@@ -1,0 +1,101 @@
+---
+title: "Poll Types"
+description: "Choose between single choice and multiple choice polls for different classroom scenarios"
+icon: "list"
+---
+
+# Poll Types
+
+Pawtograder supports two poll types to accommodate different polling needs. Each type allows students to respond quickly during class.
+
+## Single Choice
+
+Students select exactly one option from a predefined list. This uses radio button selection.
+
+**Best for:**
+- Yes/no or true/false questions
+- Questions with one correct answer
+- Forced-choice preference questions
+- Concept check questions
+- A/B/C/D multiple choice exam-style questions
+
+**Configuration:**
+- Add 2 or more answer options
+- Students can select exactly one option
+- Selecting a new option automatically deselects the previous choice
+
+**Example Questions:**
+- "Is this code snippet thread-safe?" (Yes / No)
+- "What is the time complexity of binary search?" (O(1) / O(log n) / O(n) / O(n log n))
+- "Which design pattern is being used here?" (Singleton / Factory / Observer / Strategy)
+
+## Multiple Choice
+
+Students can select one or more options from a predefined list. This uses checkbox selection.
+
+**Best for:**
+- "Select all that apply" questions
+- Questions where multiple answers may be correct
+- Gathering preferences where students may agree with several options
+- Identifying common misconceptions (students may have multiple)
+
+**Configuration:**
+- Add 2 or more answer options
+- Students can select any number of options (including none or all)
+- Each option can be independently selected/deselected
+
+**Example Questions:**
+- "Which of the following are valid JavaScript variable declarations?" (var x / let y / const z / int w)
+- "What topics would you like more review on?" (Arrays / Recursion / Trees / Graphs)
+- "Select all sorting algorithms with O(n log n) average case" (Bubble / Merge / Quick / Selection)
+
+## Choosing the Right Poll Type
+
+| Scenario | Recommended Type | Reason |
+|----------|------------------|--------|
+| True/False question | Single Choice | Only one answer possible |
+| "What is the correct answer?" | Single Choice | One correct answer expected |
+| "Which do you prefer?" | Single Choice | Forces a decision |
+| "Select all that apply" | Multiple Choice | Multiple correct answers |
+| "What topics are confusing?" | Multiple Choice | Students may have multiple concerns |
+| "Which concepts have you seen before?" | Multiple Choice | Students may recognize several |
+| Attendance check | Single Choice | Single "Present" option works |
+| Quick comprehension check | Single Choice | Keeps responses simple |
+
+## Response Behavior
+
+### Single Choice
+
+- When a student selects an option, any previous selection is cleared
+- The response is stored as a single value
+- Results show distribution across options (always totals to 100%)
+
+### Multiple Choice
+
+- Students can toggle options on/off independently
+- The response is stored as an array of selected values
+- Results show count per option (may exceed 100% when summed)
+
+<Tip>
+Use **Single Choice** when you want students to commit to a single answer. Use **Multiple Choice** when the question naturally has multiple valid selections.
+</Tip>
+
+## Data Format
+
+Poll responses are stored in JSON format:
+
+**Single Choice Response:**
+```json
+{
+  "poll_question_0": "Option A"
+}
+```
+
+**Multiple Choice Response:**
+```json
+{
+  "poll_question_0": ["Option A", "Option C"]
+}
+```
+
+This data is used to generate real-time visualizations on the response dashboard.

@@ -1,0 +1,78 @@
+---
+title: "Developer Guide"
+description: "Technical documentation for contributing to Pawtograder including architecture, local setup, and feature implementation"
+icon: "code"
+---
+
+# Welcome to Pawtograder - Developer Guide
+
+This guide will help you understand and contribute to the Pawtograder project. Learn about the architecture, development setup, and how to extend the system.
+
+## Getting Started
+
+<CardGroup cols={2}>
+  <Card title="Local Setup" icon="laptop-code" href="/developers/local-setup">
+    Set up your development environment and run Pawtograder locally.
+  </Card>
+  <Card title="Surveys" icon="clipboard-list" href="/developers/surveys">
+    Database schema, API, and implementation details for the survey system.
+  </Card>
+  <Card title="Polls" icon="square-poll-vertical" href="/developers/polls">
+    Real-time polling system architecture, database schema, and hooks.
+  </Card>
+</CardGroup>
+
+## Tech Stack
+
+Pawtograder is built with modern web technologies:
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 15, React 18, TypeScript |
+| UI Framework | Chakra UI |
+| Backend | Supabase (PostgreSQL, Auth, Storage, Edge Functions) |
+| State Management | React Hook Form, Refine, TanStack Query |
+| Testing | Jest, Playwright |
+
+## Repository Structure
+
+```text
+platform/
+├── app/                    # Next.js app router pages
+├── components/             # Reusable React components
+├── hooks/                  # Custom React hooks
+├── types/                  # TypeScript type definitions
+├── utils/                  # Utility functions
+├── supabase/               # Database migrations and Edge Functions
+├── tests/                  # Test files
+└── scripts/                # Build and utility scripts
+```
+
+## Key Concepts
+
+### Row-Level Security (RLS)
+
+Pawtograder uses Supabase's Row Level Security to enforce access control at the database level. Each table has policies that determine what data users can read, create, update, or delete based on their role.
+
+### User Roles
+
+| Role | Description |
+|------|-------------|
+| `student` | Can view course content, submit assignments, respond to surveys |
+| `grader` | Student permissions plus grading access |
+| `instructor` | Full course management access |
+
+### Profiles
+
+Users have both public and private profiles per course:
+
+- **Public Profile**: Visible to other course members (name, avatar)
+- **Private Profile**: Internal identifier for submissions and responses
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `npm test` and `npx playwright test`
+5. Submit a pull request
