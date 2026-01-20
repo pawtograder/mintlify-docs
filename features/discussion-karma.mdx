@@ -1,0 +1,97 @@
+---
+title: Discussion karma system
+description: Track and reward student engagement in discussion boards with karma badges and leaderboards
+---
+
+## Overview
+
+The discussion karma system tracks student participation in discussion boards by awarding karma points for helpful contributions. Students earn karma when their posts receive likes from other students, encouraging quality participation and peer support.
+
+## Karma badges
+
+Students display karma badges next to their names in discussion threads. The badge design changes based on karma level:
+
+- **0 karma**: Green sprout icon (new member)
+- **1-10 karma**: Heart icon with count
+- **11-49 karma**: Blue star icon with count
+- **50+ karma**: Gold trophy icon with count
+
+Karma badges appear automatically next to usernames in:
+- Discussion thread headers
+- Reply author names
+- Discussion engagement leaderboard
+
+## Earning karma
+
+Students earn karma points when other users like their discussion posts or replies. Each like adds 1 karma point to the author's total.
+
+### Like functionality
+
+Users can like posts and replies by clicking the heart icon at the bottom of each post. The like count updates in real-time and displays next to the heart icon.
+
+- Liked posts show a filled heart icon
+- Unlike by clicking the heart again
+- Like counts are visible to all users
+
+## Discussion engagement dashboard
+
+Instructors and graders can view detailed engagement metrics at **Course Settings > Discussion Engagement**.
+
+### Summary statistics
+
+The dashboard displays:
+- Total students participating
+- Average karma across all students
+- Total activity (posts + replies)
+- Most active student with trophy icon
+
+### Engagement leaderboard
+
+The leaderboard table shows per-student metrics:
+- Rank (top 3 highlighted with badges)
+- Student name with karma badge
+- Total karma points
+- Number of posts created
+- Number of replies posted
+- Likes received
+- Likes given
+- Total activity count
+
+### Exporting data
+
+Click **Export CSV** to download engagement data including all metrics for each student. The CSV includes:
+- Student names
+- Karma scores
+- Post and reply counts
+- Like statistics
+- Total activity
+
+## Thread visibility
+
+When editing a discussion post, you can change visibility between public and instructor-only. Visibility changes apply to the entire thread including all replies.
+
+The system updates visibility atomically using server-side validation to ensure:
+- Only thread authors and staff can change visibility
+- All descendant posts inherit the root post's visibility
+- Failed visibility changes roll back with error notifications
+
+## Technical details
+
+### Database schema
+
+The `profiles` table includes a `discussion_karma` column that stores each user's total karma. A database trigger automatically updates karma when likes are added or removed.
+
+### Karma calculation
+
+Karma is calculated by:
+1. Normalizing anonymous/public profile IDs to private profiles
+2. Counting likes on all discussion posts authored by the user
+3. Updating the `discussion_karma` column via trigger
+
+### Reply sorting
+
+Discussion replies are sorted by like count (descending), then by creation date (ascending). The sort order remains stable during a session to prevent disorienting reordering when like counts change.
+
+## Access control
+
+The Discussion Engagement dashboard is restricted to instructors and graders. The feature can be disabled via the discussion feature flag in course settings.
