@@ -1,0 +1,191 @@
+---
+title: "January 2026 release notes"
+description: "New features and improvements pushed to staging in January 2026"
+---
+
+## Discussion board enhancements
+
+### Drag-and-drop file uploads
+
+You can now upload files to discussion posts using drag-and-drop or paste. The system automatically detects file types and formats code files as syntax-highlighted blocks.
+
+<Note>
+Text and code files under 300 lines are inserted inline as formatted code blocks. Larger files and binary files are uploaded as attachments.
+</Note>
+
+**Key features:**
+- Drag files directly onto the discussion editor
+- Paste files from clipboard
+- Automatic code syntax detection
+- Inline insertion for discussion posts
+- Separate message uploads for chat
+
+### Karma system
+
+Discussion board now includes a karma system that rewards student engagement. Students earn karma when their posts receive likes from other users.
+
+**Karma badges:**
+- 🌱 Sprout (0 karma) - New member
+- ❤️ Heart (1-10 karma) - Active participant
+- ⭐ Star (11-49 karma) - Regular contributor
+- 🏆 Trophy (50+ karma) - Top contributor
+
+**For instructors:**
+- View engagement metrics in the Discussion Engagement dashboard
+- Export karma and activity data to CSV
+- Track posts, replies, and likes given/received per student
+
+### Discussion engagement dashboard
+
+New instructor-only dashboard for tracking student participation in discussion boards.
+
+**Metrics tracked:**
+- Total posts and replies per student
+- Likes received and given
+- Discussion karma scores
+- Most active contributors
+
+Access via Course Settings → Discussion Engagement.
+
+## Assignment features
+
+### Optional leaderboard
+
+Instructors can now toggle assignment leaderboards on or off. When enabled, students see a leaderboard showing top autograder scores using pseudonyms.
+
+**Configuration:**
+- Enable/disable per assignment in assignment settings
+- Shows top 10 submissions by autograder score
+- Uses pseudonymous names to protect student privacy
+- Responsive layout with sticky positioning
+
+### Assignment score capping
+
+Assignments now support score capping to prevent total scores from exceeding the assignment's maximum points.
+
+**How it works:**
+- Configure in rubric settings
+- Automatically caps total score (manual + autograder + tweak) to assignment total points
+- Prevents bonus points from inflating grades beyond 100%
+
+### Assignment dashboard
+
+New dashboard tab on assignment management pages showing submission analytics.
+
+**Visualizations:**
+- Submission count distribution (how many students made N submissions)
+- Autograder score distribution across all submissions
+- Real-time updates as new submissions arrive
+
+Access via Manage Assignment → Dashboard tab.
+
+### Security audit dashboard
+
+Instructor-only tool for searching submission file contents to detect academic integrity violations or security concerns.
+
+**Features:**
+- Search all submission files for specific strings (case-insensitive)
+- View contextual snippets with line numbers
+- See student information, sections, and scores
+- Link directly to GitHub files and submission pages
+- View instructor-only grader output
+- Export results to CSV
+
+Access via Manage Assignment → Security Audit.
+
+<Warning>
+This feature is instructor-only and designed for academic integrity investigations. Use responsibly and in accordance with your institution's policies.
+</Warning>
+
+### Test insights dashboard
+
+Analyze student performance on auto-graded tests with comprehensive analytics.
+
+**Performance overview:**
+- Test difficulty classification (easy/medium/hard/very hard)
+- Pass rates and score distributions per test
+- Submissions to full marks statistics
+- Identify hardest and easiest tests
+
+**Common errors explorer:**
+- Automatic error deduplication and grouping
+- Filter by test name, part, and minimum occurrences
+- View sample error outputs
+- Link errors to discussion posts via error pins
+- Export error data
+
+Access via Manage Assignment → Test Insights.
+
+### Error pins
+
+Link common test errors to discussion posts to help students find solutions faster.
+
+**How it works:**
+- Identify common error patterns in Test Insights
+- Create error pins linking errors to relevant discussion threads
+- Students with matching errors see suggested discussion posts
+- Supports test name and output matching with AND/OR logic
+
+### Enhanced autograder rerun
+
+Rerun the autograder with more control and flexibility.
+
+**New capabilities:**
+- Select specific autograder commit from main branch
+- Enter custom SHA for any valid commit
+- What-if mode: test grader changes without affecting official scores
+- View what-if result history per submission
+- Manually promote what-if results to official
+- Auto-promote toggle for immediate score updates
+
+**What-if workflow:**
+1. Select grader commit or enter SHA
+2. Disable auto-promote for testing
+3. Review what-if scores in dedicated columns
+4. Promote successful results to official
+
+Access via Manage Assignment → Rerun Autograder.
+
+## Grading improvements
+
+### Extended due date picker
+
+Instructors can now choose extended due dates using a date/time picker instead of manually calculating hours and minutes.
+
+**Features:**
+- Bidirectional sync between date picker and hours/minutes
+- Timezone-aware calculations
+- Validation against current due date
+- Helper text showing calculated extension
+
+### Grading annotations usability
+
+Improved usability for grading annotations and rubric interactions.
+
+### Bulk grading assignment for lab leaders
+
+New assignment mode automatically assigns peer reviews to lab section leaders for their students.
+
+**Configuration:**
+- Select "Assign to lab leaders" mode when creating review assignments
+- Automatically assigns reviews to all lab section leaders
+- Each leader reviews only their section's students
+- Reduces manual assignment overhead
+
+## Bug fixes and improvements
+
+- Fixed duplicate grading assignments for lab leaders
+- Added loading states to export grades buttons
+- Improved grading review score calculation with deduction-only mode support
+- Enhanced database performance for gradebook operations
+- Fixed security audit test for better reliability
+
+---
+
+## Migration notes
+
+These features are currently in staging and will be promoted to production after testing. No action required from users.
+
+<Info>
+For questions or issues with these features, contact your system administrator or file a support ticket.
+</Info>
