@@ -1,0 +1,151 @@
+---
+title: Assignment leaderboard
+description: Display student rankings and scores with medal indicators
+---
+
+## Overview
+
+The assignment leaderboard shows student rankings based on autograder scores, encouraging friendly competition and providing visibility into class performance.
+
+## Leaderboard display
+
+### Medal rankings
+
+Top performers receive medal indicators:
+
+- 🥇 **1st place**: Gold medal
+- 🥈 **2nd place**: Silver medal
+- 🥉 **3rd place**: Bronze medal
+
+### Score display
+
+Each entry shows:
+
+- Rank position
+- Student name (or "You" for current student)
+- Autograder score (e.g., "95/100")
+- Medal icon for top 3
+
+### Real-time updates
+
+The leaderboard updates automatically when:
+
+- New submissions are graded
+- Autograder reruns complete
+- Scores are adjusted by instructors
+
+## Student view
+
+Students see:
+
+- Their own position highlighted with "You" badge
+- Scores of other students (if enabled)
+- Their rank relative to peers
+- Medal if in top 3
+
+### Privacy options
+
+Instructors can configure:
+
+- **Public leaderboard**: All students visible
+- **Anonymous leaderboard**: Show ranks without names
+- **Hidden leaderboard**: Disabled for assignment
+
+## Instructor view
+
+Instructors see the complete leaderboard with:
+
+- All student names and scores
+- Submission timestamps
+- Links to individual submissions
+- Export options for analysis
+
+## Enabling the leaderboard
+
+### Assignment settings
+
+1. Edit assignment configuration
+2. Enable "Show Leaderboard" option
+3. Choose visibility settings:
+   - Public (show all names)
+   - Anonymous (show ranks only)
+   - Private (instructor-only)
+4. Save changes
+
+### Feature flags
+
+Leaderboards respect course feature flags:
+
+- Enable/disable per course
+- Control visibility by role
+- Configure in course settings
+
+## Leaderboard updates
+
+### Automatic recalculation
+
+The leaderboard recalculates when:
+
+- Student submits new code
+- Autograder completes grading
+- Instructor adjusts scores
+- Active submission changes
+
+### Update frequency
+
+- Real-time for new submissions
+- Cached for performance
+- Invalidated on score changes
+
+## Scoring rules
+
+### Active submission
+
+Only the active submission counts toward leaderboard:
+
+- Students can have multiple submissions
+- Only one marked as "active" for grading
+- Instructors can change active submission
+
+### Tie breaking
+
+When students have equal scores:
+
+- Earlier submission ranks higher
+- Timestamp determines order
+- Consistent ordering maintained
+
+## Use cases
+
+### Motivating students
+
+- Encourage early submissions
+- Reward high-quality work
+- Create friendly competition
+
+### Identifying top performers
+
+- Recognize exceptional work
+- Invite to peer tutoring roles
+- Recommend for advanced sections
+
+### Monitoring class progress
+
+- Track overall performance trends
+- Identify struggling students
+- Adjust difficulty if needed
+
+## Best practices
+
+- Enable leaderboards for competitive assignments
+- Consider anonymous mode for sensitive topics
+- Use with score capping to prevent gaming
+- Disable for collaborative assignments
+- Monitor for unhealthy competition
+
+## Privacy considerations
+
+- Students only see public leaderboard if enabled
+- Anonymous mode hides identities
+- Instructors always see full details
+- Comply with FERPA regulations
