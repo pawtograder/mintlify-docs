@@ -1,0 +1,189 @@
+---
+title: Error pins
+description: Link common errors to discussion posts to help students debug issues
+---
+
+## Overview
+
+Error pins automatically suggest relevant discussion posts when students encounter specific errors in their submissions. This helps students find solutions faster and reduces repetitive questions.
+
+## How error pins work
+
+### For instructors
+
+1. Identify common error patterns in test insights
+2. Create or find a discussion post explaining the solution
+3. Create an error pin linking the error to the post
+4. Students encountering the error see the discussion link
+
+### For students
+
+When viewing submission results:
+
+- Error pins appear as callouts on failed tests
+- Click the link to view the discussion post
+- Find explanations and solutions
+- Reduce time spent debugging
+
+## Creating error pins
+
+### From test insights dashboard
+
+1. Navigate to Test Insights → Common Errors tab
+2. Find an error pattern affecting multiple students
+3. Click "Create Error Pin"
+4. Search for relevant discussion thread
+5. Select the thread and create the pin
+
+### Manual creation
+
+1. Go to assignment management
+2. Navigate to "Error Pins" section
+3. Click "Create Error Pin"
+4. Define matching rules
+5. Link to discussion thread
+
+## Error matching rules
+
+### Rule types
+
+Error pins match submissions using:
+
+- **Test name**: Exact test case name
+- **Test part**: Specific test part
+- **Test output**: Student-visible error message
+- **Hidden output**: Instructor-only output
+- **Score range**: Specific score thresholds
+- **Lint output**: Linting error messages
+
+### Match types
+
+- **Contains**: Text appears anywhere in output
+- **Equals**: Exact match required
+- **Regex**: Pattern matching with regular expressions
+- **Range**: Score within min/max bounds
+
+### Rule logic
+
+Combine multiple rules with:
+
+- **AND logic**: All rules must match
+- **OR logic**: Any rule can match
+
+## Example error pins
+
+### Null pointer exception
+
+**Rules:**
+- Test name equals "testArrayProcessing"
+- Test output contains "NullPointerException"
+
+**Discussion link:** "Common null pointer errors in array processing"
+
+### Off-by-one errors
+
+**Rules:**
+- Test name contains "Loop"
+- Test output contains "ArrayIndexOutOfBoundsException"
+
+**Discussion link:** "Debugging off-by-one errors in loops"
+
+### Compilation errors
+
+**Rules:**
+- Lint failed equals true
+- Lint output contains "cannot find symbol"
+
+**Discussion link:** "Understanding Java compilation errors"
+
+## Managing error pins
+
+### Viewing active pins
+
+See all error pins for an assignment:
+
+- Pin ID and creation date
+- Linked discussion thread
+- Number of matched submissions
+- Enable/disable status
+
+### Editing pins
+
+Modify existing error pins:
+
+- Update matching rules
+- Change linked discussion
+- Adjust rule logic (AND/OR)
+- Enable or disable pin
+
+### Deleting pins
+
+Remove error pins that are no longer relevant:
+
+- Deletes the pin configuration
+- Removes matches from submissions
+- Does not delete the discussion post
+
+## Error pin matches
+
+### Automatic matching
+
+When a submission is graded:
+
+- System evaluates all active error pins
+- Matches are created for applicable pins
+- Students see pins on submission results page
+
+### Match display
+
+Students see error pins as:
+
+- Highlighted callout boxes
+- Icon indicating suggested discussion
+- Link to the discussion thread
+- Brief description of the error
+
+## Analytics
+
+### Pin effectiveness
+
+Track error pin usage:
+
+- Number of submissions matched
+- Click-through rate to discussions
+- Student engagement with linked posts
+- Reduction in duplicate questions
+
+### Common errors report
+
+View which errors affect the most students:
+
+- Sort by occurrence count
+- Filter by test name or part
+- Identify patterns across submissions
+
+## Permissions
+
+- **Instructors**: Create, edit, delete error pins
+- **Graders**: View error pins and matches
+- **Students**: See error pins on their submissions
+
+## Best practices
+
+- Create pins for errors affecting 3+ students
+- Link to detailed discussion posts with solutions
+- Use specific matching rules to avoid false positives
+- Test pins on sample submissions before enabling
+- Update pins when assignment changes
+- Disable outdated pins rather than deleting
+- Monitor pin effectiveness in analytics
+
+## Integration with test insights
+
+Error pins work seamlessly with test insights:
+
+1. Test insights identifies common errors
+2. One-click error pin creation from error groups
+3. Automatic rule generation from error patterns
+4. Pre-populated with sample outputs
+5. Immediate matching on existing submissions
