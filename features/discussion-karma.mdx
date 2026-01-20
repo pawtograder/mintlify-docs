@@ -1,0 +1,71 @@
+---
+title: Discussion karma system
+description: Track and reward student engagement in discussion boards with karma badges and leaderboards
+---
+
+## Overview
+
+The discussion karma system rewards students for meaningful participation in course discussions. Students earn karma when their posts receive likes from peers and instructors, encouraging quality contributions.
+
+## Karma badges
+
+Students display karma badges next to their names in discussion threads. The badge design evolves as students earn more karma:
+
+- **0 karma**: Green sprout icon (new member)
+- **1-10 karma**: Heart icon with count
+- **11-49 karma**: Blue star icon with count
+- **50+ karma**: Gold trophy icon with count
+
+## Like system
+
+Students and instructors can like discussion posts and replies:
+
+- Click the heart icon to like/unlike a post
+- Like counts display next to each post
+- Replies are sorted by like count (most liked first)
+- Visibility changes sync across all replies in a thread
+
+## Discussion engagement dashboard
+
+Instructors can view comprehensive engagement analytics at `/course/{course_id}/manage/discussion-engagement`:
+
+### Summary metrics
+
+- Total students participating
+- Average karma across all students
+- Total activity (posts + replies)
+- Most active student with trophy indicator
+
+### Engagement table
+
+View detailed metrics for each student:
+
+- **Karma**: Total likes received
+- **Posts**: Number of root discussion threads created
+- **Replies**: Number of replies to other threads
+- **Likes Received**: Total likes on their content
+- **Likes Given**: Total likes they've given to others
+- **Total Activity**: Combined posts and replies
+
+### CSV export
+
+Export engagement data for external analysis:
+
+- Click "Export CSV" to download all metrics
+- Includes student names, karma, and activity counts
+- Formula injection protection for safe spreadsheet import
+
+## How karma is calculated
+
+Karma updates automatically when posts receive likes:
+
+- **+1 karma** when someone likes your post or reply
+- **-1 karma** when someone unlikes your content (minimum 0)
+- Karma persists across the course
+- Anonymous/public profile contributions attribute to private profiles
+
+## Access control
+
+- **Students**: Can view karma badges and like posts
+- **Graders**: Can view karma badges and like posts
+- **Instructors**: Full access to engagement dashboard and analytics
