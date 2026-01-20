@@ -1,0 +1,118 @@
+---
+title: Security audit dashboard
+description: Search submission files for security violations and academic integrity concerns
+---
+
+## Overview
+
+The security audit dashboard allows instructors to search all submission file contents for specific strings to detect potential academic integrity violations, prohibited library usage, or security concerns.
+
+## Accessing the dashboard
+
+Navigate to **Assignment > Security Audit** from the assignment management navigation. This feature is restricted to instructors only.
+
+## Searching submissions
+
+<Steps>
+<Step title="Enter search term">
+Enter the string you want to search for in the search input field. The search is case-insensitive and searches the full contents of all submission files.
+
+Common search terms:
+- `java.io.File` - Detect prohibited file I/O
+- `FileInputStream` - Find file system access attempts
+- `/autograder/` - Identify attempts to access grading files
+- Specific library names or patterns
+</Step>
+
+<Step title="Execute search">
+Click **Search All Submissions** or press Enter to scan all submission files for the assignment.
+
+The search runs across all active submissions and displays results in real-time.
+</Step>
+
+<Step title="Review results">
+Results display in a sortable table showing:
+- Student name (linked to submission)
+- Student email
+- Class section
+- Lab section
+- Submission number
+- Autograder score
+- File name with line number
+- Matched content preview
+- GitHub file link
+</Step>
+</Steps>
+
+## Viewing grader output
+
+Click **View Output** on any result to open a modal displaying:
+- Submission score
+- Link to full submission
+- GitHub file link
+- Instructor-visible grader output
+- Link to complete grader results
+
+The modal shows instructor-only output that may contain additional context about why the submission failed or what violations were detected.
+
+## Exporting results
+
+Click **Export All to CSV** to download a spreadsheet containing:
+- All matched results
+- Student information
+- Submission details
+- File locations
+- GitHub links
+- Matched content
+- Search term used
+
+The CSV filename includes the assignment slug and export date for easy organization.
+
+## Use cases
+
+### Detecting prohibited libraries
+
+Search for specific import statements or library usage that violates assignment requirements:
+
+```
+java.io.File
+FileReader
+FileWriter
+```
+
+### Finding file system access
+
+Identify students attempting to access the grading environment:
+
+```
+/autograder/
+/grader/
+expected_output
+```
+
+### Academic integrity investigations
+
+Search for suspicious patterns or shared code segments across submissions.
+
+## Submission metadata export
+
+From any submission view, instructors can export complete submission history including:
+- All submission attempts with metadata
+- Autograder results and test output
+- Grading reviews
+- File diffs between submissions
+- Commit information
+
+Click the export icon in the submission header to download a Markdown file containing the full submission history.
+
+## Access control
+
+- **Instructors only**: Security audit dashboard and metadata export
+- **RLS policies**: Database-level access control enforces instructor-only permissions
+- **UI gating**: Export buttons hidden from graders
+
+## Technical details
+
+The security audit uses Supabase's `ilike` operator for case-insensitive pattern matching across submission file contents. Results are fetched via a TableController that provides real-time updates and efficient pagination.
+
+Search results include contextual snippets showing the matched content with surrounding text for quick review.
