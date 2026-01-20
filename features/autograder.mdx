@@ -1,0 +1,121 @@
+---
+title: "Autograder enhancements"
+description: "What-if grading and improved autograder rerun capabilities"
+---
+
+## What-if grading
+
+Test different autograder versions without affecting official student scores.
+
+### Overview
+
+What-if grading allows you to:
+
+- Rerun the autograder using a specific commit SHA
+- Test autograder changes before deploying to students
+- Compare results across different grader versions
+- Promote what-if results to official scores when ready
+
+### How to use
+
+<Steps>
+<Step title="Select autograder version">
+  Navigate to assignment → Rerun Autograder and choose:
+  - A commit from the dropdown (shows last 50 main branch commits)
+  - Enter a custom SHA manually
+  - Leave empty to use latest on main (default)
+</Step>
+
+<Step title="Configure auto-promote">
+  Toggle "Auto-promote new result to official":
+  - **On**: What-if result immediately becomes the official score
+  - **Off**: Result stored separately, can be promoted manually later
+</Step>
+
+<Step title="Select submissions">
+  Check the submissions you want to regrade and click "Rerun Autograder"
+</Step>
+
+<Step title="View results">
+  What-if results appear in dedicated columns:
+  - What-if Score
+  - What-if Grader SHA
+  - What-if History (view all what-if runs)
+  - Promote button (if auto-promote was off)
+</Step>
+</Steps>
+
+### What-if history
+
+View all what-if grading attempts for a submission:
+
+- Click "View" in the What-if History column
+- See all previous what-if runs with dates, scores, and SHAs
+- Compare results across different grader versions
+
+### Promoting results
+
+If auto-promote is disabled:
+
+1. Review what-if results in the table
+2. Click "Promote" next to the desired result
+3. The what-if result becomes the official autograder score
+4. Previous official result is replaced
+
+<Warning>
+Promoting a what-if result deletes the previous official grader result and all associated data (test outputs, artifacts).
+</Warning>
+
+### Technical details
+
+- What-if runs create new grader_results with `rerun_for_submission_id` set
+- No new submissions are created (reuses existing submission)
+- What-if results are excluded from grade calculations until promoted
+- Repository check runs track the requested grader SHA
+
+## Enhanced autograder reruns
+
+Improvements to the autograder rerun workflow:
+
+### Key changes
+
+- **Reuses existing submissions** instead of creating new ones
+- **Instructor selects grader version** via commit picker or manual SHA
+- **Auto-promote toggle** for immediate or deferred score updates
+- **What-if columns** show pending results before promotion
+
+### Commit selection
+
+The commit picker shows:
+
+- Last 50 commits from the main branch
+- Commit SHA (short form)
+- Commit message subject line
+- Author and date information
+
+### Development autograder columns
+
+Toggle "Show development autograder columns" to view:
+
+- Regression test scores
+- Regression test grader SHAs
+- Development autograder metadata
+
+These columns are hidden by default to reduce clutter.
+
+### Workflow
+
+1. Instructor selects submissions to regrade
+2. Chooses autograder version (optional)
+3. Configures auto-promote setting
+4. Clicks "Rerun Autograder"
+5. System enqueues grading jobs
+6. Results appear in what-if columns
+7. Instructor promotes results if auto-promote was off
+
+### Benefits
+
+- Test grader changes safely
+- No duplicate submissions cluttering the database
+- Clear separation between official and experimental scores
+- Flexible promotion workflow
