@@ -1,0 +1,93 @@
+---
+title: Enhanced autograder rerun
+description: Rerun autograder with version selection and submission reuse
+---
+
+## Overview
+
+The enhanced autograder rerun feature allows instructors to re-evaluate existing submissions with different grader versions without creating new submissions.
+
+## Key improvements
+
+### Reuse existing submissions
+
+Previously, rerunning the autograder created a new submission. Now:
+
+- Reruns use the same submission record
+- Preserves submission history and ordinal numbers
+- Maintains student's original commit SHA
+- Updates only the grader results
+
+### Grader version selection
+
+Instructors can choose which version of the autograder to use:
+
+- Select from available grader versions
+- Test new grading rubrics on existing submissions
+- Compare results across grader versions
+- Roll back to previous grader configurations
+
+## How to rerun the autograder
+
+1. Navigate to the assignment management page
+2. Go to "Rerun Autograder" section
+3. Select target submissions:
+   - All submissions
+   - Specific students
+   - Submissions with certain scores
+4. Choose grader version from dropdown
+5. Click "Rerun Autograder"
+
+## Use cases
+
+### Testing new grading rubrics
+
+Before deploying a new autograder version:
+
+1. Select a sample of submissions
+2. Choose the new grader version
+3. Review results without affecting student records
+4. Deploy when satisfied with results
+
+### Fixing grader bugs
+
+If you discover a bug in the autograder:
+
+1. Fix the grader code
+2. Deploy the new version
+3. Rerun affected submissions
+4. Students see updated scores automatically
+
+### Adjusting point values
+
+When modifying test point values:
+
+1. Update the grader configuration
+2. Rerun all submissions with new version
+3. Scores recalculate based on new rubric
+4. Gradebook updates automatically
+
+## What gets updated
+
+When you rerun the autograder:
+
+- ✅ Grader results (scores, test outputs)
+- ✅ Test case results
+- ✅ Lint results
+- ✅ Execution time
+- ❌ Submission SHA (preserved)
+- ❌ Submission ordinal (preserved)
+- ❌ Submission timestamp (preserved)
+
+## Permissions
+
+- **Instructors**: Can rerun autograder with any version
+- **Graders**: Cannot rerun autograder
+- **Students**: Cannot rerun autograder
+
+## Best practices
+
+- Test new grader versions on a small sample first
+- Document grader version changes in assignment notes
+- Notify students when scores will be recalculated
+- Keep previous grader versions available for rollback
