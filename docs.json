@@ -1,86 +1,99 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "maple",
+  "name": "Pawtograder",
+  "appearance": {
+    "default": "dark"
+  },
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#4FD1C5",
+    "light": "#81E6D9",
+    "dark": "#319795"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Students",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
+            "pages": ["students/intro"]
+          },
+          {
+            "group": "Assignments",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "students/assignments/create-submission",
+              "students/assignments/form-groups",
+              "students/assignments/late-tokens",
+              "students/assignments/self-review"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Course Features",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "students/discussion-board",
+              "students/office-hours",
+              "students/polls",
+              "students/surveys"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Course Staff",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Getting Started",
+            "pages": ["staff/intro"]
+          },
+          {
+            "group": "Assignments",
             "pages": [
-              "api-reference/introduction"
+              "staff/assignments/intro",
+              "staff/assignments/grading-assignments",
+              "staff/assignments/handgrading",
+              "staff/assignments/autograding",
+              "staff/assignments/rubrics",
+              "staff/assignments/testing"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Polls",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "staff/polls/intro",
+              "staff/polls/creating-polls",
+              "staff/polls/poll-types",
+              "staff/polls/visualizations"
             ]
+          },
+          {
+            "group": "Course Features",
+            "pages": [
+              "staff/discussion",
+              "staff/gradebook",
+              "staff/surveys",
+              "staff/office-hours/intro"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Developers",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["developers/intro", "developers/local-setup"]
+          },
+          {
+            "group": "Feature Documentation",
+            "pages": ["developers/surveys", "developers/polls"]
           }
         ]
       }
     ],
     "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
+      "anchors": []
     }
   },
   "logo": {
@@ -90,33 +103,12 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "GitHub",
+        "href": "https://github.com/pawtograder"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+    ]
   },
   "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    "copyright": "Copyright © 2025 Jonathan Bell."
   }
 }

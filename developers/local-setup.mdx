@@ -1,0 +1,345 @@
+---
+title: "Local Setup"
+description: "Set up Pawtograder for local development with Supabase, Docker, and Node.js"
+icon: "laptop-code"
+---
+
+# Local Development Setup
+
+This guide walks you through setting up Pawtograder for local development.
+
+## Prerequisites
+
+Before starting, ensure you have the following installed:
+
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| Node.js | v22 (recommended) | Use [nvm](https://github.com/nvm-sh/nvm) for version management |
+| Docker | Latest | Required for local Supabase. Can use [Docker desktop](https://www.docker.com/products/docker-desktop/) to quickly setup a docker daemon for development. |
+| Git | Latest | For cloning the repository |
+
+## Quick Start (Staging Backend)
+
+The fastest way to get started is using our staging environment as a backend. This is ideal for frontend development that doesn't require database changes.
+
+### Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/pawtograder/platform.git
+   cd platform
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment**
+   ```bash
+   cp .env.local.staging .env.local
+   ```
+
+   Edit `.env.local` and fill in your own values if needed.
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Access the application**
+
+   Open `https://localhost:3000` in your browser. You'll need to accept the self-signed certificate warning (HTTPS is required for camera/microphone access in the help queue).
+
+### Creating Test Accounts
+
+In the staging environment, you can register with any email without confirmation:
+
+- **Student account**: Use any email (e.g., `test@example.com`)
+- **Instructor account**: Include "instructor" in your email (e.g., `testinstructor@example.com`)
+
+New accounts are automatically added to the demo class.
+
+## Full Local Setup (Supabase)
+
+For development requiring database changes, RLS policy modifications, or running E2E tests, you'll need a local Supabase instance.
+
+### Prerequisites
+
+- Docker installed and running
+- Node.js v22 or later
+
+### Setup Steps
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Start Supabase**
+   ```bash
+   npx supabase start
+   ```
+
+   This starts all Supabase services in Docker containers. First run may take several minutes to download images.
+
+3. **Initialize the database**
+   ```bash
+   npx supabase db reset
+   ```
+
+   This applies all migrations and seeds initial data.
+
+4. **Configure environment variables**
+
+   After `supabase start`, you'll see output like:
+
+   ```bash
+   supabase local development setup is running.
+
+   ╭──────────────────────────────────────╮
+   │ 🔧 Development Tools                 │
+   ├─────────┬────────────────────────────┤
+   │ Studio  │ http://127.0.0.1:54323     │
+   │ Mailpit │ http://127.0.0.1:54324     │
+   │ MCP     │ http://127.0.0.1:54321/mcp │
+   ╰─────────┴────────────────────────────╯
+
+   ╭─────────────────────────────────────────────────╮
+   │ 🌐 APIs                                         │
+   ├─────────────┬───────────────────────────────────┤
+   │ Project URL │ http://127.0.0.1:54321            │
+   │ REST        │ http://127.0.0.1:54321/rest/v1    │
+   │ GraphQL     │ http://127.0.0.1:54321/graphql/v1 │
+   ╰─────────────┴───────────────────────────────────╯
+
+   ╭───────────────────────────────────────────────────────────────╮
+   │ ⛁ Database                                                    │
+   ├─────┬─────────────────────────────────────────────────────────┤
+   │ URL │ postgresql://postgres:postgres@127.0.0.1:54322/postgres │
+   ╰─────┴─────────────────────────────────────────────────────────╯
+
+   ╭──────────────────────────────────────────────────────────────╮
+   │ 🔑 Authentication Keys                                       │
+   ├─────────────┬────────────────────────────────────────────────┤
+   │ Publishable │ sb_publishable_...                             │
+   │ Secret      │ sb_secret_...                                  │
+   ╰─────────────┴────────────────────────────────────────────────╯
+   ```
+
+   Update your `.env.local`:
+   ```bash
+   SUPABASE_URL=http://127.0.0.1:54321
+   NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable key from output>
+   SUPABASE_SERVICE_ROLE_KEY=<secret key from output>
+   ENABLE_SIGNUPS=true
+   ```
+
+   <Warning>
+   Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser or commit it to version control. Keep it in server-only code and CI secrets.
+   </Warning>
+
+5. **Build the application**
+   ```bash
+   npm run build
+   ```
+
+6. **Start Edge Functions**
+   ```bash
+   npx supabase functions serve
+   ```
+
+7. **Start the development server**
+   ```bash
+   npm start
+   ```
+
+8. **Seed test data (optional)**
+   ```bash
+   npm run seed
+   ```
+
+   This creates a test class with students and assignments. Scroll up in the output to find "Login Credentials" with email/password pairs.
+
+## Local Services
+
+Once Supabase is running, these services are available:
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| API | http://127.0.0.1:54321 | Supabase REST API |
+| Studio | http://localhost:54323 | Database management UI |
+| Inbucket | http://localhost:54324 | Email testing interface |
+| Application | https://localhost:3000 | Next.js frontend |
+
+### Supabase Studio
+
+Access the Supabase dashboard at `http://localhost:54323` to:
+
+- Browse and edit database tables
+- View and manage auth users
+- Test RLS policies
+- Monitor realtime subscriptions
+- Manage storage buckets
+
+### Email Testing
+
+View captured emails at `http://localhost:54324`. Useful for testing:
+
+- Authentication flows (magic links, password reset)
+- Notification emails
+- Email verification
+
+## Development Commands
+
+### Daily Development
+
+```bash
+# Start dev server with hot reload
+npm run dev
+
+# Run linting
+npm run lint
+
+# Format code
+npm run format
+
+# Run type checking
+npm run typecheck:functions
+```
+
+### Database Operations
+
+```bash
+# Start Supabase services
+npx supabase start
+
+# Stop Supabase services
+npx supabase stop
+
+# Reset database (reapply migrations + seed)
+npx supabase db reset
+
+# Create a new migration
+npx supabase migration new migration_name
+
+# Generate TypeScript types from schema
+npm run client-local
+```
+
+### Testing
+
+```bash
+# Run unit tests
+npm test
+
+# Run unit tests in watch mode
+npm run test:watch
+
+# Run E2E tests with UI
+npx playwright test --ui
+
+# Run specific E2E test file
+npx playwright test surveys
+```
+
+### Seeding Data
+
+```bash
+# Create test class with sample data
+npm run seed
+```
+
+## Project Structure
+
+```text
+platform/
+├── app/                    # Next.js app router pages
+│   └── course/[course_id]/ # Course-specific routes
+├── components/             # Reusable React components
+├── hooks/                  # Custom React hooks
+├── types/                  # TypeScript type definitions
+├── utils/                  # Utility functions
+│   └── supabase/           # Supabase client configuration
+├── supabase/
+│   ├── migrations/         # Database migrations
+│   ├── functions/          # Edge Functions (Deno)
+│   ├── seed.sql            # Initial seed data
+│   └── config.toml         # Supabase configuration
+├── tests/
+│   └── e2e/                # Playwright E2E tests
+├── public/                 # Static assets
+└── scripts/                # Build and utility scripts
+```
+
+## Environment Variables
+
+### Required Variables
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase API URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key |
+| `SUPABASE_URL` | Supabase API URL (server-side) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only) |
+
+### Optional Variables
+
+| Variable | Description |
+|----------|-------------|
+| `ENABLE_SIGNUPS` | Enable user registration UI (`true`/`false`) |
+| `END_TO_END_SECRET` | Secret for E2E test authentication |
+
+## Troubleshooting
+
+### Supabase won't start
+
+1. Ensure Docker is running
+2. Check for port conflicts (54321, 54323, 54324)
+3. Try stopping and removing containers:
+   ```bash
+   npx supabase stop --no-backup
+   docker system prune
+   npx supabase start
+   ```
+
+### Database connection errors
+
+1. Verify Supabase is running: `npx supabase status`
+2. Check `.env.local` has correct URLs and keys
+3. Ensure you ran `npx supabase db reset` after starting
+
+### TypeScript errors after schema changes
+
+Regenerate types after any database changes:
+
+```bash
+npm run client-local
+```
+
+### HTTPS certificate warnings
+
+The dev server uses a self-signed certificate. This is expected:
+- Click "Advanced" → "Proceed to localhost"
+- Or add an exception in your browser settings
+
+### Edge Functions not working
+
+1. Ensure functions are running: `npx supabase functions serve`
+2. Check the terminal for function errors
+3. Verify function URLs in your requests
+
+### Hot reload not working
+
+1. Check for file system watcher limits (Linux):
+   ```bash
+   echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
+   sudo sysctl -p
+   ```
+2. Restart the dev server
+
+## Next Steps
+
+- Read the [Surveys Developer Guide](/developers/surveys) for feature-specific documentation
+- Join the development discussion on GitHub Issues

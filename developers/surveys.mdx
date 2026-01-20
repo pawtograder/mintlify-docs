@@ -1,0 +1,470 @@
+---
+title: "Surveys Developer Guide"
+description: "Technical architecture, database schema, and implementation details for the survey system"
+icon: "clipboard-list"
+---
+
+# Surveys - Developer Guide
+
+This guide covers the technical architecture, database schema, and implementation details of the Survey feature in Pawtograder.
+
+## Overview
+
+The survey system allows instructors to create custom surveys, collect student responses, and analyze feedback. It uses [SurveyJS](https://surveyjs.io/) for the question builder and renderer.
+
+## Architecture
+
+### Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Next.js 15, React 18, Chakra UI |
+| Survey Engine | SurveyJS (survey-core, survey-react-ui, survey-creator-react) |
+| Backend | Supabase (PostgreSQL + Row Level Security) |
+| State Management | React Hook Form, Refine |
+| Date Handling | date-fns, date-fns-tz |
+
+### Key Dependencies
+
+```json
+{
+  "survey-core": "^2.3.11",
+  "survey-creator-core": "^2.3.11",
+  "survey-creator-react": "^2.3.11",
+  "survey-react-ui": "^2.3.11"
+}
+```
+
+## Database Schema
+
+### Tables
+
+#### `surveys`
+
+Main table storing survey definitions.
+
+```sql
+CREATE TABLE surveys (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    survey_id UUID NOT NULL DEFAULT gen_random_uuid(),  -- Logical ID for versioning
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    created_by UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT,
+    json JSONB NOT NULL DEFAULT '[]'::jsonb,  -- SurveyJS JSON configuration
+    status survey_status NOT NULL DEFAULT 'draft',
+    allow_response_editing BOOLEAN NOT NULL DEFAULT FALSE,
+    due_date TIMESTAMPTZ DEFAULT NULL,
+    assigned_to_all BOOLEAN NOT NULL DEFAULT TRUE,
+    validation_errors TEXT DEFAULT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ DEFAULT NULL,  -- Soft delete
+    version INTEGER NOT NULL DEFAULT 1,
+    type survey_type NOT NULL DEFAULT 'assign_all'
+);
+```
+
+#### `survey_responses`
+
+Stores individual student responses.
+
+```sql
+CREATE TABLE survey_responses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    survey_id UUID NOT NULL REFERENCES surveys(id) ON DELETE CASCADE,
+    profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    response JSONB NOT NULL DEFAULT '{}'::jsonb,  -- Keyed by question name
+    submitted_at TIMESTAMPTZ DEFAULT NULL,
+    is_submitted BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ DEFAULT NULL,
+    CONSTRAINT survey_responses_unique_per_profile UNIQUE (survey_id, profile_id)
+);
+```
+
+#### `survey_assignments`
+
+Maps surveys to specific students (when not assigned to all).
+
+```sql
+CREATE TABLE survey_assignments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    survey_id UUID NOT NULL REFERENCES surveys(id) ON DELETE CASCADE,
+    profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT survey_assignments_unique_per_profile UNIQUE (survey_id, profile_id)
+);
+```
+
+#### `survey_templates`
+
+Reusable survey templates.
+
+```sql
+CREATE TABLE survey_templates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    template JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    created_by UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    version INTEGER NOT NULL DEFAULT 1,
+    scope template_scope NOT NULL DEFAULT 'course',  -- 'global' | 'course'
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE
+);
+```
+
+### Enum Types
+
+```sql
+CREATE TYPE survey_status AS ENUM ('draft', 'published', 'closed');
+CREATE TYPE template_scope AS ENUM ('global', 'course');
+CREATE TYPE survey_type AS ENUM ('assign_all', 'specific', 'peer');
+```
+
+### Database Triggers
+
+| Trigger | Table | Purpose |
+|---------|-------|---------|
+| `update_surveys_updated_at` | surveys | Auto-update `updated_at` on changes |
+| `update_survey_responses_updated_at` | survey_responses | Auto-update `updated_at` on changes |
+| `update_survey_templates_updated_at` | survey_templates | Auto-update `updated_at` on changes |
+| `set_survey_submitted_at_trigger` | survey_responses | Auto-set `submitted_at` when `is_submitted` flips to true |
+
+### RPC Functions
+
+#### `soft_delete_survey(p_survey_id UUID, p_survey_logical_id UUID)`
+
+Atomically soft-deletes a survey and all its responses.
+
+```sql
+-- Usage
+SELECT soft_delete_survey('physical-uuid', 'logical-uuid');
+```
+
+#### `create_survey_assignments(p_survey_id UUID, p_profile_ids UUID[])`
+
+Bulk creates survey assignments for specific students.
+
+```sql
+-- Usage
+SELECT create_survey_assignments('survey-uuid', ARRAY['profile-1', 'profile-2']);
+```
+
+## Row Level Security (RLS)
+
+### Survey Policies
+
+| Policy | Role | Access |
+|--------|------|--------|
+| `surveys_select_staff` | Instructors, Graders | Read all active surveys in their classes |
+| `surveys_select_students` | Students | Read published/closed surveys they're assigned to |
+| `surveys_insert_instructors` | Instructors | Create surveys |
+| `surveys_update_instructors` | Instructors | Update surveys |
+
+### Response Policies
+
+| Policy | Role | Access |
+|--------|------|--------|
+| `survey_responses_select_owner` | Owner | Read own responses |
+| `survey_responses_select_staff` | Staff | Read all responses for surveys in their classes |
+| `survey_responses_insert_owner` | Owner | Create responses |
+| `survey_responses_update_owner` | Owner | Update own responses |
+
+## TypeScript Types
+
+```typescript
+// types/survey.ts
+import type { Tables } from "@/utils/supabase/SupabaseTypes";
+
+export type Survey = Tables<"surveys">;
+export type SurveyResponse = Tables<"survey_responses">;
+export type SurveyAssignee = Tables<"survey_assignments">;
+
+export type SurveyWithResponse = Survey & {
+  response_status: "not_started" | "in_progress" | "completed";
+  submitted_at?: string | null;
+  is_submitted?: boolean;
+};
+
+export type SurveyWithCounts = Survey & {
+  response_count: number;
+  submitted_count: number;
+  assigned_student_count: number;
+};
+
+export type SurveyResponseWithProfile = SurveyResponse & {
+  profiles: {
+    id: string;
+    name: string | null;
+    sis_user_id?: string | null;
+  };
+};
+```
+
+## File Structure
+
+```text
+app/course/[course_id]/
+├── surveys/                          # Student-facing
+│   ├── page.tsx                      # Survey list
+│   └── [survey_id]/
+│       ├── page.tsx                  # Take survey
+│       └── submit.ts                 # Save/load response utilities
+└── manage/surveys/                   # Instructor-facing
+    ├── page.tsx                      # Dashboard
+    ├── SurveysTable.tsx              # Survey list table
+    ├── SurveysHeader.tsx             # Page header
+    ├── EmptySurveysState.tsx         # Empty state
+    ├── new/
+    │   ├── page.tsx                  # Create survey page
+    │   └── form.tsx                  # Survey form component
+    ├── preview/
+    │   └── page.tsx                  # Preview survey
+    └── [survey_id]/
+        ├── edit/
+        │   └── page.tsx              # Edit survey
+        └── responses/
+            ├── page.tsx              # Response dashboard
+            ├── SurveyResponsesView.tsx  # Response table
+            └── [response_id]/
+                └── page.tsx          # Individual response
+
+components/survey/
+├── SurveyBuilder.tsx                 # Visual survey builder
+├── SurveyBuilderModal.tsx            # Builder modal wrapper
+├── SurveyBuilderDataTypes.ts         # Builder type definitions
+├── SurveyFilterButtons.tsx           # Filter UI component
+├── SurveyTemplateLibraryModal.tsx    # Template management
+├── factories.ts                      # Builder factory functions
+├── helpers.ts                        # Builder helper functions
+└── serde.ts                          # Serialization/deserialization
+
+components/
+├── Survey.tsx                        # SurveyJS renderer
+└── survey-preview-modal.tsx          # Preview modal
+```
+
+## SurveyJS Integration
+
+### Rendering Surveys
+
+```tsx
+import { Model } from "survey-core";
+import { Survey } from "survey-react-ui";
+
+function SurveyComponent({ surveyJson, initialData, onComplete }) {
+  const survey = new Model(surveyJson);
+
+  if (initialData) {
+    survey.data = initialData;
+  }
+
+  survey.onComplete.add((sender) => {
+    onComplete(sender.data);
+  });
+
+  return <Survey model={survey} />;
+}
+```
+
+### Survey JSON Structure
+
+```json
+{
+  "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "text",
+          "name": "question1",
+          "title": "What is your name?",
+          "isRequired": true
+        },
+        {
+          "type": "radiogroup",
+          "name": "satisfaction",
+          "title": "How satisfied are you?",
+          "choices": [
+            { "value": "1", "text": "Very Unsatisfied" },
+            { "value": "5", "text": "Very Satisfied" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Supported Question Types
+
+| Type | SurveyJS Type | Description |
+|------|---------------|-------------|
+| Short Text | `text` | Single-line text input |
+| Long Text | `comment` | Multi-line textarea |
+| Single Choice | `radiogroup` | Radio button selection |
+| Multiple Choice | `checkbox` | Checkbox selection |
+| Yes/No | `boolean` | Binary toggle |
+
+## Response Handling
+
+### Saving Responses
+
+```typescript
+// app/course/[course_id]/surveys/[survey_id]/submit.ts
+export async function saveResponse(
+  surveyId: string,
+  profileId: string,
+  responseData: Record<string, unknown>,
+  isSubmitted: boolean
+) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("survey_responses")
+    .upsert(
+      {
+        survey_id: surveyId,
+        profile_id: profileId,
+        response: responseData,
+        is_submitted: isSubmitted
+      },
+      { onConflict: "survey_id,profile_id" }
+    )
+    .select()
+    .single();
+
+  return { data, error };
+}
+```
+
+### Auto-save on Value Change
+
+When `allow_response_editing` is enabled, responses are auto-saved:
+
+```tsx
+const handleValueChanged = async (surveyModel: Model) => {
+  if (!survey.allow_response_editing) return;
+
+  await saveResponse(
+    survey.id,
+    profileId,
+    surveyModel.data,
+    false  // Not submitted yet
+  );
+};
+```
+
+## CSV Export
+
+The export functionality includes security protections against CSV injection:
+
+```typescript
+function escapeCSVValue(value: unknown): string {
+  const stringValue = String(value);
+  const trimmed = stringValue.trimStart();
+
+  // Prevent CSV formula injection (OWASP CWE-1236)
+  if (["=", "+", "-", "@"].includes(trimmed[0] ?? "")) {
+    return `"'${stringValue.replace(/"/g, '""')}"`;
+  }
+
+  if (stringValue.includes(",") || stringValue.includes('"') || stringValue.includes("\n")) {
+    return `"${stringValue.replace(/"/g, '""')}"`;
+  }
+
+  return stringValue;
+}
+```
+
+## Testing
+
+### E2E Tests
+
+Survey E2E tests are located at `tests/e2e/surveys.test.tsx`.
+
+```bash
+# Run survey tests
+npx playwright test surveys
+```
+
+### Manual Testing
+
+1. Create a test class with `npm run seed`
+2. Log in as an instructor
+3. Navigate to Surveys to test CRUD operations
+4. Log in as a student to test survey taking
+
+## Common Development Tasks
+
+### Adding a New Question Type
+
+1. Update `SurveyBuilderDataTypes.ts`:
+   ```typescript
+   export type ElementType = "text" | "comment" | "radiogroup" | "checkbox" | "boolean" | "newtype";
+   ```
+
+2. Update the builder UI in `SurveyBuilder.tsx`
+
+3. Add rendering support in `Survey.tsx` (usually automatic via SurveyJS)
+
+### Modifying the Database Schema
+
+1. Create a new migration:
+   ```bash
+   npx supabase migration new your_migration_name
+   ```
+
+2. Write your SQL in `supabase/migrations/[timestamp]_your_migration_name.sql`
+
+3. Apply locally:
+   ```bash
+   npx supabase db reset
+   ```
+
+4. Regenerate types:
+   ```bash
+   npm run client-local
+   ```
+
+### Adding RLS Policies
+
+```sql
+-- Example: Allow graders to delete responses
+CREATE POLICY survey_responses_delete_staff ON survey_responses
+  FOR DELETE
+  USING (
+    EXISTS (
+      SELECT 1 FROM surveys s
+      JOIN user_privileges up ON up.class_id = s.class_id
+      WHERE s.id = survey_responses.survey_id
+        AND up.user_id = auth.uid()
+        AND up.role IN ('instructor', 'grader')
+    )
+  );
+```
+
+## Troubleshooting
+
+### Survey not appearing for students
+
+1. Check survey status is `published`
+2. Verify `deleted_at` is NULL
+3. If using specific assignments, confirm student is in `survey_assignments`
+4. Check RLS policies are not blocking access
+
+### Response not saving
+
+1. Verify the student's `profile_id` matches their class enrollment
+2. Check for unique constraint violations (duplicate responses)
+3. Verify `is_submitted` trigger is working
+
+### Visual Builder not updating JSON
+
+1. Check browser console for JavaScript errors
+2. Verify `onChange` callback is properly wired
+3. Check for JSON serialization issues in `serde.ts`
