@@ -1,0 +1,101 @@
+---
+title: Error pins
+description: Automatically suggest relevant discussion posts when students encounter errors
+---
+
+## Overview
+
+Error pins automatically detect when students encounter common errors in their submissions and suggest relevant discussion posts that may help them resolve the issue.
+
+## How error pins work
+
+### Automatic detection
+When a student's submission fails:
+1. The system analyzes the error message
+2. Matches the error against known patterns
+3. Finds relevant discussion posts about similar errors
+4. Displays suggested posts to the student
+
+### Error matching
+Error pins match based on:
+- Error message text
+- Test case names
+- Stack traces
+- Common error patterns
+
+## Creating error pins
+
+Instructors can create error pins to link errors to discussion posts:
+
+1. Navigate to **Manage Assignment** → **Test Insights**
+2. Find a common error in the error analysis
+3. Click **Create Error Pin**
+4. Select or create a discussion post to link
+5. Configure the error matching criteria
+
+### Error pin configuration
+- **Error pattern**: Text or regex to match in error messages
+- **Test case**: Specific test case that triggers the pin
+- **Discussion post**: The post to suggest to students
+- **Priority**: Order in which pins are displayed
+
+## Student experience
+
+When a student encounters a pinned error:
+1. They see their submission results
+2. An "Error Pin" callout appears
+3. The callout suggests relevant discussion posts
+4. Students can click to view the suggested posts
+5. Posts may contain hints, explanations, or solutions
+
+## Managing error pins
+
+### View all error pins
+Navigate to **Manage Assignment** → **Error Pins** to:
+- See all active error pins
+- Edit existing pins
+- Delete outdated pins
+- View pin usage statistics
+
+### Pin analytics
+Track error pin effectiveness:
+- How many students see each pin
+- Click-through rates to discussion posts
+- Whether students resolve errors after viewing pins
+- Most helpful pins
+
+## Best practices
+
+### Create pins for common errors
+- Monitor test insights for frequently failing tests
+- Create pins for errors that affect many students
+- Update pins as you learn what helps students
+
+### Write helpful discussion posts
+- Explain the error clearly
+- Provide hints without giving away the solution
+- Include examples of correct approaches
+- Link to relevant course materials
+
+### Maintain pins over time
+- Update pins when assignment requirements change
+- Remove pins for errors that no longer occur
+- Refine error matching patterns based on effectiveness
+- Add new pins as new error patterns emerge
+
+## Integration with test insights
+
+Error pins integrate with the test insights dashboard:
+- Identify common errors automatically
+- Suggest creating pins for high-frequency errors
+- Track which errors have pins and which don't
+- Measure impact of pins on student success
+
+## Example error pin
+
+**Error pattern**: `NullPointerException at line 42`
+
+**Suggested discussion post**: "Common NullPointerException in Assignment 3"
+
+**Post content**:
+> Many students are encountering a NullPointerException on line 42. This usually happens when you forget to initialize the `data` variable before using it. Check that you're calling the constructor properly and that all instance variables are initialized.
