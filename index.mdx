@@ -1,97 +1,132 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: Pawtograder documentation
+description: Comprehensive autograding platform for computer science education
 ---
 
-## Setting up
+## Welcome to Pawtograder
 
-Get your documentation site up and running in minutes.
+Pawtograder is a comprehensive autograding and course management platform designed for computer science education. It provides automated grading, peer review management, discussion boards, and analytics to support large-scale programming courses.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
+## Recent updates
+
+### January 2026 release
+
+<CardGroup cols={2}>
+<Card title="Discussion karma system" icon="heart" href="/features/discussion-karma">
+  Track student engagement with karma badges and leaderboards
 </Card>
 
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
+<Card title="Security audit dashboard" icon="shield" href="/features/security-dashboard">
+  Search submissions for security violations and integrity concerns
 </Card>
+
+<Card title="Test insights analytics" icon="chart-bar" href="/features/test-insights">
+  Analyze test difficulty and identify common error patterns
+</Card>
+
+<Card title="Error pins" icon="link" href="/features/error-pins">
+  Link common errors to discussion posts automatically
+</Card>
+</CardGroup>
+
+### Grading enhancements
+
+<CardGroup cols={2}>
+<Card title="Enhanced autograder rerun" icon="rotate" href="/features/autograder-rerun">
+  Rerun grader with version selection and submission reuse
+</Card>
+
+<Card title="Deductive grading" icon="minus-circle" href="/features/deductive-grading">
+  Start at full points and deduct for errors
+</Card>
+
+<Card title="Score capping" icon="gauge" href="/features/score-capping">
+  Set maximum score limits to control extra credit
+</Card>
+
+<Card title="Lab leader grading" icon="users" href="/features/lab-leader-grading">
+  Automatically assign reviews to lab section leaders
+</Card>
+</CardGroup>
+
+### Student engagement
+
+<CardGroup cols={2}>
+<Card title="Assignment leaderboards" icon="trophy" href="/features/assignment-leaderboard">
+  Display rankings with medal indicators
+</Card>
+
+<Card title="Discord integration" icon="message-circle" href="/features/discord-integration">
+  Sync discussions with Discord channels
+</Card>
+
+<Card title="Extended due dates" icon="calendar" href="/features/due-date-extensions">
+  Intuitive date picker for granting extensions
+</Card>
+</CardGroup>
+
+## Core features
+
+### Autograding
+
+- Automated code evaluation with GitHub integration
+- Customizable test suites and rubrics
+- Lint checking and style enforcement
+- Execution time tracking
+- Multiple submission attempts
+
+### Peer review
+
+- Configurable review assignments
+- Rubric-based grading
+- Anonymous grading options
+- Review assignment automation
+- Grading conflict management
+
+### Discussion boards
+
+- Threaded discussions with topics
+- Instructor-only posts
+- Real-time updates
+- Markdown support
+- File attachments
+
+### Analytics
+
+- Student performance tracking
+- Test difficulty analysis
+- Engagement metrics
+- Gradebook integration
+- CSV exports
+
+## Getting started
+
+<CardGroup cols={2}>
+<Card title="Quickstart guide" icon="rocket" href="/quickstart">
+  Get up and running in minutes
+</Card>
+
+<Card title="Development setup" icon="code" href="/development">
+  Set up local development environment
+</Card>
+</CardGroup>
+
+## Platform architecture
+
+Pawtograder is built with:
+
+- **Frontend**: Next.js with React
+- **Backend**: Supabase (PostgreSQL + Edge Functions)
+- **Authentication**: Supabase Auth with magic links
+- **Real-time**: Supabase Realtime for live updates
+- **Storage**: GitHub for code repositories
+- **Deployment**: Vercel for hosting
+
+## Support
+
+Need help? Check out:
+
+- Feature documentation in the sidebar
+- API reference for integrations
+- GitHub repository for issues
+- Community discussions
