@@ -1,0 +1,154 @@
+---
+title: "Analytics and insights"
+description: "Dashboards and tools for tracking student performance and identifying issues"
+---
+
+## Test insights dashboard
+
+Analyze autograder test performance and identify common student errors.
+
+### Performance overview
+
+View comprehensive test statistics:
+
+- Total submissions and submissions with results
+- Number of tests analyzed
+- Average pass rate across all tests
+- Hardest and easiest tests identified
+- Overall score distribution chart
+- Per-test difficulty classification (Easy/Medium/Hard/Very Hard)
+
+### Test performance table
+
+Detailed metrics for each test:
+
+- Test name and part
+- Difficulty level badge
+- Pass rate with visual progress bar
+- Average score vs maximum score
+- Total attempts
+- Passing and failing counts
+
+### Common errors explorer
+
+Identify and analyze recurring student errors:
+
+- Error patterns grouped by normalized output
+- Occurrence count (number of students affected)
+- Average score for students with each error
+- Sample error outputs
+- Filter by test name, test part, and minimum occurrences
+- Search error output text
+- Sort by occurrence count, average score, or test name
+
+### Error pin integration
+
+Link common errors to discussion posts:
+
+- Create error pins from common error patterns
+- Search existing discussion threads
+- Automatically match future submissions with the same error
+- Students see suggested discussion links when encountering known errors
+
+### Access
+
+- Available to instructors and graders
+- Navigate to assignment → Test Insights
+- Requires autograded assignments with test results
+
+## Security audit dashboard
+
+Search all submission files for specific strings to detect academic integrity violations or security concerns.
+
+### Search functionality
+
+- Case-insensitive full-text search across all submission files
+- Live-updating results table
+- Contextual snippets showing matched content
+- Line number references for each match
+
+### Results display
+
+For each match, view:
+
+- Student name and email
+- Class and lab section
+- Submission number and score
+- File name with GitHub link
+- Matched content preview
+- Line number where match occurs
+
+### Grader output modal
+
+Click "View Output" to see:
+
+- Full instructor-visible autograder output
+- Submission score and status
+- Link to full grader results
+- Link to submission details
+
+### CSV export
+
+Export all search results to CSV including:
+
+- Student information
+- Submission details
+- File names and line numbers
+- GitHub links
+- Matched content
+- Search term used
+
+### Access control
+
+- Instructor-only feature
+- Navigate to assignment → Security Audit
+- Uses row-level security for data access
+
+## Assignment dashboard
+
+Overview of assignment metrics and student progress (coming soon).
+
+## Discussion engagement
+
+Track student participation in discussion boards.
+
+### Summary metrics
+
+- Total students participating
+- Average karma per student
+- Total activity (posts + replies)
+- Most active student
+
+### Engagement table
+
+Per-student metrics:
+
+- Rank and karma badge
+- Total karma (likes received)
+- Posts created
+- Replies posted
+- Likes received
+- Likes given
+- Total activity count
+
+### CSV export
+
+Export engagement data for grade book integration or further analysis.
+
+### Access
+
+- Available to instructors and graders
+- Navigate to Course Settings → Discussion Engagement
+- Requires discussion feature to be enabled
+
+## Submissions to full marks
+
+Track how many attempts students need to achieve perfect scores:
+
+- Students with full marks vs without
+- Average submissions to reach full marks
+- Median submissions to full marks
+- Per-test and overall statistics
+- Distribution of attempts
+
+Available in the Test Insights dashboard.
