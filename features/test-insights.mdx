@@ -1,0 +1,162 @@
+---
+title: Test insights dashboard
+description: Analyze student performance on auto-graded tests and identify common errors
+---
+
+## Overview
+
+The test insights dashboard provides instructors and graders with analytics on test difficulty, common error patterns, and student progress toward full marks.
+
+## Accessing test insights
+
+Navigate to `/course/{course_id}/manage/assignments/{assignment_id}/test-insights`
+
+Available to instructors and graders.
+
+## Performance overview tab
+
+### Summary metrics
+
+View key statistics at a glance:
+
+- **Total submissions**: Active submissions with grader results
+- **Tests analyzed**: Number of unique test cases
+- **Average pass rate**: Overall success rate across all tests
+- **Hardest test**: Test with lowest pass rate
+
+### Overall score distribution
+
+Visual bar chart showing how students scored across all tests:
+
+- **100%**: Perfect scores
+- **90-99%**: Near-perfect
+- **80-89%**: Good performance
+- **70-79%**: Satisfactory
+- **60-69%**: Needs improvement
+- **50-59%**: Struggling
+- **1-49%**: Significant issues
+- **0%**: Failed attempts
+
+### Test performance table
+
+Detailed breakdown for each test:
+
+| Column | Description |
+|--------|-------------|
+| Test name | Name of the test case |
+| Part | Test part identifier (if applicable) |
+| Difficulty | Classification based on pass rate |
+| Pass rate | Percentage of students passing |
+| Avg score | Mean score across all attempts |
+| Attempts | Total number of submissions |
+| Passing | Count of successful attempts |
+| Failing | Count of failed attempts |
+
+#### Difficulty levels
+
+- **Easy**: 80%+ pass rate (green)
+- **Medium**: 60-79% pass rate (yellow)
+- **Hard**: 40-59% pass rate (orange)
+- **Very hard**: <40% pass rate (red)
+
+### Submissions to full marks
+
+Track how many attempts students need to achieve perfect scores:
+
+- **Students with full marks**: Count who achieved 100%
+- **Students without full marks**: Count still working toward 100%
+- **Average submissions**: Mean attempts to reach full marks
+- **Median submissions**: Middle value of attempts distribution
+
+## Common errors tab
+
+### Error exploration
+
+Identify and analyze recurring error patterns:
+
+- **Occurrence count**: Number of students encountering the error
+- **Average score**: Mean score for submissions with this error
+- **Sample outputs**: Representative error messages
+- **Affected submissions**: List of submission IDs
+
+### Filtering errors
+
+Refine the error list using filters:
+
+- **Test name**: Filter by specific test
+- **Test part**: Filter by test part
+- **Min occurrences**: Show errors affecting at least N students
+- **Search output**: Text search within error messages
+
+### Sorting options
+
+Sort errors by:
+
+- **Occurrence count**: Most common errors first (default)
+- **Average score**: Lowest scoring errors first
+- **Test name**: Alphabetical order
+
+### Error deduplication
+
+The system automatically groups similar errors by normalizing:
+
+- Memory addresses (`0x...` → `<hex>`)
+- Timestamps → `<timestamp>`
+- Line numbers (`at line 42` → `at line <N>`)
+- Large numbers → `<num>`
+
+This ensures variations of the same error are grouped together.
+
+## Error pins integration
+
+Link common errors to discussion posts to help students:
+
+### Creating error pins
+
+1. Click "Create Error Pin" on any error group
+2. Search for relevant discussion threads
+3. Select the thread explaining the solution
+4. Click "Create Error Pin"
+
+When students encounter this error, they'll see a link to the discussion post.
+
+### Viewing existing pins
+
+The modal shows existing error pins that match the pattern:
+
+- Thread subject and creation date
+- Number of submissions linked
+- Direct link to view the discussion
+
+## Use cases
+
+### Identifying difficult concepts
+
+- Review tests with low pass rates
+- Check common error patterns
+- Create targeted discussion posts or office hours topics
+
+### Improving assignments
+
+- Adjust test difficulty based on pass rates
+- Clarify instructions for frequently failed tests
+- Add hints for common error patterns
+
+### Supporting students
+
+- Link error pins to helpful discussion posts
+- Identify students needing additional help
+- Track progress toward full marks
+
+### Curriculum planning
+
+- Compare test difficulty across assignments
+- Identify concepts requiring more class time
+- Adjust pacing based on submission attempts
+
+## Best practices
+
+- Review test insights after the first wave of submissions
+- Create error pins for the top 3-5 most common errors
+- Use score distributions to calibrate test difficulty
+- Export data for longitudinal analysis across semesters
