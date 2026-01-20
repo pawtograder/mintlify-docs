@@ -11,6 +11,48 @@
   "navigation": {
     "tabs": [
       {
+        "tab": "Features",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "features/overview"
+            ]
+          },
+          {
+            "group": "Assignment management",
+            "pages": [
+              "features/assignment-dashboard",
+              "features/assignment-security-dashboard",
+              "features/test-insights-dashboard"
+            ]
+          },
+          {
+            "group": "Grading",
+            "pages": [
+              "features/deductive-grading",
+              "features/lab-leader-grading",
+              "features/autograder-rerun"
+            ]
+          },
+          {
+            "group": "Student engagement",
+            "pages": [
+              "features/assignment-leaderboard",
+              "features/discussion-karma",
+              "features/error-pins"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "features/score-capping",
+              "features/due-date-extensions"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Guides",
         "groups": [
           {
