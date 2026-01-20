@@ -1,0 +1,128 @@
+---
+title: Deductive grading
+description: Use deduction-only scoring mode for rubric criteria
+---
+
+## Overview
+
+Deductive grading allows instructors to create rubric criteria that only deduct points from a total score, rather than awarding points. This is useful for style guides, formatting requirements, and penalty-based grading.
+
+## How deductive grading works
+
+### Traditional grading
+- Start at 0 points
+- Award points for correct elements
+- Final score is sum of awarded points
+
+### Deductive grading
+- Start at maximum points
+- Deduct points for errors or missing elements
+- Final score is maximum minus deductions
+
+## Creating deductive rubric criteria
+
+When creating or editing a rubric:
+
+1. Add a new rubric criterion
+2. Select **Deduction-only scoring mode**
+3. Set the maximum points for the criterion
+4. Define deduction levels:
+   - No deduction (0 points deducted)
+   - Minor issues (-2 points)
+   - Major issues (-5 points)
+   - Critical issues (-10 points)
+
+## Use cases
+
+### Code style and formatting
+- Start with full style points
+- Deduct for style violations
+- Deduct for formatting issues
+- Deduct for naming convention violations
+
+### Documentation requirements
+- Start with full documentation points
+- Deduct for missing comments
+- Deduct for unclear documentation
+- Deduct for incomplete README
+
+### Best practices violations
+- Start with full points
+- Deduct for inefficient code
+- Deduct for poor design choices
+- Deduct for security issues
+
+## Example rubric with deductive grading
+
+### Assignment: Web Application (100 points)
+
+**Functionality (70 points)** - Traditional scoring
+- Login system (20 points)
+- User dashboard (25 points)
+- Data persistence (25 points)
+
+**Code Style (15 points)** - Deductive scoring
+- Start with 15 points
+- Deduct 1 point per style violation (max -5)
+- Deduct 2 points for inconsistent naming (max -4)
+- Deduct 3 points for missing comments (max -6)
+
+**Documentation (15 points)** - Deductive scoring
+- Start with 15 points
+- Deduct 5 points for missing README
+- Deduct 3 points for incomplete setup instructions
+- Deduct 2 points per missing function comment (max -7)
+
+## Configuring deductive criteria
+
+### YAML configuration
+
+```yaml
+rubric:
+  - name: Code Style
+    points: 15
+    scoring_mode: deduction_only
+    criteria:
+      - description: Style violations
+        deduction: -1
+        max_deductions: 5
+      - description: Inconsistent naming
+        deduction: -2
+        max_deductions: 4
+      - description: Missing comments
+        deduction: -3
+        max_deductions: 6
+```
+
+### UI configuration
+
+1. Navigate to **Manage Assignment** → **Rubric**
+2. Add a new criterion
+3. Enable **Deduction-only mode**
+4. Set maximum points
+5. Add deduction levels with negative point values
+6. Set maximum deductions for each type
+
+## Combining scoring modes
+
+You can mix traditional and deductive scoring in the same rubric:
+- Use traditional scoring for core functionality
+- Use deductive scoring for style and best practices
+- Calculate final score as: (traditional points) + (max deductive points - deductions)
+
+## Best practices
+
+- Clearly communicate which criteria use deductive scoring
+- Set reasonable maximum deductions
+- Provide examples of what triggers deductions
+- Be consistent in applying deductions
+- Consider using deductive scoring for subjective criteria
+- Document your deduction policies in the assignment description
+
+## Gradebook integration
+
+Deductive criteria integrate seamlessly with the gradebook:
+- Display starting points and deductions
+- Show final score after deductions
+- Export includes deduction details
+- Students see what points were deducted and why
