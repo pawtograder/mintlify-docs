@@ -44,6 +44,16 @@
               "ai-tools/claude-code",
               "ai-tools/windsurf"
             ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/discussion-karma",
+              "features/security-audit",
+              "features/test-insights",
+              "features/autograder-rerun",
+              "changelog"
+            ]
           }
         ]
       },
