@@ -1,0 +1,216 @@
+---
+title: Changelog
+description: Recent updates and new features in Pawtograder
+---
+
+## January 2026
+
+### Discussion karma system (Jan 20, 2026)
+
+Added a karma system to track and reward student engagement in discussion boards.
+
+**New features:**
+- Like/heart toggle on discussion posts with live counts
+- Karma badges next to usernames (sprout, heart, star, trophy based on karma level)
+- Discussion Engagement dashboard for instructors showing:
+  - Student rankings by karma
+  - Posts, replies, and likes statistics
+  - CSV export of engagement data
+- Stable reply sorting by like count
+- Atomic thread visibility changes with error handling
+
+**Technical improvements:**
+- Database trigger automatically updates karma when posts are liked
+- Server-side RPC for engagement analytics
+- Profile normalization for anonymous/public posts
+
+### Assignment security dashboard (Jan 20, 2026)
+
+Introduced an instructor-only security audit tool for detecting academic integrity violations.
+
+**New features:**
+- Search all submission files for specific strings
+- Live-updating results table with:
+  - Student information and sections
+  - Submission scores
+  - File names with line numbers
+  - Matched content previews
+  - GitHub file links
+- Grader output modal showing instructor-only feedback
+- CSV export of audit results
+- Full submission metadata export to Markdown
+
+**Security enhancements:**
+- Instructor-only access control
+- HTML sanitization for rendered Markdown
+- Formula injection protection in CSV exports
+
+### Test insights dashboard (Jan 19, 2026)
+
+Launched comprehensive test performance analytics for auto-graded assignments.
+
+**New features:**
+- Performance overview with:
+  - Test difficulty classification
+  - Pass rate statistics
+  - Score distributions
+  - Submissions to full marks tracking
+- Common errors explorer with:
+  - Intelligent error deduplication
+  - Filtering by test name, part, and occurrence count
+  - Sample error outputs
+  - Error pattern search
+- Error pin integration:
+  - Link errors to discussion threads
+  - Search and select threads
+  - Automatic matching rule creation
+  - View existing pins
+
+**Analytics capabilities:**
+- Server-side PostgreSQL functions for scalability
+- Regex-based error normalization
+- Safe regex matching with error handling
+- Real-time filtering and sorting
+
+### Enhanced autograder rerun (Jan 19, 2026)
+
+Improved the autograder rerun feature with version selection and what-if testing.
+
+**New features:**
+- Grader version selection:
+  - Choose from 50 recent commits on main branch
+  - Enter custom SHA for any commit
+  - Clear visual commit picker
+- What-if mode:
+  - Test grader changes without affecting official scores
+  - View what-if history for each submission
+  - Manual promotion of what-if results
+- Auto-promotion toggle for immediate score updates
+- Development autograder column visibility toggle
+
+**Technical improvements:**
+- Reuses existing submissions (no duplicates created)
+- Atomic promotion with row locking
+- Proper cleanup of replaced results
+- Metadata tracking for reruns
+
+### Assignment dashboard (Jan 19, 2026)
+
+Added a rough assignment dashboard for quick overview of assignment status.
+
+### Extended due date picker (Jan 19, 2026)
+
+Instructors can now choose an extended due date directly instead of entering extension hours and minutes.
+
+**Improvements:**
+- Date/time picker for intuitive due date selection
+- Clearer extension workflow
+- Reduced input errors
+
+### Assignment leaderboard (Jan 19, 2026)
+
+Introduced student leaderboards for assignments with public scoring.
+
+**Features:**
+- Medal rankings (🥇🥈🥉) for top performers
+- Real-time score updates
+- "You" badge for current student
+- Sortable by rank and score
+
+### Assignment score capping (Jan 18, 2026)
+
+Added optional score capping to limit total scores to assignment maximum points.
+
+**Configuration:**
+- Enable per-rubric via `cap_score_to_assignment_points` setting
+- Automatically caps total score (autograde + manual + tweak) to assignment total
+- Prevents scores exceeding 100% of possible points
+
+### Grading annotations usability (Jan 18, 2026)
+
+Enhanced the grading annotation interface for better usability.
+
+### Error pins feature (Jan 18, 2026)
+
+Implemented "Error Pins" to link common submission errors to discussion posts.
+
+**Features:**
+- Automatic error pattern matching
+- Suggested discussion posts displayed to students
+- Flexible matching rules (test name, output, scores)
+- AND/OR rule logic support
+
+### Lab leader bulk grading (Jan 12, 2026)
+
+Added "Assign to lab leaders" mode for bulk review assignment.
+
+**Features:**
+- Automatically assigns reviews to lab section leaders
+- Reviews distributed based on students' lab sections
+- Streamlines grading workflow for large courses
+
+### Deductive grading (Jan 12, 2026)
+
+Introduced deduction-only scoring mode for rubric criteria.
+
+**Features:**
+- Support for negative deductions
+- Criteria can only subtract points (not add)
+- Backwards compatible with existing rubrics
+- Updated UI and YAML examples
+
+## December 2025 - January 2026
+
+### Spring 2026 launch (Jan 12, 2026)
+
+Major feature release including:
+
+**Discord integration:**
+- Deep links to discussion threads
+- Channel linking for course discussions
+- Stats updates in Discord
+
+**Lab management:**
+- Lab roster management page
+- Assigned lab sections view for instructors
+- Enhanced lab sections table with sorting, filtering, CSV export
+
+**Office hours:**
+- Floating help request widget
+- Office hours discussion browser
+- Request filtering and sorting controls
+
+**Course management:**
+- Seed course assignments tooling
+- Bulk CSV enrollment import
+- Calendar subscribe icon-only trigger
+
+**Notifications:**
+- Discord discussion notification preferences
+- Enhanced calendar sync
+- Improved announcement handling
+
+### Bug fixes
+
+- Fixed duplicate grading assignments for lab leaders (Jan 18, 2026)
+- Added loading state to export grades buttons (Jan 18, 2026)
+- Reduced test flakiness (Jan 1, 2026)
+
+## Migration notes
+
+### Database changes
+
+Recent migrations include:
+- `discussion_karma` column on profiles table
+- `rerun_for_submission_id` column on grader_results table
+- New repository_check_runs columns for rerun metadata
+- Test insights analytics functions
+- Error pin matching functions
+
+### Breaking changes
+
+None. All changes are backwards compatible.
+
+### Required actions
+
+No action required. All features are opt-in or automatically available based on user roles.
