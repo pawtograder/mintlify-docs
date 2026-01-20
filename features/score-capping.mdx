@@ -1,0 +1,120 @@
+---
+title: Assignment score capping
+description: Set maximum score limits to prevent extra credit inflation
+---
+
+## Overview
+
+Score capping allows instructors to set a maximum score limit for assignments, preventing students from earning unlimited extra credit points.
+
+## Configuring score caps
+
+### Assignment settings
+
+1. Edit assignment configuration
+2. Locate "Score Cap" setting
+3. Enter maximum allowed score
+4. Save changes
+
+### Cap behavior
+
+When a score cap is set:
+
+- Student scores cannot exceed the cap
+- Autograder may award more points
+- Final grade is capped at maximum
+- Students see both raw and capped scores
+
+## Example scenarios
+
+### Extra credit with limits
+
+Assignment worth 100 points with 20 points extra credit:
+
+- **Without cap**: Students can earn up to 120/100
+- **With cap at 100**: Maximum score is 100/100
+- **With cap at 110**: Maximum score is 110/100
+
+### Preventing grade inflation
+
+For assignments with bonus tests:
+
+1. Set base points: 100
+2. Add bonus tests: +30 points possible
+3. Set score cap: 105
+4. Students can earn up to 105/100 (5% bonus)
+
+## How capping works
+
+### Score calculation
+
+```
+Raw Score = Sum of all test points earned
+Capped Score = min(Raw Score, Score Cap)
+Final Grade = Capped Score
+```
+
+### Display to students
+
+Students see:
+
+- **Raw score**: Actual points earned (e.g., 115)
+- **Capped score**: Applied maximum (e.g., 100)
+- **Indicator**: "Score capped at 100" message
+
+### Gradebook integration
+
+The gradebook uses capped scores:
+
+- Exports show capped values
+- Grade calculations use caps
+- Analytics reflect capped scores
+
+## Use cases
+
+### Limiting extra credit
+
+Prevent excessive extra credit from skewing grades:
+
+- Set reasonable bonus limits
+- Maintain grade distribution
+- Ensure fairness across assignments
+
+### Standardizing scores
+
+When combining assignments with different point values:
+
+- Cap all assignments at 100
+- Simplifies weighted grade calculations
+- Consistent scale across assignments
+
+### Encouraging completion
+
+Offer extra credit for early submission:
+
+- Base assignment: 100 points
+- Early submission bonus: +10 points
+- Cap at 105 to limit advantage
+
+## Removing score caps
+
+To remove a cap:
+
+1. Edit assignment settings
+2. Clear the score cap field
+3. Save changes
+4. Scores recalculate without cap
+
+## Permissions
+
+- **Instructors**: Set and modify score caps
+- **Graders**: View caps, cannot modify
+- **Students**: See capped scores
+
+## Best practices
+
+- Set caps before students submit
+- Communicate cap policy in assignment description
+- Use caps consistently across similar assignments
+- Consider caps when designing extra credit
+- Document cap rationale for transparency
