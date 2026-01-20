@@ -1,0 +1,202 @@
+---
+title: Discord integration
+description: Connect course discussions to Discord with deep links and channel syncing
+---
+
+## Overview
+
+The Discord integration connects your course discussion board with Discord, enabling students to participate in discussions through their preferred platform while maintaining a unified conversation history.
+
+## Features
+
+### Deep links to discussions
+
+Students can jump directly from Discord to specific discussion threads:
+
+- Discord messages link to Pawtograder threads
+- Click to view full context in web interface
+- Maintains conversation continuity
+- Preserves formatting and attachments
+
+### Channel linking
+
+Link Discord channels to discussion topics:
+
+- Map course topics to Discord channels
+- Messages sync bidirectionally
+- Maintain separate channels for different topics
+- Organize discussions by subject area
+
+### Stats updates
+
+Discussion statistics sync to Discord:
+
+- Post counts update in channel descriptions
+- Active discussion indicators
+- Engagement metrics visible in Discord
+- Real-time activity tracking
+
+## Setting up Discord integration
+
+### Prerequisites
+
+1. Create a Discord server for your course
+2. Have Discord server admin permissions
+3. Access to Pawtograder course settings
+
+### Connecting Discord
+
+<Steps>
+<Step title="Link your Discord account">
+  Navigate to course settings and click "Connect Discord Account"
+</Step>
+
+<Step title="Authorize the bot">
+  Grant Pawtograder bot permissions to your Discord server
+</Step>
+
+<Step title="Configure channels">
+  Map Discord channels to discussion topics in course settings
+</Step>
+
+<Step title="Test the integration">
+  Post a test message to verify syncing works
+</Step>
+</Steps>
+
+## Channel configuration
+
+### Mapping topics to channels
+
+1. Go to "Discord Settings" in course management
+2. Select a discussion topic
+3. Choose corresponding Discord channel
+4. Enable bidirectional sync
+5. Save configuration
+
+### Sync settings
+
+Configure what syncs between platforms:
+
+- **New posts**: Create Discord messages for new threads
+- **Replies**: Sync discussion replies to Discord
+- **Reactions**: Sync likes/reactions
+- **Edits**: Update messages when edited
+- **Deletions**: Remove messages when deleted
+
+## Using Discord discussions
+
+### Posting from Discord
+
+Students can post in linked channels:
+
+- Messages appear in Pawtograder discussions
+- Author attribution maintained
+- Formatting preserved where possible
+- Attachments sync to Pawtograder
+
+### Posting from Pawtograder
+
+Posts created in Pawtograder sync to Discord:
+
+- Thread subject becomes Discord message title
+- Body content syncs to message
+- Replies thread under original message
+- Links back to Pawtograder for full view
+
+## Notification preferences
+
+Students can configure Discord notifications:
+
+1. Go to notification preferences
+2. Enable "Discord discussion notifications"
+3. Choose notification triggers:
+   - Replies to your posts
+   - Mentions in discussions
+   - New posts in followed topics
+4. Save preferences
+
+## Discord-specific features
+
+### Role syncing
+
+Sync course roles to Discord:
+
+- Instructors get Discord instructor role
+- Graders get Discord TA role
+- Students get Discord student role
+- Automatic role updates on enrollment changes
+
+### Pending invites
+
+Manage Discord server invitations:
+
+- View pending Discord invites
+- Resend invites to students
+- Track invitation acceptance
+- Bulk invite operations
+
+## Calendar integration
+
+Discord can display course calendar events:
+
+- Assignment due dates
+- Office hours schedules
+- Exam dates
+- Course announcements
+
+<Note>
+Calendar Discord notifications can be enabled/disabled in course settings.
+</Note>
+
+## Managing the integration
+
+### Viewing connection status
+
+Check Discord integration health:
+
+- Connection status indicator
+- Last sync timestamp
+- Error logs if sync fails
+- Reconnection options
+
+### Troubleshooting sync issues
+
+If messages aren't syncing:
+
+1. Verify bot has channel permissions
+2. Check channel mapping configuration
+3. Review error logs in settings
+4. Reconnect Discord account if needed
+
+### Disabling integration
+
+To disconnect Discord:
+
+1. Go to Discord settings
+2. Click "Disconnect Discord"
+3. Confirm disconnection
+4. Bot leaves server (optional)
+
+## Permissions
+
+- **Instructors**: Full Discord integration control
+- **Graders**: Can view Discord settings
+- **Students**: Can link personal Discord accounts
+
+## Privacy considerations
+
+- Students must link Discord accounts voluntarily
+- Discord usernames visible to course members
+- Messages sync according to discussion visibility rules
+- Instructor-only posts don't sync to Discord
+
+## Best practices
+
+- Set clear Discord usage guidelines
+- Map channels to specific topics
+- Monitor Discord for off-topic discussions
+- Use Discord for informal Q&A
+- Keep formal announcements in Pawtograder
+- Regularly review sync logs
+- Test integration before semester starts
