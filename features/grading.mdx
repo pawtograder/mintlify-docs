@@ -1,0 +1,115 @@
+---
+title: "Grading features"
+description: "Enhanced grading capabilities for instructors and TAs"
+---
+
+## Deductive grading
+
+Create rubric criteria that only deduct points, useful for penalty-based grading schemes.
+
+### How it works
+
+- Students start at 0 points for deduction-only criteria
+- Points can only be deducted (negative values)
+- Deductions are capped at the criterion's total_points value
+- Cannot be combined with additive scoring on the same criterion
+
+### YAML configuration
+
+```yaml
+- name: Deduction-only penalties
+  description: Penalty-only grading for violations
+  is_additive: false
+  is_deduction_only: true
+  total_points: 20
+  checks:
+    - name: Late submission
+      description: Deduct points for late submissions
+      points: 5
+      student_visibility: always
+    - name: Missing required file
+      description: Deduct points if required files are missing
+      points: 10
+      student_visibility: always
+```
+
+### UI display
+
+Deduction-only criteria display as `-X/Y` in the rubric sidebar, showing current deductions out of maximum possible deductions.
+
+## Score capping
+
+Automatically cap final submission scores to the assignment's maximum points.
+
+### Enabling score capping
+
+Set `cap_score_to_assignment_points: true` in your rubric YAML:
+
+```yaml
+name: Grading rubric
+description: Main grading rubric with score capping
+cap_score_to_assignment_points: true
+parts:
+  - name: Implementation
+    # ... criteria
+```
+
+### Behavior
+
+- Final score = MIN(manual_score + autograder_score + tweak, assignment_max_points)
+- Useful when manual grading serves as a fallback for autograder failures
+- Prevents scores from exceeding assignment maximum
+- Applied after all scoring calculations including tweaks
+
+### UI indicators
+
+When score capping is enabled:
+
+- Rubric editor shows "Score capping is enabled" message
+- Student submission view displays capping notice
+- Grading summary explains the cap behavior
+
+## Lab leader grading assignments
+
+Bulk assign reviews to lab section leaders for their respective students.
+
+### Assignment mode
+
+Select "Assign to lab leaders" when creating grading assignments:
+
+- Automatically assigns reviews to lab section leaders
+- Each leader reviews only their own lab section's students
+- Prevents duplicate assignments for students in multiple sections
+
+### Requirements
+
+- Lab sections must be configured with designated leaders
+- Students must be assigned to lab sections
+- Works with both individual and group submissions
+
+## Extended due date selection
+
+Choose specific target dates for deadline extensions instead of entering hours and minutes.
+
+### Target date picker
+
+- Select a specific date and time for the new due date
+- Automatically calculates hours and minutes extension
+- Bidirectional sync: change either target date or hours/minutes
+- Timezone-aware using course timezone settings
+
+### Validation
+
+- Target date must be after the current due date
+- Minimum extension of 1 minute required
+- Clear error messages for invalid selections
+
+### Usage
+
+1. Navigate to assignment due date exceptions
+2. Select student or group
+3. Either:
+   - Choose a target due date from the datetime picker, or
+   - Enter hours and minutes manually
+4. The other field updates automatically
+5. Submit to apply the extension
