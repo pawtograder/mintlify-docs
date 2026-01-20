@@ -1,0 +1,132 @@
+---
+title: Assignment security dashboard
+description: Search submission files for security violations and academic integrity concerns
+---
+
+## Overview
+
+The security audit dashboard helps instructors detect potential academic integrity violations by searching all submission files for specific patterns, such as prohibited library usage or attempts to access grading infrastructure.
+
+## Accessing the dashboard
+
+Navigate to `/course/{course_id}/manage/assignments/{assignment_id}/security`
+
+<Warning>
+This feature is instructor-only. Graders and students cannot access the security audit dashboard.
+</Warning>
+
+## Searching submissions
+
+### Basic search
+
+1. Enter a search term in the search input
+2. Click "Search All Submissions" or press Enter
+3. Results display with contextual snippets showing matches
+
+### Search features
+
+- **Case-insensitive**: Searches ignore case differences
+- **Full content search**: Scans entire file contents
+- **Contextual snippets**: Shows surrounding code for each match
+- **Line numbers**: Displays exact line where match occurs
+
+### Common search patterns
+
+Search for prohibited imports or file system access:
+
+```
+java.io.File
+FileInputStream
+FileReader
+/autograder/
+```
+
+## Understanding results
+
+Each result shows:
+
+- **Student name**: Links to their submission
+- **Student email**: Contact information
+- **Class section**: Student's assigned section
+- **Lab section**: Student's lab group
+- **Submission #**: Ordinal number with link
+- **Score**: Autograder score with color coding
+- **File name**: Links to GitHub file at specific line
+- **Matched content**: Code snippet showing the match
+
+### Score indicators
+
+- **Green badge**: Full marks (100%)
+- **Red badge**: Partial or zero score
+- **Gray badge**: Not yet graded
+
+## Viewing grader output
+
+Click "View Output" on any result to see:
+
+- Full autograder score
+- Submission details and links
+- Instructor-visible grader output
+- Link to complete grader results
+
+## Exporting results
+
+### CSV export
+
+Click "Export All to CSV" to download:
+
+- All search results in spreadsheet format
+- Student information and scores
+- GitHub links for each match
+- Search term used for the query
+
+The CSV export includes formula injection protection for safe use in Excel and Google Sheets.
+
+## Submission metadata export
+
+From any submission page, instructors can export complete submission history:
+
+1. Click the export icon in the submission toolbar
+2. Downloads a markdown file containing:
+   - All submission attempts with metadata
+   - Autograder results and test outputs
+   - Grading review scores
+   - File diffs between submissions
+   - Commit messages and GitHub links
+
+## Use cases
+
+### Detecting prohibited libraries
+
+Search for imports students aren't allowed to use:
+
+```
+import java.io
+import java.nio.file
+```
+
+### Finding hardcoded values
+
+Search for suspicious patterns:
+
+```
+/autograder/
+expected_output
+test_cases
+```
+
+### Academic integrity review
+
+Identify students who may have:
+
+- Accessed grading infrastructure files
+- Used prohibited file I/O operations
+- Hardcoded test case outputs
+- Shared code with identical patterns
+
+## Best practices
+
+- Run security audits before finalizing grades
+- Document findings with exported CSV reports
+- Review grader output for context on violations
+- Use submission metadata exports for detailed investigation
