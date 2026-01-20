@@ -44,6 +44,12 @@
               "ai-tools/claude-code",
               "ai-tools/windsurf"
             ]
+          },
+          {
+            "group": "Release notes",
+            "pages": [
+              "releases/january-2026"
+            ]
           }
         ]
       },
