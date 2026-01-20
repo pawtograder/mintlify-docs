@@ -1,0 +1,178 @@
+---
+title: Deductive grading
+description: Use deduction-only scoring mode for rubric criteria
+---
+
+## Overview
+
+Deductive grading allows instructors to start students at full points and deduct for errors, rather than awarding points for correct work. This is useful for assignments where the default assumption is correctness.
+
+## Scoring modes
+
+### Additive scoring (default)
+
+Students start at 0 and earn points:
+
+- Base score: 0
+- Add points for each criterion met
+- Final score: Sum of earned points
+
+### Deductive scoring (new)
+
+Students start at maximum and lose points:
+
+- Base score: Maximum points
+- Subtract points for each error
+- Final score: Maximum - deductions
+
+## Configuring deductive grading
+
+### In rubric YAML
+
+```yaml
+criteria:
+  - name: Code style
+    max_score: 10
+    scoring_mode: deduction_only
+    levels:
+      - points: 0
+        description: No style issues
+      - points: -2
+        description: Minor style violations
+      - points: -5
+        description: Major style violations
+      - points: -10
+        description: Severe style violations
+```
+
+### In rubric editor UI
+
+1. Create or edit a rubric criterion
+2. Select "Deduction only" scoring mode
+3. Define deduction levels with negative points
+4. Set maximum score for the criterion
+
+## Deduction levels
+
+### Defining deductions
+
+Each level specifies:
+
+- **Points**: Negative value to deduct (e.g., -2, -5)
+- **Description**: What triggers this deduction
+- **Severity**: Implied by deduction amount
+
+### Example deductions
+
+**Code quality criterion (10 points max):**
+
+- 0 points: Perfect code quality
+- -1 point: Minor formatting issues
+- -3 points: Missing documentation
+- -5 points: Poor variable naming
+- -10 points: Completely unreadable code
+
+## Grading with deductions
+
+### Grader interface
+
+When grading with deductive criteria:
+
+1. Student starts with full points
+2. Select applicable deductions
+3. Points subtract from maximum
+4. Final score = Max - Total deductions
+
+### Multiple deductions
+
+Graders can apply multiple deductions:
+
+- Each deduction subtracts from total
+- Score cannot go below 0
+- All deductions are visible to students
+
+## Student view
+
+Students see deductive grading as:
+
+- Starting score: Maximum points
+- Applied deductions: List of issues found
+- Final score: After all deductions
+- Feedback: Description for each deduction
+
+## Use cases
+
+### Code style grading
+
+Start with perfect style score:
+
+- Deduct for formatting violations
+- Deduct for naming conventions
+- Deduct for missing comments
+
+### Documentation review
+
+Assume complete documentation:
+
+- Deduct for missing sections
+- Deduct for unclear explanations
+- Deduct for formatting errors
+
+### Test coverage
+
+Start with full coverage points:
+
+- Deduct for untested methods
+- Deduct for missing edge cases
+- Deduct for incomplete assertions
+
+## Combining scoring modes
+
+Mix additive and deductive criteria in one rubric:
+
+```yaml
+criteria:
+  - name: Functionality
+    max_score: 70
+    scoring_mode: additive  # Earn points for features
+    
+  - name: Code quality
+    max_score: 20
+    scoring_mode: deduction_only  # Lose points for issues
+    
+  - name: Documentation
+    max_score: 10
+    scoring_mode: deduction_only  # Lose points for gaps
+```
+
+## Backwards compatibility
+
+Existing rubrics continue to work:
+
+- Default scoring mode is additive
+- No changes required for existing criteria
+- Deductive mode is opt-in per criterion
+
+## Gradebook integration
+
+Deductive scores integrate seamlessly:
+
+- Gradebook shows final scores after deductions
+- Exports include deduction details
+- Analytics treat deductive scores normally
+
+## Permissions
+
+- **Instructors**: Configure deductive criteria
+- **Graders**: Apply deductions during grading
+- **Students**: View deductions and feedback
+
+## Best practices
+
+- Use deductive grading for subjective criteria
+- Clearly define what triggers each deduction
+- Provide detailed feedback with deductions
+- Combine with additive scoring for balanced rubrics
+- Test deductive rubrics before releasing to students
+- Set reasonable deduction amounts
+- Avoid excessive deductions that discourage students
