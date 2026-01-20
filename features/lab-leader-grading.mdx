@@ -1,0 +1,178 @@
+---
+title: Lab leader bulk grading
+description: Automatically assign reviews to lab section leaders for their students
+---
+
+## Overview
+
+The lab leader bulk grading mode automatically assigns peer reviews to lab section leaders, ensuring each leader grades only their own lab section's students.
+
+## Assignment modes
+
+### Standard modes
+
+- **Manual assignment**: Instructors assign reviews individually
+- **Random assignment**: System randomly distributes reviews
+- **Round-robin**: Balanced distribution across graders
+
+### Lab leader mode (new)
+
+- **Assign to lab leaders**: Automatically assigns to lab section leaders
+- Each lab leader grades their own section's students
+- Respects lab section boundaries
+- Prevents cross-section assignments
+
+## Setting up lab leader grading
+
+### Prerequisites
+
+1. Create lab sections in course settings
+2. Assign students to lab sections
+3. Designate lab leaders (graders) for each section
+4. Create a peer review assignment
+
+### Enabling lab leader mode
+
+1. Navigate to assignment review settings
+2. Select "Assign to lab leaders" mode
+3. Configure reviews per student
+4. Click "Bulk Assign Reviews"
+
+## How assignments work
+
+### Automatic distribution
+
+The system:
+
+1. Groups students by lab section
+2. Identifies the lab leader for each section
+3. Assigns all students in a section to that section's leader
+4. Creates review assignments automatically
+
+### Assignment rules
+
+- Lab leaders only grade their own section
+- Students without lab sections are unassigned
+- Multiple lab leaders per section split the load
+- Respects grading conflict settings
+
+## Lab section management
+
+### Creating lab sections
+
+1. Go to "Lab Sections" in course management
+2. Click "Create Lab Section"
+3. Set section name and meeting time
+4. Assign lab leader(s)
+5. Add students to section
+
+### Assigning lab leaders
+
+Lab leaders must have the "grader" role:
+
+1. Enroll user as grader
+2. Assign to lab section as leader
+3. Leader can now receive review assignments
+
+## Grading workflow
+
+### For lab leaders
+
+1. Receive automatic review assignments
+2. View assigned submissions from their section
+3. Complete reviews using rubric
+4. Submit grades for their students
+
+### For instructors
+
+1. Monitor review completion across sections
+2. View grading progress by lab section
+3. Reassign reviews if needed
+4. Release grades when all sections complete
+
+## Handling edge cases
+
+### Students without lab sections
+
+Students not assigned to a lab section:
+
+- Do not receive automatic assignments
+- Instructors must manually assign reviews
+- Shows warning in assignment interface
+
+### Lab leaders with no students
+
+If a lab section has no students:
+
+- Lab leader receives no assignments
+- No error or warning generated
+- Can manually assign reviews if needed
+
+### Multiple lab leaders per section
+
+When a section has multiple leaders:
+
+- Reviews distribute evenly among leaders
+- Round-robin within the section
+- Maintains section boundaries
+
+## Viewing assignments
+
+### By lab section
+
+Filter review assignments by lab section:
+
+- See all reviews for a specific section
+- Track completion rates per section
+- Identify sections needing attention
+
+### By lab leader
+
+View assignments for each lab leader:
+
+- Total reviews assigned
+- Completed vs pending
+- Average grading time
+- Submission links
+
+## Permissions
+
+- **Instructors**: Configure lab leader mode, view all assignments
+- **Lab leaders**: Grade assigned students from their section
+- **Students**: View their assigned reviewers
+
+## Best practices
+
+- Assign students to lab sections early in semester
+- Designate reliable graders as lab leaders
+- Use lab leader mode for large courses
+- Monitor completion rates by section
+- Provide grading guidelines to lab leaders
+- Set clear deadlines for review completion
+
+## Troubleshooting
+
+### Reviews not assigned
+
+Check that:
+
+- Students are assigned to lab sections
+- Lab sections have designated leaders
+- Leaders have grader role enabled
+- No grading conflicts exist
+
+### Uneven distribution
+
+If some lab leaders have many more reviews:
+
+- Check lab section enrollment numbers
+- Rebalance students across sections
+- Add additional lab leaders to large sections
+
+### Missing assignments
+
+If students don't have reviewers:
+
+- Verify lab section assignment
+- Check for grading conflicts
+- Manually assign if needed
