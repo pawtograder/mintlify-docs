@@ -1,0 +1,161 @@
+---
+title: Test insights dashboard
+description: Analyze student performance on auto-graded tests and identify common errors
+---
+
+## Overview
+
+The test insights dashboard provides instructors and graders with analytics on student performance for auto-graded assignments. Use this tool to identify difficult tests, track common errors, and link discussion posts to help students overcome challenges.
+
+## Accessing test insights
+
+Navigate to **Assignment > Test Insights** from the assignment management menu. The dashboard is available to both instructors and graders.
+
+## Performance overview
+
+The overview tab displays comprehensive test statistics and performance metrics.
+
+### Summary cards
+
+View key metrics at a glance:
+- **Total submissions**: Active submissions with grader results
+- **Tests analyzed**: Number of unique test cases
+- **Average pass rate**: Overall pass rate across all tests
+- **Hardest test**: Test with the lowest pass rate
+
+### Overall score distribution
+
+A bar chart shows the distribution of scores across all submissions:
+- 100% (perfect scores)
+- 90-99%
+- 80-89%
+- 70-79%
+- 60-69%
+- 50-59%
+- 1-49%
+- 0%
+
+### Test performance table
+
+Detailed per-test statistics include:
+- Test name and part
+- Difficulty level (Easy, Medium, Hard, Very Hard)
+- Pass rate with visual progress bar
+- Average score
+- Total attempts
+- Passing count
+- Failing count
+
+Tests are sorted by pass rate (hardest first) to help you identify where students struggle most.
+
+### Submissions to full marks
+
+Track how many attempts students need to achieve perfect scores:
+- Students with full marks
+- Students without full marks
+- Average submissions to reach full marks
+- Median submissions to full marks
+
+## Common errors explorer
+
+The errors tab identifies patterns in student mistakes using intelligent error deduplication.
+
+### Error grouping
+
+The system normalizes error outputs by removing variable elements:
+- Memory addresses (`0x...` → `<hex>`)
+- Timestamps → `<timestamp>`
+- Line numbers → `<N>`
+- Large numbers → `<num>`
+
+This groups semantically identical errors even when specific values differ.
+
+### Error cards
+
+Each error group displays:
+- Test name and part
+- Error signature (truncated preview)
+- Occurrence count (number of students affected)
+- Average score for affected submissions
+- Failure indicator (red for failing tests)
+
+Click an error card to expand and view:
+- Sample error outputs (up to 3 examples)
+- List of affected submission IDs
+- Actions to create error pins or view submissions
+
+### Filtering errors
+
+Use the filter panel to refine results:
+- **Test name**: Filter by specific test
+- **Test part**: Filter by test part (if applicable)
+- **Min occurrences**: Show only errors affecting N+ students
+- **Search output**: Text search within error messages
+- **Sort by**: Occurrence count, average score, or test name
+- **Direction**: Ascending or descending
+
+### Creating error pins
+
+Link common errors to discussion posts to help students:
+
+<Steps>
+<Step title="Select an error">
+Click **Create Error Pin** on any error group in the common errors list.
+</Step>
+
+<Step title="Search for discussion thread">
+Enter keywords to search existing discussion threads by subject. The modal shows matching threads with creation dates.
+</Step>
+
+<Step title="Select thread">
+Click a thread to select it. The system shows a confirmation that students with matching errors will see a link to this discussion.
+</Step>
+
+<Step title="Create pin">
+Click **Create Error Pin** to link the error pattern to the discussion thread.
+
+The system creates matching rules based on:
+- Test name (exact match)
+- Error output (contains match)
+</Step>
+</Steps>
+
+When students encounter matching errors in their submissions, they'll see a link to the pinned discussion thread.
+
+### Viewing existing pins
+
+The modal displays existing error pins that match the current error pattern, showing:
+- Discussion thread subject
+- Number of submissions linked
+- Link to view the thread
+
+## Access control
+
+Test insights is available to instructors and graders. The dashboard uses `authorizeforclassgrader()` to verify permissions before returning data.
+
+## Technical details
+
+### Analytics functions
+
+The dashboard uses server-side PostgreSQL functions for scalability:
+- `get_test_statistics_for_assignment`: Computes pass rates, score distributions, and test metrics
+- `get_common_test_errors_for_assignment`: Groups and deduplicates error patterns
+- `get_submissions_to_full_marks`: Tracks attempts needed to reach perfect scores
+- `get_error_pins_for_error_pattern`: Finds existing pins matching an error
+
+### Performance considerations
+
+- Statistics are computed on-demand (not cached)
+- Error deduplication uses regex normalization
+- Results are limited to top 50 error groups by default
+- Filters are applied client-side after fetching
+
+### Error pin matching
+
+Error pins use flexible matching rules:
+- **AND logic**: All rules must match
+- **OR logic**: Any rule can match
+- **Match types**: Contains, equals, regex
+- **Targets**: Test name, test output, scores, lint results
+
+The system uses safe regex matching that returns false for invalid patterns instead of throwing errors.
