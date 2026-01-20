@@ -1,0 +1,68 @@
+---
+title: "Discussion karma system"
+description: "Track and reward student engagement in discussion boards"
+---
+
+## Overview
+
+The discussion karma system gamifies student participation by tracking likes received on discussion posts and displaying karma badges next to usernames.
+
+## Karma badges
+
+Students earn karma badges based on the number of likes their posts receive:
+
+- **Sprout** (0 karma): New member badge for students who haven't received likes yet
+- **Heart** (1-10 karma): Basic engagement level with heart icon and count
+- **Star** (11-49 karma): Active contributor with blue star badge
+- **Trophy** (50+ karma): Top contributor with gold trophy badge
+
+Karma badges appear next to usernames throughout the discussion interface.
+
+## Like functionality
+
+Students and instructors can like discussion posts and replies:
+
+- Click the heart icon to like/unlike a post
+- Like counts update in real-time
+- Likes contribute to the author's karma score
+- Replies are sorted by like count (most liked first)
+
+## Discussion engagement dashboard
+
+Instructors and graders can access the Discussion Engagement page to view:
+
+### Summary statistics
+
+- Total students participating
+- Average karma across all students
+- Total discussion activity (posts + replies)
+- Most active student with trophy icon
+
+### Engagement table
+
+The engagement table displays for each student:
+
+- Current rank and karma badge
+- Total karma (likes received)
+- Number of posts created
+- Number of replies posted
+- Likes received
+- Likes given to others
+- Total activity count
+
+### CSV export
+
+Export engagement data to CSV for further analysis or grade book integration. The export includes all metrics shown in the table.
+
+## Access control
+
+- **Students**: Can like posts and view their own karma
+- **Instructors/Graders**: Can access the engagement dashboard and export data
+- **Feature flag**: Discussion engagement requires the "discussion" feature to be enabled for the course
+
+## Technical details
+
+- Karma is calculated server-side using database triggers
+- Karma updates automatically when likes are added or removed
+- Anonymous/public profile contributions are normalized to private profiles
+- The system handles both public and private discussion threads
