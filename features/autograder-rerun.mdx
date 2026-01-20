@@ -1,0 +1,200 @@
+---
+title: Rerun autograder with version selection
+description: Rerun the autograder on existing submissions using any grader version
+---
+
+## Overview
+
+The enhanced autograder rerun feature allows instructors to regrade existing submissions using any version of the autograder without creating new submissions. You can select a specific grader commit or test experimental changes with "what-if" results.
+
+## Key improvements
+
+- **Reuses existing submissions**: No new submissions are created
+- **Version selection**: Choose any grader commit from the main branch or enter a custom SHA
+- **What-if mode**: Test grader changes without affecting official scores
+- **Auto-promotion**: Optionally promote what-if results to official scores automatically
+- **History tracking**: View all what-if results for each submission
+
+## Accessing the rerun page
+
+Navigate to **Assignment > Rerun Autograder** from the assignment management menu.
+
+## Selecting a grader version
+
+<Steps>
+<Step title="Choose from recent commits">
+Select a commit from the dropdown menu showing the 50 most recent commits on the main branch. Each option displays:
+- Short SHA (first 7 characters)
+- Commit message subject line
+
+The default option "Latest on main" uses the current HEAD of the main branch.
+</Step>
+
+<Step title="Or enter a custom SHA">
+Enter any valid SHA from the solution repository in the custom SHA input field. This allows you to test:
+- Commits from feature branches
+- Older commits not in the recent list
+- Experimental grader versions
+</Step>
+</Steps>
+
+<Note>
+When you enter a custom SHA, the dropdown selection clears automatically. Similarly, selecting from the dropdown clears the custom SHA field.
+</Note>
+
+## Auto-promotion setting
+
+The **Auto-promote new result to official** checkbox controls what happens with rerun results:
+
+- **Checked (default)**: New grader results immediately replace the official score
+- **Unchecked**: Results appear in "what-if" columns for manual review before promotion
+
+Use what-if mode to:
+- Test grader changes before applying them
+- Compare different grader versions
+- Debug grading issues without affecting student scores
+
+## Rerunning submissions
+
+<Steps>
+<Step title="Select submissions">
+Check the boxes next to submissions you want to regrade. You can select individual submissions or use column filters to narrow the list.
+</Step>
+
+<Step title="Configure options">
+- Choose grader version (or leave default for latest)
+- Set auto-promotion preference
+- Optionally toggle development autograder columns for debugging
+</Step>
+
+<Step title="Start rerun">
+Click **Rerun Autograder on Selected Submissions**. The system:
+1. Validates your permissions
+2. Enqueues grading jobs for each submission
+3. Shows a success message with the count of queued jobs
+</Step>
+
+<Step title="Monitor progress">
+Check the **Workflow Runs Table** to see grading progress. Reruns appear as workflow runs with the requested grader SHA.
+</Step>
+</Steps>
+
+## What-if results
+
+When auto-promotion is disabled, rerun results appear in dedicated what-if columns:
+
+- **What-if Score**: The score from the rerun
+- **What-if Grader SHA**: The grader version used
+- **What-if History**: Button to view all what-if results for this submission
+- **Promote**: Button to make the what-if result official
+
+### Viewing what-if history
+
+Click **View** in the What-if History column to open a modal showing all what-if results for a submission:
+- Date and time of each rerun
+- Score achieved
+- Grader SHA used
+- Action SHA (GitHub Actions workflow version)
+
+### Promoting results
+
+Click **Promote** to make a what-if result the official autograder score. This:
+1. Deletes the current official grader result
+2. Moves the what-if result to the official submission
+3. Updates all related test results and outputs
+4. Triggers score recalculation for grading reviews
+
+<Warning>
+Promoting a what-if result permanently replaces the official score. This action cannot be undone.
+</Warning>
+
+## Column visibility
+
+Toggle **Show development autograder columns** to display:
+- Regression test scores
+- Regression test grader SHAs
+
+These columns help debug grader behavior by comparing production and development autograder results.
+
+## Filtering and sorting
+
+Use column filters to find specific submissions:
+- Filter by student name or group
+- Filter by score ranges
+- Filter by grader SHA
+- Filter by what-if status
+
+Click column headers to sort by any field.
+
+## Technical details
+
+### Rerun workflow
+
+1. Instructor selects grader version and submissions
+2. System creates `repository_check_runs` entries with rerun metadata:
+   - `is_regression_rerun`: true
+   - `target_submission_id`: Original submission ID
+   - `requested_grader_sha`: Specified grader version
+   - `auto_promote_result`: Auto-promotion setting
+3. GitHub Actions workflow triggers with the requested grader SHA
+4. Autograder runs and submits results
+5. Results are stored with `rerun_for_submission_id` set (if not auto-promoting)
+
+### What-if vs official results
+
+- **Official results**: `submission_id` set, `rerun_for_submission_id` is NULL
+- **What-if results**: `rerun_for_submission_id` set, `submission_id` is NULL (until promoted)
+
+The database view `submissions_with_grades_for_assignment_and_regression_test` includes the most recent what-if result for each submission.
+
+### Promotion process
+
+The `promote_whatif_grader_result` function:
+1. Validates instructor/grader permissions
+2. Acquires row locks to prevent race conditions
+3. Deletes existing official results and related data
+4. Updates the what-if result to become official
+5. Clears the `rerun_for_submission_id` field
+
+### Score recalculation
+
+When results are promoted, the `submissionreviewrecompute` trigger automatically recalculates:
+- Total autograde score
+- Manual grading scores
+- Score caps (if enabled)
+- Final submission review totals
+
+## Use cases
+
+### Testing grader fixes
+
+Before deploying a grader fix to all students:
+1. Disable auto-promotion
+2. Select a few affected submissions
+3. Rerun with the fixed grader version
+4. Review what-if results
+5. Promote if results are correct
+6. Enable auto-promotion and rerun remaining submissions
+
+### Debugging grading issues
+
+Compare results across grader versions:
+1. Run with current grader (auto-promote off)
+2. Run with previous grader version
+3. Compare what-if scores to identify regressions
+4. Review what-if history to see all tested versions
+
+### Applying retroactive fixes
+
+After fixing a grader bug:
+1. Select all affected submissions
+2. Choose the fixed grader commit
+3. Enable auto-promotion
+4. Rerun to update all official scores
+
+## Access control
+
+- Instructors and graders can rerun the autograder
+- Only instructors can access the security audit dashboard
+- RLS policies enforce class-level permissions
+- The `enqueue_autograder_reruns` function validates user roles
