@@ -1,0 +1,57 @@
+---
+title: Enhanced autograder rerun
+description: Rerun autograder with version selection and submission reuse
+---
+
+## Overview
+
+The enhanced autograder rerun feature allows instructors to regrade submissions using different versions of the autograder without creating new submissions.
+
+## Key improvements
+
+### Reuse existing submissions
+- Rerun grading on the same submission
+- Preserve original submission timestamp
+- Maintain submission history
+
+### Version selection
+- Choose which version of the autograder to use
+- Test new grading criteria before applying to all students
+- Compare results across autograder versions
+
+## How to rerun the autograder
+
+1. Navigate to **Manage Assignment** → **Rerun Autograder**
+2. Select the submissions to regrade
+3. Choose the autograder version to use
+4. Click **Rerun Autograder**
+
+## Use cases
+
+### Testing autograder changes
+Before deploying a new autograder version:
+1. Select a few sample submissions
+2. Rerun with the new autograder version
+3. Compare results with previous version
+4. Deploy to all submissions if results are correct
+
+### Fixing grading errors
+If you discover an error in your autograder:
+1. Fix the autograder
+2. Select affected submissions
+3. Rerun with the corrected version
+4. Release updated grades to students
+
+### Adjusting grading criteria
+When you need to adjust point values or test cases:
+1. Update the autograder configuration
+2. Rerun on all submissions
+3. Review the new scores
+4. Release updated grades
+
+## Best practices
+
+- Test autograder changes on a small sample first
+- Communicate with students when regrading
+- Document why regrading was necessary
+- Review results before releasing to students
