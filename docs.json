@@ -51,6 +51,8 @@
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
+              "staff/assignments/configuration",
+              "staff/assignments/dashboards",
               "staff/assignments/grading-assignments",
               "staff/assignments/handgrading",
               "staff/assignments/autograding",
