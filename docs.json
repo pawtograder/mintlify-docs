@@ -51,11 +51,15 @@
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
+              "staff/assignments/assignment-dashboard",
               "staff/assignments/grading-assignments",
+              "staff/assignments/grading-status-dashboard",
               "staff/assignments/handgrading",
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
-              "staff/assignments/testing"
+              "staff/assignments/testing",
+              "staff/assignments/test-insights-dashboard",
+              "staff/assignments/security-dashboard"
             ]
           },
           {

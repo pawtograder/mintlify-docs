@@ -21,3 +21,20 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 Build system integration guides for common programming languages.
 
 *Detailed documentation coming soon.*
+
+## Rerunning the Autograder
+
+Instructors can rerun the autograder on student submissions when needed. This is useful for:
+
+- Testing autograder changes before applying them to all submissions
+- Debugging grading issues
+- Updating scores after fixing autograder bugs
+
+### Enhanced Rerun Features
+
+When rerunning the autograder, you can:
+
+- **Reuse the same submission**: The rerun updates the existing submission rather than creating a new one, preserving the submission history and student's active submission status
+- **Select grader version**: Choose which version of the grader to use for the rerun, allowing you to test new grader versions or revert to previous versions
+
+This flexibility ensures you can iterate on your autograder configuration without disrupting student submissions or creating confusion with multiple submission entries.
