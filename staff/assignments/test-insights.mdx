@@ -1,0 +1,54 @@
+---
+title: "Test Insights Dashboard"
+description: "Track student performance and debug common errors with the test insights dashboard"
+---
+
+# Test Insights Dashboard
+
+The test insights dashboard helps you identify and address common errors across student submissions. Use this feature to understand which tests are failing most frequently and take action to help affected students.
+
+## Accessing Test Insights
+
+Navigate to an assignment and select the "Test Insights" tab to view aggregated test results across all student submissions.
+
+## Error Explorer
+
+The error explorer groups similar test failures together, showing:
+
+- **Error groups**: Common failure patterns across submissions
+- **Affected students**: Number of students experiencing each error
+- **Student emails**: View and copy email addresses of affected students for targeted communication
+- **Error details**: Stack traces and failure messages
+
+### Viewing Affected Students
+
+Click on any error group to see which students are affected. You can:
+- View the list of students experiencing the error
+- Copy student email addresses to reach out with targeted help
+- Click through to individual submissions for detailed debugging
+
+## Regrade Workflow
+
+Launch regrading directly from the error explorer to rerun tests after fixing issues:
+
+1. **Launch from error explorer**: Click the regrade button on any error group
+2. **Preselect submissions**: Students affected by the error are automatically selected on the autograder page
+3. **Choose grader version**: Select from available commits or enter a manual SHA in the regrade dialog
+4. **Auto-promote option**: Optionally promote the new grader version automatically after successful regrade
+
+### Regrade Dialog Options
+
+- **Select commits**: Choose from recent grader repository commits
+- **Manual SHA**: Enter a specific commit SHA for the grader version
+- **Auto-promote**: Automatically set the selected version as the active grader after regrade completes
+
+## Global Error Pins
+
+Pin important errors to make them visible across all assignments. Pinned errors appear at the top of the error explorer for quick access.
+
+To pin an error:
+1. Navigate to the error in the test insights dashboard
+2. Click the pin icon
+3. The error will now appear in the pinned section across all assignments
+
+Pinned errors help you track recurring issues and ensure they're addressed consistently across your course.
