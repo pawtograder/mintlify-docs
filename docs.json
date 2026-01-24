@@ -56,7 +56,11 @@
               "staff/assignments/handgrading",
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
-              "staff/assignments/testing"
+              "staff/assignments/testing",
+              "staff/assignments/test-insights",
+              "staff/assignments/grading-status",
+              "staff/assignments/security-dashboard",
+              "staff/assignments/leaderboard"
             ]
           },
           {
