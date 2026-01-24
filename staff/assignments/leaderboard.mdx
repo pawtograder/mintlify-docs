@@ -1,0 +1,97 @@
+---
+title: "Assignment Leaderboard"
+description: "Enable and configure optional leaderboards for competitive assignments"
+icon: "trophy"
+---
+
+# Assignment Leaderboard
+
+The assignment leaderboard feature allows you to create competitive assignments where students can see their rankings based on autograder scores. This feature is optional and can be enabled on a per-assignment basis.
+
+## Enabling Leaderboards
+
+To enable a leaderboard for an assignment:
+
+1. Navigate to the assignment configuration
+2. Find the **Leaderboard** settings section
+3. Toggle the leaderboard feature on
+4. Configure privacy and display settings
+
+<Note>
+Leaderboards are designed to be less cluttering and more optional. Students who don't want to engage with competitive elements can easily ignore them.
+</Note>
+
+## Leaderboard Configuration
+
+### Privacy Settings
+
+Configure how student information is displayed:
+
+- **Public with names**: All students see full rankings with real names
+- **Anonymous rankings**: Students see rankings but identities are hidden
+- **Personal view only**: Students only see their own rank and score
+
+### Display Options
+
+Customize what information appears on the leaderboard:
+
+- **Show scores**: Display actual autograder scores
+- **Show submission times**: Include when submissions were made
+- **Rank ties**: How to handle students with identical scores
+
+## Use Cases
+
+Leaderboards work well for:
+
+### Optimization Challenges
+
+Create assignments where students compete to:
+- Write the fastest algorithm
+- Use the least memory
+- Achieve the highest efficiency score
+
+### Performance Competitions
+
+Design problems where:
+- Multiple solutions are correct but vary in quality
+- Students can iteratively improve their submissions
+- Extra credit is awarded to top performers
+
+### Engagement and Motivation
+
+Use leaderboards to:
+- Add a fun, competitive element to assignments
+- Encourage students to optimize their solutions
+- Create friendly competition within the class
+
+## Best Practices
+
+<Tip>
+Make leaderboards optional and low-stakes. They should enhance learning, not create excessive stress or competition.
+</Tip>
+
+### Recommendations
+
+1. **Communicate clearly**: Explain that leaderboards are optional and for fun
+2. **Provide opt-out**: Allow students to hide their names if they prefer
+3. **Balance competition**: Don't make leaderboard rankings worth significant grade points
+4. **Focus on learning**: Emphasize that understanding concepts matters more than rankings
+5. **Monitor engagement**: Ensure leaderboards aren't causing undue stress
+
+## Managing Leaderboards
+
+As an instructor, you can:
+
+- **View full rankings**: See all students and their scores
+- **Export data**: Download leaderboard data for analysis
+- **Disable mid-assignment**: Turn off leaderboards if they're causing issues
+- **Reset rankings**: Clear the leaderboard if needed (e.g., after fixing autograder bugs)
+
+## Technical Details
+
+Leaderboards are calculated based on:
+
+1. **Active submission**: Only the student's currently active submission counts
+2. **Autograder score**: The score from the autograder component
+3. **Tie-breaking**: Earlier submissions rank higher in case of identical scores
+4. **Real-time updates**: Rankings update automatically as new submissions are processed

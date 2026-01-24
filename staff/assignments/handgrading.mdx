@@ -41,3 +41,38 @@ By clicking on a student/group name, you will be taken to the grading interface 
 <Frame>
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
+
+## Rerunning the Autograder
+
+Instructors can rerun the autograder on existing submissions without creating a new submission. This is useful when:
+
+- You've fixed a bug in the autograder
+- You've updated test cases
+- You want to regrade with a different version of the grader
+
+### Rerun Options
+
+When rerunning the autograder, you can:
+
+1. **Select grader version**: Choose a specific commit from the grader repository
+2. **Enter manual SHA**: Provide a specific commit SHA to use
+3. **Reuse same submission**: The autograder runs on the existing submission without creating a new one
+4. **Auto-promote**: Optionally make the regraded submission the active submission
+
+<Tip>
+Use the test insights dashboard to launch regrading directly from error groups, with affected submissions automatically preselected.
+</Tip>
+
+### Regrade Workflow
+
+To rerun the autograder:
+
+1. Navigate to the submission you want to regrade
+2. Click the **Rerun Autograder** button
+3. In the regrade dialog:
+   - Select a grader version from the dropdown, or
+   - Enter a specific commit SHA manually
+   - Choose whether to auto-promote the submission
+4. Click **Regrade** to start the process
+
+The autograder will run on the existing submission using the selected grader version. The submission's autograder results will be updated once the regrade completes.
