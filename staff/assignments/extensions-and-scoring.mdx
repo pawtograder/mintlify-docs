@@ -1,0 +1,80 @@
+---
+title: "Extensions and Score Capping"
+description: "Manage due date extensions and configure assignment score limits"
+---
+
+# Extensions and Score Capping
+
+Pawtograder provides flexible options for managing due date extensions and controlling assignment scores.
+
+## Extended Due Date Picker
+
+When granting manual extensions to students, instructors can choose the extended due date directly using a date picker interface.
+
+### Benefits
+
+The date picker approach offers several advantages over entering hours and minutes:
+
+- **Intuitive selection**: Pick a specific date and time visually
+- **Reduced errors**: Avoid calculation mistakes when determining extension length
+- **Course alignment**: Easily set extensions that align with course schedules or other deadlines
+- **Clear communication**: The exact due date is immediately visible
+
+### How to Grant Extensions
+
+1. Navigate to the assignment's "Due Date Exceptions" section
+2. Select the student(s) who need an extension
+3. Click "Grant Extension"
+4. Use the date picker to select the new due date and time
+5. The system displays both the original and extended due dates for reference
+
+The date picker shows the original due date and allows you to select any future date and time for the extended deadline.
+
+<Tip>
+You can grant extensions to individual students or to entire groups for group assignments. All group members will receive the same extended deadline.
+</Tip>
+
+## Assignment Score Capping
+
+Instructors can configure a maximum score cap for assignments to prevent scores from exceeding a specified limit.
+
+### When to Use Score Capping
+
+Score capping is useful in several scenarios:
+
+- **Extra credit management**: Prevent bonus points from inflating grades beyond course standards
+- **Grading consistency**: Ensure all assignments follow the same maximum score scale
+- **Optional components**: Allow students to attempt bonus work without breaking grade calculations
+- **Rubric flexibility**: Use detailed rubrics with many points while maintaining a standard maximum
+
+### Configuring Score Caps
+
+To set a score cap for an assignment:
+
+1. Navigate to the assignment settings
+2. Find the "Score Capping" section
+3. Enable score capping
+4. Enter the maximum allowed score
+5. Save your changes
+
+### How Score Capping Works
+
+When score capping is enabled:
+
+- Student scores are automatically capped at the specified maximum
+- The cap applies to the total score (autograder + handgrading combined)
+- Students can see their uncapped score and the capped score that counts toward their grade
+- The gradebook displays the capped score
+
+<Note>
+Score capping is applied after all grading is complete. Students will still see their full earned score, but the capped score is what appears in the gradebook and grade exports.
+</Note>
+
+### Example
+
+If you set a score cap of 100 points:
+- A student who earns 95 points receives 95 points
+- A student who earns 110 points (including bonus) receives 100 points
+- Both students see their actual earned scores, but the gradebook shows the capped values
+
+This allows you to reward excellent work with bonus points while maintaining grade consistency across your course.

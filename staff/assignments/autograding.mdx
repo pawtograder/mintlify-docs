@@ -16,6 +16,44 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Rerunning the Autograder
+
+You can rerun the autograder on existing submissions to apply updated grading logic or fix issues. The enhanced rerun feature provides more control over the regrading process.
+
+### Rerun Options
+
+When rerunning the autograder, you can:
+
+1. **Reuse existing submissions**: The autograder reruns on the same submission without creating a new one
+2. **Select grader version**: Choose which version of the grader to use for the rerun
+   - Select from recent commits in your grader repository
+   - Enter a specific commit SHA manually
+   - Use the current active grader version
+
+### How to Rerun
+
+To rerun the autograder on submissions:
+
+1. Navigate to the assignment's autograder page
+2. Select the submissions you want to regrade
+3. Click the "Rerun Autograder" button
+4. In the regrade dialog:
+   - Choose a grader version from the commit list, or
+   - Enter a specific commit SHA
+   - Optionally enable "Auto-promote" to set this version as the active grader
+
+### Auto-Promote Feature
+
+The auto-promote option automatically promotes the selected grader version to be the active grader for all future submissions after the rerun completes successfully. This is useful when:
+
+- You've fixed a bug in the grader and want to apply it going forward
+- You've updated test cases and want all new submissions to use them
+- You're confident the new grader version should be the default
+
+<Warning>
+Rerunning the autograder will replace the existing autograder results for the selected submissions. Make sure you've tested your grader changes before applying them to student submissions.
+</Warning>
+
 ## Quickstart: Java and Python
 
 Build system integration guides for common programming languages.

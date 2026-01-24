@@ -26,7 +26,8 @@
               "students/assignments/create-submission",
               "students/assignments/form-groups",
               "students/assignments/late-tokens",
-              "students/assignments/self-review"
+              "students/assignments/self-review",
+              "students/assignments/leaderboard"
             ]
           },
           {
@@ -51,10 +52,15 @@
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
+              "staff/assignments/assignment-dashboard",
+              "staff/assignments/grading-dashboard",
+              "staff/assignments/test-insights",
+              "staff/assignments/security-dashboard",
               "staff/assignments/grading-assignments",
               "staff/assignments/handgrading",
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
+              "staff/assignments/extensions-and-scoring",
               "staff/assignments/testing"
             ]
           },
