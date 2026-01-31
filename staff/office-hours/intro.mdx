@@ -74,15 +74,26 @@ Staff can communicate with students through:
 
 After the staff member has started the video chat, students can click the **Join Video Chat** button to join. The video chat window opens in a popup.
 
-### Active Help Request Widget
+### Active Help Request Widget and Notifications
 
-When a student has an active help request, it follows them around the site. They'll see:
+When a student has an active help request, it follows them around the site through a persistent "Get Help" button and Help Drawer. Students receive:
 
-- Their current queue position or status
-- Notifications when staff assigns to help them
-- Video call invitations with a prominent "Join Video Call" button
+- **Real-time Status Updates**: Current queue position or help status
+- **Browser Notifications**: Desktop notifications when staff responds (with permission)
+- **Title Bar Updates**: Unread message counts in browser tab
+- **Sound Alerts**: Audio notifications for important updates
+- **Favicon Badge**: Visual indicator in browser tab
+- **Video Call Invitations**: Prominent "Join Video Call" button when staff starts a call
 
 This ensures students never miss updates, even while browsing the discussion board or other course pages.
+
+### Request Validation
+
+The system includes validation to prevent conflicts:
+
+- Students cannot submit multiple simultaneous requests to the same queue
+- Clear error messages guide students when they attempt duplicate requests
+- Solo office hours requests are validated to ensure only one student per request
 
 ## Resolving Requests
 
