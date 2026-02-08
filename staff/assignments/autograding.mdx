@@ -21,3 +21,27 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 Build system integration guides for common programming languages.
 
 *Detailed documentation coming soon.*
+
+## Rerunning the Autograder
+
+When you need to regrade submissions (for example, after fixing a bug in the autograder), you can rerun the autograder on existing submissions:
+
+### Rerun Options
+
+When rerunning the autograder, you can:
+
+- **Reuse the same submission**: The autograder runs again on the existing submission without creating a new one
+- **Select grader version**: Choose which version of the grader to use for the rerun
+  - Use the latest grader commit
+  - Select a specific commit SHA
+  - Choose from recent grader versions
+
+### Launching a Rerun
+
+You can launch autograder reruns from multiple places:
+
+1. **From the assignment page**: Select submissions and click "Rerun Autograder"
+2. **From test insights**: Launch reruns directly from error groups (see [Test Insights Dashboard](/staff/assignments/test-insights))
+3. **From individual submissions**: Rerun the autograder for a single submission
+
+When launching from test insights, affected submissions are automatically preselected, streamlining the regrade workflow.
