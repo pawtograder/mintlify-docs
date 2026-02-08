@@ -1,0 +1,68 @@
+---
+title: "Test Insights Dashboard"
+description: "Track student performance and identify common errors across autograder test cases"
+icon: "chart-line"
+---
+
+# Test Insights Dashboard
+
+The test insights dashboard helps you understand how students are performing on autograder test cases, identify common errors, and take action to help struggling students.
+
+## Accessing Test Insights
+
+Navigate to an assignment and click the **Test Insights** tab to view the dashboard. The dashboard displays performance metrics for all autograder test cases.
+
+## Understanding Error Groups
+
+The dashboard groups students by the specific errors they're encountering in test cases. For each error group, you can see:
+
+- The specific error message or failure
+- Number of students affected
+- List of affected students
+- Test case details
+
+## Viewing Affected Students
+
+For each error group, you can:
+
+- View the list of students experiencing that specific error
+- Copy affected students' email addresses for bulk communication
+- Click through to individual student submissions
+
+This makes it easy to reach out to groups of students who are stuck on the same issue.
+
+## Launching Regrades
+
+When you identify an issue that requires regrading (such as a bug in the autograder), you can launch a regrade directly from the error explorer:
+
+<Steps>
+<Step title="Select Error Group">
+Click on the error group you want to regrade from the test insights dashboard.
+</Step>
+
+<Step title="Launch Regrade">
+Click the **Regrade** button to open the regrade dialog.
+</Step>
+
+<Step title="Configure Regrade">
+In the regrade dialog, you can:
+- Choose to regrade using existing commits or enter a manual SHA
+- Select which submissions to regrade (preselected based on the error group)
+- Enable auto-promote to automatically update grades if the regrade improves scores
+</Step>
+
+<Step title="Execute">
+Click **Start Regrade** to begin regrading the selected submissions.
+</Step>
+</Steps>
+
+The affected submissions will be automatically preselected on the autograder page, streamlining the regrade workflow.
+
+## Use Cases
+
+The test insights dashboard is particularly useful for:
+
+- **Identifying autograder bugs**: Spot patterns in failures that indicate issues with test cases
+- **Finding common student mistakes**: See which concepts students are struggling with
+- **Targeted intervention**: Reach out to specific groups of students with tailored help
+- **Efficient regrading**: Quickly regrade submissions affected by autograder fixes
