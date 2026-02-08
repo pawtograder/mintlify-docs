@@ -55,6 +55,15 @@ Staff can communicate with students through:
 
 After the staff member has started the video chat, students can click the **Join Video Chat** button to join. The video chat window opens in a popup.
 
+#### Chat Reliability
+
+The chat system includes improved error handling to ensure messages aren't lost:
+
+- **Connection status**: The system monitors the connection and alerts users if disconnected
+- **Message preservation**: If a message fails to send (e.g., due to connection issues), it remains in the input box so users don't lose their typed content
+- **Automatic reconnection**: The chat automatically attempts to reconnect when the connection is restored
+- **Robust startup**: Improved chat initialization and refetch flow for more reliable connections
+
 ### Active Help Request Widget
 
 When a student has an active help request, it follows them around the site. They'll see:
