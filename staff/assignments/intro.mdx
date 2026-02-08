@@ -20,6 +20,17 @@ A **handout repository** is a repository that contains the starter code for an a
 
 A **grader repository** is a repository that contains the code that will be used to grade the assignment. It is used to provide instructors with the necessary files to grade the assignment.
 
+### Syncing Handout Updates
+
+When you need to push updates from the handout repository to student repositories (for example, to fix a bug in starter code), Pawtograder provides a sync-to-handout feature. The system has been improved for better resilience:
+
+- **Automatic retry logic**: Failed syncs are automatically retried
+- **Conflict detection**: The system detects and reports merge conflicts
+- **Selective sync**: Choose which students receive the update
+- **Status tracking**: Monitor sync progress across all student repositories
+
+This ensures that updates reach all students reliably, even in cases of temporary network issues or repository conflicts.
+
 ## Individual and Group Assignments
 
 Assignments can be individual, group-optional, or group-required.
