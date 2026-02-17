@@ -1,0 +1,118 @@
+---
+title: "Test Insights and Error Tracking"
+description: "Analyze test failures, track common errors, and regrade submissions efficiently"
+icon: "chart-line"
+---
+
+# Test Insights and Error Tracking
+
+Pawtograder provides powerful tools to help instructors identify and address common test failures across student submissions. The test insights feature groups similar errors together, making it easy to spot patterns and take action.
+
+## Error Explorer
+
+The error explorer shows you all test failures grouped by similarity. This helps you quickly identify:
+
+- Common mistakes students are making
+- Potential issues with test cases
+- Students who need additional support
+
+### Viewing Error Groups
+
+Each error group shows:
+
+- The number of affected students
+- The test case that failed
+- The error message or output
+- A list of affected submissions
+
+### Pinning Errors
+
+You can pin important error groups to keep them at the top of the list. This is useful for:
+
+- Tracking critical issues that need attention
+- Highlighting errors you're actively investigating
+- Keeping frequently referenced errors easily accessible
+
+Pinned errors are visible globally across the course, making it easy for all staff members to see which issues are being prioritized.
+
+### Viewing Affected Students
+
+From any error group, you can:
+
+- View the list of students affected by that error
+- Copy student email addresses for bulk communication
+- Navigate directly to individual submissions
+
+This makes it easy to reach out to students who are experiencing the same issue.
+
+## Regrade Workflow
+
+The improved regrade workflow allows you to efficiently regrade submissions after fixing test cases or updating autograder configurations.
+
+### Launching a Regrade
+
+You can launch a regrade from multiple places:
+
+1. **From the error explorer**: Select an error group and click "Regrade Affected Submissions"
+2. **From the autograder page**: Use the bulk regrade interface
+
+### Regrade Options
+
+When launching a regrade, you can:
+
+1. **Preselect submissions**: When launching from the error explorer, affected submissions are automatically selected
+2. **Choose commits**: Select specific commits to regrade, or enter a manual SHA
+3. **Auto-promote**: Automatically promote the regraded submission to be the active submission if it scores higher
+
+### Regrade Dialog
+
+The regrade dialog provides:
+
+- A list of selected submissions
+- Commit selection interface
+- Manual SHA input option
+- Auto-promote toggle
+- Conflict detection for submissions already being graded
+
+### Conflict Detection
+
+The system detects and warns you about:
+
+- Submissions that are currently being graded by staff
+- Potential conflicts with ongoing grading work
+- Submissions that may have pending manual grades
+
+This helps prevent accidentally overwriting manual grading work.
+
+## Best Practices
+
+### Using Error Groups
+
+1. **Review regularly**: Check the error explorer after each assignment deadline
+2. **Pin critical issues**: Pin errors that affect many students or indicate test problems
+3. **Communicate proactively**: Use the email copy feature to reach out to affected students
+4. **Document patterns**: Use error groups to identify topics that need more coverage
+
+### Regrading Submissions
+
+1. **Test first**: Always test your autograder changes before regrading all submissions
+2. **Use auto-promote carefully**: Consider whether higher scores should automatically replace lower ones
+3. **Check for conflicts**: Review the conflict warnings before proceeding with a regrade
+4. **Communicate changes**: Let students know when you've fixed test cases and regraded
+
+### Monitoring Test Quality
+
+Use the error explorer to:
+
+- Identify test cases that are failing for many students
+- Spot potential issues with test case wording or expectations
+- Find opportunities to improve assignment clarity
+- Track which concepts students are struggling with
+
+## Integration with Office Hours
+
+Error groups integrate with the office hours system:
+
+- Students can reference specific error messages in help requests
+- Staff can quickly identify which error group a student is experiencing
+- Common errors can be linked to discussion board posts with solutions
