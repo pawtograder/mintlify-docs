@@ -56,7 +56,8 @@
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
               "staff/assignments/testing",
-              "staff/assignments/test-insights"
+              "staff/assignments/test-insights",
+              "staff/assignments/grading-status"
             ]
           },
           {
