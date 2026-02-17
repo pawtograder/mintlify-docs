@@ -1,0 +1,165 @@
+---
+title: "Test Insights"
+description: "Analyze common test errors and student performance patterns across submissions"
+icon: "chart-line"
+---
+
+# Test Insights
+
+The test insights dashboard helps you identify and address common issues students are encountering with programming assignments. It analyzes test results across all submissions to surface patterns, making it easier to provide targeted help.
+
+## Accessing Test Insights
+
+Navigate to an assignment's management page and click the **Test Insights** tab to view the dashboard.
+
+## Common Errors Explorer
+
+The common errors explorer groups submissions by similar error patterns, helping you identify:
+
+- **Widespread issues**: Errors affecting many students
+- **Test problems**: Issues that might indicate bugs in your test suite
+- **Common misconceptions**: Patterns suggesting students misunderstood requirements
+
+### Error Group Information
+
+Each error group displays:
+
+- **Test name and part**: Which test is failing
+- **Error signature**: A fingerprint of the error pattern
+- **Occurrence count**: Number of students affected
+- **Average score**: How students are performing on this test
+- **Sample outputs**: Representative error messages from affected submissions
+
+### Filtering Errors
+
+Use the filter panel to focus on specific issues:
+
+- **Minimum occurrences**: Only show errors affecting at least N students
+- **Failing tests only**: Hide tests where students are getting partial credit
+- **Score threshold**: Filter by minimum or maximum average score
+
+### Actions on Error Groups
+
+For each error group, you can:
+
+#### View Affected Submissions
+
+Click **View Submissions** to see all submissions with this error pattern. This opens the autograder page with those submissions pre-selected.
+
+#### Regrade Submissions
+
+Click **Regrade** to launch the regrade workflow:
+
+1. Submissions are pre-selected on the autograder page
+2. Choose to regrade specific commits or enter a manual SHA
+3. Optionally enable auto-promote to make the regrade the active submission
+
+This is useful when you've fixed a test bug and need to regrade affected students.
+
+#### Copy Student Emails
+
+Click **Copy Emails** to copy the email addresses of all affected students to your clipboard. Use this to:
+
+- Send targeted announcements about common issues
+- Reach out to students who need specific help
+- Coordinate with TAs about which students to prioritize
+
+#### Create Error Pin
+
+Click **Pin Error** to create a global error pin that automatically links this error pattern to a discussion post. When students encounter this error in the future, they'll see a callout linking to your explanation.
+
+See the [discussion board documentation](/staff/discussion) for more about error pins.
+
+#### AI Analysis
+
+Click **AI Analyze** to get AI assistance analyzing the error pattern:
+
+1. The system generates a prompt with context about the error
+2. Copy the prompt to your AI assistant (Claude, ChatGPT, etc.)
+3. The AI will analyze whether it's a student error or test issue
+4. Get draft discussion posts to help affected students
+
+See the [AI assistance documentation](/staff/ai-assistance) for setup instructions.
+
+## Test Statistics
+
+The dashboard also provides overall test statistics:
+
+- **Pass rate**: Percentage of students passing each test
+- **Score distribution**: How students are performing across the rubric
+- **Completion rate**: How many students have submitted
+
+Use these metrics to identify which parts of the assignment are most challenging.
+
+## Workflow Example
+
+Here's a typical workflow for using test insights:
+
+<Steps>
+<Step title="Identify patterns">
+Review the common errors explorer to find widespread issues. Look for errors affecting 5+ students.
+</Step>
+
+<Step title="Analyze the issue">
+Click **AI Analyze** or manually review sample outputs to understand the root cause. Is it:
+- A student misconception?
+- Unclear assignment requirements?
+- A bug in your test suite?
+</Step>
+
+<Step title="Take action">
+Based on your analysis:
+- **Student error**: Create a discussion post explaining the issue (use AI-drafted versions)
+- **Test bug**: Fix the test and regrade affected submissions
+- **Unclear spec**: Update the assignment handout and post clarification
+</Step>
+
+<Step title="Create error pin">
+If this is a recurring issue, create an error pin linking to your discussion post. Future students will see it automatically.
+</Step>
+
+<Step title="Monitor progress">
+Return to test insights after your intervention to see if the error rate decreases.
+</Step>
+</Steps>
+
+## Best Practices
+
+### Regular Monitoring
+
+Check test insights:
+- **Shortly after release**: Catch early issues when few students are affected
+- **Mid-assignment**: Identify patterns as more students submit
+- **Before the deadline**: Ensure no widespread blockers
+
+### Proactive Communication
+
+When you find common errors:
+- Post to the discussion board before students ask
+- Pin important threads so they're easy to find
+- Use error pins to automatically surface solutions
+
+### Distinguish Test Issues from Student Issues
+
+Not all common errors are student mistakes. If many students fail the same test:
+- Review the test implementation
+- Verify it matches the assignment specification
+- Check for ambiguous requirements
+- Consider if the test is too strict or lenient
+
+### Leverage AI Analysis
+
+AI assistance can help you:
+- Quickly understand unfamiliar error patterns
+- Draft clear explanations for students
+- Identify whether issues stem from the assignment or student code
+- Save time when analyzing complex failures
+
+## Privacy Considerations
+
+Test insights only show:
+- Aggregated error patterns
+- Sample error outputs (no student names in samples)
+- Student emails when you explicitly request them
+
+Individual student performance is not displayed in the common errors view.
