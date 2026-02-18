@@ -72,8 +72,14 @@
             "pages": [
               "staff/discussion",
               "staff/gradebook",
-              "staff/surveys",
-              "staff/office-hours/intro"
+              "staff/surveys"
+            ]
+          },
+          {
+            "group": "Office Hours",
+            "pages": [
+              "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance"
             ]
           }
         ]
