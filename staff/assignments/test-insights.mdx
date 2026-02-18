@@ -1,0 +1,123 @@
+---
+title: "Test Insights and Error Analysis"
+description: "Analyze autograder errors, identify patterns, and efficiently regrade submissions"
+icon: "chart-line"
+---
+
+# Test Insights and Error Analysis
+
+Pawtograder provides powerful tools for analyzing autograder test results, identifying common errors, and efficiently regrading submissions when needed.
+
+## Error Explorer
+
+The error explorer helps you identify patterns in test failures across all student submissions. This feature groups similar errors together, making it easy to:
+
+- Spot common mistakes that many students are making
+- Identify potential issues with test cases or grading criteria
+- Provide targeted help to groups of students with similar problems
+
+### Error Groups
+
+Errors are automatically grouped by:
+
+- Test case name
+- Error message patterns
+- Stack trace similarities
+
+Each error group shows:
+
+- Number of affected students
+- Representative error message
+- List of submissions with this error
+
+### Viewing Affected Students
+
+For each error group, you can:
+
+- View the list of students affected by this error
+- Copy student email addresses for bulk communication
+- Navigate directly to individual submissions
+
+This makes it easy to reach out to students who are experiencing the same issue with targeted guidance.
+
+## Regrade Workflow
+
+When you need to regrade submissions (for example, after fixing a test case or updating grading criteria), Pawtograder provides a streamlined workflow:
+
+### Launching a Regrade
+
+You can launch a regrade from two locations:
+
+1. **Error Explorer**: Click the regrade button next to an error group to regrade all affected submissions
+2. **Autograder Page**: Select specific submissions and click the regrade button
+
+When launching from the error explorer, affected submissions are automatically preselected on the autograder page.
+
+### Regrade Dialog
+
+The regrade dialog provides flexible options for selecting which code to regrade:
+
+<Steps>
+<Step title="Choose Commit Selection Method">
+Select how to identify which commits to regrade:
+
+- **Specific commits**: Choose from a list of recent commits
+- **Manual SHA**: Enter a specific commit SHA directly
+</Step>
+
+<Step title="Auto-Promote Option">
+Enable **auto-promote** to automatically set the regraded submission as the active submission for grading. This is useful when:
+
+- You've fixed a grading issue and want to update all affected students' grades
+- You're regrading after a deadline extension
+- You want to ensure the latest results are used for final grading
+</Step>
+
+<Step title="Confirm and Execute">
+Review your selections and click **Regrade** to start the process. The autograder will run on all selected submissions with the specified commit.
+</Step>
+</Steps>
+
+### Conflict Detection
+
+The regrade system includes conflict detection to prevent issues:
+
+- Warns if submissions are already being graded
+- Alerts if selected commits don't exist in student repositories
+- Validates that all selected submissions are eligible for regrading
+
+## Global Error Pins
+
+Instructors can pin specific error messages or patterns globally across the course. Pinned errors:
+
+- Appear prominently in the error explorer
+- Help students quickly identify known issues
+- Can include instructor notes with workarounds or fixes
+- Remain visible until unpinned by an instructor
+
+Use global error pins to:
+
+- Highlight common mistakes that students should be aware of
+- Document known issues with assignments or test cases
+- Provide quick reference for TAs helping students
+
+## Best Practices
+
+### Analyzing Errors
+
+1. **Review error groups regularly**: Check the error explorer after each assignment deadline to identify patterns
+2. **Investigate high-frequency errors**: Errors affecting many students may indicate unclear instructions or test issues
+3. **Document common mistakes**: Use pinned errors or discussion posts to help students avoid common pitfalls
+
+### Regrading
+
+1. **Test before regrading**: Verify that your test case fixes work correctly before regrading all submissions
+2. **Communicate with students**: Let students know when you're regrading and why
+3. **Use auto-promote carefully**: Only enable auto-promote when you're confident the regrade should replace existing grades
+4. **Batch similar regrades**: If multiple error groups need regrading, consider addressing them together
+
+### Student Communication
+
+1. **Copy affected emails**: Use the email copy feature to quickly contact all students with a specific error
+2. **Provide context**: Explain what the error means and how students can fix it
+3. **Link to resources**: Include links to relevant documentation or discussion posts
