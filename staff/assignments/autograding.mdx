@@ -16,6 +16,16 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Empty Submission Detection
+
+Pawtograder automatically detects empty submissions to help identify students who may need assistance. When a student creates a submission without any meaningful code changes, the system flags it as potentially empty. This helps instructors:
+
+- Identify students who may be struggling to get started
+- Catch accidental submissions before grading
+- Provide early intervention for students who need help
+
+Empty submissions are detected based on the content of files configured for the assignment. The system analyzes whether the submission contains substantive changes from the assignment template or starter code.
+
 ## Quickstart: Java and Python
 
 Build system integration guides for common programming languages.
