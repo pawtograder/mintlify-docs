@@ -73,7 +73,8 @@
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
-              "staff/office-hours/intro"
+              "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance"
             ]
           }
         ]
