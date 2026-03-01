@@ -96,7 +96,7 @@ total_points = sum(gradebook_columns("hw-*"))
 
 #### `mean(array, weighted=true)`
 
-Calculates weighted (default) or unweighted averages:
+Calculates weighted (default) or unweighted averages. The function gracefully handles undefined values and missing grades:
 
 ```javascript
 // Weighted average (accounts for different max scores)
@@ -123,7 +123,7 @@ Unweighted average is defined as:
 return (100 * validValues.reduce((a, b) => a + (b && b.score ? b.score / b.max_score : 0), 0)) / validValues.length;
 ```
 
-In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average.
+In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average. The calculation tolerates undefined values in the input array, ensuring robust grade calculations even when some data is missing.
 
 #### `drop_lowest(array, count)`
 
