@@ -16,6 +16,29 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Test Insights and Error Explorer
+
+Pawtograder provides powerful tools to help you understand and debug common student errors:
+
+### Error Explorer
+
+View grouped test failures across all submissions to identify patterns and common issues. The error explorer allows you to:
+
+- See which students are affected by specific errors
+- Copy affected students' email addresses for communication
+- Launch regrading workflows directly from error groups
+
+### Regrade Workflow
+
+The improved regrade workflow streamlines the process of re-running autograders:
+
+1. **Launch from Error Explorer**: Start a regrade directly from an error group
+2. **Preselect Submissions**: Submissions are automatically selected on the autograder page
+3. **Choose Commits**: Select specific commits or enter a manual SHA in the regrade dialog
+4. **Auto-promote**: Optionally promote the new submission as the active submission
+
+This workflow includes conflict detection and clearer validation for solo office-hours requests.
+
 ## Quickstart: Java and Python
 
 Build system integration guides for common programming languages.
