@@ -1,0 +1,126 @@
+---
+title: "AI Assistance"
+description: "Use AI-powered tools to help students more effectively with the MCP server"
+icon: "robot"
+---
+
+# AI Assistance
+
+Pawtograder provides AI-powered assistance tools to help instructors and graders support students more effectively. The system uses the Model Context Protocol (MCP) to provide AI assistants with structured access to student help requests, discussion threads, and submission data.
+
+## Getting Started
+
+### Prerequisites
+
+- You must be an instructor or grader in the course
+- Install Claude Desktop or another MCP-compatible AI assistant
+- Create an API token in Pawtograder
+
+### Setup Steps
+
+1. **Install Claude Desktop**
+   
+   Download from [claude.ai/download](https://claude.ai/download)
+
+2. **Create an API Token**
+   
+   - Go to Settings → API Tokens in Pawtograder
+   - Click "Create New Token"
+   - Copy the token (it will only be shown once)
+
+3. **Configure Claude Desktop**
+   
+   Add the Pawtograder MCP server to your Claude Desktop configuration:
+   
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+   
+   ```json
+   {
+     "mcpServers": {
+       "pawtograder": {
+         "command": "npx",
+         "args": ["-y", "@anthropic-ai/mcp-proxy@latest", "YOUR_PAWTOGRADER_URL/functions/v1/mcp-server"],
+         "env": {
+           "MCP_HEADERS": "{\"Authorization\": \"Bearer YOUR_TOKEN_HERE\"}"
+         }
+       }
+     }
+   }
+   ```
+
+4. **Restart Claude Desktop**
+   
+   Quit and reopen Claude Desktop. You should see "pawtograder" listed as an available MCP server.
+
+## Using AI Help
+
+### From Help Requests
+
+When viewing a student's help request, click the "AI Help" button to copy a pre-formatted prompt that includes:
+
+- The student's question and conversation history
+- Linked assignment details and handout URL
+- Submission details with test results
+- Suggested MCP tools to fetch additional context
+
+Paste this prompt into Claude or your AI assistant to get intelligent analysis and suggested responses.
+
+### From Discussion Threads
+
+Click the AI Help icon in discussion thread actions to get assistance with:
+
+- Understanding the student's question
+- Finding related discussions
+- Analyzing linked submissions
+- Drafting helpful responses
+
+### From Test Failures
+
+When viewing submission results, click the AI Help button on failing tests or build errors to get:
+
+- Diagnosis of the error with evidence from code and test output
+- Draft responses in both Socratic and direct styles
+- Verification checklist for staff review
+
+## Available MCP Tools
+
+The Pawtograder MCP server provides these tools for AI assistants:
+
+### Context Tools
+- `get_help_request` - Fetch help request with full conversation history
+- `get_discussion_thread` - Fetch discussion with replies
+- `get_assignment` - Get assignment details including handout URL
+
+### Submission Tools
+- `get_submission` - Get submission metadata and summary
+- `list_submission_files` - See available files
+- `get_submission_files` - Fetch specific source files using glob patterns
+- `list_submission_tests` - See test results
+- `get_test_output` - Get detailed output for specific tests
+- `get_submission_build_output` - Get compilation/build errors
+
+### Repository Tools
+- `list_grader_files` - List files in the grader/solution repository
+- `get_grader_files` - Fetch grader files using glob patterns
+- `list_handout_files` - List files in the template/handout repository
+- `get_handout_files` - Fetch handout files using glob patterns
+
+### Search Tools
+- `search_help_requests` - Find related help requests
+- `search_discussion_threads` - Find related discussions
+- `get_submissions_for_student` - View student's submission history
+
+## Privacy and Security
+
+The MCP server is designed with privacy in mind:
+
+- Never exposes user email addresses or the users table
+- Never exposes the `is_private_profile` field
+- Only returns safe profile data (name, avatar)
+- Restricted to instructors and graders only
+- All data access is subject to Pawtograder's row-level security policies
+
+## Providing Feedback
+
+After using AI assistance, you'll be prompted to provide feedback on whether the analysis was accurate and helpful. This feedback helps improve the AI assistance feature for your course.
