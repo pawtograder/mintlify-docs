@@ -8,6 +8,16 @@ icon: "users-gear"
 
 Pawtograder has a robust feature to allow instructors to assign grading tasks to staff. When a grading task is assigned, the instructor can set a due date for that task, and re-assign the task to a different grader if needed. Pawtograder will also automatically allow any other grader to complete the task if the original grader is unable to complete it (without needing to re-assign the task).
 
+## Automatic Completion of Related Reviews
+
+When a grader completes their assigned review, Pawtograder automatically:
+
+- Marks other review assignments as complete if they cover the same or a subset of rubric parts
+- Completes the overall submission review when all required rubric checks are satisfied
+- Validates that uncovered rubric parts have no blocking requirements before marking the submission complete
+
+This reduces duplicate work when multiple graders are assigned to overlapping parts of the same submission.
+
 ## Conflicts of Interest
 
 Pawtograder will automatically ensure that graders do not grade assignments that they have a conflict of interest in. Graders can self-input their conflicts (under "Course Settings" - "Grading Conflicts"), and instructors can review and enter conflicts for all graders in the class. Graders are encouraged to input a "Reason" for their conflict, so that instructors can understand the nature of the conflict and help avoid declaring spurious conflicts.
