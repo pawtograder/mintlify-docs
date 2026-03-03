@@ -60,6 +60,46 @@ When a student has an active help request in office hours, a widget appears in t
 
 This integration ensures students never miss updates on their help requests, even while browsing the discussion board.
 
+## Error Pins
+
+Error pins automatically link discussion threads to student submissions that match specific error patterns. This helps students discover relevant discussions when they encounter common errors.
+
+### Creating Error Pins
+
+You can create error pins in two scopes:
+
+- **Assignment-specific**: Matches only submissions for a specific assignment
+- **Class-level**: Matches submissions across all assignments in the class
+
+To create an error pin:
+
+1. Navigate to a discussion thread that addresses a common error
+2. Click **Create Error Pin** in the thread actions
+3. Choose between assignment-specific or class-level
+4. Define matching rules based on:
+   - Test names and output
+   - Build/lint errors
+   - Score ranges
+   - Error messages
+5. Preview matches to see which submissions would be linked
+6. Save the pin
+
+### Rule Logic
+
+Error pins support two rule evaluation modes:
+
+- **AND logic**: All rules must match for a submission to be linked
+- **OR logic**: Any rule matching will link the submission
+
+### Managing Error Pins
+
+View and manage all error pins for your class in the Error Pins management interface. You can:
+
+- Enable or disable pins
+- View match counts
+- Edit pin rules
+- Delete pins
+
 ## Notifications
 
 By default, users do not get notifications for new posts, but can optionally "watch" a post to receive notifications when the post is updated or receives a new reply. Interacting with a post (e.g. replying to it) will automatically watch the post.
