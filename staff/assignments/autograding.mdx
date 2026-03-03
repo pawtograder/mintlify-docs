@@ -16,6 +16,19 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## AI-Powered Hints
+
+Pawtograder supports AI-powered hints for autograder test failures. Instructors can configure tests to provide LLM-generated hints to help students understand and fix errors.
+
+### Supported AI Providers
+
+- **OpenAI** - GPT models (default: gpt-4o-mini)
+- **Azure OpenAI** - Azure-hosted OpenAI models
+- **Anthropic** - Claude models
+- **OpenRouter** - Access to multiple AI providers through a unified API
+
+Configure the AI provider in your test configuration using the `llm` field with `provider`, `model`, `temperature`, and `max_tokens` options.
+
 ## Quickstart: Java and Python
 
 Build system integration guides for common programming languages.
