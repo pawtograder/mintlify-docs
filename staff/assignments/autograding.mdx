@@ -16,6 +16,40 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## AI-Powered Hints
+
+Autograder test results can include AI-generated hints to help students debug their code. Configure LLM hints by adding an `llm` object to the test's `extra_data`:
+
+```json
+{
+  "llm": {
+    "type": "v1",
+    "prompt": "Help the student understand why their test failed...",
+    "model": "gpt-4o-mini",
+    "provider": "openai",
+    "temperature": 0.85,
+    "max_tokens": 500
+  }
+}
+```
+
+### Supported Providers
+
+- **OpenAI**: Use `"provider": "openai"` with models like `gpt-4o-mini`, `gpt-4o`
+- **Azure OpenAI**: Use `"provider": "azure"` with your Azure deployment
+- **Anthropic**: Use `"provider": "anthropic"` with models like `claude-3-haiku`, `claude-3-sonnet`
+- **OpenRouter**: Use `"provider": "openrouter"` with any OpenRouter-supported model (e.g., `openai/gpt-4o-mini`, `anthropic/claude-3-haiku`)
+
+### Configuration
+
+Set environment variables for API keys:
+- `OPENAI_API_KEY` or `OPENAI_API_KEY_{account}` for OpenAI
+- `AZURE_OPENAI_KEY` or `AZURE_OPENAI_KEY_{account}` for Azure
+- `ANTHROPIC_API_KEY` or `ANTHROPIC_API_KEY_{account}` for Anthropic
+- `OPENROUTER_API_KEY` or `OPENROUTER_API_KEY_{account}` for OpenRouter
+
+Use the `account` field in your LLM configuration to specify which account-specific key to use.
+
 ## Quickstart: Java and Python
 
 Build system integration guides for common programming languages.
