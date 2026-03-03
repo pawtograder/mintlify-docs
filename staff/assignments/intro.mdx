@@ -26,6 +26,24 @@ Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
 
+## Empty Submission Detection
+
+Pawtograder automatically detects when students submit code that matches the handout (starter) files exactly. This helps identify students who may have forgotten to commit their changes before submitting.
+
+When creating an assignment, you can choose whether to:
+
+- **Permit empty submissions** (default): Students can submit even if their files match the handout exactly. The submission is flagged as empty but accepted.
+- **Reject empty submissions**: Students receive an error message asking them to commit their changes. The submission is automatically removed.
+
+<Note>
+Instructors and graders can always submit, even when empty submissions are prohibited. This prevents breaking staff testing workflows.
+</Note>
+
+Empty submission detection works by:
+1. Computing SHA-256 hashes of all expected submission files from the handout repository
+2. Comparing submitted files against all recorded handout versions
+3. Flagging submissions that match any handout version
+
 ## Due Date Exceptions
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
