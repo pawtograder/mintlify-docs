@@ -297,6 +297,19 @@ parts:
 - Prefer options when the same check has graded tiers (e.g., Complete/Partial/Incomplete).
 - Use `student_visibility` to separate internal notes from student-facing feedback.
 
+## Editing Rubrics
+
+### Unsaved Changes Protection
+
+When editing rubrics, Pawtograder protects you from accidentally losing work:
+
+- If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears
+- The dialog warns you that unsaved changes will be lost
+- You can choose to stay on the page and save your changes, or discard them and leave
+- This prevents accidental data loss when navigating away or closing the browser tab
+
+**Best practice**: Save your rubric frequently while editing, especially after making significant changes to criteria or checks.
+
 ## Field Reference: Required vs Optional (with defaults)
 
 **Rubric**
