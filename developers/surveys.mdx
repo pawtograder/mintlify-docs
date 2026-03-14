@@ -184,6 +184,28 @@ Bulk creates survey assignments for specific students.
 SELECT create_survey_assignments('survey-uuid', ARRAY['profile-1', 'profile-2']);
 ```
 
+#### `get_survey_status_for_assignment(p_assignment_id BIGINT, p_profile_id UUID)`
+
+Returns survey completion status for a student on a specific assignment.
+
+```sql
+-- Usage
+SELECT * FROM get_survey_status_for_assignment(123, 'profile-uuid');
+```
+
+Returns surveys linked to the assignment with completion status for the specified student.
+
+#### `get_survey_responses_with_group_context(p_class_id BIGINT, p_survey_id UUID)`
+
+Aggregates survey responses with group and mentor information for analytics.
+
+```sql
+-- Usage
+SELECT * FROM get_survey_responses_with_group_context(456, 'survey-uuid');
+```
+
+Returns response data joined with group membership, mentor assignments, and section information.
+
 ## Row Level Security (RLS)
 
 ### Survey Policies
