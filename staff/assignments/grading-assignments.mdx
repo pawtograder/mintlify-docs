@@ -24,13 +24,38 @@ Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assig
   <img src="/images/staff/assignments/grading-assignments-1756052527424.png" alt="Bulk Assign Grading form with distribution options" />
 </Frame>
 
-The algorithm will first split submissions between graders (assigning all selected rubric parts to each grader, aka "Assign by submission"), or split the rubric parts between graders first (assigning each submission to different graders for each rubric part, aka "Assign by rubric part").
+### Assignment Modes
+
+Pawtograder offers several modes for distributing grading tasks:
+
+#### By Submission
+
+Submissions are split between graders first. Each grader receives complete submissions with all selected rubric parts.
+
+#### By Rubric Part
+
+Rubric parts are split between graders first. Each submission is assigned to different graders for different rubric parts, allowing specialization.
+
+#### Assign to Lab Leaders
+
+Each submission is automatically assigned to all lab leaders of the student's lab section. No manual grader selection needed.
+
+#### Assign to Group Mentors
+
+Each group's submission is automatically assigned to the group's assigned mentor. This mode:
+
+- Requires groups to have mentors assigned (see Group Management)
+- Skips submissions without groups or without assigned mentors
+- Respects grading conflicts between mentors and group members
+- Ideal for group projects with dedicated mentors
+
+### Configuring Assignments
 
 You can choose which rubric to assign (the "Grading Rubric" is the default, and what is used to calculate the student's grade for the assignment), and optionally choose which rubric parts to assign.
 
 The algorithm will only operate over unassigned grading tasks. To support complex workflows, you can manually assign some subsets at a time (filtering by section or tag).
 
-To select assignees, you can filter by role (e.g. graders, instructors, or both), and optionally filter by tag. The form will show which graders will be assigned, and you can manually override the selection of graders.
+To select assignees (for "By submission" and "By rubric part" modes), you can filter by role (e.g. graders, instructors, or both), and optionally filter by tag. The form will show which graders will be assigned, and you can manually override the selection of graders.
 
 You can choose to reuse existing grading assignments (e.g. if you want to assign the same graders to the same submissions as a previous assignment, or even to assign the same graders a different rubric on the same submissions). Selecting this option will override all balancing efforts.
 
