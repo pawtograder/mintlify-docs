@@ -12,6 +12,29 @@ Programming assignments are the core of Pawtograder. Each assignment consists of
 
 Pawtograder creates two GitHub teams for each class: a "staff" team and a "students" team. Staff are granted access to all class repositories, and students are only granted access to their own repositories. The "students" team can be used by instructors who want to create additional GitHub repositories that are only accessible to students (e.g. for distributing in-class exercises).
 
+### Repository Permissions Audit
+
+Instructors can audit repository permissions to ensure that all students and staff have the correct access to assignment repositories. This is particularly useful for:
+
+- Verifying that students have access to their repositories after group changes
+- Ensuring staff permissions are correctly configured
+- Troubleshooting access issues
+- Maintaining security by confirming no unauthorized access exists
+
+**To run a permissions audit:**
+
+1. Navigate to the assignment's settings page
+2. Click on "Repository Permissions Audit"
+3. Review the audit results showing current permissions for all repositories
+4. Identify any discrepancies or missing permissions
+5. Use the "Fix Permissions" button to automatically correct any issues
+
+The audit flow helps maintain the integrity of repository access, especially important when:
+- Students are added to or removed from groups
+- Group assignments are modified after release
+- Staff roles change during the semester
+- Troubleshooting student access problems
+
 ## Repositories
 
 Two repositories are automatically created for each assignment: a "handout" repository and a "grader" repository. These repositories must be configured by the staff before the assignment is released.
