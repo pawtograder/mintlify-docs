@@ -16,6 +16,33 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## AI-Powered Feedback with Feedbot
+
+Feedbot provides AI-generated feedback on student submissions using large language models (LLMs). It can analyze code, provide suggestions, and help students understand their mistakes.
+
+### Supported LLM Providers
+
+Feedbot supports multiple LLM providers:
+
+- **OpenAI**: GPT-3.5, GPT-4, and other OpenAI models
+- **OpenRouter**: Access to a wide variety of models including Claude, Llama, and others through a unified API
+
+### Configuring OpenRouter
+
+To use OpenRouter with Feedbot:
+
+1. Navigate to the assignment's autograder settings
+2. Select **Feedbot** as the feedback provider
+3. Choose **OpenRouter** as the LLM provider
+4. Enter your OpenRouter API key
+5. Select the model you want to use (e.g., `anthropic/claude-3-sonnet`, `meta-llama/llama-3-70b`)
+6. Configure feedback parameters:
+   - Temperature (creativity level)
+   - Max tokens (response length)
+   - System prompt (instructions for the AI)
+
+OpenRouter provides access to many models at competitive pricing, making it easier to experiment with different AI models for providing feedback to students.
+
 ## Quickstart: Java and Python
 
 Build system integration guides for common programming languages.
