@@ -37,3 +37,27 @@ You can choose to reuse existing grading assignments (e.g. if you want to assign
 Lastly, you can choose to enforce that graders are **not** assigned to the same submission as they were on a prior assignment or rubric. This feature is useful to assign meta-graders, where the meta-grader is a different grader than the one who graded the submission.
 
 You will be able to preview the assignments before creating them, and can manually tweak them through the drag-and-drop interface.
+
+## Reassigning Grading Tasks
+
+After grading tasks have been assigned, instructors can reassign individual submissions or rubric parts to different graders:
+
+1. Navigate to the assignment's grading page
+2. Find the submission you want to reassign
+3. Click **Reassign** next to the grader's name
+4. Select a new grader from the dropdown
+5. Optionally add a note explaining the reassignment
+6. Click **Confirm Reassignment**
+
+**Important behaviors:**
+
+- When a submission is reassigned to a new grader, it appears in their pending work list immediately
+- If the new grader had already completed grading a different rubric part for the same submission, the system clears the `completed_at` timestamp to ensure the new work appears as pending
+- The original grader's work is preserved and can be reviewed if needed
+- Reassignments respect conflict of interest rules
+
+This feature is useful for:
+- Balancing workload when a grader falls behind
+- Handling grader absences or availability changes
+- Correcting assignment errors
+- Ensuring quality by moving submissions to more experienced graders
