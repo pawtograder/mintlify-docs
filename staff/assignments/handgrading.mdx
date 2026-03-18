@@ -41,3 +41,31 @@ By clicking on a student/group name, you will be taken to the grading interface 
 <Frame>
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
+
+## Reassigning Grading Work
+
+Instructors can reassign grading work from one grader to another, even after grading has been partially or fully completed. This is useful when:
+
+- A grader is unavailable and their work needs to be redistributed
+- Workload needs to be rebalanced across graders
+- A specific grader's expertise is needed for certain submissions
+
+### How Reassignment Works
+
+When you reassign a submission or rubric part:
+
+1. Navigate to the assignment's grading management page
+2. Select the submission(s) to reassign
+3. Choose the new grader from the dropdown
+4. The system will:
+   - Transfer the grading assignment to the new grader
+   - Reset the `completed_at` timestamp so the work appears in the new grader's pending list
+   - Preserve any existing grading work (scores, comments, annotations)
+   - Update the review assignment status to incomplete
+
+### Important Notes
+
+- Existing grading work is preserved during reassignment
+- The new grader can review and modify previous work
+- Reassigned work appears in the new grader's pending work list
+- If a grader already has a completed review for a different rubric part on the same submission, reassigning additional parts to them will properly reset the completion status
