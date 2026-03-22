@@ -89,6 +89,10 @@
           {
             "group": "Feature Documentation",
             "pages": ["developers/surveys", "developers/polls"]
+          },
+          {
+            "group": "Operations",
+            "pages": ["developers/monitoring"]
           }
         ]
       }
