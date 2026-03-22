@@ -98,3 +98,90 @@ By clicking on a student/group name, you will be taken to the grading interface 
 <Frame>
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
+
+## Viewing Artifacts
+
+Artifacts are files generated during the autograding process that provide additional context for grading. Common artifact types include:
+
+- Test output logs
+- Generated reports (HTML, PDF)
+- Visualization outputs (charts, graphs)
+- Code coverage reports
+- Performance profiling data
+
+### Artifact Rendering
+
+Pawtograder supports rendering multiple artifact formats directly in the grading interface:
+
+#### Plaintext Artifacts
+
+Text-based artifacts (`.txt`, `.log`, `.csv`) are displayed with:
+
+- Syntax highlighting for structured formats
+- Line numbers for easy reference
+- Search functionality
+- Copy-to-clipboard support
+
+**Annotation support:** You can add rubric annotations directly to specific lines in plaintext artifacts, similar to code files.
+
+#### Markdown Artifacts
+
+Markdown files (`.md`) are rendered with full formatting:
+
+- Headers, lists, and emphasis
+- Code blocks with syntax highlighting
+- Tables and blockquotes
+- Links and images (if embedded)
+
+**Use cases for markdown artifacts:**
+
+- Student-written reports or documentation
+- Autograder-generated feedback summaries
+- Test result explanations
+- Assignment reflections
+
+**Annotation support:** Markdown artifacts support annotations at the paragraph or section level.
+
+#### HTML Artifacts
+
+HTML files are rendered in a sandboxed iframe:
+
+- Full CSS styling preserved
+- Interactive elements (limited for security)
+- Responsive layouts
+- Embedded media
+
+#### PDF Artifacts
+
+PDF files are displayed using the browser's PDF viewer:
+
+- Page navigation
+- Zoom controls
+- Download option
+- Print support
+
+### Adding Annotations to Artifacts
+
+To annotate an artifact during grading:
+
+1. Navigate to the **Artifacts** tab
+2. Select the artifact to view
+3. For plaintext/markdown: Click on a line or section
+4. Choose a rubric check from the annotation menu
+5. Add optional comments
+6. The annotation appears inline with the artifact
+
+Artifact annotations are visible to students when grades are released, providing context for feedback tied to specific outputs.
+
+### Configuring Artifacts
+
+Instructors configure which artifacts to collect in the autograder settings:
+
+1. Navigate to assignment settings
+2. In the **Autograder** section, click **Configure Artifacts**
+3. Specify artifact file patterns (e.g., `reports/*.md`, `output.txt`)
+4. Choose rendering mode (plaintext, markdown, HTML, PDF, or auto-detect)
+5. Set visibility (always visible, only if grader annotates, or instructor-only)
+6. Save configuration
+
+The autograder will collect matching files from the grading environment and make them available in the grading interface.
