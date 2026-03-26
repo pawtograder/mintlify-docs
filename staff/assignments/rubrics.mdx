@@ -271,11 +271,29 @@ parts:
             student_visibility: if_applied
 ```
 
+## Editing Rubrics
+
+When editing rubrics, the system tracks unsaved changes and warns you before navigating away to prevent accidental data loss.
+
+**Unsaved Changes Protection:**
+
+- Browser tab/window close attempts show a confirmation dialog
+- Clicking navigation links within the application prompts for confirmation
+- Using browser back/forward buttons triggers a warning
+- Mobile navigation controls respect the unsaved state
+
+The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning is cleared automatically.
+
+<Tip>
+If you're working on rubrics across multiple tabs, only the currently visible tab will manage the unsaved changes warning to avoid false alerts.
+</Tip>
+
 ## How This Renders in the Hand-Grader
 
 - Global checks appear as radio buttons (when `max_checks_per_submission = 1`) or checkboxes (otherwise).
 - Checks with `data.options` render a choice list. The selected option's label is prefixed to the comment.
 - Annotation checks are applied via right-click on a code line or by selecting an artifact.
+- Checks linked to specific artifacts display a clickable link to navigate directly to that artifact.
 - For each criteria, the sidebar shows:
   - Additive: `earned / total_points`
   - Subtractive: `remaining / total_points`
