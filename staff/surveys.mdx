@@ -290,17 +290,83 @@ To review peer feedback:
 2. Use filters to focus on specific questions or date ranges
 3. Export to CSV for detailed analysis or grade calculations
 
+## Survey Series and Analytics
+
+### Creating Survey Series
+
+Survey series allow you to track trends across multiple surveys over time, such as weekly team collaboration check-ins.
+
+1. Navigate to **Manage Series** from the surveys dashboard
+2. Click **Create Series**
+3. Enter a series name (e.g., "Weekly Team Collaboration Surveys")
+4. Add an optional description
+5. Click **Create Series**
+
+Once created, you can link individual surveys to the series when creating or editing them:
+
+1. Select the series from the **Link to Series** dropdown
+2. Enter the **Week Number** to indicate the survey's position in the series
+3. Surveys in a series can be compared side-by-side in analytics views
+
+### Configuring Analytics
+
+The analytics configuration editor allows you to customize which questions appear in analytics views and set alert thresholds for group monitoring.
+
+**Global Alert Thresholds:**
+
+- **Variance Threshold**: Standard deviation above which to flag high variance (default: 1.5)
+- **Non-Response Threshold**: Response rate below which to flag groups (default: 80%)
+
+**Per-Question Configuration:**
+
+For each question, you can:
+
+1. Toggle **Include in Analytics** to show/hide the question in analytics views
+2. Set an **Alert Threshold** value that triggers warnings
+3. Choose **Alert Direction** (above/below mean, or any response above/below)
+4. Add a custom **Alert Message** to display when the threshold is exceeded
+5. Mark as **Reversed Scale** if higher values indicate worse outcomes
+
+### Viewing Survey Analytics
+
+The analytics dashboard provides three views for analyzing survey responses:
+
+**Overview Tab:**
+
+- Summary cards showing total responses, response rate, and average scores
+- Filter by section to compare different course sections
+- Compare multiple surveys in a series side-by-side
+- Diverging stacked bar charts for Likert-scale questions
+- Free text response aggregation
+
+**By Group Tab:**
+
+- View statistics for each student group
+- Identify groups with low response rates or concerning feedback
+- Drill down into individual group responses
+- Compare group performance against course averages
+
+**My Groups Tab** (for mentors):
+
+- Shows only groups where you are assigned as the mentor
+- Same detailed analytics as the By Group view
+- Focused view for mentors to monitor their assigned teams
+
+<Note>
+Analytics automatically group questions by their scale type (e.g., 1-5 Likert scales) for consistent visualization across related questions.
+</Note>
+
 ## Managing Survey Responses
 
 ### Viewing Response Dashboard
 
-Click **View Responses** on any published survey to see the response dashboard.
+Click **View Responses** on any published survey to see the response dashboard and analytics.
 
 <Frame>
   <img src="/images/staff/surveys/survey-response-dashboard.png" alt="Survey Response Dashboard with metrics and data table" />
 </Frame>
 
-The dashboard displays three key metrics at the top:
+The dashboard displays key metrics and analytics:
 
 #### Total Responses
 
