@@ -53,6 +53,7 @@
               "staff/assignments/intro",
               "staff/assignments/grading-assignments",
               "staff/assignments/handgrading",
+              "staff/assignments/repository-analytics",
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
               "staff/assignments/testing"
