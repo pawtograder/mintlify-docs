@@ -15,7 +15,7 @@ Rubrics can only be edited by instructors.
 ## High-Level Overview
 
 - **Rubric**: Named collection of parts used for a specific review round (self-review, grading-review, meta-grading-review). The grading review is the main review that students will see.
-- **Part**: Logical section within a rubric (e.g., Code Quality, Functionality). Contains criteria.
+- **Part**: Logical section within a rubric (e.g., Code Quality, Functionality). Contains criteria. Parts can be configured for individual grading or assign-to-student modes for group submissions.
 - **Criteria**: A scoring rule block with:
   - `is_additive`: If true, checks add points up to `total_points`. If false, checks deduct points from `total_points`.
   - `total_points`: Max points for this criteria. It is not possible for a grader to assign more points to nested checks, even if you allow them to select that many points.
