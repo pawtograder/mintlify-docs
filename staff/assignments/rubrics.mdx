@@ -340,3 +340,79 @@ A check on one rubric can reference a check on another rubric. During grading, a
 
 - Show a student's self-review evidence next to the corresponding grading check.
 - Pull in meta-grading notes when doing final pass reviews.
+
+## Individual and Assign-to-Student Grading Modes
+
+For group submissions, rubric parts can be configured with special grading modes to assess individual contributions:
+
+### Individual Grading Mode
+
+When a rubric part has `is_individual_grading: true`, that part is graded separately for each group member. The grading interface displays the part once per student, and graders apply checks individually for each team member.
+
+**Use cases:**
+- Individual code quality assessments in group projects
+- Personal reflection questions
+- Individual contribution evaluations
+
+**Configuration:**
+```yaml
+name: Group Project Rubric
+parts:
+  - name: Individual Code Quality
+    is_individual_grading: true
+    criteria:
+      - name: Code style
+        total_points: 10
+        is_additive: false
+        checks:
+          - name: Style violations
+            is_annotation: true
+            annotation_target: file
+            points: 1
+```
+
+When grading, you'll see this part repeated for each group member with a student name badge. Annotations and checks must be applied separately for each student.
+
+### Assign-to-Student Mode
+
+When a rubric part has `is_assign_to_student: true`, the grader selects which student the part applies to (or skips it if not applicable).
+
+**Use cases:**
+- Role-specific responsibilities (e.g., "Team Lead" duties)
+- Optional bonus sections that only some students completed
+- Targeted feedback for specific contributions
+
+**Configuration:**
+```yaml
+name: Group Project Rubric
+parts:
+  - name: Team Lead Responsibilities
+    is_assign_to_student: true
+    criteria:
+      - name: Leadership
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Effective coordination
+            is_annotation: false
+            points: 5
+```
+
+When grading, you'll see a dropdown to select which student this part applies to, or choose "Skip" if it doesn't apply to anyone.
+
+### Scoring with Individual/Assign-to-Student Parts
+
+When a rubric includes individual or assign-to-student parts:
+
+- **Shared score**: Points from regular (whole-group) rubric parts, autograder, and tweak
+- **Individual score**: Points from individual-grading and assign-to-student parts for each student
+- **Total per student**: Shared + individual, capped to assignment maximum if configured
+
+The grading interface displays a "Scores by student" breakdown showing shared, individual, and total scores for each group member.
+
+### Important Notes
+
+- A part cannot be both `is_individual_grading` and `is_assign_to_student` (mutually exclusive)
+- Individual grading parts require `target_student_profile_id` on all rubric-linked comments
+- Assign-to-student parts are skipped in completion validation when not assigned to any student
+- Students only see their own individual scores, not their teammates' scores
