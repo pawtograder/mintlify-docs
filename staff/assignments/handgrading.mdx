@@ -28,6 +28,49 @@ Instructors can assign graders to entire submissions (grading the whole rubric o
 
 You can also grade the submission as a whole, by clicking on the "Grade" button.
 
+## Individual Grading for Group Assignments
+
+For group assignments, you can configure rubric parts to be graded individually for each student rather than once for the entire group. This allows you to assess individual contributions within group work.
+
+### Individual Grading Mode
+
+When a rubric part is marked as **individual grading**, you will see separate sections for each group member in the grading interface. Each student receives their own score for that rubric part.
+
+**To use individual grading:**
+
+1. Edit the assignment rubric in YAML format
+2. Add `is_individual_grading: true` to any rubric part
+3. Save the rubric
+
+When grading, the interface displays each group member's name with their individual section. Students only see their own individual scores, while instructors and graders see all group members' scores.
+
+### Assign-to-Student Mode
+
+The **assign-to-student** mode allows you to assign specific rubric parts to individual students during grading. This is useful when different students are responsible for different components of a group project.
+
+**To use assign-to-student grading:**
+
+1. Edit the assignment rubric in YAML format
+2. Add `is_assign_to_student: true` to any rubric part
+3. Save the rubric
+
+When grading, you'll see a dropdown to select which student the rubric part applies to, or you can choose "Skip" if the part doesn't apply to any student.
+
+<Note>
+A rubric part cannot be both `is_individual_grading` and `is_assign_to_student`. Choose the mode that best fits your grading needs.
+</Note>
+
+### Viewing Individual Scores
+
+When a group submission includes individual grading:
+
+- The **Scores by student** section shows each student's breakdown:
+  - **Shared**: Points from whole-group rubric items, autograder, and manual adjustments
+  - **Individual**: Points from that student's individual rubric sections
+  - **Total**: Combined score (capped to assignment maximum if configured)
+
+Students see only their own score breakdown, while instructors and graders see all group members' scores.
+
 ## Grading Submissions Without Assignments
 
 If you have not been assigned to grade any submissions, you will see a list of all submissions on the assignment's landing page.
