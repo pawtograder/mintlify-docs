@@ -1,0 +1,190 @@
+---
+title: "Repository Analytics"
+description: "Track student GitHub activity with automated analytics for commits, pull requests, issues, and code reviews"
+icon: "chart-line"
+---
+
+# Repository Analytics
+
+Repository analytics helps instructors and graders audit individual student contributions on GitHub-based assignments. When enabled, Pawtograder automatically collects and displays GitHub activity including commits, pull requests, issues, and comments.
+
+## Enabling Repository Analytics
+
+To enable repository analytics for an assignment:
+
+1. Navigate to the assignment creation or edit form
+2. Check the **Enable repository analytics** checkbox
+3. Save the assignment
+
+<Note>
+Repository analytics must be enabled before the assignment is released. Analytics are only collected for assignments with this feature enabled.
+</Note>
+
+## Viewing Analytics
+
+Access repository analytics from any submission page:
+
+1. Navigate to a student's submission
+2. Click the **Repo Analytics** tab in the submission navigation
+3. View the analytics dashboard with activity data and charts
+
+<Frame>
+  <img src="/images/staff/assignments/repo-analytics-dashboard.png" alt="Repository Analytics dashboard showing activity chart and items table" />
+</Frame>
+
+The analytics dashboard is only visible to instructors and graders, not to students.
+
+## Analytics Data
+
+### Activity Types
+
+Repository analytics tracks the following GitHub activity:
+
+- **Commits**: All commits pushed to the repository
+- **Pull Requests**: PRs opened by students
+- **Issues**: Issues created in the repository
+- **Issue Comments**: Comments on issues
+- **PR Review Comments**: Code review comments on pull requests
+
+### Contributions by User
+
+The dashboard displays a summary table showing each contributor's activity:
+
+- Total commits per user
+- Pull requests created
+- Issues opened
+- Issue and PR comments
+- Overall contribution count
+
+GitHub usernames are automatically mapped to student names when available.
+
+## Activity Chart
+
+The **Activity Chart** tab displays a stacked bar chart showing daily activity across all tracked metrics. This visualization helps identify:
+
+- Patterns of student engagement over time
+- Last-minute work before deadlines
+- Collaboration patterns in group assignments
+
+## Filtering and Searching
+
+Use the filter buttons to focus on specific activity types:
+
+- **All**: Show all activity items
+- **Commits**: Show only commits
+- **Pull Requests**: Show only PRs
+- **Issues**: Show only issues
+- **Issue Comments**: Show only issue comments
+- **PR Review Comments**: Show only code review comments
+
+## Detailed Item View
+
+Click the expand arrow next to any item to view additional details:
+
+### For Commits and Pull Requests
+
+- List of files changed
+- Lines added and deleted per file
+- Total file change summary
+
+### For Issues
+
+- Issue labels
+- Assigned users
+- Body preview (first 400 characters)
+- Closed date and reason (if applicable)
+
+## Linking to Submissions
+
+When viewing commits in the analytics dashboard, commits that correspond to Pawtograder submissions include a **View submission →** link. Click this link to navigate directly to the grading interface for that specific commit.
+
+## Exporting Data
+
+Click **Export to CSV** to download all analytics data for external analysis. The CSV includes:
+
+- Activity type
+- GitHub ID (commit SHA, PR number, or issue number)
+- Title or message
+- Author
+- Creation date
+- Current state
+- File change summary
+- Labels (for issues)
+- Body preview
+- GitHub URL
+
+The exported file is named with the repository name and export date for easy organization.
+
+## Refreshing Analytics
+
+Analytics are automatically refreshed daily at 2:00 AM UTC for all released assignments with due dates today or in the future.
+
+To manually refresh analytics for a specific submission:
+
+1. Click the **Refresh** button in the analytics dashboard
+2. Wait for the refresh to complete (typically 5-10 seconds)
+3. The page will automatically reload with updated data
+
+<Warning>
+Manual refreshes are rate-limited to once every 10 minutes per repository to prevent excessive GitHub API usage.
+</Warning>
+
+### Refresh Status
+
+The dashboard displays the current fetch status:
+
+- **Idle**: No recent fetch activity
+- **Fetching**: Analytics refresh in progress
+- **Completed**: Last fetch completed successfully
+- **Error**: Last fetch encountered an error
+
+The timestamp shows when analytics were last successfully fetched from GitHub.
+
+## Linking Rubric Items to Analytics
+
+You can link specific rubric criteria to repository analytics metrics. This allows graders to quickly view relevant GitHub activity when evaluating a rubric item.
+
+To link a rubric check to analytics:
+
+1. Edit the assignment rubric
+2. Select a rubric check
+3. Choose a **KPI Category** from the dropdown:
+   - Commits
+   - Pull requests opened
+   - Issues opened
+   - Issues closed
+   - Issue comments
+   - PR review comments
+4. Save the rubric
+
+When grading, a **View [metric] analytics** link will appear next to the rubric check, filtering the analytics dashboard to show only that activity type.
+
+## Use Cases
+
+### Individual Contribution Auditing
+
+For group assignments, use repository analytics to verify that all team members are contributing:
+
+- Compare commit counts across group members
+- Review PR authorship and review participation
+- Identify students who may need additional support
+
+### Process Compliance
+
+Verify students are following required development practices:
+
+- Check that students are creating PRs for code review
+- Ensure issues are being used for task tracking
+- Confirm code review comments are being provided
+
+### Academic Integrity
+
+Repository analytics can help identify potential academic integrity issues:
+
+- Unusual commit patterns (e.g., all work in a single commit)
+- Lack of incremental development
+- Mismatched authorship between commits and submissions
+
+<Tip>
+Combine repository analytics with rubric KPI links to streamline the grading process. For example, create a rubric item for "Used pull requests for code review" and link it to the "Pull requests opened" KPI category.
+</Tip>
