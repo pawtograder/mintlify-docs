@@ -26,6 +26,10 @@ To import grades, instructors use a 3-step wizard:
 
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
 
+## Decimal Score Support
+
+The gradebook supports decimal scores. You can enter fractional values (e.g., 87.5) in any grade field, and they will be properly stored and calculated in grade expressions. When rubric check scores are updated during handgrading, submission grade totals are automatically recalculated to reflect the changes.
+
 ## Expression Syntax
 
 The gradebook expression system uses **MathJS** as its foundation, enhanced with specialized functions for grade calculations. Expressions must return a numeric value that becomes the student's score for that column. The final expression line is the student's score for that column.
