@@ -55,6 +55,7 @@
               "staff/assignments/handgrading",
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
+              "staff/assignments/repository-analytics",
               "staff/assignments/testing"
             ]
           },
