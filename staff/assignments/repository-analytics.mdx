@@ -1,0 +1,129 @@
+---
+title: "Repository Analytics"
+description: "Track student contributions with GitHub repository analytics for commits, pull requests, issues, and code reviews"
+icon: "chart-line"
+---
+
+# Repository Analytics
+
+Repository analytics provides instructors and graders with detailed insights into student contributions on GitHub-based assignments. When enabled, Pawtograder automatically collects and displays commits, pull requests, issues, and comments from student repositories.
+
+## Enabling Repository Analytics
+
+To enable repository analytics for an assignment:
+
+1. Navigate to the assignment configuration page
+2. Check the **Enable repository analytics** option
+3. Save the assignment
+
+Repository analytics are only available for assignments with GitHub repositories enabled.
+
+## Viewing Analytics
+
+When repository analytics are enabled, a **Repo Analytics** tab appears in the submission view for instructors and graders.
+
+### Analytics Dashboard
+
+The analytics dashboard provides two views:
+
+#### Items View
+
+Displays a detailed table of all repository activity:
+
+- **Commits**: Code changes with file modifications and line counts
+- **Pull Requests**: PRs opened and closed with file changes
+- **Issues**: Issues opened and closed with labels and assignees
+- **Issue Comments**: Comments on issues
+- **PR Review Comments**: Code review comments on pull requests
+
+Each item shows:
+- Type and status badge
+- Title or message
+- Author (mapped to student names when available)
+- Creation date
+- Link to view on GitHub
+
+Click the expand arrow on commits and pull requests to see detailed file changes.
+
+#### Activity Chart
+
+Visualizes daily repository activity with a stacked bar chart showing:
+- Commits per day
+- Pull requests opened
+- Issues opened and closed
+- Issue comments
+- PR review comments
+
+### Filtering by Activity Type
+
+Use the filter buttons to focus on specific types of activity:
+- **All**: Show all repository items
+- **Commits**: Show only commits
+- **Pull Requests**: Show only PRs
+- **Issues**: Show only issues
+- **Issue Comments**: Show only issue comments
+- **PR Review Comments**: Show only PR review comments
+
+### Contributions by User
+
+The dashboard displays a summary table showing each student's total contributions:
+- Number of commits
+- Number of pull requests
+- Number of issues
+- Issue comments
+- PR review comments
+- Total activity count
+
+Students are color-coded for easy identification across the interface.
+
+## Refreshing Analytics Data
+
+Analytics data is automatically refreshed daily for active assignments. To manually refresh:
+
+1. Click the **Refresh** button in the analytics dashboard
+2. Wait for the refresh to complete (typically 5-10 seconds)
+3. The dashboard will automatically reload with updated data
+
+<Note>
+Manual refreshes are rate-limited to once every 10 minutes per repository to avoid excessive GitHub API usage.
+</Note>
+
+## Exporting Analytics Data
+
+Click **Export CSV** to download all repository analytics data for external analysis. The CSV includes:
+- Item type and GitHub ID
+- Title and author
+- Creation date and state
+- File changes summary
+- Labels and metadata
+- GitHub URL
+
+## Linking Rubric Checks to Analytics
+
+You can link rubric checks to specific repository analytics categories. When grading, these links allow you to quickly view relevant repository activity.
+
+To link a rubric check to analytics, add a `kpi_category` field to the check in your rubric YAML:
+
+```yaml
+checks:
+  - name: Made meaningful commits
+    points: 10
+    kpi_category: commits
+  - name: Participated in code review
+    points: 5
+    kpi_category: pr_review_comments
+```
+
+Supported KPI categories:
+- `commits`: Links to commit history
+- `prs_opened`: Links to pull requests
+- `pr_review_comments`: Links to PR review comments
+- `issues_opened`: Links to issues opened
+- `issues_closed`: Links to issues closed
+- `issue_comments`: Links to issue comments
+
+When grading with linked checks, a "View analytics" link appears next to the check, filtering the analytics view to show only relevant items.
+
+## Privacy and Access
+
+Repository analytics are only visible to instructors and graders. Students cannot view repository analytics for their own or other students' submissions.
