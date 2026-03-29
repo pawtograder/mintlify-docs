@@ -41,3 +41,57 @@ By clicking on a student/group name, you will be taken to the grading interface 
 <Frame>
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
+
+## Individual Grading for Group Submissions
+
+For group assignments, you can configure rubric parts to be graded individually for each group member. This allows you to assess individual contributions within group work.
+
+### Configuring Individual Grading
+
+In your rubric YAML, mark a rubric part with `is_individual_grading: true`:
+
+```yaml
+name: Grading Rubric
+parts:
+  - name: Individual Contribution
+    is_individual_grading: true
+    criteria:
+      - name: Code quality
+        total_points: 10
+        checks:
+          - name: Well-structured code
+            points: 10
+```
+
+When grading a group submission with individual grading parts, the rubric sidebar displays separate sections for each group member. You grade each student's contribution independently, and Pawtograder tracks individual scores separately.
+
+### Assign-to-Student Grading
+
+Alternatively, you can use `is_assign_to_student: true` to let graders assign specific rubric parts to individual students:
+
+```yaml
+name: Grading Rubric
+parts:
+  - name: Documentation
+    is_assign_to_student: true
+    criteria:
+      - name: README quality
+        total_points: 5
+        checks:
+          - name: Complete documentation
+            points: 5
+```
+
+With assign-to-student parts, graders select which group member the part applies to (or skip it if not applicable). This is useful for rubric sections that only apply to specific team roles.
+
+<Note>
+A rubric part cannot be both `is_individual_grading` and `is_assign_to_student`. Choose the mode that best fits your grading needs.
+</Note>
+
+### Viewing Individual Scores
+
+When a submission has individual grading components, the submission view displays:
+- **Scores by student**: Shows shared score (whole-group rubric + autograder) and individual score for each group member
+- **Total**: Combined score capped to assignment maximum when configured
+
+Students see only their own individual score, while instructors and graders see all group members' scores.
