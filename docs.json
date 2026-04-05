@@ -52,6 +52,7 @@
             "pages": [
               "staff/assignments/intro",
               "staff/assignments/managing-groups",
+              "staff/assignments/repository-analytics",
               "staff/assignments/grading-assignments",
               "staff/assignments/handgrading",
               "staff/assignments/autograding",
