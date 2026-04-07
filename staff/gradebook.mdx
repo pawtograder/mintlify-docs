@@ -26,6 +26,14 @@ To import grades, instructors use a 3-step wizard:
 
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
 
+## Exporting Grades
+
+You can export the gradebook to CSV format for use in external systems or record-keeping. The export includes all visible columns and student information.
+
+### Export with Rendered Expressions
+
+When exporting, you have the option to export columns with their calculated values rendered. This is particularly useful for expression-based columns, as it allows you to export the final computed scores rather than the formulas themselves. This feature ensures that exported data matches exactly what students see in the gradebook.
+
 ## Expression Syntax
 
 The gradebook expression system uses **MathJS** as its foundation, enhanced with specialized functions for grade calculations. Expressions must return a numeric value that becomes the student's score for that column. The final expression line is the student's score for that column.
