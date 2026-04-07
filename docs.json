@@ -88,6 +88,10 @@
           {
             "group": "Feature Documentation",
             "pages": ["developers/surveys", "developers/polls"]
+          },
+          {
+            "group": "Updates",
+            "pages": ["changelog"]
           }
         ]
       }
