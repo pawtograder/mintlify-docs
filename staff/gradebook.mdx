@@ -14,6 +14,16 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
+## Exporting Grades
+
+Click the "Export" button to download gradebook data as a CSV file. The export includes:
+
+- Student names and identifiers
+- All gradebook columns with their scores
+- Expression-based columns rendered with their calculated values
+
+When exporting, you can choose to include columns rendered by expressions, which exports the calculated values rather than the expression formulas. This is useful for importing grades into external systems or for archival purposes.
+
 ## Importing Grades
 
 To import grades, instructors use a 3-step wizard:
