@@ -1,0 +1,60 @@
+---
+title: Changelog
+description: Recent updates and improvements to the Pawtograder platform
+---
+
+## April 2026
+
+### April 7, 2026
+
+#### Gradebook improvements
+- **Fixed gradebook column reordering** - Resolved issue where Move Left/Right buttons weren't working correctly for gradebook columns ([#668](https://github.com/pawtograder/platform/pull/668))
+- **Performance improvements** - Added better suspense boundaries to improve loading performance, especially on the gradebook page ([#678](https://github.com/pawtograder/platform/pull/678))
+
+### April 6, 2026
+
+#### Admin features
+- **Default time zone for admin view** - Added a default time zone setting for the admin interface ([#677](https://github.com/pawtograder/platform/pull/677))
+
+### April 5, 2026
+
+#### Bug fixes
+- **Grade override notes now visible** - Fixed issue where grade override notes weren't displaying in the UI ([#670](https://github.com/pawtograder/platform/pull/670))
+- **Self-review regrade prevention** - Students can no longer request regrades on self-review rubric items ([#673](https://github.com/pawtograder/platform/pull/673))
+- **Survey analytics fix** - Fixed survey analytics not showing for series surveys when comparison view is disabled ([#675](https://github.com/pawtograder/platform/pull/675))
+
+## March 2026
+
+### March 29, 2026
+
+#### Group management
+- **Enhanced group export** - Group CSV exports now include student and mentor emails in "Name <email>" format. Student exports also use this format for consistency ([#666](https://github.com/pawtograder/platform/pull/666))
+- **Test Assignment GitHub repo fix** - Fixed "Test Assignment" GitHub repository functionality for groups-only assignments ([#665](https://github.com/pawtograder/platform/pull/665))
+
+#### Time zone support
+- **Configurable time zones** - Added comprehensive time zone support across the platform, allowing courses to set their preferred time zone for all date/time displays ([#494](https://github.com/pawtograder/platform/pull/494))
+
+### March 28, 2026
+
+#### Late tokens
+- **Fixed gifted late token display** - Students who receive gifted late tokens now see the correct remaining token count. Previously, students who used all initial tokens but received gifts saw "You have no remaining late tokens" even when they had capacity ([#661](https://github.com/pawtograder/platform/pull/661))
+
+#### Content rendering
+- **HTML tag escaping** - HTML tags in markdown content are now escaped instead of stripped, preserving the original content intent ([#658](https://github.com/pawtograder/platform/pull/658))
+
+#### Grading improvements
+- **Auto-recalculate submission totals** - Submission grade totals now automatically recalculate when rubric check scores change ([#662](https://github.com/pawtograder/platform/pull/662))
+- **Better error messages** - Improved student-facing error messages to be more descriptive and actionable ([#660](https://github.com/pawtograder/platform/pull/660))
+- **Decimal scores in gradebook** - Gradebook number inputs now accept decimal scores ([#659](https://github.com/pawtograder/platform/pull/659))
+
+### March 27, 2026
+
+#### Performance and stability
+- **Memory leak fix** - Eliminated blob URL memory leaks in the submission file viewer that could cause browser crashes when viewing multiple large files ([#654](https://github.com/pawtograder/platform/pull/654))
+- **Group due date fix** - Fixed due date adjustment dialog for group assignments to correctly create instructor exceptions with assignment_group_id instead of student_id ([#657](https://github.com/pawtograder/platform/pull/657))
+- **Gradebook recalculation fix** - Fixed version-drift bug in gradebook recalculation pipeline that could cause scores to not converge ([#656](https://github.com/pawtograder/platform/pull/656))
+
+#### New features
+- **Assignment repository analytics** - Added analytics for assignment repositories, providing insights into student repository activity ([#637](https://github.com/pawtograder/platform/pull/637))
+- **Group individual grading** - Introduced support for grading individual students within group assignments ([#638](https://github.com/pawtograder/platform/pull/638))
+- **Survey display improvements** - Enhanced survey display and results analysis interface ([#652](https://github.com/pawtograder/platform/pull/652))
