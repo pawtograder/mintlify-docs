@@ -280,12 +280,21 @@ parts:
   - Additive: `earned / total_points`
   - Subtractive: `remaining / total_points`
 
+## Regrade Requests
+
+Students can request regrades on rubric items where they believe the grading was incorrect. However, regrade requests are automatically prevented on self-review rubric items, as these are completed by the students themselves.
+
+## Split-Rubric Group Grading
+
+For group assignments, you can apply per-student adjustments when using split-rubric grading. This allows you to assign different scores or provide individualized feedback to group members while maintaining the efficiency of group grading workflows.
+
 ## Notes and Tips
 
 - Keep criteria focused and keep check names short; longer explanation should go in `description`.
 - Use `max_annotations` to prevent over-counting nitpicks.
 - Prefer options when the same check has graded tiers (e.g., Complete/Partial/Incomplete).
 - Use `student_visibility` to separate internal notes from student-facing feedback.
+- Grade override notes are now properly displayed in the grading interface.
 
 ## Field Reference: Required vs Optional (with defaults)
 
