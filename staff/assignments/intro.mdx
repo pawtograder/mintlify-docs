@@ -26,6 +26,15 @@ Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
 
+### Exporting Group and Student Data
+
+You can export group and student information to CSV format for external analysis or record-keeping. The exports include:
+
+- **Group Export**: Includes columns for GroupName, StudentNames (in "Name <email>" format), and MentorName (if applicable, also in "Name <email>" format)
+- **Student Export**: Includes student information with emails in the same "Name <email>" format
+
+All exports use UTF-8 encoding with BOM for proper Excel compatibility and include formula-safe CSV escaping to prevent injection attacks.
+
 ## Due Date Exceptions
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
