@@ -1,0 +1,42 @@
+---
+title: "Course Management"
+description: "Manage course settings, student rosters, and export course data"
+icon: "gear"
+---
+
+# Course Management
+
+## Exporting Course Data
+
+Pawtograder provides export functionality for course rosters and group information.
+
+### Student Roster Export
+
+Export your course roster to CSV format with student names and email addresses. This is useful for:
+
+- Sharing student lists with external systems
+- Creating mailing lists
+- Generating reports for administrative purposes
+
+The exported CSV includes:
+- Student names in "Name <email>" format
+- All enrolled students in the course
+
+### Group Export
+
+Export group assignments to CSV format with detailed information about group composition and mentors. The export includes:
+
+- **GroupName**: The name of each group
+- **StudentNames**: All students in the group in "Name <email>" format
+- **MentorName**: The assigned mentor/grader in "Name <email>" format (if applicable)
+
+The CSV export includes:
+- UTF-8 BOM for proper character encoding
+- Formula-safe CSV escaping to prevent injection attacks
+- Sorted rows for stable, consistent exports
+
+This export is particularly useful for:
+- Tracking group assignments across multiple projects
+- Coordinating with mentors or graders
+- Generating reports on group composition
+- Importing group data into external systems
