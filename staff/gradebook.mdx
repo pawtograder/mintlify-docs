@@ -14,6 +14,30 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
+## Exporting Grades
+
+Instructors can export gradebook data to CSV for external analysis, record-keeping, or integration with other systems.
+
+### Standard Export
+
+The standard gradebook export includes all columns and student grades in CSV format.
+
+### Export with Rendered Expressions
+
+For gradebook columns that use expressions, you can choose to export the **rendered values** instead of the raw expression formulas. This option exports the calculated numeric results for each student, making the data immediately usable in external tools like Excel or Google Sheets.
+
+**Use cases for expression rendering:**
+- Share final calculated grades with students or administrators
+- Import computed averages into external grading systems
+- Analyze grade distributions based on complex calculations
+- Create reports that show final weighted scores
+
+When exporting with rendered expressions:
+- Expression columns show the calculated numeric value for each student
+- Manual and imported columns export normally
+- All student-specific calculations are preserved
+- The export maintains the same CSV format and encoding standards
+
 ## Importing Grades
 
 To import grades, instructors use a 3-step wizard:
