@@ -26,6 +26,21 @@ Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
 
+### Instructor Group Management
+
+Instructors can create and manage groups directly from the assignment's "Groups" page. This interface allows you to:
+
+- **Create new groups**: Add groups with specific names and assign students as members
+- **Move students between groups**: Reassign students from one group to another
+- **Publish changes**: All group modifications are staged and published together, ensuring atomic updates to both the database and GitHub repository permissions
+
+When you publish group changes, Pawtograder automatically:
+- Creates or updates group memberships in the database
+- Queues GitHub permission synchronization tasks to grant students access to their group's repository
+- Creates repositories for new groups (if the assignment has a template repository configured)
+
+The publish workflow uses a batch RPC system to ensure all changes are applied consistently, even when managing large numbers of groups.
+
 ## Due Date Exceptions
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
