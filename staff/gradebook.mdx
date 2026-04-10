@@ -14,6 +14,16 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
+## Gradebook Recalculation
+
+When gradebook columns use expressions that reference other columns, Pawtograder automatically recalculates affected grades when dependencies change. This recalculation process runs asynchronously in the background to maintain performance for large courses.
+
+The recalculation system uses a worker that processes batches of rows, tracking the state of each row to prevent concurrent modifications. Each row in `gradebook_row_recalc_state` has a version number that increments with each update, ensuring that only the worker that initiated the recalculation can mark it as complete.
+
+<Note>
+The gradebook recalculation system was recently fixed to address a critical bug where rows could become permanently stuck in the `is_recalculating=true` state. The fix ensures that version numbers are read after upserts complete, preventing version mismatches during batch processing.
+</Note>
+
 ## Importing Grades
 
 To import grades, instructors use a 3-step wizard:
