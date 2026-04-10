@@ -16,6 +16,16 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Automatic recalculation:** When you release or unrelease a gradebook column, Pawtograder automatically recalculates all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current state of their dependencies. For example, if you have a "Final Grade" column that references "Homework Average", releasing or unreleasing the "Homework Average" column will trigger a recalculation of "Final Grade" for all students.
 
+## Reordering Columns
+
+You can reorder gradebook columns to organize them logically:
+
+- **Drag and drop**: Click and drag the grip icon (⋮⋮) in any column header to reorder columns
+- **Move left/right**: Use the column menu (⋮) and select "Move Left" or "Move Right" to shift a column one position
+- **Auto-layout**: Click the auto-layout button (grid icon) to automatically organize columns by their slug prefixes
+
+Column reordering is saved immediately and affects the display for all instructors and the export order in CSV files.
+
 ## Exporting Grades
 
 You can export the gradebook to CSV format for external analysis or record-keeping. The export feature includes an option to **use render expressions** when exporting:
