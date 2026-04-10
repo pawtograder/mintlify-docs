@@ -16,6 +16,10 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Automatic recalculation:** When you release or unrelease a gradebook column, Pawtograder automatically recalculates all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the correct values based on the current release state of their dependencies. For example, if you have a "Final Grade" column that references multiple homework columns, releasing or unreleasing any homework column will trigger a recalculation of the Final Grade column for all students.
 
+## Managing Columns
+
+You can reorder gradebook columns to organize them logically. Use the "Move Left" and "Move Right" options in the column menu to adjust the position of columns in the gradebook view. This helps you group related columns together and present grades in a more intuitive order for both instructors and students.
+
 ## Exporting Grades
 
 You can export the gradebook to CSV for external analysis or record-keeping. Click the "Export" button to download a CSV file containing all student grades.
