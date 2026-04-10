@@ -191,6 +191,33 @@ View captured emails at `http://localhost:54324`. Useful for testing:
 - Notification emails
 - Email verification
 
+## CI/CD Pipeline
+
+Pawtograder uses GitHub Actions for continuous integration and deployment. The build process was migrated from Coolify to GitHub Actions to improve reliability and reduce test flakiness.
+
+### Build Process
+
+The CI pipeline runs on every push and pull request, executing:
+
+1. **Dependency Installation**: Installs npm packages and system dependencies
+2. **Type Checking**: Validates TypeScript types across the codebase
+3. **Linting**: Runs ESLint to enforce code quality standards
+4. **Unit Tests**: Executes Jest test suites
+5. **E2E Tests**: Runs Playwright tests against a test environment
+6. **Build**: Compiles the Next.js application
+
+### Running CI Checks Locally
+
+Before pushing code, run the same checks that CI will execute:
+
+```bash
+# Run all checks
+npm run lint && npm run typecheck:functions && npm test
+
+# Run E2E tests
+npx playwright test
+```
+
 ## Development Commands
 
 ### Daily Development
