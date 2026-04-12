@@ -339,6 +339,16 @@ The dev server uses a self-signed certificate. This is expected:
    ```
 2. Restart the dev server
 
+## Continuous Integration
+
+The project uses GitHub Actions for continuous integration and deployment:
+
+- **Build Process**: Automated builds run in GitHub Actions (migrated from Coolify)
+- **Testing**: E2E tests run automatically on pull requests
+- **Deployment**: Staging deployments use the `dev` environment configuration
+
+All CI workflows are defined in `.github/workflows/` and handle building, testing, and deploying the application.
+
 ## Next Steps
 
 - Read the [Surveys Developer Guide](/developers/surveys) for feature-specific documentation
