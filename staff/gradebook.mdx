@@ -16,11 +16,27 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Automatic recalculation of dependent columns:** When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## Instructor-Only Columns
+
+Instructor-only columns are hidden from students until you explicitly release them. This feature is useful for:
+
+- **What-if scenarios**: Create calculated columns to test grading schemes before making them visible to students
+- **Curve adjustments**: Apply curves or bonus points privately before finalizing grades
+- **Draft calculations**: Build complex grade formulas and verify they work correctly before student visibility
+
+When you create or edit a calculated column (one with a score expression), you can check the "Staff-only column" option. While unreleased, students cannot see the column definition or their grades. When you're ready to make the column visible:
+
+1. Click the column menu and select "Release Column"
+2. Confirm the release (this action cannot be undone)
+3. The column becomes permanently visible to students and behaves like a normal column
+
+After release, the column transitions from a frozen snapshot to live recalculation. Any subsequent grade changes will automatically propagate to students.
+
 ## Importing Grades
 
 To import grades, instructors use a 3-step wizard:
 
-1. **File Selection**: Click the "Import Column" button and select a CSV file from your computer, which the system parses client-side to extract tabular data.
+1. **File Selection**: Click the "Import Columns" button and select a CSV file from your computer, which the system parses client-side to extract tabular data.
 
 2. **Column Mapping**: Choose which CSV column contains student identifiers and select whether they are email addresses or student IDs. For each remaining CSV column, decide whether to map it to an existing gradebook column for updates, create a new column (requiring you to set the maximum score), or ignore the column entirely. The system automatically detects email columns if present.
 
