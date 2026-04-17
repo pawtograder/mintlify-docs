@@ -1,0 +1,260 @@
+---
+title: "CLI (Beta)"
+description: "Command-line interface for managing Pawtograder courses, assignments, and resources"
+icon: "terminal"
+---
+
+# Pawtograder CLI (Beta)
+
+The Pawtograder CLI is a command-line tool for instructors and site administrators to manage courses, assignments, and other resources programmatically.
+
+<Warning>
+The CLI is currently in beta. Commands and options may change in future releases.
+</Warning>
+
+## Installation
+
+The CLI is included in the Pawtograder platform repository. To use it:
+
+```bash
+# Clone the repository
+git clone https://github.com/pawtograder/platform.git
+cd platform
+
+# Install dependencies
+npm install
+
+# Run the CLI
+npm run cli -- <command> [options]
+```
+
+## Authentication
+
+Before using the CLI, you must authenticate with an API token.
+
+### Login
+
+```bash
+npm run cli -- login
+```
+
+You can also provide a token directly:
+
+```bash
+npm run cli -- login --token YOUR_API_TOKEN
+```
+
+For custom deployments, specify the API URL:
+
+```bash
+npm run cli -- login --url https://your-instance.com/functions/v1/cli
+```
+
+### Check current user
+
+```bash
+npm run cli -- whoami
+```
+
+### Logout
+
+```bash
+npm run cli -- logout
+```
+
+## Available Commands
+
+### Classes
+
+Manage course classes.
+
+```bash
+# List all classes
+npm run cli -- classes list
+```
+
+### Assignments
+
+Manage assignments across courses.
+
+```bash
+# Copy assignments from one class to another
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all
+
+# Delete an assignment
+npm run cli -- assignments delete \
+  --class cs3500-fall-2025 \
+  --assignment hw1
+```
+
+### Surveys
+
+Manage course surveys.
+
+```bash
+# List surveys
+npm run cli -- surveys list --class cs3500-fall-2025
+
+# Copy surveys between classes
+npm run cli -- surveys copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026
+```
+
+### Flashcards
+
+Manage flashcard decks.
+
+```bash
+# List flashcard decks
+npm run cli -- flashcards list --class cs3500-fall-2025
+```
+
+### Rubrics
+
+Manage grading rubrics.
+
+```bash
+# List rubrics
+npm run cli -- rubrics list --class cs3500-fall-2025
+```
+
+### Submissions
+
+Manage student submissions.
+
+```bash
+# List submissions for an assignment
+npm run cli -- submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1
+
+# Add comments to submissions
+npm run cli -- submissions comments \
+  --class cs3500-fall-2025 \
+  --assignment hw1
+
+# Manage submission artifacts
+npm run cli -- submissions artifacts \
+  --class cs3500-fall-2025 \
+  --assignment hw1
+```
+
+### Help Requests
+
+Manage office hours help requests.
+
+```bash
+# List help requests
+npm run cli -- help-requests list --class cs3500-fall-2025
+```
+
+### Discussions
+
+Manage discussion board threads.
+
+```bash
+# List discussion threads
+npm run cli -- discussions list --class cs3500-fall-2025
+```
+
+### Reviews
+
+Manage peer and grading reviews.
+
+```bash
+# List review assignments
+npm run cli -- reviews list \
+  --class cs3500-fall-2025 \
+  --assignment hw1
+```
+
+### Repositories
+
+Manage GitHub repositories for assignments.
+
+```bash
+# List repositories
+npm run cli -- repos list \
+  --class cs3500-fall-2025 \
+  --assignment hw1
+
+# Sync repositories
+npm run cli -- repos sync \
+  --class cs3500-fall-2025 \
+  --assignment hw1
+```
+
+## Common Options
+
+Most commands support these common options:
+
+- `--class <slug>` - Specify the class slug
+- `--assignment <slug>` - Specify the assignment slug
+- `--help` - Show help for a command
+- `--version` - Show CLI version
+
+## Examples
+
+### Copy all assignments to a new semester
+
+```bash
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all
+```
+
+### List submissions for grading
+
+```bash
+npm run cli -- submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --format json
+```
+
+### Bulk add comments to submissions
+
+```bash
+npm run cli -- submissions comments \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --file comments.csv
+```
+
+## Getting Help
+
+For detailed help on any command:
+
+```bash
+npm run cli -- <command> --help
+```
+
+For example:
+
+```bash
+npm run cli -- assignments --help
+npm run cli -- assignments copy --help
+```
+
+## Troubleshooting
+
+### Authentication errors
+
+If you encounter authentication errors:
+
+1. Verify your API token is valid
+2. Check that you're logged in: `npm run cli -- whoami`
+3. Try logging out and back in: `npm run cli -- logout && npm run cli -- login`
+
+### Command not found
+
+Ensure you're running the CLI from the platform repository root directory and have installed dependencies with `npm install`.
+
+### Permission errors
+
+Some commands require specific permissions. Ensure your user account has the necessary role (instructor or admin) for the operation you're attempting.
