@@ -18,6 +18,12 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Automatic recalculation of dependent columns:** When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## "What if" Calculations
+
+Students can perform "what if" calculations in the gradebook to explore how hypothetical grades would affect their overall course performance. This feature allows students to temporarily override their current grades or fill in missing grades to see the impact on calculated columns (such as their final grade).
+
+When a student enters a "what if" value, the gradebook recalculates all dependent columns using the hypothetical score, showing the student how their grade would change. These calculations are performed entirely client-side and do not affect the actual grades stored in the system. Students can clear their "what if" values at any time to return to viewing their actual grades.
+
 ## Importing Grades
 
 To import grades, instructors use a 3-step wizard:
