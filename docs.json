@@ -33,6 +33,7 @@
             "group": "Course Features",
             "pages": [
               "students/discussion-board",
+              "students/gradebook-whatif",
               "students/office-hours",
               "students/polls",
               "students/surveys"
@@ -88,6 +89,10 @@
           {
             "group": "Feature Documentation",
             "pages": ["developers/surveys", "developers/polls"]
+          },
+          {
+            "group": "Tools",
+            "pages": ["developers/cli"]
           }
         ]
       }
