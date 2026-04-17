@@ -26,6 +26,22 @@ Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
 
+### Managing Groups
+
+Instructors can configure groups through the "Configure Groups" page for each assignment. The interface provides:
+
+- **Create New Group**: Add groups and assign initial members
+- **Tweak a Group**: Modify existing group membership
+- **Bulk operations**: Stage multiple changes before publishing
+
+When you make changes (creating groups, moving students), they are staged locally. Click "Publish Changes" to apply all staged changes atomically. The system will:
+
+1. Create new groups and update memberships in the database
+2. Create GitHub repositories for new groups (when the assignment has a template repository)
+3. Update repository permissions asynchronously
+
+After publishing, the page automatically refreshes to show the updated group configuration.
+
 ## Due Date Exceptions
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
