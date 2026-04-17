@@ -35,7 +35,8 @@
               "students/discussion-board",
               "students/office-hours",
               "students/polls",
-              "students/surveys"
+              "students/surveys",
+              "students/gradebook-what-if"
             ]
           }
         ]
