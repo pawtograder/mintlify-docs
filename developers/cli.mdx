@@ -1,0 +1,298 @@
+---
+title: "CLI interface"
+description: "Command-line tools for managing courses, assignments, and repositories"
+icon: "terminal"
+---
+
+# CLI interface
+
+The Pawtograder CLI provides command-line tools for instructors and administrators to manage courses, copy assignments between semesters, and perform bulk repository operations.
+
+## Installation and authentication
+
+The CLI is included in the platform repository and runs via npm scripts.
+
+### Prerequisites
+
+- Node.js 18 or later
+- SSH access to GitHub (for repository operations)
+- A Pawtograder API token with CLI access
+
+### Getting a CLI token
+
+1. Log in to Pawtograder
+2. Navigate to User Menu → API Tokens
+3. Click "Create New Token"
+4. Select "CLI" or "MCP + CLI" as the token type
+5. Copy the token (it starts with `mcp_`)
+
+### Login
+
+```bash
+npm run cli -- login
+```
+
+You'll be prompted to enter your API token. The CLI will verify the token and store your credentials securely in `~/.pawtograder/credentials.json`.
+
+You can also provide the token directly:
+
+```bash
+npm run cli -- login --token mcp_your_token_here
+```
+
+### Check authentication
+
+```bash
+npm run cli -- whoami
+```
+
+### Logout
+
+```bash
+npm run cli -- logout
+```
+
+## Available commands
+
+### Classes
+
+List all classes you have access to:
+
+```bash
+npm run cli -- classes list
+```
+
+Show details for a specific class:
+
+```bash
+npm run cli -- classes show <class-id-or-slug>
+```
+
+### Assignments
+
+List assignments for a class:
+
+```bash
+npm run cli -- assignments list --class <class-id-or-slug>
+```
+
+Show assignment details:
+
+```bash
+npm run cli -- assignments show <assignment-id-or-slug> --class <class-id-or-slug>
+```
+
+Copy assignments between classes:
+
+```bash
+# Copy a single assignment
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --assignment homework-1 \
+  --workdir ./repos
+
+# Copy all assignments
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all \
+  --workdir ./repos
+
+# Copy with a schedule CSV (custom dates)
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --schedule schedule.csv \
+  --workdir ./repos
+```
+
+The `--workdir` option specifies a local directory for git clones when copying repository content. Use `--dry-run` to preview changes without making them.
+
+Delete an assignment:
+
+```bash
+npm run cli -- assignments delete <assignment-id-or-slug> \
+  --class <class-id-or-slug>
+```
+
+### Rubrics
+
+List rubrics for an assignment:
+
+```bash
+npm run cli -- rubrics list \
+  --assignment <assignment-id-or-slug> \
+  --class <class-id-or-slug>
+```
+
+Export a rubric to YAML:
+
+```bash
+npm run cli -- rubrics export \
+  --assignment <assignment-id-or-slug> \
+  --class <class-id-or-slug> \
+  --type grading \
+  --output rubric.yml
+```
+
+Import a rubric from YAML:
+
+```bash
+npm run cli -- rubrics import \
+  --assignment <assignment-id-or-slug> \
+  --class <class-id-or-slug> \
+  --file rubric.yml \
+  --type grading
+```
+
+### Repository operations
+
+The CLI provides local git-based tools for bulk repository maintenance.
+
+List repositories for an assignment:
+
+```bash
+npm run cli -- repos list \
+  --class <class-id-or-slug> \
+  --assignment <assignment-id-or-slug>
+```
+
+Sync grade workflow from handout to student repos:
+
+```bash
+npm run cli -- repos sync-grade-workflow \
+  --class <class-id-or-slug> \
+  --assignment <assignment-id-or-slug> \
+  --workdir ./repos
+```
+
+This command:
+1. Fetches the canonical `.github/workflows/grade.yml` from the handout repository
+2. Clones all student repositories locally
+3. Updates the workflow file in each student repo
+4. Commits and pushes changes
+
+Copy files from source assignment repos to target assignment repos:
+
+```bash
+npm run cli -- repos copy-after-source-due \
+  --class <class-id-or-slug> \
+  --source-assignment <assignment-id-or-slug> \
+  --target-assignment <assignment-id-or-slug> \
+  --workdir ./repos
+```
+
+This is useful for multi-part assignments where students continue working on the same codebase. The command only copies repos where the source assignment's due date has passed.
+
+### Surveys
+
+Copy surveys between classes:
+
+```bash
+# Copy a single survey
+npm run cli -- surveys copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --survey "Midterm Feedback"
+
+# Copy all surveys
+npm run cli -- surveys copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all
+```
+
+### Flashcards
+
+List flashcard decks:
+
+```bash
+npm run cli -- flashcards list --class <class-id-or-slug>
+```
+
+Copy flashcard decks between classes:
+
+```bash
+npm run cli -- flashcards copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all
+```
+
+### Submissions
+
+Import submission artifacts from a manifest:
+
+```bash
+npm run cli -- submissions artifacts import \
+  --class <class-id-or-slug> \
+  --assignment <assignment-id-or-slug> \
+  --file manifest.json
+```
+
+Import or sync submission comments:
+
+```bash
+npm run cli -- submissions comments import \
+  --class <class-id-or-slug> \
+  --assignment <assignment-id-or-slug> \
+  --file batch-results.json \
+  --author-profile-id <uuid>
+```
+
+## Common options
+
+Most commands support these options:
+
+- `--dry-run`: Preview changes without making them
+- `--help`: Show command-specific help
+- `--class` or `-c`: Specify a class by ID, slug, or name
+- `--assignment` or `-a`: Specify an assignment by ID or slug
+
+## Repository operations
+
+Repository commands use local git operations via SSH. Ensure you have:
+
+1. SSH keys configured for GitHub
+2. Access to the course's GitHub organization
+3. Sufficient disk space in your `--workdir` for cloning repos
+
+### Concurrency and rate limiting
+
+Repository operations support parallel execution:
+
+```bash
+npm run cli -- repos sync-grade-workflow \
+  --class cs3500 \
+  --assignment hw1 \
+  --workdir ./repos \
+  --concurrency 4 \
+  --delay-ms 1000
+```
+
+- `--concurrency`: Number of parallel git operations (1-8, default: 2)
+- `--delay-ms`: Delay between batches in milliseconds (default: 0)
+
+## Troubleshooting
+
+### Authentication errors
+
+If you see "Not logged in" errors:
+1. Run `npm run cli -- login` to authenticate
+2. Verify your token has the required scopes (cli:read or cli:write)
+3. Check that your token hasn't been revoked
+
+### Timeout errors
+
+For large operations (copying many assignments or repos):
+1. Use `--dry-run` first to preview
+2. Set a longer timeout: `PAWTOGRADER_HTTP_TIMEOUT_MS=600000 npm run cli -- ...`
+3. Enable debug logging: `DEBUG=1 npm run cli -- ...`
+
+### Repository access errors
+
+If git operations fail:
+1. Verify your SSH keys are configured: `ssh -T git@github.com`
+2. Check you're a member of the course's GitHub organization
+3. Ensure the `--workdir` path exists and is writable
