@@ -1,17 +1,33 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
   "name": "Pawtograder",
-  "appearance": {
-    "default": "dark"
-  },
-  "colors": {
-    "primary": "#4FD1C5",
-    "light": "#81E6D9",
-    "dark": "#319795"
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
   },
   "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@pawtograder.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://app.pawtograder.com"
+  },
   "navigation": {
+    "global": {
+      "anchors": []
+    },
     "tabs": [
       {
         "tab": "Students",
@@ -32,6 +48,7 @@
           {
             "group": "Course Features",
             "pages": [
+              "students/gradebook",
               "students/discussion-board",
               "students/office-hours",
               "students/polls",
@@ -91,24 +108,10 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": []
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/pawtograder"
-      }
     ]
   },
-  "footer": {
-    "copyright": "Copyright © 2025 Jonathan Bell."
+  "footerSocials": {
+    "x": "https://x.com/pawtograder",
+    "github": "https://github.com/pawtograder"
   }
 }
