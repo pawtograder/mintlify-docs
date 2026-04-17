@@ -251,6 +251,30 @@ npx playwright test surveys
 npm run seed
 ```
 
+### CLI Operations
+
+```bash
+# Run the Pawtograder CLI (requires login)
+npm run cli -- <command> [options]
+
+# Convenience alias for repo operations
+npm run cli:repos -- <command> [options]
+
+# Login with API token
+npm run cli -- login
+
+# List classes
+npm run cli -- classes list
+
+# Copy assignments between classes
+npm run cli -- assignments copy --source-class <slug> --target-class <slug> --all
+
+# Sync grade.yml workflow to student repos
+npm run cli:repos -- sync-grade-workflow --class <id> --assignment <id> --workdir <path>
+```
+
+The CLI provides commands for classes, assignments, surveys, flashcards, rubrics, submissions, and repository maintenance. Use `--help` on any command for detailed options. Repository operations use local SSH git for student repo writes.
+
 ## Project Structure
 
 ```text
