@@ -33,6 +33,7 @@
             "group": "Course Features",
             "pages": [
               "students/discussion-board",
+              "students/gradebook-whatif",
               "students/office-hours",
               "students/polls",
               "students/surveys"
