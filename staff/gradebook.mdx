@@ -28,6 +28,17 @@ To import grades, instructors use a 3-step wizard:
 
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
 
+## Expression Builder
+
+The gradebook includes a full-screen Expression Builder for creating and editing column expressions. This interface provides:
+
+- **Real-time validation**: Expressions are validated as you type, with clear error messages for syntax issues
+- **Full-screen editing**: Maximize your workspace for complex formulas
+- **Syntax highlighting**: Enhanced readability for mathematical expressions
+- **Function reference**: Quick access to available functions and their documentation
+
+To access the Expression Builder, click the expand icon when editing an expression-based column.
+
 ## Expression Syntax
 
 The gradebook expression system uses **MathJS** as its foundation, enhanced with specialized functions for grade calculations. Expressions must return a numeric value that becomes the student's score for that column. The final expression line is the student's score for that column.
