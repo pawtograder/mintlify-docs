@@ -30,6 +30,19 @@ To import grades, instructors use a 3-step wizard:
 
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
 
+## Expression Builder
+
+When creating or editing a column with a score expression, Pawtograder provides an **Expression Builder** interface with live validation and debugging tools:
+
+- **Live validation**: As you type, the expression is parsed and validated in real-time. Parse errors and dependency errors (unknown column slugs, cycles) are shown immediately.
+- **Full-screen mode**: Click "Expression Builder" to expand to a full-screen editor with additional features:
+  - **Student picker**: Select a student to test the expression against their actual gradebook data
+  - **Per-line evaluation**: See the intermediate value of each statement in your expression, displayed inline
+  - **Score preview**: View both the raw numeric result and the rendered form (if a render expression is set)
+  - **Incomplete values panel**: See which dependencies are missing or not released for the selected student
+
+The Expression Builder helps you write and debug complex expressions before saving them, ensuring they work correctly for all students.
+
 ## Expression Syntax
 
 The gradebook expression system uses **MathJS** as its foundation, enhanced with specialized functions for grade calculations. Expressions must return a numeric value that becomes the student's score for that column. The final expression line is the student's score for that column.
