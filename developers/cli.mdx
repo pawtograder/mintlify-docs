@@ -1,0 +1,255 @@
+---
+title: "CLI Tool"
+description: "Command-line interface for managing Pawtograder courses, assignments, and resources"
+icon: "terminal"
+---
+
+# CLI Tool
+
+The Pawtograder CLI is a command-line tool for instructors and site administrators to manage courses, assignments, and other resources programmatically.
+
+## Installation
+
+The CLI is included in the main Pawtograder repository. Run it using:
+
+```bash
+npm run cli -- <command> [options]
+```
+
+Or directly with `npx tsx`:
+
+```bash
+npx tsx cli/index.ts <command> [options]
+```
+
+## Authentication
+
+Before using the CLI, you need to authenticate with an API token.
+
+### Login
+
+```bash
+npm run cli -- login
+```
+
+You can provide a token directly:
+
+```bash
+npm run cli -- login --token YOUR_API_TOKEN
+```
+
+Or specify a custom API URL:
+
+```bash
+npm run cli -- login --url https://custom.pawtograder.com/functions/v1/cli
+```
+
+### Check Current User
+
+```bash
+npm run cli -- whoami
+```
+
+### Logout
+
+```bash
+npm run cli -- logout
+```
+
+## Available Commands
+
+### Classes
+
+List and manage classes:
+
+```bash
+# List all classes
+npm run cli -- classes list
+```
+
+### Assignments
+
+Manage assignments across classes:
+
+```bash
+# List assignments for a class
+npm run cli -- assignments list --class cs3500-fall-2025
+
+# Show assignment details
+npm run cli -- assignments show hw-01 --class cs3500-fall-2025
+
+# Copy a single assignment between classes
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --assignment hw-01 \
+  --workdir ./temp
+
+# Copy all assignments between classes
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all \
+  --workdir ./temp
+
+# Copy assignments with a schedule file
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --schedule schedule.csv \
+  --workdir ./temp
+
+# Delete an assignment
+npm run cli -- assignments delete hw-01 --class cs3500-fall-2025 --force
+```
+
+#### Assignment Copy Options
+
+- `--source-class`: Source class identifier (ID, slug, or name)
+- `--target-class`: Target class identifier (ID, slug, or name)
+- `--assignment`: Copy a single assignment by ID or slug
+- `--schedule`: CSV file with assignment slugs/titles and date overrides
+- `--all`: Copy all assignments from source class
+- `--workdir`: Local directory for git repository operations (required unless `--skip-repos`)
+- `--dry-run`: Preview what would be copied without making changes
+- `--skip-repos`: Skip git repository operations
+- `--skip-rubrics`: Skip rubric copying
+- `--skip-surveys`: Skip copying surveys linked to assignments
+- `--concurrency`: Number of parallel git operations (1-8, default: 4)
+- `--delay-ms`: Delay between clone batches in milliseconds (default: 0)
+- `--debug`: Enable server-side timing logs
+
+### Surveys
+
+Manage surveys:
+
+```bash
+# List surveys
+npm run cli -- surveys list --class cs3500-fall-2025
+```
+
+### Flashcards
+
+Manage flashcard decks:
+
+```bash
+# List flashcard decks
+npm run cli -- flashcards list --class cs3500-fall-2025
+```
+
+### Rubrics
+
+Manage grading rubrics:
+
+```bash
+# List rubrics
+npm run cli -- rubrics list --class cs3500-fall-2025
+```
+
+### Submissions
+
+Manage student submissions:
+
+```bash
+# List submissions
+npm run cli -- submissions list --assignment hw-01 --class cs3500-fall-2025
+
+# Add artifacts to a submission
+npm run cli -- submissions artifacts add \
+  --submission <id> \
+  --file ./output.txt \
+  --name "Test Output"
+
+# Add comments to a submission
+npm run cli -- submissions comments add \
+  --submission <id> \
+  --text "Great work!"
+```
+
+### Help Requests
+
+Manage office hours help requests:
+
+```bash
+# List help requests
+npm run cli -- help-requests list --class cs3500-fall-2025
+```
+
+### Discussions
+
+Manage discussion board posts:
+
+```bash
+# List discussion threads
+npm run cli -- discussions list --class cs3500-fall-2025
+```
+
+### Reviews
+
+Manage grading reviews:
+
+```bash
+# List reviews
+npm run cli -- reviews list --assignment hw-01 --class cs3500-fall-2025
+```
+
+### Repositories
+
+Manage GitHub repositories:
+
+```bash
+# List repositories
+npm run cli -- repos list --class cs3500-fall-2025
+```
+
+## Common Patterns
+
+### Copying Assignments Between Semesters
+
+When setting up a new semester, you can copy all assignments from a previous offering:
+
+```bash
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all \
+  --workdir ./temp
+```
+
+This will copy:
+- Assignment configurations
+- Rubrics (unless `--skip-rubrics` is specified)
+- Surveys linked to assignments (unless `--skip-surveys` is specified)
+- Git repositories (handout and solution repos, unless `--skip-repos` is specified)
+
+### Using a Schedule File
+
+Create a CSV file with assignment slugs and new due dates:
+
+```csv
+slug,due_date
+hw-01,2026-09-15T23:59:00
+hw-02,2026-09-22T23:59:00
+project-01,2026-10-01T23:59:00
+```
+
+Then copy with the schedule:
+
+```bash
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --schedule schedule.csv \
+  --workdir ./temp
+```
+
+## Error Handling
+
+The CLI provides detailed error messages and logging. Use the `--debug` flag on supported commands to enable verbose server-side logging.
+
+If you encounter authentication errors, try logging out and logging back in:
+
+```bash
+npm run cli -- logout
+npm run cli -- login
+```
