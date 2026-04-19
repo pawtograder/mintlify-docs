@@ -221,3 +221,17 @@ mod = case_when([
 final = max(letter + mod, 0)
 final
 ```
+
+## What-If Calculations
+
+The gradebook supports "what-if" scenarios, allowing instructors and students to explore hypothetical grade changes. When you modify a grade value in the gradebook interface:
+
+- **Temporary overrides**: Changes are applied temporarily to see their impact on calculated columns
+- **Real-time updates**: All dependent columns recalculate instantly to show the new totals
+- **Visual indicators**: Modified cells are highlighted to distinguish hypothetical values from actual grades
+- **Easy reset**: Discard what-if changes to return to actual grades
+
+This feature is particularly useful for:
+- Helping students understand how future assignments will affect their final grade
+- Exploring different grading scenarios before finalizing grades
+- Demonstrating the impact of extra credit or dropped assignments
