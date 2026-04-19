@@ -86,6 +86,10 @@
             "pages": ["developers/intro", "developers/local-setup"]
           },
           {
+            "group": "Tools",
+            "pages": ["developers/cli"]
+          },
+          {
             "group": "Feature Documentation",
             "pages": ["developers/surveys", "developers/polls"]
           }
