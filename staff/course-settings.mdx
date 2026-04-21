@@ -1,35 +1,87 @@
 ---
 title: "Course Settings"
+description: "Configure course-wide settings including timezone, late tokens, and grading policies"
 description: "Configure course-wide settings including time zones, late tokens, and grading policies"
 icon: "gear"
 ---
 
 # Course Settings
 
-Course settings allow instructors to configure global preferences and policies for their course.
+## Timezone Configuration
 
-## Time Zone Configuration
+Pawtograder allows you to configure a default timezone for your course. This timezone is used to display all dates and times throughout the platform, including assignment due dates, survey deadlines, and poll schedules.
 
-Pawtograder supports configurable time zones for your course. The time zone setting determines how due dates, survey deadlines, and other time-based features are displayed and interpreted.
-
-**Default Time Zone**: America/New_York (Eastern Time)
-
-To change your course's time zone:
+To configure your course timezone:
 
 1. Navigate to Course Settings
-2. Select your preferred time zone from the dropdown
+2. Select your preferred timezone from the dropdown menu
 3. Save your changes
 
-All existing and future deadlines will be displayed in the configured time zone. This ensures consistency across your course, especially for courses with students or staff in different geographic locations.
+All dates and times will be displayed in the configured timezone for course staff. Students will see dates and times in their local timezone by default, but the system uses your configured course timezone for all deadline calculations.
 
-<Note>
-Admin views also have a default time zone setting to ensure consistent time display across administrative interfaces.
-</Note>
+The default timezone is America/New_York (Eastern Time).
 
 ## Late Token Policy
 
-Configure the number of late tokens available to students and how they can be used for assignment extensions. See the [Late Tokens](/students/assignments/late-tokens) documentation for more details on how students use these tokens.
+Configure how many late tokens students receive and how they can be used for assignment extensions. See the [Late Tokens](/students/assignments/late-tokens) documentation for more details on how students use late tokens.
 
 ## Grading Conflicts
 
-Manage conflicts of interest for graders to ensure fair and unbiased grading. Graders can self-report conflicts, and instructors can review and manage all conflicts for the course.
+Course staff can declare conflicts of interest to ensure they don't grade assignments where conflicts exist. See the [Assigning Grading Tasks](/staff/assignments/grading-assignments) documentation for more details.
+
+Configure course-wide settings that affect how Pawtograder displays information and manages policies for all students in your course.
+
+## Time Zone Configuration
+
+Pawtograder allows you to configure the time zone used for displaying dates and times throughout your course. This ensures that all due dates, timestamps, and time-based features display in your local time zone.
+
+### Setting Your Course Time Zone
+
+1. Navigate to **Course Settings** in the course navigation menu
+2. Find the **Time Zone** setting
+3. Select your preferred time zone from the dropdown menu
+4. Click **Save** to apply the changes
+
+### Default Time Zone
+
+If no time zone is configured, Pawtograder defaults to **America/New_York** (Eastern Time).
+
+### What Time Zone Affects
+
+The configured time zone affects:
+
+- **Assignment due dates**: Students see deadlines in the course's configured time zone
+- **Survey due dates**: Survey deadlines display in the configured time zone
+- **Poll close times**: Automatic poll deactivation times use the configured time zone
+- **Submission timestamps**: When students submit work, timestamps display in the configured time zone
+- **Gradebook timestamps**: Import and modification times display in the configured time zone
+- **Response timestamps**: Survey and poll response times display in the configured time zone
+
+<Note>
+The time zone setting is course-wide and applies to all students and staff in the course. Individual users cannot override this setting.
+</Note>
+
+<Tip>
+Set your time zone to match your institution's location or the primary location where your course is taught. This ensures that due dates and times are intuitive for your students.
+</Tip>
+
+## Late Token Policy
+
+Configure the class-wide late token policy that determines how many late tokens students receive and how they can be used.
+
+### Configuring Late Tokens
+
+1. Navigate to **Course Settings**
+2. Find the **Late Tokens** section
+3. Set the number of late tokens available to each student
+4. Configure whether tokens can be used on specific assignments (set per-assignment)
+
+See [Due Date Exceptions](/staff/assignments/intro#due-date-exceptions) for more details on late token configuration.
+
+## Grading Conflicts
+
+Manage conflicts of interest to ensure graders do not grade assignments where they have a conflict.
+
+Graders can self-input their conflicts under **Course Settings** → **Grading Conflicts**, and instructors can review and enter conflicts for all graders in the class.
+
+See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.

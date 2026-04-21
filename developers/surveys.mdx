@@ -55,14 +55,44 @@ CREATE TABLE surveys (
     status survey_status NOT NULL DEFAULT 'draft',
     allow_response_editing BOOLEAN NOT NULL DEFAULT FALSE,
     due_date TIMESTAMPTZ DEFAULT NULL,
+    available_at TIMESTAMPTZ DEFAULT NULL,  -- When survey becomes visible
+    assignment_id BIGINT REFERENCES assignments(id) ON DELETE SET NULL,  -- Optional link to assignment
     assigned_to_all BOOLEAN NOT NULL DEFAULT TRUE,
     validation_errors TEXT DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ DEFAULT NULL,  -- Soft delete
     version INTEGER NOT NULL DEFAULT 1,
-    type survey_type NOT NULL DEFAULT 'assign_all'
+    type survey_type NOT NULL DEFAULT 'assign_all',
+    series_id UUID REFERENCES survey_series(id) ON DELETE SET NULL,  -- Optional series link
+    series_ordinal INTEGER DEFAULT NULL,  -- Position in series (Week 1, 2, etc.)
+    analytics_config JSONB DEFAULT NULL  -- Per-question analytics configuration
 );
+```
+
+#### `survey_series`
+
+Stores survey series for trend analysis.
+
+```sql
+CREATE TABLE survey_series (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    description TEXT,
+    created_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+#### `assignment_groups`
+
+Updated to include mentor assignments.
+
+```sql
+ALTER TABLE assignment_groups
+ADD COLUMN mentor_profile_id UUID REFERENCES profiles(id) ON DELETE SET NULL;
 ```
 
 #### `survey_responses`
@@ -153,6 +183,28 @@ Bulk creates survey assignments for specific students.
 -- Usage
 SELECT create_survey_assignments('survey-uuid', ARRAY['profile-1', 'profile-2']);
 ```
+
+#### `get_survey_status_for_assignment(p_assignment_id BIGINT, p_profile_id UUID)`
+
+Returns survey completion status for a student on a specific assignment.
+
+```sql
+-- Usage
+SELECT * FROM get_survey_status_for_assignment(123, 'profile-uuid');
+```
+
+Returns surveys linked to the assignment with completion status for the specified student.
+
+#### `get_survey_responses_with_group_context(p_class_id BIGINT, p_survey_id UUID)`
+
+Aggregates survey responses with group and mentor information for analytics.
+
+```sql
+-- Usage
+SELECT * FROM get_survey_responses_with_group_context(456, 'survey-uuid');
+```
+
+Returns response data joined with group membership, mentor assignments, and section information.
 
 ## Row Level Security (RLS)
 
