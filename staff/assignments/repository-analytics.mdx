@@ -1,6 +1,13 @@
 ---
 title: "Repository Analytics"
 description: "View commit activity and repository statistics for student assignments"
+
+description: "Track student contributions with GitHub repository analytics for commits, pull requests, issues, and code reviews"
+
+description: "Track student GitHub activity with automated analytics for commits, pull requests, issues, and code reviews"
+
+title: "Repository analytics"
+description: "Track and analyze student GitHub contributions on assignments"
 icon: "chart-line"
 ---
 
@@ -79,3 +86,398 @@ Combine repository analytics with gradebook data and submission timestamps to ge
 - Students cannot see analytics for other students' repositories
 - Analytics data is derived from GitHub repository metadata
 - No code content is analyzed or stored, only commit metadata
+
+Repository analytics provides instructors and graders with detailed insights into student contributions on GitHub-based assignments. When enabled, Pawtograder automatically collects and displays commits, pull requests, issues, and comments from student repositories.
+
+Repository analytics helps instructors and graders audit individual student contributions on GitHub-based assignments. When enabled, Pawtograder automatically collects and displays GitHub activity including commits, pull requests, issues, and comments.
+
+Repository analytics helps instructors and graders audit individual student contributions on group assignments by collecting and displaying GitHub activity including commits, pull requests, issues, and comments.
+
+## Enabling Repository Analytics
+
+To enable repository analytics for an assignment:
+
+1. Navigate to the assignment configuration page
+2. Check the **Enable repository analytics** option
+3. Save the assignment
+
+Repository analytics are only available for assignments with GitHub repositories enabled.
+
+## Viewing Analytics
+
+When repository analytics are enabled, a **Repo Analytics** tab appears in the submission view for instructors and graders.
+
+### Analytics Dashboard
+
+The analytics dashboard provides two views:
+
+#### Items View
+
+Displays a detailed table of all repository activity:
+
+- **Commits**: Code changes with file modifications and line counts
+- **Pull Requests**: PRs opened and closed with file changes
+- **Issues**: Issues opened and closed with labels and assignees
+- **Issue Comments**: Comments on issues
+- **PR Review Comments**: Code review comments on pull requests
+
+Each item shows:
+- Type and status badge
+- Title or message
+- Author (mapped to student names when available)
+- Creation date
+- Link to view on GitHub
+
+Click the expand arrow on commits and pull requests to see detailed file changes.
+
+#### Activity Chart
+
+Visualizes daily repository activity with a stacked bar chart showing:
+- Commits per day
+- Pull requests opened
+- Issues opened and closed
+- Issue comments
+- PR review comments
+
+### Filtering by Activity Type
+
+Use the filter buttons to focus on specific types of activity:
+- **All**: Show all repository items
+
+1. Navigate to the assignment creation or edit form
+2. Check the **Enable repository analytics** checkbox
+3. Save the assignment
+
+<Note>
+Repository analytics must be enabled before the assignment is released. Analytics are only collected for assignments with this feature enabled.
+</Note>
+
+## Viewing Analytics
+
+Access repository analytics from any submission page:
+
+1. Navigate to a student's submission
+2. Click the **Repo Analytics** tab in the submission navigation
+3. View the analytics dashboard with activity data and charts
+
+<Frame>
+  <img src="/images/staff/assignments/repo-analytics-dashboard.png" alt="Repository Analytics dashboard showing activity chart and items table" />
+</Frame>
+
+The analytics dashboard is only visible to instructors and graders, not to students.
+
+## Analytics Data
+
+### Activity Types
+
+Repository analytics tracks the following GitHub activity:
+
+- **Commits**: All commits pushed to the repository
+- **Pull Requests**: PRs opened by students
+- **Issues**: Issues created in the repository
+- **Issue Comments**: Comments on issues
+- **PR Review Comments**: Code review comments on pull requests
+
+### Contributions by User
+
+The dashboard displays a summary table showing each contributor's activity:
+
+- Total commits per user
+- Pull requests created
+- Issues opened
+- Issue and PR comments
+- Overall contribution count
+
+GitHub usernames are automatically mapped to student names when available.
+
+## Activity Chart
+
+The **Activity Chart** tab displays a stacked bar chart showing daily activity across all tracked metrics. This visualization helps identify:
+
+- Patterns of student engagement over time
+- Last-minute work before deadlines
+- Collaboration patterns in group assignments
+
+## Filtering and Searching
+
+Use the filter buttons to focus on specific activity types:
+
+- **All**: Show all activity items
+- **Commits**: Show only commits
+- **Pull Requests**: Show only PRs
+- **Issues**: Show only issues
+- **Issue Comments**: Show only issue comments
+- **PR Review Comments**: Show only PR review comments
+
+### Contributions by User
+
+The dashboard displays a summary table showing each student's total contributions:
+- Number of commits
+- Number of pull requests
+- Number of issues
+- Issue comments
+- PR review comments
+- Total activity count
+
+Students are color-coded for easy identification across the interface.
+
+## Refreshing Analytics Data
+
+Analytics data is automatically refreshed daily for active assignments. To manually refresh:
+
+1. Click the **Refresh** button in the analytics dashboard
+2. Wait for the refresh to complete (typically 5-10 seconds)
+3. The dashboard will automatically reload with updated data
+
+<Note>
+Manual refreshes are rate-limited to once every 10 minutes per repository to avoid excessive GitHub API usage.
+</Note>
+
+## Exporting Analytics Data
+
+Click **Export CSV** to download all repository analytics data for external analysis. The CSV includes:
+- Item type and GitHub ID
+- Title and author
+- Creation date and state
+- File changes summary
+- Labels and metadata
+- GitHub URL
+
+## Linking Rubric Checks to Analytics
+
+You can link rubric checks to specific repository analytics categories. When grading, these links allow you to quickly view relevant repository activity.
+
+To link a rubric check to analytics, add a `kpi_category` field to the check in your rubric YAML:
+
+```yaml
+checks:
+  - name: Made meaningful commits
+    points: 10
+    kpi_category: commits
+  - name: Participated in code review
+    points: 5
+    kpi_category: pr_review_comments
+```
+
+Supported KPI categories:
+- `commits`: Links to commit history
+- `prs_opened`: Links to pull requests
+- `pr_review_comments`: Links to PR review comments
+- `issues_opened`: Links to issues opened
+- `issues_closed`: Links to issues closed
+- `issue_comments`: Links to issue comments
+
+When grading with linked checks, a "View analytics" link appears next to the check, filtering the analytics view to show only relevant items.
+
+## Privacy and Access
+
+Repository analytics are only visible to instructors and graders. Students cannot view repository analytics for their own or other students' submissions.
+
+- **PR Review Comments**: Show only code review comments
+
+## Detailed Item View
+
+Click the expand arrow next to any item to view additional details:
+
+### For Commits and Pull Requests
+
+- List of files changed
+- Lines added and deleted per file
+- Total file change summary
+
+### For Issues
+
+- Issue labels
+- Assigned users
+- Body preview (first 400 characters)
+- Closed date and reason (if applicable)
+
+## Linking to Submissions
+
+When viewing commits in the analytics dashboard, commits that correspond to Pawtograder submissions include a **View submission →** link. Click this link to navigate directly to the grading interface for that specific commit.
+
+## Exporting Data
+
+Click **Export to CSV** to download all analytics data for external analysis. The CSV includes:
+
+- Activity type
+- GitHub ID (commit SHA, PR number, or issue number)
+- Title or message
+- Author
+- Creation date
+- Current state
+- File change summary
+
+1. Navigate to the assignment settings when creating or editing an assignment
+2. Check the "Enable repository analytics" option
+3. Save the assignment
+
+Once enabled, analytics will be automatically collected daily for all repositories associated with the assignment.
+
+## Viewing Repository Analytics
+
+When repository analytics is enabled, a "Repo Analytics" button appears in the submission sidebar for instructors and graders.
+
+The analytics dashboard provides two main views:
+
+### Items View
+
+The Items view displays a detailed table of all repository activity:
+
+- **Type badges**: Commit, Pull Request, Issue, Issue Comment, PR Review Comment
+- **Title/Message**: Commit messages, PR/issue titles with links to GitHub
+- **Author**: GitHub username (mapped to student names when available)
+- **Date**: Activity date
+- **State**: Open/closed status for PRs and issues
+- **File changes**: For commits and PRs, shows files modified with additions/deletions
+
+**Contributions by User** table shows aggregate counts per contributor:
+- Commits
+- Pull requests
+- Issues
+- Issue comments
+- PR review comments
+
+### Activity Chart
+
+The Activity Chart provides a daily visualization of repository activity over time, showing:
+- Commits
+- PRs opened
+- Issues opened and closed
+- Issue comments
+- PR review comments
+
+## Refreshing Analytics Data
+
+Analytics data is automatically refreshed daily at 2:00 AM UTC for active assignments. You can also manually refresh data:
+
+1. Click the "Refresh" button in the analytics dashboard
+2. Rate limit: Manual refreshes are limited to once per 10 minutes per repository
+3. The fetch status indicator shows when data was last updated
+
+## Exporting Analytics Data
+
+Click the "Export CSV" button to download all analytics data for external analysis. The CSV includes:
+- Activity type
+- GitHub ID
+- Title/message
+- Author
+- Date
+- State
+- File changes summary
+- Labels (for issues)
+- Body preview
+- GitHub URL
+
+The exported file is named with the repository name and export date for easy organization.
+
+## Refreshing Analytics
+
+Analytics are automatically refreshed daily at 2:00 AM UTC for all released assignments with due dates today or in the future.
+
+To manually refresh analytics for a specific submission:
+
+1. Click the **Refresh** button in the analytics dashboard
+2. Wait for the refresh to complete (typically 5-10 seconds)
+3. The page will automatically reload with updated data
+
+<Warning>
+Manual refreshes are rate-limited to once every 10 minutes per repository to prevent excessive GitHub API usage.
+</Warning>
+
+### Refresh Status
+
+The dashboard displays the current fetch status:
+
+- **Idle**: No recent fetch activity
+- **Fetching**: Analytics refresh in progress
+- **Completed**: Last fetch completed successfully
+- **Error**: Last fetch encountered an error
+
+The timestamp shows when analytics were last successfully fetched from GitHub.
+
+## Linking Rubric Items to Analytics
+
+You can link specific rubric criteria to repository analytics metrics. This allows graders to quickly view relevant GitHub activity when evaluating a rubric item.
+
+To link a rubric check to analytics:
+
+1. Edit the assignment rubric
+2. Select a rubric check
+3. Choose a **KPI Category** from the dropdown:
+   - Commits
+   - Pull requests opened
+   - Issues opened
+   - Issues closed
+   - Issue comments
+   - PR review comments
+4. Save the rubric
+
+When grading, a **View [metric] analytics** link will appear next to the rubric check, filtering the analytics dashboard to show only that activity type.
+
+## Use Cases
+
+### Individual Contribution Auditing
+
+For group assignments, use repository analytics to verify that all team members are contributing:
+
+- Compare commit counts across group members
+- Review PR authorship and review participation
+- Identify students who may need additional support
+
+### Process Compliance
+
+Verify students are following required development practices:
+
+- Check that students are creating PRs for code review
+- Ensure issues are being used for task tracking
+- Confirm code review comments are being provided
+
+### Academic Integrity
+
+Repository analytics can help identify potential academic integrity issues:
+
+- Unusual commit patterns (e.g., all work in a single commit)
+- Lack of incremental development
+- Mismatched authorship between commits and submissions
+
+<Tip>
+Combine repository analytics with rubric KPI links to streamline the grading process. For example, create a rubric item for "Used pull requests for code review" and link it to the "Pull requests opened" KPI category.
+</Tip>
+
+## Linking Rubric Checks to Analytics
+
+Rubric checks can be linked to specific repository analytics KPIs (Key Performance Indicators). When configuring a rubric check, you can assign a KPI category:
+
+- `commits`: Track commit activity
+- `prs_opened`: Track pull requests created
+- `pr_review_comments`: Track code review participation
+- `issues_opened`: Track issues created
+- `issues_closed`: Track issue resolution
+- `issue_comments`: Track issue discussion participation
+
+When a check has a KPI category assigned, graders see a "View analytics" link that filters the repository analytics to show only that activity type.
+
+## How It Works
+
+Repository analytics uses the GitHub API to fetch activity data:
+
+1. **Data Collection**: The system fetches issues, pull requests, commits, and comments from the assignment repository
+2. **Incremental Updates**: After the initial fetch, subsequent updates only retrieve new activity since the last fetch
+3. **Daily Aggregation**: Activity is aggregated by day for the activity chart
+4. **Per-Submission View**: Each submission shows analytics for its associated repository
+
+### Rate Limiting
+
+To respect GitHub API rate limits:
+- Manual refreshes are limited to once per 10 minutes per repository
+- Automatic daily refreshes are staggered across the 2:00 AM UTC hour
+- The system monitors GitHub rate limits and delays processing when necessary
+- Bulk operations process repositories in batches of 20
+
+## Privacy and Access
+
+- Repository analytics are only visible to instructors and graders
+- Students cannot view repository analytics
+- Analytics data is scoped to the assignment's repository
+- All data is fetched using the course's configured GitHub organization
