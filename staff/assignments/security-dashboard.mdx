@@ -13,6 +13,115 @@ icon: "shield"
 
 # Assignment Security Dashboard
 
+The security dashboard helps you identify potential academic integrity issues by analyzing patterns across student submissions. It provides tools to detect unusual similarities, suspicious timing, and other indicators that may warrant investigation.
+
+## Accessing the Dashboard
+
+Navigate to an assignment's management page and click the **Security** tab to view the security dashboard.
+
+## Security Metrics
+
+The dashboard displays several key metrics:
+
+### Submission Timing Analysis
+
+- **Submission clustering**: Identifies groups of submissions made within short time windows
+- **Late-night submissions**: Flags submissions made at unusual hours
+- **Deadline clustering**: Shows how many submissions came in just before the deadline
+
+### Code Similarity Detection
+
+- **High similarity pairs**: Identifies pairs of submissions with unusually similar code
+- **Similarity scores**: Quantifies how similar submissions are
+- **Common patterns**: Distinguishes between template code and student-written code
+
+### Behavioral Patterns
+
+- **Rapid submissions**: Students making many submissions in quick succession
+- **Identical errors**: Multiple students with identical error messages
+- **Repository activity**: Unusual patterns in commit history
+
+## Investigating Issues
+
+### Reviewing Flagged Submissions
+
+When the dashboard flags potential issues:
+
+<Steps>
+<Step title="Review the evidence">
+Click on a flagged pair or group to see detailed comparison:
+- Side-by-side code comparison
+- Submission timestamps
+- Commit history
+- Test results
+</Step>
+
+<Step title="Consider context">
+Evaluate whether the similarity is concerning:
+- Is it in template/starter code?
+- Did students work together on an allowed group assignment?
+- Are the similarities superficial or substantive?
+</Step>
+
+<Step title="Gather additional evidence">
+If needed, review:
+- Discussion board posts between students
+- Help request history
+- Previous assignment submissions
+</Step>
+
+<Step title="Take appropriate action">
+Based on your findings:
+- Document the case
+- Contact students for clarification
+- Follow your institution's academic integrity procedures
+</Step>
+</Steps>
+
+### Similarity Thresholds
+
+The dashboard uses configurable thresholds:
+
+- **High similarity**: >80% similar (requires investigation)
+- **Moderate similarity**: 60-80% similar (worth reviewing)
+- **Low similarity**: <60% similar (likely coincidental)
+
+You can adjust these thresholds based on your assignment and course policies.
+
+## Filtering and Sorting
+
+Use the dashboard filters to focus your investigation:
+
+- **Similarity threshold**: Only show pairs above a certain similarity score
+- **Submission date range**: Focus on specific time periods
+- **Student groups**: Filter by specific students or groups
+- **Flagged only**: Show only submissions with security flags
+
+## Exporting Data
+
+Export security analysis data for:
+
+- **Record keeping**: Document investigations for institutional records
+- **Reporting**: Generate reports for academic integrity committees
+- **Analysis**: Further analyze patterns in external tools
+
+Click **Export** to download a CSV with:
+- Submission pairs and similarity scores
+- Timestamps and metadata
+- Flagged issues and notes
+
+## Privacy Considerations
+
+The security dashboard:
+
+- Is only accessible to instructors
+- Does not automatically notify students when flagged
+- Stores analysis results securely
+- Respects student privacy while enabling integrity monitoring
+
+<Warning>
+Security flags are indicators for investigation, not proof of misconduct. Always gather complete evidence and follow your institution's procedures before taking action.
+
 The assignment security dashboard helps instructors identify potential academic integrity concerns by analyzing patterns in student submissions. This tool provides insights into suspicious activity while respecting student privacy.
 
 ## Overview
@@ -395,6 +504,52 @@ Always investigate thoroughly before making academic integrity accusations. The 
 ## Best Practices
 
 ### Proactive Monitoring
+
+- Review the security dashboard shortly after each deadline
+- Look for patterns across multiple assignments
+- Monitor high-stakes assignments more closely
+
+### Fair Investigation
+
+- Consider all possible explanations
+- Give students opportunity to explain
+- Document your investigation process
+- Follow institutional policies consistently
+
+### Prevention
+
+Use the dashboard insights to:
+- Identify assignment design issues that encourage collaboration
+- Adjust deadlines if clustering is problematic
+- Clarify collaboration policies
+- Improve assignment uniqueness
+
+### Communication
+
+- Clearly communicate collaboration policies
+- Explain what constitutes acceptable help
+- Remind students about academic integrity expectations
+- Make policies visible in assignment descriptions
+
+## Limitations
+
+The security dashboard:
+
+- Cannot detect all forms of academic misconduct
+- May flag legitimate collaboration on group assignments
+- Requires human judgment to interpret results
+- Should be one tool among many in integrity monitoring
+
+Always combine automated analysis with manual review and student communication.
+
+## Integration with Other Tools
+
+The security dashboard works alongside:
+
+- **Test insights**: Identify if similar errors suggest collaboration
+- **Discussion board**: Review if students discussed solutions publicly
+- **Help requests**: Check if students received similar help
+- **Submission history**: Analyze patterns across multiple assignments
 
 - Review the dashboard shortly after assignment deadlines
 - Look for patterns across multiple assignments
