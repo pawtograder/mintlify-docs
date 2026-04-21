@@ -1,29 +1,4 @@
 {
-  "name": "Pawtograder",
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "favicon": "/favicon.svg",
-  "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
-    "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
-    }
-  },
-  "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "mailto:support@pawtograder.com"
-    }
-  ],
-  "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://app.pawtograder.com"
-  },
   "navigation": {
     "global": {
       "anchors": []
@@ -34,7 +9,7 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["students/intro"]
+            "pages": ["students/intro", "changelog"]
           },
           {
             "group": "Assignments",
@@ -42,14 +17,16 @@
               "students/assignments/create-submission",
               "students/assignments/form-groups",
               "students/assignments/late-tokens",
-              "students/assignments/self-review"
+              "students/assignments/self-review",
+              "students/assignments/leaderboard"
             ]
           },
           {
             "group": "Course Features",
             "pages": [
-              "students/gradebook",
               "students/discussion-board",
+              "students/gradebook",
+              "students/gradebook-whatif",
               "students/office-hours",
               "students/polls",
               "students/surveys"
@@ -62,17 +39,40 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["staff/intro"]
+            "pages": ["staff/intro", "staff/course-settings"]
           },
           {
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
+              "staff/assignments/assignment-dashboard",
+              "staff/assignments/grading-dashboard",
+              "staff/assignments/test-insights",
+              "staff/assignments/security-dashboard",
+              "staff/assignments/configuration",
+              "staff/assignments/dashboards",
+              "staff/assignments/managing-groups",
+              "staff/assignments/repository-analytics",
+              "staff/assignments/groups",
               "staff/assignments/grading-assignments",
+              "staff/assignments/grading-status-dashboard",
               "staff/assignments/handgrading",
+              "staff/assignments/repository-analytics",
               "staff/assignments/autograding",
+              "staff/assignments/test-insights",
               "staff/assignments/rubrics",
-              "staff/assignments/testing"
+              "staff/assignments/testing",
+              "staff/assignments/test-insights",
+              "staff/assignments/grading-status",
+              "staff/assignments/security-dashboard",
+              "staff/assignments/leaderboard",
+              "staff/assignments/dashboards",
+              "staff/assignments/test-insights-dashboard",
+              "staff/assignments/extensions-and-scoring",
+              "staff/assignments/grading-dashboard",
+              "staff/assignments/repository-permissions",
+              "staff/assignments/repository-analytics",
+              "staff/assignments/analytics"
             ]
           },
           {
@@ -85,12 +85,30 @@
             ]
           },
           {
+            "group": "Office Hours",
+            "pages": [
+              "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance"
+            ]
+          },
+          {
             "group": "Course Features",
             "pages": [
+              "staff/instructor-dashboard",
+              "staff/dashboard",
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
-              "staff/office-hours/intro"
+              "staff/surveys",
+              "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance",
+              "staff/ai-assistance"
+            ]
+          },
+          {
+            "group": "Automation",
+            "pages": [
+              "staff/cli"
             ]
           }
         ]
@@ -103,19 +121,14 @@
             "pages": ["developers/intro", "developers/local-setup"]
           },
           {
-            "group": "Tools",
-            "pages": ["developers/cli"]
-          },
-          {
             "group": "Feature Documentation",
-            "pages": ["developers/surveys", "developers/polls"]
+              "group": "Operations",
+              "group": "Updates",
+              "group": "Release Information",
+              "group": "Tools"
           }
         ]
       }
     ]
-  },
-  "footerSocials": {
-    "x": "https://x.com/pawtograder",
-    "github": "https://github.com/pawtograder"
   }
 }
