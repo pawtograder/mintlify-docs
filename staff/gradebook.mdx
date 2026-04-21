@@ -6,6 +6,27 @@ icon: "table"
 
 # Gradebook
 
+## Grading Status Dashboard
+
+The grading status dashboard provides a comprehensive overview of grading progress across all assignments in your course. This dashboard helps instructors and graders:
+
+- Track which assignments have pending grading tasks
+- Monitor grading completion rates
+- Identify bottlenecks in the grading workflow
+- Ensure all submissions are graded before releasing results
+
+### Dashboard Features
+
+The dashboard displays:
+
+- **Assignment list**: All assignments with grading tasks
+- **Completion status**: Percentage of submissions graded for each assignment
+- **Pending tasks**: Number of submissions awaiting grading
+- **Grader assignments**: Which staff members are assigned to grade each submission
+- **Due dates**: Grading deadlines for each assignment
+
+Use the dashboard to prioritize grading tasks and ensure timely feedback to students.
+
 ## Column Semantics in the Gradebook System
 
 In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources. Columns can be **manually entered** by instructors who directly input grades cell-by-cell, **imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date), or **linked to programming assignments** through the assignment reference system. When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
