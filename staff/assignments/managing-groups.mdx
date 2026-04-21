@@ -1,0 +1,57 @@
+---
+title: "Managing Groups"
+description: "View, export, and manage student groups for group assignments"
+icon: "users"
+---
+
+# Managing Groups
+
+Pawtograder provides tools for instructors to view and manage student groups for group assignments. You can see which students are in each group, who their mentors are, and export group information for external analysis.
+
+## Viewing Groups
+
+Navigate to an assignment's group management page to see all groups for that assignment. The groups list displays:
+
+- Group name
+- Student members
+- Assigned mentor (if applicable)
+- Group status
+
+## Exporting Group Data
+
+Click **Export to CSV** to download group information including student and mentor email addresses.
+
+### CSV Format
+
+The exported CSV includes the following columns:
+
+- **GroupName**: The name of the group
+- **StudentNames**: All students in the group in "Name <email>" format
+- **MentorName**: The assigned mentor in "Name <email>" format (if applicable)
+
+**Example:**
+
+```csv
+GroupName,StudentNames,MentorName
+team-alpha,"Alice Smith <alice@example.com>, Bob Jones <bob@example.com>",Dr. Johnson <johnson@example.com>
+team-beta,"Carol White <carol@example.com>, David Brown <david@example.com>",Prof. Lee <lee@example.com>
+```
+
+### Export Features
+
+- **UTF-8 BOM**: Ensures proper character encoding in Excel and other spreadsheet applications
+- **Formula-safe escaping**: Prevents CSV injection attacks by escaping values that start with `=`, `+`, `-`, or `@`
+- **Sorted rows**: Groups are sorted alphabetically for consistent exports
+- **Email inclusion**: Both student and mentor information includes email addresses for easy contact
+
+## Student Export
+
+When exporting student data from an assignment, the student column also includes email addresses in the same "Name <email>" format for consistency across exports.
+
+<Tip>
+Use the CSV export to:
+- Share group assignments with external grading systems
+- Contact all members of specific groups
+- Track group composition across assignments
+- Analyze group formation patterns
+</Tip>
