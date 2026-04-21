@@ -55,6 +55,26 @@ Encourage students to enable browser notifications during the first week of clas
 
 Instructors can create multiple office hours queues to provide different types of help. For example, if a class is coordinated across multiple campuses, there may be in-person help queues per-campus, and a cross-network virtual help queue.
 
+### Queue Configuration
+
+When creating or editing a queue, you can configure:
+
+- **Queue name**: Display name shown to students
+- **Description**: Course-level office hours description explaining when and how to get help
+- **Schedule**: Weekly schedule showing when the queue is active
+- **Demo mode**: Mark queues as demo/test queues that don't affect real office hours
+- **Queue ordering**: Set ordinal values to control the display order of queues
+
+The weekly schedule displays with live "Happening now" highlights, making it easy for students to see when help is available.
+
+### Office Hours Status Card
+
+Students see an office hours status card that shows:
+- Current status of all queues (open/closed)
+- Individual queue cards with availability
+- Weekly schedule with highlighted active times
+- Quick access to request help
+
 ### Queue Schedule
 
 You can configure a weekly schedule for each office hours queue. The schedule:
@@ -240,6 +260,23 @@ Students can resolve their own help requests from the floating banner or main ch
 - **Other**: Other reason for closing the request
 
 This resolution flow helps track which help requests were successfully resolved vs. abandoned, providing valuable feedback for improving course support.
+
+### Student Resolution Flow
+
+Students can resolve their own help requests from:
+- The floating banner at the top of the page
+- The main chat view in the office hours interface
+
+When resolving, students select a resolution status:
+- **Resolved**: Question was answered or problem was solved
+- **Resolved - No longer needed**: Figured it out independently or no longer needs help
+- **Resolved - Unanswered**: Closing the request without getting needed help
+
+This feedback helps you understand office hours effectiveness and identify areas for improvement.
+
+### Conflict Detection
+
+The system includes validation to prevent conflicts with solo office hours requests. When a student tries to join a queue while already in another solo request, they'll receive a clear error message explaining the conflict.
 
 ## Request Validation
 
