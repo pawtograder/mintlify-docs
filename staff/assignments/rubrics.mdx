@@ -9,7 +9,7 @@ icon: "list-check"
 This guide explains how rubrics drive the hand-grading experience and how scores are computed. It also includes copy-pasteable YAML examples for each configuration option.
 
 <Note>
-Rubrics can only be edited by instructors.
+Rubrics can only be edited by instructors. When editing rubrics, you will be warned before leaving the page if you have unsaved changes.
 </Note>
 
 ## High-Level Overview
@@ -35,6 +35,8 @@ Rubrics can only be edited by instructors.
 - The right-hand panel is the rubric sidebar. Global checks render as radio/checkbox options. Annotation checks are applied from the code view or artifact cards by right-clicking a line or selecting an artifact.
 - Each applied check creates a comment entry tied to a check with points and optional text.
 - For each criteria, the sidebar shows a running subtotal.
+
+Recent usability improvements to the grading interface include enhanced annotation workflows, making it easier to apply feedback directly to code and artifacts.
 
 ### How Points Are Computed
 
@@ -280,6 +282,17 @@ parts:
 - For each criteria, the sidebar shows:
   - Additive: `earned / total_points`
   - Subtractive: `remaining / total_points`
+
+## Unsaved Changes Protection
+
+When editing rubrics, Pawtograder automatically warns you before leaving the page if you have unsaved changes. This protection works across:
+
+- Browser navigation (back/forward buttons)
+- Clicking links to other pages
+- Closing the browser tab or window
+- Using the mobile navigation dropdown
+
+The warning ensures you don't accidentally lose your work when editing complex rubrics.
 
 ## Notes and Tips
 
