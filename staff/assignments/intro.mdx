@@ -12,6 +12,24 @@ Programming assignments are the core of Pawtograder. Each assignment consists of
 
 Pawtograder creates two GitHub teams for each class: a "staff" team and a "students" team. Staff are granted access to all class repositories, and students are only granted access to their own repositories. The "students" team can be used by instructors who want to create additional GitHub repositories that are only accessible to students (e.g. for distributing in-class exercises).
 
+### Repository Permissions Audit
+
+Instructors can audit repository permissions to ensure that all students have the correct access to their assignment repositories. This feature helps identify and resolve permission issues that may prevent students from accessing their work.
+
+To access the permissions audit:
+
+1. Navigate to an assignment's page
+2. Click on the **Repository Permissions** tab
+3. Review the list of student repositories and their permission status
+4. Fix any permission issues by clicking the **Sync Permissions** button
+
+The audit flow displays:
+- Student/group names and their repository URLs
+- Current permission status (correct or needs attention)
+- Ability to bulk-fix permission issues
+
+This is particularly useful after making changes to group assignments or when students report access issues.
+
 ### Repository permissions audit
 
 Instructors can audit repository permissions to ensure all students and staff have the correct access levels. The audit flow checks for missing or incorrect permissions and provides tools to fix any issues. This is particularly useful after adding new students to a course or when troubleshooting access problems.
@@ -148,6 +166,23 @@ A **handout repository** is a repository that contains the starter code for an a
 
 A **grader repository** is a repository that contains the code that will be used to grade the assignment. It is used to provide instructors with the necessary files to grade the assignment.
 
+### Repository Analytics
+
+Instructors can view analytics for assignment repositories to track student activity and engagement. The repository analytics feature provides insights into:
+
+- Commit frequency and patterns across all student repositories
+- Individual student repository activity
+- Push timing relative to assignment deadlines
+- Repository creation and setup status
+
+To access repository analytics:
+
+1. Navigate to an assignment's page
+2. Click on the **Repository Analytics** tab
+3. View aggregate statistics and individual repository metrics
+
+This helps instructors identify students who may need additional support or who are struggling to get started with an assignment.
+
 ### Repository analytics
 
 Instructors can view analytics for assignment repositories, including commit activity, file changes, and collaboration patterns. This helps track student engagement and identify potential issues with repository setup or permissions.
@@ -177,6 +212,16 @@ This feature ensures all students receive important fixes and updates without di
 Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
+
+### Group Individual Grading
+
+For group assignments, instructors can enable individual grading to assess each group member's contribution separately. This feature allows:
+
+- Assigning different grades to different members of the same group
+- Tracking individual performance within collaborative projects
+- Providing personalized feedback to each group member
+
+When individual grading is enabled for a group assignment, instructors can grade each student's contribution independently while still maintaining the group submission structure. This is useful for peer evaluation scenarios or when group members have significantly different levels of contribution.
 
 ## Empty Submission Detection
 
