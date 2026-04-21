@@ -57,6 +57,32 @@ Instructors can create multiple office hours queues to provide different types o
 
 ### Queue Configuration
 
+When creating queues, you can configure:
+
+- **Queue name**: Displayed to students when selecting where to request help
+- **Description**: Course-level office hours description explaining the purpose and policies
+- **Schedule**: Weekly recurring times when the queue is active
+- **Ordinal ordering**: Control the display order of queues in the interface
+- **Demo mode**: Mark queues as demo/test queues for training purposes
+
+### Queue Management
+
+The queue management interface allows you to:
+
+- View all active and scheduled queues
+- See current wait times and student counts
+- Enable or disable queues as needed
+- Monitor staff availability across all queues
+
+### Calendar Integration
+
+Queue schedules integrate with a calendar view that shows:
+
+- Weekly recurring office hours times
+- **"Happening now"** indicators for currently active sessions
+- Queue name resolution from calendar events
+- Visual schedule for students to plan when to seek help
+
 When creating or editing a queue, you can configure:
 
 - **Queue name**: Display name shown to students
@@ -186,6 +212,69 @@ When a student has an active help request, it follows them around the site throu
 - **Video Call Invitations**: Prominent "Join Video Call" button when staff starts a call
 
 This ensures students never miss updates, even while browsing the discussion board or other course pages.
+
+## Get Help Button and Help Drawer
+
+Students have access to a persistent **Get Help** button in the bottom-right corner of every page. This button:
+
+- Provides quick access to office hours from anywhere in the course
+- Opens a help drawer with comprehensive office hours information
+- Shows notification badges when students have active requests
+- Remains accessible throughout the entire site
+
+### Help Drawer Features
+
+The help drawer provides students with:
+
+1. **Office Hours Status Card**: Shows whether office hours are currently active and which queues are open
+2. **Per-Queue Cards**: Individual cards for each help queue showing wait times, staff availability, and queue status
+3. **Weekly Schedule**: Calendar view with recurring office hours times and **"Happening now"** highlights for active sessions
+
+This persistent interface ensures students can always check office hours status and request help without navigating away from their current page.
+
+## Notifications and Alerts
+
+Pawtograder provides rich notification support for office hours:
+
+### Student Notifications
+
+Students receive notifications through multiple channels:
+
+- **Browser notifications**: Desktop alerts for important events (requires permission)
+- **Title updates**: Page title shows notification counts when on another tab
+- **Sound alerts**: Optional audio notifications for messages and status changes
+- **Favicon badges**: Visual indicator on the browser tab
+
+### Notification Events
+
+Students are notified when:
+
+- Staff assigns themselves to help
+- New messages arrive in the help request chat
+- Video calls are initiated
+- Help request status changes
+
+### Testing and Configuration
+
+Students can:
+
+- Test their notification settings to verify they're working
+- See permission warnings if browser notifications are blocked
+- Configure which types of notifications they want to receive
+
+This comprehensive notification system ensures students never miss important updates about their help requests, even when working in other tabs or applications.
+
+## Resolving Requests
+
+A help request can be marked as "Resolved" by either a staff member or a student. Students can resolve their own requests from the floating banner or main chat view, and will be prompted to select a resolution status:
+
+- **Resolved - Got help**: Student received assistance and their issue was addressed
+- **Resolved - Figured it out**: Student solved the problem independently
+- **Resolved - No longer needed**: The help is no longer necessary
+- **Cancelled**: Request was cancelled without resolution
+
+This resolution flow helps you understand how students are being supported and track the effectiveness of office hours. The resolution status is visible to instructors and can be used for analytics and improvement.
+
 
 ### Office Hours Status and Schedule
 
