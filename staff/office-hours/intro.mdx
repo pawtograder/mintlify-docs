@@ -10,9 +10,169 @@ Pawtograder's office hours feature allows students to request live help from cou
 
 Students are encouraged to make public requests for help, so that other students can also benefit from the discussion.
 
+## Student Experience
+
+Students can access office hours through a persistent **Get Help** button that appears in the bottom-right corner of every page. This button opens a help drawer showing:
+
+- Current office hours status
+- Active queues accepting requests
+- Weekly queue schedule with live "Happening now" highlights
+- Quick access to submit new requests
+
+Students receive notifications through multiple channels (browser notifications, title updates, sound alerts, and favicon badges) to stay informed about their help request status even while browsing other course pages.
+
+## Get Help CTA and Help Drawer
+
+Students have access to a persistent **Get Help** call-to-action button throughout the site. This button opens a right-side help drawer that provides:
+
+- **Office Hours status card**: Overview of all available queues and their current status
+- **Per-queue cards**: Individual queue information including wait times and staff availability
+- **Weekly queue schedule**: Calendar view showing when each queue is staffed, with live "Happening now" highlights for currently active sessions
+- **Demo queues**: Optional practice queues for testing (configured via ordinal-based queue ordering)
+
+### Queue Management Features
+
+- **Ordinal-based ordering**: Queues are displayed in a configurable order
+- **Course-level description**: Add a description to explain your office hours system
+- **Queue name resolution**: Calendar events automatically link to the corresponding queue
+- **Conflict detection**: The system validates help requests to prevent scheduling conflicts for solo office hours
+
+## Student Notifications
+
+The platform provides comprehensive notification support to ensure students never miss updates:
+
+### Notification Types
+
+- **Browser notifications**: Desktop alerts for help request updates
+- **Title notifications**: Page title updates showing notification counts
+- **Sound notifications**: Audio alerts for important events
+- **Favicon updates**: Visual indicator in the browser tab
+- **Permission warnings**: Clear prompts if browser notifications are blocked
+
+### Notification Settings
+
+Students can:
+
+- Test notifications to verify their setup
+- Enable or disable specific notification types
+- Configure sound preferences
+- Manage browser notification permissions
+
+<Tip>
+Encourage students to enable browser notifications during the first week of class to ensure they receive timely updates about their help requests.
+</Tip>
+
 ## Office Hours Queues
 
 Instructors can create multiple office hours queues to provide different types of help. For example, if a class is coordinated across multiple campuses, there may be in-person help queues per-campus, and a cross-network virtual help queue.
+
+### Queue Configuration
+
+When configuring queues, you can:
+
+- Set **demo queues** for testing and training purposes
+- Configure **ordinal-based queue ordering** to control display order
+- Add a **course-level Office Hours description** to provide context to students
+- Define **weekly queue schedules** that display with live "Happening now" highlights
+
+Students can view the queue schedule through the **Get Help** button, which provides a persistent call-to-action throughout the site.
+
+When creating queues, you can configure:
+
+- **Queue name**: Displayed to students when selecting where to request help
+- **Description**: Course-level office hours description explaining the purpose and policies
+- **Schedule**: Weekly recurring times when the queue is active
+- **Ordinal ordering**: Control the display order of queues in the interface
+- **Demo mode**: Mark queues as demo/test queues for training purposes
+
+### Queue Management
+
+The queue management interface allows you to:
+
+- View all active and scheduled queues
+- See current wait times and student counts
+- Enable or disable queues as needed
+- Monitor staff availability across all queues
+
+### Calendar Integration
+
+Queue schedules integrate with a calendar view that shows:
+
+- Weekly recurring office hours times
+- **"Happening now"** indicators for currently active sessions
+- Queue name resolution from calendar events
+- Visual schedule for students to plan when to seek help
+
+When creating or editing a queue, you can configure:
+
+- **Queue name**: Display name shown to students
+- **Description**: Course-level office hours description explaining when and how to get help
+- **Schedule**: Weekly schedule showing when the queue is active
+- **Demo mode**: Mark queues as demo/test queues that don't affect real office hours
+- **Queue ordering**: Set ordinal values to control the display order of queues
+
+The weekly schedule displays with live "Happening now" highlights, making it easy for students to see when help is available.
+
+### Office Hours Status Card
+
+Students see an office hours status card that shows:
+- Current status of all queues (open/closed)
+- Individual queue cards with availability
+- Weekly schedule with highlighted active times
+- Quick access to request help
+
+### Queue Schedule
+
+You can configure a weekly schedule for each office hours queue. The schedule:
+
+- Displays to students showing when help is available
+- Highlights "Happening now" for currently active sessions
+- Shows upcoming sessions for the week
+- Helps students plan when to request help
+
+Students see the schedule in the Help Drawer and on the office hours page, making it easy to know when staff are available.
+
+### Demo Queues
+
+You can mark queues as "demo" queues for testing purposes. Demo queues:
+
+- Don't appear in the main queue list for students
+- Allow staff to test the help request workflow
+- Can be used for training new staff members
+
+### Queue Configuration
+
+When configuring office hours queues, you can:
+
+- Set a course-level office hours description
+- Configure queue ordering using ordinal values
+- Create demo queues for testing purposes
+- Set up weekly schedules that display to students with live "Happening now" indicators
+
+### Student Access
+
+Students can access office hours through:
+
+1. **Get Help Button**: A persistent CTA that appears throughout the site
+2. **Help Drawer**: A right-side drawer showing:
+   - Office hours status card
+   - Per-queue cards with current staff availability
+   - Weekly queue schedule with live status highlights
+
+- **Set queue schedules**: Define when each queue is active throughout the week
+- **Mark queues as demo**: Demo queues appear in a separate section and use ordinal-based ordering
+- **Add course-level descriptions**: Provide context about your office hours system
+- **Configure queue ordering**: Queues are ordered by their ordinal value for consistent display
+
+### Office Hours Status Card
+
+Students see an **Office Hours Status** card that displays:
+- Whether office hours are currently happening
+- Which queues are currently open
+- How many students are waiting in each queue
+- The weekly schedule with "Happening now" highlights for active sessions
+
+This helps students understand when help is available and which queue to join.
 
 ## Help Request Templates
 
@@ -44,9 +204,17 @@ Pin important FAQ threads and common troubleshooting posts on your discussion bo
 
 The TA dashboard displays only **active** queues, matching what students see. Inactive queues remain accessible in the Queue Management section for instructors to configure. When all queues are inactive, TAs see an empty state with a helpful hint.
 
+The TA Dashboard displays only **active** queues—those marked as active in Queue Management. Inactive queues are hidden from both students and the TA Dashboard to reduce clutter. To activate or deactivate queues, use the Queue Management interface.
+
 ## Providing Help
 
 When a staff member is working on the queue, they should click **Start Working** to indicate that they are available to help. This is a helpful indicator for students, and also allows instructors to see that staff are logged on and ready to help.
+
+The TA dashboard shows only active queues (matching what students see). Inactive queues remain visible in Queue Management for configuration purposes.
+
+The TA dashboard displays only active queues, matching what students see. Inactive queues remain accessible in Queue Management for configuration purposes.
+
+The TA dashboard displays only active help queues (matching what students see). Inactive queues can still be managed through the Queue Management interface.
 
 Select a help request from the queue, and click **Take Assignment** to indicate that you are actively working on it.
 
@@ -54,24 +222,506 @@ Select a help request from the queue, and click **Take Assignment** to indicate 
 
 Staff can communicate with students through:
 
-1. **Text Chat**: Built-in messaging for quick questions and code sharing
+1. **Text Chat**: Built-in messaging for quick questions and code sharing. Messages are preserved if students lose connection while typing.
 2. **Video Chat**: Click **Start Video Chat** to open a video call with screen-sharing capabilities
+3. **AI Help**: Click **AI Help** to generate context for AI assistants that support MCP (Model Context Protocol), providing relevant information about the student's submission, test results, and discussion threads
 
 After the staff member has started the video chat, students can click the **Join Video Chat** button to join. The video chat window opens in a popup.
 
+#### Chat Reliability
+
+The chat system includes improved error handling to ensure messages aren't lost:
+
+- **Connection status**: The system monitors the connection and alerts users if disconnected
+- **Message preservation**: If a message fails to send (e.g., due to connection issues), it remains in the input box so users don't lose their typed content
+- **Automatic reconnection**: The chat automatically attempts to reconnect when the connection is restored
+- **Robust startup**: Improved chat initialization and refetch flow for more reliable connections
+
+### AI Assistance
+
+Instructors and graders can access AI-powered assistance when helping students:
+
+- **AI Help Button**: Available in help request chats and discussion threads
+- **Context-aware support**: AI assistants have access to student submissions, test results, and error messages
+- **Assignment context**: Provide assignment handout URLs to give AI assistants full context about the task
+
+Click the **AI Help** button to generate an MCP context URL that can be used with AI assistants like Claude Desktop or Cursor. The AI will have access to all relevant information about the student's question and code.
+
+<Tip>
+For more details on setting up and using AI assistance, see the [MCP Server & AI Assistance](/developers/mcp-server) developer documentation.
+</Tip>
+
+When helping students with programming assignments, you can use the **AI Help** button in help request chats and discussion threads to get AI-powered assistance. This feature uses a Model Context Protocol (MCP) server that provides AI assistants with context about:
+
+- The student's help request or discussion thread
+- Their submission files and test results
+- Build output and error messages
+- Assignment handout information
+
+<Note>
+AI assistance is only available to instructors and graders. The system never exposes private student information to the AI.
+</Note>
+
 ### Active Help Request Widget
 
-When a student has an active help request, it follows them around the site. They'll see:
+### Active Help Request Widget and Notifications
 
-- Their current queue position or status
-- Notifications when staff assigns to help them
-- Video call invitations with a prominent "Join Video Call" button
+When a student has an active help request, it follows them around the site through a persistent "Get Help" button and Help Drawer. Students receive:
+
+- **Real-time Status Updates**: Current queue position or help status
+- **Browser Notifications**: Desktop notifications when staff responds (with permission)
+- **Title Bar Updates**: Unread message counts in browser tab
+- **Sound Alerts**: Audio notifications for important updates
+- **Favicon Badge**: Visual indicator in browser tab
+- **Video Call Invitations**: Prominent "Join Video Call" button when staff starts a call
 
 This ensures students never miss updates, even while browsing the discussion board or other course pages.
 
+## Get Help Button
+
+Students can access office hours from anywhere in the course through a persistent **Get Help** button that appears site-wide. This button:
+
+- Opens a help drawer showing office hours status and available queues
+- Displays which queues are currently active ("Happening now")
+- Shows the weekly queue schedule with live status highlights
+- Provides quick access to create new help requests
+- Shows demo queues for testing (if configured)
+
+The help drawer includes:
+
+- **Office Hours Status Card**: Overview of current office hours availability
+- **Per-Queue Cards**: Individual cards for each help queue showing status and schedule
+- **Weekly Schedule**: Visual calendar showing when each queue is staffed
+
+## Notifications
+
+Students receive comprehensive notifications about their help requests:
+
+- **Browser Notifications**: Desktop notifications when staff responds or starts a video call
+- **Title Bar Updates**: Browser tab title shows unread message counts
+- **Sound Alerts**: Optional audio notifications for new messages
+- **Favicon Badge**: Visual indicator in browser tab for unread messages
+
+Students can test notifications and manage preferences from the help request interface.
+
 ## Resolving Requests
 
-A help request can be marked as "Resolved" by either a staff member or a student.
+A help request can be marked as "Resolved" by either a staff member or a student. When students resolve their own requests, they can select a resolution status:
+
+- **Resolved - Got help**: The student received assistance and their question was answered
+- **Resolved - Figured it out**: The student solved the issue independently
+- **Resolved - No longer needed**: The issue is no longer relevant
+
+This resolution flow helps track how students are getting help and provides insights into office hours effectiveness.
+
+Students can resolve their own help requests from either the floating banner or the main chat view. When resolving, they select a resolution status:
+
+- **Resolved - Got help**: Student received assistance
+- **Resolved - Figured it out**: Student solved the problem independently
+- **Resolved - No longer needed**: Request is no longer relevant
+
+Staff members can also mark requests as resolved.
+
+## Office Hours Scheduling and Status
+
+Instructors can configure office hours schedules to help students know when help is available. The system displays:
+
+- **Office Hours status card**: Shows whether office hours are currently active
+- **Per-queue cards**: Display status and wait times for each queue
+- **Weekly queue schedule**: Calendar view with live "Happening now" highlights
+- **Demo queues**: Create demonstration queues for testing and training
+
+Students can view the schedule to see when different queues are available and plan when to request help.
+
+## Queue Management
+
+### Queue Ordering
+
+Queues are displayed in ordinal-based order, allowing you to control the sequence in which queues appear to students. This is useful for prioritizing certain types of help or organizing queues by location or topic.
+
+### Course-Level Office Hours Description
+
+Add a course-level description for office hours that appears at the top of the office hours page. Use this to:
+
+- Explain your office hours policies
+- Provide guidelines for requesting help
+- Link to additional resources
+
+## Enhanced Notifications
+
+The office hours system includes comprehensive notification support to ensure students never miss updates:
+
+### Browser Notifications
+
+Students receive browser notifications when:
+
+- A staff member assigns to help them
+- Their queue position changes significantly
+- A video chat is started
+
+Students can test notifications and will see permission warnings if browser notifications are blocked.
+
+### Visual Indicators
+
+- **Title notifications**: The page title updates with status changes
+- **Sound notifications**: Optional audio alerts for important updates
+- **Favicon changes**: The browser tab icon updates to show active status
+
+### Message Notifications
+
+The chat system includes notification hooks that trigger when:
+
+- Staff sends a message
+- The help request status changes
+- Video chat invitations are sent
+
+## Resolving Requests
+
+A help request can be marked as "Resolved" by either a staff member or a student. When students resolve their own requests, they can select a resolution status:
+
+- **Resolved**: Question was answered or problem was solved
+- **Resolved - No longer needed**: Student figured it out or no longer needs help
+- **Resolved - Unanswered**: Closing the request without getting needed help
+
+This feedback helps you understand the effectiveness of office hours and identify areas for improvement.
+
+## Student Help Experience Enhancements
+
+### Get Help CTA
+
+A persistent **Get Help** button appears throughout the site, giving students quick access to:
+- Submit new help requests
+- View active request status
+- Open the help drawer with queue information
+
+### Help Drawer
+
+The help drawer displays:
+- **Office Hours Status Card**: Shows if office hours are currently active
+- **Per-Queue Cards**: Individual status and wait times for each queue
+- **Weekly Queue Schedule**: Full schedule with live "Happening now" highlights for active sessions
+
+### Site-Wide Notifications
+
+Students receive multi-channel notifications for their active help requests:
+- **Browser notifications**: Desktop alerts for status changes (with permission prompts)
+- **Title updates**: Browser tab title shows queue position
+- **Sound alerts**: Audio notifications for important updates (with test functionality)
+- **Favicon changes**: Visual indicator in browser tab
+
+### Conflict Detection
+
+The system validates help requests to prevent conflicts:
+- Detects if a student already has an active solo request
+- Shows clear validation messages when conflicts occur
+- Prevents duplicate requests in the same queue
+
+## Get Help Button and Help Drawer
+
+Students have access to a persistent **Get Help** button in the bottom-right corner of every page. This button:
+
+- Provides quick access to office hours from anywhere in the course
+- Opens a help drawer with comprehensive office hours information
+- Shows notification badges when students have active requests
+- Remains accessible throughout the entire site
+
+### Help Drawer Features
+
+The help drawer provides students with:
+
+1. **Office Hours Status Card**: Shows whether office hours are currently active and which queues are open
+2. **Per-Queue Cards**: Individual cards for each help queue showing wait times, staff availability, and queue status
+3. **Weekly Schedule**: Calendar view with recurring office hours times and **"Happening now"** highlights for active sessions
+
+This persistent interface ensures students can always check office hours status and request help without navigating away from their current page.
+
+## Notifications and Alerts
+
+Pawtograder provides rich notification support for office hours:
+
+### Student Notifications
+
+Students receive notifications through multiple channels:
+
+- **Browser notifications**: Desktop alerts for important events (requires permission)
+- **Title updates**: Page title shows notification counts when on another tab
+- **Sound alerts**: Optional audio notifications for messages and status changes
+- **Favicon badges**: Visual indicator on the browser tab
+
+### Notification Events
+
+Students are notified when:
+
+- Staff assigns themselves to help
+- New messages arrive in the help request chat
+- Video calls are initiated
+- Help request status changes
+
+### Testing and Configuration
+
+Students can:
+
+- Test their notification settings to verify they're working
+- See permission warnings if browser notifications are blocked
+- Configure which types of notifications they want to receive
+
+This comprehensive notification system ensures students never miss important updates about their help requests, even when working in other tabs or applications.
+
+## Resolving Requests
+
+A help request can be marked as "Resolved" by either a staff member or a student. Students can resolve their own requests from the floating banner or main chat view, and will be prompted to select a resolution status:
+
+- **Resolved - Got help**: Student received assistance and their issue was addressed
+- **Resolved - Figured it out**: Student solved the problem independently
+- **Resolved - No longer needed**: The help is no longer necessary
+- **Cancelled**: Request was cancelled without resolution
+
+This resolution flow helps you understand how students are being supported and track the effectiveness of office hours. The resolution status is visible to instructors and can be used for analytics and improvement.
+
+
+### Office Hours Status and Schedule
+
+The office hours interface includes:
+
+- **Office Hours Status Card**: Shows whether office hours are currently active and provides a course-level description of office hours
+- **Per-Queue Cards**: Displays information for each help queue, including current wait times and staff availability
+- **Weekly Queue Schedule**: A calendar view showing when each queue is scheduled to be active, with live "Happening now" highlights for currently active queues
+
+This helps students understand when help is available and which queue to join based on their needs.
+
+### Demo Queues
+
+Instructors can create demo queues for testing and training purposes. Demo queues allow staff to practice using the office hours system without affecting real student help requests.
+
+### Rich Notifications for Students
+
+Students receive comprehensive notifications for their help requests:
+
+- **Browser notifications**: Desktop alerts when request status changes
+- **Title bar updates**: Browser tab title shows queue position
+- **Sound notifications**: Audio alerts for important updates
+- **Favicon changes**: Visual indicator in browser tab
+
+Students can test notifications and manage notification permissions directly from their help request page.
+
+### Request Validation
+
+The system includes validation to prevent conflicts:
+
+- Students cannot submit multiple simultaneous requests to the same queue
+- Clear error messages guide students when they attempt duplicate requests
+- Solo office hours requests are validated to ensure only one student per request
+
+### Student Notifications
+
+Students receive comprehensive notifications for help request updates:
+
+- **Browser Notifications**: Desktop notifications for status changes (requires permission)
+- **Title Bar Updates**: Page title shows queue position and status
+- **Sound Alerts**: Audio notifications for important events
+- **Favicon Badge**: Visual indicator in browser tab for active requests
+
+Students can test notifications and manage permissions directly from the help request interface. A permission warning appears if browser notifications are blocked.
+
+### AI Assistance for Instructors
+
+Pawtograder includes a Model Context Protocol (MCP) server that enables AI assistants to help instructors and TAs support students who are struggling with errors in their programming assignments. The MCP server provides:
+
+- Secure Supabase OAuth authentication (instructors and graders only)
+- Tools for fetching help requests, discussion threads, submissions, test results, and build output
+- Privacy protection that never exposes sensitive user data
+- AI Help button in help request chat and discussion thread views
+- Support for any MCP-compatible AI client
+
+To use AI assistance, instructors can add a handout URL to assignments (in the assignment configuration) to provide assignment context to AI assistants. The AI Help button generates MCP context that can be used to help diagnose student issues and provide targeted assistance.
+
+## Resolving Requests
+
+## Resolving requests
+
+A help request can be marked as "Resolved" by either a staff member or a student. When students resolve their own requests, they can select a resolution status to indicate how their issue was resolved (e.g., "Resolved with help", "Resolved on my own", "No longer needed").
+
+A help request can be marked as "Resolved" by either a staff member or a student. Students can resolve their own requests from the chat interface or floating banner, and can select a resolution status:
+
+- **Resolved - Got help**: Student received assistance and issue is resolved
+- **Resolved - Figured it out**: Student solved the problem independently
+- **Resolved - No longer needed**: Student no longer needs help
+
+This resolution flow helps track the effectiveness of office hours and understand how students are getting their questions answered.
+
+## AI Assistance for Staff
+
+Pawtograder includes AI assistance tools to help instructors and TAs support students more effectively. When viewing a help request or discussion thread, staff can click the **AI Help** button to generate context that can be used with AI assistants.
+
+The AI assistance system uses the Model Context Protocol (MCP) to provide:
+
+- Access to help request details and chat history
+- Student submission files and test results
+- Build output and error messages
+- Assignment context from handout URLs
+
+<Note>
+AI assistance is only available to instructors and graders. Student data is protected and never exposed through the AI tools.
+</Note>
+
+To use AI assistance:
+
+1. Configure the MCP server with Supabase OAuth authentication
+2. Click the **AI Help** button when viewing a help request or discussion thread
+3. Use the generated context with any MCP-compatible AI client
+
+This feature helps staff quickly understand student issues and provide more targeted assistance, especially when dealing with complex error messages or debugging scenarios.
+
+### Staff resolution
+
+Staff members can mark a help request as resolved when they have finished helping the student. This closes the request and removes it from the queue.
+
+### Student resolution
+
+Students can resolve their own help requests from the floating banner or main chat view. When resolving a request, students can select a resolution status:
+
+- **Resolved**: The issue was fixed
+- **No longer needed**: The student no longer needs help
+- **Other**: Other reason for closing the request
+
+This resolution flow helps track which help requests were successfully resolved vs. abandoned, providing valuable feedback for improving course support.
+
+## AI Assistance for Instructors
+
+Pawtograder includes a Model Context Protocol (MCP) server that enables AI assistants to help instructors and TAs support students who are struggling with errors in their programming assignments.
+
+### Features
+
+- **MCP server with Supabase OAuth authentication** (instructors/graders only)
+- **Tools for fetching help requests**, discussion threads, submissions, test results, and build output
+- **Privacy protection**: never exposes users table or private profile information
+- **AI Help button** in help request chat and discussion thread views
+- **Assignment context**: Add a `handout_url` field to assignments to provide assignment context to AI assistants
+
+### Using AI Assistance
+
+When viewing a help request or discussion thread, instructors can click the **AI Help** button to generate MCP context that can be used with any MCP-compatible client (such as Claude Desktop). The AI assistant can then access relevant information about the student's submission, test results, and error messages to provide more informed assistance.
+
+<Warning>
+AI assistance is only available to instructors and graders. Students cannot access this feature.
+</Warning>
+
+When students resolve their own requests, they are prompted to select a resolution status:
+
+- **Resolved - Question Answered**: Their question was fully answered
+- **Resolved - Problem Solved**: Their technical issue was fixed
+- **Resolved - Referred Elsewhere**: They were directed to other resources
+- **Resolved - No Longer Needed**: They no longer need help with this issue
+- **Resolved - Other**: The request was resolved for another reason
+
+This resolution data helps you understand common student needs and the effectiveness of your office hours support.
+
+## AI Assistance for Instructors
+
+Pawtograder provides AI assistance tools to help instructors and TAs support students more effectively. An **AI Help** button appears in help request chats and discussion threads, allowing staff to generate context that can be used with AI assistants.
+
+### Model Context Protocol (MCP) Server
+
+The MCP server enables AI assistants to access course data securely:
+
+- **Authentication**: Uses Supabase OAuth (instructors and graders only)
+- **Available Tools**: Fetch help requests, discussion threads, submissions, test results, and build output
+- **Privacy Protection**: Never exposes sensitive user data
+- **Assignment Context**: Add a `handout_url` to assignments to provide assignment context to AI assistants
+
+This feature helps TAs quickly understand student errors and provide more effective assistance, especially for complex programming assignment debugging.
+
+## Student Notifications
+
+Students receive multiple types of notifications to stay informed about their help requests:
+
+- **Browser Notifications**: Desktop notifications when staff responds or starts helping
+- **Title Bar Updates**: Browser tab title shows status updates
+- **Sound Alerts**: Optional audio notifications for important events
+- **Favicon Badge**: Visual indicator in browser tabs
+
+Students can test notifications and adjust settings from the help request interface.
+
+## AI Assistance for Staff
+
+Course staff can use AI assistance tools to help support students who are struggling with errors in their programming assignments. The AI Help button appears in help request chats and discussion threads, providing staff with AI-powered insights based on:
+
+- Student submissions and test results
+- Build output and error messages
+- Assignment context and requirements
+
+<Note>
+AI assistance requires configuration of the Model Context Protocol (MCP) server with Supabase OAuth authentication. Only instructors and graders have access to AI assistance tools.
+</Note>
+
+### Student Resolution Flow
+
+Students can resolve their own help requests from:
+- The floating banner at the top of the page
+- The main chat view in the office hours interface
+
+When resolving, students select a resolution status:
+- **Resolved**: Question was answered or problem was solved
+- **Resolved - No longer needed**: Figured it out independently or no longer needs help
+- **Resolved - Unanswered**: Closing the request without getting needed help
+
+This feedback helps you understand office hours effectiveness and identify areas for improvement.
+
+### Conflict Detection
+
+The system includes validation to prevent conflicts with solo office hours requests. When a student tries to join a queue while already in another solo request, they'll receive a clear error message explaining the conflict.
+
+## Request Validation
+
+Pawtograder includes conflict detection and validation for help requests:
+
+- **Solo request validation**: Prevents students from joining multiple solo office hours queues simultaneously
+- **Clearer error messages**: Students receive specific feedback when validation fails
+- **Improved UX**: The system provides clear guidance on resolving conflicts
+
+## Notifications
+
+Students receive comprehensive notifications for office hours updates:
+
+- **Browser notifications**: Desktop alerts for status changes and messages
+- **Title notifications**: Page title updates showing queue status
+- **Sound notifications**: Audio alerts for important events
+- **Favicon updates**: Visual indicators in the browser tab
+
+Students can test notifications and manage permissions from the help drawer. Permission warnings appear if browser notifications are disabled.
+
+## AI Assistance Tools
+
+Pawtograder includes AI assistance tools to help course staff provide better support to students. When viewing a help request or discussion thread, instructors and graders can access AI-powered context about:
+
+- Student submissions and code
+- Test results and build output
+- Assignment handouts and requirements
+- Discussion thread history
+
+These tools use the Model Context Protocol (MCP) to provide AI assistants with relevant context, enabling staff to:
+
+- Quickly understand student issues
+- Generate helpful debugging suggestions
+- Provide more targeted assistance
+
+<Note>
+AI assistance tools are only available to instructors and graders. Student data is protected and never exposed inappropriately.
+</Note>
+
+To use AI assistance:
+1. Click the **AI Help** button when viewing a help request or discussion thread
+2. The system generates an MCP context file with relevant information
+3. Use this context with any MCP-compatible AI client to get assistance
+
+When students resolve their own requests, they select how the issue was resolved:
+- Self-solved
+- Staff helped
+- Peer helped
+- No time to wait
+- Other (with optional notes)
+
+This information helps you understand how students are getting help and identify patterns in office hours usage.
 
 ## Feedback and Analytics
 
