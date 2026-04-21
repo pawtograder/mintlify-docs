@@ -236,6 +236,15 @@ Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
 
+### Exporting Group Data
+
+You can export group information to CSV format, which includes student and mentor email addresses. The export includes:
+
+- **Group export**: Columns for GroupName, StudentNames (in "Name <email>" format), and MentorName (in "Name <email>" format)
+- **Student export**: Student column includes email in "Name <email>" format
+
+The CSV export uses UTF-8 encoding with BOM for proper character support and includes formula-safe escaping to prevent CSV injection attacks.
+
 ### Exporting Group Information
 
 You can export group information to CSV for record-keeping or external analysis. The export includes:
@@ -358,6 +367,17 @@ Instructors and graders can also manually grant extensions to students, gift add
 Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions". For group assignments, due date exceptions are properly applied at the group level to ensure all group members receive the same extension.
 
 Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+## Repository Analytics
+
+Pawtograder provides analytics for assignment repositories, allowing instructors to track student activity and engagement with their code repositories. Repository analytics include:
+
+- Commit history and frequency
+- Code contribution patterns
+- Repository activity timelines
+- Collaboration metrics for group assignments
+
+These analytics help instructors identify students who may need additional support and understand how students are approaching their assignments over time.
 
 ### Gifting Late Tokens
 
