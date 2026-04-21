@@ -1,0 +1,69 @@
+---
+title: "Managing Groups"
+description: "Create, manage, and export group assignments with student and mentor information"
+icon: "users"
+---
+
+# Managing Groups
+
+Pawtograder supports group assignments where students can work together on programming assignments. Instructors have full control over group formation, management, and data export.
+
+## Group Assignment Types
+
+Pawtograder supports two kinds of group assignments:
+
+- **Group optional**: Students can choose to work alone or form a group
+- **Group required**: Students must form a group to submit
+
+## Group Formation
+
+When creating a group assignment, instructors can choose how groups are formed:
+
+- **Student-formed groups**: Students create and join groups themselves using an invitation system
+- **Instructor-assigned groups**: Instructors manually assign students to groups
+- **Reuse groups**: Instructors can reuse group configurations from a prior assignment
+
+## Exporting Group Data
+
+Instructors can export group information to CSV for record-keeping, communication, and analysis.
+
+### Group Export Format
+
+The group export includes comprehensive information about each group:
+
+```csv
+GroupName,StudentNames,MentorName
+team-alpha,"Alice Smith <alice@university.edu>, Bob Jones <bob@university.edu>",Dr. Johnson <johnson@university.edu>
+team-beta,"Carol White <carol@university.edu>, David Brown <david@university.edu>, Eve Davis <eve@university.edu>",Prof. Williams <williams@university.edu>
+```
+
+**Export features:**
+- Group name for easy identification
+- All student names with email addresses in `Name <email>` format
+- Mentor/grader name with email address (if assigned)
+- UTF-8 BOM encoding for Excel compatibility
+- Formula-safe CSV escaping to prevent injection attacks
+- Sorted rows for stable, consistent exports
+
+### Student Export with Emails
+
+When exporting student lists, the export now includes email addresses in the same `Name <email>` format for consistency:
+
+```csv
+Student,Section,Status
+Alice Smith <alice@university.edu>,Section 1,Active
+Bob Jones <bob@university.edu>,Section 2,Active
+```
+
+This unified format makes it easy to:
+- Import contact information into email clients
+- Cross-reference students across different exports
+- Maintain consistent data formats across the platform
+
+## Group Permissions
+
+When groups are formed:
+- All group members have access to the shared repository
+- Any group member can make submissions
+- All group members see the same grades and feedback
+- Late token usage affects all group members equally
