@@ -18,7 +18,7 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["students/intro"]
+            "pages": ["students/intro", "changelog"]
           },
           {
             "group": "Assignments",
@@ -51,8 +51,11 @@
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
+              "staff/assignments/configuration",
+              "staff/assignments/dashboards",
               "staff/assignments/grading-assignments",
               "staff/assignments/handgrading",
+              "staff/assignments/repository-analytics",
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
               "staff/assignments/testing"
@@ -75,6 +78,14 @@
               "staff/surveys",
               "staff/office-hours/intro",
               "staff/office-hours/ai-assistance"
+
+              "staff/ai-assistance"
+            ]
+          },
+          {
+            "group": "Automation",
+            "pages": [
+              "staff/cli"
             ]
           }
         ]
