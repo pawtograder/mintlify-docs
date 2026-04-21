@@ -61,6 +61,165 @@ http://127.0.0.1:54321/mcp
 
 This URL is displayed in the Supabase startup output under "Development Tools".
 
+title: "AI Assistance for Office Hours"
+description: "Use AI tools to help diagnose student issues and provide better support during office hours"
+icon: "robot"
+
+description: "Use AI tools to help support students with programming errors and debugging"
+icon: "sparkles"
+---
+
+# AI Assistance for Office Hours
+
+Pawtograder provides AI assistance tools to help instructors and graders provide better support to students. These tools use the Model Context Protocol (MCP) to give AI assistants structured access to student help requests, submissions, and test results.
+
+## Getting AI Help
+
+When viewing a help request or discussion thread, click the **AI Help** button to copy a formatted prompt that includes:
+
+- The student's question and conversation history
+- Linked assignment details and handout URL
+- Submission files and test results
+- Suggested MCP tools for fetching additional context
+
+You can paste this prompt into Claude Desktop, ChatGPT, or any MCP-compatible AI assistant to get intelligent analysis and suggested responses.
+
+## Setting Up MCP Access
+
+To use AI assistance with Claude Desktop:
+
+### 1. Install Claude Desktop
+
+Download from [claude.ai/download](https://claude.ai/download)
+
+### 2. Create an API Token
+
+1. Go to **Settings → API Tokens** in Pawtograder
+2. Click **Create New Token**
+3. Give it a name (e.g., "Claude Desktop")
+4. Copy the token (it will only be shown once)
+
+### 3. Configure Claude Desktop
+
+Add this configuration to your Claude Desktop config file:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "pawtograder": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-proxy@latest", "YOUR_PAWTOGRADER_URL/functions/v1/mcp-server"],
+      "env": {
+        "MCP_HEADERS": "{\"Authorization\": \"Bearer YOUR_TOKEN_HERE\"}"
+      }
+    }
+  }
+}
+```
+
+Replace `YOUR_TOKEN_HERE` with the token you created in step 2.
+
+### 4. Restart Claude Desktop
+
+Quit and reopen Claude Desktop. You should see "pawtograder" listed as an available MCP server.
+
+## Available AI Tools
+
+The MCP server provides these tools for AI assistants:
+
+### Context Tools
+- **get_help_request** - Fetch help request with full conversation history
+- **get_discussion_thread** - Fetch discussion thread with replies
+- **get_assignment** - Get assignment spec, handout URL, and rubric
+
+### Submission Tools
+- **get_submission** - Get submission metadata and summary
+- **list_submission_files** - See what files were submitted
+- **get_submission_files** - Fetch specific source files (supports glob patterns like `*.java`)
+
+### Test Tools
+- **list_submission_tests** - See all test results (pass/fail, scores)
+- **get_test_output** - Get detailed output for specific tests
+- **get_submission_build_output** - Get compilation/build errors
+
+### Search Tools
+- **search_help_requests** - Find related help requests
+- **search_discussion_threads** - Find similar questions from other students
+
+## AI Analysis Features
+
+AI assistance is available in multiple contexts:
+
+- **Help requests**: Click AI Help in the help request chat
+- **Discussion threads**: Click the AI Help icon in thread actions
+- **Test failures**: Click AI Help on failing test results
+- **Build errors**: Click AI Help on build error messages
+- **Test insights**: Click AI Analyze on common error patterns
+
+## Providing Feedback
+
+After using AI assistance, you'll be prompted to provide feedback on whether the analysis was helpful. This feedback helps improve the AI assistance feature for your course.
+
+<Note>
+AI assistance is only available to instructors and graders. Students cannot access these tools.
+</Note>
+
+## Privacy and Security
+
+The MCP server is designed with privacy in mind:
+
+- Never exposes student email addresses or user table data
+- Only accessible to instructors and graders
+- Requires authentication via API tokens
+- All data access respects Pawtograder's existing permissions
+
+Pawtograder includes AI assistance tools that help instructors and TAs support students who are struggling with errors in their programming assignments. The AI Help feature provides context-aware assistance by analyzing student submissions, test results, and discussion threads.
+
+## How It Works
+
+The AI assistance system uses the Model Context Protocol (MCP) to enable AI assistants to access relevant student data securely. When helping a student, you can click the **AI Help** button to generate context that can be shared with MCP-compatible AI clients like Claude.
+
+### Available Context
+
+The AI assistance tools can access:
+
+- **Help requests**: Current and past help requests with student descriptions
+- **Discussion threads**: Related discussion posts and replies
+- **Submissions**: Student code submissions for assignments
+- **Test results**: Autograder output and test failures
+- **Build output**: Compilation errors and build logs
+- **Assignment handouts**: Assignment instructions and requirements (when configured)
+
+## Using AI Help
+
+The **AI Help** button appears in two locations:
+
+1. **Help request chat view**: When actively helping a student through office hours
+2. **Discussion thread view**: When viewing student questions on the discussion board
+
+Click the button to generate an MCP context file that includes all relevant information about the student's issue. This context can be used with any MCP-compatible AI assistant to get suggestions for helping the student.
+
+## Privacy and Security
+
+The AI assistance system is designed with privacy in mind:
+
+- **Instructor/grader access only**: Only users with instructor or grader roles can access AI assistance tools
+- **Supabase OAuth authentication**: Secure authentication ensures only authorized users can access student data
+- **No user table exposure**: The system never exposes the users table or private profile information
+- **Audit trail**: All AI assistance requests are logged for compliance and review
+
+## Configuration
+
+To enable AI assistance for an assignment, instructors can add a `handout_url` field to the assignment. This URL points to the assignment instructions or handout, providing the AI assistant with context about what students are trying to accomplish.
+
+<Note>
+The AI assistance feature requires an MCP-compatible client to use the generated context. The system generates the context but does not directly integrate with any specific AI service.
+</Note>
+
 ## Best Practices
 
 When using AI assistance to help students:
@@ -76,3 +235,19 @@ When using AI assistance to help students:
 - All access is logged and auditable
 - The server provides read-only access to course data
 - Sensitive user information is never exposed
+
+1. **Review AI suggestions**: Always review and verify AI-generated suggestions before sharing them with students
+2. **Use as a starting point**: Treat AI suggestions as a starting point for your own analysis, not a complete solution
+3. **Maintain pedagogical goals**: Ensure that AI-assisted help still supports learning objectives and doesn't simply provide answers
+4. **Protect student privacy**: Be mindful of student data when using external AI services
+
+## MCP Server Setup
+
+For advanced users who want to set up their own MCP server integration, the system provides:
+
+- Supabase OAuth authentication flow
+- RESTful API endpoints for fetching student data
+- Tools for retrieving help requests, submissions, test results, and build output
+- Secure token-based access control
+
+Contact your system administrator for details on setting up custom MCP integrations.
