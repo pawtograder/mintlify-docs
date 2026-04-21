@@ -70,6 +70,20 @@ When a student has an active help request, it follows them around the site. They
 
 This ensures students never miss updates, even while browsing the discussion board or other course pages.
 
+### AI Assistance for Instructors
+
+Pawtograder includes a Model Context Protocol (MCP) server that enables AI assistants to help instructors and TAs support students who are struggling with errors in their programming assignments. The MCP server provides:
+
+- Secure Supabase OAuth authentication (instructors and graders only)
+- Tools for fetching help requests, discussion threads, submissions, test results, and build output
+- Privacy protection that never exposes sensitive user data
+- AI Help button in help request chat and discussion thread views
+- Support for any MCP-compatible AI client
+
+To use AI assistance, instructors can add a handout URL to assignments (in the assignment configuration) to provide assignment context to AI assistants. The AI Help button generates MCP context that can be used to help diagnose student issues and provide targeted assistance.
+
+## Resolving Requests
+
 ## Resolving requests
 
 ### Staff resolution
