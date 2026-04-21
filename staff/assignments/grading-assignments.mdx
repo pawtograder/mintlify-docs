@@ -6,7 +6,17 @@ icon: "users-gear"
 
 # Assigning Grading Tasks
 
-Pawtograder has a robust feature to allow instructors to assign grading tasks to staff. When a grading task is assigned, the instructor can set a due date for that task, and re-assign the task to a different grader if needed. Pawtograder will also automatically allow any other grader to complete the task if the original grader is unable to complete it (without needing to re-assign the task).
+Pawtograder has a robust feature to allow instructors to assign grading tasks to staff. When a grading task is assigned, the instructor can set a due date for that task, and re-assign the task to a different grader if needed. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the new work will appear in their pending work list. Pawtograder will also automatically allow any other grader to complete the task if the original grader is unable to complete it (without needing to re-assign the task).
+
+## Automatic Completion of Related Reviews
+
+When a grader completes their assigned review, Pawtograder automatically:
+
+- Marks other review assignments as complete if they cover the same or a subset of rubric parts
+- Completes the overall submission review when all required rubric checks are satisfied
+- Validates that uncovered rubric parts have no blocking requirements before marking the submission complete
+
+This reduces duplicate work when multiple graders are assigned to overlapping parts of the same submission.
 
 ## Conflicts of Interest
 
@@ -16,21 +26,89 @@ Pawtograder will automatically ensure that graders do not grade assignments that
   <img src="/images/staff/assignments/grading-assignments-1756052760269.png" alt="Grading Conflicts Dashboard showing declared conflicts and reasons" />
 </Frame>
 
+## Assigning Group Mentors
+
+For group assignments, you can assign mentors to student groups from the assignment's Groups management page. Each group can have one assigned mentor.
+
+1. Navigate to the assignment's **Groups** page
+2. Find the **Mentor** column in the groups table
+3. Select a grader or instructor from the dropdown for each group
+4. The mentor assignment is saved automatically
+
+Group mentors are displayed to students on their submission pages and in the group widget.
+
+### Assigning Grading to Group Mentors
+
+When using the bulk assign grading feature, you can automatically assign each group's submission to their assigned mentor:
+
+1. Select **Assign to group mentors** from the assignment mode dropdown
+2. The system will automatically assign each group's submission to the group's mentor
+3. Submissions without groups or without assigned mentors will be skipped
+4. Grading conflicts are automatically checked and respected
+
+This mode is useful for structured mentorship workflows where each mentor is responsible for grading their assigned groups.
+
 ## Assigning Grading Tasks
 
-Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assignments" page) allows instructors to assign grading tasks to staff in bulk.
+Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assignments" page) allows instructors to assign grading tasks to staff in bulk. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the system automatically clears the completion timestamp so the new work appears in their pending work list.
 
 <Frame>
   <img src="/images/staff/assignments/grading-assignments-1756052527424.png" alt="Bulk Assign Grading form with distribution options" />
 </Frame>
 
-The algorithm will first split submissions between graders (assigning all selected rubric parts to each grader, aka "Assign by submission"), or split the rubric parts between graders first (assigning each submission to different graders for each rubric part, aka "Assign by rubric part").
+The algorithm offers several distribution modes:
+
+- **By submission**: Split submissions between graders (each grader gets complete rubrics for their assigned submissions)
+- **By rubric part**: Split rubric parts between graders (each submission is graded by multiple graders, each handling different rubric parts)
+- **Assign to lab leaders**: Automatically assign each submission to all lab leaders of the student's lab section
+- **Assign to group mentors**: Automatically assign each group's submission to that group's assigned mentor
+
+### Assignment Modes
+
+Pawtograder offers several modes for distributing grading tasks:
+
+#### By Submission
+
+Submissions are split between graders first. Each grader receives complete submissions with all selected rubric parts.
+
+#### By Rubric Part
+
+Rubric parts are split between graders first. Each submission is assigned to different graders for different rubric parts, allowing specialization.
+
+#### Assign to Lab Leaders
+
+Each submission is automatically assigned to all lab leaders of the student's lab section. No manual grader selection needed.
+
+#### Assign to Group Mentors
+
+Each group's submission is automatically assigned to the group's assigned mentor. This mode:
+
+- Requires groups to have mentors assigned (see Group Management)
+- Skips submissions without groups or without assigned mentors
+- Respects grading conflicts between mentors and group members
+- Ideal for group projects with dedicated mentors
+
+### Configuring Assignments
+The algorithm offers several assignment modes:
+
+- **By submission**: Split submissions between graders (assigning all selected rubric parts to each grader)
+- **By rubric part**: Split rubric parts between graders first (assigning each submission to different graders for each rubric part)
+- **Assign to lab leaders**: Automatically assign each submission to all lab leaders of the student's lab section
+- **Assign to group mentors**: Automatically assign each group's submission to the group's assigned mentor
 
 You can choose which rubric to assign (the "Grading Rubric" is the default, and what is used to calculate the student's grade for the assignment), and optionally choose which rubric parts to assign.
 
 The algorithm will only operate over unassigned grading tasks. To support complex workflows, you can manually assign some subsets at a time (filtering by section or tag).
 
-To select assignees, you can filter by role (e.g. graders, instructors, or both), and optionally filter by tag. The form will show which graders will be assigned, and you can manually override the selection of graders.
+To select assignees (for "By submission" and "By rubric part" modes), you can filter by role (e.g. graders, instructors, or both), and optionally filter by tag. The form will show which graders will be assigned, and you can manually override the selection of graders.
+### Group Mentor Assignment
+
+When using the "Assign to group mentors" mode:
+
+- Each group's submission is automatically assigned to the group's mentor
+- Submissions without groups or without assigned mentors are skipped
+- No manual grader selection is needed
+- The system validates for grading conflicts with group members
 
 You can choose to reuse existing grading assignments (e.g. if you want to assign the same graders to the same submissions as a previous assignment, or even to assign the same graders a different rubric on the same submissions). Selecting this option will override all balancing efforts.
 
@@ -53,3 +131,360 @@ When grading a group assignment with individual grading enabled, you can:
 - Track individual performance within group contexts for gradebook calculations
 
 This provides flexibility to recognize individual effort while still supporting collaborative learning.
+
+## Reassigning Grading Tasks
+
+After grading tasks have been assigned, instructors can reassign them to different graders if needed. This is useful when:
+
+- A grader is unable to complete their assigned tasks
+- Workload needs to be rebalanced among graders
+- A grader has a conflict of interest that was discovered after assignment
+
+To reassign a grading task:
+
+After grading tasks have been assigned, instructors can reassign submissions to different graders if needed. This is useful when:
+
+- A grader is unavailable or overloaded
+- Workload needs to be rebalanced
+- A conflict of interest is discovered after initial assignment
+
+To reassign a grading task, navigate to the submission's grading page and use the reassignment controls to select a new grader. The system will update the assignment and notify the new grader of their task.
+
+## Bulk Completing Grading Reviews
+
+The **Mark All Grading Complete** button allows you to efficiently complete multiple grading reviews at once.
+
+When you click this button:
+
+1. The system checks which incomplete submission reviews can be marked complete
+2. A review is eligible if all required rubric checks have been applied
+3. You'll see a summary showing:
+   - How many reviews can be marked complete
+   - How many have missing required checks (and will be skipped)
+4. Confirming will mark all eligible reviews as complete
+
+This feature is useful for:
+- Completing reviews after a grading session
+- Finalizing grades before releasing them to students
+- Ensuring all required feedback has been provided
+
+<Note>
+Only reviews with all required rubric checks applied will be marked complete. Reviews with missing required checks are automatically skipped to prevent incomplete grading.
+</Note>
+
+## Managing Repository Permissions
+
+For assignments with GitHub repositories, you can audit and fix repository permissions to ensure all group members have the correct access.
+
+### Fix Repository Permissions
+
+The **Fix Permissions** button on the Repositories page allows you to comprehensively audit and correct all assignment repository permissions:
+
+1. Navigate to the assignment's **Repositories** page
+2. Click the **Fix Permissions** button
+3. The system will:
+   - Audit all repositories for the assignment
+   - Compute the correct collaborator list from current group membership
+   - Enqueue permission sync jobs for each repository
+   - Skip repositories that haven't been created on GitHub yet
+   - Skip repositories where no students have confirmed GitHub usernames
+
+The button displays a summary showing:
+
+- Number of syncs enqueued
+- Repositories skipped (no usernames)
+- Repositories skipped (not ready)
+- Any errors encountered
+
+This feature is useful when:
+
+- Students join or leave groups after repository creation
+- GitHub permissions become out of sync with group membership
+- You need to verify all students have correct repository access
+
+## Reassigning Grading Tasks
+
+After grading tasks have been assigned, you may need to reassign them to different graders due to workload changes, conflicts of interest, or grader availability.
+
+### Reassigning Individual Submissions
+
+To reassign a single submission to a different grader:
+
+1. Navigate to the assignment's **Grading Assignments** page
+2. Find the submission you want to reassign
+3. Click the **Reassign** button next to the grader's name
+4. Select a new grader from the dropdown
+5. Optionally update the due date for the new grader
+6. Click **Confirm** to complete the reassignment
+
+The system will:
+- Transfer the grading task to the new grader
+- Preserve any existing grading work (comments, rubric checks)
+- Notify the new grader of their assignment
+- Update the grading dashboard to reflect the change
+
+### Bulk Reassignment
+
+For reassigning multiple submissions at once:
+
+1. Navigate to the assignment's **Grading Assignments** page
+2. Select the submissions you want to reassign using checkboxes
+3. Click **Bulk Reassign** at the top of the list
+4. Choose the new grader(s) for the selected submissions
+5. Optionally update due dates
+6. Preview the changes before confirming
+7. Click **Confirm Bulk Reassignment**
+
+<Note>
+Reassignment preserves all existing grading work. If a grader has already started grading a submission, their work will remain visible to the new grader and can be continued or modified.
+</Note>
+
+### Automatic Completion by Other Graders
+
+Even without explicit reassignment, any grader with appropriate permissions can complete a grading task assigned to another grader. This allows for flexible workflows where:
+
+- Graders can help each other meet deadlines
+- Backup graders can step in when needed
+- Instructors can review and complete any grading task
+
+The original assignee remains listed as the primary grader, but the completion is tracked with the actual grader's identity.
+
+## Assigning Group Mentors
+
+For group assignments, you can assign mentors to student groups. Mentors are typically graders or instructors who provide guidance and feedback to specific groups throughout the assignment.
+
+### Setting Group Mentors
+
+1. Navigate to the assignment's **Groups** page
+2. In the groups table, find the **Mentor** column
+3. Use the dropdown to select a mentor for each group
+4. The mentor assignment is saved automatically
+
+### Using Group Mentors for Grading
+
+When using the **Assign to group mentors** mode in bulk grading:
+
+1. Each group's submission is automatically assigned to that group's mentor
+2. Groups without assigned mentors are skipped with a warning
+3. Submissions not associated with a group are also skipped
+4. Grading conflicts are still respected
+
+This mode is useful for maintaining consistency when the same mentor works with a group throughout the semester.
+
+For group assignments, you can assign mentors to student groups:
+
+1. Navigate to the assignment's **Groups** page
+2. Locate the **Mentor** column in the groups table
+3. Select a grader or instructor from the dropdown for each group
+4. The mentor assignment is saved automatically
+
+**Group Mentor Benefits:**
+- Mentors can be automatically assigned to grade their groups' submissions using the "Assign to group mentors" bulk grading mode
+- Students see their group's mentor on the submission page
+- Mentors can view analytics for only their assigned groups in survey responses
+
+<Tip>
+Export the groups table to CSV to see mentor assignments alongside group membership.
+</Tip>
+
+## Reassigning Grading Tasks
+
+After grading tasks have been assigned, instructors can reassign individual submissions or rubric parts to different graders:
+
+1. Navigate to the assignment's grading page
+2. Find the submission you want to reassign
+3. Click **Reassign** next to the grader's name
+4. Select a new grader from the dropdown
+5. Optionally add a note explaining the reassignment
+6. Click **Confirm Reassignment**
+
+**Important behaviors:**
+
+- When a submission is reassigned to a new grader, it appears in their pending work list immediately
+- If the new grader had already completed grading a different rubric part for the same submission, the system clears the `completed_at` timestamp to ensure the new work appears as pending
+- The original grader's work is preserved and can be reviewed if needed
+- Reassignments respect conflict of interest rules
+
+This feature is useful for:
+- Balancing workload when a grader falls behind
+- Handling grader absences or availability changes
+- Correcting assignment errors
+- Ensuring quality by moving submissions to more experienced graders
+
+If a grader is unable to complete their assigned grading tasks, instructors can reassign those tasks to a different grader. Pawtograder handles reassignment intelligently to ensure work appears correctly in graders' pending lists.
+
+**To reassign a grading task:**
+
+1. Navigate to the assignment's "Grading Assignments" page
+2. Find the submission or rubric part that needs reassignment
+3. Select the new grader from the reassignment interface
+4. Confirm the reassignment
+
+**How reassignment works:**
+
+- When reassigning a rubric part to a grader who already completed a different part for the same submission, the system resets the completion status for the new assignment
+- The new grading task appears in the grader's pending work list
+- Previously completed work by the original grader is preserved
+- The new grader can view all previous feedback while completing their assigned part
+
+This ensures that reassigned work is properly tracked and appears in the correct grader's queue, even when graders have partial completion on the same submission.
+
+## Repository Permissions Audit
+
+Pawtograder provides a "Fix Repository Permissions" button on the Repositories page that allows instructors to audit and correct GitHub repository permissions for all assignment repositories in a single operation.
+
+This feature is useful when:
+- Students join or leave groups after repositories have been created
+- Repository permissions become out of sync with group membership
+- You need to ensure all students have proper access to their assignment repositories
+
+The button will:
+- Check all repositories for the assignment
+- Verify that each repository has the correct collaborators based on current group membership
+- Enqueue permission sync jobs for repositories that need updates
+- Provide a summary of synced repositories, skipped repositories, and any errors
+
+## Grading Reassignment
+
+When a student submits a new version of their work after grading has begun, Pawtograder automatically handles the reassignment of grading tasks. The system will:
+
+- Move incomplete grading assignments to the new active submission
+- Preserve existing grading comments on the original submission
+- Reopen grading assignments so graders can review the new submission
+- Prevent data loss by detecting conflicts with existing grading work
+
+## Grading Status Dashboard
+
+The grading status dashboard provides a comprehensive overview of grading progress across all assignments. Access it from the course navigation to see:
+
+- **Assignment-level progress**: View completion status for each assignment
+- **Grader workload**: See how many tasks are assigned to each grader
+- **Due dates**: Track upcoming grading deadlines
+- **Completion rates**: Monitor overall grading progress
+
+This dashboard helps instructors identify bottlenecks, ensure equitable workload distribution, and track grading progress in real-time.
+
+The grading status dashboard provides a comprehensive overview of grading progress across all assignments. Use this dashboard to:
+
+- Monitor completion rates for assigned grading tasks
+- Track which graders are on schedule or falling behind
+- Identify bottlenecks in the grading workflow
+- View grading statistics across multiple assignments
+
+This helps instructors ensure timely feedback to students and manage grading workload effectively.
+
+The grading status dashboard provides instructors with a comprehensive overview of grading progress across all assignments. This dashboard helps you:
+
+- Monitor which assignments have pending grading tasks
+- Track completion rates for each grader
+- Identify bottlenecks in the grading workflow
+- View grading assignments by staff member or by assignment
+
+Access the grading status dashboard from the course navigation to get a real-time view of all grading activities and ensure timely completion of grading tasks.
+
+The Grading Status Dashboard provides instructors with a comprehensive overview of grading progress across all assignments. Access this dashboard to monitor:
+
+- **Completion rates**: Track how many submissions have been graded versus pending
+- **Grader workload**: See the distribution of grading tasks across staff members
+- **Due dates**: Monitor upcoming grading deadlines
+- **Assignment progress**: View grading status for each assignment at a glance
+
+This dashboard helps instructors identify bottlenecks, ensure equitable workload distribution, and keep grading on schedule.
+
+The grading status dashboard provides a comprehensive overview of grading progress for an assignment. Access it from the assignment page to monitor:
+
+- **Overall completion**: Track how many submissions have been graded
+- **Per-grader progress**: See individual grader workload and completion rates
+- **Rubric part breakdown**: Monitor progress on specific rubric components
+- **Due date tracking**: Identify overdue grading tasks
+- **Bottleneck identification**: Quickly spot where grading is falling behind
+
+This dashboard helps instructors ensure grading stays on track and identify when intervention or reassignment is needed.
+
+The **Grading Status Dashboard** provides a comprehensive overview of grading progress across your course. Access it from the assignment's grading page to see:
+
+- **Overall Progress**: Visual progress bars showing completion rates for each rubric part
+- **Grader Performance**: Individual grader statistics including assigned tasks, completed tasks, and completion rates
+- **Submission Status**: Track which submissions have been graded and which are still pending
+- **Due Date Tracking**: Monitor grading task deadlines and identify overdue assignments
+
+This dashboard helps instructors:
+- Identify bottlenecks in the grading process
+- Balance workload across graders
+- Follow up with graders who may need support
+- Ensure timely feedback delivery to students
+
+## Managing Review Assignments
+
+### Viewing Review Assignments
+
+The "All Assignments" tab provides a comprehensive view of all review assignments, organized into two sub-tabs:
+
+- **Grading reviews**: Shows all non-self-review rubric assignments (grading review, meta-grading, code walk, etc.)
+- **Self reviews**: Shows only self-review rubric assignments
+
+Each table displays:
+- Submitter information
+- Assignee details
+- Due dates (in the course's configured timezone)
+- Review status (Not Started, In Progress, Completed)
+- Rubric and review round (grading reviews only)
+
+You can filter, sort, and export review assignments to CSV for external tracking.
+
+### Editing Individual Review Assignments
+
+Click the edit icon on any review assignment row to modify:
+
+- **Due date**: Set or update the deadline for completing the review
+- **Assignee**: Reassign the review to a different grader (grading reviews only)
+
+For self-review assignments, only the due date can be edited since self-reviews are always assigned to the student who submitted.
+
+### Bulk Editing Review Due Dates
+
+Use the "Bulk edit grading due dates" or "Bulk edit self-review due dates" buttons to update multiple review assignments at once:
+
+1. Select a rubric from the dropdown (required)
+2. Choose a new due date and time
+3. Optionally check "Only rows not yet completed" to skip finished reviews
+4. Click "Apply to matching rows"
+
+The system will update all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately to ensure clarity.
+
+### Bulk Editing Review Due Dates
+
+Use the "Bulk edit grading due dates" or "Bulk edit self-review due dates" buttons to update multiple review assignments at once:
+
+1. Select a rubric from the dropdown (required)
+2. Choose a new due date and time
+3. Optionally check "Only rows not yet completed" to skip finished reviews
+4. Click "Apply to matching rows"
+
+The system will update all review assignments for the selected rubric that match your criteria, showing you how many rows were affected.
+
+## Student Overview Page
+
+The student overview page (accessible from "Manage" → "Students" → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance:
+
+### Student Information
+
+- **Email address**: The student's account email
+- **Lecture section**: If enrolled in a Canvas/SIS section, displays the section name, meeting times, and location
+- **Lab section**: Shows the lab section name, meeting times, location, and assigned section leaders
+
+### Assignments Table
+
+The assignments table shows all course assignments with the following information for the selected student:
+
+- **Title**: Assignment name (linked to submission if available)
+- **Group**: For group assignments, displays:
+  - Group name
+  - Other group members (excluding the viewed student)
+  - Group mentor (if assigned)
+- **Submission #**: Ordinal number of the submission (linked to submission page)
+- **Submission Time**: When the student submitted
+- **Autograder Score**: Automated test results
+- **Total Score**: Final grade out of maximum points
+- **Due Date**: Assignment deadline (with any student-specific adjustments)
+- **Adjust Due Date**: Quick access to modify the due date for this student
