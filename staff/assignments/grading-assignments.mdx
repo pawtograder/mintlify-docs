@@ -26,6 +26,28 @@ Pawtograder will automatically ensure that graders do not grade assignments that
   <img src="/images/staff/assignments/grading-assignments-1756052760269.png" alt="Grading Conflicts Dashboard showing declared conflicts and reasons" />
 </Frame>
 
+## Assigning Group Mentors
+
+For group assignments, you can assign mentors to student groups from the assignment's Groups management page. Each group can have one assigned mentor.
+
+1. Navigate to the assignment's **Groups** page
+2. Find the **Mentor** column in the groups table
+3. Select a grader or instructor from the dropdown for each group
+4. The mentor assignment is saved automatically
+
+Group mentors are displayed to students on their submission pages and in the group widget.
+
+### Assigning Grading to Group Mentors
+
+When using the bulk assign grading feature, you can automatically assign each group's submission to their assigned mentor:
+
+1. Select **Assign to group mentors** from the assignment mode dropdown
+2. The system will automatically assign each group's submission to the group's mentor
+3. Submissions without groups or without assigned mentors will be skipped
+4. Grading conflicts are automatically checked and respected
+
+This mode is useful for structured mentorship workflows where each mentor is responsible for grading their assigned groups.
+
 ## Assigning Grading Tasks
 
 Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assignments" page) allows instructors to assign grading tasks to staff in bulk. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the system automatically clears the completion timestamp so the new work appears in their pending work list.
@@ -62,7 +84,6 @@ Each group's submission is automatically assigned to the group's assigned mentor
 - Ideal for group projects with dedicated mentors
 
 ### Configuring Assignments
-
 The algorithm offers several assignment modes:
 
 - **By submission**: Split submissions between graders (assigning all selected rubric parts to each grader)
@@ -75,7 +96,6 @@ You can choose which rubric to assign (the "Grading Rubric" is the default, and 
 The algorithm will only operate over unassigned grading tasks. To support complex workflows, you can manually assign some subsets at a time (filtering by section or tag).
 
 To select assignees (for "By submission" and "By rubric part" modes), you can filter by role (e.g. graders, instructors, or both), and optionally filter by tag. The form will show which graders will be assigned, and you can manually override the selection of graders.
-
 ### Group Mentor Assignment
 
 When using the "Assign to group mentors" mode:
@@ -90,6 +110,36 @@ You can choose to reuse existing grading assignments (e.g. if you want to assign
 Lastly, you can choose to enforce that graders are **not** assigned to the same submission as they were on a prior assignment or rubric. This feature is useful to assign meta-graders, where the meta-grader is a different grader than the one who graded the submission.
 
 You will be able to preview the assignments before creating them, and can manually tweak them through the drag-and-drop interface.
+
+## Managing Repository Permissions
+
+For assignments with GitHub repositories, you can audit and fix repository permissions to ensure all group members have the correct access.
+
+### Fix Repository Permissions
+
+The **Fix Permissions** button on the Repositories page allows you to comprehensively audit and correct all assignment repository permissions:
+
+1. Navigate to the assignment's **Repositories** page
+2. Click the **Fix Permissions** button
+3. The system will:
+   - Audit all repositories for the assignment
+   - Compute the correct collaborator list from current group membership
+   - Enqueue permission sync jobs for each repository
+   - Skip repositories that haven't been created on GitHub yet
+   - Skip repositories where no students have confirmed GitHub usernames
+
+The button displays a summary showing:
+
+- Number of syncs enqueued
+- Repositories skipped (no usernames)
+- Repositories skipped (not ready)
+- Any errors encountered
+
+This feature is useful when:
+
+- Students join or leave groups after repository creation
+- GitHub permissions become out of sync with group membership
+- You need to verify all students have correct repository access
 
 ## Reassigning Grading Tasks
 
