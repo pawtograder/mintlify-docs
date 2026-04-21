@@ -118,7 +118,7 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["developers/intro", "developers/local-setup"]
+            "pages": ["developers/intro", "developers/local-setup", "developers/cli"]
           },
           {
             "group": "Feature Documentation",
