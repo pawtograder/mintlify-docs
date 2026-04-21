@@ -14,6 +14,27 @@ Pawtograder creates two GitHub teams for each class: a "staff" team and a "stude
 
 ### Repository Permissions Audit
 
+Instructors can audit repository permissions to ensure that all students and staff have the correct access to assignment repositories. This is particularly useful for:
+
+- Verifying that students have access to their repositories after group changes
+- Ensuring staff permissions are correctly configured
+- Troubleshooting access issues
+- Maintaining security by confirming no unauthorized access exists
+
+**To run a permissions audit:**
+
+1. Navigate to the assignment's settings page
+2. Click on "Repository Permissions Audit"
+3. Review the audit results showing current permissions for all repositories
+4. Identify any discrepancies or missing permissions
+5. Use the "Fix Permissions" button to automatically correct any issues
+
+The audit flow helps maintain the integrity of repository access, especially important when:
+- Students are added to or removed from groups
+- Group assignments are modified after release
+- Staff roles change during the semester
+- Troubleshooting student access problems
+
 If repository permissions become out of sync, instructors can use the **Fix Permissions** button on the assignment's repositories page to audit and correct all repository permissions:
 
 1. Navigate to the assignment's **Repositories** page
@@ -56,6 +77,37 @@ This feature ensures all students receive important fixes and updates without di
 Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
+
+### Improved Group Management
+
+When tweaking student groups after an assignment is released, Pawtograder provides improved resilience:
+
+- Group changes are processed more reliably
+- Repository permissions are automatically updated when groups change
+- Students are only notified of group assignments after the assignment is released (not during draft configuration)
+- Prevents premature notifications that could confuse students before an assignment goes live
+
+## Assignment Dashboard and Metrics
+
+The instructor dashboard for each assignment provides comprehensive metrics and insights into student progress and grading status:
+
+### Key Metrics Displayed
+
+- **Submission Statistics**: Total submissions, on-time vs late submissions, and submission rate
+- **Grading Progress**: Number of submissions graded, pending reviews, and completion percentage
+- **Student Engagement**: Active students, group formation status, and repository activity
+- **Autograder Results**: Pass rates, common failures, and test execution statistics
+
+### Assignment Overview
+
+The revamped assignment overview page provides instructors with:
+
+- **At-a-glance status**: Quick view of assignment health and progress
+- **Actionable insights**: Identify students who need help or follow-up
+- **Grading workflow**: Direct access to pending grading tasks and review assignments
+- **Timeline visualization**: See submission patterns and deadline adherence
+
+These metrics help instructors monitor assignment progress, identify issues early, and make data-driven decisions about extensions, additional support, or grading priorities.
 
 ### Group Mentors
 

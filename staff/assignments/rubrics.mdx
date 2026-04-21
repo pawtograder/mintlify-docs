@@ -40,6 +40,16 @@ When editing rubrics, you will be prompted to confirm before leaving the editor 
 - Each applied check creates a comment entry tied to a check with points and optional text.
 - For each criteria, the sidebar shows a running subtotal.
 
+### Artifact Rendering
+
+When grading submissions, artifacts (non-code files) are displayed with appropriate rendering:
+
+- **Markdown files** (`.md`, `.markdown`): Rendered with full formatting including headers, lists, links, and code blocks
+- **Plain text files** (`.txt`): Displayed as formatted text for easy reading
+- **Binary files**: Available for download
+
+This allows graders to provide feedback on documentation, reports, and other non-code deliverables directly within the grading interface. Annotation checks can target specific artifacts, enabling inline feedback on README files, design documents, and other text-based submissions.
+
 Recent usability improvements to the grading interface include enhanced annotation workflows, making it easier to apply feedback directly to code and artifacts.
 
 ### How Points Are Computed
@@ -304,6 +314,19 @@ The warning ensures you don't accidentally lose your work when editing complex r
 - Use `max_annotations` to prevent over-counting nitpicks.
 - Prefer options when the same check has graded tiers (e.g., Complete/Partial/Incomplete).
 - Use `student_visibility` to separate internal notes from student-facing feedback.
+
+## Editing Rubrics
+
+### Unsaved Changes Protection
+
+When editing rubrics, Pawtograder protects you from accidentally losing work:
+
+- If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears
+- The dialog warns you that unsaved changes will be lost
+- You can choose to stay on the page and save your changes, or discard them and leave
+- This prevents accidental data loss when navigating away or closing the browser tab
+
+**Best practice**: Save your rubric frequently while editing, especially after making significant changes to criteria or checks.
 
 ## Field Reference: Required vs Optional (with defaults)
 

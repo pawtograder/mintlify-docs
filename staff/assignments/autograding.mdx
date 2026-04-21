@@ -331,6 +331,43 @@ Build system integration guides for common programming languages.
 
 *Detailed documentation coming soon.*
 
+## AI-Powered Feedback with Feedbot
+
+Pawtograder includes Feedbot, an AI-powered feedback system that can provide automated feedback on student submissions. Feedbot integrates with various AI providers to generate contextual feedback based on rubric criteria and submission content.
+
+### Supported AI Providers
+
+Feedbot supports multiple AI providers for flexibility and cost optimization:
+
+- **OpenAI**: GPT-4 and other OpenAI models
+- **OpenRouter**: Access to multiple AI models through a single API, including:
+  - Anthropic Claude models
+  - Google Gemini models
+  - Meta Llama models
+  - And many others available through OpenRouter's unified interface
+
+### Configuring Feedbot
+
+To enable Feedbot for your course:
+
+1. Navigate to course settings
+2. Select "AI Feedback Configuration"
+3. Choose your preferred AI provider (OpenAI or OpenRouter)
+4. Enter your API credentials
+5. Configure feedback generation settings
+6. Enable Feedbot for specific assignments
+
+### Using OpenRouter
+
+OpenRouter provides access to a wide variety of AI models through a single API endpoint, making it easy to:
+
+- Compare different models for your use case
+- Switch between providers without code changes
+- Access models that may be more cost-effective for your needs
+- Use specialized models for specific feedback types
+
+To use OpenRouter with Feedbot, select "OpenRouter" as your provider and provide your OpenRouter API key in the configuration settings.
+
 ## Rerunning the Autograder
 
 When you need to regrade submissions (for example, after fixing a bug in the autograder), you can rerun the autograder on existing submissions:

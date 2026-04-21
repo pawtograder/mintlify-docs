@@ -89,6 +89,26 @@ Lastly, you can choose to enforce that graders are **not** assigned to the same 
 
 You will be able to preview the assignments before creating them, and can manually tweak them through the drag-and-drop interface.
 
+## Reassigning Grading Tasks
+
+If a grader is unable to complete their assigned grading tasks, instructors can reassign those tasks to a different grader. Pawtograder handles reassignment intelligently to ensure work appears correctly in graders' pending lists.
+
+**To reassign a grading task:**
+
+1. Navigate to the assignment's "Grading Assignments" page
+2. Find the submission or rubric part that needs reassignment
+3. Select the new grader from the reassignment interface
+4. Confirm the reassignment
+
+**How reassignment works:**
+
+- When reassigning a rubric part to a grader who already completed a different part for the same submission, the system resets the completion status for the new assignment
+- The new grading task appears in the grader's pending work list
+- Previously completed work by the original grader is preserved
+- The new grader can view all previous feedback while completing their assigned part
+
+This ensures that reassigned work is properly tracked and appears in the correct grader's queue, even when graders have partial completion on the same submission.
+
 ## Repository Permissions Audit
 
 Pawtograder provides a "Fix Repository Permissions" button on the Repositories page that allows instructors to audit and correct GitHub repository permissions for all assignment repositories in a single operation.
