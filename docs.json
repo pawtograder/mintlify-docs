@@ -121,6 +121,10 @@
             "pages": ["developers/intro", "developers/local-setup", "developers/cli"]
           },
           {
+            "group": "Tools",
+            "pages": ["developers/cli"]
+          },
+          {
             "group": "Feature Documentation",
               "group": "Operations",
               "group": "Updates",

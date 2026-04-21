@@ -127,6 +127,10 @@ npm run cli -- whoami
 npm run cli -- logout
 ```
 
+## Classes
+
+### List all classes
+
 ## Available commands
 
 ## Commands
@@ -138,6 +142,39 @@ List all classes you have access to:
 ```bash
 npm run cli -- classes list
 ```
+
+### Show class details
+
+```bash
+npm run cli -- classes show <identifier>
+```
+
+The identifier can be a class ID, slug, or name.
+
+## Assignments
+
+### List assignments
+
+```bash
+npm run cli -- assignments list --class <identifier>
+```
+
+### Show assignment details
+
+```bash
+npm run cli -- assignments show <identifier> --class <identifier>
+```
+
+### Copy assignments
+
+Copy assignments between classes with support for single assignment, bulk copy, or schedule-based copy:
+
+```bash
+# Copy single assignment
+npm run cli -- assignments copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --assignment hw1
 
 Show details for a specific class:
 
@@ -186,6 +223,42 @@ npm run cli -- assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --schedule schedule.csv \
+--workdir /tmp/pawtograder-repos
+```
+
+The `--workdir` is required for repository content copying (handout and solution repos). The CLI uses local SSH git operations to avoid Supabase timeout limits.
+
+**Options:**
+- `--dry-run` - Preview changes without making them
+- `--skip-repos` - Skip repository operations
+- `--skip-rubrics` - Skip rubric copying
+- `--skip-surveys` - Skip survey copying
+- `--concurrency <n>` - Parallel clone operations (1-8, default 4)
+- `--delay-ms <n>` - Delay between clone batches
+
+### Delete assignment
+
+```bash
+npm run cli -- assignments delete <identifier> --class <identifier>
+```
+
+Use `--force` to skip confirmation prompt.
+
+## Rubrics
+
+### List rubrics
+
+```bash
+npm run cli -- rubrics list --assignment <identifier> --class <identifier>
+```
+
+### Export rubric
+
+```bash
+npm run cli -- rubrics export \
+  --assignment hw1 \
+  --class cs3500 \
+
 --workdir /tmp/repos
 
 # Delete an assignment
@@ -278,6 +351,15 @@ npm run cli -- rubrics import \
   --file hw1-rubric.yml \
   --type grading
 ```
+
+Use `--dry-run` to preview changes.
+
+## Surveys
+
+### Copy surveys
+
+```bash
+# Copy single survey
 
 Use `--dry-run` to preview the import without making changes.
 ### Surveys
@@ -427,6 +509,24 @@ npm run cli -- flashcards copy \
   --all
 ```
 
+## Repository Operations
+
+Repository commands use local SSH git operations for reliability and performance.
+
+### List repositories
+
+```bash
+npm run cli:repos -- list --class <identifier> --assignment <identifier>
+```
+
+### Sync grade workflow
+
+Synchronize `.github/workflows/grade.yml` from the handout repository to all student repositories:
+
+```bash
+npm run cli:repos -- sync-grade-workflow \
+  --class cs3500 \
+
 ### List submissions for grading
 
 ```bash
@@ -558,6 +658,19 @@ npm run cli:repos -- sync-grade-workflow \
   --workdir /tmp/pawtograder-repos
 ```
 
+**Options:**
+- `--dry-run` - Preview changes only
+- `--concurrency <n>` - Parallel operations (1-8, default 2)
+- `--delay-ms <n>` - Delay between batches
+
+### Cross-assignment repository copy
+
+Copy files from source assignment repositories to target assignment repositories after the source due date:
+
+```bash
+npm run cli:repos -- copy-after-source-due \
+  --class cs3500 \
+
 This command:
 1. Fetches the canonical `.github/workflows/grade.yml` from the handout repository
 2. Clones all student repositories locally via SSH
@@ -578,6 +691,36 @@ npm run cli:repos -- copy-after-source-due \
   --target-assignment hw2 \
   --workdir /tmp/pawtograder-repos
 ```
+
+**Options:**
+- `--dry-run` - Preview with rsync -n only
+- `--mirror-delete` - Pass rsync --delete (excludes .git)
+- `--concurrency <n>` - Parallel operations (1-8, default 2)
+- `--delay-ms <n>` - Delay between batches
+
+## Submissions
+
+### Import comments
+
+Batch import submission comments from autograder results:
+
+```bash
+npm run cli -- submissions comments import \
+  --class cs3500 \
+  --assignment hw1 \
+  --file batch-results.json \
+  --author-profile-id <uuid>
+```
+
+Use `--rubric-part-id` instead of `--author-profile-id` to use review assignment assignees as authors.
+
+### Import artifacts
+
+Upload submission artifact blobs:
+
+```bash
+npm run cli -- submissions artifacts import \
+  --class cs3500 \
 
 This is useful for sequential assignments where students build on previous work. The CLI:
 1. Verifies the source assignment due date has passed
@@ -604,6 +747,29 @@ npm run cli -- submissions artifacts import \
   --file manifest.json \
   --batch-size 5
 ```
+
+**Options:**
+- `--overwrite` - Replace existing artifacts with same name
+- `--dry-run` - Preview counts only
+- `--batch-size <n>` - Artifacts per API request (default 5)
+
+## Environment Variables
+
+### HTTP Timeout
+
+For large operations (artifact imports, assignment copies), increase the timeout:
+
+```bash
+export PAWTOGRADER_HTTP_TIMEOUT_MS=600000  # 10 minutes
+```
+
+### Debug Logging
+
+Enable verbose HTTP logging:
+
+```bash
+export DEBUG=1
+npm run cli -- <command>
 
 The manifest is a JSON file with this structure:
 
@@ -741,6 +907,22 @@ npm run cli:repos -- list --class <id> --assignment <id>
 ```
 
 ## Error Handling
+
+The CLI provides detailed error messages:
+
+- **401 Unauthorized**: Token expired or revoked - run `pawtograder login`
+- **403 Forbidden**: Token lacks required scopes (cli:read or cli:write)
+- **504 Gateway Timeout**: Operation took too long - increase timeout or use smaller batches
+
+For assignment copy operations, the CLI validates and fixes existing assignments on retry, so you can safely re-run failed commands.
+
+## Best Practices
+
+1. **Use dry-run first**: Preview changes with `--dry-run` before executing
+2. **Export backups**: Export rubrics before importing new versions
+3. **Batch size**: For artifact imports, use smaller `--batch-size` if requests timeout
+4. **Workdir**: Use a dedicated directory for `--workdir` to avoid conflicts
+5. **Concurrency**: Start with default concurrency and adjust based on network performance
 
 The CLI provides detailed error messages and context:
 
