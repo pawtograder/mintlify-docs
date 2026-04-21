@@ -16,6 +16,17 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Test Insights and Error Explorer
+
+Pawtograder provides powerful test insights to help instructors identify and address common student errors:
+
+- **Error Explorer**: View grouped test failures across all submissions to identify patterns
+- **Regrade Workflow**: Launch regrading directly from the error explorer with preselected submissions
+- **Email Export**: View and copy affected students' emails from error groups for targeted communication
+- **Flexible Regrade Options**: Choose specific commits or manual SHA in a regrade dialog with auto-promote functionality
+
+These tools help instructors quickly identify widespread issues and efficiently regrade submissions when autograder configurations are updated.
+
 ## Rerunning the Autograder
 
 Instructors can rerun the autograder on student submissions when needed. The enhanced rerun feature allows you to:
@@ -57,3 +68,20 @@ Launch targeted regrades directly from the error explorer:
 4. **Auto-promote**: Optionally promote the regrade results automatically
 
 This workflow streamlines the process of fixing grading issues and re-evaluating student work without manual submission selection.
+
+## Rerunning the Autograder
+
+Instructors can rerun the autograder on student submissions when needed. This is useful for:
+
+- Testing autograder changes before applying them to all submissions
+- Debugging grading issues
+- Updating scores after fixing autograder bugs
+
+### Enhanced Rerun Features
+
+When rerunning the autograder, you can:
+
+- **Reuse the same submission**: The rerun updates the existing submission rather than creating a new one, preserving the submission history and student's active submission status
+- **Select grader version**: Choose which version of the grader to use for the rerun, allowing you to test new grader versions or revert to previous versions
+
+This flexibility ensures you can iterate on your autograder configuration without disrupting student submissions or creating confusion with multiple submission entries.
