@@ -62,6 +62,30 @@ Lastly, you can choose to enforce that graders are **not** assigned to the same 
 
 You will be able to preview the assignments before creating them, and can manually tweak them through the drag-and-drop interface.
 
+## Repository Permissions Audit
+
+Pawtograder provides a "Fix Repository Permissions" button on the Repositories page that allows instructors to audit and correct GitHub repository permissions for all assignment repositories in a single operation.
+
+This feature is useful when:
+- Students join or leave groups after repositories have been created
+- Repository permissions become out of sync with group membership
+- You need to ensure all students have proper access to their assignment repositories
+
+The button will:
+- Check all repositories for the assignment
+- Verify that each repository has the correct collaborators based on current group membership
+- Enqueue permission sync jobs for repositories that need updates
+- Provide a summary of synced repositories, skipped repositories, and any errors
+
+## Grading Reassignment
+
+When a student submits a new version of their work after grading has begun, Pawtograder automatically handles the reassignment of grading tasks. The system will:
+
+- Move incomplete grading assignments to the new active submission
+- Preserve existing grading comments on the original submission
+- Reopen grading assignments so graders can review the new submission
+- Prevent data loss by detecting conflicts with existing grading work
+
 ## Grading Status Dashboard
 
 The grading status dashboard provides a comprehensive overview of grading progress across all assignments. Access it from the course navigation to see:

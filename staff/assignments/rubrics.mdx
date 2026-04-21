@@ -358,6 +358,17 @@ A check on one rubric can reference a check on another rubric. During grading, a
 - Show a student's self-review evidence next to the corresponding grading check.
 - Pull in meta-grading notes when doing final pass reviews.
 
+## Artifact Support
+
+Pawtograder supports rendering plaintext and Markdown artifacts in the submission file preview. When you configure a rubric check to target an artifact (using `annotation_target: artifact` and specifying the `artifact` field), graders can:
+
+- View plaintext artifacts with proper formatting
+- View Markdown artifacts with rendered formatting
+- Click on artifact links in the rubric sidebar to navigate directly to the artifact
+- Apply annotation checks to specific sections of artifacts
+
+This is particularly useful for grading documentation files, README files, or other text-based deliverables that students submit as artifacts.
+
 ## Individual and Assign-to-Student Grading Modes
 
 For group submissions, rubric parts can be configured with special grading modes to assess individual contributions:
