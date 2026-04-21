@@ -59,6 +59,21 @@ Instructors can create multiple office hours queues to provide different types o
 
 When configuring office hours queues, you can:
 
+- Set a course-level office hours description
+- Configure queue ordering using ordinal values
+- Create demo queues for testing purposes
+- Set up weekly schedules that display to students with live "Happening now" indicators
+
+### Student Access
+
+Students can access office hours through:
+
+1. **Get Help Button**: A persistent CTA that appears throughout the site
+2. **Help Drawer**: A right-side drawer showing:
+   - Office hours status card
+   - Per-queue cards with current staff availability
+   - Weekly queue schedule with live status highlights
+
 - **Set queue schedules**: Define when each queue is active throughout the week
 - **Mark queues as demo**: Demo queues appear in a separate section and use ordinal-based ordering
 - **Add course-level descriptions**: Provide context about your office hours system
@@ -170,6 +185,25 @@ Students can resolve their own help requests from the floating banner or main ch
 - **Other**: Other reason for closing the request
 
 This resolution flow helps track which help requests were successfully resolved vs. abandoned, providing valuable feedback for improving course support.
+
+## Request Validation
+
+Pawtograder includes conflict detection and validation for help requests:
+
+- **Solo request validation**: Prevents students from joining multiple solo office hours queues simultaneously
+- **Clearer error messages**: Students receive specific feedback when validation fails
+- **Improved UX**: The system provides clear guidance on resolving conflicts
+
+## Notifications
+
+Students receive comprehensive notifications for office hours updates:
+
+- **Browser notifications**: Desktop alerts for status changes and messages
+- **Title notifications**: Page title updates showing queue status
+- **Sound notifications**: Audio alerts for important events
+- **Favicon updates**: Visual indicators in the browser tab
+
+Students can test notifications and manage permissions from the help drawer. Permission warnings appear if browser notifications are disabled.
 
 ## Feedback and Analytics
 

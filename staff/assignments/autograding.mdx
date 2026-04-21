@@ -43,6 +43,32 @@ Build system integration guides for common programming languages.
 
 *Detailed documentation coming soon.*
 
+## Test Insights Dashboard
+
+The test insights dashboard helps you track student performance and identify common issues across submissions. Access it from the assignment page to view:
+
+### Error Explorer
+
+View and analyze test failures across all student submissions:
+
+- **Error grouping**: Automatically groups similar test failures together
+- **Affected students**: See which students are experiencing each error
+- **Email export**: Copy affected students' email addresses for bulk communication
+- **Global error pins**: Pin important errors to track them across assignments
+
+### Regrade Workflow
+
+Launch targeted regrades directly from the error explorer:
+
+1. **Select errors**: Choose which error groups need regrading
+2. **Preselect submissions**: The autograder page automatically preselects affected submissions
+3. **Regrade dialog**: Choose between:
+   - Specific commits from the repository history
+   - Manual SHA entry for precise version control
+4. **Auto-promote**: Optionally promote the regrade results automatically
+
+This workflow streamlines the process of fixing grading issues and re-evaluating student work without manual submission selection.
+
 ## Rerunning the Autograder
 
 Instructors can rerun the autograder on student submissions when needed. This is useful for:
