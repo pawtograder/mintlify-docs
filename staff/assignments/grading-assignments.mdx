@@ -6,7 +6,17 @@ icon: "users-gear"
 
 # Assigning Grading Tasks
 
-Pawtograder has a robust feature to allow instructors to assign grading tasks to staff. When a grading task is assigned, the instructor can set a due date for that task, and re-assign the task to a different grader if needed. Pawtograder will also automatically allow any other grader to complete the task if the original grader is unable to complete it (without needing to re-assign the task).
+Pawtograder has a robust feature to allow instructors to assign grading tasks to staff. When a grading task is assigned, the instructor can set a due date for that task, and re-assign the task to a different grader if needed. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the new work will appear in their pending work list. Pawtograder will also automatically allow any other grader to complete the task if the original grader is unable to complete it (without needing to re-assign the task).
+
+## Automatic Completion of Related Reviews
+
+When a grader completes their assigned review, Pawtograder automatically:
+
+- Marks other review assignments as complete if they cover the same or a subset of rubric parts
+- Completes the overall submission review when all required rubric checks are satisfied
+- Validates that uncovered rubric parts have no blocking requirements before marking the submission complete
+
+This reduces duplicate work when multiple graders are assigned to overlapping parts of the same submission.
 
 ## Conflicts of Interest
 
@@ -18,7 +28,7 @@ Pawtograder will automatically ensure that graders do not grade assignments that
 
 ## Assigning Grading Tasks
 
-Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assignments" page) allows instructors to assign grading tasks to staff in bulk.
+Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assignments" page) allows instructors to assign grading tasks to staff in bulk. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the system automatically clears the completion timestamp so the new work appears in their pending work list.
 
 <Frame>
   <img src="/images/staff/assignments/grading-assignments-1756052527424.png" alt="Bulk Assign Grading form with distribution options" />
@@ -62,6 +72,56 @@ The grading status dashboard provides a comprehensive overview of grading progre
 - **Completion rates**: Monitor overall grading progress
 
 This dashboard helps instructors identify bottlenecks, ensure equitable workload distribution, and track grading progress in real-time.
+
+The grading status dashboard provides a comprehensive overview of grading progress across all assignments. Use this dashboard to:
+
+- Monitor completion rates for assigned grading tasks
+- Track which graders are on schedule or falling behind
+- Identify bottlenecks in the grading workflow
+- View grading statistics across multiple assignments
+
+This helps instructors ensure timely feedback to students and manage grading workload effectively.
+
+The grading status dashboard provides instructors with a comprehensive overview of grading progress across all assignments. This dashboard helps you:
+
+- Monitor which assignments have pending grading tasks
+- Track completion rates for each grader
+- Identify bottlenecks in the grading workflow
+- View grading assignments by staff member or by assignment
+
+Access the grading status dashboard from the course navigation to get a real-time view of all grading activities and ensure timely completion of grading tasks.
+
+The Grading Status Dashboard provides instructors with a comprehensive overview of grading progress across all assignments. Access this dashboard to monitor:
+
+- **Completion rates**: Track how many submissions have been graded versus pending
+- **Grader workload**: See the distribution of grading tasks across staff members
+- **Due dates**: Monitor upcoming grading deadlines
+- **Assignment progress**: View grading status for each assignment at a glance
+
+This dashboard helps instructors identify bottlenecks, ensure equitable workload distribution, and keep grading on schedule.
+
+The grading status dashboard provides a comprehensive overview of grading progress for an assignment. Access it from the assignment page to monitor:
+
+- **Overall completion**: Track how many submissions have been graded
+- **Per-grader progress**: See individual grader workload and completion rates
+- **Rubric part breakdown**: Monitor progress on specific rubric components
+- **Due date tracking**: Identify overdue grading tasks
+- **Bottleneck identification**: Quickly spot where grading is falling behind
+
+This dashboard helps instructors ensure grading stays on track and identify when intervention or reassignment is needed.
+
+The **Grading Status Dashboard** provides a comprehensive overview of grading progress across your course. Access it from the assignment's grading page to see:
+
+- **Overall Progress**: Visual progress bars showing completion rates for each rubric part
+- **Grader Performance**: Individual grader statistics including assigned tasks, completed tasks, and completion rates
+- **Submission Status**: Track which submissions have been graded and which are still pending
+- **Due Date Tracking**: Monitor grading task deadlines and identify overdue assignments
+
+This dashboard helps instructors:
+- Identify bottlenecks in the grading process
+- Balance workload across graders
+- Follow up with graders who may need support
+- Ensure timely feedback delivery to students
 
 ## Managing Review Assignments
 
