@@ -1,0 +1,56 @@
+---
+title: "Repository Permissions"
+description: "Audit and fix GitHub repository permissions for assignment repositories"
+icon: "shield-check"
+---
+
+# Repository Permissions
+
+Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+
+## Fix Repository Permissions
+
+If you suspect that repository permissions are out of sync (for example, if students report they cannot access their repositories), you can use the **Fix Permissions** button to audit and correct all repository permissions for an assignment.
+
+### Using the Fix Permissions Tool
+
+1. Navigate to the assignment's **Repositories** page
+2. Click the **Fix Permissions** button in the top-right corner
+3. The system will:
+   - Audit all repositories for the assignment
+   - Identify the correct collaborators for each repository (based on current group membership)
+   - Enqueue permission sync jobs for each repository
+   - Display a summary of the results
+
+### Understanding the Results
+
+After running the fix, you'll see a summary showing:
+
+- **Synced**: Number of repositories where permissions were queued for update
+- **No usernames**: Repositories skipped because no students have confirmed GitHub usernames
+- **Not ready**: Repositories skipped because they haven't been created on GitHub yet
+- **Errors**: Number of repositories that encountered errors during the audit
+
+<Note>
+The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
+</Note>
+
+## When to Use Fix Permissions
+
+Use the Fix Permissions tool when:
+
+- Students report they cannot access their assignment repositories
+- After making bulk changes to group membership
+- After manually modifying groups outside of the normal workflow
+- As a preventive measure before an assignment deadline
+
+## How Permissions Are Managed
+
+Pawtograder automatically manages repository permissions when:
+
+- A new assignment is released (creates repositories with correct permissions)
+- Students join or leave groups (updates group repository permissions)
+- Groups are created or dissolved (creates/archives repositories)
+- Individual submissions are activated or deactivated
+
+The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
