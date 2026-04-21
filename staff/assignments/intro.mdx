@@ -12,6 +12,173 @@ Programming assignments are the core of Pawtograder. Each assignment consists of
 
 Pawtograder creates two GitHub teams for each class: a "staff" team and a "students" team. Staff are granted access to all class repositories, and students are only granted access to their own repositories. The "students" team can be used by instructors who want to create additional GitHub repositories that are only accessible to students (e.g. for distributing in-class exercises).
 
+### Repository Permissions Audit
+
+Instructors can audit repository permissions to ensure students have correct access to their assignment repositories. The permissions audit flow allows you to:
+
+1. Navigate to an assignment's settings page
+2. Click **Audit Repository Permissions**
+3. Review a list of all student repositories and their current GitHub permissions
+4. Identify any permission mismatches or access issues
+5. Automatically fix permission issues with a single click
+
+This feature is particularly useful after making changes to course enrollment or when troubleshooting student access issues.
+
+### Repository Analytics
+
+View analytics for assignment repositories to track student activity and engagement. Repository analytics provide insights into:
+
+- Commit frequency and patterns across all student repositories
+- Push activity over time
+- Repository creation and setup completion rates
+- Individual student repository activity
+
+Access repository analytics from the assignment dashboard to monitor student progress and identify students who may need additional support.
+
+Instructors can audit repository permissions to ensure that all students have the correct access to their assignment repositories. This feature helps identify and resolve permission issues that may prevent students from accessing their work.
+
+To access the permissions audit:
+
+1. Navigate to an assignment's page
+2. Click on the **Repository Permissions** tab
+3. Review the list of student repositories and their permission status
+4. Fix any permission issues by clicking the **Sync Permissions** button
+
+The audit flow displays:
+- Student/group names and their repository URLs
+- Current permission status (correct or needs attention)
+- Ability to bulk-fix permission issues
+
+This is particularly useful after making changes to group assignments or when students report access issues.
+
+### Repository permissions audit
+
+Instructors can audit repository permissions to ensure all students and staff have the correct access levels. The audit flow checks for missing or incorrect permissions and provides tools to fix any issues. This is particularly useful after adding new students to a course or when troubleshooting access problems.
+
+### Repository Permissions Audit
+
+Instructors can audit and fix repository permissions for all assignment repositories using the **Fix Repository Permissions** button on the assignment's Repositories page. This feature:
+
+- Validates that all group members have correct repository access
+- Enqueues permission sync jobs for each repository
+- Provides a summary of synced, skipped, and error repositories
+- Useful for resolving permission issues after group changes or student roster updates
+
+Instructors can audit repository permissions to ensure students have correct access to their assignment repositories:
+
+1. Navigate to the assignment's management page
+2. Click on "Audit Repository Permissions"
+3. The system will check all student repositories for the assignment
+4. Any permission issues will be identified and can be corrected
+5. This is useful for troubleshooting access issues or verifying permissions after group changes
+
+The audit flow helps maintain security and ensures students can access their work while preventing unauthorized access to other students' repositories.
+
+Instructors can audit repository permissions to ensure students have correct access:
+
+1. Navigate to the assignment's management page
+2. Access the repository permissions audit tool
+3. Review which students have access to which repositories
+4. The system automatically ensures:
+   - Students have access to their own repositories
+   - Group members have access to their group's repository
+   - Staff have access to all repositories
+   - Permissions are updated when group membership changes
+
+The audit flow helps identify and resolve permission issues, ensuring students can access their work and submit assignments without delays.
+
+Instructors can audit repository permissions to ensure students have correct access to their assignment repositories:
+
+1. Navigate to an assignment's settings page
+2. Click **Audit Repository Permissions** in the GitHub section
+3. The system will scan all student repositories for this assignment
+4. A report displays:
+   - Students with correct permissions (green checkmark)
+   - Students missing repository access (red warning)
+   - Students with incorrect permission levels (yellow warning)
+5. Click **Fix All Issues** to automatically correct permission problems
+6. Or click **Fix** next to individual students to correct specific issues
+
+**Common permission issues detected:**
+
+- Student removed from their repository
+- Incorrect permission level (e.g., read instead of write)
+- Repository not created for enrolled student
+- Student still has access after dropping the course
+
+The audit flow helps maintain repository security and ensures all students can access their work. Run audits periodically, especially after:
+
+- Adding or removing students from the course
+- Changing group assignments
+- Students reporting access issues
+
+1. Navigate to the assignment's settings page
+2. Click **Audit Repository Permissions**
+3. The system will check all student repositories for:
+   - Missing repository access
+   - Incorrect permission levels
+   - Orphaned permissions from dropped students
+4. Review the audit results showing any permission issues
+5. Click **Fix Issues** to automatically correct any problems found
+
+The audit flow helps maintain security and ensures students can access their work, especially after:
+- Students join or drop the course
+- Group assignments are created or modified
+- Repository permissions are manually changed outside Pawtograder
+
+<Note>
+Run the permissions audit if students report being unable to access their repositories or if you've made manual changes to GitHub teams.
+</Note>
+
+Instructors can audit repository permissions to ensure students have appropriate access to their assignment repositories:
+
+1. Navigate to an assignment's settings page
+2. Click **Audit Repository Permissions**
+3. The system checks all student repositories for the assignment
+4. View a report showing:
+   - Students with correct repository access
+   - Students missing repository access
+   - Any permission mismatches or issues
+5. Click **Fix Permissions** to automatically correct any detected issues
+
+This is particularly useful for:
+- Verifying permissions after group assignments are formed
+- Ensuring students aren't notified of group assignments before release
+- Troubleshooting student access issues
+- Maintaining security and privacy of student work
+
+The audit flow improves the resilience of group management by detecting and correcting permission issues before they affect students.
+
+Instructors can audit repository permissions to ensure that all students and staff have the correct access to assignment repositories. This is particularly useful for:
+
+- Verifying that students have access to their repositories after group changes
+- Ensuring staff permissions are correctly configured
+- Troubleshooting access issues
+- Maintaining security by confirming no unauthorized access exists
+
+**To run a permissions audit:**
+
+1. Navigate to the assignment's settings page
+2. Click on "Repository Permissions Audit"
+3. Review the audit results showing current permissions for all repositories
+4. Identify any discrepancies or missing permissions
+5. Use the "Fix Permissions" button to automatically correct any issues
+
+The audit flow helps maintain the integrity of repository access, especially important when:
+- Students are added to or removed from groups
+- Group assignments are modified after release
+- Staff roles change during the semester
+- Troubleshooting student access problems
+
+If repository permissions become out of sync, instructors can use the **Fix Permissions** button on the assignment's repositories page to audit and correct all repository permissions:
+
+1. Navigate to the assignment's **Repositories** page
+2. Click the **Fix Permissions** button
+3. The system will audit all repositories and enqueue permission syncs as needed
+4. View the summary showing synced repositories, skipped repositories, and any errors
+
+This feature ensures all group members have correct access to their group repositories and removes access for students who have left groups.
+
 ## Repositories
 
 Two repositories are automatically created for each assignment: a "handout" repository and a "grader" repository. These repositories must be configured by the staff before the assignment is released.
@@ -19,6 +186,49 @@ Two repositories are automatically created for each assignment: a "handout" repo
 A **handout repository** is a repository that contains the starter code for an assignment. It is used to provide students with the necessary files to complete the assignment.
 
 A **grader repository** is a repository that contains the code that will be used to grade the assignment. It is used to provide instructors with the necessary files to grade the assignment.
+
+Instructors can view repository analytics to track student activity, including commit frequency, file changes, and collaboration patterns across assignment repositories.
+
+### Repository Analytics
+
+Instructors can view analytics for assignment repositories to track student activity and engagement. The repository analytics feature provides insights into:
+
+- Commit frequency and patterns across all student repositories
+- Individual student repository activity
+- Push timing relative to assignment deadlines
+- Repository creation and setup status
+
+To access repository analytics:
+
+1. Navigate to an assignment's page
+2. Click on the **Repository Analytics** tab
+3. View aggregate statistics and individual repository metrics
+
+This helps instructors identify students who may need additional support or who are struggling to get started with an assignment.
+
+### Repository analytics
+
+Instructors can view analytics for assignment repositories, including commit activity, file changes, and collaboration patterns. This helps track student engagement and identify potential issues with repository setup or permissions.
+
+### Syncing Handout Updates
+
+When you need to push updates from the handout repository to student repositories (for example, to fix a bug in starter code), Pawtograder provides a sync-to-handout feature. The system has been improved for better resilience:
+
+- **Automatic retry logic**: Failed syncs are automatically retried
+- **Conflict detection**: The system detects and reports merge conflicts
+- **Selective sync**: Choose which students receive the update
+- **Status tracking**: Monitor sync progress across all student repositories
+
+This ensures that updates reach all students reliably, even in cases of temporary network issues or repository conflicts.
+
+After an assignment is released, you may need to update the handout repository to fix bugs or add clarifications. Pawtograder provides a sync-to-handout feature that:
+
+- Pushes updates from the handout repository to all student repositories
+- Includes improved resilience to handle edge cases and errors
+- Preserves student work while merging in your changes
+- Notifies students of the updates
+
+This feature ensures all students receive important fixes and updates without disrupting their work in progress.
 
 ## Individual and Group Assignments
 
@@ -28,9 +238,505 @@ Instructors can reuse a set of groups from a prior assignment.
 
 You can export group information to CSV, which includes student names and emails in the format "Name <email>" for easy communication with group members. The export also includes mentor information if mentors are assigned to groups.
 
+### Exporting Group and Student Data
+
+For group assignments, you can export group composition data to CSV format. The export includes:
+
+- **Group Export**: Group name, student names with emails (in "Name <email>" format), and mentor/grader name with email
+- **Student Export**: Individual student information including email addresses in the same "Name <email>" format
+
+Exported CSV files use UTF-8 encoding with BOM for Excel compatibility and include proper escaping to prevent formula injection. Rows are sorted alphabetically for consistent exports.
+
+You can export group and student information to CSV for external use:
+
+- **Group Export**: Includes group name, student names with emails, and mentor name with email in the format `Name <email>`
+- **Student Export**: Includes student information with emails in the same `Name <email>` format
+
+Exported CSV files use UTF-8 encoding with BOM for compatibility with Excel and other spreadsheet applications.
+
+You can export group and student information to CSV format for external analysis or record-keeping. The exports include:
+
+- **Group Export**: Includes columns for GroupName, StudentNames (in "Name <email>" format), and MentorName (if applicable, also in "Name <email>" format)
+- **Student Export**: Includes student information with emails in the same "Name <email>" format
+
+All exports use UTF-8 encoding with BOM for proper Excel compatibility and include formula-safe CSV escaping to prevent injection attacks.
+
+### Exporting Group Information
+
+You can export group rosters to CSV for record-keeping or external processing. The export includes:
+
+- **Group Export**: Group name, student names and emails, and mentor name and email (if assigned)
+- **Student Export**: Student information including email addresses in "Name <email>" format
+
+Both exports use UTF-8 encoding with BOM for Excel compatibility and include formula-safe CSV escaping.
+
+### Group Management Features
+
+**Exporting Group Data**: You can export group information to CSV format, which includes:
+- Group name
+- Student names and email addresses (in "Name <email>" format)
+- Mentor name and email address (if assigned)
+
+The CSV export uses UTF-8 encoding with BOM for Excel compatibility and includes formula-safe escaping for security.
+
+**Individual Grading within Groups**: For group assignments, you can configure individual grading to allow different grades for each group member. This is useful for peer evaluation or when group members contribute differently to the project.
+
+## Repository Analytics
+
+Pawtograder provides analytics for assignment repositories to help you understand student engagement and progress. You can view:
+
+- **Commit history**: See when students are making commits to their repositories
+- **Activity patterns**: Identify students who may be starting late or struggling with the assignment
+- **Repository statistics**: View metrics about code changes and development activity
+
+These analytics help instructors identify students who may need additional support and understand overall class progress on assignments.
+
+### Exporting Group Data
+
+You can export group information to CSV for external analysis or record-keeping. The export includes:
+
+- **Group name**: The name of each group
+- **Student names and emails**: All students in the group in "Name <email>" format
+- **Mentor name and email**: The assigned mentor (if any) in "Name <email>" format
+
+The CSV export uses UTF-8 encoding with BOM for Excel compatibility and includes formula-safe escaping to prevent CSV injection attacks. Rows are sorted alphabetically by group name for consistent exports.
+
+Similarly, when exporting student data for an assignment, the student column includes email addresses in the same "Name <email>" format for easy communication and identification.
+
+### Group Individual Grading
+
+For group assignments, instructors can assign different grades to individual group members when needed. This allows for fair grading when group members contribute unequally or when individual performance needs to be assessed separately from the group submission. Individual grades can be set through the gradebook interface, overriding the default group grade for specific students.
+
+## Repository Analytics
+
+Pawtograder provides analytics for assignment repositories to help instructors understand student engagement and progress. You can view commit activity, contribution patterns, and repository statistics for individual students or across the entire class. This helps identify students who may need additional support or who are making exceptional progress.
+
+Repository analytics include:
+- Commit frequency and timing
+- Lines of code added/removed
+- File modification patterns
+- Contribution graphs over time
+
+You can export group information to CSV format, which includes student and mentor email addresses. The export includes:
+
+- **Group export**: Columns for GroupName, StudentNames (in "Name <email>" format), and MentorName (in "Name <email>" format)
+- **Student export**: Student column includes email in "Name <email>" format
+
+The CSV export uses UTF-8 encoding with BOM for proper character support and includes formula-safe escaping to prevent CSV injection attacks.
+
+### Exporting Group Information
+
+You can export group information to CSV for record-keeping or external analysis. The export includes:
+
+- **Group export**: Columns for GroupName, StudentNames (with emails), and MentorName (with email) in the format "Name <email>"
+- **Student export**: Student column includes email in the same "Name <email>" format
+
+Exports use UTF-8 encoding with BOM for proper character handling and include formula-safe CSV escaping for security.
+
+For group assignments, instructors can enable individual grading to allow separate evaluation of each group member's contribution while maintaining the group submission structure.
+
+For group assignments, instructors can enable individual grading within groups. This allows each group member to receive a separate grade while still working together on the same submission. When individual grading is enabled, graders can assign different scores to each group member based on their individual contributions.
+
+### Group Individual Grading
+
+For group assignments, instructors can enable individual grading to assess each group member's contribution separately. This feature allows:
+
+- Assigning different grades to different members of the same group
+- Tracking individual performance within collaborative projects
+- Providing personalized feedback to each group member
+
+When individual grading is enabled for a group assignment, instructors can grade each student's contribution independently while still maintaining the group submission structure. This is useful for peer evaluation scenarios or when group members have significantly different levels of contribution.
+
+## Empty Submission Detection
+
+Pawtograder automatically detects when students submit code that matches the handout (starter) files exactly. This helps identify students who may have forgotten to commit their changes before submitting.
+
+When creating an assignment, you can choose whether to:
+
+- **Permit empty submissions** (default): Students can submit even if their files match the handout exactly. The submission is flagged as empty but accepted.
+- **Reject empty submissions**: Students receive an error message asking them to commit their changes. The submission is automatically removed.
+
+<Note>
+Instructors and graders can always submit, even when empty submissions are prohibited. This prevents breaking staff testing workflows.
+</Note>
+
+Empty submission detection works by:
+1. Computing SHA-256 hashes of all expected submission files from the handout repository
+2. Comparing submitted files against all recorded handout versions
+3. Flagging submissions that match any handout version
+
+### Managing Student Groups
+
+The group management interface allows instructors to:
+
+- Create and modify student groups
+- Move students between groups
+- Adjust group sizes and composition
+- View group formation status
+
+**Important**: Students are not notified about group assignments until the assignment is released. This allows instructors to:
+- Prepare groups in advance without alerting students
+- Make adjustments before the assignment goes live
+- Avoid confusion from premature notifications
+
+The group management UI is designed to be resilient, allowing you to make changes even when there are temporary issues with repository creation or permissions.
+
+### Improved Group Management
+
+When tweaking student groups after an assignment is released, Pawtograder provides improved resilience:
+
+- Group changes are processed more reliably
+- Repository permissions are automatically updated when groups change
+- Students are only notified of group assignments after the assignment is released (not during draft configuration)
+- Prevents premature notifications that could confuse students before an assignment goes live
+
+## Assignment Dashboard and Metrics
+
+The instructor dashboard for each assignment provides comprehensive metrics and insights into student progress and grading status:
+
+### Key Metrics Displayed
+
+- **Submission Statistics**: Total submissions, on-time vs late submissions, and submission rate
+- **Grading Progress**: Number of submissions graded, pending reviews, and completion percentage
+- **Student Engagement**: Active students, group formation status, and repository activity
+- **Autograder Results**: Pass rates, common failures, and test execution statistics
+
+### Assignment Overview
+
+The revamped assignment overview page provides instructors with:
+
+- **At-a-glance status**: Quick view of assignment health and progress
+- **Actionable insights**: Identify students who need help or follow-up
+- **Grading workflow**: Direct access to pending grading tasks and review assignments
+- **Timeline visualization**: See submission patterns and deadline adherence
+
+These metrics help instructors monitor assignment progress, identify issues early, and make data-driven decisions about extensions, additional support, or grading priorities.
+
+### Group Mentors
+
+Instructors can assign mentors to student groups from the Groups management page. Group mentors:
+
+- Are displayed to students in the group information
+- Can be automatically assigned to grade their groups' submissions using the "Assign to group mentors" bulk grading mode
+- Are shown in the groups CSV export for tracking purposes
+
+To assign a mentor to a group, navigate to the assignment's Groups page and select a grader or instructor from the Mentor dropdown for each group.
+
+## Empty Submission Detection
+
+Pawtograder automatically detects empty submissions to help identify students who may need assistance. When a submission contains no meaningful content, it is flagged for instructor review, making it easier to reach out to students who might be struggling with the assignment.
+
+### Group Mentors
+
+Instructors can assign mentors to student groups from the groups management page:
+
+1. Navigate to the assignment's **Groups** page
+2. Use the **Mentor** dropdown for each group to assign a grader or instructor
+3. Mentors are displayed to students in their group details
+4. Use the "Assign to group mentors" bulk grading mode to automatically assign submissions to their group's mentor
+5. Group mentor assignments are preserved when copying groups between assignments
+
 ## Due Date Exceptions
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
 Each token can be exchanged for a 24-hour extension, but the extension must be requested before the student's original due date.
 
+Instructors and graders can also manually grant extensions to students, gift additional late tokens to individual students, and view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions". For group assignments, due date exceptions can be applied to the entire group.
+
+Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions". For group assignments, due date exceptions are properly applied at the group level to ensure all group members receive the same extension.
+
 Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+### Self-Review Deadlines
+
+When an assignment's due date is extended (either through late tokens or instructor exceptions), self-review deadlines are automatically adjusted to maintain the appropriate time window for students to complete their self-reviews.
+
+## Time Zone Support
+
+Pawtograder supports configurable time zones for displaying assignment deadlines and other time-sensitive information. Instructors can set a default time zone for the course, and individual users can configure their preferred time zone in their settings. This ensures that all deadlines are displayed accurately regardless of where students and staff are located.
+
+## Assignment Analytics
+
+Pawtograder provides repository analytics for assignments, allowing instructors to track student engagement with their assignment repositories. This includes commit history, activity patterns, and other metrics that help instructors understand how students are working on their assignments.
+
+## Repository Analytics
+
+Pawtograder provides analytics for assignment repositories, allowing instructors to track student activity and engagement with their code repositories. Repository analytics include:
+
+- Commit history and frequency
+- Code contribution patterns
+- Repository activity timelines
+- Collaboration metrics for group assignments
+
+These analytics help instructors identify students who may need additional support and understand how students are approaching their assignments over time.
+
+### Gifting Late Tokens
+
+Instructors can gift additional late tokens to individual students beyond the class-wide allocation. Gifted tokens:
+
+- Are added to the student's available token balance
+- Can be used just like regular late tokens
+- Display correctly in the student's remaining token count
+- Allow students who have exhausted their initial tokens to still request extensions
+
+This feature is useful for accommodating special circumstances or rewarding exceptional participation.
+
+For group assignments, due date exceptions are properly tracked at the group level. When viewing a group submission, instructors can adjust the due date for the entire group, ensuring all group members receive the same extension.
+
+## Instructor Dashboard and Metrics
+
+The instructor dashboard provides comprehensive metrics and analytics for each assignment:
+
+### Assignment Overview
+
+The assignment overview page displays key metrics including:
+
+- **Submission Statistics**: Total submissions, on-time vs late submissions, and submission trends over time
+- **Grading Progress**: Number of submissions graded, pending reviews, and grading completion percentage
+- **Student Engagement**: Repository activity, commit frequency, and active students
+- **Autograder Results**: Pass rates, common failures, and test performance across submissions
+
+### Grading Status Tracking
+
+Track the progress of grading assignments with detailed views:
+
+- **Incomplete Reviews**: See which submissions still need grading
+- **Grader Workload**: View distribution of grading assignments across TAs
+- **Review Completion**: Monitor which graders have completed their assigned work
+- **Bulk Actions**: Complete multiple reviews at once when appropriate
+
+### Using the Dashboard
+
+1. Navigate to an assignment from the assignments list
+2. View the overview tab for high-level metrics
+3. Click into specific metrics for detailed breakdowns
+4. Use filters to focus on specific sections, groups, or graders
+5. Export data for external analysis if needed
+
+<Tip>
+The dashboard updates in real-time as students submit work and graders complete reviews, giving you an up-to-date view of assignment progress.
+</Tip>
+
+The instructor dashboard provides comprehensive metrics and overview information for each assignment, including:
+
+- Submission statistics and completion rates
+- Grading progress tracking across all submissions
+- Assignment overview with key metrics at a glance
+- Visual indicators for incomplete work and pending reviews
+
+This dashboard helps instructors monitor assignment progress, identify bottlenecks in the grading process, and ensure timely completion of all grading tasks.
+
+## Assignment Security Dashboard
+
+The assignment security dashboard helps instructors monitor and detect potential academic integrity issues. Access it from the assignment page to:
+
+- **Detect suspicious patterns**: Identify unusual submission timing or behavior
+- **Monitor repository access**: Track who has accessed student repositories
+- **Review submission history**: See detailed commit and push patterns
+- **Flag potential issues**: Mark submissions for further review
+
+This dashboard provides instructors with tools to maintain academic integrity while respecting student privacy.
+
+## Leaderboard
+
+Assignments can optionally include a leaderboard to display student rankings based on autograder scores. The leaderboard feature:
+
+- Shows top-performing submissions in real-time
+- Can be enabled or disabled per assignment
+- Helps reduce clutter when not needed for competitive assignments
+- Encourages friendly competition when enabled
+
+Instructors can toggle the leaderboard on or off in the assignment settings to match the pedagogical goals of each assignment.
+
+When granting extensions, instructors can now choose an extended due date directly using a date picker, rather than entering extension hours and minutes. This makes it easier to set specific deadlines for individual students.
+
+## Assignment Leaderboard
+
+Assignments can include an optional leaderboard feature that displays student rankings based on their scores. This feature:
+
+- Can be enabled or disabled per assignment
+- Shows student rankings in a less cluttering way
+- Helps motivate students through friendly competition
+- Is configurable to match your course's pedagogical goals
+
+Instructors can control whether the leaderboard is visible to students and customize its display settings.
+
+## Score Capping
+
+Instructors can set a maximum score cap for assignments. This feature allows you to:
+
+- Limit the maximum points a student can earn on an assignment
+- Prevent extra credit from inflating grades beyond a certain threshold
+- Maintain consistent grading scales across assignments
+
+Score capping is configured per assignment and applies after all autograder and handgrading scores are calculated.
+
+Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. When granting extensions, you can now choose an extended due date directly rather than entering hours and minutes, making it easier to set precise deadlines.
+
+## Assignment Dashboards
+
+Pawtograder provides several dashboards to help you monitor and manage assignments:
+
+### Grading Status Dashboard
+
+The grading status dashboard gives you a comprehensive overview of grading progress across all submissions:
+
+- View completion status for each grading task
+- Track which submissions have been graded and which are pending
+- Monitor grader workload and progress
+- Identify bottlenecks in the grading workflow
+
+### Security Dashboard
+
+The assignment security dashboard helps you detect and prevent academic integrity issues:
+
+- Monitor for suspicious patterns in submissions
+- Track repository access and commit patterns
+- Identify potential collaboration or copying concerns
+- Review security audit logs for each assignment
+
+### Test Insights Dashboard
+
+The test insights dashboard provides detailed analytics on student performance:
+
+- View aggregated test results across all submissions
+- Identify common errors and failure patterns
+- Track which test cases students struggle with most
+- Export affected student emails for targeted communication
+- Launch regrading workflows directly from error groups
+
+Use the test insights dashboard to understand where students need additional support and to improve your assignments over time.
+
+Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+### Extension Date Picker
+
+When granting manual extensions, instructors can now choose the extended due date directly using a date picker interface, rather than entering extension hours and minutes. This makes it easier to:
+
+- Set precise extension deadlines
+- Avoid calculation errors when determining extension duration
+- Quickly grant extensions to specific dates (e.g., "extend until next Monday")
+
+## Assignment Leaderboard
+
+Assignments can include an optional leaderboard feature that displays student rankings based on performance metrics:
+
+- **Configurable visibility**: Choose whether to show or hide the leaderboard
+- **Less cluttering option**: Make the leaderboard less prominent in the UI
+- **Performance tracking**: Display rankings based on scores or custom metrics
+- **Automatic updates**: Leaderboard refreshes as submissions are graded
+
+The leaderboard feature can encourage friendly competition while remaining optional for courses that prefer not to emphasize rankings.
+
+## Assignment Security Dashboard
+
+The security dashboard helps instructors monitor and prevent academic integrity issues:
+
+- **Anomaly detection**: Identify unusual submission patterns
+- **Collaboration analysis**: Detect potential unauthorized collaboration
+- **Submission timing**: Track when students submit relative to deadlines
+- **Access patterns**: Monitor repository access and commit history
+
+Access the security dashboard from the assignment page to review potential concerns and investigate suspicious activity.
+
+### Granting Manual Extensions
+
+When granting extensions to individual students, instructors can now choose the extended due date directly using a date picker interface, rather than entering extension hours and minutes. This makes it easier to:
+
+- Set specific deadline times (e.g., "Friday at 5:00 PM")
+- Grant extensions that don't align with 24-hour increments
+- Visualize the new deadline while setting the extension
+- Avoid calculation errors when determining extension length
+
+The date picker shows the student's current due date and allows you to select any future date and time for the extended deadline.
+
+## Assignment Score Capping
+
+Instructors can configure a maximum score cap for assignments. Score capping allows you to:
+
+- Set an upper limit on the total points a student can earn
+- Prevent extra credit from inflating scores beyond a desired maximum
+- Ensure consistency in grading across different rubric configurations
+- Cap scores at 100% even if bonus points are available
+
+### Configuring Score Caps
+
+To set a score cap for an assignment:
+
+1. Navigate to the assignment configuration
+2. Find the **Score Cap** settings
+3. Enter the maximum score (e.g., 100 for a 100-point assignment)
+4. Save the configuration
+
+When a score cap is set:
+- Student scores are automatically capped at the specified maximum
+- The gradebook displays the capped score
+- Students can see their raw score and the capped score on their submission page
+
+<Tip>
+Use score capping when you offer bonus points or extra credit but want to ensure no student exceeds the assignment's maximum possible score.
+</Tip>
+
+
+## Assignment Leaderboard
+
+Assignments can optionally include a leaderboard feature that displays top-performing students. The leaderboard:
+
+- Shows rankings based on assignment scores
+- Updates automatically as submissions are graded
+- Can be toggled on or off per assignment
+- Encourages student engagement through friendly competition
+
+To enable or disable the leaderboard for an assignment, use the assignment configuration settings. When enabled, students will see their ranking and the top performers on the assignment page.
+
+<Tip>
+The leaderboard can be made optional to reduce competitive pressure while still providing visibility into class performance. Consider your course culture when deciding whether to enable this feature.
+</Tip>
+
+### Extended Due Date Picker
+
+When granting manual extensions, instructors can now choose the extended due date directly using a date picker, rather than entering extension hours and minutes. This makes it easier to set specific deadlines and reduces calculation errors when granting extensions.
+
+Instructors and graders can also manually grant extensions to students using a date picker to select the extended due date, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+## Assignment Dashboards
+
+Pawtograder provides several dashboards to help instructors monitor and manage assignments:
+
+### Assignment Dashboard
+
+View a comprehensive overview of assignment progress, including submission statistics, grading status, and student performance metrics.
+
+### Security Dashboard
+
+Monitor assignment security with insights into potential academic integrity concerns, including:
+
+- Submission timing patterns
+- Repository access logs
+- Unusual activity indicators
+
+### Test Insights Dashboard
+
+Track student performance across test cases to identify:
+
+- Common failure patterns
+- Tests that students struggle with most
+- Overall test pass rates and trends
+
+These dashboards help instructors identify areas where students need additional support and adjust course materials accordingly.
+
+## Assignment Score Capping
+
+Instructors can configure a maximum score cap for assignments. This feature allows you to:
+
+- Set a ceiling on the total points students can earn
+- Prevent extra credit from inflating scores beyond intended limits
+- Ensure consistent grading scales across assignments
+- Handle bonus points while maintaining grade boundaries
+
+Score capping is configured in the assignment settings and applies automatically when calculating final scores.
+
+- Prevent extra credit from inflating grades beyond intended limits
+- Maintain consistent grading scales across assignments
+
+Score capping is configured in the assignment settings and applies automatically when grades are calculated.
