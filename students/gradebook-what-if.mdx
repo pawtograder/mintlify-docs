@@ -1,0 +1,67 @@
+---
+title: "What-if grade simulations"
+description: "Simulate hypothetical grades to see how they affect your final grade"
+icon: "calculator"
+---
+
+# What-if grade simulations
+
+The gradebook what-if feature lets you simulate hypothetical grades to see how they would affect your calculated grades and final course grade.
+
+## Enabling what-if
+
+Your instructor controls whether what-if simulations are enabled for your course. If enabled, you can tap on released grades to enter hypothetical values.
+
+When what-if is disabled, the gradebook is view-only and shows a notice at the top.
+
+## Using what-if
+
+### Simulate a grade
+
+1. Navigate to your gradebook
+2. Tap on any released grade card
+3. Enter a hypothetical score
+4. Press Enter or tap outside the input
+
+The grade card will show your simulated value with a magic wand icon. Any calculated columns that depend on this grade will automatically update to reflect your simulation.
+
+### Clear a simulation
+
+To return to your actual grade:
+
+1. Tap on the simulated grade card
+2. Clear the input field (delete all text)
+3. Press Enter
+
+All dependent calculated columns will return to their actual values.
+
+## What you can simulate
+
+- **Manual columns**: Participation, attendance, or other instructor-entered grades
+- **Assignment columns**: Grades linked to programming assignments
+- **Released columns only**: You can only simulate grades that your instructor has released
+
+## What you cannot simulate
+
+- **Calculated columns**: Columns that use expressions (like averages or totals) are read-only. They update automatically based on your simulations of their source columns.
+- **Unreleased columns**: Grades that haven't been released by your instructor
+
+## How calculations work
+
+When you simulate a grade, Pawtograder recalculates all dependent columns using the same expressions your instructor defined. For example:
+
+- If your final grade is `mean(gradebook_columns("hw-*")) * 0.7 + gradebook_columns("participation") * 0.3`
+- And you simulate a higher participation score
+- Your final grade will update to show what you would earn with that participation score
+
+The calculations respect the same rules as actual grades:
+- Missing grades count as 0 unless excused
+- Droppable grades can be dropped by `drop_lowest()`
+- Weighted averages account for different maximum scores
+
+## Tips
+
+- Use what-if to understand how much an upcoming assignment affects your grade
+- Simulate different scenarios to plan your study priorities
+- Remember that simulations are local to your browser and don't affect your actual grades
+- Your instructor cannot see your what-if simulations
