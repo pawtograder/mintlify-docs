@@ -67,6 +67,8 @@ You can reorder gradebook columns using the **Move Left** and **Move Right** but
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
+**Instructor-only columns:** Columns can be marked as "instructor-only" to hide them from students entirely, regardless of their released status. This is useful for internal tracking, notes, or intermediate calculations that should never be visible to students. Instructor-only columns are still included in calculations for other columns that reference them.
+
 **Instructor-only columns:** You can create staff-only gradebook columns that are hidden from students until you release them. When creating or editing a calculated column, check the **"Staff-only column"** option. Students cannot see the column definition or their grades until you release it. When you release an instructor-only column, it becomes a normal visible column with standard recalculation and sync behavior. This is useful for draft calculations, curve adjustments, or internal tracking that you want to finalize before sharing with students.
 
 **Instructor-only columns:** When creating or editing a calculated column, you can mark it as "Staff-only" (instructor-only). These columns are completely hidden from students until you release them. When you release an instructor-only column, it creates a frozen snapshot of the current scores for students and then becomes a normal visible column. After release, the column behaves like any other column - score edits propagate to students and you can unrelease it to hide scores again. Use instructor-only columns for internal grading calculations, curve adjustments, or work-in-progress grade components that you want to finalize before sharing with students.
@@ -267,6 +269,19 @@ To import grades, instructors use a 3-step wizard:
 You can manually enter grades directly into the gradebook by clicking on any cell. The gradebook supports both whole numbers and decimal scores, allowing you to enter precise grades like 8.5 or 92.75. This is particularly useful for assignments with partial credit or when you need to record fractional points.
 
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
+
+## Expression Builder
+
+When creating or editing a column with a score expression, Pawtograder provides an **Expression Builder** interface with live validation and debugging tools:
+
+- **Live validation**: As you type, the expression is parsed and validated in real-time. Parse errors and dependency errors (unknown column slugs, cycles) are shown immediately.
+- **Full-screen mode**: Click "Expression Builder" to expand to a full-screen editor with additional features:
+  - **Student picker**: Select a student to test the expression against their actual gradebook data
+  - **Per-line evaluation**: See the intermediate value of each statement in your expression, displayed inline
+  - **Score preview**: View both the raw numeric result and the rendered form (if a render expression is set)
+  - **Incomplete values panel**: See which dependencies are missing or not released for the selected student
+
+The Expression Builder helps you write and debug complex expressions before saving them, ensuring they work correctly for all students.
 
 ## Exporting Grades
 

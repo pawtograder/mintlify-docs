@@ -125,6 +125,10 @@
             "pages": ["developers/cli"]
           },
           {
+            "group": "Tools",
+            "pages": ["developers/cli"]
+          },
+          {
             "group": "Feature Documentation",
               "group": "Operations",
               "group": "Updates",
