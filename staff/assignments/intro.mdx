@@ -37,6 +37,10 @@ Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
 
+## Empty Submission Detection
+
+Pawtograder automatically detects empty submissions to help identify students who may need assistance. When a submission contains no meaningful content, it is flagged for instructor review, making it easier to reach out to students who might be struggling with the assignment.
+
 ### Group Mentors
 
 Instructors can assign mentors to student groups from the groups management page:
@@ -68,6 +72,10 @@ To enable or disable the leaderboard for an assignment, use the assignment confi
 <Tip>
 The leaderboard can be made optional to reduce competitive pressure while still providing visibility into class performance. Consider your course culture when deciding whether to enable this feature.
 </Tip>
+
+### Extended Due Date Picker
+
+When granting manual extensions, instructors can now choose the extended due date directly using a date picker, rather than entering extension hours and minutes. This makes it easier to set specific deadlines and reduces calculation errors when granting extensions.
 
 Instructors and graders can also manually grant extensions to students using a date picker to select the extended due date, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
 
@@ -102,6 +110,12 @@ These dashboards help instructors identify areas where students need additional 
 Instructors can configure a maximum score cap for assignments. This feature allows you to:
 
 - Set a ceiling on the total points students can earn
+- Prevent extra credit from inflating scores beyond intended limits
+- Ensure consistent grading scales across assignments
+- Handle bonus points while maintaining grade boundaries
+
+Score capping is configured in the assignment settings and applies automatically when calculating final scores.
+
 - Prevent extra credit from inflating grades beyond intended limits
 - Maintain consistent grading scales across assignments
 
