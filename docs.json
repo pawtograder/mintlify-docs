@@ -17,7 +17,8 @@
               "students/assignments/create-submission",
               "students/assignments/form-groups",
               "students/assignments/late-tokens",
-              "students/assignments/self-review"
+              "students/assignments/self-review",
+              "students/assignments/leaderboard"
             ]
           },
           {
@@ -53,6 +54,11 @@
               "staff/assignments/autograding",
               "staff/assignments/rubrics",
               "staff/assignments/testing",
+              "staff/assignments/test-insights",
+              "staff/assignments/grading-status",
+              "staff/assignments/security-dashboard",
+              "staff/assignments/leaderboard"
+
               "staff/assignments/dashboards"
 
               "staff/assignments/test-insights-dashboard",
