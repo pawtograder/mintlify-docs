@@ -63,7 +63,8 @@
               "staff/assignments/leaderboard",
               "staff/assignments/dashboards",
               "staff/assignments/test-insights-dashboard",
-              "staff/assignments/extensions-and-scoring"
+              "staff/assignments/extensions-and-scoring",
+              "staff/assignments/grading-dashboard"
             ]
           },
           {
@@ -76,11 +77,19 @@
             ]
           },
           {
+            "group": "Office Hours",
+            "pages": [
+              "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance"
+            ]
+          },
+          {
             "group": "Course Features",
             "pages": [
               "staff/instructor-dashboard",
               "staff/discussion",
               "staff/gradebook",
+              "staff/surveys",
               "staff/surveys",
               "staff/office-hours/intro",
               "staff/office-hours/ai-assistance",

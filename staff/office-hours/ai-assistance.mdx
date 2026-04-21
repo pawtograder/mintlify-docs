@@ -1,4 +1,66 @@
 ---
+title: "AI Assistance Tools"
+description: "Use AI assistants to help support students through the Model Context Protocol (MCP) server"
+icon: "sparkles"
+---
+
+# AI Assistance Tools
+
+Pawtograder includes a Model Context Protocol (MCP) server that enables AI assistants to help instructors and TAs support students who are struggling with errors in their programming assignments.
+
+## Overview
+
+The MCP server provides AI assistants with secure, read-only access to help request data, discussion threads, student submissions, test results, and build output. This allows AI tools to provide context-aware assistance when helping students debug their code.
+
+## Authentication
+
+The MCP server uses Supabase OAuth authentication and is restricted to instructors and graders only. Students cannot access the MCP server.
+
+## Privacy Protection
+
+The MCP server is designed with privacy in mind:
+
+- Never exposes the users table
+- Does not expose `is_private_profile` flags
+- Provides only the data necessary to help students with their assignments
+
+## Available Tools
+
+The MCP server provides the following tools for AI assistants:
+
+- **Fetch help requests**: View active and past help requests from students
+- **Fetch discussion threads**: Access discussion board posts and replies
+- **Fetch submissions**: Retrieve student submission details
+- **Fetch test results**: View autograder test output and results
+- **Fetch build output**: Access compilation and build logs
+
+## Assignment Context
+
+To provide better context to AI assistants, assignments now include a `handout_url` field. This field can be set to point to the assignment handout or specification, allowing AI assistants to understand the assignment requirements when helping students.
+
+## Using AI Assistance
+
+### AI Help Button
+
+When viewing a help request chat or discussion thread, instructors and graders will see an **AI Help** button. Clicking this button generates an MCP context that can be used with any MCP-compatible AI client.
+
+### MCP-Compatible Clients
+
+The MCP server works with any MCP-compatible client, including:
+
+- Claude Desktop
+- Other AI assistants that support the Model Context Protocol
+
+### Local Development
+
+When running Pawtograder locally with Supabase, the MCP server is available at:
+
+```
+http://127.0.0.1:54321/mcp
+```
+
+This URL is displayed in the Supabase startup output under "Development Tools".
+
 title: "AI Assistance for Office Hours"
 description: "Use AI tools to help diagnose student issues and provide better support during office hours"
 icon: "robot"
@@ -161,6 +223,18 @@ The AI assistance feature requires an MCP-compatible client to use the generated
 ## Best Practices
 
 When using AI assistance to help students:
+
+1. **Review AI suggestions**: Always review AI-generated responses before sharing with students
+2. **Maintain pedagogical goals**: Ensure AI assistance supports learning rather than providing complete solutions
+3. **Protect student privacy**: Be mindful of what information you share with AI tools
+4. **Use assignment context**: Set the `handout_url` field on assignments to help AI understand requirements
+
+## Security Considerations
+
+- The MCP server requires authentication and is restricted to course staff
+- All access is logged and auditable
+- The server provides read-only access to course data
+- Sensitive user information is never exposed
 
 1. **Review AI suggestions**: Always review and verify AI-generated suggestions before sharing them with students
 2. **Use as a starting point**: Treat AI suggestions as a starting point for your own analysis, not a complete solution
