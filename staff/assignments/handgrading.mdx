@@ -8,7 +8,73 @@ icon: "pen-to-square"
 
 Instructors can define multiple handgrading rubrics for each assignment, although the most typical mechanism is to simply use the "Grading Rubric" (which, combined with the autograder score, is used to compute the score for each submission).
 
-Once all required rubric checks are done, the grader can click the "Complete Review" button to confirm that they have completed grading. This does **not** release the review to the student, but indicates to the instructor that it **could** be released (at the instructor's discretion).
+Once all required rubric checks are done, the grader can click the "Complete Review" button to confirm that they have completed grading. This does **not** release the review to the student, but indicates to the instructor that it **could** be released (at the instructor's discretion). TAs can edit or delete rubric scores even after completing a review, allowing for corrections and adjustments as needed.
+
+## Grading Status Dashboard
+
+The assignment landing page provides a comprehensive grading status dashboard that shows:
+
+- Overall grading progress across all submissions
+- Individual grader workload and completion status
+- Pending grading tasks organized by grader
+- Quick access to ungraded submissions
+
+This dashboard helps instructors monitor grading progress and ensure balanced workload distribution among TAs.
+
+<Note>
+TAs can edit or delete rubric scores even after completing a review. This allows you to make corrections or adjustments without needing to "uncomplete" the review first.
+</Note>
+
+After completing a review, you can still edit or delete rubric scores if you need to make corrections.
+
+<Tip>
+TAs can edit or delete rubric scores even after completing a review, allowing for corrections and adjustments as needed.
+</Tip>
+
+TAs can edit or delete rubric scores even after completing a review, allowing them to make corrections or adjustments as needed.
+
+## Editing Scores After Completing a Review
+
+TAs can edit or delete rubric scores even after marking a review as complete. This allows you to:
+
+- Correct scoring mistakes discovered after completing the review
+- Adjust scores based on regrade requests or instructor feedback
+- Update comments or feedback without needing to "uncomplete" the review
+
+Simply navigate back to the submission and make your changes. The review will remain marked as complete, but the updated scores will be reflected immediately.
+
+### Bulk Complete Grading Reviews
+
+Instructors can mark multiple submission reviews as complete at once using the "Mark All Grading Complete" button on the All Submissions tab. This feature:
+
+- Automatically validates that each submission has all required rubric checks applied
+- Shows a summary of how many submissions can be marked complete
+- Displays the count of submissions with missing required checks
+- Only marks submissions complete that meet all rubric requirements
+
+This streamlines the grading workflow when multiple submissions are ready for completion.
+
+<Note>
+TAs can edit or delete rubric scores even after completing a review. This allows for corrections or adjustments without needing to "uncomplete" the review.
+</Note>
+
+## Editing Comments After Review Completion
+
+Graders can continue to add and edit comments even after completing a review. This allows for:
+
+- Adding clarifications or additional feedback
+- Correcting mistakes in comments
+- Responding to student questions about feedback
+
+However, once a review is **released** to students, only instructors can edit the comments. This ensures that students receive consistent feedback and prevents graders from making changes after students have seen their grades.
+
+## Managing Incomplete Reviews
+
+Instructors have visibility into all incomplete grading reviews across submissions. For reviews that are substantially complete but missing minor formalities, instructors can use the bulk-complete feature to mark multiple reviews as complete simultaneously. This is particularly useful when:
+
+- Reviews have all substantive feedback but graders forgot to click "Complete Review"
+- You need to finalize grading for a large number of submissions at once
+- Minor administrative tasks are preventing review completion
 
 ## Grading Submissions That You Have Been Assigned
 
@@ -18,15 +84,59 @@ When you have submissions assigned to grade, you will see a summary of them on t
   <img src="/images/staff/assignments/handgrading-1756054330152.png" alt="Handgrading page showing assigned submissions list" />
 </Frame>
 
-Click on any submission to view the grading interface. Click on the "Files" tab to view the submission's files.
+Click on any submission to view the grading interface. Click on the "Files" tab to view the submission's files. Plaintext and markdown files can be viewed directly in the browser. If the assignment includes artifacts, you can view them in the "Artifacts" tab, and rubric checks can link directly to specific artifacts for easy reference.
 
 Instructors can assign graders to entire submissions (grading the whole rubric on each submission), or can assign graders to only parts of each rubric for each submission. The grading interface will show you the rubric parts that you have been assigned to grade, and you can grade each part individually. If you are assigned to grade only a part of the rubric, you can also click on "View + Grade Full Rubric" to have access to grade the full rubric.
+
+## Reassigning Grading Work
+
+Instructors can reassign grading work from one grader to another at any time. When a rubric part is reassigned to a different grader:
+
+- The new grader will see the submission appear in their pending work list
+- Any previously completed grading for other rubric parts on the same submission remains intact
+- The reassignment ensures the new grader can immediately begin work on their assigned portion
+
+<Note>
+When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the new work will now properly appear in their pending work list. Previously, the existing review assignment's completed timestamp was preserved, causing the new work to not appear.
+
+When a rubric part is reassigned to you after you've already completed grading a different part of the same submission, the new assignment will appear in your pending work list.
+</Note>
 
 <Frame>
   <img src="/images/staff/assignments/handgrading-1756060030919.png" alt="Grading interface with rubric sidebar and code view" />
 </Frame>
 
 You can also grade the submission as a whole, by clicking on the "Grade" button.
+
+### Automatic Review Completion
+
+When a grader completes their assigned rubric parts, Pawtograder automatically marks other review assignments as complete if their assigned parts are a subset of the completed work. For example, if a grader completes parts A, B, and C, any other graders assigned only to parts A, B, or A+B will have their assignments automatically completed. This streamlines workflows where multiple graders review overlapping portions of submissions.
+
+### Pinning Errors
+
+When grading submissions, you can pin specific errors or issues to make them globally visible across all submissions. This is useful for tracking common mistakes or patterns that appear across multiple student submissions. Pinned errors remain visible as you navigate between different submissions, helping you maintain consistency in grading and identify widespread issues that may need to be addressed with the entire class.
+
+## Grading Annotations Usability
+
+The grading interface includes enhanced usability features for annotations:
+
+- **Improved annotation placement**: More precise control over where annotations appear in student code
+- **Annotation threading**: Group related comments together for better organization
+- **Quick annotation templates**: Save and reuse common feedback comments
+- **Keyboard shortcuts**: Navigate and create annotations more efficiently
+- **Annotation search**: Find specific feedback across submissions
+
+These improvements make it faster and easier to provide detailed, helpful feedback to students while maintaining consistency across grading.
+
+## Grading Annotations
+
+The grading interface includes enhanced annotation tools for providing detailed feedback:
+
+- **Inline comments**: Add comments directly to specific lines of code
+- **Improved usability**: Streamlined interface for faster annotation creation and editing
+- **Persistent annotations**: Annotations remain visible across grading sessions
+
+These improvements make it easier to provide targeted, actionable feedback to students on their code submissions.
 
 ## Grading Submissions Without Assignments
 
@@ -58,3 +168,82 @@ This feature is useful when:
 - You need to prepare reviews for release to students
 
 The system will only mark reviews as complete if they have all required rubric checks applied, preventing incomplete reviews from being marked as done.
+
+## Grading Status Dashboard
+
+The grading status dashboard provides instructors with a comprehensive overview of grading progress across all assignments. Access it from the course navigation to see:
+
+- **Completion status**: Track which submissions have been graded and which are pending
+- **Grader assignments**: See which staff members are assigned to grade each submission
+- **Progress metrics**: Monitor overall grading progress for each assignment
+- **Due dates**: View grading task deadlines to ensure timely completion
+
+This dashboard helps instructors identify bottlenecks, redistribute workload if needed, and ensure all submissions are graded before releasing results to students.
+
+## Rerunning the Autograder
+
+Instructors can rerun the autograder on existing submissions without creating a new submission. This is useful when:
+
+- You've fixed a bug in the autograder
+- You've updated test cases
+- You want to regrade with a different version of the grader
+
+### Rerun Options
+
+When rerunning the autograder, you can:
+
+1. **Select grader version**: Choose a specific commit from the grader repository
+2. **Enter manual SHA**: Provide a specific commit SHA to use
+3. **Reuse same submission**: The autograder runs on the existing submission without creating a new one
+4. **Auto-promote**: Optionally make the regraded submission the active submission
+
+<Tip>
+Use the test insights dashboard to launch regrading directly from error groups, with affected submissions automatically preselected.
+</Tip>
+
+### Regrade Workflow
+
+To rerun the autograder:
+
+1. Navigate to the submission you want to regrade
+2. Click the **Rerun Autograder** button
+3. In the regrade dialog:
+   - Select a grader version from the dropdown, or
+   - Enter a specific commit SHA manually
+   - Choose whether to auto-promote the submission
+4. Click **Regrade** to start the process
+
+The autograder will run on the existing submission using the selected grader version. The submission's autograder results will be updated once the regrade completes.
+
+## Managing grading completion
+
+### Viewing grading completion status
+
+The all submissions table includes a **Grading Complete** column that shows whether each submission review has been marked as complete. You can filter submissions by completion status to quickly find incomplete reviews.
+
+### Marking all grading complete
+
+When you have many submissions to grade, you can use the **Mark All Grading Complete** button to automatically mark all eligible submissions as complete. This feature:
+
+- **Validates rubric requirements**: Only marks submissions complete if all required rubric checks have been applied
+- **Shows eligibility counts**: Displays how many submissions can be marked complete vs. how many have missing required checks
+- **Prevents errors**: Skips submissions with incomplete rubrics to avoid validation errors
+
+To use this feature:
+
+1. Navigate to the **All Submissions** tab on the assignment page
+2. Click **Mark All Grading Complete**
+3. Review the eligibility summary showing:
+   - How many incomplete submissions can be marked complete
+   - How many submissions have missing required rubric checks
+4. Click the checkmark to confirm
+
+Only submissions with all required rubric checks applied will be marked as complete. Submissions with missing required checks will be skipped.
+
+### Tracking incomplete reviews
+
+The instructor dashboard now provides better visibility into incomplete grading reviews:
+
+- **Submission reviews column**: Shows completed/total counts with a link to the submissions table
+- **Incomplete badge**: Highlights assignments with incomplete reviews in orange
+- **Direct navigation**: Click the incomplete count to jump to the submissions table filtered by incomplete reviews
