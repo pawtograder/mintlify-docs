@@ -165,6 +165,29 @@ Always preview your survey before publishing to catch any formatting issues or u
 - Due date validation ensures deadline is in the future
 - Editing published surveys is possible but use caution (see Editing Published Surveys below)
 
+### Linking Surveys to Assignments
+
+You can optionally link a survey to a specific assignment. When linked, students will see the survey status banner on their submission page, making it easy for them to complete assignment-related feedback.
+
+1. In the survey form, select an assignment from the **Link to Assignment** dropdown
+2. The survey will appear on the assignment's submission page for students
+3. Students can quickly access and complete the survey from their submission view
+
+**Use cases for linked surveys:**
+- Post-assignment reflection surveys
+- Team collaboration feedback after group projects
+- Assignment-specific difficulty or time tracking
+
+### Available At Configuration
+
+Control when a survey becomes visible to students using the **Available At** field:
+
+1. Leave empty to make the survey visible immediately upon publishing
+2. Set a future date/time to schedule when the survey becomes available
+3. Useful for releasing surveys after an assignment deadline or class event
+
+The **Available At** date must be before the **Due Date** if both are set.
+
 ### Due Date Configuration
 
 1. Click the date/time picker in the survey form
@@ -178,6 +201,32 @@ Always preview your survey before publishing to catch any formatting issues or u
 - Red "Closed" indicator when past due
 - Orange warning when less than 24 hours remain
 - Days and hours remaining for upcoming deadlines
+
+### Available At Date
+
+Control when a survey becomes visible to students:
+
+1. Set the **Available At** date/time in the survey form
+2. Leave empty to make the survey visible immediately upon publishing
+3. Survey remains hidden from students until the specified date/time
+4. The available date must be before the due date
+
+<Tip>
+Use the available date to schedule surveys in advance without manually publishing them later.
+</Tip>
+
+### Linking to Assignments
+
+Link surveys to specific assignments to display survey status on student submission pages:
+
+1. Select an assignment from the **Link to Assignment** dropdown
+2. Students will see the survey status banner on their submission page
+3. The banner shows whether the survey is pending, completed, or overdue
+4. Students can quickly access the survey from their submission page
+
+<Note>
+Linked surveys appear on both the assignment page and submission pages, making it easier for students to provide feedback about specific assignments.
+</Note>
 
 ### Response Editing Control
 
@@ -194,6 +243,21 @@ Toggle **Allow Response Editing** to control whether students can modify their s
 - Students cannot change responses after submitting
 - Original submission timestamp preserved
 - Ensures responses reflect immediate reactions
+
+### Linking Surveys to Assignments
+
+You can optionally link a survey to a specific assignment. When linked, students will see the survey status on their submission page, making it easy to collect assignment-specific feedback.
+
+1. In the survey form, select an assignment from the **Link to Assignment** dropdown
+2. Optionally set an **Available At** date to control when the survey becomes visible to students
+3. The survey will appear on the assignment submission page for students
+
+<Tip>
+Use assignment-linked surveys for:
+- Post-assignment reflection surveys
+- Peer feedback on group projects
+- Assignment-specific difficulty or time tracking
+</Tip>
 
 ### Survey Assignment
 
@@ -252,6 +316,141 @@ Assign mentors to student groups for targeted survey distribution and feedback c
 - Assign specialized mentors based on project topics
 - Enable targeted feedback collection from specific mentor-group pairings
 - Track mentor effectiveness through group-specific survey analytics
+
+### Link to Assignment
+
+Optionally link a survey to a specific assignment. When linked, students will see the survey status banner on their submission page.
+
+1. Select an assignment from the **Link to Assignment** dropdown
+2. The survey will appear on the assignment's submission page for students
+3. Students can quickly access the survey from their submission view
+
+**Use Cases:**
+- Collect feedback immediately after assignment submission
+- Gather reflection responses tied to specific projects
+- Track team collaboration for group assignments
+
+### Available At
+
+Control when a survey becomes visible to students:
+
+1. Leave **Available At** empty to make the survey visible immediately upon publishing
+2. Set a future date/time to schedule when the survey becomes available
+3. The survey remains hidden from students until the specified time
+
+<Note>
+The **Available At** date must be before the **Due Date**. Students cannot access the survey before the availability time, even if it is published.
+</Note>
+
+### Linking Surveys to Assignments
+
+You can link a survey to a specific assignment to collect feedback about that assignment. When linked:
+
+1. Navigate to the survey settings
+2. Select **Link to Assignment** option
+3. Choose the assignment from the dropdown menu
+4. The survey will be associated with that assignment in analytics and reporting
+
+This enables you to track survey responses in the context of specific assignments and view assignment-specific analytics.
+
+### Group Mentors and Analytics
+
+For group assignments, you can assign mentors to student groups and view analytics across groups:
+
+**Assigning Mentors to Groups**
+
+1. Navigate to the assignment's group management page
+2. Select a student group
+3. Click **Assign Mentor**
+4. Choose a TA or instructor to mentor that group
+5. Mentors can view their assigned groups' survey responses
+
+**Viewing Group Analytics**
+
+The survey analytics view provides insights across student groups:
+
+- Response rates by group
+- Comparative analysis of responses across groups
+- Mentor-specific views showing only their assigned groups' data
+- Export group-level data for detailed analysis
+
+<Tip>
+Use group mentors and analytics for:
+- Tracking team dynamics in group projects
+- Identifying groups that need additional support
+- Distributing mentoring responsibilities across TAs
+- Analyzing peer feedback patterns within teams
+</Tip>
+
+**Link to assignment**
+
+You can link a survey to a specific assignment to automatically assign it to students who submitted that assignment:
+
+1. Select **Link to assignment** option
+2. Choose an assignment from the dropdown
+3. The survey will be automatically assigned to all students who have submissions for that assignment
+4. Response tracking is tied to the assignment context
+
+This is particularly useful for post-assignment reflection surveys or assignment-specific feedback collection.
+
+### Group Mentors and Analytics
+
+For surveys linked to group assignments, you can assign mentors to student groups and view analytics across groups:
+
+**Assigning group mentors**
+
+1. Navigate to the survey linked to a group assignment
+2. Click **Manage Group Mentors**
+3. Select a student group from the list
+4. Assign one or more mentors to that group
+5. Mentors will have access to view responses from their assigned groups
+
+**Viewing group analytics**
+
+The analytics view provides aggregated insights across student groups:
+
+1. Click **View Analytics** on a survey linked to a group assignment
+2. Filter by specific groups or view all groups
+3. See response rates and patterns by group
+4. Compare responses across different groups
+5. Export group-level data for further analysis
+
+This feature helps instructors and mentors track engagement and feedback patterns within team-based assignments.
+
+### Linking Surveys to Assignments
+
+You can link a survey to a specific assignment to collect feedback about that assignment. When linked, the survey appears in the assignment context and can be used for peer feedback or assignment-specific evaluations.
+
+To link a survey to an assignment:
+
+1. Create or edit a survey
+2. In the survey settings, select **Link to Assignment** (optional)
+3. Choose the assignment from the dropdown list
+4. Save the survey
+
+Linked surveys appear on the assignment page for easy student access.
+
+### Group Mentors and Analytics
+
+For surveys assigned to student groups, you can assign mentors to specific groups and view analytics across groups:
+
+**Assigning Group Mentors:**
+
+1. Navigate to the survey's group management page
+2. Select a student group
+3. Assign one or more mentors (TAs or instructors) to that group
+4. Mentors can view responses from their assigned groups
+
+**Viewing Group Analytics:**
+
+The analytics view provides insights into survey responses across different student groups:
+
+- Response rates by group
+- Comparative metrics across groups
+- Mentor-specific views for assigned groups
+- Export group-level data for analysis
+
+This feature is particularly useful for large courses with multiple sections or project groups where different mentors oversee different student cohorts.
 
 ## Peer Feedback Surveys
 
@@ -320,6 +519,97 @@ When surveys are linked to assignments with groups, you can view analytics broke
 - Comparison of groups assigned to different mentors
 - Identification of groups with low response rates
 
+## Survey Analytics
+
+Pawtograder provides comprehensive analytics for survey responses, including statistical analysis and visualizations broken down by groups.
+
+### Analytics Views
+
+The analytics dashboard includes three main views:
+
+**Overview**: Course-wide statistics with diverging stacked bar charts grouped by Likert scale. Filter by section to compare different parts of your course.
+
+**By Group**: View response distributions and statistics for each student group. Useful for identifying groups that may need additional support.
+
+**My Groups** (for group mentors): If you are assigned as a mentor to specific groups, this view shows only your groups' analytics.
+
+### Group Mentor Analytics
+
+When groups have assigned mentors, the analytics view highlights groups that may need attention based on configurable thresholds:
+
+- Low response rates within a group
+- High variance in responses
+- Responses that fall outside expected ranges
+
+Mentors can quickly identify which of their groups may benefit from additional support or intervention.
+
+Pawtograder provides comprehensive analytics for survey responses, including statistical breakdowns by group, mentor, and section.
+
+### Accessing Analytics
+
+Navigate to **View Responses** on any published survey to access the analytics dashboard. The analytics view includes:
+
+- **Summary cards** showing total responses, response rate, and alerts for groups needing attention
+- **Overview tab** displaying course-wide statistics and diverging stacked bar charts
+- **By Group tab** showing per-group analytics with comparison to course averages
+- **My Groups tab** (for mentors) displaying only groups assigned to you
+
+### Configuring Analytics
+
+When creating or editing a survey, expand the **Analytics Configuration** section to customize:
+
+1. **Global Alert Thresholds**:
+   - **Variance Threshold**: Standard deviation above which to flag high variance (default: 1.5)
+   - **Non-Response Threshold**: Response rate below which to flag groups (default: 80%)
+
+2. **Per-Question Configuration**:
+   - Toggle **Include** to add questions to analytics
+   - Set **Alert Threshold** to trigger warnings when group means exceed/fall below a value
+   - Choose **Alert Direction** (above/below mean, or any individual response above/below)
+   - Add custom **Alert Message** to explain the concern
+   - Mark **Reversed scale** if higher values indicate worse outcomes
+
+### Survey Series
+
+Link related surveys into a series to track trends over time:
+
+1. Navigate to **Manage Series** from the surveys dashboard
+2. Click **Create Series** and provide a name and description
+3. When creating/editing surveys, select the series from the **Link to Series** dropdown
+4. Assign a **Week Number** to position the survey in the series
+5. Use the series management page to reorder surveys with arrow buttons
+
+**Series Comparison**: In the analytics view, select multiple surveys from a series to compare response trends across weeks.
+
+## Survey Series
+
+Survey series allow you to track trends across multiple related surveys over time, such as weekly team collaboration check-ins.
+
+### Creating a Survey Series
+
+1. Navigate to **Surveys** → **Manage Series**
+2. Click **Create Series**
+3. Enter a series name (e.g., "Weekly Team Collaboration Surveys")
+4. Add an optional description
+5. Click **Create Series**
+
+### Linking Surveys to a Series
+
+When creating or editing a survey:
+
+1. Select a series from the **Link to Series** dropdown
+2. Enter a **Week Number** to indicate the survey's position in the series
+3. Surveys in a series can be compared in the analytics view
+
+### Managing Series
+
+From the **Manage Series** page, you can:
+
+- View all surveys in each series
+- Reorder surveys using the arrow buttons
+- Edit series name and description
+- Delete a series (surveys will be unlinked but not deleted)
+
 ## Managing Survey Responses
 
 ### Viewing Response Dashboard
@@ -351,6 +641,42 @@ Dynamic countdown to the due date:
 - **Black**: More than 24 hours remaining (displays days and hours)
 - **Orange**: Less than 24 hours remaining (displays hours and minutes)
 - **Red**: Past due date (displays "Closed")
+
+### Survey Analytics
+
+The analytics view provides comprehensive insights into survey responses with interactive visualizations.
+
+#### Overview Tab
+
+View course-wide statistics and response distributions:
+
+- Summary cards showing total responses, response rate, and key metrics
+- Diverging stacked bar charts for Likert-scale questions
+- Filter by section (lab, lecture, or discussion) to compare subgroups
+- Compare multiple surveys in a series to track trends over time
+
+#### By Group Tab
+
+Analyze responses by student groups:
+
+- View statistics for each group with mentor assignments
+- Compare group performance against course averages
+- Identify groups that may need additional support
+- Drill down into individual group details with member-level responses
+
+#### My Groups Tab (for mentors)
+
+If you are assigned as a mentor to student groups, this tab shows only your groups' analytics, allowing you to focus on the teams you support.
+
+#### Configuring Analytics
+
+Use the **Analytics Configuration** section when creating or editing a survey to:
+
+1. Select which questions to include in analytics
+2. Set alert thresholds for specific questions
+3. Configure alert direction (above/below threshold)
+4. Add custom alert messages for groups needing attention
+5. Mark reversed scales (where higher values indicate worse outcomes)
 
 ### Response Data Table
 
@@ -428,6 +754,31 @@ Click on any row in the response table to view a student's individual response i
 - All questions and answers displayed in the responses page
 - Navigate back to dashboard with breadcrumb or back button
 
+### Group Analytics View
+
+For surveys linked to group assignments, the Group tab provides team-level analytics:
+
+**Group Summary Cards:**
+- Visual cards for each group showing response rates and key metrics
+- Color-coded alerts for groups needing attention
+- Click any card to view detailed group analytics
+
+**Section Filtering:**
+- Filter groups by class section using the dropdown
+- "All sections" view shows groups organized by section
+- Selection is persisted for your next visit
+
+**Group Detail Panel:**
+- **Group Member Roster**: Shows all group members with submission status (✓ submitted, ✗ not submitted)
+- **Email Links**: Instructor view includes mailto links for students and mentors
+- **Question-by-Question Breakdown**: Responses grouped by question type with charts
+- **Individual Responses**: View each group member's answers
+
+**Mentor View:**
+- Mentors see only their assigned groups
+- Same analytics and roster features as instructor view
+- Cannot access other groups' data
+
 ## Editing Surveys
 
 ### Editing Draft Surveys
@@ -482,6 +833,42 @@ Share your successful survey designs with others or reuse them in future semeste
 3. Choose template scope:
    - **Course Only**: Available only in your course
    - **Global (Shared)**: Available to all instructors across courses
+
+## Survey Analytics
+
+View statistical analysis and trends for survey responses:
+
+### Analytics Dashboard
+
+The analytics dashboard provides comprehensive insights into survey responses:
+
+- **Summary cards**: Overall response rate, average scores, and alerts for groups needing attention
+- **Overview tab**: Course-wide statistics with optional section filtering
+- **By Group tab**: Compare responses across student groups
+- **My Groups tab**: View analytics for groups you mentor (if applicable)
+
+### Configuring Analytics
+
+Use the **Analytics Configuration** section when creating or editing a survey:
+
+1. Set global alert thresholds for variance and non-response rates
+2. Select which questions to include in analytics
+3. Configure per-question alert thresholds and directions
+4. Mark reversed-scale questions (where higher values indicate worse outcomes)
+
+### Survey Series
+
+Track trends across multiple surveys over time:
+
+1. Click **Manage Series** from the surveys dashboard
+2. Create a new series with a name and description
+3. Link surveys to the series when creating or editing them
+4. Set the week number for each survey in the series
+5. View trend comparisons across all surveys in the series
+
+<Tip>
+Use survey series for weekly team collaboration surveys or recurring course feedback to identify patterns over time.
+</Tip>
 
 ## Deleting Surveys
 
