@@ -26,6 +26,36 @@ Empty submissions are flagged in the grading interface, allowing instructors to 
 
 *Detailed documentation coming soon.*
 
+## Artifact Rendering
+
+Autograders can generate artifacts (files) that are displayed to students and graders alongside submission results. The system supports rendering various file formats:
+
+### Supported Artifact Types
+
+- **Plaintext files** (`.txt`, `.log`, etc.): Displayed with syntax highlighting and line numbers
+- **Markdown files** (`.md`): Rendered as formatted HTML with proper styling
+- **Binary files**: Available for download but not rendered inline
+
+### Configuring Artifacts
+
+To include artifacts in your autograder output:
+
+1. Generate the artifact files in your grading script
+2. Place them in the expected output directory
+3. Configure the artifact list in your assignment settings
+4. Artifacts will automatically appear in the submission view
+
+### Artifact Annotations
+
+Graders can apply rubric checks as annotations directly to artifacts:
+
+- Use `annotation_target: artifact` in your rubric check configuration
+- Specify the artifact filename in the `artifact` field
+- Graders can select text or sections of the artifact to attach feedback
+- This is useful for grading written reports, documentation, or generated output files
+
+See the [Rubrics documentation](/staff/assignments/rubrics) for more details on configuring artifact annotations.
+
 ## Artifacts
 
 Autograders can produce artifacts that are displayed to students and graders. Artifacts are files or content generated during the grading process.
