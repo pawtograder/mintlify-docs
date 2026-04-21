@@ -246,6 +246,23 @@ Toggle **Allow Response Editing** to control whether students can modify their s
 
 ### Linking Surveys to Assignments
 
+You can optionally link a survey to a specific assignment. When linked, students will see the survey status on their submission page.
+
+1. In the survey form, select an assignment from the **Link to Assignment** dropdown
+2. Optionally set an **Available At** date to control when the survey becomes visible
+3. The survey will appear on the assignment submission page for students
+
+When a survey is linked to an assignment, students see a status banner showing:
+- Whether they have completed the survey
+- Time remaining until the due date
+- A direct link to take or view the survey
+
+<Tip>
+Link surveys to assignments to:
+- Collect feedback about specific projects or assignments
+- Ensure students see relevant surveys at the right time
+- Track completion rates for assignment-specific feedback
+
 You can optionally link a survey to an assignment. When linked, students will see the survey status on their submission page, making it easy to collect assignment-specific feedback.
 
 1. Select an assignment from the **Link to Assignment** dropdown
@@ -515,6 +532,65 @@ To review peer feedback:
 1. Navigate to the survey's **View Responses** page
 2. Use filters to focus on specific questions or date ranges
 3. Export to CSV for detailed analysis or grade calculations
+
+## Group Mentors and Survey Analytics
+
+### Assigning Mentors to Groups
+
+For group assignments, you can assign mentors (instructors or graders) to student groups. This enables mentor-specific views in survey analytics.
+
+1. Navigate to the assignment's **Groups** page
+2. In the groups table, find the **Mentor** column
+3. Select a mentor from the dropdown for each group
+4. The mentor assignment is saved automatically
+
+Mentors can:
+- View analytics for only their assigned groups
+- See aggregated survey responses from their groups
+- Track group health metrics and alerts
+
+### Survey Analytics
+
+Survey analytics provide statistical analysis of survey responses with multiple views:
+
+**Overview Tab**
+- Course-wide statistics for all numeric questions
+- Filter by section (lab, lecture, etc.)
+- Compare surveys across a series to track trends over time
+
+**By Group Tab**
+- View response distributions for each group
+- Compare group performance against course averages
+- See alerts for groups that may need attention
+
+**My Groups Tab** (for mentors)
+- Shows only groups assigned to the current user
+- Same analytics as the By Group view, filtered to your groups
+
+Analytics include:
+- Diverging stacked bar charts for Likert-scale questions
+- Distribution charts for choice-based questions
+- Free-text response aggregation
+- Statistical summaries (mean, median, min, max, standard deviation)
+- Alerts for groups with low response rates or concerning metrics
+
+### Configuring Analytics
+
+Use the **Analytics Configuration** section when creating or editing a survey to:
+
+1. Set global alert thresholds for variance and non-response rates
+2. Choose which questions to include in analytics
+3. Configure per-question alert thresholds and directions
+4. Mark reversed-scale questions (where higher values indicate worse outcomes)
+
+### Survey Series
+
+Create survey series to track trends across multiple weeks:
+
+1. Navigate to **Manage Series** from the surveys page
+2. Click **Create Series** and enter a name and description
+3. When creating surveys, link them to the series and assign a week number
+4. Use the series comparison view to see how responses change over time
 
 ## Survey Series and Analytics
 

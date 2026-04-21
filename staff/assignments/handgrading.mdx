@@ -299,6 +299,22 @@ By clicking on a student/group name, you will be taken to the grading interface 
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
 
+## Submission Reassignment
+
+When a student submits a new version of their work, Pawtograder automatically handles grading reassignment:
+
+**What happens automatically:**
+- Review assignments move to the new active submission
+- Assignments are reopened (completion status is cleared)
+- Grading comments remain attached to the original submission they were written for
+
+**Why this matters:**
+- Graders can see their previous feedback in context of the old submission
+- New submissions start fresh without carrying over old comments
+- Review assignments are automatically reassigned to the new submission
+
+This ensures that when students resubmit work, graders can review the new submission while preserving the historical record of feedback on previous versions.
+
 ## Viewing Artifacts
 
 Artifacts are files generated during the autograding process that provide additional context for grading. Common artifact types include:

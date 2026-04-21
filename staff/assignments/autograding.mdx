@@ -26,6 +26,28 @@ Empty submissions are flagged in the grading interface, allowing instructors to 
 
 *Detailed documentation coming soon.*
 
+## Artifacts
+
+Autograders can produce artifacts that are displayed to students and graders. Artifacts are files or content generated during the grading process.
+
+### Supported Artifact Types
+
+**Plaintext artifacts**
+- Display plain text content in a formatted code block
+- Useful for test output, logs, or simple reports
+- Automatically formatted with monospace font
+
+**Markdown artifacts**
+- Render formatted markdown content
+- Support headings, lists, code blocks, and other markdown features
+- Ideal for detailed feedback reports or documentation
+
+**Binary artifacts**
+- Support for other file types (images, PDFs, etc.)
+- Displayed with appropriate viewers
+
+To create artifacts, your autograder should output files that Pawtograder can detect and display. The system automatically detects the file type and renders it appropriately.
+
 ## AI-Powered Hints
 
 Pawtograder supports AI-powered hints for autograder test failures. Instructors can configure tests to provide LLM-generated hints to help students understand and fix errors.

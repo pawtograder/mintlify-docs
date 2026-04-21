@@ -58,6 +58,11 @@ Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assig
 
 The algorithm offers several distribution modes:
 
+- **By submission**: Split submissions between graders (each grader gets complete rubrics for their assigned submissions)
+- **By rubric part**: Split rubric parts between graders (each submission is graded by multiple graders, each handling different rubric parts)
+- **Assign to lab leaders**: Automatically assign each submission to all lab leaders of the student's lab section
+- **Assign to group mentors**: Automatically assign each group's submission to that group's assigned mentor
+
 ### Assignment Modes
 
 Pawtograder offers several modes for distributing grading tasks:
@@ -110,6 +115,28 @@ You can choose to reuse existing grading assignments (e.g. if you want to assign
 Lastly, you can choose to enforce that graders are **not** assigned to the same submission as they were on a prior assignment or rubric. This feature is useful to assign meta-graders, where the meta-grader is a different grader than the one who graded the submission.
 
 You will be able to preview the assignments before creating them, and can manually tweak them through the drag-and-drop interface.
+
+## Bulk Completing Grading Reviews
+
+The **Mark All Grading Complete** button allows you to efficiently complete multiple grading reviews at once.
+
+When you click this button:
+
+1. The system checks which incomplete submission reviews can be marked complete
+2. A review is eligible if all required rubric checks have been applied
+3. You'll see a summary showing:
+   - How many reviews can be marked complete
+   - How many have missing required checks (and will be skipped)
+4. Confirming will mark all eligible reviews as complete
+
+This feature is useful for:
+- Completing reviews after a grading session
+- Finalizing grades before releasing them to students
+- Ensuring all required feedback has been provided
+
+<Note>
+Only reviews with all required rubric checks applied will be marked complete. Reviews with missing required checks are automatically skipped to prevent incomplete grading.
+</Note>
 
 ## Managing Repository Permissions
 
