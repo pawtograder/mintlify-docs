@@ -8,6 +8,10 @@ icon: "comments"
 
 Pawtograder's discussion board feature allows students and staff to discuss course content and ask questions. It is **not** intended to be a replacement for office hours, although there is an option to format the post as a question that needs an answer (as opposed to a "note" that does not need an answer).
 
+Posts are formatted as Markdown and support drag-and-drop image uploads. Users can drag image files directly into the editor to upload and embed them in posts.
+
+Posts are formatted as Markdown and support drag-and-drop image uploads, making it easy for students and staff to share screenshots, diagrams, and other visual content.
+
 <Frame>
   <img src="/images/staff/surveys/discussion-board-overview.png" alt="Discussion board showing My Feed with posts, Pinned Posts sidebar, and active help request widget" />
 </Frame>
@@ -60,6 +64,27 @@ Posts can be shared with the entire class, or with course staff only. Each user 
 
 Students can edit their own posts, and staff can edit any post.
 
+### Image Uploads
+
+The discussion board supports drag-and-drop image uploads, making it easy to share:
+
+- Screenshots of code or error messages
+- Diagrams and visual explanations
+- Assignment-related images
+
+Simply drag an image file into the post editor or reply box, and it will be automatically uploaded and embedded in your post. This feature works for both creating new posts and replying to existing threads.
+
+The discussion board supports drag-and-drop image uploads for both students and staff. Users can:
+
+- Drag images directly into the post editor
+- Upload screenshots, diagrams, and other visual content
+- Add multiple images to a single post or reply
+- Preview images before posting
+
+This feature makes it easier for students to share error messages, code screenshots, and visual explanations of their questions.
+
+Posts and replies support drag-and-drop image uploads. Students and staff can simply drag image files directly into the post editor, and they will be automatically uploaded and embedded using Markdown syntax. This makes it easy to share screenshots, diagrams, error messages, and other visual content.
+
 ### Post Metadata
 
 Each post displays:
@@ -69,6 +94,8 @@ Each post displays:
 - **Timestamp**: When the post was created
 - **Reply count**: Number of responses, with indicators for new replies
 - **Like count**: Community engagement metric
+- **Karma**: Points earned by users for helpful contributions
+
 - **Karma points**: Users earn karma for helpful contributions
 - **Answered badge**: Indicates whether a question has been resolved
 
@@ -86,6 +113,186 @@ When a student has an active help request in office hours, a widget appears in t
 
 This integration ensures students never miss updates on their help requests, even while browsing the discussion board.
 
+## Drag-and-Drop Image Uploads
+
+The discussion board supports drag-and-drop image uploads, making it easy for students and staff to share screenshots, diagrams, and other visual content. Simply drag an image file into the post editor to upload it.
+
+## Karma System
+
+The discussion board includes a karma system that rewards helpful contributions. Students earn karma points by:
+
+- Creating helpful posts that receive likes
+- Providing answers that are marked as solving questions
+- Engaging constructively with the community
+
+Karma scores are visible to instructors and can help identify active, helpful community members. This gamification element encourages quality participation in course discussions.
+
+## Karma System
+
+Pawtograder includes a karma system to encourage student engagement on the discussion board:
+
+- Students earn karma for creating posts and replies
+- Additional karma is awarded when posts receive likes
+- Karma scores are visible to students and staff
+- Helps identify active and helpful community members
+
+The karma system gamifies participation and rewards students who contribute meaningfully to course discussions.
+
+## Image Uploads
+
+The discussion board supports drag-and-drop image uploads, making it easy for students and staff to:
+
+- Share screenshots of errors or issues
+- Post diagrams and visual explanations
+- Include images directly in posts without external hosting
+
+Simply drag an image file into the post editor to upload it.
+
+The discussion board includes a karma system that rewards students for helpful contributions. Students earn karma points through:
+
+- Creating helpful posts and replies
+- Receiving likes from other students and staff
+- Having their answers marked as helpful by instructors
+- Engaging constructively with the community
+
+As an instructor, you can use karma scores to:
+- Identify active and helpful students
+- Recognize students who contribute to peer learning
+- Award participation credit based on discussion board engagement
+- Encourage quality contributions over quantity
+
+Student karma scores are visible on their profiles and in the discussion board interface.
+
+## Error Pins
+
+Error pins are a powerful feature that automatically surfaces relevant discussion posts to students when they encounter errors in their submissions. When a student's autograder run produces an error, the system:
+
+- Matches the error message against discussion board posts
+- Displays relevant pinned posts and discussions to the student
+- Helps students find solutions without joining the office hours queue
+- Reduces repetitive questions by surfacing existing answers
+
+### Creating Effective Error Pins
+
+To maximize the effectiveness of error pins:
+
+1. **Pin posts about common errors**: When you notice students frequently encountering the same error, create and pin a discussion post explaining the solution
+2. **Use clear error messages**: Include the actual error message text in your post so the system can match it
+3. **Provide step-by-step solutions**: Make pinned posts comprehensive so students can resolve issues independently
+4. **Update regularly**: As new common errors emerge, create new pinned posts to address them
+
+Error pins integrate with the [test insights dashboard](/staff/assignments/test-insights-dashboard) to help you identify which errors are most common and deserve dedicated discussion posts.
+
 ## Notifications
 
 By default, users do not get notifications for new posts, but can optionally "watch" a post to receive notifications when the post is updated or receives a new reply. Interacting with a post (e.g. replying to it) will automatically watch the post.
+
+## Karma and Leaderboard
+
+Pawtograder includes an optional karma system to encourage helpful participation on the discussion board. As an instructor, you can enable or disable these features based on your course culture and goals.
+
+### Karma System
+
+When enabled, students earn karma points for:
+
+- Creating helpful posts and sharing knowledge
+- Providing useful answers to questions
+- Receiving likes from other students
+- Having their answers marked as correct
+
+The karma system is designed to:
+
+- Encourage active participation in course discussions
+- Recognize students who help their peers
+- Create a positive community atmosphere
+- Provide instructors with insights into student engagement
+
+### Leaderboard Configuration
+
+The leaderboard feature can be configured to be:
+
+- **Prominent**: Displayed prominently to encourage competition and recognition
+- **Subtle**: Available but less emphasized to reduce competitive pressure
+- **Disabled**: Completely hidden if you prefer not to use gamification
+
+### Best Practices
+
+When using the karma system:
+
+1. **Set expectations**: Explain to students how karma works and what behaviors are rewarded
+2. **Monitor for quality**: Ensure students are providing helpful content, not just posting for points
+3. **Balance competition**: Consider your course culture when deciding how prominent to make the leaderboard
+4. **Recognize top contributors**: Acknowledge students who consistently help their peers
+5. **Adjust as needed**: You can enable or disable these features at any time based on how they're working in your course
+
+<Note>
+The karma system and leaderboard are optional features. Many courses find them helpful for encouraging participation, while others prefer a less gamified approach. Choose what works best for your teaching style and student population.
+</Note>
+
+## Drag-and-Drop Image Uploads
+
+Students and staff can add images to posts and replies by dragging and dropping image files directly into the editor. This feature makes it easier for students to:
+
+- Share screenshots of errors or issues
+- Show diagrams or visual explanations
+- Provide examples of their work
+
+Images are automatically uploaded and embedded in the post when dropped into the text editor.
+
+## Karma System
+
+Pawtograder includes an optional karma system to recognize helpful contributions to the discussion board. Students earn karma points when:
+
+- Their posts receive likes from other students
+- Their answers are marked as helpful by the original poster
+- Instructors endorse their contributions
+
+### Leaderboard
+
+You can enable or disable the leaderboard feature from the course settings. When enabled, the leaderboard displays top contributors based on their karma scores. This can encourage student participation and help identify students who are actively helping their peers.
+
+To make the leaderboard less prominent, you can configure it to be collapsed by default, reducing visual clutter while still making it available for students who want to see it.
+
+## Image Uploads
+
+Students and staff can drag and drop images directly into discussion posts and replies. This makes it easy to:
+
+- Share screenshots of errors or issues
+- Include diagrams and visual explanations
+- Attach relevant images without external hosting
+
+Images are automatically uploaded and embedded in the post content.
+
+## Karma System
+
+The discussion board includes a karma system to recognize helpful contributions:
+
+- Students earn karma points when their posts and replies receive likes
+- Karma scores are visible to instructors and staff
+- Use karma to identify active and helpful students in your course
+- Karma encourages quality contributions and peer-to-peer learning
+
+The karma system helps foster a positive and engaged learning community.
+
+## Karma System
+
+The discussion board includes a karma system to encourage student participation and recognize helpful contributions. Students earn karma points through:
+
+- **Creating posts**: Earning likes from other students
+- **Providing helpful answers**: Replies that solve problems or answer questions
+- **Community engagement**: Constructive participation in discussions
+
+### Using Karma
+
+As an instructor, you can:
+
+- **View karma scores**: See which students are actively contributing
+- **Track participation**: Use karma as a metric for discussion board engagement
+- **Offer incentives**: Award extra credit or recognition for high karma scores
+- **Monitor quality**: Identify students who consistently provide helpful answers
+
+Karma scores are visible on student profiles and can be exported for grading purposes.
+
+<Tip>
+Consider using karma as part of your participation grade to encourage students to help each other on the discussion board.
+</Tip>
