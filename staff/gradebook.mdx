@@ -175,6 +175,10 @@ return (100 * validValues.reduce((a, b) => a + (b && b.score ? b.score / b.max_s
 
 In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average. The calculation tolerates undefined values in the input array, ensuring robust grade calculations even when some data is missing.
 
+<Note>
+The mean calculation now tolerates undefined values in the input array, automatically filtering them out before computing the average. This prevents errors when some gradebook columns have not yet been populated.
+</Note>
+
 #### `drop_lowest(array, count)`
 
 Removes the lowest scoring droppable items:

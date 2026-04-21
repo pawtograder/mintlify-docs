@@ -1,4 +1,72 @@
 ---
+title: "Test Insights and Error Explorer"
+description: "Analyze test failures, group errors, and regrade submissions efficiently"
+icon: "magnifying-glass-chart"
+---
+
+# Test Insights and Error Explorer
+
+Pawtograder provides powerful tools to help instructors understand patterns in test failures and efficiently regrade submissions when issues are identified.
+
+## Error Explorer
+
+The error explorer helps you identify and analyze common test failures across all student submissions. This feature groups similar errors together, making it easy to:
+
+- Identify widespread issues that may indicate problems with the assignment or autograder
+- Find students affected by specific errors
+- Quickly regrade submissions after fixing autograder issues
+
+### Viewing Error Groups
+
+Navigate to the assignment's autograder page to access the error explorer. Errors are automatically grouped by:
+
+- Test name
+- Error message
+- Stack trace patterns
+
+Each error group shows:
+
+- Number of affected submissions
+- Representative error message
+- List of affected students
+
+### Copying Student Emails
+
+You can view and copy the email addresses of all students affected by a specific error group. This is useful for:
+
+- Notifying students about known issues
+- Communicating fixes or workarounds
+- Following up with students who need assistance
+
+To copy affected students' emails:
+
+1. Click on an error group in the error explorer
+2. Click the "Copy Emails" button
+3. Paste the email list into your email client
+
+## Regrade Workflow
+
+When you identify an issue with your autograder or tests, Pawtograder provides a streamlined workflow to regrade affected submissions.
+
+### Launching Regrade from Error Explorer
+
+1. **Identify the Issue**: Use the error explorer to find the error group you want to regrade
+2. **Launch Regrade**: Click the "Regrade" button from the error explorer
+3. **Preselect Submissions**: The system automatically preselects all submissions affected by that error
+4. **Choose Commits**: Select which commits to regrade in the regrade dialog
+
+### Regrade Dialog Options
+
+The regrade dialog provides several options:
+
+- **Regrade Latest Commits**: Regrade each student's most recent submission
+- **Regrade Specific SHA**: Enter a specific commit SHA to regrade
+- **Auto-Promote**: Automatically promote the new submission if it scores higher than the current active submission
+
+<Note>
+Auto-promote is useful when fixing autograder bugs that incorrectly penalized students. It ensures students automatically receive the benefit of the corrected grading without manual intervention.
+</Note>
+
 title: "Test Insights and Error Tracking"
 description: "Analyze test failures, track common errors, and regrade submissions efficiently"
 icon: "chart-line"
@@ -199,6 +267,56 @@ Review your selections and click **Regrade** to start the process. The autograde
 ### Conflict Detection
 
 The regrade system includes conflict detection to prevent issues:
+
+- Warns if students have made new commits since the error occurred
+- Alerts if submissions are already being graded
+- Provides clear validation messages before executing the regrade
+
+## Best Practices
+
+### Analyzing Test Failures
+
+1. **Review error patterns early**: Check the error explorer shortly after the assignment deadline
+2. **Look for clusters**: Large error groups may indicate assignment or autograder issues
+3. **Compare across submissions**: Use the error explorer to see if errors are consistent or varied
+
+### Regrading Submissions
+
+1. **Test your fix first**: Use the test assignment feature to verify your autograder fix works correctly
+2. **Document the issue**: Keep notes on what was fixed for future reference
+3. **Communicate with students**: Let affected students know about the regrade and any changes
+4. **Use auto-promote carefully**: Only enable auto-promote when you're confident the new grades are correct
+
+### Office Hours Integration
+
+When students request help with test failures:
+
+1. Use the error explorer to see if their issue is widespread
+2. Check if other students have the same error pattern
+3. Direct students to existing help requests or discussions if the issue is common
+4. Use the AI assistance feature to help diagnose unique errors
+
+## Technical Details
+
+### Error Grouping Algorithm
+
+Errors are grouped using:
+
+- Exact test name matching
+- Fuzzy matching on error messages (ignoring line numbers and variable names)
+- Stack trace similarity analysis
+
+### Regrade Performance
+
+- Regrades are processed asynchronously in the background
+- Students receive notifications when their regrade completes
+- The system prevents duplicate regrades for the same commit
+
+### Data Retention
+
+- Error groups are updated in real-time as new submissions arrive
+- Historical error data is preserved for analysis
+- Regrade history is maintained for audit purposes
 
 - Warns if submissions are already being graded
 - Alerts if selected commits don't exist in student repositories
