@@ -10,6 +10,16 @@ Instructors can define multiple handgrading rubrics for each assignment, althoug
 
 Once all required rubric checks are done, the grader can click the "Complete Review" button to confirm that they have completed grading. This does **not** release the review to the student, but indicates to the instructor that it **could** be released (at the instructor's discretion).
 
+## Editing Comments After Review Completion
+
+Graders can continue to add and edit comments even after completing a review. This allows for:
+
+- Adding clarifications or additional feedback
+- Correcting mistakes in comments
+- Responding to student questions about feedback
+
+However, once a review is **released** to students, only instructors can edit the comments. This ensures that students receive consistent feedback and prevents graders from making changes after students have seen their grades.
+
 ## Grading Submissions That You Have Been Assigned
 
 When you have submissions assigned to grade, you will see a summary of them on the assignment's landing page.
@@ -18,7 +28,7 @@ When you have submissions assigned to grade, you will see a summary of them on t
   <img src="/images/staff/assignments/handgrading-1756054330152.png" alt="Handgrading page showing assigned submissions list" />
 </Frame>
 
-Click on any submission to view the grading interface. Click on the "Files" tab to view the submission's files.
+Click on any submission to view the grading interface. Click on the "Files" tab to view the submission's files. Plaintext and markdown files can be viewed directly in the browser. If the assignment includes artifacts, you can view them in the "Artifacts" tab, and rubric checks can link directly to specific artifacts for easy reference.
 
 Instructors can assign graders to entire submissions (grading the whole rubric on each submission), or can assign graders to only parts of each rubric for each submission. The grading interface will show you the rubric parts that you have been assigned to grade, and you can grade each part individually. If you are assigned to grade only a part of the rubric, you can also click on "View + Grade Full Rubric" to have access to grade the full rubric.
 
@@ -51,3 +61,36 @@ By clicking on a student/group name, you will be taken to the grading interface 
 <Frame>
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
+
+## Managing grading completion
+
+### Viewing grading completion status
+
+The all submissions table includes a **Grading Complete** column that shows whether each submission review has been marked as complete. You can filter submissions by completion status to quickly find incomplete reviews.
+
+### Marking all grading complete
+
+When you have many submissions to grade, you can use the **Mark All Grading Complete** button to automatically mark all eligible submissions as complete. This feature:
+
+- **Validates rubric requirements**: Only marks submissions complete if all required rubric checks have been applied
+- **Shows eligibility counts**: Displays how many submissions can be marked complete vs. how many have missing required checks
+- **Prevents errors**: Skips submissions with incomplete rubrics to avoid validation errors
+
+To use this feature:
+
+1. Navigate to the **All Submissions** tab on the assignment page
+2. Click **Mark All Grading Complete**
+3. Review the eligibility summary showing:
+   - How many incomplete submissions can be marked complete
+   - How many submissions have missing required rubric checks
+4. Click the checkmark to confirm
+
+Only submissions with all required rubric checks applied will be marked as complete. Submissions with missing required checks will be skipped.
+
+### Tracking incomplete reviews
+
+The instructor dashboard now provides better visibility into incomplete grading reviews:
+
+- **Submission reviews column**: Shows completed/total counts with a link to the submissions table
+- **Incomplete badge**: Highlights assignments with incomplete reviews in orange
+- **Direct navigation**: Click the incomplete count to jump to the submissions table filtered by incomplete reviews
