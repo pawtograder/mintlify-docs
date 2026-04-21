@@ -10,6 +10,47 @@ Pawtograder's office hours feature allows students to request live help from cou
 
 Students are encouraged to make public requests for help, so that other students can also benefit from the discussion.
 
+## Get Help CTA and Help Drawer
+
+Students have access to a persistent **Get Help** call-to-action button throughout the site. This button opens a right-side help drawer that provides:
+
+- **Office Hours status card**: Overview of all available queues and their current status
+- **Per-queue cards**: Individual queue information including wait times and staff availability
+- **Weekly queue schedule**: Calendar view showing when each queue is staffed, with live "Happening now" highlights for currently active sessions
+- **Demo queues**: Optional practice queues for testing (configured via ordinal-based queue ordering)
+
+### Queue Management Features
+
+- **Ordinal-based ordering**: Queues are displayed in a configurable order
+- **Course-level description**: Add a description to explain your office hours system
+- **Queue name resolution**: Calendar events automatically link to the corresponding queue
+- **Conflict detection**: The system validates help requests to prevent scheduling conflicts for solo office hours
+
+## Student Notifications
+
+The platform provides comprehensive notification support to ensure students never miss updates:
+
+### Notification Types
+
+- **Browser notifications**: Desktop alerts for help request updates
+- **Title notifications**: Page title updates showing notification counts
+- **Sound notifications**: Audio alerts for important events
+- **Favicon updates**: Visual indicator in the browser tab
+- **Permission warnings**: Clear prompts if browser notifications are blocked
+
+### Notification Settings
+
+Students can:
+
+- Test notifications to verify their setup
+- Enable or disable specific notification types
+- Configure sound preferences
+- Manage browser notification permissions
+
+<Tip>
+Encourage students to enable browser notifications during the first week of class to ensure they receive timely updates about their help requests.
+</Tip>
+
 ## Office Hours Queues
 
 Instructors can create multiple office hours queues to provide different types of help. For example, if a class is coordinated across multiple campuses, there may be in-person help queues per-campus, and a cross-network virtual help queue.
@@ -32,6 +73,40 @@ You can mark queues as "demo" queues for testing purposes. Demo queues:
 - Don't appear in the main queue list for students
 - Allow staff to test the help request workflow
 - Can be used for training new staff members
+
+### Queue Configuration
+
+When configuring office hours queues, you can:
+
+- Set a course-level office hours description
+- Configure queue ordering using ordinal values
+- Create demo queues for testing purposes
+- Set up weekly schedules that display to students with live "Happening now" indicators
+
+### Student Access
+
+Students can access office hours through:
+
+1. **Get Help Button**: A persistent CTA that appears throughout the site
+2. **Help Drawer**: A right-side drawer showing:
+   - Office hours status card
+   - Per-queue cards with current staff availability
+   - Weekly queue schedule with live status highlights
+
+- **Set queue schedules**: Define when each queue is active throughout the week
+- **Mark queues as demo**: Demo queues appear in a separate section and use ordinal-based ordering
+- **Add course-level descriptions**: Provide context about your office hours system
+- **Configure queue ordering**: Queues are ordered by their ordinal value for consistent display
+
+### Office Hours Status Card
+
+Students see an **Office Hours Status** card that displays:
+- Whether office hours are currently happening
+- Which queues are currently open
+- How many students are waiting in each queue
+- The weekly schedule with "Happening now" highlights for active sessions
+
+This helps students understand when help is available and which queue to join.
 
 ## Help Request Templates
 
@@ -100,6 +175,29 @@ The system includes validation to prevent conflicts:
 - Clear error messages guide students when they attempt duplicate requests
 - Solo office hours requests are validated to ensure only one student per request
 
+### Student Notifications
+
+Students receive comprehensive notifications for help request updates:
+
+- **Browser Notifications**: Desktop notifications for status changes (requires permission)
+- **Title Bar Updates**: Page title shows queue position and status
+- **Sound Alerts**: Audio notifications for important events
+- **Favicon Badge**: Visual indicator in browser tab for active requests
+
+Students can test notifications and manage permissions directly from the help request interface. A permission warning appears if browser notifications are blocked.
+
+### AI Assistance for Instructors
+
+Pawtograder includes a Model Context Protocol (MCP) server that enables AI assistants to help instructors and TAs support students who are struggling with errors in their programming assignments. The MCP server provides:
+
+- Secure Supabase OAuth authentication (instructors and graders only)
+- Tools for fetching help requests, discussion threads, submissions, test results, and build output
+- Privacy protection that never exposes sensitive user data
+- AI Help button in help request chat and discussion thread views
+- Support for any MCP-compatible AI client
+
+To use AI assistance, instructors can add a handout URL to assignments (in the assignment configuration) to provide assignment context to AI assistants. The AI Help button generates MCP context that can be used to help diagnose student issues and provide targeted assistance.
+
 ## Resolving Requests
 
 ## Resolving requests
@@ -117,6 +215,25 @@ Students can resolve their own help requests from the floating banner or main ch
 - **Other**: Other reason for closing the request
 
 This resolution flow helps track which help requests were successfully resolved vs. abandoned, providing valuable feedback for improving course support.
+
+## Request Validation
+
+Pawtograder includes conflict detection and validation for help requests:
+
+- **Solo request validation**: Prevents students from joining multiple solo office hours queues simultaneously
+- **Clearer error messages**: Students receive specific feedback when validation fails
+- **Improved UX**: The system provides clear guidance on resolving conflicts
+
+## Notifications
+
+Students receive comprehensive notifications for office hours updates:
+
+- **Browser notifications**: Desktop alerts for status changes and messages
+- **Title notifications**: Page title updates showing queue status
+- **Sound notifications**: Audio alerts for important events
+- **Favicon updates**: Visual indicators in the browser tab
+
+Students can test notifications and manage permissions from the help drawer. Permission warnings appear if browser notifications are disabled.
 
 ## Feedback and Analytics
 
