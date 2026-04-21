@@ -1,0 +1,53 @@
+---
+title: "Assignment Configuration"
+description: "Configure assignment settings including due dates, score capping, and grading options"
+icon: "gear"
+---
+
+# Assignment Configuration
+
+Pawtograder provides flexible configuration options for assignments to support various grading policies and workflows.
+
+## Due Date Management
+
+### Extended Due Date Picker
+
+When granting manual extensions to students, instructors can choose an extended due date directly using a date picker interface, rather than entering extension hours and minutes. This makes it easier to:
+
+- Set specific deadlines for individual students or groups
+- Visualize the extended due date in context
+- Avoid calculation errors when determining extension length
+
+To grant an extension:
+
+1. Navigate to the assignment's "Due Date Exceptions" section
+2. Select the student or group
+3. Use the date picker to choose the extended due date
+4. Save the extension
+
+The system will automatically calculate the extension duration based on the original due date.
+
+## Score Capping
+
+Instructors can configure a maximum score cap for assignments. This feature allows you to:
+
+- Set a maximum possible score for an assignment
+- Prevent extra credit from exceeding a specified limit
+- Ensure consistent grading across all submissions
+
+Score capping is configured in the assignment settings and applies automatically when calculating final grades. When a student's total score (autograder + handgrading) exceeds the cap, their final score will be limited to the maximum value.
+
+### Configuring Score Caps
+
+1. Navigate to the assignment settings
+2. Find the "Score Capping" section
+3. Enter the maximum score value
+4. Save the configuration
+
+The score cap will apply to all submissions for that assignment.
+
+## Export Options
+
+### Loading States for Export Buttons
+
+When exporting grades or other assignment data, the export buttons now display loading states to provide feedback during the export process. This helps you understand that the system is processing your request, especially for large datasets.

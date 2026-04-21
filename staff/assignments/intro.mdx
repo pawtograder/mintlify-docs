@@ -12,6 +12,17 @@ Programming assignments are the core of Pawtograder. Each assignment consists of
 
 Pawtograder creates two GitHub teams for each class: a "staff" team and a "students" team. Staff are granted access to all class repositories, and students are only granted access to their own repositories. The "students" team can be used by instructors who want to create additional GitHub repositories that are only accessible to students (e.g. for distributing in-class exercises).
 
+### Repository Permissions Audit
+
+If repository permissions become out of sync, instructors can use the **Fix Permissions** button on the assignment's repositories page to audit and correct all repository permissions:
+
+1. Navigate to the assignment's **Repositories** page
+2. Click the **Fix Permissions** button
+3. The system will audit all repositories and enqueue permission syncs as needed
+4. View the summary showing synced repositories, skipped repositories, and any errors
+
+This feature ensures all group members have correct access to their group repositories and removes access for students who have left groups.
+
 ## Repositories
 
 Two repositories are automatically created for each assignment: a "handout" repository and a "grader" repository. These repositories must be configured by the staff before the assignment is released.
@@ -25,6 +36,16 @@ A **grader repository** is a repository that contains the code that will be used
 Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
+
+### Group Mentors
+
+Instructors can assign mentors to student groups from the groups management page:
+
+1. Navigate to the assignment's **Groups** page
+2. Use the **Mentor** dropdown for each group to assign a grader or instructor
+3. Mentors are displayed to students in their group details
+4. Use the "Assign to group mentors" bulk grading mode to automatically assign submissions to their group's mentor
+5. Group mentor assignments are preserved when copying groups between assignments
 
 ## Due Date Exceptions
 
@@ -62,3 +83,41 @@ The security dashboard helps instructors monitor and prevent academic integrity 
 - **Access patterns**: Monitor repository access and commit history
 
 Access the security dashboard from the assignment page to review potential concerns and investigate suspicious activity.
+
+Instructors and graders can also manually grant extensions to students using a date picker to select the extended due date, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+## Assignment Dashboards
+
+Pawtograder provides several dashboards to help instructors monitor and manage assignments:
+
+### Assignment Dashboard
+
+View a comprehensive overview of assignment progress, including submission statistics, grading status, and student performance metrics.
+
+### Security Dashboard
+
+Monitor assignment security with insights into potential academic integrity concerns, including:
+
+- Submission timing patterns
+- Repository access logs
+- Unusual activity indicators
+
+### Test Insights Dashboard
+
+Track student performance across test cases to identify:
+
+- Common failure patterns
+- Tests that students struggle with most
+- Overall test pass rates and trends
+
+These dashboards help instructors identify areas where students need additional support and adjust course materials accordingly.
+
+## Assignment Score Capping
+
+Instructors can configure a maximum score cap for assignments. This feature allows you to:
+
+- Set a ceiling on the total points students can earn
+- Prevent extra credit from inflating grades beyond intended limits
+- Maintain consistent grading scales across assignments
+
+Score capping is configured in the assignment settings and applies automatically when grades are calculated.
