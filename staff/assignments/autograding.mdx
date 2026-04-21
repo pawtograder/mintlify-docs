@@ -16,6 +16,37 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Rerunning Autograders
+
+You can rerun the autograder on existing submissions without creating new submissions. This is useful when:
+
+- You've fixed a bug in your grading script
+- You want to update test cases and regrade existing work
+- You need to regrade after adjusting point values
+
+When rerunning an autograder:
+
+1. Navigate to the assignment's autograder page
+2. Select the submissions you want to regrade
+3. Choose which version of the grader to use:
+   - **Latest commit**: Use the most recent version of your grader repository
+   - **Specific commit**: Select a particular commit SHA for consistent grading
+   - **Auto-promote**: Automatically promote the new autograder results if they improve the student's score
+
+The rerun reuses the same submission rather than creating a new one, preserving the original submission timestamp and history.
+
+## Test Insights and Regrade Workflow
+
+The test insights dashboard integrates with the autograder to streamline regrading:
+
+1. **View Error Groups**: See which test cases are failing and how many students are affected
+2. **Launch Regrade**: Start a regrade directly from an error group
+3. **Preselect Submissions**: Affected submissions are automatically selected on the autograder page
+4. **Choose Grader Version**: Select commits or enter a manual SHA in the regrade dialog
+5. **Auto-promote Results**: Optionally promote new results automatically if scores improve
+
+This workflow makes it easy to identify issues, fix them, and regrade affected students efficiently.
+
 ## Test Insights and Error Explorer
 
 Pawtograder provides powerful test insights to help instructors identify and address common student errors:

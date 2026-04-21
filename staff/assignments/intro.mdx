@@ -31,6 +31,17 @@ A **handout repository** is a repository that contains the starter code for an a
 
 A **grader repository** is a repository that contains the code that will be used to grade the assignment. It is used to provide instructors with the necessary files to grade the assignment.
 
+### Syncing Handout Updates
+
+After an assignment is released, you may need to update the handout repository to fix bugs or add clarifications. Pawtograder provides a sync-to-handout feature that:
+
+- Pushes updates from the handout repository to all student repositories
+- Includes improved resilience to handle edge cases and errors
+- Preserves student work while merging in your changes
+- Notifies students of the updates
+
+This feature ensures all students receive important fixes and updates without disrupting their work in progress.
+
 ## Individual and Group Assignments
 
 Assignments can be individual, group-optional, or group-required.
@@ -55,6 +66,42 @@ Instructors can assign mentors to student groups from the groups management page
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
 Each token can be exchanged for a 24-hour extension, but the extension must be requested before the student's original due date.
+
+Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. When granting extensions, you can now choose an extended due date directly rather than entering hours and minutes, making it easier to set precise deadlines.
+
+## Assignment Dashboards
+
+Pawtograder provides several dashboards to help you monitor and manage assignments:
+
+### Grading Status Dashboard
+
+The grading status dashboard gives you a comprehensive overview of grading progress across all submissions:
+
+- View completion status for each grading task
+- Track which submissions have been graded and which are pending
+- Monitor grader workload and progress
+- Identify bottlenecks in the grading workflow
+
+### Security Dashboard
+
+The assignment security dashboard helps you detect and prevent academic integrity issues:
+
+- Monitor for suspicious patterns in submissions
+- Track repository access and commit patterns
+- Identify potential collaboration or copying concerns
+- Review security audit logs for each assignment
+
+### Test Insights Dashboard
+
+The test insights dashboard provides detailed analytics on student performance:
+
+- View aggregated test results across all submissions
+- Identify common errors and failure patterns
+- Track which test cases students struggle with most
+- Export affected student emails for targeted communication
+- Launch regrading workflows directly from error groups
+
+Use the test insights dashboard to understand where students need additional support and to improve your assignments over time.
 
 Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
 
