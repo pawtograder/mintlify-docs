@@ -57,6 +57,15 @@ Instructors can create multiple office hours queues to provide different types o
 
 ### Queue Configuration
 
+When configuring queues, you can:
+
+- Set **demo queues** for testing and training purposes
+- Configure **ordinal-based queue ordering** to control display order
+- Add a **course-level Office Hours description** to provide context to students
+- Define **weekly queue schedules** that display with live "Happening now" highlights
+
+Students can view the queue schedule through the **Get Help** button, which provides a persistent call-to-action throughout the site.
+
 When creating queues, you can configure:
 
 - **Queue name**: Displayed to students when selecting where to request help
@@ -395,6 +404,21 @@ Students can resolve their own help requests from the floating banner or main ch
 - **Other**: Other reason for closing the request
 
 This resolution flow helps track which help requests were successfully resolved vs. abandoned, providing valuable feedback for improving course support.
+
+## AI Assistance for Instructors
+
+Pawtograder provides AI assistance tools to help instructors and TAs support students more effectively. An **AI Help** button appears in help request chats and discussion threads, allowing staff to generate context that can be used with AI assistants.
+
+### Model Context Protocol (MCP) Server
+
+The MCP server enables AI assistants to access course data securely:
+
+- **Authentication**: Uses Supabase OAuth (instructors and graders only)
+- **Available Tools**: Fetch help requests, discussion threads, submissions, test results, and build output
+- **Privacy Protection**: Never exposes sensitive user data
+- **Assignment Context**: Add a `handout_url` to assignments to provide assignment context to AI assistants
+
+This feature helps TAs quickly understand student errors and provide more effective assistance, especially for complex programming assignment debugging.
 
 ## Student Notifications
 
