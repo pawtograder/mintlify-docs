@@ -24,13 +24,27 @@ Pawtograder's "Bulk Assign Grading" feature (from an Assignment's "Grading Assig
   <img src="/images/staff/assignments/grading-assignments-1756052527424.png" alt="Bulk Assign Grading form with distribution options" />
 </Frame>
 
-The algorithm will first split submissions between graders (assigning all selected rubric parts to each grader, aka "Assign by submission"), or split the rubric parts between graders first (assigning each submission to different graders for each rubric part, aka "Assign by rubric part").
+The algorithm offers several assignment modes:
+
+- **By submission**: Split submissions between graders (assigning all selected rubric parts to each grader)
+- **By rubric part**: Split rubric parts between graders first (assigning each submission to different graders for each rubric part)
+- **Assign to lab leaders**: Automatically assign each submission to all lab leaders of the student's lab section
+- **Assign to group mentors**: Automatically assign each group's submission to the group's assigned mentor
 
 You can choose which rubric to assign (the "Grading Rubric" is the default, and what is used to calculate the student's grade for the assignment), and optionally choose which rubric parts to assign.
 
 The algorithm will only operate over unassigned grading tasks. To support complex workflows, you can manually assign some subsets at a time (filtering by section or tag).
 
 To select assignees, you can filter by role (e.g. graders, instructors, or both), and optionally filter by tag. The form will show which graders will be assigned, and you can manually override the selection of graders.
+
+### Group Mentor Assignment
+
+When using the "Assign to group mentors" mode:
+
+- Each group's submission is automatically assigned to the group's mentor
+- Submissions without groups or without assigned mentors are skipped
+- No manual grader selection is needed
+- The system validates for grading conflicts with group members
 
 You can choose to reuse existing grading assignments (e.g. if you want to assign the same graders to the same submissions as a previous assignment, or even to assign the same graders a different rubric on the same submissions). Selecting this option will override all balancing efforts.
 
@@ -48,3 +62,78 @@ The grading status dashboard provides instructors with a comprehensive overview 
 - View grading assignments by staff member or by assignment
 
 Access the grading status dashboard from the course navigation to get a real-time view of all grading activities and ensure timely completion of grading tasks.
+
+## Managing Review Assignments
+
+### Viewing Review Assignments
+
+The "All Assignments" tab provides a comprehensive view of all review assignments, organized into two sub-tabs:
+
+- **Grading reviews**: Shows all non-self-review rubric assignments (grading review, meta-grading, code walk, etc.)
+- **Self reviews**: Shows only self-review rubric assignments
+
+Each table displays:
+- Submitter information
+- Assignee details
+- Due dates (in the course's configured timezone)
+- Review status (Not Started, In Progress, Completed)
+- Rubric and review round (grading reviews only)
+
+You can filter, sort, and export review assignments to CSV for external tracking.
+
+### Editing Individual Review Assignments
+
+Click the edit icon on any review assignment row to modify:
+
+- **Due date**: Set or update the deadline for completing the review
+- **Assignee**: Reassign the review to a different grader (grading reviews only)
+
+For self-review assignments, only the due date can be edited since self-reviews are always assigned to the student who submitted.
+
+### Bulk Editing Review Due Dates
+
+Use the "Bulk edit grading due dates" or "Bulk edit self-review due dates" buttons to update multiple review assignments at once:
+
+1. Select a rubric from the dropdown (required)
+2. Choose a new due date and time
+3. Optionally check "Only rows not yet completed" to skip finished reviews
+4. Click "Apply to matching rows"
+
+The system will update all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately to ensure clarity.
+
+### Bulk Editing Review Due Dates
+
+Use the "Bulk edit grading due dates" or "Bulk edit self-review due dates" buttons to update multiple review assignments at once:
+
+1. Select a rubric from the dropdown (required)
+2. Choose a new due date and time
+3. Optionally check "Only rows not yet completed" to skip finished reviews
+4. Click "Apply to matching rows"
+
+The system will update all review assignments for the selected rubric that match your criteria, showing you how many rows were affected.
+
+## Student Overview Page
+
+The student overview page (accessible from "Manage" → "Students" → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance:
+
+### Student Information
+
+- **Email address**: The student's account email
+- **Lecture section**: If enrolled in a Canvas/SIS section, displays the section name, meeting times, and location
+- **Lab section**: Shows the lab section name, meeting times, location, and assigned section leaders
+
+### Assignments Table
+
+The assignments table shows all course assignments with the following information for the selected student:
+
+- **Title**: Assignment name (linked to submission if available)
+- **Group**: For group assignments, displays:
+  - Group name
+  - Other group members (excluding the viewed student)
+  - Group mentor (if assigned)
+- **Submission #**: Ordinal number of the submission (linked to submission page)
+- **Submission Time**: When the student submitted
+- **Autograder Score**: Automated test results
+- **Total Score**: Final grade out of maximum points
+- **Due Date**: Assignment deadline (with any student-specific adjustments)
+- **Adjust Due Date**: Quick access to modify the due date for this student
