@@ -1,0 +1,47 @@
+---
+title: "Monitoring and Metrics"
+description: "Prometheus metrics for monitoring system performance and rate limiting"
+icon: "chart-line"
+---
+
+# Monitoring and Metrics
+
+Pawtograder exposes Prometheus metrics for monitoring system performance, queue health, and rate limiting behavior.
+
+## Metrics Endpoint
+
+Metrics are available at the `/metrics` endpoint and can be scraped by Prometheus or compatible monitoring systems.
+
+## Rate Limiter Metrics
+
+Pawtograder uses Bottleneck with Upstash Redis for distributed rate limiting. The system exposes detailed metrics about limiter state:
+
+### Limiter Gauges
+
+The following gauges are exposed with a `limiter_id` label to track each rate limiter independently:
+
+#### `pawtograder_limiter_running_weight`
+
+Total weight of currently running jobs for this limiter. This represents the active workload being processed.
+
+#### `pawtograder_limiter_queued_count`
+
+Number of jobs waiting in the queue for this limiter. Uses the same logic as Bottleneck's `queued.lua` script to ensure consistency with the rate limiting behavior.
+
+#### `pawtograder_limiter_concurrent_clients`
+
+Number of clients with active work (running or queued) for this limiter. Helps identify how many distinct clients are competing for rate-limited resources.
+
+### Implementation Details
+
+The metrics system scans Redis for `b_*_settings` keys to discover all active limiters. For each limiter, it evaluates:
+
+- Running weight from the limiter's internal state
+- Queued count using Bottleneck's queue counting logic
+- Active client count based on clients with non-zero running or queued jobs
+
+Redis errors during metric collection are non-fatal, allowing Postgres queue metrics to continue scraping successfully.
+
+## Queue Metrics
+
+In addition to rate limiter metrics, Pawtograder exposes metrics for job queue health and performance (implementation details vary by queue backend).
