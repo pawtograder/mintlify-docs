@@ -16,6 +16,40 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Test Insights and Error Analysis
+
+Pawtograder provides powerful tools to help instructors understand and respond to common student errors:
+
+### Error Explorer
+
+The error explorer groups similar test failures together, allowing you to:
+
+- View all students affected by a particular error pattern
+- Copy affected students' email addresses for bulk communication
+- Launch regrading workflows directly from error groups
+- Identify systemic issues in assignments or test cases
+
+### Regrade Workflow
+
+When you need to regrade submissions, you can:
+
+1. Launch regrade from the error explorer
+2. Preselect affected submissions on the autograder page
+3. Choose specific commits or enter a manual SHA in the regrade dialog
+4. Auto-promote the new submission if desired
+
+This streamlined workflow makes it easy to respond to discovered issues or updated test cases.
+
+## Empty Submission Detection
+
+The autograder automatically detects empty submissions to help identify students who may need assistance. Empty submissions are flagged when:
+
+- No meaningful code changes are present
+- Only starter code or template files exist
+- The submission contains no substantive work
+
+This feature helps instructors quickly identify students who may be struggling to get started on an assignment.
+
 ## Empty Submission Detection
 
 Pawtograder automatically detects empty submissions where students have not made meaningful changes to the starter code. When an empty submission is detected:

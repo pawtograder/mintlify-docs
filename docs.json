@@ -99,7 +99,7 @@
           },
           {
             "group": "Feature Documentation",
-            "pages": ["developers/surveys", "developers/polls"]
+            "pages": ["developers/surveys", "developers/polls", "developers/mcp-server"]
           }
         ]
       }
