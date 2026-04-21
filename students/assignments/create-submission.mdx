@@ -15,14 +15,121 @@ You will see a list of all the submissions you have made for the assignment. The
 
 Every time that you push changes to your repository, Pawtograder will automatically run your autograder. The submission page may show a preview of the grading rubric (if enabled by your instructor), and will show a summary of the autograder results.
 
+<Note>
+If you submit an empty repository or a repository with no meaningful content, Pawtograder will detect this and flag it for your instructor's review.
+</Note>
+
+### Assignment Leaderboard
+
+If your instructor has enabled the leaderboard feature for an assignment, you can view your ranking compared to other students. The leaderboard displays scores and rankings based on autograder results, encouraging friendly competition and helping you gauge your progress. Instructors can choose to make leaderboards optional and less prominent to reduce pressure while still providing performance insights.
+
 <Frame>
   <img src="/images/students/assignments/create-submission-1754510547128.png" alt="Submission page showing autograder results and grading rubric preview" />
 </Frame>
 
-The "Files" tab shows the files that your instructor configured for the submission.
+## Viewing Submission Files
+
+The "Files" tab shows the files that your instructor configured for the submission. Pawtograder supports:
+
+- **Text files**: Displayed with syntax highlighting and line-by-line commenting
+- **Markdown files**: Rendered with rich preview including diagrams, images, and tables
+- **Binary files**: Images display inline, PDFs show in a preview pane, and other files provide download links
+
+The "Files" tab shows the files that your instructor configured for the submission. Pawtograder supports viewing various file types:
+
+- **Text and code files**: Displayed with syntax highlighting
+- **Markdown files**: Rendered with formatting preview
+- **Binary files**: Supported for submission (e.g., images, PDFs, compiled files)
+
+The "Files" tab shows the files that your instructor configured for the submission. Binary files (such as images, PDFs, and compiled files) are supported and can be downloaded. Markdown files (.md) are rendered with syntax highlighting for easy reading.
+
+The "Files" tab shows the files that your instructor configured for the submission. You can view plaintext and markdown files directly in the browser, and download other file types.
 
 <Frame>
   <img src="/images/students/assignments/create-submission-1754510607368.png" alt="Files tab displaying submitted code files" />
 </Frame>
 
+Pawtograder can render various file types for easy viewing:
+- **Code files**: Syntax-highlighted display
+- **Markdown files**: Rendered with formatting
+- **Plaintext files**: Direct text display
+- **Binary files**: Available for download
+
+### File Preview
+
+Pawtograder supports previewing various file types in your submission:
+
+- **Code files**: Syntax-highlighted display of source code
+- **Markdown files**: Rendered markdown preview with formatting
+- **Binary files**: Supported for submission (images, PDFs, etc.)
+
+<Tip>
+Markdown files (`.md`, `.markdown`) are automatically rendered with formatting, making it easy to review documentation or README files in your submission.
+</Tip>
+
+The file viewer supports:
+- **Binary files**: Images, PDFs, and other binary files are now supported in submissions
+- **Markdown preview**: Markdown files (.md) are rendered with formatting for easier reading
+- **Code syntax highlighting**: Source code files display with appropriate syntax highlighting
+
+If your instructor has configured artifacts for the assignment, you'll see an "Artifacts" tab where you can view generated outputs like HTML sites, plaintext reports, or markdown documentation.
+
 These pages also have a link to the specific GitHub commit that was used to create the submission, and a link to download that complete repository as a zip file.
+
+## File Previews
+
+Pawtograder provides rich previews for different file types in your submissions:
+
+- **Markdown files** (`.md`, `.markdown`): Rendered with full formatting including diagrams, images, tables, and syntax-highlighted code blocks. You can toggle between preview and source view.
+- **Images** (`.png`, `.jpg`, `.gif`, etc.): Displayed inline with full resolution
+- **PDFs**: Previewed directly in the browser
+- **Code files**: Syntax-highlighted with line numbers
+
+Binary files (images, PDFs, etc.) are stored securely and loaded on-demand when you view them.
+
+## Assignment Leaderboard
+
+Some assignments may include an optional leaderboard that displays student rankings based on performance metrics. The leaderboard:
+
+- Shows your ranking compared to other students in the course
+- Updates automatically as new submissions are graded
+- Can be configured by your instructor to be visible or hidden
+- Provides friendly competition and motivation
+
+Some assignments may include an optional leaderboard that displays top-performing students. The leaderboard:
+
+- Shows rankings based on assignment scores
+- Updates automatically as submissions are graded
+- Can be configured by instructors to be visible or hidden
+- Encourages friendly competition and engagement
+
+<Note>
+Leaderboards are optional and controlled by your instructor. Not all assignments will have a leaderboard enabled.
+</Note>
+
+The leaderboard is designed to be less cluttering and only appears when enabled by course staff for specific assignments.
+
+If your instructor has enabled the leaderboard for an assignment, you'll see it on the assignment page showing your current ranking and the top performers in the class.
+
+## Error Pins
+
+When your submission encounters an error during autograding, Pawtograder may display "Error Pins" - suggested discussion board posts that are relevant to your specific error. This feature helps you:
+
+- **Find solutions faster**: See if other students encountered the same error and found solutions
+- **Access instructor guidance**: View posts where instructors explained how to fix common errors
+- **Reduce wait times**: Get help without needing to join the office hours queue
+- **Learn from peers**: Understand different approaches to solving the same problem
+
+Error pins appear automatically when the system detects that your error matches discussion posts that instructors have pinned or marked as relevant. Click on any suggested post to read the full discussion and potential solutions.
+
+## Viewing artifacts
+
+Some assignments may include artifacts - generated outputs from your code such as reports, visualizations, or analysis results. If your submission includes artifacts, you'll see them listed in the Files tab.
+
+Pawtograder supports previewing several artifact formats:
+
+- **Plaintext files**: Displayed with proper formatting
+- **Markdown files**: Rendered with formatting and syntax highlighting
+- **HTML sites**: Interactive preview of generated websites (from ZIP archives)
+
+When grading your submission, instructors can reference specific artifacts in rubric checks. These artifact references will appear as clickable links in the rubric sidebar, making it easy to navigate to the relevant output.
