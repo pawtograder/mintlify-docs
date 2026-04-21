@@ -44,7 +44,9 @@
             "pages": [
               "staff/assignments/intro",
               "staff/assignments/assignment-dashboard",
-
+              "staff/assignments/grading-dashboard",
+              "staff/assignments/test-insights",
+              "staff/assignments/security-dashboard",
               "staff/assignments/configuration",
               "staff/assignments/dashboards",
               "staff/assignments/grading-assignments",
@@ -60,7 +62,8 @@
               "staff/assignments/security-dashboard",
               "staff/assignments/leaderboard",
               "staff/assignments/dashboards",
-              "staff/assignments/test-insights-dashboard"
+              "staff/assignments/test-insights-dashboard",
+              "staff/assignments/extensions-and-scoring"
             ]
           },
           {
@@ -80,8 +83,7 @@
               "staff/gradebook",
               "staff/surveys",
               "staff/office-hours/intro",
-              "staff/office-hours/ai-assistance"
-
+              "staff/office-hours/ai-assistance",
               "staff/ai-assistance"
             ]
           },
