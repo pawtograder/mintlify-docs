@@ -75,6 +75,7 @@
           {
             "group": "Course Features",
             "pages": [
+              "staff/instructor-dashboard",
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
