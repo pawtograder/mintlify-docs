@@ -26,6 +26,7 @@
             "pages": [
               "students/discussion-board",
               "students/gradebook",
+              "students/gradebook-whatif",
               "students/office-hours",
               "students/polls",
               "students/surveys"
