@@ -1,6 +1,132 @@
 ---
+title: "Test Insights and Error Analysis"
+description: "Analyze autograder errors, identify patterns, and efficiently regrade submissions"
+icon: "chart-line"
+---
+
+# Test Insights and Error Analysis
+
+Pawtograder provides powerful tools for analyzing autograder test results, identifying common errors, and efficiently regrading submissions when needed.
+
+## Error Explorer
+
+The error explorer helps you identify patterns in test failures across all student submissions. This feature groups similar errors together, making it easy to:
+
+- Spot common mistakes that many students are making
+- Identify potential issues with test cases or grading criteria
+- Provide targeted help to groups of students with similar problems
+
+### Error Groups
+
+Errors are automatically grouped by:
+
+- Test case name
+- Error message patterns
+- Stack trace similarities
+
+Each error group shows:
+
+- Number of affected students
+- Representative error message
+- List of submissions with this error
+
+### Viewing Affected Students
+
+For each error group, you can:
+
+- View the list of students affected by this error
+- Copy student email addresses for bulk communication
+- Navigate directly to individual submissions
+
+This makes it easy to reach out to students who are experiencing the same issue with targeted guidance.
+
+## Regrade Workflow
+
+When you need to regrade submissions (for example, after fixing a test case or updating grading criteria), Pawtograder provides a streamlined workflow:
+
+### Launching a Regrade
+
+You can launch a regrade from two locations:
+
+1. **Error Explorer**: Click the regrade button next to an error group to regrade all affected submissions
+2. **Autograder Page**: Select specific submissions and click the regrade button
+
+When launching from the error explorer, affected submissions are automatically preselected on the autograder page.
+
+### Regrade Dialog
+
+The regrade dialog provides flexible options for selecting which code to regrade:
+
+<Steps>
+<Step title="Choose Commit Selection Method">
+Select how to identify which commits to regrade:
+
+- **Specific commits**: Choose from a list of recent commits
+- **Manual SHA**: Enter a specific commit SHA directly
+</Step>
+
+<Step title="Auto-Promote Option">
+Enable **auto-promote** to automatically set the regraded submission as the active submission for grading. This is useful when:
+
+- You've fixed a grading issue and want to update all affected students' grades
+- You're regrading after a deadline extension
+- You want to ensure the latest results are used for final grading
+</Step>
+
+<Step title="Confirm and Execute">
+Review your selections and click **Regrade** to start the process. The autograder will run on all selected submissions with the specified commit.
+</Step>
+</Steps>
+
+### Conflict Detection
+
+The regrade system includes conflict detection to prevent issues:
+
+- Warns if submissions are already being graded
+- Alerts if selected commits don't exist in student repositories
+- Validates that all selected submissions are eligible for regrading
+
+## Global Error Pins
+
+Instructors can pin specific error messages or patterns globally across the course. Pinned errors:
+
+- Appear prominently in the error explorer
+- Help students quickly identify known issues
+- Can include instructor notes with workarounds or fixes
+- Remain visible until unpinned by an instructor
+
+Use global error pins to:
+
+- Highlight common mistakes that students should be aware of
+- Document known issues with assignments or test cases
+- Provide quick reference for TAs helping students
+
+## Best Practices
+
+### Analyzing Errors
+
+1. **Review error groups regularly**: Check the error explorer after each assignment deadline to identify patterns
+2. **Investigate high-frequency errors**: Errors affecting many students may indicate unclear instructions or test issues
+3. **Document common mistakes**: Use pinned errors or discussion posts to help students avoid common pitfalls
+
+### Regrading
+
+1. **Test before regrading**: Verify that your test case fixes work correctly before regrading all submissions
+2. **Communicate with students**: Let students know when you're regrading and why
+3. **Use auto-promote carefully**: Only enable auto-promote when you're confident the regrade should replace existing grades
+4. **Batch similar regrades**: If multiple error groups need regrading, consider addressing them together
+
+### Student Communication
+
+1. **Copy affected emails**: Use the email copy feature to quickly contact all students with a specific error
+2. **Provide context**: Explain what the error means and how students can fix it
+3. **Link to resources**: Include links to relevant documentation or discussion posts
+
 title: "Test Insights Dashboard"
-description: "Track student performance and debug common errors with the test insights dashboard"
+description: "Track student performance and identify common errors across autograder test cases"
+
+description: "Track student performance and identify common errors with the test insights dashboard"
+icon: "chart-line"
 ---
 
 # Test Insights Dashboard
@@ -52,3 +178,125 @@ To pin an error:
 3. The error will now appear in the pinned section across all assignments
 
 Pinned errors help you track recurring issues and ensure they're addressed consistently across your course.
+
+The test insights dashboard helps you understand how students are performing on autograder test cases, identify common errors, and take action to help struggling students.
+
+## Accessing Test Insights
+
+Navigate to an assignment and click the **Test Insights** tab to view the dashboard. The dashboard displays performance metrics for all autograder test cases.
+
+## Understanding Error Groups
+
+The dashboard groups students by the specific errors they encounter in test cases. For each error group, you can see:
+
+- The error message or failure reason
+- Number of students affected
+- List of affected students
+- Test case details
+
+## Viewing Affected Students
+
+Click on any error group to expand and see which students are experiencing that specific issue. You can:
+
+- View the list of affected students
+- Copy student emails to reach out with targeted help
+- Click on individual students to view their submissions
+
+## Launching Regrades
+
+When you identify an issue that requires regrading (such as a bug in the autograder), you can launch a regrade directly from the error explorer:
+
+<Steps>
+<Step title="Select Error Group">
+Click on the error group you want to regrade
+</Step>
+
+<Step title="Launch Regrade">
+Click the **Regrade** button to open the regrade dialog
+</Step>
+
+<Step title="Configure Regrade">
+In the regrade dialog, you can:
+- Choose to regrade specific commits or enter a manual SHA
+- Select which submissions to regrade (preselected based on the error group)
+- Enable auto-promote to automatically update student grades if the regrade improves their score
+</Step>
+
+<Step title="Execute Regrade">
+Click **Start Regrade** to queue the regrade jobs
+</Step>
+</Steps>
+
+The affected submissions will be automatically preselected on the autograder page, making it easy to regrade just the students who were impacted by the issue.
+
+## Pinning Errors Globally
+
+You can pin specific error groups to make them visible across all assignments in your course. This is useful for:
+
+- Highlighting common mistakes students should avoid
+- Tracking recurring issues across multiple assignments
+- Creating a knowledge base of frequent errors
+
+To pin an error globally, click the **Pin** icon next to the error group. Pinned errors appear at the top of the test insights dashboard and remain visible even after students fix the issue in their submissions.
+
+## Use Cases
+
+The test insights dashboard is particularly useful for:
+
+- **Identifying autograder bugs**: Quickly spot when many students fail the same test for unexpected reasons
+- **Targeted intervention**: Reach out to specific students struggling with particular concepts
+- **Assignment improvement**: Understand which test cases are most challenging and adjust future assignments
+- **Office hours preparation**: Know which topics to focus on during help sessions
+
+The test insights dashboard helps instructors identify patterns in student submissions and common errors across autograder tests. This feature provides visibility into which tests students are struggling with and enables targeted interventions.
+
+## Accessing Test Insights
+
+Navigate to an assignment and select the **Test Insights** tab to view the dashboard. The dashboard displays:
+
+- **Error groups**: Tests that are failing for multiple students
+- **Affected students**: Number and list of students experiencing each error
+- **Test details**: Specific test names and error messages
+- **Trends**: Performance patterns across submissions
+
+## Error Explorer
+
+The error explorer allows you to drill down into specific test failures:
+
+1. **View error groups**: See tests grouped by similar failure patterns
+2. **Copy student emails**: Quickly copy the email addresses of affected students for outreach
+3. **Launch regrading**: Start a regrade workflow directly from an error group
+
+### Copying Student Emails
+
+When viewing an error group, you can copy the email addresses of all affected students to your clipboard. This makes it easy to:
+
+- Send targeted help to students struggling with specific concepts
+- Notify students about common mistakes
+- Follow up with students who need additional support
+
+## Regrade Workflow
+
+The test insights dashboard integrates with the regrade workflow, allowing you to:
+
+1. **Launch regrade from error explorer**: Click the regrade button on any error group
+2. **Preselect submissions**: Submissions from affected students are automatically selected
+3. **Choose grader version**: Select a specific commit or enter a manual SHA in the regrade dialog
+4. **Auto-promote**: Optionally promote the new submission to be the active submission
+
+This streamlined workflow makes it easy to regrade submissions after fixing autograder issues or updating test cases.
+
+<Tip>
+Use the test insights dashboard regularly to identify common misconceptions and adjust your teaching or assignment specifications accordingly.
+</Tip>
+
+## Global Error Pins
+
+Instructors can pin specific error groups to make them globally visible across the assignment. Pinned errors:
+
+- Appear at the top of the error explorer
+- Help staff quickly identify known issues
+- Can include notes about workarounds or fixes
+- Remain visible until unpinned
+
+To pin an error, click the pin icon next to the error group in the error explorer.

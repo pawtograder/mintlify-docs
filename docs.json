@@ -1,17 +1,8 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
-  "name": "Pawtograder",
-  "appearance": {
-    "default": "dark"
-  },
-  "colors": {
-    "primary": "#4FD1C5",
-    "light": "#81E6D9",
-    "dark": "#319795"
-  },
-  "favicon": "/favicon.svg",
   "navigation": {
+    "global": {
+      "anchors": []
+    },
     "tabs": [
       {
         "tab": "Students",
@@ -56,16 +47,23 @@
               "staff/assignments/grading-dashboard",
               "staff/assignments/test-insights",
               "staff/assignments/security-dashboard",
-
               "staff/assignments/configuration",
               "staff/assignments/dashboards",
               "staff/assignments/grading-assignments",
+              "staff/assignments/grading-status-dashboard",
               "staff/assignments/handgrading",
               "staff/assignments/repository-analytics",
               "staff/assignments/autograding",
+              "staff/assignments/test-insights",
               "staff/assignments/rubrics",
-              "staff/assignments/extensions-and-scoring",
-              "staff/assignments/testing"
+              "staff/assignments/testing",
+              "staff/assignments/test-insights",
+              "staff/assignments/grading-status",
+              "staff/assignments/security-dashboard",
+              "staff/assignments/leaderboard",
+              "staff/assignments/dashboards",
+              "staff/assignments/test-insights-dashboard",
+              "staff/assignments/extensions-and-scoring"
             ]
           },
           {
@@ -80,10 +78,12 @@
           {
             "group": "Course Features",
             "pages": [
+              "staff/instructor-dashboard",
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
               "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance",
               "staff/ai-assistance"
             ]
           },
@@ -104,28 +104,10 @@
           },
           {
             "group": "Feature Documentation",
-            "pages": ["developers/surveys", "developers/polls"]
+            "pages": ["developers/surveys", "developers/polls", "developers/mcp-server"]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": []
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/pawtograder"
-      }
     ]
-  },
-  "footer": {
-    "copyright": "Copyright © 2025 Jonathan Bell."
   }
 }
