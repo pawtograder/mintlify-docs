@@ -1,4 +1,28 @@
 ---
+title: "CLI interface"
+description: "Command-line tools for managing courses, assignments, and repositories"
+icon: "terminal"
+---
+
+# CLI interface
+
+The Pawtograder CLI provides command-line tools for instructors and administrators to manage courses, copy assignments between semesters, and perform bulk repository operations.
+
+## Installation and authentication
+
+The CLI is included in the platform repository and runs via npm scripts.
+
+### Prerequisites
+
+- Node.js 18 or later
+- SSH access to GitHub (for repository operations)
+- A Pawtograder API token with CLI access
+
+### Getting a CLI token
+
+1. Log in to Pawtograder
+2. Navigate to User Menu → API Tokens
+
 title: "CLI"
 description: "Command-line interface for managing Pawtograder courses, assignments, and repositories"
 icon: "terminal"
@@ -53,11 +77,15 @@ Before using the CLI, you need to authenticate with an API token.
 4. Select "CLI" or "MCP + CLI" as the token type
 5. Copy the token (it starts with `mcp_`)
 
+### Login
+
 ### Logging In
 
 ```bash
 npm run cli -- login
 ```
+
+You'll be prompted to enter your API token. The CLI will verify the token and store your credentials securely in `~/.pawtograder/credentials.json`.
 
 Or provide the token directly:
 
@@ -68,6 +96,8 @@ You can also provide the token directly:
 ```bash
 npm run cli -- login --token mcp_your_token_here
 ```
+
+### Check authentication
 
 ### Check Current User
 
@@ -80,10 +110,11 @@ npm run cli -- whoami
 ### Logout
 
 ### Logging Out
-
 ```bash
 npm run cli -- logout
 ```
+
+## Available commands
 
 ## Commands
 
@@ -122,7 +153,10 @@ Copy assignments between classes:
 npm run cli -- assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
-  --assignment hw1 \
+--assignment homework-1 \
+  --workdir ./repos
+
+--assignment hw1 \
   --workdir /tmp/pawtograder-repos
 
 # Copy all assignments
@@ -130,7 +164,9 @@ npm run cli -- assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all \
-  --workdir /tmp/pawtograder-repos
+--workdir ./repos
+
+--workdir /tmp/pawtograder-repos
 
 # Copy with a schedule CSV (custom dates)
 npm run cli -- assignments copy \
@@ -193,12 +229,15 @@ npm run cli -- assignments delete <assignment-id-or-slug> --class <class-id-or-s
 ```
 
 Add `--force` to skip the confirmation prompt.
-
 ### Rubrics
 
 List rubrics for an assignment:
 
 ```bash
+npm run cli -- rubrics list \
+  --assignment <assignment-id-or-slug> \
+  --class <class-id-or-slug>
+
 npm run cli -- rubrics list --assignment <id-or-slug> --class <class-id-or-slug>
 ```
 
@@ -206,7 +245,12 @@ Export a rubric to YAML:
 
 ```bash
 npm run cli -- rubrics export \
-  --assignment hw1 \
+--assignment <assignment-id-or-slug> \
+  --class <class-id-or-slug> \
+  --type grading \
+  --output rubric.yml
+
+--assignment hw1 \
   --class cs3500-spring-2026 \
   --type grading \
   --output hw1-rubric.yml
@@ -216,7 +260,7 @@ Import a rubric from YAML:
 
 ```bash
 npm run cli -- rubrics import \
-  --assignment hw1 \
+--assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml \
   --type grading
@@ -238,7 +282,6 @@ npm run cli -- surveys copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all
-
 # Link to a target assignment
 npm run cli -- surveys copy \
   --source-class cs3500-fall-2025 \
@@ -256,12 +299,13 @@ Copy flashcard decks between classes:
 npm run cli -- flashcards list --class <identifier>
 
 # Copy all decks
-
 List flashcard decks:
 
 ```bash
 npm run cli -- flashcards list --class <class-id-or-slug>
 ```
+
+Copy flashcard decks between classes:
 
 Copy flashcard decks:
 
@@ -403,12 +447,15 @@ Options:
 - `--concurrency <n>`: Parallel operations (1-8, default 2)
 
 ### Submissions
-
 Import submission artifacts from a manifest:
 
 ```bash
 npm run cli -- submissions artifacts import \
-  --class cs3500-spring-2026 \
+--class <class-id-or-slug> \
+  --assignment <assignment-id-or-slug> \
+  --file manifest.json
+
+--class cs3500-spring-2026 \
   --assignment hw1 \
   --file manifest.json \
   --batch-size 5
@@ -446,6 +493,69 @@ You can also use `content_file` instead of `content_base64` to reference externa
 Import or sync submission comments:
 
 ```bash
+npm run cli -- submissions comments import \
+  --class <class-id-or-slug> \
+  --assignment <assignment-id-or-slug> \
+  --file batch-results.json \
+  --author-profile-id <uuid>
+```
+
+## Common options
+
+Most commands support these options:
+
+- `--dry-run`: Preview changes without making them
+- `--help`: Show command-specific help
+- `--class` or `-c`: Specify a class by ID, slug, or name
+- `--assignment` or `-a`: Specify an assignment by ID or slug
+
+## Repository operations
+
+Repository commands use local git operations via SSH. Ensure you have:
+
+1. SSH keys configured for GitHub
+2. Access to the course's GitHub organization
+3. Sufficient disk space in your `--workdir` for cloning repos
+
+### Concurrency and rate limiting
+
+Repository operations support parallel execution:
+
+```bash
+npm run cli -- repos sync-grade-workflow \
+  --class cs3500 \
+  --assignment hw1 \
+  --workdir ./repos \
+  --concurrency 4 \
+  --delay-ms 1000
+```
+
+- `--concurrency`: Number of parallel git operations (1-8, default: 2)
+- `--delay-ms`: Delay between batches in milliseconds (default: 0)
+
+## Troubleshooting
+
+### Authentication errors
+
+If you see "Not logged in" errors:
+1. Run `npm run cli -- login` to authenticate
+2. Verify your token has the required scopes (cli:read or cli:write)
+3. Check that your token hasn't been revoked
+
+### Timeout errors
+
+For large operations (copying many assignments or repos):
+1. Use `--dry-run` first to preview
+2. Set a longer timeout: `PAWTOGRADER_HTTP_TIMEOUT_MS=600000 npm run cli -- ...`
+3. Enable debug logging: `DEBUG=1 npm run cli -- ...`
+
+### Repository access errors
+
+If git operations fail:
+1. Verify your SSH keys are configured: `ssh -T git@github.com`
+2. Check you're a member of the course's GitHub organization
+3. Ensure the `--workdir` path exists and is writable
+
 # Import (add-only)
 npm run cli -- submissions comments import \
   --class cs3500-spring-2026 \
