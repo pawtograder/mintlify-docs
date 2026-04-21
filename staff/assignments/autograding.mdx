@@ -50,6 +50,192 @@ Set environment variables for API keys:
 
 Use the `account` field in your LLM configuration to specify which account-specific key to use.
 
+## Test Insights and Error Analysis
+
+Pawtograder provides powerful tools for analyzing common test failures across student submissions:
+
+- **Error Explorer**: View common error patterns grouped by test name and error signature
+- **Affected Students**: See which submissions are impacted by each error pattern
+- **Regrade Workflow**: Launch regrades directly from the error explorer with automatic submission selection
+- **Email Export**: Copy affected students' emails for communication
+
+These tools help you quickly identify whether test failures indicate a problem with the assignment specification or common student mistakes.
+
+## Submission File Support
+
+Pawtograder supports both text and binary files in student submissions:
+
+### Text Files
+Text files (code, markdown, configuration files, etc.) are displayed with syntax highlighting in the submission viewer. Students and graders can view the file contents directly in the browser.
+
+### Binary Files
+Binary files (images, PDFs, compiled executables, etc.) are supported in submissions. These files:
+- Are stored securely in the submission
+- Can be downloaded by students and graders
+- Display a download button in the file viewer
+- Show file metadata (name, size, type)
+
+### Markdown Preview
+Markdown files (`.md`, `.markdown`) in submissions are automatically rendered with a live preview. This allows students and graders to see formatted documentation, README files, and written responses without needing to download the file.
+
+The markdown preview supports:
+- Standard markdown syntax (headings, lists, links, code blocks)
+- Inline code and code blocks with syntax highlighting
+- Images and links
+- Tables and blockquotes
+
+## Test Insights and Error Explorer
+
+Pawtograder provides powerful tools to help you understand and debug common student errors:
+
+### Error Explorer
+
+View grouped test failures across all submissions to identify patterns and common issues. The error explorer allows you to:
+
+- See which students are affected by specific errors
+- Copy affected students' email addresses for communication
+- Launch regrading workflows directly from error groups
+
+### Regrade Workflow
+
+The improved regrade workflow streamlines the process of re-running autograders:
+
+1. **Launch from Error Explorer**: Start a regrade directly from an error group
+2. **Preselect Submissions**: Submissions are automatically selected on the autograder page
+3. **Choose Commits**: Select specific commits or enter a manual SHA in the regrade dialog
+4. **Auto-promote**: Optionally promote the new submission as the active submission
+
+This workflow includes conflict detection and clearer validation for solo office-hours requests.
+
+## Test Insights and Error Analysis
+
+Pawtograder provides powerful tools to help instructors understand and respond to common student errors:
+
+### Error Explorer
+
+The error explorer groups similar test failures together, allowing you to:
+
+- View all students affected by a particular error pattern
+- Copy affected students' email addresses for bulk communication
+- Launch regrading workflows directly from error groups
+- Identify systemic issues in assignments or test cases
+
+### Regrade Workflow
+
+When you need to regrade submissions, you can:
+
+1. Launch regrade from the error explorer
+2. Preselect affected submissions on the autograder page
+3. Choose specific commits or enter a manual SHA in the regrade dialog
+4. Auto-promote the new submission if desired
+
+This streamlined workflow makes it easy to respond to discovered issues or updated test cases.
+
+## Empty Submission Detection
+
+The autograder automatically detects empty submissions to help identify students who may need assistance. Empty submissions are flagged when:
+
+- No meaningful code changes are present
+- Only starter code or template files exist
+- The submission contains no substantive work
+
+This feature helps instructors quickly identify students who may be struggling to get started on an assignment.
+
+## Empty Submission Detection
+
+Pawtograder automatically detects empty submissions where students have not made meaningful changes to the starter code. When an empty submission is detected:
+
+- The submission is flagged with a warning indicator
+- Students are notified that their submission appears to be empty
+- Instructors can see which submissions are empty in the grading interface
+
+This helps identify students who may need assistance or who accidentally submitted without completing their work.
+
+## Test Insights and Error Explorer
+
+Pawtograder provides powerful tools to help instructors understand and address common test failures across student submissions.
+
+### Error Explorer
+
+The error explorer groups similar test failures together, making it easy to:
+
+- Identify patterns in student errors
+- See which students are affected by each error type
+- View and copy affected students' email addresses for bulk communication
+- Pin error groups globally to highlight common issues
+
+### Regrade Workflow
+
+When you need to regrade submissions after fixing test issues:
+
+1. Launch a regrade directly from the error explorer
+2. Submissions are automatically preselected on the autograder page
+3. Choose to regrade from specific commits or enter a manual SHA
+4. Option to auto-promote the new submission as the active submission
+
+This streamlined workflow makes it easy to regrade multiple students who encountered the same issue, without manually selecting each submission.
+
+Pawtograder automatically detects empty submissions to help identify students who may need assistance. When a student creates a submission without any meaningful code changes, the system flags it as potentially empty. This helps instructors:
+
+- Identify students who may be struggling to get started
+- Catch accidental submissions before grading
+- Provide early intervention for students who need help
+
+Empty submissions are detected based on the content of files configured for the assignment. The system analyzes whether the submission contains substantive changes from the assignment template or starter code.
+
+## Rerunning Autograders
+
+Instructors can rerun the autograder on student submissions when needed. The enhanced rerun feature allows you to:
+
+- **Reuse the same submission**: Rerun the autograder on the existing submission without creating a new one
+- **Select grader version**: Choose which version of the grader to use for the rerun, allowing you to test grader updates or revert to previous versions
+- **Batch operations**: Rerun autograders on multiple submissions at once
+
+This is useful when:
+- You've fixed a bug in the autograder
+- You want to apply updated test cases to existing submissions
+- You need to verify grading consistency across different grader versions
+
+You can rerun the autograder on existing submissions without creating new submissions. This is useful when:
+
+- You've fixed a bug in your grading script
+- You want to update test cases and regrade existing work
+- You need to regrade after adjusting point values
+
+When rerunning an autograder:
+
+1. Navigate to the assignment's autograder page
+2. Select the submissions you want to regrade
+3. Choose which version of the grader to use:
+   - **Latest commit**: Use the most recent version of your grader repository
+   - **Specific commit**: Select a particular commit SHA for consistent grading
+   - **Auto-promote**: Automatically promote the new autograder results if they improve the student's score
+
+The rerun reuses the same submission rather than creating a new one, preserving the original submission timestamp and history.
+
+## Test Insights and Regrade Workflow
+
+The test insights dashboard integrates with the autograder to streamline regrading:
+
+1. **View Error Groups**: See which test cases are failing and how many students are affected
+2. **Launch Regrade**: Start a regrade directly from an error group
+3. **Preselect Submissions**: Affected submissions are automatically selected on the autograder page
+4. **Choose Grader Version**: Select commits or enter a manual SHA in the regrade dialog
+5. **Auto-promote Results**: Optionally promote new results automatically if scores improve
+
+This workflow makes it easy to identify issues, fix them, and regrade affected students efficiently.
+
+## Test Insights and Error Explorer
+
+Pawtograder provides powerful test insights to help instructors identify and address common student errors:
+
+- **Error Explorer**: View grouped test failures across all submissions to identify patterns
+- **Regrade Workflow**: Launch regrading directly from the error explorer with preselected submissions
+- **Email Export**: View and copy affected students' emails from error groups for targeted communication
+- **Flexible Regrade Options**: Choose specific commits or manual SHA in a regrade dialog with auto-promote functionality
+
+These tools help instructors quickly identify widespread issues and efficiently regrade submissions when autograder configurations are updated.
+
 ## Rerunning the Autograder
 
 Instructors can rerun the autograder on student submissions when needed. The enhanced rerun feature allows you to:
@@ -65,3 +251,70 @@ This is useful when you've fixed a bug in the autograder, want to test a new gra
 Build system integration guides for common programming languages.
 
 *Detailed documentation coming soon.*
+
+## Test Insights and Error Explorer
+
+Pawtograder provides tools to help you understand common errors across student submissions:
+
+### Error Explorer
+
+View and analyze test failures grouped by error type. The error explorer helps you:
+
+- Identify patterns in student errors
+- See which students are affected by specific issues
+- Copy affected students' email addresses for bulk communication
+- Pin error groups globally to highlight common issues
+
+### Regrade Workflow
+
+Launch regrading directly from the error explorer:
+
+1. Select submissions from the error explorer
+2. Navigate to the autograder page with submissions preselected
+3. Choose commits or enter a manual SHA in the regrade dialog
+4. Optionally auto-promote the new submission as the active submission
+
+This streamlined workflow makes it easy to regrade submissions after fixing autograder issues or updating test cases.
+
+## Test Insights Dashboard
+
+The test insights dashboard helps you track student performance and identify common issues across submissions. Access it from the assignment page to view:
+
+### Error Explorer
+
+View and analyze test failures across all student submissions:
+
+- **Error grouping**: Automatically groups similar test failures together
+- **Affected students**: See which students are experiencing each error
+- **Email export**: Copy affected students' email addresses for bulk communication
+- **Global error pins**: Pin important errors to track them across assignments
+
+### Regrade Workflow
+
+Launch targeted regrades directly from the error explorer:
+
+1. **Select errors**: Choose which error groups need regrading
+2. **Preselect submissions**: The autograder page automatically preselects affected submissions
+3. **Regrade dialog**: Choose between:
+   - Specific commits from the repository history
+   - Manual SHA entry for precise version control
+4. **Auto-promote**: Optionally promote the regrade results automatically
+
+This workflow streamlines the process of fixing grading issues and re-evaluating student work without manual submission selection.
+
+## Rerunning the Autograder
+
+Instructors can rerun the autograder on student submissions when needed. This is useful for:
+
+- Testing autograder changes before applying them to all submissions
+- Debugging grading issues
+- Updating scores after fixing autograder bugs
+
+### Enhanced Rerun Features
+
+When rerunning the autograder, you can:
+
+- **Reuse the same submission**: The rerun updates the existing submission rather than creating a new one, preserving the submission history and student's active submission status
+- **Select grader version**: Choose which version of the grader to use for the rerun, allowing you to test new grader versions or revert to previous versions
+
+This flexibility ensures you can iterate on your autograder configuration without disrupting student submissions or creating confusion with multiple submission entries.
