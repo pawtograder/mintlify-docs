@@ -1,0 +1,86 @@
+---
+title: "MCP Server for AI Assistance"
+description: "Configure and use the Model Context Protocol server to provide AI-powered assistance for course staff"
+icon: "brain-circuit"
+---
+
+# MCP Server for AI Assistance
+
+Pawtograder includes a Model Context Protocol (MCP) server that enables AI assistants to help course staff support students who are struggling with errors in their programming assignments.
+
+## Overview
+
+The MCP server provides AI assistants with secure, authenticated access to:
+
+- Help requests and discussion threads
+- Student submissions and test results
+- Build output and error messages
+- Assignment context and requirements
+
+This allows course staff to leverage AI tools to quickly understand student issues and provide more effective assistance.
+
+## Authentication
+
+The MCP server uses Supabase OAuth authentication to ensure secure access. Only instructors and graders have access to the MCP server tools.
+
+<Warning>
+The MCP server never exposes sensitive user data such as the users table or private profile information. All data access is scoped to course-related information only.
+</Warning>
+
+## Available Tools
+
+The MCP server provides the following tools for AI assistants:
+
+### Help Request Tools
+
+- **Fetch help requests**: Retrieve active and historical help requests
+- **View help request details**: Access full context including chat history and student information
+- **Get discussion threads**: Access discussion board posts and replies
+
+### Submission Tools
+
+- **Fetch submissions**: Retrieve student submissions for assignments
+- **View test results**: Access autograder test output and results
+- **Get build output**: View compilation and build logs
+
+### Assignment Context
+
+- **Assignment details**: Access assignment descriptions and requirements
+- **Handout URL**: Retrieve assignment handout links for full context
+
+## Configuration
+
+To enable AI assistance for your course:
+
+1. Ensure the MCP server is configured with Supabase OAuth credentials
+2. Add the `handout_url` field to assignments in the assignments table to provide assignment context
+3. Course staff will see an "AI Help" button in help request chats and discussion threads
+
+## Using AI Assistance
+
+When viewing a help request or discussion thread, course staff can click the "AI Help" button to:
+
+1. Generate MCP context for the current conversation
+2. Use any MCP-compatible AI client to analyze the situation
+3. Get AI-powered insights and suggestions for helping the student
+
+The AI assistant has access to all relevant context about the student's submission, test failures, and the assignment requirements.
+
+## Privacy and Security
+
+The MCP server is designed with privacy in mind:
+
+- Only instructors and graders can access MCP tools
+- Student personal information is protected
+- All access is logged and auditable
+- Data access is scoped to course-related information only
+
+## MCP-Compatible Clients
+
+The MCP server works with any MCP-compatible AI client, including:
+
+- Claude Desktop
+- Custom MCP clients
+- Other AI assistants that support the Model Context Protocol
+
+Refer to your AI client's documentation for instructions on connecting to an MCP server.
