@@ -189,6 +189,23 @@ The system automatically creates new columns with full audit metadata including 
 
 ## Exporting Grades
 
+Instructors can export gradebook data to CSV format for external analysis, reporting, or archival purposes. The export feature provides two options:
+
+### Standard Export
+
+The standard export includes all gradebook columns with their current values as they appear in the gradebook interface. This is useful for quick exports and sharing grade data with external systems.
+
+### Export with Rendered Expressions
+
+When exporting, you can choose to render expression-based columns by their calculated values rather than showing the expression formula. This option:
+
+- Evaluates all expression columns for each student
+- Exports the computed numeric results instead of the formula
+- Maintains compatibility with external systems that expect numeric values
+- Preserves manual overrides when present
+
+This is particularly useful when you need to share final calculated grades with registrar systems, learning management systems, or for creating grade reports that don't need to show the underlying calculation logic.
+
 You can export gradebook data to CSV format for external analysis or record-keeping. The export feature provides two options:
 
 1. **Export raw scores**: Exports the actual stored values in each column (default behavior)
