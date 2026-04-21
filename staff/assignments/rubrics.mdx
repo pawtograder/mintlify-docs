@@ -487,6 +487,16 @@ When editing rubrics, Pawtograder protects you from accidentally losing work:
 - Annotation `annotation_target` defaults to `file` in the UI if omitted.
 - `min_checks_per_submission` and `max_checks_per_submission` are optional; when not set, graders are not constrained by count.
 
+## Grading Comment Restrictions After Release
+
+Once a review has been released to students, grading comments are restricted to maintain grading integrity:
+
+- **Graders can only edit or delete their own comments** after a review is released
+- **Instructors retain full editing privileges** and can modify any comment, even after release
+- This prevents graders from modifying feedback after students have seen it, while allowing instructors to make corrections if needed
+
+This restriction applies to all rubric comments and annotations, ensuring that students see consistent feedback once grades are released.
+
 ## Check References (Cross-Rubric Context)
 
 ### What It Is
