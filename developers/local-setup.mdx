@@ -140,27 +140,26 @@ For development requiring database changes, RLS policy modifications, or running
    Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser or commit it to version control. Keep it in server-only code and CI secrets.
    </Warning>
 
-5. **Build the application**
-   ```bash
-   npm run build
-   ```
-
-6. **Start Edge Functions**
+5. **Start Edge Functions**
    ```bash
    npx supabase functions serve
    ```
 
-7. **Start the development server**
+6. **Start the development server**
    ```bash
-   npm start
+   npm run dev
    ```
 
-8. **Seed test data (optional)**
+7. **Seed test data (optional)**
    ```bash
    npm run seed
    ```
 
    This creates a test class with students and assignments. Scroll up in the output to find "Login Credentials" with email/password pairs.
+
+<Note>
+The build process now runs in GitHub Actions for continuous integration. Local development uses `npm run dev` for hot-reloading without requiring a separate build step.
+</Note>
 
 ## Local Services
 
