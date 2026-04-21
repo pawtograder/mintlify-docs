@@ -6,29 +6,430 @@ icon: "table"
 
 # Gradebook
 
+## Gradebook Column Management
+
+The gradebook supports flexible column reordering to help you organize your grade components. You can move columns left or right using the column header controls to arrange them in your preferred order.
+
+## Grading Status Dashboard
+
+The grading status dashboard provides an overview of grading progress across all assignments. Use it to:
+
+- Monitor which assignments have pending grading work
+- See how many submissions need review
+- Track grading completion across your course staff
+- Identify bottlenecks in the grading workflow
+
+Access the dashboard from the gradebook or assignments section to get a comprehensive view of grading status.
+
+The grading status dashboard provides a comprehensive overview of grading progress across all assignments in your course. This dashboard helps instructors and graders:
+
+- Track which assignments have pending grading tasks
+- Monitor grading completion rates
+- Identify bottlenecks in the grading workflow
+- Ensure all submissions are graded before releasing results
+
+### Dashboard Features
+
+The dashboard displays:
+
+- **Assignment list**: All assignments with grading tasks
+- **Completion status**: Percentage of submissions graded for each assignment
+- **Pending tasks**: Number of submissions awaiting grading
+- **Grader assignments**: Which staff members are assigned to grade each submission
+- **Due dates**: Grading deadlines for each assignment
+
+Use the dashboard to prioritize grading tasks and ensure timely feedback to students.
+
 ## Column Semantics in the Gradebook System
 
-In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources. Columns can be **manually entered** by instructors who directly input grades cell-by-cell, **imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date), or **linked to programming assignments** through the assignment reference system. When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
+In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources. Columns can be **manually entered** by instructors who directly input grades cell-by-cell (supporting both whole numbers and decimal values), **imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date), or **linked to programming assignments** through the assignment reference system. When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
+
+In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources. Scores can be whole numbers or decimals, allowing for precise grading. Columns can be **manually entered** by instructors who directly input grades cell-by-cell, **imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date), or **linked to programming assignments** through the assignment reference system. When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
+In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources. Columns can be **manually entered** by instructors who directly input grades cell-by-cell (supporting both whole numbers and decimal scores), **imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date), or **linked to programming assignments** through the assignment reference system. When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
+
+You can reorder columns in the gradebook by using the "Move Left" and "Move Right" options in the column menu. This allows you to organize your gradebook columns in a logical order for easier viewing and management.
+
+### Managing columns
+
+You can reorder columns in the gradebook by using the "Move Left" and "Move Right" buttons in the column header menu. This allows you to organize your gradebook columns in a logical order for your course.
+
+When entering grades manually, the gradebook supports decimal scores. You can enter values like "8.5" or "92.3" directly into grade cells, and the system will properly validate and store these values.
+
+When you override a calculated grade or manually adjust a grade, you can add a note explaining the reason for the override. These notes are visible in the gradebook interface and help maintain transparency about grade adjustments.
+
+### Managing Column Order
+
+You can reorder gradebook columns using the **Move Left** and **Move Right** buttons in the column header menu. This allows you to organize your gradebook in a logical order that makes sense for your course structure.
 
 **Expressions:** The most sophisticated column type uses **mathematical expressions** that reference other columns or assignments, creating a powerful dependency system for calculated grades. Using MathJS syntax, instructors can create complex formulas like `(gradebook_columns("homework-*") + assignments("project-*")) / 2` to automatically compute weighted averages, drop lowest scores, or apply curve adjustments. Score expressions can define functions and have access to the full MathJS library of math and utility functions. Any grade that is automatically calculated can also be manually overridden by the instructor on a case-by-case basis.
+
+**Instructor-only columns:** Columns can be marked as **staff-only** (instructor-only) when creating or editing a calculated column. These columns are completely hidden from students until you release them. When you release an instructor-only column, it takes a snapshot of the current private scores and makes them visible to students. After release, the column behaves like a normal column with standard recalculation and sync behavior. This is useful for internal grading calculations, curve adjustments, or "what-if" scenarios that you want to finalize before sharing with students.
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
 **Instructor-only columns:** You can create staff-only gradebook columns that are hidden from students until you release them. When creating or editing a calculated column, check the **"Staff-only column"** option. Students cannot see the column definition or their grades until you release it. When you release an instructor-only column, it becomes a normal visible column with standard recalculation and sync behavior. This is useful for draft calculations, curve adjustments, or internal tracking that you want to finalize before sharing with students.
 
+**Instructor-only columns:** When creating or editing a calculated column, you can mark it as "Staff-only" (instructor-only). These columns are completely hidden from students until you release them. When you release an instructor-only column, it creates a frozen snapshot of the current scores for students and then becomes a normal visible column. After release, the column behaves like any other column - score edits propagate to students and you can unrelease it to hide scores again. Use instructor-only columns for internal grading calculations, curve adjustments, or work-in-progress grade components that you want to finalize before sharing with students.
+
+**Instructor-only columns:** When creating or editing a calculated column, you can mark it as "Staff-only" (instructor-only). These columns are completely hidden from students until you release them. When you release an instructor-only column, it creates a frozen snapshot of the current scores for students and clears the instructor-only flag, making the column behave like a normal column going forward. This is useful for curve adjustments, bonus calculations, or other intermediate calculations you want to keep private until finalized.
+
+**Instructor-only columns:** In addition to the released/unreleased status, columns can be marked as **instructor-only**. These columns are completely hidden from students regardless of their released status, and are useful for internal tracking purposes such as attendance records, participation scores, or grading notes that should never be visible to students. Instructor-only columns can still be used in expressions for calculated columns that are visible to students.
+
 **Automatic recalculation of dependent columns:** When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
+
+## "What if" Calculations
+
+Students can perform "what if" calculations in the gradebook to explore how hypothetical grades would affect their overall course performance. This feature allows students to temporarily override their current grades or fill in missing grades to see the impact on calculated columns (such as their final grade).
+
+When a student enters a "what if" value, the gradebook recalculates all dependent columns using the hypothetical score, showing the student how their grade would change. These calculations are performed entirely client-side and do not affect the actual grades stored in the system. Students can clear their "what if" values at any time to return to viewing their actual grades.
+
+**Instructor-only columns:** When creating or editing a calculated column, you can mark it as "Staff-only" (instructor-only). These columns are completely hidden from students until you release them. When you release an instructor-only column, it creates a frozen snapshot of the current scores for students and clears the instructor-only flag, making the column behave like a normal column going forward. This is useful for curve adjustments, what-if scenarios, or other calculations you want to finalize before showing to students.
+
+**Instructor-only columns:** Columns can be marked as "instructor-only" to permanently hide them from students regardless of release status. This is useful for internal tracking columns (e.g., participation notes, grading rubrics, or administrative flags) that should never be visible to students. Instructor-only columns appear with a special indicator in the gradebook interface and are completely hidden from the student view.
+
+**Automatic recalculation of dependent columns:** When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
+
+## Instructor-Only Columns
+
+Instructor-only columns are hidden from students until you explicitly release them. This feature is useful for:
+
+- **What-if scenarios**: Create calculated columns to test grading schemes before making them visible to students
+- **Curve adjustments**: Apply curves or bonus points privately before finalizing grades
+- **Draft calculations**: Build complex grade formulas and verify they work correctly before student visibility
+
+When you create or edit a calculated column (one with a score expression), you can check the "Staff-only column" option. While unreleased, students cannot see the column definition or their grades. When you're ready to make the column visible:
+
+1. Click the column menu and select "Release Column"
+2. Confirm the release (this action cannot be undone)
+3. The column becomes permanently visible to students and behaves like a normal column
+
+After release, the column transitions from a frozen snapshot to live recalculation. Any subsequent grade changes will automatically propagate to students.
+
+**Instructor-only columns:** You can create staff-only gradebook columns that are hidden from students until you explicitly release them. When creating or editing a calculated column, check the "Staff-only column" option to enable this behavior. While unreleased, instructor-only columns and their student cell rows are completely invisible to students via row-level security. When you release an instructor-only column, Pawtograder creates a frozen snapshot of the instructor's view for students, then clears the instructor-only flag so the column behaves as a normal column going forward. After release, score edits propagate to students via standard synchronization, and unreleasing the column clears the public score but the column remains visible (since instructor-only was cleared).
+
+**What-if grade simulations:** Instructors can enable the "What-If" feature for students via Course Settings → Feature flags. When enabled, students can tap released grades in their gradebook to simulate hypothetical scores, and calculated columns update based on those simulations. This allows students to explore how different scores would affect their final grade. When disabled, the student gradebook is view-only. The What-If feature does not apply to the staff preview in the instructor gradebook.
+
+## "What If" Grade Calculations
+
+Students can use the "What If" feature to explore hypothetical grade scenarios by temporarily adjusting their scores. This allows students to answer questions like "What grade do I need on the final exam to get an A in the course?" or "How will my grade change if I skip this assignment?"
+
+When a student enters "what if" mode:
+- They can edit any editable grade cell to enter hypothetical scores
+- Calculated columns automatically update to reflect the hypothetical scenario
+- All changes are temporary and client-side only - no actual grades are modified
+- Students can reset to actual grades at any time
+- The interface clearly indicates which grades are hypothetical vs. actual
+
+This feature helps students make informed decisions about their study priorities and understand how different performance outcomes affect their overall grade.
+
+**Instructor-only columns:** Gradebook columns can be marked as "instructor-only" to completely hide them from students, regardless of release status. This is useful for internal tracking columns such as participation notes, attendance records, or preliminary grade calculations that should never be visible to students. Instructor-only columns are indicated with a special icon in the gradebook interface and are excluded from all student views, including grade exports and API responses.
+
+**Instructor-only columns:** When creating or editing a calculated column, you can mark it as **"Staff-only"** (instructor-only). These columns are completely hidden from students until you release them. When unreleased, students cannot see the column definition or their grades. When you release an instructor-only column, Pawtograder creates a frozen snapshot of the current instructor view for students, then clears the instructor-only flag so the column behaves like a normal column going forward. After release, any score edits you make will propagate to students through standard sync behavior. This feature is useful for preparing curved grades, bonus adjustments, or other calculated columns that you want to finalize before making them visible to students.
+
+**Instructor-only columns:** You can create columns that are visible only to instructors and never shown to students, regardless of release status. This is useful for internal tracking, grading notes, or intermediate calculations that shouldn't be student-facing. When creating or editing a column, toggle the "Instructor Only" option to hide it from students entirely. Instructor-only columns can still be referenced in expressions for other columns, allowing you to use them in calculations while keeping the underlying data private.
+
+**Automatic recalculation:** When you release or unrelease a gradebook column, Pawtograder automatically recalculates all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current state of their dependencies. For example, if you have a "Final Grade" column that references "Homework Average", releasing or unreleasing the "Homework Average" column will trigger a recalculation of "Final Grade" for all students.
+
+## Reordering Columns
+
+You can reorder gradebook columns to organize them logically:
+
+- **Drag and drop**: Click and drag the grip icon (⋮⋮) in any column header to reorder columns
+- **Move left/right**: Use the column menu (⋮) and select "Move Left" or "Move Right" to shift a column one position
+- **Auto-layout**: Click the auto-layout button (grid icon) to automatically organize columns by their slug prefixes
+
+Column reordering is saved immediately and affects the display for all instructors and the export order in CSV files.
+
+## Exporting Grades
+
+You can export the gradebook to CSV format for external analysis or record-keeping. The export feature includes an option to **use render expressions** when exporting:
+
+- **Without render expressions** (default): Exports raw numeric scores as stored in the database
+- **With render expressions**: Applies any render expressions you've configured (e.g., converting numeric scores to letter grades) before exporting
+
+To export:
+1. Click the "Download Gradebook" button at the bottom of the gradebook page
+2. Optionally check "Use render expressions in CSV" to apply formatting
+3. Click "Download CSV"
+
+The exported CSV includes all students and columns, with proper UTF-8 encoding to preserve special characters and emoji.
+
+## Gradebook Recalculation
+
+When gradebook columns use expressions that reference other columns, Pawtograder automatically recalculates affected grades when dependencies change. This recalculation process runs asynchronously in the background to maintain performance for large courses.
+
+The recalculation system uses a worker that processes batches of rows, tracking the state of each row to prevent concurrent modifications. Each row in `gradebook_row_recalc_state` has a version number that increments with each update, ensuring that only the worker that initiated the recalculation can mark it as complete.
+
+<Note>
+The gradebook recalculation system was recently fixed to address a critical bug where rows could become permanently stuck in the `is_recalculating=true` state. The fix ensures that version numbers are read after upserts complete, preventing version mismatches during batch processing.
+</Note>
+
+## Managing Columns
+
+You can reorder gradebook columns using the "Move Left" and "Move Right" options in the column menu. This helps you organize your gradebook to match your grading workflow or course structure.
+
+## Exporting Grades
+
+Instructors can export gradebook data to CSV for external analysis, record-keeping, or integration with other systems.
+
+### Standard Export
+
+The standard gradebook export includes all columns and student grades in CSV format.
+
+### Export with Rendered Expressions
+
+For gradebook columns that use expressions, you can choose to export the **rendered values** instead of the raw expression formulas. This option exports the calculated numeric results for each student, making the data immediately usable in external tools like Excel or Google Sheets.
+
+**Use cases for expression rendering:**
+- Share final calculated grades with students or administrators
+- Import computed averages into external grading systems
+- Analyze grade distributions based on complex calculations
+- Create reports that show final weighted scores
+
+When exporting with rendered expressions:
+- Expression columns show the calculated numeric value for each student
+- Manual and imported columns export normally
+- All student-specific calculations are preserved
+- The export maintains the same CSV format and encoding standards
+
+You can export gradebook data to CSV for external analysis or record-keeping. The export includes an option to render expression-based columns with their calculated values, allowing you to export computed grades alongside raw scores.
+
+Click the "Export" button to download gradebook data as a CSV file. The export includes:
+
+- Student names and identifiers
+- All gradebook columns with their scores
+- Expression-based columns rendered with their calculated values
+
+When exporting, you can choose to include columns rendered by expressions, which exports the calculated values rather than the expression formulas. This is useful for importing grades into external systems or for archival purposes.
+
+## Gradebook Interface
+
+The gradebook interface provides a spreadsheet-like view of all student grades with the following features:
+
+- **Column reordering**: Use the "Move Left" and "Move Right" buttons in the column header menu to reorder columns in the gradebook view
+- **Decimal score support**: Enter decimal values (e.g., 8.5) directly in gradebook cells for precise grading
+- **Manual overrides**: Override any calculated grade by clicking on the cell and entering a new value. Override notes are displayed in the UI when hovering over overridden grades
+- **Real-time recalculation**: When rubric check scores change, submission grade totals automatically recalculate to reflect the updated scores
+
+## Manual Grade Entry
+
+When manually entering grades in the gradebook, you can input both whole numbers and decimal values. The system supports decimal scores for precise grading (e.g., 87.5 out of 100), allowing you to record partial credit and fine-grained assessments.
+
+## Gradebook Recalculation
+
+The gradebook automatically recalculates scores when grades change. The recalculation system uses a queue-based architecture to handle updates efficiently:
+
+- When a grade changes, the system enqueues a recalculation job for affected gradebook rows
+- Edge functions process these jobs asynchronously to update calculated columns
+- The system tracks row versions to ensure updates are applied correctly and prevent race conditions
+- If a row is already being recalculated, new updates are queued without incrementing the version, allowing the current worker to complete successfully
+
+This architecture ensures that calculated grades (such as averages and weighted scores) stay up-to-date even during periods of high activity, such as when multiple graders are entering scores simultaneously.
+
+## Exporting Grades
+
+The gradebook includes export functionality to download grades in CSV format. Export buttons now display a loading state while the export is being generated, providing clear feedback during the process.
+
+**Instructor-only columns:** Columns can be marked as instructor-only, making them completely invisible to students regardless of release status. This is useful for internal tracking, grading notes, or calculations that should never be shared with students. Instructor-only columns can still be used in expressions for other columns, allowing you to build complex grading systems with hidden intermediate calculations.
+
+**Automatic recalculation of dependent columns:** When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
+
+## "What If" Calculations
+
+The gradebook includes a "What If" mode that allows students and instructors to explore hypothetical grade scenarios. When enabled, you can temporarily modify grades to see how they would affect calculated columns and overall course performance.
+
+To use "What If" mode:
+1. Click the "What If" toggle in the gradebook interface
+2. Edit any grade cell to enter a hypothetical score
+3. All calculated columns automatically update to reflect the hypothetical scenario
+4. Modified cells are visually highlighted to distinguish them from actual grades
+5. Click "Reset" to clear all hypothetical changes and return to actual grades
+
+This feature is particularly useful for:
+- Students planning how to allocate study time across remaining assignments
+- Instructors modeling the impact of curve adjustments or extra credit
+- Advisors helping students understand grade requirements for specific outcomes
+
+All "What If" changes are temporary and client-side only—they never modify actual grades in the database.
 
 ## Importing Grades
 
 To import grades, instructors use a 3-step wizard:
 
-1. **File Selection**: Click the "Import Column" button and select a CSV file from your computer, which the system parses client-side to extract tabular data.
+1. **File Selection**: Click the "Import Columns" button and select a CSV file from your computer, which the system parses client-side to extract tabular data.
 
 2. **Column Mapping**: Choose which CSV column contains student identifiers and select whether they are email addresses or student IDs. For each remaining CSV column, decide whether to map it to an existing gradebook column for updates, create a new column (requiring you to set the maximum score), or ignore the column entirely. The system automatically detects email columns if present.
 
 3. **Preview & Confirm**: Review a comprehensive preview table that shows exactly what changes will occur, highlighting grade updates with strikethrough old values and bold new values, warning about students in the CSV who aren't enrolled in the course, and providing alerts when attempting to override calculated column scores. Only after reviewing this detailed preview can you click "Confirm Import" to execute the changes.
 
+## Entering Grades Manually
+
+You can manually enter grades directly into the gradebook by clicking on any cell. The gradebook supports both whole numbers and decimal scores, allowing you to enter precise grades like 8.5 or 92.75. This is particularly useful for assignments with partial credit or when you need to record fractional points.
+
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
+
+## Exporting Grades
+
+Instructors can export gradebook data to CSV format for external analysis, reporting, or archival purposes. The export feature provides two options:
+
+### Standard Export
+
+The standard export includes all gradebook columns with their current values as they appear in the gradebook interface. This is useful for quick exports and sharing grade data with external systems.
+
+### Export with Rendered Expressions
+
+When exporting, you can choose to render expression-based columns by their calculated values rather than showing the expression formula. This option:
+
+- Evaluates all expression columns for each student
+- Exports the computed numeric results instead of the formula
+- Maintains compatibility with external systems that expect numeric values
+- Preserves manual overrides when present
+
+This is particularly useful when you need to share final calculated grades with registrar systems, learning management systems, or for creating grade reports that don't need to show the underlying calculation logic.
+
+You can export gradebook data to CSV format for external analysis or record-keeping. The export feature provides two options:
+
+1. **Export raw scores**: Exports the actual stored values in each column (default behavior)
+2. **Export with expressions rendered**: For columns defined by expressions, exports the calculated values instead of the expression formula itself
+
+When exporting with expressions rendered, calculated columns show their computed numeric values for each student, making the export suitable for importing into external grading systems or spreadsheet applications that don't support the expression syntax.
+
+1. **Standard Export**: Exports the raw scores as stored in the gradebook, including any manual overrides.
+
+2. **Export with Rendered Expressions**: For columns defined by expressions, this option evaluates the expression for each student and exports the calculated result. This is useful when you want to see the final computed values rather than the underlying formula or when sharing grades with external systems that don't support expression evaluation.
+
+To export, click the "Export" button in the gradebook interface and select your preferred export format.
+
+You can export gradebook data to CSV format for external analysis or record-keeping. The export feature offers two modes:
+
+- **Standard Export**: Exports raw scores as they appear in the gradebook
+- **Export with Expressions Rendered**: Evaluates all expression-based columns and exports the calculated values instead of the formulas. This is useful when you need to share final computed grades with external systems or for archival purposes.
+
+To export, click the **Export** button in the gradebook toolbar and select your preferred export mode.
+
+## Managing Columns
+
+### Reordering Columns
+
+You can reorder gradebook columns to organize them logically. Use the **Move Left** and **Move Right** options in the column menu to adjust column positions. This helps you group related assignments or arrange columns by chronological order for easier navigation.
+
+1. **Standard Export**: Exports raw scores as they appear in the gradebook
+2. **Expression-Rendered Export**: Exports columns with their expression calculations evaluated and rendered as numeric values
+
+To export grades, click the **Export** button in the gradebook toolbar and select your preferred export mode. The CSV file will include student identifiers and all visible gradebook columns.
+
+## Managing Columns
+
+You can reorder gradebook columns using the **Move Left** and **Move Right** buttons in each column's menu. This allows you to organize your gradebook layout to match your grading workflow or reporting needs.
+
+You can export gradebook data to CSV format for external analysis or record-keeping. The export feature provides two options:
+
+1. **Standard Export**: Exports raw column values as they appear in the gradebook
+2. **Expression-Rendered Export**: Exports columns with their expression calculations evaluated, showing the computed values rather than the raw scores
+
+To export grades, click the "Export" button on the gradebook page and select your preferred export format. The CSV file will include all visible columns and student data based on your current view and filters.
+
+You can export gradebook data to CSV for external analysis or record-keeping. The export includes an option to render calculated columns by their expressions, showing the computed values rather than the formulas. This is useful when you need to share final grades with students or import them into other systems.
+
+You can export gradebook data to CSV for external analysis or record-keeping. The export includes all visible columns and student grades.
+
+### Expression-Based Export Columns
+
+When exporting, you can choose to render columns defined by expressions using their calculated values. This allows you to export computed grades (like weighted averages or dropped scores) as actual numeric values rather than formulas, making the data easier to use in external systems like Excel or Google Sheets.
+
+The gradebook provides flexible export options to download grade data as CSV files for external analysis or record-keeping.
+
+### Standard Export
+
+Click the **Export** button to download a CSV file containing all gradebook columns and student grades. The export includes:
+
+- Student names and identifiers
+- All gradebook columns (both manually entered and calculated)
+- Current grade values for each student
+- Proper CSV formatting for Excel and Google Sheets compatibility
+
+### Expression-Based Export
+
+For advanced use cases, you can export gradebook data with columns rendered by custom expressions. This allows you to:
+
+- Calculate and export derived values not stored as permanent columns
+- Apply transformations or formatting specific to external systems
+- Generate reports with computed statistics
+
+To use expression-based export, define your export expressions using the same MathJS syntax as gradebook column expressions, then export the results alongside your standard gradebook data.
+
+Click the **Export** button to download gradebook data as a CSV file. The export includes:
+
+- Student names and identifiers
+- All gradebook columns with their current values
+- **Expression-rendered columns**: Columns defined by expressions are exported with their calculated values, making it easy to share final computed grades with external systems
+
+The exported CSV uses UTF-8 encoding with BOM for Excel compatibility and includes proper escaping for formula injection protection.
+
+Click the "Export Gradebook" button to download all grades as a CSV file. You can optionally enable "Render expression columns" to export calculated columns with their computed values instead of formulas. This is useful for submitting final grades to external systems or creating snapshots of current standings.
+
+The gradebook supports exporting data to CSV format. When exporting, you can choose to include columns that are calculated using expressions. The export will render these expression-based columns with their computed values for each student, making it easy to share final grades or import them into external systems.
+
+The gradebook supports exporting to CSV with two options:
+
+- **Standard Export**: Exports all gradebook columns with their current values
+- **Expression-Based Export**: Exports columns with values calculated by their expressions, allowing you to export computed grades (e.g., weighted averages, curved scores) rather than just raw values
+
+Both export formats include student information and properly escaped CSV values for compatibility with Excel and Google Sheets.
+
+The gradebook supports exporting grades to CSV format with two export options:
+
+### Standard Export
+
+The standard export includes all gradebook columns with their raw scores. Click the "Export" button to download a CSV file containing student identifiers and all column scores.
+
+### Export with Expression Columns
+
+You can export the gradebook with additional columns rendered by expressions. This allows you to include calculated values (such as weighted averages, letter grades, or custom formulas) directly in the exported CSV alongside the raw scores.
+
+To export with expression columns:
+
+1. Click the "Export with Expressions" option
+2. The exported CSV will include both the original gradebook columns and any columns defined by expressions
+3. Expression columns are evaluated for each student and rendered as numeric values in the export
+
+This feature is useful for sharing final calculated grades with external systems, generating reports with derived values, or providing students with comprehensive grade breakdowns that include both raw scores and computed results.
+
+You can export the gradebook to CSV format for use in external systems or record-keeping. The export includes all visible columns and student information.
+
+### Export with Rendered Expressions
+
+When exporting, you have the option to export columns with their calculated values rendered. This is particularly useful for expression-based columns, as it allows you to export the final computed scores rather than the formulas themselves. This feature ensures that exported data matches exactly what students see in the gradebook.
+
+You can export gradebook data to CSV format for external analysis or record-keeping. The export feature provides two options:
+
+- **Export raw values**: Exports the actual stored values in the gradebook (e.g., numeric scores, null for missing grades).
+- **Export rendered values**: Exports values as they appear in the gradebook interface, with expression-based columns showing their calculated results. This is useful when you want to export computed grades or formatted values for external systems.
+
+To export, click the "Export" button in the gradebook toolbar and select your preferred export format.
+
+## Decimal Score Support
+
+The gradebook supports decimal scores. You can enter fractional values (e.g., 87.5) in any grade field, and they will be properly stored and calculated in grade expressions. When rubric check scores are updated during handgrading, submission grade totals are automatically recalculated to reflect the changes.
+
+## Manual Grade Entry
+
+You can manually enter or edit grades directly in the gradebook interface. The gradebook supports both integer and decimal scores. When entering scores manually, you can type decimal values (e.g., 87.5, 92.3) to provide more precise grading. This is particularly useful for assignments with partial credit or weighted scoring systems.
+
+## Gradebook recalculation
+
+The gradebook automatically recalculates scores when dependencies change. The recalculation system uses a queue-based architecture to ensure all grade updates are processed reliably and in the correct order, even when multiple changes occur simultaneously. This ensures that calculated columns always reflect the most current data from their dependencies.
+
+## Expression Builder
+
+The gradebook includes a full-screen Expression Builder for creating and editing column expressions. This interface provides:
+
+- **Real-time validation**: Expressions are validated as you type, with clear error messages for syntax issues
+- **Full-screen editing**: Maximize your workspace for complex formulas
+- **Syntax highlighting**: Enhanced readability for mathematical expressions
+- **Function reference**: Quick access to available functions and their documentation
+
+To access the Expression Builder, click the expand icon when editing an expression-based column.
 
 ## Expression Syntax
 
@@ -100,7 +501,7 @@ total_points = sum(gradebook_columns("hw-*"))
 
 #### `mean(array, weighted=true)`
 
-Calculates weighted (default) or unweighted averages:
+Calculates weighted (default) or unweighted averages. The function gracefully handles undefined values and missing grades:
 
 ```javascript
 // Weighted average (accounts for different max scores)
@@ -127,7 +528,11 @@ Unweighted average is defined as:
 return (100 * validValues.reduce((a, b) => a + (b && b.score ? b.score / b.max_score : 0), 0)) / validValues.length;
 ```
 
-In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average.
+In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average. The calculation tolerates undefined values in the input array, ensuring robust grade calculations even when some data is missing.
+
+<Note>
+The mean calculation now tolerates undefined values in the input array, automatically filtering them out before computing the average. This prevents errors when some gradebook columns have not yet been populated.
+</Note>
 
 #### `drop_lowest(array, count)`
 
@@ -160,6 +565,10 @@ letter_grade = case_when([
 ### Comparison Functions
 
 Normal comparison functions like `==`, `>=`, `<=`, etc. are available, and can automatically coerce a gradebook value to a score for you (so that you do not need to map each gradebook value to a score to compare it).
+
+### Manual Grade Entry
+
+Gradebook columns support decimal score entry. When entering grades manually, you can input decimal values (e.g., 87.5) for precise grading. The system validates that scores don't exceed the maximum score for the column.
 
 ### Complete Examples
 
@@ -210,3 +619,17 @@ mod = case_when([
 final = max(letter + mod, 0)
 final
 ```
+
+## What-If Calculations
+
+The gradebook supports "what-if" scenarios, allowing instructors and students to explore hypothetical grade changes. When you modify a grade value in the gradebook interface:
+
+- **Temporary overrides**: Changes are applied temporarily to see their impact on calculated columns
+- **Real-time updates**: All dependent columns recalculate instantly to show the new totals
+- **Visual indicators**: Modified cells are highlighted to distinguish hypothetical values from actual grades
+- **Easy reset**: Discard what-if changes to return to actual grades
+
+This feature is particularly useful for:
+- Helping students understand how future assignments will affect their final grade
+- Exploring different grading scenarios before finalizing grades
+- Demonstrating the impact of extra credit or dropped assignments
