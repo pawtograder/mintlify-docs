@@ -64,7 +64,8 @@
               "staff/assignments/dashboards",
               "staff/assignments/test-insights-dashboard",
               "staff/assignments/extensions-and-scoring",
-              "staff/assignments/grading-dashboard"
+              "staff/assignments/grading-dashboard",
+              "staff/assignments/repository-permissions"
             ]
           },
           {
