@@ -37,7 +37,7 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["staff/intro"]
+            "pages": ["staff/intro", "staff/course-settings"]
           },
           {
             "group": "Assignments",
@@ -49,6 +49,8 @@
               "staff/assignments/security-dashboard",
               "staff/assignments/configuration",
               "staff/assignments/dashboards",
+              "staff/assignments/managing-groups",
+              "staff/assignments/repository-analytics",
               "staff/assignments/grading-assignments",
               "staff/assignments/grading-status-dashboard",
               "staff/assignments/handgrading",
