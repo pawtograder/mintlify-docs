@@ -271,6 +271,31 @@ Use specific student assignment for:
 - Pilot testing a survey before wider release
 </Tip>
 
+### Link to Assignment
+
+Optionally link a survey to a specific assignment. When linked, students will see the survey status banner on their submission page.
+
+1. Select an assignment from the **Link to Assignment** dropdown
+2. The survey will appear on the assignment's submission page for students
+3. Students can quickly access the survey from their submission view
+
+**Use Cases:**
+- Collect feedback immediately after assignment submission
+- Gather reflection responses tied to specific projects
+- Track team collaboration for group assignments
+
+### Available At
+
+Control when a survey becomes visible to students:
+
+1. Leave **Available At** empty to make the survey visible immediately upon publishing
+2. Set a future date/time to schedule when the survey becomes available
+3. The survey remains hidden from students until the specified time
+
+<Note>
+The **Available At** date must be before the **Due Date**. Students cannot access the survey before the availability time, even if it is published.
+</Note>
+
 ### Linking Surveys to Assignments
 
 You can link a survey to a specific assignment to collect feedback about that assignment. When linked:
@@ -430,6 +455,46 @@ To review peer feedback:
 1. Navigate to the survey's **View Responses** page
 2. Use filters to focus on specific questions or date ranges
 3. Export to CSV for detailed analysis or grade calculations
+
+## Survey Analytics
+
+Pawtograder provides comprehensive analytics for survey responses, including statistical breakdowns by group, mentor, and section.
+
+### Accessing Analytics
+
+Navigate to **View Responses** on any published survey to access the analytics dashboard. The analytics view includes:
+
+- **Summary cards** showing total responses, response rate, and alerts for groups needing attention
+- **Overview tab** displaying course-wide statistics and diverging stacked bar charts
+- **By Group tab** showing per-group analytics with comparison to course averages
+- **My Groups tab** (for mentors) displaying only groups assigned to you
+
+### Configuring Analytics
+
+When creating or editing a survey, expand the **Analytics Configuration** section to customize:
+
+1. **Global Alert Thresholds**:
+   - **Variance Threshold**: Standard deviation above which to flag high variance (default: 1.5)
+   - **Non-Response Threshold**: Response rate below which to flag groups (default: 80%)
+
+2. **Per-Question Configuration**:
+   - Toggle **Include** to add questions to analytics
+   - Set **Alert Threshold** to trigger warnings when group means exceed/fall below a value
+   - Choose **Alert Direction** (above/below mean, or any individual response above/below)
+   - Add custom **Alert Message** to explain the concern
+   - Mark **Reversed scale** if higher values indicate worse outcomes
+
+### Survey Series
+
+Link related surveys into a series to track trends over time:
+
+1. Navigate to **Manage Series** from the surveys dashboard
+2. Click **Create Series** and provide a name and description
+3. When creating/editing surveys, select the series from the **Link to Series** dropdown
+4. Assign a **Week Number** to position the survey in the series
+5. Use the series management page to reorder surveys with arrow buttons
+
+**Series Comparison**: In the analytics view, select multiple surveys from a series to compare response trends across weeks.
 
 ## Survey Series
 
