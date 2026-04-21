@@ -171,6 +171,7 @@ Once Supabase is running, these services are available:
 | API | http://127.0.0.1:54321 | Supabase REST API |
 | Studio | http://localhost:54323 | Database management UI |
 | Inbucket | http://localhost:54324 | Email testing interface |
+| MCP Server | http://127.0.0.1:54321/mcp | Model Context Protocol server for AI assistance |
 | Application | https://localhost:3000 | Next.js frontend |
 
 ### Supabase Studio
@@ -190,6 +191,16 @@ View captured emails at `http://localhost:54324`. Useful for testing:
 - Authentication flows (magic links, password reset)
 - Notification emails
 - Email verification
+
+### MCP Server
+
+The Model Context Protocol (MCP) server is available at `http://127.0.0.1:54321/mcp` for AI assistance features. This endpoint:
+
+- Provides AI assistants with secure access to help requests, discussions, and submissions
+- Requires API token authentication (create tokens via the UI)
+- Is restricted to instructors and graders only
+
+See the [AI assistance documentation](/staff/ai-assistance) for more details on using the MCP server.
 
 ## Development Commands
 
@@ -348,6 +359,33 @@ For AI-assisted development using Cursor, see the `AGENTS.md` file in the reposi
 - Environment variable setup
 - Pre-commit formatting requirements
 - Build and test commands
+
+## Cursor Agent Development Environment
+
+Pawtograder includes a Cursor agent development environment setup that allows AI assistants to help with development tasks. This environment provides:
+
+- Pre-configured development container settings
+- Access to the codebase structure and conventions
+- Integration with the local development environment
+
+### Setup
+
+The Cursor agent environment is automatically configured when you clone the repository. The configuration files are located in the `.cursor` directory and include:
+
+- Development environment settings
+- Code style and formatting rules
+- Project-specific AI assistant guidelines
+
+### Usage
+
+When using Cursor or other AI-powered development tools, the agent will have access to:
+
+- Project structure and file organization
+- Database schema and migrations
+- Component patterns and conventions
+- Testing setup and examples
+
+This helps AI assistants provide more accurate and context-aware suggestions when working on Pawtograder features.
 
 ## Next Steps
 

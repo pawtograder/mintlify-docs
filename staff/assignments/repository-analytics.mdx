@@ -1,0 +1,111 @@
+---
+title: "Repository analytics"
+description: "Track and analyze student GitHub contributions on assignments"
+icon: "chart-line"
+---
+
+# Repository Analytics
+
+Repository analytics helps instructors and graders audit individual student contributions on group assignments by collecting and displaying GitHub activity including commits, pull requests, issues, and comments.
+
+## Enabling Repository Analytics
+
+To enable repository analytics for an assignment:
+
+1. Navigate to the assignment settings when creating or editing an assignment
+2. Check the "Enable repository analytics" option
+3. Save the assignment
+
+Once enabled, analytics will be automatically collected daily for all repositories associated with the assignment.
+
+## Viewing Repository Analytics
+
+When repository analytics is enabled, a "Repo Analytics" button appears in the submission sidebar for instructors and graders.
+
+The analytics dashboard provides two main views:
+
+### Items View
+
+The Items view displays a detailed table of all repository activity:
+
+- **Type badges**: Commit, Pull Request, Issue, Issue Comment, PR Review Comment
+- **Title/Message**: Commit messages, PR/issue titles with links to GitHub
+- **Author**: GitHub username (mapped to student names when available)
+- **Date**: Activity date
+- **State**: Open/closed status for PRs and issues
+- **File changes**: For commits and PRs, shows files modified with additions/deletions
+
+**Contributions by User** table shows aggregate counts per contributor:
+- Commits
+- Pull requests
+- Issues
+- Issue comments
+- PR review comments
+
+### Activity Chart
+
+The Activity Chart provides a daily visualization of repository activity over time, showing:
+- Commits
+- PRs opened
+- Issues opened and closed
+- Issue comments
+- PR review comments
+
+## Refreshing Analytics Data
+
+Analytics data is automatically refreshed daily at 2:00 AM UTC for active assignments. You can also manually refresh data:
+
+1. Click the "Refresh" button in the analytics dashboard
+2. Rate limit: Manual refreshes are limited to once per 10 minutes per repository
+3. The fetch status indicator shows when data was last updated
+
+## Exporting Analytics Data
+
+Click the "Export CSV" button to download all analytics data for external analysis. The CSV includes:
+- Activity type
+- GitHub ID
+- Title/message
+- Author
+- Date
+- State
+- File changes summary
+- Labels (for issues)
+- Body preview
+- GitHub URL
+
+## Linking Rubric Checks to Analytics
+
+Rubric checks can be linked to specific repository analytics KPIs (Key Performance Indicators). When configuring a rubric check, you can assign a KPI category:
+
+- `commits`: Track commit activity
+- `prs_opened`: Track pull requests created
+- `pr_review_comments`: Track code review participation
+- `issues_opened`: Track issues created
+- `issues_closed`: Track issue resolution
+- `issue_comments`: Track issue discussion participation
+
+When a check has a KPI category assigned, graders see a "View analytics" link that filters the repository analytics to show only that activity type.
+
+## How It Works
+
+Repository analytics uses the GitHub API to fetch activity data:
+
+1. **Data Collection**: The system fetches issues, pull requests, commits, and comments from the assignment repository
+2. **Incremental Updates**: After the initial fetch, subsequent updates only retrieve new activity since the last fetch
+3. **Daily Aggregation**: Activity is aggregated by day for the activity chart
+4. **Per-Submission View**: Each submission shows analytics for its associated repository
+
+### Rate Limiting
+
+To respect GitHub API rate limits:
+- Manual refreshes are limited to once per 10 minutes per repository
+- Automatic daily refreshes are staggered across the 2:00 AM UTC hour
+- The system monitors GitHub rate limits and delays processing when necessary
+- Bulk operations process repositories in batches of 20
+
+## Privacy and Access
+
+- Repository analytics are only visible to instructors and graders
+- Students cannot view repository analytics
+- Analytics data is scoped to the assignment's repository
+- All data is fetched using the course's configured GitHub organization

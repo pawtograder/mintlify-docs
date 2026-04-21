@@ -67,3 +67,18 @@ The regrade process runs asynchronously. You can monitor progress on the Workflo
 ### Viewing Affected Submissions
 
 Click **View Submissions** on an error group to navigate to the Rerun Autograder page with those submissions pre-selected. This makes it easy to review the affected submissions before deciding whether to regrade.
+
+## Rerunning the Autograder
+
+When testing or debugging grading issues, you can rerun the autograder on any submission:
+
+1. **Reuse submission**: The rerun uses the same submission record rather than creating a new one
+2. **Select grader version**: Choose which version of the grader to use for the rerun:
+   - Use the current grader configuration
+   - Select a specific commit from the grader repository history
+   - Enter a manual SHA for precise version control
+
+This feature is particularly useful for:
+- Testing grader changes without affecting student submissions
+- Debugging grading issues with different grader versions
+- Validating fixes before deploying to production
