@@ -414,6 +414,118 @@ Build system integration guides for common programming languages.
 
 *Detailed documentation coming soon.*
 
+## AI-Assisted Grading with Feedbot
+
+Feedbot provides AI-powered feedback on student submissions using large language models (LLMs). It can analyze code quality, provide suggestions, and generate personalized feedback at scale.
+
+### Supported LLM Providers
+
+Feedbot supports multiple LLM providers for flexibility and cost optimization:
+
+#### OpenAI
+
+- Models: GPT-4, GPT-4 Turbo, GPT-3.5 Turbo
+- Best for: High-quality feedback, complex code analysis
+- Configuration: Requires OpenAI API key
+
+#### Anthropic Claude
+
+- Models: Claude 3 Opus, Claude 3 Sonnet, Claude 3 Haiku
+- Best for: Detailed explanations, educational feedback
+- Configuration: Requires Anthropic API key
+
+#### OpenRouter
+
+OpenRouter provides access to multiple LLM providers through a single API, including:
+
+- OpenAI models (GPT-4, GPT-3.5)
+- Anthropic models (Claude 3 family)
+- Open-source models (Llama, Mistral, etc.)
+- Specialized models for code analysis
+
+**Benefits of OpenRouter:**
+
+- Single API key for multiple providers
+- Automatic fallback if primary model is unavailable
+- Cost optimization through model selection
+- Access to latest models without separate integrations
+
+**Configuration:**
+
+1. Sign up for an OpenRouter account at [openrouter.ai](https://openrouter.ai)
+2. Generate an API key from your OpenRouter dashboard
+3. In Pawtograder assignment settings, select **OpenRouter** as the LLM provider
+4. Enter your OpenRouter API key
+5. Choose which model to use from the OpenRouter catalog
+6. Configure feedback parameters (temperature, max tokens, etc.)
+
+### Configuring Feedbot for an Assignment
+
+1. Navigate to the assignment settings page
+2. Scroll to the **AI Grading** section
+3. Enable **Feedbot**
+4. Select your LLM provider (OpenAI, Anthropic, or OpenRouter)
+5. Enter the appropriate API key
+6. Choose the model to use
+7. Configure feedback settings:
+   - Feedback style (concise, detailed, encouraging)
+   - Focus areas (code quality, style, logic, testing)
+   - Maximum feedback length
+   - Language and tone preferences
+
+### Feedbot Feedback Types
+
+**Code Quality Analysis:**
+
+- Identifies code smells and anti-patterns
+- Suggests refactoring opportunities
+- Evaluates naming conventions and readability
+
+**Logic and Correctness:**
+
+- Reviews algorithm efficiency
+- Identifies potential bugs or edge cases
+- Suggests alternative approaches
+
+**Style and Best Practices:**
+
+- Checks adherence to language conventions
+- Recommends documentation improvements
+- Evaluates code organization
+
+**Custom Prompts:**
+
+Create custom prompts for assignment-specific feedback:
+
+1. In the Feedbot configuration, click **Add Custom Prompt**
+2. Write a prompt describing what to evaluate
+3. Specify which files or code sections to analyze
+4. Set priority and weight for this feedback type
+
+### Viewing Feedbot Results
+
+Students see Feedbot feedback on their submission page:
+
+- Inline comments on specific code lines
+- Summary feedback at the submission level
+- Suggestions for improvement
+- Links to relevant documentation or resources
+
+Instructors can:
+
+- Review all Feedbot feedback before releasing to students
+- Edit or override AI-generated feedback
+- Disable Feedbot for specific submissions
+- Track Feedbot usage and costs
+
+### Best Practices
+
+- Start with conservative feedback settings and adjust based on results
+- Review Feedbot output on sample submissions before enabling for all students
+- Combine Feedbot with traditional autograding for comprehensive assessment
+- Use custom prompts to align feedback with course learning objectives
+- Monitor API costs and set usage limits if needed
+
 ## AI-Powered Feedback with Feedbot
 
 Pawtograder includes Feedbot, an AI-powered feedback system that can provide automated feedback on student submissions. Feedbot integrates with various AI providers to generate contextual feedback based on rubric criteria and submission content.

@@ -311,6 +311,38 @@ parts:
   - Additive: `earned / total_points`
   - Subtractive: `remaining / total_points`
 
+## Rubric Editor Features
+
+### Unsaved Changes Protection
+
+The rubric editor automatically detects unsaved changes and prevents accidental data loss:
+
+**When you have unsaved changes:**
+
+- A warning indicator appears in the editor header
+- Attempting to navigate away triggers a confirmation dialog
+- Browser tab close/refresh prompts a warning
+- The dialog shows which changes will be lost
+
+**Confirmation dialog options:**
+
+- **Save and Continue**: Saves your changes before navigating away
+- **Discard Changes**: Abandons unsaved changes and continues navigation
+- **Cancel**: Returns to the editor to continue editing
+
+<Tip>
+The editor auto-saves drafts to browser local storage every 30 seconds as a backup. If your browser crashes, you can recover your work when you return to the editor.
+</Tip>
+
+### Keyboard Shortcuts
+
+Speed up rubric editing with keyboard shortcuts:
+
+- `Ctrl/Cmd + S`: Save rubric
+- `Ctrl/Cmd + Z`: Undo last change
+- `Ctrl/Cmd + Shift + Z`: Redo
+- `Esc`: Close current dialog
+
 ## Editing Rubric Scores After Completion
 
 TAs and instructors can edit or delete rubric scores even after completing a review. This allows for:
@@ -349,6 +381,7 @@ The warning ensures you don't accidentally lose your work when editing complex r
 - Use `max_annotations` to prevent over-counting nitpicks.
 - Prefer options when the same check has graded tiers (e.g., Complete/Partial/Incomplete).
 - Use `student_visibility` to separate internal notes from student-facing feedback.
+- Save frequently to avoid losing work, especially for complex rubrics.
 
 ## Editing Rubrics
 

@@ -88,6 +88,7 @@
             "group": "Course Features",
             "pages": [
               "staff/instructor-dashboard",
+              "staff/dashboard",
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
@@ -114,7 +115,7 @@
           },
           {
             "group": "Feature Documentation",
-            "pages": ["developers/surveys", "developers/polls", "developers/mcp-server"]
+              "group": "Operations"
           }
         ]
       }

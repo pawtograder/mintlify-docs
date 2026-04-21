@@ -118,6 +118,8 @@ When you have submissions assigned to grade, you will see a summary of them on t
   <img src="/images/staff/assignments/handgrading-1756054330152.png" alt="Handgrading page showing assigned submissions list" />
 </Frame>
 
+Click on any submission to view the grading interface. Click on the "Files" tab to view the submission's files. Click on the "Artifacts" tab to view any generated artifacts from the submission.
+
 Click on any submission to view the grading interface. Click on the "Files" tab to view the submission's files. Plaintext and markdown files can be viewed directly in the browser. If the assignment includes artifacts, you can view them in the "Artifacts" tab, and rubric checks can link directly to specific artifacts for easy reference.
 
 ### Viewing Artifacts
@@ -171,6 +173,63 @@ When a rubric part is reassigned to you after you've already completed grading a
 
 You can also grade the submission as a whole, by clicking on the "Grade" button.
 
+## Tracking Incomplete Reviews
+
+Instructors can monitor grading progress and identify incomplete reviews:
+
+### Incomplete Reviews Dashboard
+
+Navigate to the assignment's **Grading Progress** page to see:
+
+- Total number of grading assignments
+- Number of completed reviews
+- Number of incomplete reviews
+- List of graders with incomplete assignments
+- Due dates for pending reviews
+
+**Incomplete review indicators:**
+
+- Red badge: Review is past due
+- Yellow badge: Review is due within 24 hours
+- Gray badge: Review is not yet due
+
+### Filtering Incomplete Reviews
+
+Use filters to focus on specific incomplete reviews:
+
+1. Click **Filter** on the grading progress page
+2. Filter by:
+   - Grader name
+   - Due date range
+   - Rubric part
+   - Completion status
+3. Sort by due date, grader, or submission
+
+### Bulk Complete Reviews
+
+For situations where reviews need to be marked complete without full grading (e.g., excused submissions, administrative completion):
+
+1. Navigate to the **Grading Progress** page
+2. Select multiple incomplete reviews using checkboxes
+3. Click **Bulk Complete** at the top of the list
+4. Choose completion options:
+   - Mark as complete without changes (preserves existing grades)
+   - Mark as complete and apply default scores
+   - Mark as complete and excuse from grading
+5. Optionally add a note explaining the bulk completion
+6. Click **Confirm Bulk Complete**
+
+<Warning>
+Bulk completion marks reviews as complete but does not automatically release them to students. Use the release controls separately to make grades visible to students.
+</Warning>
+
+**Common use cases for bulk complete:**
+
+- Excusing students who dropped the course
+- Completing reviews for late submissions that won't be graded
+- Administrative cleanup at end of semester
+- Marking placeholder reviews as complete
+
 ### Automatic Review Completion
 
 When a grader completes their assigned rubric parts, Pawtograder automatically marks other review assignments as complete if their assigned parts are a subset of the completed work. For example, if a grader completes parts A, B, and C, any other graders assigned only to parts A, B, or A+B will have their assignments automatically completed. This streamlines workflows where multiple graders review overlapping portions of submissions.
@@ -214,6 +273,93 @@ By clicking on a student/group name, you will be taken to the grading interface 
 <Frame>
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
+
+## Viewing Artifacts
+
+Artifacts are files generated during the autograding process that provide additional context for grading. Common artifact types include:
+
+- Test output logs
+- Generated reports (HTML, PDF)
+- Visualization outputs (charts, graphs)
+- Code coverage reports
+- Performance profiling data
+
+### Artifact Rendering
+
+Pawtograder supports rendering multiple artifact formats directly in the grading interface:
+
+#### Plaintext Artifacts
+
+Text-based artifacts (`.txt`, `.log`, `.csv`) are displayed with:
+
+- Syntax highlighting for structured formats
+- Line numbers for easy reference
+- Search functionality
+- Copy-to-clipboard support
+
+**Annotation support:** You can add rubric annotations directly to specific lines in plaintext artifacts, similar to code files.
+
+#### Markdown Artifacts
+
+Markdown files (`.md`) are rendered with full formatting:
+
+- Headers, lists, and emphasis
+- Code blocks with syntax highlighting
+- Tables and blockquotes
+- Links and images (if embedded)
+
+**Use cases for markdown artifacts:**
+
+- Student-written reports or documentation
+- Autograder-generated feedback summaries
+- Test result explanations
+- Assignment reflections
+
+**Annotation support:** Markdown artifacts support annotations at the paragraph or section level.
+
+#### HTML Artifacts
+
+HTML files are rendered in a sandboxed iframe:
+
+- Full CSS styling preserved
+- Interactive elements (limited for security)
+- Responsive layouts
+- Embedded media
+
+#### PDF Artifacts
+
+PDF files are displayed using the browser's PDF viewer:
+
+- Page navigation
+- Zoom controls
+- Download option
+- Print support
+
+### Adding Annotations to Artifacts
+
+To annotate an artifact during grading:
+
+1. Navigate to the **Artifacts** tab
+2. Select the artifact to view
+3. For plaintext/markdown: Click on a line or section
+4. Choose a rubric check from the annotation menu
+5. Add optional comments
+6. The annotation appears inline with the artifact
+
+Artifact annotations are visible to students when grades are released, providing context for feedback tied to specific outputs.
+
+### Configuring Artifacts
+
+Instructors configure which artifacts to collect in the autograder settings:
+
+1. Navigate to assignment settings
+2. In the **Autograder** section, click **Configure Artifacts**
+3. Specify artifact file patterns (e.g., `reports/*.md`, `output.txt`)
+4. Choose rendering mode (plaintext, markdown, HTML, PDF, or auto-detect)
+5. Set visibility (always visible, only if grader annotates, or instructor-only)
+6. Save configuration
+
+The autograder will collect matching files from the grading environment and make them available in the grading interface.
 
 ## Bulk Completing Grading Reviews
 
