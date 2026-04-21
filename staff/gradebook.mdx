@@ -14,9 +14,14 @@ In the Pawtograder gradebook system, **columns** represent individual grade comp
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
+## Exporting Grades
+
+The gradebook includes export functionality to download grades in CSV format. Export buttons now display a loading state while the export is being generated, providing clear feedback during the process.
+
 **Instructor-only columns:** Columns can be marked as instructor-only, making them completely invisible to students regardless of release status. This is useful for internal tracking, grading notes, or calculations that should never be shared with students. Instructor-only columns can still be used in expressions for other columns, allowing you to build complex grading systems with hidden intermediate calculations.
 
 **Automatic recalculation of dependent columns:** When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
+
 
 ## Importing Grades
 
