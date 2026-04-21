@@ -12,6 +12,10 @@ Programming assignments are the core of Pawtograder. Each assignment consists of
 
 Pawtograder creates two GitHub teams for each class: a "staff" team and a "students" team. Staff are granted access to all class repositories, and students are only granted access to their own repositories. The "students" team can be used by instructors who want to create additional GitHub repositories that are only accessible to students (e.g. for distributing in-class exercises).
 
+### Repository permissions audit
+
+Instructors can audit repository permissions to ensure all students and staff have the correct access levels. The audit flow checks for missing or incorrect permissions and provides tools to fix any issues. This is particularly useful after adding new students to a course or when troubleshooting access problems.
+
 ### Repository Permissions Audit
 
 Instructors can audit and fix repository permissions for all assignment repositories using the **Fix Repository Permissions** button on the assignment's Repositories page. This feature:
@@ -144,6 +148,10 @@ A **handout repository** is a repository that contains the starter code for an a
 
 A **grader repository** is a repository that contains the code that will be used to grade the assignment. It is used to provide instructors with the necessary files to grade the assignment.
 
+### Repository analytics
+
+Instructors can view analytics for assignment repositories, including commit activity, file changes, and collaboration patterns. This helps track student engagement and identify potential issues with repository setup or permissions.
+
 ### Syncing Handout Updates
 
 When you need to push updates from the handout repository to student repositories (for example, to fix a bug in starter code), Pawtograder provides a sync-to-handout feature. The system has been improved for better resilience:
@@ -265,6 +273,8 @@ Instructors can set a class-wide number of late tokens, and configure assignment
 Each token can be exchanged for a 24-hour extension, but the extension must be requested before the student's original due date.
 
 Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+For group assignments, due date exceptions are properly tracked at the group level. When viewing a group submission, instructors can adjust the due date for the entire group, ensuring all group members receive the same extension.
 
 ## Instructor Dashboard and Metrics
 
