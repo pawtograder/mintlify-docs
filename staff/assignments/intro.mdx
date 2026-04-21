@@ -42,11 +42,24 @@ When you need to push updates from the handout repository to student repositorie
 
 This ensures that updates reach all students reliably, even in cases of temporary network issues or repository conflicts.
 
+After an assignment is released, you may need to update the handout repository to fix bugs or add clarifications. Pawtograder provides a sync-to-handout feature that:
+
+- Pushes updates from the handout repository to all student repositories
+- Includes improved resilience to handle edge cases and errors
+- Preserves student work while merging in your changes
+- Notifies students of the updates
+
+This feature ensures all students receive important fixes and updates without disrupting their work in progress.
+
 ## Individual and Group Assignments
 
 Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
+
+## Empty Submission Detection
+
+Pawtograder automatically detects empty submissions to help identify students who may need assistance. When a submission contains no meaningful content, it is flagged for instructor review, making it easier to reach out to students who might be struggling with the assignment.
 
 ### Group Mentors
 
@@ -62,6 +75,168 @@ Instructors can assign mentors to student groups from the groups management page
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
 Each token can be exchanged for a 24-hour extension, but the extension must be requested before the student's original due date.
+
+Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+## Leaderboard
+
+Assignments can optionally include a leaderboard to display student rankings based on autograder scores. The leaderboard feature:
+
+- Shows top-performing submissions in real-time
+- Can be enabled or disabled per assignment
+- Helps reduce clutter when not needed for competitive assignments
+- Encourages friendly competition when enabled
+
+Instructors can toggle the leaderboard on or off in the assignment settings to match the pedagogical goals of each assignment.
+
+When granting extensions, instructors can now choose an extended due date directly using a date picker, rather than entering extension hours and minutes. This makes it easier to set specific deadlines for individual students.
+
+## Assignment Leaderboard
+
+Assignments can include an optional leaderboard feature that displays student rankings based on their scores. This feature:
+
+- Can be enabled or disabled per assignment
+- Shows student rankings in a less cluttering way
+- Helps motivate students through friendly competition
+- Is configurable to match your course's pedagogical goals
+
+Instructors can control whether the leaderboard is visible to students and customize its display settings.
+
+## Score Capping
+
+Instructors can set a maximum score cap for assignments. This feature allows you to:
+
+- Limit the maximum points a student can earn on an assignment
+- Prevent extra credit from inflating grades beyond a certain threshold
+- Maintain consistent grading scales across assignments
+
+Score capping is configured per assignment and applies after all autograder and handgrading scores are calculated.
+
+Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. When granting extensions, you can now choose an extended due date directly rather than entering hours and minutes, making it easier to set precise deadlines.
+
+## Assignment Dashboards
+
+Pawtograder provides several dashboards to help you monitor and manage assignments:
+
+### Grading Status Dashboard
+
+The grading status dashboard gives you a comprehensive overview of grading progress across all submissions:
+
+- View completion status for each grading task
+- Track which submissions have been graded and which are pending
+- Monitor grader workload and progress
+- Identify bottlenecks in the grading workflow
+
+### Security Dashboard
+
+The assignment security dashboard helps you detect and prevent academic integrity issues:
+
+- Monitor for suspicious patterns in submissions
+- Track repository access and commit patterns
+- Identify potential collaboration or copying concerns
+- Review security audit logs for each assignment
+
+### Test Insights Dashboard
+
+The test insights dashboard provides detailed analytics on student performance:
+
+- View aggregated test results across all submissions
+- Identify common errors and failure patterns
+- Track which test cases students struggle with most
+- Export affected student emails for targeted communication
+- Launch regrading workflows directly from error groups
+
+Use the test insights dashboard to understand where students need additional support and to improve your assignments over time.
+
+Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+### Extension Date Picker
+
+When granting manual extensions, instructors can now choose the extended due date directly using a date picker interface, rather than entering extension hours and minutes. This makes it easier to:
+
+- Set precise extension deadlines
+- Avoid calculation errors when determining extension duration
+- Quickly grant extensions to specific dates (e.g., "extend until next Monday")
+
+## Assignment Leaderboard
+
+Assignments can include an optional leaderboard feature that displays student rankings based on performance metrics:
+
+- **Configurable visibility**: Choose whether to show or hide the leaderboard
+- **Less cluttering option**: Make the leaderboard less prominent in the UI
+- **Performance tracking**: Display rankings based on scores or custom metrics
+- **Automatic updates**: Leaderboard refreshes as submissions are graded
+
+The leaderboard feature can encourage friendly competition while remaining optional for courses that prefer not to emphasize rankings.
+
+## Assignment Security Dashboard
+
+The security dashboard helps instructors monitor and prevent academic integrity issues:
+
+- **Anomaly detection**: Identify unusual submission patterns
+- **Collaboration analysis**: Detect potential unauthorized collaboration
+- **Submission timing**: Track when students submit relative to deadlines
+- **Access patterns**: Monitor repository access and commit history
+
+Access the security dashboard from the assignment page to review potential concerns and investigate suspicious activity.
+
+### Granting Manual Extensions
+
+When granting extensions to individual students, instructors can now choose the extended due date directly using a date picker interface, rather than entering extension hours and minutes. This makes it easier to:
+
+- Set specific deadline times (e.g., "Friday at 5:00 PM")
+- Grant extensions that don't align with 24-hour increments
+- Visualize the new deadline while setting the extension
+- Avoid calculation errors when determining extension length
+
+The date picker shows the student's current due date and allows you to select any future date and time for the extended deadline.
+
+## Assignment Score Capping
+
+Instructors can configure a maximum score cap for assignments. Score capping allows you to:
+
+- Set an upper limit on the total points a student can earn
+- Prevent extra credit from inflating scores beyond a desired maximum
+- Ensure consistency in grading across different rubric configurations
+- Cap scores at 100% even if bonus points are available
+
+### Configuring Score Caps
+
+To set a score cap for an assignment:
+
+1. Navigate to the assignment configuration
+2. Find the **Score Cap** settings
+3. Enter the maximum score (e.g., 100 for a 100-point assignment)
+4. Save the configuration
+
+When a score cap is set:
+- Student scores are automatically capped at the specified maximum
+- The gradebook displays the capped score
+- Students can see their raw score and the capped score on their submission page
+
+<Tip>
+Use score capping when you offer bonus points or extra credit but want to ensure no student exceeds the assignment's maximum possible score.
+</Tip>
+
+
+## Assignment Leaderboard
+
+Assignments can optionally include a leaderboard feature that displays top-performing students. The leaderboard:
+
+- Shows rankings based on assignment scores
+- Updates automatically as submissions are graded
+- Can be toggled on or off per assignment
+- Encourages student engagement through friendly competition
+
+To enable or disable the leaderboard for an assignment, use the assignment configuration settings. When enabled, students will see their ranking and the top performers on the assignment page.
+
+<Tip>
+The leaderboard can be made optional to reduce competitive pressure while still providing visibility into class performance. Consider your course culture when deciding whether to enable this feature.
+</Tip>
+
+### Extended Due Date Picker
+
+When granting manual extensions, instructors can now choose the extended due date directly using a date picker, rather than entering extension hours and minutes. This makes it easier to set specific deadlines and reduces calculation errors when granting extensions.
 
 Instructors and graders can also manually grant extensions to students using a date picker to select the extended due date, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
 
@@ -96,6 +271,12 @@ These dashboards help instructors identify areas where students need additional 
 Instructors can configure a maximum score cap for assignments. This feature allows you to:
 
 - Set a ceiling on the total points students can earn
+- Prevent extra credit from inflating scores beyond intended limits
+- Ensure consistent grading scales across assignments
+- Handle bonus points while maintaining grade boundaries
+
+Score capping is configured in the assignment settings and applies automatically when calculating final scores.
+
 - Prevent extra credit from inflating grades beyond intended limits
 - Maintain consistent grading scales across assignments
 
