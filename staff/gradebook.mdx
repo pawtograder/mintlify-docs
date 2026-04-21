@@ -75,6 +75,10 @@ To import grades, instructors use a 3-step wizard:
 
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
 
+## Manual Grade Entry
+
+You can manually enter or edit grades directly in the gradebook interface. The gradebook supports both integer and decimal scores. When entering scores manually, you can type decimal values (e.g., 87.5, 92.3) to provide more precise grading. This is particularly useful for assignments with partial credit or weighted scoring systems.
+
 ## Gradebook recalculation
 
 The gradebook automatically recalculates scores when dependencies change. The recalculation system uses a queue-based architecture to ensure all grade updates are processed reliably and in the correct order, even when multiple changes occur simultaneously. This ensures that calculated columns always reflect the most current data from their dependencies.
