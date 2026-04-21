@@ -1,0 +1,70 @@
+---
+title: "AI Assistance for Office Hours"
+description: "Use AI tools to help support students with programming errors and debugging"
+icon: "sparkles"
+---
+
+# AI Assistance for Office Hours
+
+Pawtograder includes AI assistance tools that help instructors and TAs support students who are struggling with errors in their programming assignments. The AI Help feature provides context-aware assistance by analyzing student submissions, test results, and discussion threads.
+
+## How It Works
+
+The AI assistance system uses the Model Context Protocol (MCP) to enable AI assistants to access relevant student data securely. When helping a student, you can click the **AI Help** button to generate context that can be shared with MCP-compatible AI clients like Claude.
+
+### Available Context
+
+The AI assistance tools can access:
+
+- **Help requests**: Current and past help requests with student descriptions
+- **Discussion threads**: Related discussion posts and replies
+- **Submissions**: Student code submissions for assignments
+- **Test results**: Autograder output and test failures
+- **Build output**: Compilation errors and build logs
+- **Assignment handouts**: Assignment instructions and requirements (when configured)
+
+## Using AI Help
+
+The **AI Help** button appears in two locations:
+
+1. **Help request chat view**: When actively helping a student through office hours
+2. **Discussion thread view**: When viewing student questions on the discussion board
+
+Click the button to generate an MCP context file that includes all relevant information about the student's issue. This context can be used with any MCP-compatible AI assistant to get suggestions for helping the student.
+
+## Privacy and Security
+
+The AI assistance system is designed with privacy in mind:
+
+- **Instructor/grader access only**: Only users with instructor or grader roles can access AI assistance tools
+- **Supabase OAuth authentication**: Secure authentication ensures only authorized users can access student data
+- **No user table exposure**: The system never exposes the users table or private profile information
+- **Audit trail**: All AI assistance requests are logged for compliance and review
+
+## Configuration
+
+To enable AI assistance for an assignment, instructors can add a `handout_url` field to the assignment. This URL points to the assignment instructions or handout, providing the AI assistant with context about what students are trying to accomplish.
+
+<Note>
+The AI assistance feature requires an MCP-compatible client to use the generated context. The system generates the context but does not directly integrate with any specific AI service.
+</Note>
+
+## Best Practices
+
+When using AI assistance to help students:
+
+1. **Review AI suggestions**: Always review and verify AI-generated suggestions before sharing them with students
+2. **Use as a starting point**: Treat AI suggestions as a starting point for your own analysis, not a complete solution
+3. **Maintain pedagogical goals**: Ensure that AI-assisted help still supports learning objectives and doesn't simply provide answers
+4. **Protect student privacy**: Be mindful of student data when using external AI services
+
+## MCP Server Setup
+
+For advanced users who want to set up their own MCP server integration, the system provides:
+
+- Supabase OAuth authentication flow
+- RESTful API endpoints for fetching student data
+- Tools for retrieving help requests, submissions, test results, and build output
+- Secure token-based access control
+
+Contact your system administrator for details on setting up custom MCP integrations.
