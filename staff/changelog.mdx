@@ -1,0 +1,62 @@
+---
+title: "Changelog"
+description: "Recent updates, bug fixes, and improvements to Pawtograder"
+icon: "clock-rotate-left"
+---
+
+# Changelog
+
+## April 2026
+
+### Features
+
+#### Gradebook Export with Expression Columns
+You can now export the gradebook with columns rendered by expressions, allowing calculated values like weighted averages and letter grades to be included directly in CSV exports alongside raw scores.
+
+#### Group and Student CSV Exports with Emails
+Group exports now include student and mentor email addresses in "Name <email>" format. Student roster exports also include email addresses for easier integration with external systems.
+
+#### Configurable Time Zones
+Added support for configurable time zones throughout the system. Users can set their preferred time zone in course settings, affecting all date and time displays including assignment due dates, survey deadlines, and timestamps.
+
+### Bug Fixes
+
+#### Late Token Display for Gifted Tokens
+Fixed an issue where students who used all their initial late tokens but received gifted tokens would see "You have no remaining late tokens" even though they had remaining capacity. The system now correctly accounts for gifted tokens (negative values) when calculating remaining tokens.
+
+#### Grade Override Notes Visibility
+Fixed a bug where grade override notes were not showing in the UI. Override notes are now properly displayed when instructors manually adjust grades.
+
+#### Gradebook Column Reordering
+Fixed the "Move Left/Right" functionality for gradebook columns. Columns can now be properly reordered using the move buttons.
+
+#### Self-Review Deadline Extensions
+Fixed an issue where self-review deadlines were not properly updated when assignment due dates were extended. Self-review deadlines now correctly adjust when the main assignment deadline changes.
+
+#### Decimal Scores in Gradebook
+Fixed gradebook number inputs to properly accept decimal scores. Previously, only integer values were accepted.
+
+#### Submission Grade Recalculation
+Fixed automatic recalculation of submission grade totals when rubric check scores change. Grades now update immediately when rubric item scores are modified.
+
+#### Survey Analytics Display
+Fixed survey analytics not showing for series surveys when comparison mode was disabled. Analytics now display correctly regardless of comparison settings.
+
+#### Test Assignment GitHub Repos for Groups
+Fixed an issue where "Test Assignment" GitHub repository creation failed for groups-only assignments. Group assignments can now properly test repository creation.
+
+### Performance Improvements
+
+#### Loading Performance Enhancements
+Added better suspense boundaries throughout the application to improve loading performance, especially on the gradebook page. Pages now load more smoothly with better progressive rendering.
+
+#### Memory Leak Fixes
+Eliminated blob URL memory leaks in the submission file viewer. The system now uses signed URLs instead of downloading entire files into browser memory, preventing crashes when viewing multiple large files.
+
+### Security Improvements
+
+#### HTML Tag Escaping
+Improved markdown rendering security by escaping HTML tags instead of stripping them. This prevents potential XSS vulnerabilities while preserving the content of user input.
+
+#### Error Message Improvements
+Enhanced student-facing error messages to be more descriptive and helpful while avoiding exposure of sensitive system information.
