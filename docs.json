@@ -1,24 +1,15 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
-  "name": "Pawtograder",
-  "appearance": {
-    "default": "dark"
-  },
-  "colors": {
-    "primary": "#4FD1C5",
-    "light": "#81E6D9",
-    "dark": "#319795"
-  },
-  "favicon": "/favicon.svg",
   "navigation": {
+    "global": {
+      "anchors": []
+    },
     "tabs": [
       {
         "tab": "Students",
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["students/intro"]
+            "pages": ["students/intro", "changelog"]
           },
           {
             "group": "Assignments",
@@ -26,7 +17,8 @@
               "students/assignments/create-submission",
               "students/assignments/form-groups",
               "students/assignments/late-tokens",
-              "students/assignments/self-review"
+              "students/assignments/self-review",
+              "students/assignments/leaderboard"
             ]
           },
           {
@@ -45,17 +37,40 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["staff/intro"]
+            "pages": ["staff/intro", "staff/course-settings"]
           },
           {
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
+              "staff/assignments/assignment-dashboard",
+              "staff/assignments/grading-dashboard",
+              "staff/assignments/test-insights",
+              "staff/assignments/security-dashboard",
+              "staff/assignments/configuration",
+              "staff/assignments/dashboards",
+              "staff/assignments/managing-groups",
+              "staff/assignments/repository-analytics",
+              "staff/assignments/groups",
               "staff/assignments/grading-assignments",
+              "staff/assignments/grading-status-dashboard",
               "staff/assignments/handgrading",
+              "staff/assignments/repository-analytics",
               "staff/assignments/autograding",
+              "staff/assignments/test-insights",
               "staff/assignments/rubrics",
-              "staff/assignments/testing"
+              "staff/assignments/testing",
+              "staff/assignments/test-insights",
+              "staff/assignments/grading-status",
+              "staff/assignments/security-dashboard",
+              "staff/assignments/leaderboard",
+              "staff/assignments/dashboards",
+              "staff/assignments/test-insights-dashboard",
+              "staff/assignments/extensions-and-scoring",
+              "staff/assignments/grading-dashboard",
+              "staff/assignments/repository-permissions",
+              "staff/assignments/repository-analytics",
+              "staff/assignments/analytics"
             ]
           },
           {
@@ -68,12 +83,30 @@
             ]
           },
           {
+            "group": "Office Hours",
+            "pages": [
+              "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance"
+            ]
+          },
+          {
             "group": "Course Features",
             "pages": [
+              "staff/instructor-dashboard",
+              "staff/dashboard",
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
-              "staff/office-hours/intro"
+              "staff/surveys",
+              "staff/office-hours/intro",
+              "staff/office-hours/ai-assistance",
+              "staff/ai-assistance"
+            ]
+          },
+          {
+            "group": "Automation",
+            "pages": [
+              "staff/cli"
             ]
           }
         ]
@@ -87,28 +120,11 @@
           },
           {
             "group": "Feature Documentation",
-            "pages": ["developers/surveys", "developers/polls"]
+              "group": "Operations",
+              "group": "Updates"
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": []
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/pawtograder"
-      }
     ]
-  },
-  "footer": {
-    "copyright": "Copyright © 2025 Jonathan Bell."
   }
 }
