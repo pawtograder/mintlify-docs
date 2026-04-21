@@ -238,6 +238,13 @@ Instructors can reuse a set of groups from a prior assignment.
 
 ### Exporting Group and Student Data
 
+For group assignments, you can export group composition data to CSV format. The export includes:
+
+- **Group Export**: Group name, student names with emails (in "Name <email>" format), and mentor/grader name with email
+- **Student Export**: Individual student information including email addresses in the same "Name <email>" format
+
+Exported CSV files use UTF-8 encoding with BOM for Excel compatibility and include proper escaping to prevent formula injection. Rows are sorted alphabetically for consistent exports.
+
 You can export group and student information to CSV for external use:
 
 - **Group Export**: Includes group name, student names with emails, and mentor name with email in the format `Name <email>`

@@ -121,6 +121,14 @@ The system automatically creates new columns with full audit metadata including 
 
 ## Exporting Grades
 
+Click the **Export** button to download gradebook data as a CSV file. The export includes:
+
+- Student names and identifiers
+- All gradebook columns with their current values
+- **Expression-rendered columns**: Columns defined by expressions are exported with their calculated values, making it easy to share final computed grades with external systems
+
+The exported CSV uses UTF-8 encoding with BOM for Excel compatibility and includes proper escaping for formula injection protection.
+
 Click the "Export Gradebook" button to download all grades as a CSV file. You can optionally enable "Render expression columns" to export calculated columns with their computed values instead of formulas. This is useful for submitting final grades to external systems or creating snapshots of current standings.
 
 The gradebook supports exporting data to CSV format. When exporting, you can choose to include columns that are calculated using expressions. The export will render these expression-based columns with their computed values for each student, making it easy to share final grades or import them into external systems.
