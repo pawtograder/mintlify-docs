@@ -57,11 +57,37 @@ When entering grades manually, the gradebook supports decimal scores. You can en
 
 When you override a calculated grade or manually adjust a grade, you can add a note explaining the reason for the override. These notes are visible in the gradebook interface and help maintain transparency about grade adjustments.
 
+### Managing Column Order
+
+You can reorder gradebook columns using the **Move Left** and **Move Right** buttons in the column header menu. This allows you to organize your gradebook in a logical order that makes sense for your course structure.
+
 **Expressions:** The most sophisticated column type uses **mathematical expressions** that reference other columns or assignments, creating a powerful dependency system for calculated grades. Using MathJS syntax, instructors can create complex formulas like `(gradebook_columns("homework-*") + assignments("project-*")) / 2` to automatically compute weighted averages, drop lowest scores, or apply curve adjustments. Score expressions can define functions and have access to the full MathJS library of math and utility functions. Any grade that is automatically calculated can also be manually overridden by the instructor on a case-by-case basis.
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
 ## Exporting Grades
+
+Instructors can export gradebook data to CSV for external analysis, record-keeping, or integration with other systems.
+
+### Standard Export
+
+The standard gradebook export includes all columns and student grades in CSV format.
+
+### Export with Rendered Expressions
+
+For gradebook columns that use expressions, you can choose to export the **rendered values** instead of the raw expression formulas. This option exports the calculated numeric results for each student, making the data immediately usable in external tools like Excel or Google Sheets.
+
+**Use cases for expression rendering:**
+- Share final calculated grades with students or administrators
+- Import computed averages into external grading systems
+- Analyze grade distributions based on complex calculations
+- Create reports that show final weighted scores
+
+When exporting with rendered expressions:
+- Expression columns show the calculated numeric value for each student
+- Manual and imported columns export normally
+- All student-specific calculations are preserved
+- The export maintains the same CSV format and encoding standards
 
 You can export gradebook data to CSV for external analysis or record-keeping. The export includes an option to render expression-based columns with their calculated values, allowing you to export computed grades alongside raw scores.
 

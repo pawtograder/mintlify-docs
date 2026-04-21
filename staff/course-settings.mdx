@@ -1,11 +1,68 @@
 ---
 title: "Course Settings"
+description: "Configure course-wide settings including time zones, late tokens, and display preferences"
+
 description: "Configure course-wide settings including timezone, late tokens, and grading policies"
 description: "Configure course-wide settings including time zones, late tokens, and grading policies"
 icon: "gear"
 ---
 
 # Course Settings
+
+Course settings allow instructors to configure global preferences that apply across all course features.
+
+## Time Zone Configuration
+
+Pawtograder supports configurable time zones for displaying dates and times throughout the platform. This ensures that all deadlines, timestamps, and schedules are shown in the appropriate time zone for your course.
+
+### Setting Your Course Time Zone
+
+Instructors can configure the course time zone in the course settings. Once set, all dates and times throughout Pawtograder will be displayed in this time zone for all users in the course.
+
+**Default time zone**: `America/New_York` (Eastern Time)
+
+### Where Time Zones Apply
+
+The configured time zone affects:
+
+- **Assignment due dates**: Deadlines shown to students and staff
+- **Survey deadlines**: When surveys close for responses
+- **Poll deactivation times**: Automatic poll closing times
+- **Office hours schedules**: Queue availability times
+- **Gradebook timestamps**: When grades were entered or updated
+- **Discussion board posts**: Post and reply timestamps
+- **Self-review deadlines**: When self-reviews are due
+
+### Time Zone Display
+
+When a time zone is configured:
+- All users see dates and times in the course's configured time zone
+- Countdown timers automatically calculate based on the configured time zone
+- Date pickers use the configured time zone for deadline selection
+- Export files include timestamps in the configured time zone
+
+### Admin View Default Time Zone
+
+For system administrators viewing courses across multiple time zones, a default time zone can be configured for the admin view to ensure consistent time display when managing multiple courses.
+
+## Late Token Configuration
+
+Configure class-wide late token policies:
+
+- Set the number of late tokens available to each student
+- Configure how many tokens can be used per assignment
+- Define the extension period for each token (typically 24 hours)
+
+See [Due Date Exceptions](/staff/assignments/intro#due-date-exceptions) for more details.
+
+## Course Display Settings
+
+Additional course-wide settings may include:
+
+- Course name and description
+- Enrollment synchronization preferences
+- GitHub organization settings
+- Email notification preferences
 
 ## Timezone Configuration
 
