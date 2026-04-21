@@ -1,17 +1,8 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
-  "name": "Pawtograder",
-  "appearance": {
-    "default": "dark"
-  },
-  "colors": {
-    "primary": "#4FD1C5",
-    "light": "#81E6D9",
-    "dark": "#319795"
-  },
-  "favicon": "/favicon.svg",
   "navigation": {
+    "global": {
+      "anchors": []
+    },
     "tabs": [
       {
         "tab": "Students",
@@ -52,9 +43,12 @@
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
+              "staff/assignments/assignment-dashboard",
+
               "staff/assignments/configuration",
               "staff/assignments/dashboards",
               "staff/assignments/grading-assignments",
+              "staff/assignments/grading-status-dashboard",
               "staff/assignments/handgrading",
               "staff/assignments/repository-analytics",
               "staff/assignments/autograding",
@@ -64,6 +58,11 @@
               "staff/assignments/grading-status",
               "staff/assignments/security-dashboard",
               "staff/assignments/leaderboard"
+
+              "staff/assignments/dashboards"
+
+              "staff/assignments/test-insights-dashboard",
+              "staff/assignments/security-dashboard"
             ]
           },
           {
@@ -106,24 +105,6 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": []
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/pawtograder"
-      }
     ]
-  },
-  "footer": {
-    "copyright": "Copyright © 2025 Jonathan Bell."
   }
 }
