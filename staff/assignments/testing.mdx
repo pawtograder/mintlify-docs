@@ -38,6 +38,36 @@ The test submission page will look just like it will when viewing a student's su
   <img src="/images/staff/assignments/testing-1756921280690.png" alt="Test submission grading interface with rubric sidebar" />
 </Frame>
 
+## Test Insights and Regrading
+
+After students submit, you can use the **Test Insights** view to analyze common error patterns:
+
+### Viewing Common Errors
+
+The Test Insights page shows:
+- Error patterns grouped by test name and error signature
+- Number of affected submissions
+- Average scores for each error group
+- Sample error outputs
+
+### Regrading Workflow
+
+When you identify an error pattern that needs regrading:
+
+1. Click **Regrade Submissions** on the error group
+2. Choose an autograder version:
+   - Select a recent commit from the main branch
+   - Or enter a custom SHA
+3. Optionally enable **Auto-promote** to make new scores official immediately
+4. View and copy affected student emails if needed
+5. Click **Regrade** to queue the submissions
+
+The regrade process runs asynchronously. You can monitor progress on the Workflow Runs page.
+
+### Viewing Affected Submissions
+
+Click **View Submissions** on an error group to navigate to the Rerun Autograder page with those submissions pre-selected. This makes it easy to review the affected submissions before deciding whether to regrade.
+
 ## Rerunning the Autograder
 
 When testing or debugging grading issues, you can rerun the autograder on any submission:

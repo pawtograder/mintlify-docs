@@ -26,6 +26,23 @@ Empty submissions are flagged in the grading interface, allowing instructors to 
 
 *Detailed documentation coming soon.*
 
+## AI-Powered Hints for Students
+
+Pawtograder supports AI-powered hints for failing tests using LLM providers. When a student fails a test, they can request a hint that provides guidance without giving away the solution.
+
+### Supported LLM Providers
+
+Configure AI hints using one of these providers:
+
+- **OpenAI** - GPT models (default: `gpt-4o-mini`)
+- **Azure OpenAI** - Azure-hosted GPT models
+- **Anthropic** - Claude models
+- **OpenRouter** - Access to multiple LLM providers through a unified API
+
+### Configuration
+
+Set up LLM hints in your test configuration by adding an `llm` field to the test's `extra_data`:
+
 ## AI-Powered Feedback with Feedbot
 
 Feedbot provides AI-generated feedback on student submissions using large language models (LLMs). It can analyze code, provide suggestions, and help students understand their mistakes.
@@ -92,7 +109,12 @@ Autograder test results can include AI-generated hints to help students debug th
 {
   "llm": {
     "type": "v1",
-    "prompt": "Help the student understand why their test failed...",
+"prompt": "You are a helpful CS tutor. Guide the student to fix their code without giving away the solution.",
+    "provider": "openrouter",
+    "model": "openai/gpt-4o-mini",
+    "account": "default",
+
+"prompt": "Help the student understand why their test failed...",
     "model": "gpt-4o-mini",
     "provider": "openai",
     "temperature": 0.85,
@@ -100,6 +122,29 @@ Autograder test results can include AI-generated hints to help students debug th
   }
 }
 ```
+
+### Provider-Specific Configuration
+
+#### OpenRouter
+
+OpenRouter provides access to multiple LLM providers through a single API. Set the `OPENROUTER_API_KEY` environment variable or use account-specific keys with `OPENROUTER_API_KEY_{account}`.
+
+Model names use the format `provider/model`, for example:
+- `openai/gpt-4o-mini`
+- `anthropic/claude-3-haiku`
+- `google/gemini-pro`
+
+#### OpenAI
+
+Set `OPENAI_API_KEY` or use account-specific keys with `OPENAI_API_KEY_{account}`.
+
+#### Azure OpenAI
+
+Requires `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_KEY` (or account-specific variants).
+
+#### Anthropic
+
+Set `ANTHROPIC_API_KEY` or use account-specific keys with `ANTHROPIC_API_KEY_{account}`.
 
 ### Supported Providers
 
