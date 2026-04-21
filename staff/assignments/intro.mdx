@@ -238,6 +238,30 @@ Instructors can reuse a set of groups from a prior assignment.
 
 ### Exporting Group Data
 
+You can export group information to CSV for external analysis or record-keeping. The export includes:
+
+- **Group name**: The name of each group
+- **Student names and emails**: All students in the group in "Name <email>" format
+- **Mentor name and email**: The assigned mentor (if any) in "Name <email>" format
+
+The CSV export uses UTF-8 encoding with BOM for Excel compatibility and includes formula-safe escaping to prevent CSV injection attacks. Rows are sorted alphabetically by group name for consistent exports.
+
+Similarly, when exporting student data for an assignment, the student column includes email addresses in the same "Name <email>" format for easy communication and identification.
+
+### Group Individual Grading
+
+For group assignments, instructors can assign different grades to individual group members when needed. This allows for fair grading when group members contribute unequally or when individual performance needs to be assessed separately from the group submission. Individual grades can be set through the gradebook interface, overriding the default group grade for specific students.
+
+## Repository Analytics
+
+Pawtograder provides analytics for assignment repositories to help instructors understand student engagement and progress. You can view commit activity, contribution patterns, and repository statistics for individual students or across the entire class. This helps identify students who may need additional support or who are making exceptional progress.
+
+Repository analytics include:
+- Commit frequency and timing
+- Lines of code added/removed
+- File modification patterns
+- Contribution graphs over time
+
 You can export group information to CSV format, which includes student and mentor email addresses. The export includes:
 
 - **Group export**: Columns for GroupName, StudentNames (in "Name <email>" format), and MentorName (in "Name <email>" format)
