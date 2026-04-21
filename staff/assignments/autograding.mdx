@@ -16,6 +16,29 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Submission File Support
+
+Pawtograder supports both text and binary files in student submissions:
+
+### Text Files
+Text files (code, markdown, configuration files, etc.) are displayed with syntax highlighting in the submission viewer. Students and graders can view the file contents directly in the browser.
+
+### Binary Files
+Binary files (images, PDFs, compiled executables, etc.) are supported in submissions. These files:
+- Are stored securely in the submission
+- Can be downloaded by students and graders
+- Display a download button in the file viewer
+- Show file metadata (name, size, type)
+
+### Markdown Preview
+Markdown files (`.md`, `.markdown`) in submissions are automatically rendered with a live preview. This allows students and graders to see formatted documentation, README files, and written responses without needing to download the file.
+
+The markdown preview supports:
+- Standard markdown syntax (headings, lists, links, code blocks)
+- Inline code and code blocks with syntax highlighting
+- Images and links
+- Tables and blockquotes
+
 ## Test Insights and Error Explorer
 
 Pawtograder provides powerful tools to help you understand and debug common student errors:

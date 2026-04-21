@@ -10,6 +10,17 @@ Pawtograder's office hours feature allows students to request live help from cou
 
 Students are encouraged to make public requests for help, so that other students can also benefit from the discussion.
 
+## Student Experience
+
+Students can access office hours through a persistent **Get Help** button that appears in the bottom-right corner of every page. This button opens a help drawer showing:
+
+- Current office hours status
+- Active queues accepting requests
+- Weekly queue schedule with live "Happening now" highlights
+- Quick access to submit new requests
+
+Students receive notifications through multiple channels (browser notifications, title updates, sound alerts, and favicon badges) to stay informed about their help request status even while browsing other course pages.
+
 ## Get Help CTA and Help Drawer
 
 Students have access to a persistent **Get Help** call-to-action button throughout the site. This button opens a right-side help drawer that provides:
@@ -211,6 +222,18 @@ After the staff member has started the video chat, students can click the **Join
 
 ### AI Assistance
 
+Instructors and graders can access AI-powered assistance when helping students:
+
+- **AI Help Button**: Available in help request chats and discussion threads
+- **Context-aware support**: AI assistants have access to student submissions, test results, and error messages
+- **Assignment context**: Provide assignment handout URLs to give AI assistants full context about the task
+
+Click the **AI Help** button to generate an MCP context URL that can be used with AI assistants like Claude Desktop or Cursor. The AI will have access to all relevant information about the student's question and code.
+
+<Tip>
+For more details on setting up and using AI assistance, see the [MCP Server & AI Assistance](/developers/mcp-server) developer documentation.
+</Tip>
+
 When helping students with programming assignments, you can use the **AI Help** button in help request chats and discussion threads to get AI-powered assistance. This feature uses a Model Context Protocol (MCP) server that provides AI assistants with context about:
 
 - The student's help request or discussion thread
@@ -404,6 +427,16 @@ Students can resolve their own help requests from the floating banner or main ch
 - **Other**: Other reason for closing the request
 
 This resolution flow helps track which help requests were successfully resolved vs. abandoned, providing valuable feedback for improving course support.
+
+When students resolve their own requests, they are prompted to select a resolution status:
+
+- **Resolved - Question Answered**: Their question was fully answered
+- **Resolved - Problem Solved**: Their technical issue was fixed
+- **Resolved - Referred Elsewhere**: They were directed to other resources
+- **Resolved - No Longer Needed**: They no longer need help with this issue
+- **Resolved - Other**: The request was resolved for another reason
+
+This resolution data helps you understand common student needs and the effectiveness of your office hours support.
 
 ## AI Assistance for Instructors
 
