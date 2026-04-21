@@ -336,6 +336,37 @@ To use AI assistance, instructors can add a handout URL to assignments (in the a
 
 ## Resolving requests
 
+A help request can be marked as "Resolved" by either a staff member or a student. Students can resolve their own requests from the chat interface or floating banner, and can select a resolution status:
+
+- **Resolved - Got help**: Student received assistance and issue is resolved
+- **Resolved - Figured it out**: Student solved the problem independently
+- **Resolved - No longer needed**: Student no longer needs help
+
+This resolution flow helps track the effectiveness of office hours and understand how students are getting their questions answered.
+
+## AI Assistance for Staff
+
+Pawtograder includes AI assistance tools to help instructors and TAs support students more effectively. When viewing a help request or discussion thread, staff can click the **AI Help** button to generate context that can be used with AI assistants.
+
+The AI assistance system uses the Model Context Protocol (MCP) to provide:
+
+- Access to help request details and chat history
+- Student submission files and test results
+- Build output and error messages
+- Assignment context from handout URLs
+
+<Note>
+AI assistance is only available to instructors and graders. Student data is protected and never exposed through the AI tools.
+</Note>
+
+To use AI assistance:
+
+1. Configure the MCP server with Supabase OAuth authentication
+2. Click the **AI Help** button when viewing a help request or discussion thread
+3. Use the generated context with any MCP-compatible AI client
+
+This feature helps staff quickly understand student issues and provide more targeted assistance, especially when dealing with complex error messages or debugging scenarios.
+
 ### Staff resolution
 
 Staff members can mark a help request as resolved when they have finished helping the student. This closes the request and removes it from the queue.
