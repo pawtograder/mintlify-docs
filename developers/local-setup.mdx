@@ -282,6 +282,18 @@ npx playwright test --ui
 npx playwright test surveys
 ```
 
+### Build and Deployment
+
+```bash
+# Build the application for production
+npm run build
+
+# Start production server
+npm start
+```
+
+The platform uses GitHub Actions for continuous integration and deployment. The build process has been migrated from Coolify to GitHub Actions to improve reliability and reduce test flakiness.
+
 ### Seeding Data
 
 ```bash
