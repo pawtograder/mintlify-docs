@@ -58,13 +58,67 @@ description: Recent updates and improvements to the Pawtograder platform
 - **Assignment repository analytics** - Added analytics for assignment repositories, providing insights into student repository activity ([#637](https://github.com/pawtograder/platform/pull/637))
 - **Group individual grading** - Introduced support for grading individual students within group assignments ([#638](https://github.com/pawtograder/platform/pull/638))
 - **Survey display improvements** - Enhanced survey display and results analysis interface ([#652](https://github.com/pawtograder/platform/pull/652))
-
 title: "Changelog"
 description: "Recent updates and improvements to Pawtograder"
 icon: "clock-rotate-left"
 ---
 
 # Changelog
+
+## April 10, 2026
+
+### Critical Fixes
+
+#### Gradebook Recalculation Worker Fix
+Fixed a critical bug in the gradebook recalculation worker that caused 100% failure rate on deployed Supabase environments. The worker was reading the version from `gradebook_row_recalc_state` before upserting rows, which incremented the version. When the batch RPC tried to clear rows with the pre-upsert `expected_version`, it always mismatched, leaving every processed row permanently stuck in `is_recalculating=true`. The fix moves the version read to after the upsert completes, ensuring `expected_version` matches the actual post-upsert value.
+
+### Infrastructure
+
+#### CI/Build Process Migration
+Migrated the build process from Coolify to GitHub Actions, reducing test flakiness and improving deployment reliability. This change centralizes the build pipeline and provides better visibility into build status.
+
+### Bug Fixes
+
+#### Office Hours
+- Fixed office hours dashboard to show only active queues for TAs, matching student visibility. Inactive queues remain visible in Queue Management. Added empty state and hint when all queues are inactive.
+
+#### Grading and Reviews
+- Fixed grading comment edit/delete restrictions after review release. Comments can no longer be modified after reviews are released to students.
+- Fixed regrade decimal points handling to ensure proper score calculations.
+- Fixed grade override notes not displaying in the UI.
+- Prevented regrade requests on self-review rubric items, as these are student-submitted and should not be eligible for regrade.
+
+#### Gradebook
+- Fixed gradebook column Move Left/Right functionality with E2E tests to prevent regression.
+- Fixed free text responses not being filtered by section, ensuring instructors only see responses from their assigned sections.
+- Fixed student assignments dashboard to show total score when graded, providing clearer feedback to students.
+- Added option to export gradebook with columns rendered by expression, allowing instructors to export calculated values.
+
+#### Surveys
+- Fixed survey analytics not showing for series surveys when comparison mode is disabled.
+
+#### Self-Review
+- Fixed self-review deadlines when assignment due date is extended. Self-review deadlines now properly adjust based on the updated due date.
+
+### Performance Improvements
+
+#### Loading Performance
+Added better Suspense boundaries to improve loading performance, especially on the gradebook page. This reduces perceived load times and provides better user feedback during data fetching.
+
+#### Testing
+- Added E2E test improvements including printing magic links on test failure for easier debugging.
+- Reduced test flakiness through improved CI configuration.
+
+### UI/UX Improvements
+
+#### Admin Features
+- Added default time zone for admin view to ensure consistent date/time display across the platform.
+
+#### Grading Features
+- Added tweak notes functionality for per-student adjustments in split-rubric group grading scenarios.
+
+### Error Handling
+Improved error filtering to reduce noise in error logs and focus on actionable issues.
 
 ## March 2026
 

@@ -121,7 +121,8 @@
           {
             "group": "Feature Documentation",
               "group": "Operations",
-              "group": "Updates"
+              "group": "Updates",
+              "group": "Release Information"
           }
         ]
       }
