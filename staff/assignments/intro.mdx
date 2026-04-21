@@ -14,6 +14,26 @@ Pawtograder creates two GitHub teams for each class: a "staff" team and a "stude
 
 ### Repository Permissions Audit
 
+Instructors can audit repository permissions to ensure students have correct access to their assignment repositories:
+
+1. Navigate to the assignment's settings page
+2. Click **Audit Repository Permissions**
+3. The system will check all student repositories for:
+   - Missing repository access
+   - Incorrect permission levels
+   - Orphaned permissions from dropped students
+4. Review the audit results showing any permission issues
+5. Click **Fix Issues** to automatically correct any problems found
+
+The audit flow helps maintain security and ensures students can access their work, especially after:
+- Students join or drop the course
+- Group assignments are created or modified
+- Repository permissions are manually changed outside Pawtograder
+
+<Note>
+Run the permissions audit if students report being unable to access their repositories or if you've made manual changes to GitHub teams.
+</Note>
+
 Instructors can audit repository permissions to ensure students have appropriate access to their assignment repositories:
 
 1. Navigate to an assignment's settings page
@@ -97,6 +117,22 @@ Assignments can be individual, group-optional, or group-required.
 Students can be assigned to groups by instructors, or can self-assign to groups.
 Instructors can reuse a set of groups from a prior assignment.
 
+### Managing Student Groups
+
+The group management interface allows instructors to:
+
+- Create and modify student groups
+- Move students between groups
+- Adjust group sizes and composition
+- View group formation status
+
+**Important**: Students are not notified about group assignments until the assignment is released. This allows instructors to:
+- Prepare groups in advance without alerting students
+- Make adjustments before the assignment goes live
+- Avoid confusion from premature notifications
+
+The group management UI is designed to be resilient, allowing you to make changes even when there are temporary issues with repository creation or permissions.
+
 ### Improved Group Management
 
 When tweaking student groups after an assignment is released, Pawtograder provides improved resilience:
@@ -160,6 +196,38 @@ Each token can be exchanged for a 24-hour extension, but the extension must be r
 Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
 
 ## Instructor Dashboard and Metrics
+
+The instructor dashboard provides comprehensive metrics and analytics for each assignment:
+
+### Assignment Overview
+
+The assignment overview page displays key metrics including:
+
+- **Submission Statistics**: Total submissions, on-time vs late submissions, and submission trends over time
+- **Grading Progress**: Number of submissions graded, pending reviews, and grading completion percentage
+- **Student Engagement**: Repository activity, commit frequency, and active students
+- **Autograder Results**: Pass rates, common failures, and test performance across submissions
+
+### Grading Status Tracking
+
+Track the progress of grading assignments with detailed views:
+
+- **Incomplete Reviews**: See which submissions still need grading
+- **Grader Workload**: View distribution of grading assignments across TAs
+- **Review Completion**: Monitor which graders have completed their assigned work
+- **Bulk Actions**: Complete multiple reviews at once when appropriate
+
+### Using the Dashboard
+
+1. Navigate to an assignment from the assignments list
+2. View the overview tab for high-level metrics
+3. Click into specific metrics for detailed breakdowns
+4. Use filters to focus on specific sections, groups, or graders
+5. Export data for external analysis if needed
+
+<Tip>
+The dashboard updates in real-time as students submit work and graders complete reviews, giving you an up-to-date view of assignment progress.
+</Tip>
 
 The instructor dashboard provides comprehensive metrics and overview information for each assignment, including:
 
