@@ -57,12 +57,9 @@
               "staff/assignments/test-insights",
               "staff/assignments/grading-status",
               "staff/assignments/security-dashboard",
-              "staff/assignments/leaderboard"
-
-              "staff/assignments/dashboards"
-
-              "staff/assignments/test-insights-dashboard",
-              "staff/assignments/security-dashboard"
+              "staff/assignments/leaderboard",
+              "staff/assignments/dashboards",
+              "staff/assignments/test-insights-dashboard"
             ]
           },
           {
