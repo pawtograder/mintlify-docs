@@ -6,6 +6,10 @@ icon: "table"
 
 # Gradebook
 
+## Gradebook Column Management
+
+The gradebook supports flexible column reordering to help you organize your grade components. You can move columns left or right using the column header controls to arrange them in your preferred order.
+
 ## Grading Status Dashboard
 
 The grading status dashboard provides an overview of grading progress across all assignments. Use it to:
@@ -98,6 +102,12 @@ You can manually enter grades directly into the gradebook by clicking on any cel
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
 
 ## Exporting Grades
+
+You can export the gradebook to CSV format for use in external systems or record-keeping. The export includes all visible columns and student information.
+
+### Export with Rendered Expressions
+
+When exporting, you have the option to export columns with their calculated values rendered. This is particularly useful for expression-based columns, as it allows you to export the final computed scores rather than the formulas themselves. This feature ensures that exported data matches exactly what students see in the gradebook.
 
 You can export gradebook data to CSV format for external analysis or record-keeping. The export feature provides two options:
 
