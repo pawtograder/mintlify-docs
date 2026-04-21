@@ -12,6 +12,17 @@ Programming assignments are the core of Pawtograder. Each assignment consists of
 
 Pawtograder creates two GitHub teams for each class: a "staff" team and a "students" team. Staff are granted access to all class repositories, and students are only granted access to their own repositories. The "students" team can be used by instructors who want to create additional GitHub repositories that are only accessible to students (e.g. for distributing in-class exercises).
 
+### Repository Permissions Audit
+
+If repository permissions become out of sync, instructors can use the **Fix Permissions** button on the assignment's repositories page to audit and correct all repository permissions:
+
+1. Navigate to the assignment's **Repositories** page
+2. Click the **Fix Permissions** button
+3. The system will audit all repositories and enqueue permission syncs as needed
+4. View the summary showing synced repositories, skipped repositories, and any errors
+
+This feature ensures all group members have correct access to their group repositories and removes access for students who have left groups.
+
 ## Repositories
 
 Two repositories are automatically created for each assignment: a "handout" repository and a "grader" repository. These repositories must be configured by the staff before the assignment is released.
@@ -30,9 +41,55 @@ Instructors can reuse a set of groups from a prior assignment.
 
 Pawtograder automatically detects empty submissions to help identify students who may need assistance. When a submission contains no meaningful content, it is flagged for instructor review, making it easier to reach out to students who might be struggling with the assignment.
 
+### Group Mentors
+
+Instructors can assign mentors to student groups from the groups management page:
+
+1. Navigate to the assignment's **Groups** page
+2. Use the **Mentor** dropdown for each group to assign a grader or instructor
+3. Mentors are displayed to students in their group details
+4. Use the "Assign to group mentors" bulk grading mode to automatically assign submissions to their group's mentor
+5. Group mentor assignments are preserved when copying groups between assignments
+
 ## Due Date Exceptions
 
 Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
 Each token can be exchanged for a 24-hour extension, but the extension must be requested before the student's original due date.
 
-Instructors and graders can also manually grant extensions to students, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+Instructors and graders can also manually grant extensions to students using a date picker to select the extended due date, and can view all extensions granted to a student. This is done in the assignment configuration under "Due Date Exceptions".
+
+## Assignment Dashboards
+
+Pawtograder provides several dashboards to help instructors monitor and manage assignments:
+
+### Assignment Dashboard
+
+View a comprehensive overview of assignment progress, including submission statistics, grading status, and student performance metrics.
+
+### Security Dashboard
+
+Monitor assignment security with insights into potential academic integrity concerns, including:
+
+- Submission timing patterns
+- Repository access logs
+- Unusual activity indicators
+
+### Test Insights Dashboard
+
+Track student performance across test cases to identify:
+
+- Common failure patterns
+- Tests that students struggle with most
+- Overall test pass rates and trends
+
+These dashboards help instructors identify areas where students need additional support and adjust course materials accordingly.
+
+## Assignment Score Capping
+
+Instructors can configure a maximum score cap for assignments. This feature allows you to:
+
+- Set a ceiling on the total points students can earn
+- Prevent extra credit from inflating grades beyond intended limits
+- Maintain consistent grading scales across assignments
+
+Score capping is configured in the assignment settings and applies automatically when grades are calculated.
