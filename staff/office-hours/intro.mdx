@@ -220,6 +220,15 @@ Staff can communicate with students through:
 
 After the staff member has started the video chat, students can click the **Join Video Chat** button to join. The video chat window opens in a popup.
 
+#### Chat Reliability
+
+The chat system includes improved error handling to ensure messages aren't lost:
+
+- **Connection status**: The system monitors the connection and alerts users if disconnected
+- **Message preservation**: If a message fails to send (e.g., due to connection issues), it remains in the input box so users don't lose their typed content
+- **Automatic reconnection**: The chat automatically attempts to reconnect when the connection is restored
+- **Robust startup**: Improved chat initialization and refetch flow for more reliable connections
+
 ### AI Assistance
 
 Instructors and graders can access AI-powered assistance when helping students:
@@ -259,6 +268,69 @@ When a student has an active help request, it follows them around the site throu
 - **Video Call Invitations**: Prominent "Join Video Call" button when staff starts a call
 
 This ensures students never miss updates, even while browsing the discussion board or other course pages.
+
+## Office Hours Scheduling and Status
+
+Instructors can configure office hours schedules to help students know when help is available. The system displays:
+
+- **Office Hours status card**: Shows whether office hours are currently active
+- **Per-queue cards**: Display status and wait times for each queue
+- **Weekly queue schedule**: Calendar view with live "Happening now" highlights
+- **Demo queues**: Create demonstration queues for testing and training
+
+Students can view the schedule to see when different queues are available and plan when to request help.
+
+## Queue Management
+
+### Queue Ordering
+
+Queues are displayed in ordinal-based order, allowing you to control the sequence in which queues appear to students. This is useful for prioritizing certain types of help or organizing queues by location or topic.
+
+### Course-Level Office Hours Description
+
+Add a course-level description for office hours that appears at the top of the office hours page. Use this to:
+
+- Explain your office hours policies
+- Provide guidelines for requesting help
+- Link to additional resources
+
+## Enhanced Notifications
+
+The office hours system includes comprehensive notification support to ensure students never miss updates:
+
+### Browser Notifications
+
+Students receive browser notifications when:
+
+- A staff member assigns to help them
+- Their queue position changes significantly
+- A video chat is started
+
+Students can test notifications and will see permission warnings if browser notifications are blocked.
+
+### Visual Indicators
+
+- **Title notifications**: The page title updates with status changes
+- **Sound notifications**: Optional audio alerts for important updates
+- **Favicon changes**: The browser tab icon updates to show active status
+
+### Message Notifications
+
+The chat system includes notification hooks that trigger when:
+
+- Staff sends a message
+- The help request status changes
+- Video chat invitations are sent
+
+## Resolving Requests
+
+A help request can be marked as "Resolved" by either a staff member or a student. When students resolve their own requests, they can select a resolution status:
+
+- **Resolved**: Question was answered or problem was solved
+- **Resolved - No longer needed**: Student figured it out or no longer needs help
+- **Resolved - Unanswered**: Closing the request without getting needed help
+
+This feedback helps you understand the effectiveness of office hours and identify areas for improvement.
 
 ## Student Help Experience Enhancements
 

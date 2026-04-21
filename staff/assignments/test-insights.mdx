@@ -178,7 +178,6 @@ To pin an error:
 3. The error will now appear in the pinned section across all assignments
 
 Pinned errors help you track recurring issues and ensure they're addressed consistently across your course.
-
 The test insights dashboard helps you understand how students are performing on autograder test cases, identify common errors, and take action to help struggling students.
 
 ## Accessing Test Insights
@@ -186,6 +185,10 @@ The test insights dashboard helps you understand how students are performing on 
 Navigate to an assignment and click the **Test Insights** tab to view the dashboard. The dashboard displays performance metrics for all autograder test cases.
 
 ## Understanding Error Groups
+
+The dashboard groups students by the specific errors they're encountering in test cases. For each error group, you can see:
+
+- The specific error message or failure
 
 The dashboard groups students by the specific errors they encounter in test cases. For each error group, you can see:
 
@@ -195,6 +198,14 @@ The dashboard groups students by the specific errors they encounter in test case
 - Test case details
 
 ## Viewing Affected Students
+
+For each error group, you can:
+
+- View the list of students experiencing that specific error
+- Copy affected students' email addresses for bulk communication
+- Click through to individual student submissions
+
+This makes it easy to reach out to groups of students who are stuck on the same issue.
 
 Click on any error group to expand and see which students are experiencing that specific issue. You can:
 
@@ -242,6 +253,11 @@ To pin an error globally, click the **Pin** icon next to the error group. Pinned
 ## Use Cases
 
 The test insights dashboard is particularly useful for:
+
+- **Identifying autograder bugs**: Spot patterns in failures that indicate issues with test cases
+- **Finding common student mistakes**: See which concepts students are struggling with
+- **Targeted intervention**: Reach out to specific groups of students with tailored help
+- **Efficient regrading**: Quickly regrade submissions affected by autograder fixes
 
 - **Identifying autograder bugs**: Quickly spot when many students fail the same test for unexpected reasons
 - **Targeted intervention**: Reach out to specific students struggling with particular concepts

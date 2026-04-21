@@ -33,6 +33,15 @@ A **grader repository** is a repository that contains the code that will be used
 
 ### Syncing Handout Updates
 
+When you need to push updates from the handout repository to student repositories (for example, to fix a bug in starter code), Pawtograder provides a sync-to-handout feature. The system has been improved for better resilience:
+
+- **Automatic retry logic**: Failed syncs are automatically retried
+- **Conflict detection**: The system detects and reports merge conflicts
+- **Selective sync**: Choose which students receive the update
+- **Status tracking**: Monitor sync progress across all student repositories
+
+This ensures that updates reach all students reliably, even in cases of temporary network issues or repository conflicts.
+
 After an assignment is released, you may need to update the handout repository to fix bugs or add clarifications. Pawtograder provides a sync-to-handout feature that:
 
 - Pushes updates from the handout repository to all student repositories
