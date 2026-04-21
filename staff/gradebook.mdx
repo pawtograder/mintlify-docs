@@ -121,6 +121,13 @@ The system automatically creates new columns with full audit metadata including 
 
 ## Exporting Grades
 
+The gradebook supports exporting to CSV with two options:
+
+- **Standard Export**: Exports all gradebook columns with their current values
+- **Expression-Based Export**: Exports columns with values calculated by their expressions, allowing you to export computed grades (e.g., weighted averages, curved scores) rather than just raw values
+
+Both export formats include student information and properly escaped CSV values for compatibility with Excel and Google Sheets.
+
 The gradebook supports exporting grades to CSV format with two export options:
 
 ### Standard Export
@@ -309,6 +316,10 @@ letter_grade = case_when([
 ### Comparison Functions
 
 Normal comparison functions like `==`, `>=`, `<=`, etc. are available, and can automatically coerce a gradebook value to a score for you (so that you do not need to map each gradebook value to a score to compare it).
+
+### Manual Grade Entry
+
+Gradebook columns support decimal score entry. When entering grades manually, you can input decimal values (e.g., 87.5) for precise grading. The system validates that scores don't exceed the maximum score for the column.
 
 ### Complete Examples
 
