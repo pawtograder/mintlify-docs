@@ -140,27 +140,26 @@ For development requiring database changes, RLS policy modifications, or running
    Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser or commit it to version control. Keep it in server-only code and CI secrets.
    </Warning>
 
-5. **Build the application**
-   ```bash
-   npm run build
-   ```
-
-6. **Start Edge Functions**
+5. **Start Edge Functions**
    ```bash
    npx supabase functions serve
    ```
 
-7. **Start the development server**
+6. **Start the development server**
    ```bash
-   npm start
+   npm run dev
    ```
 
-8. **Seed test data (optional)**
+7. **Seed test data (optional)**
    ```bash
    npm run seed
    ```
 
    This creates a test class with students and assignments. Scroll up in the output to find "Login Credentials" with email/password pairs.
+
+<Note>
+The build process now runs in GitHub Actions for continuous integration. Local development uses `npm run dev` for hot-reloading without requiring a separate build step.
+</Note>
 
 ## Local Services
 
@@ -171,6 +170,7 @@ Once Supabase is running, these services are available:
 | API | http://127.0.0.1:54321 | Supabase REST API |
 | Studio | http://localhost:54323 | Database management UI |
 | Inbucket | http://localhost:54324 | Email testing interface |
+| MCP Server | http://127.0.0.1:54321/mcp | Model Context Protocol server for AI assistance |
 | Application | https://localhost:3000 | Next.js frontend |
 
 ### Supabase Studio
@@ -190,6 +190,43 @@ View captured emails at `http://localhost:54324`. Useful for testing:
 - Authentication flows (magic links, password reset)
 - Notification emails
 - Email verification
+
+## CI/CD Pipeline
+
+Pawtograder uses GitHub Actions for continuous integration and deployment. The build process was migrated from Coolify to GitHub Actions to improve reliability and reduce test flakiness.
+
+### Build Process
+
+The CI pipeline runs on every push and pull request, executing:
+
+1. **Dependency Installation**: Installs npm packages and system dependencies
+2. **Type Checking**: Validates TypeScript types across the codebase
+3. **Linting**: Runs ESLint to enforce code quality standards
+4. **Unit Tests**: Executes Jest test suites
+5. **E2E Tests**: Runs Playwright tests against a test environment
+6. **Build**: Compiles the Next.js application
+
+### Running CI Checks Locally
+
+Before pushing code, run the same checks that CI will execute:
+
+```bash
+# Run all checks
+npm run lint && npm run typecheck:functions && npm test
+
+# Run E2E tests
+npx playwright test
+```
+
+### MCP Server
+
+The Model Context Protocol (MCP) server is available at `http://127.0.0.1:54321/mcp` for AI assistance features. This endpoint:
+
+- Provides AI assistants with secure access to help requests, discussions, and submissions
+- Requires API token authentication (create tokens via the UI)
+- Is restricted to instructors and graders only
+
+See the [AI assistance documentation](/staff/ai-assistance) for more details on using the MCP server.
 
 ## Development Commands
 
@@ -244,12 +281,48 @@ npx playwright test --ui
 npx playwright test surveys
 ```
 
+### Build and Deployment
+
+```bash
+# Build the application for production
+npm run build
+
+# Start production server
+npm start
+```
+
+The platform uses GitHub Actions for continuous integration and deployment. The build process has been migrated from Coolify to GitHub Actions to improve reliability and reduce test flakiness.
+
 ### Seeding Data
 
 ```bash
 # Create test class with sample data
 npm run seed
 ```
+
+### CLI Operations
+
+```bash
+# Run the Pawtograder CLI (requires login)
+npm run cli -- <command> [options]
+
+# Convenience alias for repo operations
+npm run cli:repos -- <command> [options]
+
+# Login with API token
+npm run cli -- login
+
+# List classes
+npm run cli -- classes list
+
+# Copy assignments between classes
+npm run cli -- assignments copy --source-class <slug> --target-class <slug> --all
+
+# Sync grade.yml workflow to student repos
+npm run cli:repos -- sync-grade-workflow --class <id> --assignment <id> --workdir <path>
+```
+
+The CLI provides commands for classes, assignments, surveys, flashcards, rubrics, submissions, and repository maintenance. Use `--help` on any command for detailed options. Repository operations use local SSH git for student repo writes.
 
 ## Project Structure
 
@@ -338,6 +411,53 @@ The dev server uses a self-signed certificate. This is expected:
    sudo sysctl -p
    ```
 2. Restart the dev server
+
+## Continuous Integration
+
+The project uses GitHub Actions for continuous integration and deployment:
+
+- **Build Process**: Automated builds run in GitHub Actions (migrated from Coolify)
+- **Testing**: E2E tests run automatically on pull requests
+- **Deployment**: Staging deployments use the `dev` environment configuration
+
+All CI workflows are defined in `.github/workflows/` and handle building, testing, and deploying the application.
+
+## Cursor Agent Development
+
+For AI-assisted development using Cursor, see the `AGENTS.md` file in the repository root for Cursor Cloud-specific setup instructions, including:
+
+- Docker daemon configuration for cloud environments
+- Supabase migration workarounds
+- Environment variable setup
+- Pre-commit formatting requirements
+- Build and test commands
+
+## Cursor Agent Development Environment
+
+Pawtograder includes a Cursor agent development environment setup that allows AI assistants to help with development tasks. This environment provides:
+
+- Pre-configured development container settings
+- Access to the codebase structure and conventions
+- Integration with the local development environment
+
+### Setup
+
+The Cursor agent environment is automatically configured when you clone the repository. The configuration files are located in the `.cursor` directory and include:
+
+- Development environment settings
+- Code style and formatting rules
+- Project-specific AI assistant guidelines
+
+### Usage
+
+When using Cursor or other AI-powered development tools, the agent will have access to:
+
+- Project structure and file organization
+- Database schema and migrations
+- Component patterns and conventions
+- Testing setup and examples
+
+This helps AI assistants provide more accurate and context-aware suggestions when working on Pawtograder features.
 
 ## Next Steps
 

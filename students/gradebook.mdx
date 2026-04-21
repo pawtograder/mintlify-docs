@@ -49,3 +49,65 @@ All dependent calculated columns will return to showing your actual grades.
 <Note>
 What-if simulations are a planning tool only. They do not change your actual grades or notify your instructor.
 </Note>
+
+description: "View your grades and simulate hypothetical scores with What If calculations"
+icon: "table"
+---
+
+# Gradebook
+
+The student gradebook shows your grades for all released gradebook columns in your course. Your instructor controls which columns are visible to you and when they are released.
+
+## Viewing Your Grades
+
+The gradebook displays your grades organized by category or assignment type. Each grade card shows:
+
+- **Column name**: The name of the grade component (e.g., "Homework 1", "Final Grade")
+- **Your score**: Your current score out of the maximum points
+- **Status indicators**: Visual cues for missing grades, incomplete dependencies, or calculated values
+
+For calculated columns (those using expressions), you see the current calculation based only on the grades that have been released to you. For example, if your instructor has a "Homework Average" column that averages all homework assignments, you'll only see the average of the homework assignments that have been released.
+
+## What If Calculations
+
+If your instructor has enabled the "What If" feature for your course, you can simulate hypothetical scores to see how they would affect your calculated grades.
+
+### Using What If
+
+To simulate a grade:
+
+1. Click on any released grade card that allows editing (manual grades and assignment-linked grades)
+2. Enter a hypothetical score in the input field
+3. Press Enter to apply the simulation
+
+When you enter a What If value:
+
+- The grade card displays your simulated score with a magic wand icon
+- All calculated columns that depend on that grade automatically update to show what your grade would be with the simulated value
+- Your actual grades in the system are not changed - this is only a simulation
+
+### Clearing Simulations
+
+To remove a What If simulation:
+
+1. Click on the grade card with the simulated value
+2. Clear the input field (delete all text)
+3. Press Enter
+
+The grade card will return to showing your actual grade, and all dependent calculated columns will revert to their actual values.
+
+### Limitations
+
+- You can only simulate grades for manual columns and assignment-linked columns
+- Calculated columns (those using expressions) cannot be directly edited - they update automatically based on your simulated values
+- What If simulations are only visible to you and do not affect your actual grades or what your instructor sees
+- If What If is disabled for your course, the gradebook is view-only and you'll see a notice at the top
+
+## Understanding Incomplete Values
+
+Some calculated grades may show warnings about incomplete or unreleased dependencies. This means:
+
+- **Missing dependencies**: Some grades that feed into the calculation haven't been entered yet
+- **Unreleased dependencies**: Some grades that feed into the calculation haven't been released by your instructor yet
+
+These warnings help you understand why a calculated grade might be lower than expected or why it might change when more grades are released.
