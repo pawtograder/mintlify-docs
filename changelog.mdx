@@ -5,6 +5,58 @@ description: Recent updates and improvements to the Pawtograder platform
 
 ## April 2026
 
+### April 21, 2026
+
+#### Bug fixes
+- **Fixed gradebook updates for individual grading on group assignments** - When grades are updated after release for group assignments with individual grading, the gradebook now correctly updates for all group members ([#725](https://github.com/pawtograder/platform/pull/725))
+
+### April 19, 2026
+
+#### Gradebook improvements
+- **Expression validation and full-screen Expression Builder** - Added real-time expression validation with per-line evaluation, student picker for testing expressions, and a full-screen editor for complex formulas ([#717](https://github.com/pawtograder/platform/pull/717))
+
+#### Bug fixes
+- **Fixed discussion browse view post list height** - Resolved nested scroll issues in the discussion board browse view for better navigation ([#723](https://github.com/pawtograder/platform/pull/723))
+
+### April 18, 2026
+
+#### Bug fixes
+- **Prevented accidental double posts on new forum threads** - Fixed issue where users could accidentally create duplicate discussion posts ([#721](https://github.com/pawtograder/platform/pull/721))
+- **Fixed finalize_submission_early granting free extensions** - Corrected issue where early submission finalization was incorrectly granting free extensions when late tokens were active ([#712](https://github.com/pawtograder/platform/pull/712))
+
+#### Performance improvements
+- **Build time optimization** - Improved build performance for faster deployments ([#633](https://github.com/pawtograder/platform/pull/633))
+
+### April 17, 2026
+
+#### New features
+- **Beta CLI interface** - Introduced a new command-line interface for course management, assignment copying, and repository operations ([#597](https://github.com/pawtograder/platform/pull/597))
+
+#### Gradebook improvements
+- **Instructor-only columns** - Added support for staff-only gradebook columns that are hidden from students until explicitly released ([#682](https://github.com/pawtograder/platform/pull/682))
+
+#### Bug fixes
+- **Fixed assignments_for_student_dashboard duplicate rows** - Resolved issue causing duplicate entries in the student dashboard ([#719](https://github.com/pawtograder/platform/pull/719))
+- **Fixed repository sync when assignment groups or membership change** - Repository sync jobs are now properly enqueued when assignment groups or membership are modified ([#716](https://github.com/pawtograder/platform/pull/716))
+- **Renamed "Import Column" to "Import Columns"** - Updated UI text for clarity ([#718](https://github.com/pawtograder/platform/pull/718))
+- **Allow comment edits after review completion** - Graders can now continue to edit comments after completing a review, as long as the review hasn't been released to students ([#715](https://github.com/pawtograder/platform/pull/715))
+
+### April 16, 2026
+
+#### Gradebook improvements
+- **Overhauled "What if" calculations** - Improved the student gradebook "What if" feature for exploring hypothetical grade scenarios ([#626](https://github.com/pawtograder/platform/pull/626))
+
+### April 14, 2026
+
+#### Bug fixes
+- **Unified grade.yml workflow SHA mismatch error message** - Improved error messaging for workflow SHA mismatches ([#713](https://github.com/pawtograder/platform/pull/713))
+
+### April 13, 2026
+
+#### New features
+- **Student overview enhancements** - Added lecture section, email, and assignment groups to the student overview page ([#707](https://github.com/pawtograder/platform/pull/707))
+- **Instructor bulk and per-row review due date edits** - Instructors can now edit review due dates in bulk or individually for both self-reviews and grading reviews ([#706](https://github.com/pawtograder/platform/pull/706))
+
 ### April 7, 2026
 
 #### Gradebook improvements
