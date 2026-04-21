@@ -1,4 +1,31 @@
 {
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "Pawtograder",
+  "appearance": {
+    "default": "dark"
+  },
+  "colors": {
+    "primary": "#4FD1C5",
+    "light": "#81E6D9",
+    "dark": "#319795"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/pawtograder"
+      }
+    ]
+  },
+  "footer": {
+    "copyright": "Copyright \u00a9 2025 Jonathan Bell."
+  },
   "navigation": {
     "global": {
       "anchors": []
@@ -9,7 +36,10 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["students/intro", "changelog"]
+            "pages": [
+              "students/intro",
+              "changelog"
+            ]
           },
           {
             "group": "Assignments",
@@ -39,7 +69,10 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["staff/intro", "staff/course-settings"]
+            "pages": [
+              "staff/intro",
+              "staff/course-settings"
+            ]
           },
           {
             "group": "Assignments",
@@ -57,21 +90,14 @@
               "staff/assignments/grading-assignments",
               "staff/assignments/grading-status-dashboard",
               "staff/assignments/handgrading",
-              "staff/assignments/repository-analytics",
               "staff/assignments/autograding",
-              "staff/assignments/test-insights",
               "staff/assignments/rubrics",
               "staff/assignments/testing",
-              "staff/assignments/test-insights",
               "staff/assignments/grading-status",
-              "staff/assignments/security-dashboard",
               "staff/assignments/leaderboard",
-              "staff/assignments/dashboards",
               "staff/assignments/test-insights-dashboard",
               "staff/assignments/extensions-and-scoring",
-              "staff/assignments/grading-dashboard",
               "staff/assignments/repository-permissions",
-              "staff/assignments/repository-analytics",
               "staff/assignments/analytics"
             ]
           },
@@ -99,7 +125,6 @@
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
-              "staff/surveys",
               "staff/office-hours/intro",
               "staff/office-hours/ai-assistance",
               "staff/ai-assistance"
@@ -118,22 +143,17 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["developers/intro", "developers/local-setup", "developers/cli"]
+            "pages": [
+              "developers/intro",
+              "developers/local-setup",
+              "developers/cli"
+            ]
           },
           {
             "group": "Tools",
-            "pages": ["developers/cli"]
-          },
-          {
-            "group": "Tools",
-            "pages": ["developers/cli"]
-          },
-          {
-            "group": "Feature Documentation",
-              "group": "Operations",
-              "group": "Updates",
-              "group": "Release Information",
-              "group": "Tools"
+            "pages": [
+              "developers/cli"
+            ]
           }
         ]
       }
