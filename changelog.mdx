@@ -1,0 +1,120 @@
+---
+title: "Changelog"
+description: "Recent updates and improvements to Pawtograder"
+icon: "clock-rotate-left"
+---
+
+# Changelog
+
+## March 2026
+
+### Repository Analytics (PR #637)
+
+Instructors and graders can now audit individual student contributions on group assignments through the new Repository Analytics feature.
+
+**Key features:**
+- Daily activity charts showing commits, pull requests, issues, and comments
+- Detailed items table with file changes and metadata
+- Per-submission view accessible from the submission sidebar
+- CSV export for external analysis
+- Manual refresh with fetch status and rate-limit feedback
+- Automated daily refresh for active assignments
+
+**How to use:**
+1. Enable repository analytics in the assignment settings
+2. View analytics from the "Repo Analytics" tab on any submission
+3. Link rubric checks to specific KPI categories (commits, PRs, issues, etc.)
+4. Click analytics links in rubric checks to filter by activity type
+
+### Group Individual Grading (PR #638)
+
+Group assignments now support per-student grading modes for more granular assessment.
+
+**New grading modes:**
+- **Individual grading**: Rubric parts are graded separately for each group member
+- **Assign-to-student**: Graders can assign specific rubric parts to individual students
+
+**Features:**
+- Per-student score breakdowns in submission views
+- Targeted annotations for individual group members
+- Separate scores tracked in gradebook
+- Role-aware display (students see only their own scores)
+
+**How to use:**
+1. In the rubric editor, mark parts with `is_individual_grading: true` or `is_assign_to_student: true`
+2. When grading, select which student each annotation applies to
+3. View per-student totals in the submission sidebar
+
+### Survey Improvements (PR #652)
+
+Enhanced survey display and results analysis for better insights.
+
+**Improvements:**
+- Instructor dashboard now shows open and recent surveys
+- Student dashboard displays pending surveys with status badges
+- Section filtering in group analytics with persisted selection
+- Group member roster view showing submission status
+- Email links for contacting students and mentors
+- Improved response formatting with proper choice label mapping
+
+### Auto-Recalculation of Grades (PR #662)
+
+Submission grade totals now automatically update when rubric check scores change.
+
+**What changed:**
+- Editing a rubric check's point value now immediately updates all affected submissions
+- No manual recalculation needed
+- Ensures grade consistency across all submissions
+
+### Improved Error Messages (PR #660)
+
+Students now receive more descriptive and actionable error messages when submissions fail.
+
+**Improvements:**
+- Clearer explanations of what went wrong
+- Specific guidance on how to fix common issues
+- Better formatting for error details
+
+### Decimal Score Support (PR #659)
+
+The gradebook now accepts decimal scores for more precise grading.
+
+**What changed:**
+- Number inputs in the gradebook now support decimal values
+- Allows for partial credit with greater precision
+- Maintains compatibility with existing integer scores
+
+### File Viewer Performance (PR #654)
+
+Fixed memory leaks in the submission file viewer that could cause browser crashes.
+
+**Technical improvements:**
+- Replaced blob URLs with signed URLs for binary file previews
+- Eliminated memory accumulation when viewing multiple large files
+- Added lazy loading for images
+- Improved performance when grading submissions with many files
+
+### Group Assignment Due Date Fixes (PR #657)
+
+Fixed an issue where due date exceptions for group assignments were not being applied correctly.
+
+**What was fixed:**
+- Due date exceptions now properly use `assignment_group_id` instead of `student_id`
+- Group submissions now correctly respect manual extensions
+
+### Special Character Handling (PR #650)
+
+Binary file names with special characters are now handled correctly.
+
+**What was fixed:**
+- Files with Unicode characters (e.g., macOS screenshot names with special spaces) now upload successfully
+- Improved filename sanitization for storage compatibility
+
+### HTML Escaping in Markdown (PR #658)
+
+Markdown renderers now properly escape HTML tags instead of stripping them.
+
+**What changed:**
+- HTML tags in markdown content are now displayed as text
+- Prevents unintended HTML rendering in student submissions
+- Improves security and display consistency
