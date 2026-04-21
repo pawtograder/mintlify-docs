@@ -6,29 +6,101 @@ icon: "table"
 
 # Gradebook
 
+## Grading Status Dashboard
+
+The grading status dashboard provides an overview of grading progress across all assignments. Use it to:
+
+- Monitor which assignments have pending grading work
+- See how many submissions need review
+- Track grading completion across your course staff
+- Identify bottlenecks in the grading workflow
+
+Access the dashboard from the gradebook or assignments section to get a comprehensive view of grading status.
+
+The grading status dashboard provides a comprehensive overview of grading progress across all assignments in your course. This dashboard helps instructors and graders:
+
+- Track which assignments have pending grading tasks
+- Monitor grading completion rates
+- Identify bottlenecks in the grading workflow
+- Ensure all submissions are graded before releasing results
+
+### Dashboard Features
+
+The dashboard displays:
+
+- **Assignment list**: All assignments with grading tasks
+- **Completion status**: Percentage of submissions graded for each assignment
+- **Pending tasks**: Number of submissions awaiting grading
+- **Grader assignments**: Which staff members are assigned to grade each submission
+- **Due dates**: Grading deadlines for each assignment
+
+Use the dashboard to prioritize grading tasks and ensure timely feedback to students.
+
 ## Column Semantics in the Gradebook System
 
-In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources. Columns can be **manually entered** by instructors who directly input grades cell-by-cell, **imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date), or **linked to programming assignments** through the assignment reference system. When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
+In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources. Columns can be **manually entered** by instructors who directly input grades cell-by-cell (supporting both whole numbers and decimal scores), **imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date), or **linked to programming assignments** through the assignment reference system. When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
 
 **Expressions:** The most sophisticated column type uses **mathematical expressions** that reference other columns or assignments, creating a powerful dependency system for calculated grades. Using MathJS syntax, instructors can create complex formulas like `(gradebook_columns("homework-*") + assignments("project-*")) / 2` to automatically compute weighted averages, drop lowest scores, or apply curve adjustments. Score expressions can define functions and have access to the full MathJS library of math and utility functions. Any grade that is automatically calculated can also be manually overridden by the instructor on a case-by-case basis.
 
 **Student visibility of grades:** The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility - they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column-level only (you can't release or unrelease individual grades). For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
 
+## Gradebook Recalculation
+
+The gradebook automatically recalculates scores when grades change. The recalculation system uses a queue-based architecture to handle updates efficiently:
+
+- When a grade changes, the system enqueues a recalculation job for affected gradebook rows
+- Edge functions process these jobs asynchronously to update calculated columns
+- The system tracks row versions to ensure updates are applied correctly and prevent race conditions
+- If a row is already being recalculated, new updates are queued without incrementing the version, allowing the current worker to complete successfully
+
+This architecture ensures that calculated grades (such as averages and weighted scores) stay up-to-date even during periods of high activity, such as when multiple graders are entering scores simultaneously.
+
+## Exporting Grades
+
+The gradebook includes export functionality to download grades in CSV format. Export buttons now display a loading state while the export is being generated, providing clear feedback during the process.
+
+**Instructor-only columns:** Columns can be marked as instructor-only, making them completely invisible to students regardless of release status. This is useful for internal tracking, grading notes, or calculations that should never be shared with students. Instructor-only columns can still be used in expressions for other columns, allowing you to build complex grading systems with hidden intermediate calculations.
+
+**Automatic recalculation of dependent columns:** When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
+
 ## Importing Grades
 
 To import grades, instructors use a 3-step wizard:
 
-1. **File Selection**: Click the "Import Column" button and select a CSV file from your computer, which the system parses client-side to extract tabular data.
+1. **File Selection**: Click the "Import Columns" button and select a CSV file from your computer, which the system parses client-side to extract tabular data.
 
 2. **Column Mapping**: Choose which CSV column contains student identifiers and select whether they are email addresses or student IDs. For each remaining CSV column, decide whether to map it to an existing gradebook column for updates, create a new column (requiring you to set the maximum score), or ignore the column entirely. The system automatically detects email columns if present.
 
 3. **Preview & Confirm**: Review a comprehensive preview table that shows exactly what changes will occur, highlighting grade updates with strikethrough old values and bold new values, warning about students in the CSV who aren't enrolled in the course, and providing alerts when attempting to override calculated column scores. Only after reviewing this detailed preview can you click "Confirm Import" to execute the changes.
+
+## Entering Grades Manually
+
+You can manually enter grades directly into the gradebook by clicking on any cell. The gradebook supports both whole numbers and decimal scores, allowing you to enter precise grades like 8.5 or 92.75. This is particularly useful for assignments with partial credit or when you need to record fractional points.
 
 The system automatically creates new columns with full audit metadata including filename, date, and creator information, updates only enrolled students' grades while preserving override behavior for calculated columns, and maintains complete import history for traceability and compliance purposes.
 
 ## Decimal Score Support
 
 The gradebook supports decimal scores. You can enter fractional values (e.g., 87.5) in any grade field, and they will be properly stored and calculated in grade expressions. When rubric check scores are updated during handgrading, submission grade totals are automatically recalculated to reflect the changes.
+
+## Manual Grade Entry
+
+You can manually enter or edit grades directly in the gradebook interface. The gradebook supports both integer and decimal scores. When entering scores manually, you can type decimal values (e.g., 87.5, 92.3) to provide more precise grading. This is particularly useful for assignments with partial credit or weighted scoring systems.
+
+## Gradebook recalculation
+
+The gradebook automatically recalculates scores when dependencies change. The recalculation system uses a queue-based architecture to ensure all grade updates are processed reliably and in the correct order, even when multiple changes occur simultaneously. This ensures that calculated columns always reflect the most current data from their dependencies.
+
+## Expression Builder
+
+The gradebook includes a full-screen Expression Builder for creating and editing column expressions. This interface provides:
+
+- **Real-time validation**: Expressions are validated as you type, with clear error messages for syntax issues
+- **Full-screen editing**: Maximize your workspace for complex formulas
+- **Syntax highlighting**: Enhanced readability for mathematical expressions
+- **Function reference**: Quick access to available functions and their documentation
+
+To access the Expression Builder, click the expand icon when editing an expression-based column.
 
 ## Expression Syntax
 
@@ -100,7 +172,7 @@ total_points = sum(gradebook_columns("hw-*"))
 
 #### `mean(array, weighted=true)`
 
-Calculates weighted (default) or unweighted averages:
+Calculates weighted (default) or unweighted averages. The function gracefully handles undefined values and missing grades:
 
 ```javascript
 // Weighted average (accounts for different max scores)
@@ -127,7 +199,11 @@ Unweighted average is defined as:
 return (100 * validValues.reduce((a, b) => a + (b && b.score ? b.score / b.max_score : 0), 0)) / validValues.length;
 ```
 
-In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average.
+In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average. The calculation tolerates undefined values in the input array, ensuring robust grade calculations even when some data is missing.
+
+<Note>
+The mean calculation now tolerates undefined values in the input array, automatically filtering them out before computing the average. This prevents errors when some gradebook columns have not yet been populated.
+</Note>
 
 #### `drop_lowest(array, count)`
 
@@ -210,3 +286,17 @@ mod = case_when([
 final = max(letter + mod, 0)
 final
 ```
+
+## What-If Calculations
+
+The gradebook supports "what-if" scenarios, allowing instructors and students to explore hypothetical grade changes. When you modify a grade value in the gradebook interface:
+
+- **Temporary overrides**: Changes are applied temporarily to see their impact on calculated columns
+- **Real-time updates**: All dependent columns recalculate instantly to show the new totals
+- **Visual indicators**: Modified cells are highlighted to distinguish hypothetical values from actual grades
+- **Easy reset**: Discard what-if changes to return to actual grades
+
+This feature is particularly useful for:
+- Helping students understand how future assignments will affect their final grade
+- Exploring different grading scenarios before finalizing grades
+- Demonstrating the impact of extra credit or dropped assignments
