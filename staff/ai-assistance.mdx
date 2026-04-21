@@ -1,0 +1,528 @@
+---
+title: "AI assistance for helping students"
+description: "Use AI tools to help diagnose student errors and draft responses for office hours and discussion threads"
+icon: "robot"
+---
+
+# AI assistance for helping students
+
+Pawtograder provides AI assistance tools that help instructors and graders support students more effectively. These tools use the Model Context Protocol (MCP) to give AI assistants structured access to student help requests, discussion threads, and submission data.
+
+## Overview
+
+AI assistance is available in several contexts:
+
+- **Help requests**: Get AI help when responding to student questions in office hours
+
+- **Help request chat**: Get AI help when responding to student help requests
+- **Discussion threads**: Analyze student questions and draft responses
+- **Test failures**: Understand why students are failing specific tests
+- **Build errors**: Diagnose compilation and build issues
+- **Test insights**: Analyze common error patterns across multiple submissions
+
+## Getting Started
+
+### Prerequisites
+
+1. **Claude Desktop** (recommended) or any MCP-compatible AI assistant
+2. **API Token** from Pawtograder
+
+## How It Works
+
+When you click an **AI Help** button, Pawtograder generates a structured prompt that includes:
+
+- Context about the student's question or issue
+- Links to relevant assignment details and handout URLs
+- Suggested MCP tools for fetching additional data
+- Guidance on how to structure your analysis
+
+You can paste this prompt into Claude Desktop, ChatGPT, or any MCP-compatible AI assistant to get intelligent assistance.
+
+## Setting Up AI Assistance
+
+### Prerequisites
+
+- You must be an instructor or grader in the course
+- Claude Desktop installed (recommended) or another MCP-compatible AI assistant
+
+### Setup Steps
+
+<Steps>
+<Step title="Install Claude Desktop">
+Download and install Claude Desktop from [claude.ai/download](https://claude.ai/download).
+</Step>
+
+<Step title="Install MCP Proxy">
+Claude Desktop requires an MCP proxy to connect to HTTP-based MCP servers:
+
+<Step title="Install the MCP Proxy">
+
+- **Office hours help requests**: Get AI help analyzing student questions and drafting responses
+- **Discussion threads**: Get AI assistance for answering student questions on the discussion board
+- **Test failures**: Analyze why students are failing specific tests
+- **Build errors**: Diagnose compilation and build failures
+- **Test insights**: Analyze common error patterns across multiple submissions
+
+## Setting up AI assistance
+
+### Prerequisites
+
+1. **Claude Desktop**: Download and install from [claude.ai/download](https://claude.ai/download)
+2. **MCP Proxy**: Install the proxy to connect Claude Desktop to Pawtograder
+3. **API Token**: Create a token in Pawtograder to authenticate the MCP server
+
+### Step 1: Install Claude Desktop
+
+Download and install Claude Desktop from Anthropic at [claude.ai/download](https://claude.ai/download).
+
+### Step 2: Install the MCP proxy
+Claude Desktop currently only supports stdio-based MCP servers. Install the proxy to connect to Pawtograder:
+
+```bash
+npx @anthropic-ai/mcp-proxy@latest
+```
+</Step>
+
+<Step title="Create API Token">
+1. Click your profile menu in Pawtograder
+2. Select **Settings** → **API Tokens**
+3. Click **Create New Token**
+4. Give it a name (e.g., "Claude Desktop")
+5. Copy the token (it will only be shown once)
+</Step>
+
+<Step title="Configure Claude Desktop">
+Add the Pawtograder MCP server to your Claude Desktop configuration:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+### Step 3: Create an API token
+
+1. Navigate to your user menu in Pawtograder
+2. Click **Settings** → **API Tokens**
+3. Click **Create New Token**
+4. Enter a name (e.g., "Claude Desktop")
+5. Copy the token immediately - it will only be shown once
+
+### Step 4: Configure Claude Desktop
+
+Open Claude Desktop settings and add the Pawtograder MCP server configuration:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add this configuration (replace `YOUR_TOKEN_HERE` with your token):
+```json
+{
+  "mcpServers": {
+    "pawtograder": {
+      "command": "npx",
+"args": ["-y", "@anthropic-ai/mcp-proxy@latest", "YOUR_PAWTOGRADER_URL/functions/v1/mcp-server"],
+
+"args": ["-y", "@anthropic-ai/mcp-proxy@latest", "https://app.pawtograder.com/functions/v1/mcp-server"],
+      "env": {
+        "MCP_HEADERS": "{\"Authorization\": \"Bearer YOUR_TOKEN_HERE\"}"
+      }
+    }
+  }
+}
+```
+
+Replace:
+- `YOUR_PAWTOGRADER_URL` with your Pawtograder instance URL
+- `YOUR_TOKEN_HERE` with the token you created
+
+- `YOUR_PAWTOGRADER_URL` with your Pawtograder instance URL (e.g., `https://app.pawtograder.com`)
+- `YOUR_TOKEN_HERE` with the API token you created in step 3
+</Step>
+
+<Step title="Restart Claude Desktop">
+Quit and reopen Claude Desktop. You should see "pawtograder" listed as an available MCP server in the tools menu.
+</Step>
+</Steps>
+
+## Using AI Assistance
+
+### In Help Requests
+
+When helping a student in office hours:
+
+1. Click the **AI Help** button (robot icon) in the help request chat
+2. The system copies a pre-formatted prompt to your clipboard
+3. Paste the prompt into Claude Desktop
+4. Claude will automatically fetch:
+   - The student's question and conversation history
+   - Their latest submission with test results
+   - The assignment specification and handout URL
+   - Related discussion threads
+
+Claude provides:
+- **Diagnosis with evidence**: Specific code snippets and test outputs showing the issue
+- **Two draft responses**: Socratic (exploratory) and Direct (efficient) versions
+- **Verification checklist**: Items to confirm before sending
+
+### In Discussion Threads
+
+When responding to student questions on the discussion board:
+
+1. Click the **AI Help** icon in the thread actions
+2. Paste the copied prompt into Claude
+3. Claude fetches the thread, replies, and related context
+4. Review the suggested response and adapt as needed
+
+### For Test Failures
+
+When viewing a student's failing test:
+
+1. Click the **AI Help** icon next to the failing test
+2. Claude analyzes:
+   - The test output and error messages
+   - The student's source code
+   - The assignment specification
+   - The expected behavior
+
+### For Common Error Patterns
+
+In the Test Insights view:
+
+1. Click **AI Analyze** on an error group
+2. Claude examines submissions from multiple students
+3. Determines if it's a student error or assignment issue
+4. Drafts a discussion post to help affected students
+
+### Help Requests and Discussion Threads
+
+When helping a student via help request or discussion thread:
+
+1. Click the **AI Help** icon button (robot icon) in the toolbar
+2. The AI context prompt is automatically copied to your clipboard
+3. Paste the prompt into your AI assistant
+4. The AI will fetch relevant context and provide analysis
+
+The AI assistant will:
+- Fetch the student's question and conversation history
+- Retrieve the assignment specification and handout URL
+- Access the student's submission and test results
+- Provide a diagnosis with evidence from the student's code
+- Draft two response versions (Socratic and direct) for you to choose from
+
+### Test Failures and Build Errors
+
+When viewing a student's submission results:
+
+1. Click the **AI Help** icon next to failing tests or build errors
+2. The error analysis prompt is copied to your clipboard
+3. Paste into your AI assistant for detailed diagnosis
+
+The AI will analyze:
+- The specific error output
+- The student's source code
+- The assignment requirements
+- Related test results
+
+### Test Insights Dashboard
+
+When analyzing common error patterns:
+
+1. Navigate to the test insights dashboard for an assignment
+2. Click **AI Analyze** on an error group
+3. The AI will analyze the pattern across multiple submissions
+
+This helps you:
+- Identify whether the issue is with the assignment or student code
+- Draft discussion posts to help affected students
+- Understand common misconceptions
+
+## Available MCP Tools
+
+The Pawtograder MCP server provides these tools to AI assistants:
+
+### Context Tools
+- `get_help_request` - Fetch help request with conversation history
+- `get_discussion_thread` - Fetch discussion thread with replies
+- `get_assignment` - Get assignment details, handout URL, and rubric
+
+### Submission Tools
+- `get_submission` - Get submission metadata and summary
+- `list_submission_files` - See what files the student submitted
+- `get_submission_files` - Fetch specific source files using glob patterns
+- `list_submission_tests` - See all test results (pass/fail, scores)
+- `get_test_output` - Get detailed output for specific tests
+- `get_submission_build_output` - Get compilation/build errors
+
+### Repository Tools
+- `list_grader_files` - List files in the grader/solution repository
+- `get_grader_files` - Fetch grader files (tests, mutants, solutions)
+- `list_handout_files` - List files in the template/handout repository
+- `get_handout_files` - Fetch handout/starter code files
+
+### Search Tools
+- `search_help_requests` - Find related help requests
+- `search_discussion_threads` - Find related discussion threads
+- `get_submissions_for_student` - Get all submissions for a student
+
+## Privacy and Security
+
+The MCP server is designed with privacy and security in mind:
+
+- **Access control**: Only instructors and graders can use AI assistance
+- **Class-level authorization**: You can only access data from classes where you have instructor/grader role
+- **Privacy protection**: The system never exposes user email addresses or private profile flags
+- **Token-based authentication**: API tokens are long-lived JWTs that can be revoked at any time
+- **Audit trail**: Token usage is tracked with last-used timestamps
+
+## Providing Feedback
+
+After using AI assistance, you'll be prompted to provide feedback:
+
+- **Thumbs up/down**: Rate whether the AI analysis was helpful
+- **Optional comment**: Provide details about what worked or didn't work
+
+This feedback helps improve the AI assistance feature for your course.
+
+## Managing API Tokens
+
+### Viewing Your Tokens
+
+1. Click your profile menu
+2. Select **API Tokens**
+3. View all your tokens with their status, creation date, and last used date
+
+### Creating a Token
+
+1. Enter a descriptive name (e.g., "Claude Desktop", "VS Code")
+2. Click **Create**
+3. Copy the token immediately - it will only be shown once
+
+Tokens are valid for 90 days by default.
+
+### Revoking a Token
+
+1. Find the token in your token list
+2. Click the trash icon
+3. Confirm revocation
+
+Revoked tokens cannot be used and will be rejected by the MCP server.
+
+## Troubleshooting
+
+### AI Assistant Can't Connect to MCP Server
+
+- Verify your API token is not expired or revoked
+- Check that the MCP server URL is correct in your configuration
+- Ensure the `Authorization` header is properly formatted
+- Restart your AI assistant after configuration changes
+
+### AI Assistant Returns "Access Denied"
+
+- Verify you have instructor or grader role in the class
+- Check that you're requesting data from the correct class ID
+- Ensure your API token has the required scopes (`mcp:read`)
+
+### Token Creation Fails
+
+- Verify you have instructor or grader role in at least one class
+- Check that your token name is not empty and under 100 characters
+- Ensure you're not exceeding any token limits
+## Best Practices
+
+### When to Use AI Assistance
+
+- **Complex debugging**: When a student's error is difficult to diagnose
+- **Pattern recognition**: When multiple students have similar issues
+- **Time-saving**: When you need to draft a detailed response quickly
+- **Learning**: When you want to see different approaches to explaining a concept
+
+### When to Skip AI Assistance
+
+- **Simple questions**: Quick answers you can provide immediately
+- **Policy questions**: Course-specific policies that AI won't know
+- **Personal situations**: Student accommodations or sensitive issues
+
+### Reviewing AI Responses
+
+Always review and verify AI-generated content before sending to students:
+
+- **Check the evidence**: Verify code snippets and line numbers are accurate
+- **Adjust the tone**: Match how long you've been helping the student
+- **Verify against the spec**: Ensure the advice aligns with assignment requirements
+- **Don't give away solutions**: Make sure hints guide without revealing answers
+
+## Troubleshooting
+
+### "pawtograder" server not showing in Claude
+
+1. Verify your `claude_desktop_config.json` syntax is valid
+2. Check that the token hasn't expired (tokens are valid for 90 days)
+3. Restart Claude Desktop completely
+4. Check Claude Desktop logs for connection errors
+
+### "Access denied" errors
+
+1. Verify you're an instructor or grader in the class
+2. Check that your API token hasn't been revoked
+3. Create a new token if needed
+
+### Token expired
+
+API tokens expire after 90 days. Create a new token in Settings → API Tokens.
+
+- **Complex debugging**: When students have multi-layered issues
+- **Pattern analysis**: When multiple students have similar errors
+- **Time-saving**: When you need to quickly understand unfamiliar code
+- **Draft responses**: When you want to provide thorough, well-structured help
+
+### When Not to Use AI Assistance
+
+- **Simple questions**: Direct answers are faster
+- **Policy matters**: AI can't make grading decisions
+- **Personal issues**: Student concerns requiring human judgment
+
+### Effective Prompting
+
+The AI assistance feature provides structured prompts, but you can enhance them:
+
+- **Add context**: Mention how long you've been helping the student
+- **Specify tone**: Request Socratic questioning or direct hints
+- **Request specific analysis**: Ask for focus on particular aspects
+- **Iterate**: Follow up with additional questions as needed
+
+## Handout URLs
+
+To provide better context to AI assistants, add a **Handout URL** when creating assignments:
+
+1. Navigate to the assignment creation form
+2. Fill in the **Handout URL** field with a link to your assignment instructions
+3. The URL will be provided to AI assistants when analyzing student issues
+
+This helps the AI understand assignment requirements and provide more accurate assistance.
+
+### Step 5: Restart Claude Desktop
+
+Quit and reopen Claude Desktop. You should see "pawtograder" listed as an available MCP server in the tools menu.
+
+## Using AI assistance
+
+### Office hours and discussion threads
+
+When viewing a help request or discussion thread, click the **AI Help** button (robot icon) to copy a pre-formatted prompt. Paste this into Claude Desktop to get:
+
+1. **Diagnosis with evidence**: The AI fetches the student's code, test results, and assignment spec to identify the issue
+2. **Draft responses**: Two versions (Socratic/exploratory and direct/efficient) that you can copy or adapt
+3. **Verification checklist**: Reminders to verify the AI's analysis before sending
+
+The AI will automatically fetch:
+- The student's question and conversation history
+- The assignment specification and handout URL
+- The student's submission files and test results
+- Related discussion threads from other students
+
+### Test failures and build errors
+
+When viewing submission results, you'll see AI Help buttons next to:
+
+- **Build errors**: Click to analyze compilation failures
+- **Failing tests**: Click to analyze why a specific test is failing
+
+The AI will fetch the relevant code, test output, and assignment requirements to provide a diagnosis.
+
+### Test insights
+
+When viewing common error patterns in the test insights dashboard, click **AI Analyze** to get help understanding why multiple students are making the same mistake. The AI will:
+
+1. Analyze the error pattern across multiple submissions
+2. Determine if it's a student error or an assignment/test issue
+3. Draft a discussion post you can share with the class
+
+## Providing feedback
+
+After using AI assistance, Pawtograder will prompt you to provide feedback:
+
+- **Thumbs up/down**: Rate whether the AI's analysis was accurate
+- **Optional comment**: Provide additional details about what was helpful or not
+
+This feedback helps improve the AI assistance feature for your course.
+
+## Privacy and security
+
+The MCP server is designed with privacy in mind:
+
+- **Never exposes** the users table or email addresses
+- **Never exposes** the `is_private_profile` field
+- **Only accessible** to instructors and graders
+- **Class-level access control**: You can only access data from classes where you have instructor/grader permissions
+- **Token-based authentication**: API tokens can be revoked at any time
+
+## Available MCP tools
+
+The Pawtograder MCP server provides these tools for AI assistants:
+
+### Context tools
+- `get_help_request`: Fetch help request with conversation history
+- `get_discussion_thread`: Fetch discussion thread with replies
+- `get_assignment`: Get assignment details including handout URL
+
+### Submission tools
+- `get_submission`: Get submission metadata
+- `list_submission_files`: See what files were submitted
+- `get_submission_files`: Fetch specific source files (supports glob patterns)
+
+### Test and build tools
+- `list_submission_tests`: See all test results
+- `get_test_output`: Get detailed output for a specific test
+- `get_submission_build_output`: Get compilation/build errors
+
+### Repository tools
+- `list_grader_files`: List files in the grader/solution repository
+- `get_grader_files`: Fetch grader files (tests, mutants, solution code)
+- `list_handout_files`: List files in the template/handout repository
+- `get_handout_files`: Fetch handout/starter code files
+
+### Search tools
+- `search_help_requests`: Find related help requests
+- `search_discussion_threads`: Find related discussion threads
+- `get_submissions_for_student`: Get a student's submission history
+
+## Managing API tokens
+
+### Viewing tokens
+
+1. Click your user menu
+2. Select **Settings** → **API Tokens**
+3. View all your tokens with their status (Active, Expired, or Revoked)
+
+### Creating tokens
+
+1. Click **Create New Token**
+2. Enter a descriptive name
+3. Copy the token immediately - it won't be shown again
+4. Tokens are valid for 90 days by default
+
+### Revoking tokens
+
+1. Find the token in your token list
+2. Click the trash icon
+3. The token will be immediately revoked and can no longer be used
+
+## Troubleshooting
+
+### Claude Desktop doesn't show the Pawtograder server
+
+- Verify your `claude_desktop_config.json` is in the correct location
+- Check that the JSON syntax is valid
+- Ensure you replaced `YOUR_TOKEN_HERE` with your actual token
+- Restart Claude Desktop after making changes
+
+### "Invalid or expired API token" error
+
+- Your token may have expired (tokens last 90 days)
+- Your token may have been revoked
+- Create a new token and update your Claude Desktop configuration
+
+### AI can't access my class data
+
+- Verify you have instructor or grader permissions in the class
+- The MCP server only works for instructors and graders, not students
+- Check that you're using the correct class ID in your prompts

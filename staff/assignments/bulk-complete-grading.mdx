@@ -1,0 +1,76 @@
+---
+title: "Bulk Complete Grading Reviews"
+description: "Mark multiple grading reviews as complete in one action"
+icon: "check-double"
+---
+
+# Bulk Complete Grading Reviews
+
+The **Mark All Grading Complete** feature allows instructors to efficiently complete multiple grading reviews at once, saving time when finalizing grades for an assignment.
+
+## Accessing Bulk Complete
+
+Navigate to an assignment's **All Submissions** tab to access the bulk complete feature.
+
+The button appears in the toolbar alongside other bulk actions like "Release All" and "Export Grades".
+
+## How It Works
+
+When you click **Mark All Grading Complete**:
+
+1. The system checks which incomplete submission reviews are eligible for completion
+2. A popover displays eligibility information:
+   - Number of incomplete reviews that can be marked complete
+   - Number of reviews with missing required rubric checks
+3. Click the checkmark to confirm and mark all eligible reviews as complete
+
+### Eligibility Requirements
+
+A submission review is eligible for bulk completion when:
+
+- All required rubric checks have been applied
+- All criteria minimum check requirements are satisfied
+- The submission is from an active (non-dropped) student
+- The review is not already marked as complete
+
+Reviews with missing required checks are automatically skipped to prevent validation errors.
+
+## Grading Complete Column
+
+The submissions table includes a **Grading Complete** column showing completion status:
+
+- ✓ (checkmark): Review is complete
+- ✗ (x): Review is incomplete
+
+You can filter submissions by completion status using the column filter dropdown.
+
+## Use Cases
+
+**End of Grading Period**
+- Mark all eligible reviews complete after graders finish their work
+- Quickly identify which submissions still need attention
+
+**Partial Grading Workflows**
+- Complete reviews for submissions that meet minimum requirements
+- Leave incomplete those needing additional feedback
+
+**Quality Assurance**
+- Filter to show only incomplete reviews
+- Verify all required checks are applied before bulk completing
+
+<Tip>
+Use the "Grading Complete" filter to show only incomplete reviews, then address any missing required checks before using bulk complete.
+</Tip>
+
+## Completion Behavior
+
+When reviews are marked complete:
+
+- `completed_at` timestamp is set to the current time
+- `completed_by` is set to the instructor performing the bulk action
+- Associated review assignments are also marked complete
+- Reviews are **not** automatically released to students (use "Release All" separately)
+
+<Note>
+Marking a review complete indicates it's ready for release, but does not make it visible to students. Use the "Release All Submission Reviews" button to release grades to students.
+</Note>

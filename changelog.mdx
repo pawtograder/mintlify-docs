@@ -1,0 +1,180 @@
+---
+title: Changelog
+description: Recent updates and improvements to the Pawtograder platform
+---
+
+## April 2026
+
+### April 7, 2026
+
+#### Gradebook improvements
+- **Fixed gradebook column reordering** - Resolved issue where Move Left/Right buttons weren't working correctly for gradebook columns ([#668](https://github.com/pawtograder/platform/pull/668))
+- **Performance improvements** - Added better suspense boundaries to improve loading performance, especially on the gradebook page ([#678](https://github.com/pawtograder/platform/pull/678))
+
+### April 6, 2026
+
+#### Admin features
+- **Default time zone for admin view** - Added a default time zone setting for the admin interface ([#677](https://github.com/pawtograder/platform/pull/677))
+
+### April 5, 2026
+
+#### Bug fixes
+- **Grade override notes now visible** - Fixed issue where grade override notes weren't displaying in the UI ([#670](https://github.com/pawtograder/platform/pull/670))
+- **Self-review regrade prevention** - Students can no longer request regrades on self-review rubric items ([#673](https://github.com/pawtograder/platform/pull/673))
+- **Survey analytics fix** - Fixed survey analytics not showing for series surveys when comparison view is disabled ([#675](https://github.com/pawtograder/platform/pull/675))
+
+## March 2026
+
+### March 29, 2026
+
+#### Group management
+- **Enhanced group export** - Group CSV exports now include student and mentor emails in "Name <email>" format. Student exports also use this format for consistency ([#666](https://github.com/pawtograder/platform/pull/666))
+- **Test Assignment GitHub repo fix** - Fixed "Test Assignment" GitHub repository functionality for groups-only assignments ([#665](https://github.com/pawtograder/platform/pull/665))
+
+#### Time zone support
+- **Configurable time zones** - Added comprehensive time zone support across the platform, allowing courses to set their preferred time zone for all date/time displays ([#494](https://github.com/pawtograder/platform/pull/494))
+
+### March 28, 2026
+
+#### Late tokens
+- **Fixed gifted late token display** - Students who receive gifted late tokens now see the correct remaining token count. Previously, students who used all initial tokens but received gifts saw "You have no remaining late tokens" even when they had capacity ([#661](https://github.com/pawtograder/platform/pull/661))
+
+#### Content rendering
+- **HTML tag escaping** - HTML tags in markdown content are now escaped instead of stripped, preserving the original content intent ([#658](https://github.com/pawtograder/platform/pull/658))
+
+#### Grading improvements
+- **Auto-recalculate submission totals** - Submission grade totals now automatically recalculate when rubric check scores change ([#662](https://github.com/pawtograder/platform/pull/662))
+- **Better error messages** - Improved student-facing error messages to be more descriptive and actionable ([#660](https://github.com/pawtograder/platform/pull/660))
+- **Decimal scores in gradebook** - Gradebook number inputs now accept decimal scores ([#659](https://github.com/pawtograder/platform/pull/659))
+
+### March 27, 2026
+
+#### Performance and stability
+- **Memory leak fix** - Eliminated blob URL memory leaks in the submission file viewer that could cause browser crashes when viewing multiple large files ([#654](https://github.com/pawtograder/platform/pull/654))
+- **Group due date fix** - Fixed due date adjustment dialog for group assignments to correctly create instructor exceptions with assignment_group_id instead of student_id ([#657](https://github.com/pawtograder/platform/pull/657))
+- **Gradebook recalculation fix** - Fixed version-drift bug in gradebook recalculation pipeline that could cause scores to not converge ([#656](https://github.com/pawtograder/platform/pull/656))
+
+#### New features
+- **Assignment repository analytics** - Added analytics for assignment repositories, providing insights into student repository activity ([#637](https://github.com/pawtograder/platform/pull/637))
+- **Group individual grading** - Introduced support for grading individual students within group assignments ([#638](https://github.com/pawtograder/platform/pull/638))
+- **Survey display improvements** - Enhanced survey display and results analysis interface ([#652](https://github.com/pawtograder/platform/pull/652))
+
+title: "Changelog"
+description: "Recent updates and improvements to Pawtograder"
+icon: "clock-rotate-left"
+---
+
+# Changelog
+
+## March 2026
+
+### Repository Analytics (PR #637)
+
+Instructors and graders can now audit individual student contributions on group assignments through the new Repository Analytics feature.
+
+**Key features:**
+- Daily activity charts showing commits, pull requests, issues, and comments
+- Detailed items table with file changes and metadata
+- Per-submission view accessible from the submission sidebar
+- CSV export for external analysis
+- Manual refresh with fetch status and rate-limit feedback
+- Automated daily refresh for active assignments
+
+**How to use:**
+1. Enable repository analytics in the assignment settings
+2. View analytics from the "Repo Analytics" tab on any submission
+3. Link rubric checks to specific KPI categories (commits, PRs, issues, etc.)
+4. Click analytics links in rubric checks to filter by activity type
+
+### Group Individual Grading (PR #638)
+
+Group assignments now support per-student grading modes for more granular assessment.
+
+**New grading modes:**
+- **Individual grading**: Rubric parts are graded separately for each group member
+- **Assign-to-student**: Graders can assign specific rubric parts to individual students
+
+**Features:**
+- Per-student score breakdowns in submission views
+- Targeted annotations for individual group members
+- Separate scores tracked in gradebook
+- Role-aware display (students see only their own scores)
+
+**How to use:**
+1. In the rubric editor, mark parts with `is_individual_grading: true` or `is_assign_to_student: true`
+2. When grading, select which student each annotation applies to
+3. View per-student totals in the submission sidebar
+
+### Survey Improvements (PR #652)
+
+Enhanced survey display and results analysis for better insights.
+
+**Improvements:**
+- Instructor dashboard now shows open and recent surveys
+- Student dashboard displays pending surveys with status badges
+- Section filtering in group analytics with persisted selection
+- Group member roster view showing submission status
+- Email links for contacting students and mentors
+- Improved response formatting with proper choice label mapping
+
+### Auto-Recalculation of Grades (PR #662)
+
+Submission grade totals now automatically update when rubric check scores change.
+
+**What changed:**
+- Editing a rubric check's point value now immediately updates all affected submissions
+- No manual recalculation needed
+- Ensures grade consistency across all submissions
+
+### Improved Error Messages (PR #660)
+
+Students now receive more descriptive and actionable error messages when submissions fail.
+
+**Improvements:**
+- Clearer explanations of what went wrong
+- Specific guidance on how to fix common issues
+- Better formatting for error details
+
+### Decimal Score Support (PR #659)
+
+The gradebook now accepts decimal scores for more precise grading.
+
+**What changed:**
+- Number inputs in the gradebook now support decimal values
+- Allows for partial credit with greater precision
+- Maintains compatibility with existing integer scores
+
+### File Viewer Performance (PR #654)
+
+Fixed memory leaks in the submission file viewer that could cause browser crashes.
+
+**Technical improvements:**
+- Replaced blob URLs with signed URLs for binary file previews
+- Eliminated memory accumulation when viewing multiple large files
+- Added lazy loading for images
+- Improved performance when grading submissions with many files
+
+### Group Assignment Due Date Fixes (PR #657)
+
+Fixed an issue where due date exceptions for group assignments were not being applied correctly.
+
+**What was fixed:**
+- Due date exceptions now properly use `assignment_group_id` instead of `student_id`
+- Group submissions now correctly respect manual extensions
+
+### Special Character Handling (PR #650)
+
+Binary file names with special characters are now handled correctly.
+
+**What was fixed:**
+- Files with Unicode characters (e.g., macOS screenshot names with special spaces) now upload successfully
+- Improved filename sanitization for storage compatibility
+
+### HTML Escaping in Markdown (PR #658)
+
+Markdown renderers now properly escape HTML tags instead of stripping them.
+
+**What changed:**
+- HTML tags in markdown content are now displayed as text
+- Prevents unintended HTML rendering in student submissions
+- Improves security and display consistency
