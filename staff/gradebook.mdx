@@ -85,7 +85,13 @@ Students can perform "what if" calculations in the gradebook to explore how hypo
 
 When a student enters a "what if" value, the gradebook recalculates all dependent columns using the hypothetical score, showing the student how their grade would change. These calculations are performed entirely client-side and do not affect the actual grades stored in the system. Students can clear their "what if" values at any time to return to viewing their actual grades.
 
-**Instructor-only columns:** When creating or editing a calculated column, you can mark it as "Staff-only" (instructor-only). These columns are completely hidden from students until you release them. When you release an instructor-only column, it creates a frozen snapshot of the current scores for students and clears the instructor-only flag, making the column behave like a normal column going forward. This is useful for curve adjustments, what-if scenarios, or other calculations you want to finalize before showing to students.
+**Instructor-only columns:** When creating or editing a calculated column, you can mark it as "Staff-only" (instructor-only). These columns are completely hidden from students until you release them. When you release an instructor-only column:
+
+1. A frozen snapshot of the current private scores is created for students
+2. The instructor-only flag is cleared, making the column permanently visible
+3. The column behaves like a normal column going forward - subsequent edits propagate to students via standard sync
+
+This is useful for curve adjustments, bonus calculations, or draft grade formulas you want to finalize before making them visible to students. After release, you can still unrelease the column to hide scores, but the column metadata remains visible since the instructor-only flag was cleared.
 
 **Instructor-only columns:** Columns can be marked as "instructor-only" to permanently hide them from students regardless of release status. This is useful for internal tracking columns (e.g., participation notes, grading rubrics, or administrative flags) that should never be visible to students. Instructor-only columns appear with a special indicator in the gradebook interface and are completely hidden from the student view.
 
@@ -439,12 +445,15 @@ The gradebook automatically recalculates scores when dependencies change. The re
 
 The gradebook includes a full-screen Expression Builder for creating and editing column expressions. This interface provides:
 
-- **Real-time validation**: Expressions are validated as you type, with clear error messages for syntax issues
-- **Full-screen editing**: Maximize your workspace for complex formulas
-- **Syntax highlighting**: Enhanced readability for mathematical expressions
-- **Function reference**: Quick access to available functions and their documentation
+- **Live validation**: Expressions are validated as you type, with parse errors and dependency errors shown immediately
+- **Full-screen mode**: Click "Expression Builder" to expand to a full-screen editor with additional features:
+  - **Student picker**: Select a student to test the expression against their actual gradebook data
+  - **Per-line evaluation**: See the intermediate value of each statement in your expression, displayed inline
+  - **Score preview**: View both the raw numeric result and the rendered form (if a render expression is set)
+  - **Incomplete values panel**: See which dependencies are missing or not released for the selected student
+- **Save blocking**: The Save button is disabled until the expression parses correctly and all dependency slugs resolve
 
-To access the Expression Builder, click the expand icon when editing an expression-based column.
+The Expression Builder helps you write and debug complex expressions before saving them, ensuring they work correctly for all students.
 
 ## Expression Syntax
 
