@@ -439,12 +439,15 @@ The gradebook automatically recalculates scores when dependencies change. The re
 
 The gradebook includes a full-screen Expression Builder for creating and editing column expressions. This interface provides:
 
-- **Real-time validation**: Expressions are validated as you type, with clear error messages for syntax issues
-- **Full-screen editing**: Maximize your workspace for complex formulas
-- **Syntax highlighting**: Enhanced readability for mathematical expressions
-- **Function reference**: Quick access to available functions and their documentation
+- **Live validation**: Expressions are validated as you type, with parse errors and dependency errors shown immediately
+- **Full-screen mode**: Click "Expression Builder" to expand to a full-screen editor with additional features:
+  - **Student picker**: Select a student to test the expression against their actual gradebook data
+  - **Per-line evaluation**: See the intermediate value of each statement in your expression, displayed inline
+  - **Score preview**: View both the raw numeric result and the rendered form (if a render expression is set)
+  - **Incomplete values panel**: See which dependencies are missing or not released for the selected student
+- **Save blocking**: The Save button is disabled until the expression parses correctly and all dependency slugs resolve
 
-To access the Expression Builder, click the expand icon when editing an expression-based column.
+The Expression Builder helps you write and debug complex expressions before saving them, ensuring they work correctly for all students.
 
 ## Expression Syntax
 
