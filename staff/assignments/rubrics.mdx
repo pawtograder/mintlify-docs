@@ -10,25 +10,7 @@ This guide explains how rubrics drive the hand-grading experience and how scores
 
 <Note>
 Rubrics can only be edited by instructors. When editing a rubric, you will be prompted to confirm before leaving the page if you have unsaved changes.
-
-Rubrics can only be edited by instructors. When editing rubrics, you will be warned before leaving the page if you have unsaved changes.
 </Note>
-
-## Editing Rubrics
-
-When editing rubrics, the system protects against accidental data loss:
-
-**Unsaved Changes Warning**
-- If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears
-- The dialog warns you that your changes will be lost if you proceed
-- You can choose to stay on the page and save your changes, or discard them and leave
-- This prevents accidental loss of rubric modifications
-
-Always save your rubric changes before navigating away from the editor.
-
-<Warning>
-When editing rubrics, you will be prompted to confirm before leaving the editor if you have unsaved changes. This prevents accidental loss of your work.
-</Warning>
 
 ## High-Level Overview
 
@@ -64,8 +46,6 @@ When grading submissions, artifacts (non-code files) are displayed with appropri
 
 This allows graders to provide feedback on documentation, reports, and other non-code deliverables directly within the grading interface. Annotation checks can target specific artifacts, enabling inline feedback on README files, design documents, and other text-based submissions.
 
-Recent usability improvements to the grading interface include enhanced annotation workflows, making it easier to apply feedback directly to code and artifacts.
-
 ### How Points Are Computed
 
 - Per criteria:
@@ -82,10 +62,6 @@ Recent usability improvements to the grading interface include enhanced annotati
 ### References Across Rubrics
 
 - Checks can reference checks from other rubrics to surface related feedback when grading. This is managed inline in the sidebar (preview mode).
-
-### Regrade Requests
-
-Students cannot request regrades on self-review rubric items. Regrade requests are only available for grading rubric items that have been reviewed by instructors or graders.
 
 ## YAML Schema Quick Reference
 
@@ -307,35 +283,36 @@ parts:
             student_visibility: if_applied
 ```
 
-<Warning>
-After reviews are released to students, grading comments cannot be edited or deleted. Plan your feedback carefully before releasing grades.
-</Warning>
-
 ## Editing Rubrics
 
-When editing a rubric, Pawtograder will warn you before leaving the page if you have unsaved changes. This prevents accidental loss of work when navigating away from the rubric editor.
+When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
-The warning appears when:
-- You have made changes to the rubric YAML
-- You attempt to navigate away or close the browser tab
-- Changes have not been saved
+This protection applies when:
 
-Click **Save** to preserve your changes before navigating away, or **Cancel** to discard changes and leave the page.
+- Navigating away via links within the application
+- Using browser back/forward buttons
+- Closing the browser tab or window
+- Refreshing the page
+- Using the mobile navigation dropdown
 
-When editing rubrics, the system tracks unsaved changes and warns you before navigating away to prevent accidental data loss.
+The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning clears automatically.
 
-**Unsaved Changes Protection:**
+### Keyboard shortcuts
 
-- Browser tab/window close attempts show a confirmation dialog
-- Clicking navigation links within the application prompts for confirmation
-- Using browser back/forward buttons triggers a warning
-- Mobile navigation controls respect the unsaved state
+Speed up rubric editing with keyboard shortcuts:
 
-The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning is cleared automatically.
+- `Ctrl/Cmd + S`: Save rubric
+- `Ctrl/Cmd + Z`: Undo last change
+- `Ctrl/Cmd + Shift + Z`: Redo
+- `Esc`: Close current dialog
 
 <Tip>
 If you're working on rubrics across multiple tabs, only the currently visible tab will manage the unsaved changes warning to avoid false alerts.
 </Tip>
+
+<Warning>
+After reviews are released to students, grading comments cannot be edited or deleted (except by instructors — see [Grading Comment Restrictions After Release](#grading-comment-restrictions-after-release)). Plan your feedback carefully before releasing grades.
+</Warning>
 
 ## How This Renders in the Hand-Grader
 
@@ -349,56 +326,11 @@ If you're working on rubrics across multiple tabs, only the currently visible ta
 
 ## Regrade Requests
 
-Students can request regrades on rubric items where they believe the grading was incorrect. However, regrade requests are automatically prevented on self-review rubric items, as these are completed by the students themselves.
+Students can request regrades on rubric items where they believe the grading was incorrect. Regrade requests are automatically prevented on self-review rubric items, since those are completed by the students themselves.
 
 ## Split-Rubric Group Grading
 
 For group assignments, you can apply per-student adjustments when using split-rubric grading. This allows you to assign different scores or provide individualized feedback to group members while maintaining the efficiency of group grading workflows.
-
-## Editing Rubrics
-
-### Unsaved Changes Protection
-
-When editing rubrics, the system protects against accidental data loss:
-
-- If you attempt to leave the rubric editor with unsaved changes, you'll see a confirmation dialog
-- The dialog warns you that your changes will be lost if you proceed
-- You can choose to stay on the page and save your changes, or discard them and leave
-- This protection applies when navigating away, closing the tab, or refreshing the page
-
-This ensures you don't accidentally lose work when editing complex rubrics.
-
-## Rubric Editor Features
-
-### Unsaved Changes Protection
-
-The rubric editor automatically detects unsaved changes and prevents accidental data loss:
-
-**When you have unsaved changes:**
-
-- A warning indicator appears in the editor header
-- Attempting to navigate away triggers a confirmation dialog
-- Browser tab close/refresh prompts a warning
-- The dialog shows which changes will be lost
-
-**Confirmation dialog options:**
-
-- **Save and Continue**: Saves your changes before navigating away
-- **Discard Changes**: Abandons unsaved changes and continues navigation
-- **Cancel**: Returns to the editor to continue editing
-
-<Tip>
-The editor auto-saves drafts to browser local storage every 30 seconds as a backup. If your browser crashes, you can recover your work when you return to the editor.
-</Tip>
-
-### Keyboard Shortcuts
-
-Speed up rubric editing with keyboard shortcuts:
-
-- `Ctrl/Cmd + S`: Save rubric
-- `Ctrl/Cmd + Z`: Undo last change
-- `Ctrl/Cmd + Shift + Z`: Redo
-- `Esc`: Close current dialog
 
 ## Editing Rubric Scores After Completion
 
@@ -421,17 +353,6 @@ TAs and instructors can edit or delete rubric scores even after completing a rev
 Editing completed reviews does not automatically notify students. If grades have been released, you may need to communicate changes to affected students.
 </Note>
 
-## Unsaved Changes Protection
-
-When editing rubrics, Pawtograder automatically warns you before leaving the page if you have unsaved changes. This protection works across:
-
-- Browser navigation (back/forward buttons)
-- Clicking links to other pages
-- Closing the browser tab or window
-- Using the mobile navigation dropdown
-
-The warning ensures you don't accidentally lose your work when editing complex rubrics.
-
 ## Notes and Tips
 
 - Keep criteria focused and keep check names short; longer explanation should go in `description`.
@@ -443,19 +364,6 @@ The warning ensures you don't accidentally lose your work when editing complex r
 - Rubric scores are automatically recalculated when check scores change, ensuring the gradebook stays up-to-date.
 
 - Save frequently to avoid losing work, especially for complex rubrics.
-
-## Editing Rubrics
-
-### Unsaved Changes Protection
-
-When editing rubrics, Pawtograder protects you from accidentally losing work:
-
-- If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears
-- The dialog warns you that unsaved changes will be lost
-- You can choose to stay on the page and save your changes, or discard them and leave
-- This prevents accidental data loss when navigating away or closing the browser tab
-
-**Best practice**: Save your rubric frequently while editing, especially after making significant changes to criteria or checks.
 
 ## Field Reference: Required vs Optional (with defaults)
 
@@ -519,17 +427,6 @@ A check on one rubric can reference a check on another rubric. During grading, a
 
 - Show a student's self-review evidence next to the corresponding grading check.
 - Pull in meta-grading notes when doing final pass reviews.
-
-## Artifact Support
-
-Pawtograder supports rendering plaintext and Markdown artifacts in the submission file preview. When you configure a rubric check to target an artifact (using `annotation_target: artifact` and specifying the `artifact` field), graders can:
-
-- View plaintext artifacts with proper formatting
-- View Markdown artifacts with rendered formatting
-- Click on artifact links in the rubric sidebar to navigate directly to the artifact
-- Apply annotation checks to specific sections of artifacts
-
-This is particularly useful for grading documentation files, README files, or other text-based deliverables that students submit as artifacts.
 
 ## Individual and Assign-to-Student Grading Modes
 
