@@ -32,16 +32,16 @@ npm run cli -- <command> [options]
 
 Before using the CLI, you must authenticate with an API token.
 
-### Creating an API Token
+### Creating an API token
 
-1. Log in to Pawtograder
-2. Navigate to your account settings
-3. Go to the "API Tokens" section
-4. Click "Create New Token"
-5. Give your token a descriptive name and select appropriate scopes
-6. Copy the generated token (you won't be able to see it again)
+1. Log in to Pawtograder.
+2. Navigate to your account settings.
+3. Go to the **API Tokens** section.
+4. Click **Create New Token**.
+5. Give your token a descriptive name and select the **CLI** or **MCP + CLI** token type.
+6. Copy the generated token (you won't be able to see it again).
 
-### Logging In
+### Logging in
 
 ```bash
 # Interactive login (prompts for token)
@@ -54,7 +54,7 @@ npm run cli -- login --token YOUR_TOKEN_HERE
 npm run cli -- login --token YOUR_TOKEN_HERE --url https://your-instance.com/functions/v1/cli
 ```
 
-### Managing Authentication
+### Managing authentication
 
 ```bash
 # Check current user
@@ -64,20 +64,19 @@ npm run cli -- whoami
 npm run cli -- logout
 ```
 
-## Available Commands
+## Available commands
 
 ### Classes
-
-Manage course classes.
 
 ```bash
 # List all classes you have access to
 npm run cli -- classes list
+
+# Show details for a class
+npm run cli -- classes show <identifier>
 ```
 
 ### Assignments
-
-Manage assignments across classes:
 
 ```bash
 # List assignments for a class
@@ -90,13 +89,15 @@ npm run cli -- assignments show <identifier> --class <identifier>
 npm run cli -- assignments copy \
   --source-class <slug> \
   --target-class <slug> \
-  --all
+  --all \
+  --workdir ./temp
 
-# Copy with schedule (CSV file with dates)
+# Copy with a schedule CSV file
 npm run cli -- assignments copy \
   --source-class <slug> \
   --target-class <slug> \
-  --schedule <file.csv>
+  --schedule schedule.csv \
+  --workdir ./temp
 
 # Delete an assignment
 npm run cli -- assignments delete <identifier> \
@@ -106,15 +107,18 @@ npm run cli -- assignments delete <identifier> \
 
 #### Assignment copy options
 
-- `--assignment <slug>`: Copy a single assignment
-- `--all`: Copy all assignments from source class
-- `--schedule <file>`: Copy assignments with date overrides from CSV
-- `--dry-run`: Preview changes without making them
-- `--skip-repos`: Skip repository operations
-- `--skip-rubrics`: Skip rubric copying
-- `--skip-surveys`: Skip survey copying
-- `--workdir <path>`: Local directory for git clones (required for repo operations)
-- `--concurrency <n>`: Parallel operations (1-8, default 4)
+| Option | Description |
+|--------|-------------|
+| `--assignment <slug>` | Copy a single assignment |
+| `--all` | Copy all assignments from source class |
+| `--schedule <file>` | Copy assignments with date overrides from CSV |
+| `--dry-run` | Preview changes without making them |
+| `--skip-repos` | Skip repository operations |
+| `--skip-rubrics` | Skip rubric copying |
+| `--skip-surveys` | Skip survey copying |
+| `--workdir <path>` | Local directory for git clones (required for repo operations) |
+| `--concurrency <n>` | Parallel operations (1–8, default 4) |
+| `--delay-ms <ms>` | Delay between clone batches |
 
 ### Rubrics
 
@@ -145,22 +149,20 @@ Rubric types: `grading`, `self_review`, `meta`
 
 ### Surveys
 
-Copy surveys between classes:
-
 ```bash
-# Copy all surveys
+# Copy all surveys between classes
 npm run cli -- surveys copy \
   --source-class <slug> \
   --target-class <slug> \
   --all
 
-# Copy single survey
+# Copy a single survey
 npm run cli -- surveys copy \
   --source-class <slug> \
   --target-class <slug> \
   --survey <uuid|title>
 
-# Link to target assignment
+# Link copied surveys to a target assignment
 npm run cli -- surveys copy \
   --source-class <slug> \
   --target-class <slug> \
@@ -170,16 +172,14 @@ npm run cli -- surveys copy \
 
 ### Flashcards
 
-Copy flashcard decks between classes:
-
 ```bash
-# Copy all decks
+# Copy all flashcard decks
 npm run cli -- flashcards copy \
   --source-class <slug> \
   --target-class <slug> \
   --all
 
-# Copy single deck
+# Copy a single deck
 npm run cli -- flashcards copy \
   --source-class <slug> \
   --target-class <slug> \
@@ -188,10 +188,10 @@ npm run cli -- flashcards copy \
 
 ### Submissions
 
-Import comments and artifacts:
+Import comments and artifacts into submissions:
 
 ```bash
-# Import submission comments
+# Import submission comments (add-only)
 npm run cli -- submissions comments import \
   --class <identifier> \
   --assignment <identifier> \
@@ -215,7 +215,7 @@ npm run cli -- submissions artifacts import \
 
 ## Repository maintenance
 
-The CLI provides local git/rsync workflows for student repository operations. These commands fetch metadata from the API and perform git operations via SSH on your machine.
+The CLI provides local git/rsync workflows for student repository operations. These commands fetch metadata from the API and perform git operations via SSH on your machine. You must run `npm run cli -- login` first.
 
 ### List repositories
 
@@ -227,7 +227,7 @@ npm run cli -- repos list \
 
 ### Sync grade workflow
 
-Sync `.github/workflows/grade.yml` from handout to all student repos:
+Sync `.github/workflows/grade.yml` from the handout repo to all student repos:
 
 ```bash
 npm run cli -- repos sync-grade-workflow \
@@ -237,13 +237,13 @@ npm run cli -- repos sync-grade-workflow \
 ```
 
 Options:
-- `--dry-run`: Preview changes only
-- `--concurrency <n>`: Parallel operations (1-8, default 2)
+- `--dry-run`: Preview changes only (no commit/push)
+- `--concurrency <n>`: Parallel operations (1–8, default 2)
 - `--delay-ms <ms>`: Delay between batches
 
 ### Cross-assignment copy
 
-Copy files from source assignment repos to target assignment repos after source due date:
+Copy files from source assignment repos to target assignment repos after the source due date:
 
 ```bash
 npm run cli -- repos copy-after-source-due \
@@ -256,224 +256,19 @@ npm run cli -- repos copy-after-source-due \
 Options:
 - `--dry-run`: Preview with rsync -n only
 - `--mirror-delete`: Pass rsync --delete (excludes .git)
-- `--concurrency <n>`: Parallel operations (1-8, default 2)
+- `--concurrency <n>`: Parallel operations (1–8, default 2)
 
 ## Environment variables
 
-- `PAWTOGRADER_HTTP_TIMEOUT_MS`: HTTP timeout in milliseconds (default: system default)
-- `DEBUG=1`: Enable verbose HTTP logging
-- `PAWTOGRADER_VERBOSE=1`: Alternative verbose flag
+| Variable | Description |
+|----------|-------------|
+| `PAWTOGRADER_HTTP_TIMEOUT_MS` | HTTP timeout in milliseconds |
+| `DEBUG=1` | Enable verbose HTTP logging |
+| `PAWTOGRADER_VERBOSE=1` | Alternative verbose flag |
 
 ## Common workflows
 
-### Copy course to new semester
-
-```bash
-# Copy all assignments with new dates
-
-Manage programming assignments.
-
-```bash
-# List assignments in a class
-npm run cli -- assignments list --class cs3500-fall-2025
-
-# Show assignment details
-npm run cli -- assignments show hw1 --class cs3500-fall-2025
-
-# Copy a single assignment between classes
-npm run cli -- assignments copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --assignment hw1 \
-  --workdir ./temp
-
-# Copy all assignments between classes
-npm run cli -- assignments copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --all \
-  --workdir ./temp
-
-# Copy assignments with a schedule (CSV file)
-npm run cli -- assignments copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --schedule schedule.csv \
---workdir ~/pawtograder-repos
-```
-
-### Bulk update grade workflows
-
-```bash
-# Sync grade.yml to all student repos
-npm run cli -- repos sync-grade-workflow \
-  --class cs3500-spring-2026 \
-  --assignment hw1 \
-  --workdir ~/pawtograder-repos \
-  --concurrency 4
-```
-
-### Export and modify rubrics
-
-```bash
-# Export rubric
-npm run cli -- rubrics export \
-  --assignment hw1 \
-  --class cs3500 \
-  --output hw1-rubric.yml
-
-# Edit hw1-rubric.yml locally
-
-# Import modified rubric
-npm run cli -- rubrics import \
-  --assignment hw1 \
-  --class cs3500 \
-  --file hw1-rubric.yml
-```
-
---workdir ./temp
-
-# Delete an assignment
-npm run cli -- assignments delete hw1 --class cs3500-fall-2025 --force
-```
-
-#### Assignment Copy Options
-
-- `--source-class`: Source class identifier (ID, slug, or name)
-- `--target-class`: Target class identifier (ID, slug, or name)
-- `--assignment`: Copy a single assignment by ID or slug
-- `--schedule`: CSV file with assignment slugs and date overrides
-- `--all`: Copy all assignments from source class
-- `--dry-run`: Preview changes without making them
-- `--skip-repos`: Skip git repository operations
-- `--skip-rubrics`: Skip rubric copying
-- `--skip-surveys`: Skip copying surveys linked to assignments
-- `--workdir`: Local directory for git clones (required unless `--skip-repos`)
-- `--concurrency`: Number of parallel git operations (1-8, default: 4)
-- `--delay-ms`: Delay between clone batches in milliseconds
-
-### Surveys
-
-Manage course surveys.
-
-```bash
-# List surveys in a class
-npm run cli -- surveys list --class cs3500-fall-2025
-
-# Copy surveys between classes
-npm run cli -- surveys copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026
-```
-
-### Flashcards
-
-Manage flashcard decks.
-
-```bash
-# List flashcard decks
-npm run cli -- flashcards list --class cs3500-fall-2025
-
-# Copy flashcard decks between classes
-npm run cli -- flashcards copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026
-```
-
-### Rubrics
-
-Manage grading rubrics.
-
-```bash
-# List rubrics
-npm run cli -- rubrics list --class cs3500-fall-2025
-
-# Export a rubric to YAML
-npm run cli -- rubrics export rubric-id --class cs3500-fall-2025 --output rubric.yml
-
-# Import a rubric from YAML
-npm run cli -- rubrics import rubric.yml --class cs3500-fall-2025
-```
-
-### Submissions
-
-Manage student submissions.
-
-```bash
-# List submissions for an assignment
-npm run cli -- submissions list --assignment hw1 --class cs3500-fall-2025
-
-# Add comments to submissions
-npm run cli -- submissions comments add \
-  --assignment hw1 \
-  --class cs3500-fall-2025 \
-  --file comments.csv
-
-# Export submission artifacts
-npm run cli -- submissions artifacts export \
-  --assignment hw1 \
-  --class cs3500-fall-2025 \
-  --output ./artifacts
-```
-
-### Repositories
-
-Manage GitHub repositories.
-
-```bash
-# List repositories for an assignment
-npm run cli -- repos list --assignment hw1 --class cs3500-fall-2025
-
-# Sync repository permissions
-npm run cli -- repos sync --assignment hw1 --class cs3500-fall-2025
-```
-
-### Reviews
-
-Manage peer reviews and grading assignments.
-
-```bash
-# List review assignments
-npm run cli -- reviews list --assignment hw1 --class cs3500-fall-2025
-
-# Assign reviews
-npm run cli -- reviews assign \
-  --assignment hw1 \
-  --class cs3500-fall-2025 \
-  --file assignments.csv
-```
-
-### Help Requests
-
-Manage office hours help requests.
-
-```bash
-# List help requests
-npm run cli -- help-requests list --class cs3500-fall-2025
-
-# Export help request data
-npm run cli -- help-requests export \
-  --class cs3500-fall-2025 \
-  --output requests.csv
-```
-
-### Discussions
-
-Manage discussion board content.
-
-```bash
-# List discussion threads
-npm run cli -- discussions list --class cs3500-fall-2025
-
-# Export discussion data
-npm run cli -- discussions export \
-  --class cs3500-fall-2025 \
-  --output discussions.csv
-```
-
-## Common Workflows
-
-### Copying a Course Between Semesters
+### Copy a course to a new semester
 
 ```bash
 # 1. Copy all assignments with repositories
@@ -486,79 +281,69 @@ npm run cli -- assignments copy \
 # 2. Copy surveys
 npm run cli -- surveys copy \
   --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026
+  --target-class cs3500-spring-2026 \
+  --all
 
 # 3. Copy flashcard decks
 npm run cli -- flashcards copy \
   --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026
+  --target-class cs3500-spring-2026 \
+  --all
 ```
 
-### Bulk Grading Operations
+### Bulk update grade workflows
 
 ```bash
-# 1. Export submissions
-npm run cli -- submissions list \
+npm run cli -- repos sync-grade-workflow \
+  --class cs3500-spring-2026 \
   --assignment hw1 \
-  --class cs3500-fall-2025 \
-  --output submissions.csv
-
-# 2. Add comments from CSV
-npm run cli -- submissions comments add \
-  --assignment hw1 \
-  --class cs3500-fall-2025 \
-  --file comments.csv
+  --workdir ~/pawtograder-repos \
+  --concurrency 4
 ```
 
-## Error Handling
+### Export and modify a rubric
 
-The CLI provides detailed error messages and exit codes:
+```bash
+# Export
+npm run cli -- rubrics export \
+  --assignment hw1 \
+  --class cs3500 \
+  --output hw1-rubric.yml
 
-- `0`: Success
-- `1`: General error
-- `2`: Authentication error
-- `3`: Not found error
-- `4`: Validation error
+# Edit hw1-rubric.yml locally, then import
+npm run cli -- rubrics import \
+  --assignment hw1 \
+  --class cs3500 \
+  --file hw1-rubric.yml
+```
 
-Use `--help` with any command to see detailed usage information:
+## Error handling
+
+The CLI provides detailed error messages. Use `--help` with any command to see usage information:
 
 ```bash
 npm run cli -- assignments --help
 npm run cli -- assignments copy --help
 ```
 
-## Best Practices
+## Best practices
 
-1. **Use dry-run mode**: Always test with `--dry-run` before running destructive operations
-2. **Backup data**: Export important data before making bulk changes
-3. **Use workdir**: Specify a dedicated working directory for git operations to avoid conflicts
-4. **Monitor progress**: The CLI provides detailed logging for long-running operations
-5. **Secure tokens**: Store API tokens securely and never commit them to version control
-6. **Use specific identifiers**: Prefer slugs or IDs over names for reliability
+1. **Use dry-run mode**: Always test with `--dry-run` before running destructive operations.
+2. **Backup data**: Export important data before making bulk changes.
+3. **Use workdir**: Specify a dedicated working directory for git operations to avoid conflicts.
+4. **Secure tokens**: Store API tokens securely and never commit them to version control.
+5. **Use specific identifiers**: Prefer slugs or IDs over names for reliability.
 
 ## Troubleshooting
 
-### Authentication Issues
-
-If you encounter authentication errors:
+### Authentication issues
 
 1. Verify your token is valid: `npm run cli -- whoami`
-2. Check token scopes match the required permissions
+2. Check that the token type is **CLI** or **MCP + CLI** (tokens starting with `mcp_`)
 3. Ensure you're connecting to the correct instance
 
-### Repository Operations
-
-If git operations fail:
+### Repository operations
 
 1. Ensure you have SSH access to GitHub
 2. Verify the workdir has sufficient disk space
-3. Check network connectivity
-4. Try reducing `--concurrency` for rate-limited operations
-
-### Performance
-
-For large operations:
-
-- Use `--concurrency` to control parallel operations
-- Add `--delay-ms` to avoid rate limiting
-- Consider running operations during off-peak hours
+3. Try reducing `--concurrency` for rate-limited operations
