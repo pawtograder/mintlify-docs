@@ -6,6 +6,15 @@ icon: "clock-rotate-left"
 
 ## April 2026
 
+### April 24, 2026
+
+#### Assignment submissions table
+- **Bulk release/unrelease with row selection** - The instructor assignment submissions table now supports row checkboxes. Select individual rows, use "All in view" to select every submission matching the current filters, or clear the selection with "None". The Release and Unrelease buttons are enabled only when rows are selected and show the count of selected submissions (for example, "Release 5 selected submissions") ([#730](https://github.com/pawtograder/platform/pull/730))
+- **Group mentor column** - For group assignments where at least one group has an assigned mentor, a "Group mentor" column is now available in the submissions table with multi-select filtering ([#730](https://github.com/pawtograder/platform/pull/730))
+
+#### Bug fixes
+- **Fixed individual score display on group assignments** - Submission tables, submission history, and the student dashboard now correctly show each student's individual score on group assignments that use split rubrics or per-student grading totals, rather than always showing the group-level total ([#729](https://github.com/pawtograder/platform/pull/729))
+
 ### April 22, 2026
 
 #### CI improvements
