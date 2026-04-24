@@ -103,9 +103,40 @@ This is particularly useful when you need to extend deadlines for an entire sect
 
 You can also adjust review due dates for individual students directly from the gradebook view. This allows for fine-grained control when handling individual extension requests or special circumstances.
 
+## Releasing and Unreleasing Reviews
+
+The instructor assignment submissions table lets you release or unrelease grading reviews for a selected subset of submissions rather than all submissions at once.
+
+### Selecting submissions
+
+Each row in the submissions table has a checkbox. Use the controls in the column header to:
+
+- **Select all in view** — selects every row that matches the current filters (name, section, grader, etc.).
+- **None** — clears the entire selection.
+- Individual row checkboxes — toggle a single submission.
+
+Rows without an active submission cannot be selected.
+
+The selection is automatically cleared whenever you change a column filter, so the count always reflects what you see.
+
+### Bulk release / unrelease
+
+Once you have selected one or more submissions, the **Release** and **Unrelease** buttons become active and show the number of selected submissions (for example, "Release 5 selected submissions"). Clicking either button:
+
+1. Applies the action only to the selected submissions' grading reviews.
+2. Refreshes the table.
+3. Clears the selection.
+4. Shows a success message with the count of affected reviews.
+
+If no submissions are selected, both buttons are disabled.
+
+### Group mentor column
+
+When an assignment uses groups and at least one group has an assigned mentor, a **Group mentor** column is available in the submissions table. You can enable it from the column visibility controls and filter by mentor name to quickly select and release reviews for a specific mentor's groups.
+
 ## Grading Comments and Review Release
 
-Once a review has been released to students, grading comments are locked to maintain grading integrity. Graders cannot edit or delete their comments after the review is released, ensuring that students receive consistent feedback and preventing post-release modifications that could cause confusion. Instructors retain full editing privileges and can modify any comment, even after release.
+Graders can edit their comments after completing a review, as long as the review has not yet been released to students. Once a review is released, non-instructor edits are locked to maintain grading integrity. Instructors retain full editing privileges and can modify any comment at any time, even after release.
 
 If you need to make larger changes to feedback after release, unrelease the review first, make your edits, and then re-release it.
 
