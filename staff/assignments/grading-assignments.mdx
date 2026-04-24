@@ -103,11 +103,41 @@ This is particularly useful when you need to extend deadlines for an entire sect
 
 You can also adjust review due dates for individual students directly from the gradebook view. This allows for fine-grained control when handling individual extension requests or special circumstances.
 
+## Releasing and Unreleasing Submission Reviews
+
+From the **Manage → Assignment** submissions table, instructors can release or unrelease grading reviews for selected submissions.
+
+### Selecting submissions
+
+The submissions table includes a checkbox column on the left. Use it to:
+
+- **Select individual rows** by clicking the checkbox next to each submission.
+- **Select all in the current filtered view** by clicking **All in view** in the column header.
+- **Clear the selection** by clicking **None** in the column header.
+
+Only submissions with an active submission can be selected. Changing a column filter automatically clears the current selection.
+
+### Bulk release and unrelease
+
+Once you have selected submissions, the **Release** and **Unrelease** buttons become active and show the number of selected submissions (for example, "Release 5 selected submissions"). Clicking either button applies the action only to the selected submissions and clears the selection when complete.
+
+### Group mentor column
+
+When a group assignment has at least one mentor assigned, a **Group mentor** column appears in the submissions table. The column shows the mentor's name for each group (or a dash for groups without a mentor) and includes a multi-select filter so you can filter the table by mentor — including a **No mentor** option to find unassigned groups. You can toggle the column's visibility using the column visibility controls above the table.
+
 ## Grading Comments and Review Release
 
 Once a review has been released to students, grading comments are locked to maintain grading integrity. Graders cannot edit or delete their comments after the review is released, ensuring that students receive consistent feedback and preventing post-release modifications that could cause confusion. Instructors retain full editing privileges and can modify any comment, even after release.
 
 If you need to make larger changes to feedback after release, unrelease the review first, make your edits, and then re-release it.
+
+### TA messaging when feedback is released
+
+When a submission review has been released to students, TAs see a warning banner in the rubric sidebar explaining that marks are locked. Checkboxes, radio buttons, and comment forms are disabled for TAs on released reviews. If a TA attempts to save a comment or annotation and the action is blocked by the release lock, they see a clear message:
+
+> "This grading feedback has already been released to students, so you cannot add or change marks. Ask your instructor to click Unrelease on this submission review if a change is needed; after edits, they can release again."
+
+Instructors are not affected by this restriction and can edit any comment at any time.
 
 ## Group Grading with Split Rubrics
 
