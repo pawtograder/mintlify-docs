@@ -80,6 +80,32 @@ Perform common assignment management tasks directly from the dashboard:
 - **Check security**: Open the security dashboard.
 - **Export data**: Download submission and grading data.
 
+## Bulk releasing and unreleasing submission reviews
+
+The submissions table supports row selection so you can release or unrelease grading reviews for a specific subset of submissions rather than all at once.
+
+### Selecting submissions
+
+Each row in the submissions table has a checkbox. Use the controls in the header to quickly select or clear rows:
+
+- **All in view**: Selects every submission that matches the current filters.
+- **None**: Clears the current selection.
+- Individual checkboxes: Toggle a single row.
+
+Only rows with an active submission can be selected. Rows without a submission are disabled.
+
+Changing a column filter automatically clears the current selection so the selected set always matches what is visible.
+
+### Releasing and unreleasing
+
+Once you have selected one or more submissions, the **Release** and **Unrelease** buttons become active and show the number of selected submissions (for example, "Release 5 selected submissions"). Click the button to apply the action to only the selected rows.
+
+After the operation completes, the selection is cleared and the table refreshes.
+
+### Group mentor column
+
+For group assignments where at least one group has an assigned mentor, a **Group mentor** column is available in the submissions table. You can show or hide it using the column visibility controls, and filter by mentor name using the multi-select filter in the column header.
+
 ## Filtering and Sorting
 
 Customize your dashboard view:
