@@ -6,6 +6,16 @@ icon: "clock-rotate-left"
 
 ## April 2026
 
+### April 24, 2026
+
+#### Grading improvements
+- **Bulk release/unrelease with row selection** - The instructor assignment submissions table now has per-row checkboxes. Select individual rows or use **All in view** to select all rows matching the current filters, then release or unrelease grading reviews for the selected submissions in one click ([#730](https://github.com/pawtograder/platform/pull/730))
+- **Group mentor column in submissions table** - When a group assignment has at least one group with an assigned mentor, a **Group mentor** column appears in the instructor submissions table with a multi-select filter ([#731](https://github.com/pawtograder/platform/pull/731))
+- **Clear TA messaging when grading feedback is released** - TAs now see a warning banner in the rubric sidebar when a review has been released to students, and receive a clear explanation when a permission error occurs instead of a generic error message ([#724](https://github.com/pawtograder/platform/pull/724))
+
+#### Bug fixes
+- **Fixed individual score display on group assignments** - Student views (assignment page, submission history, test page) now correctly show the per-student grading total for group assignments with split rubrics, rather than the group-level total ([#729](https://github.com/pawtograder/platform/pull/729))
+
 ### April 22, 2026
 
 #### CI improvements
