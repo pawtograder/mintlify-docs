@@ -109,6 +109,14 @@ Once a review has been released to students, grading comments are locked to main
 
 If you need to make larger changes to feedback after release, unrelease the review first, make your edits, and then re-release it.
 
+### TA messaging when feedback is released
+
+When a TA attempts to add or change marks on a submission whose review has already been released, Pawtograder now shows a clear warning instead of a generic permission error:
+
+> "This grading feedback has already been released to students, so you cannot add or change marks. Ask your instructor to click **Unrelease** on this submission review if a change is needed; after edits, they can release again."
+
+This warning appears in the rubric sidebar and as a toast notification when a TA tries to save a comment or annotation on a released review. The rubric criteria panel also shows a warning banner so TAs see the restriction before attempting to save.
+
 ## Group Grading with Split Rubrics
 
 When grading group assignments, Pawtograder supports per-student adjustments even when using split rubrics. This allows you to:
