@@ -6,6 +6,22 @@ icon: "clock-rotate-left"
 
 ## April 2026
 
+### April 29, 2026
+
+#### Bug fixes
+- **Submission file pattern validation** - When no files in a student repository match the `submissionFiles` glob patterns in `pawtograder.yml`, the submission now fails immediately with a descriptive error message naming the unmatched patterns and grader repo SHA, instead of silently creating an empty submission ([#739](https://github.com/pawtograder/platform/pull/739))
+
+### April 24, 2026
+
+#### Grading improvements
+- **Group mentor column in instructor submissions table** - For group assignments with at least one group mentor assigned, a **Group mentor** column now appears in the Manage → Assignment submissions table with multi-select filtering ([#731](https://github.com/pawtograder/platform/pull/731))
+- **Bulk release/unrelease selected submissions** - Instructors can now select individual submissions (or all submissions matching current filters) and release or unrelease only those reviews, replacing the previous "release all" behavior ([#730](https://github.com/pawtograder/platform/pull/730))
+
+#### Bug fixes
+- **Fixed individual scores on group assignments for students** - Some student views were not showing individual scores on group assignments ([#729](https://github.com/pawtograder/platform/pull/729))
+- **Fixed gradebook updates for individual grading on group assignments post-release** - Gradebook now correctly updates when grades are changed after release for individual grading on group assignments ([#725](https://github.com/pawtograder/platform/pull/725))
+- **Cleared TA messaging when grading feedback is released** - TA-facing messaging is now cleared when grading feedback is released to students ([#724](https://github.com/pawtograder/platform/pull/724))
+
 ### April 22, 2026
 
 #### CI improvements
