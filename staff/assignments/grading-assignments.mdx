@@ -206,6 +206,31 @@ When a student submits a new version of their work after grading has begun, Pawt
 - Reopen grading assignments so graders can review the new submission
 - Prevent data loss by detecting conflicts with existing grading work
 
+## Bulk Releasing and Unreleasing Reviews
+
+The instructor assignment submissions table supports **row selection** for bulk release and unrelease operations, giving you precise control over which submissions are released to students.
+
+### How to bulk release or unrelease
+
+1. Navigate to **Manage → Assignments → [Assignment]**.
+2. Use the **checkbox column** on the left to select individual rows, or click **All in view** in the column header to select all submissions matching the current filters.
+3. Click **None** to clear the selection.
+4. Once rows are selected, the **Release** and **Unrelease** buttons become active and show the count of selected submissions (e.g. "Release 12 selected submissions").
+5. Click the button to release or unrelease the selected submissions' reviews.
+
+The selection is automatically cleared after a successful release or unrelease, and resets when you change column filters.
+
+<Note>
+Only submissions with an active submission (i.e. the student has submitted) can be selected. Rows without a submission are not selectable.
+</Note>
+
+### Group mentor column
+
+When a group assignment has at least one group with an assigned mentor, a **Group mentor** column appears in the submissions table. You can:
+
+- **Filter by mentor**: Use the multi-select dropdown under the column header to filter submissions by mentor name, or select **No mentor** to find groups without an assigned mentor.
+- **Toggle visibility**: Use the column visibility controls to show or hide the Group mentor column.
+
 ## Bulk Completing Grading Reviews
 
 The **Mark All Grading Complete** button allows you to efficiently complete multiple grading reviews at once.
