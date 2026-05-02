@@ -6,7 +6,28 @@ icon: "clock-rotate-left"
 
 ## April 2026
 
+### April 29, 2026
+
+#### Gradebook enhancements
+- **Improved Expression Builder editor** - The full-screen Expression Builder now uses a Monaco-based editor with syntax highlighting, autocomplete for built-in functions and column slugs, and hover tooltips showing intermediate values for any sub-expression. Per-line result annotations are displayed inline next to each statement ([#735](https://github.com/pawtograder/platform/pull/735))
+- **Gradebook table select-all/none filters** - Column and section filter dropdowns in the gradebook table now include **Select all** and **Select none** toolbar buttons for faster multi-select filtering ([#735](https://github.com/pawtograder/platform/pull/735))
+
+#### Autograding fixes
+- **Fail loudly when no files match submissionFiles patterns** - If no repository files match the configured `submissionFiles` glob patterns, the submission is now immediately rejected with a descriptive 400 error listing the unmatched patterns and guiding instructors to check `pawtograder.yml` ([#739](https://github.com/pawtograder/platform/pull/739))
+
+### April 24, 2026
+
+#### Grading improvements
+- **Clear TA messaging when grading feedback is released** - When a TA attempts to add or change marks on a released submission review, Pawtograder now shows a clear warning explaining the restriction and directing them to ask an instructor to unrelease the review ([#724](https://github.com/pawtograder/platform/pull/724))
+- **Group mentor column in instructor assignment table** - The instructor submissions table now shows a **Group mentor** column (with multi-select filter) when the assignment has groups with assigned mentors ([#731](https://github.com/pawtograder/platform/pull/731))
+
+#### Bug fixes
+- **Fixed individual score display on group assignments** - Student views now correctly show individual scores on group assignments ([#729](https://github.com/pawtograder/platform/pull/729))
+
 ### April 22, 2026
+
+#### Grading improvements
+- **Bulk release/unrelease selected submissions** - The instructor assignment submissions table now supports row selection with checkboxes. Use **All in view** to select all filtered submissions, then click **Release** or **Unrelease** to act on only the selected rows ([#730](https://github.com/pawtograder/platform/pull/730))
 
 #### CI improvements
 - **Shared npm cache across workflows** - GitHub Actions workflows now share npm cache for faster builds ([#728](https://github.com/pawtograder/platform/pull/728))

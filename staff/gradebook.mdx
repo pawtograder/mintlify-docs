@@ -113,12 +113,15 @@ The system automatically creates new columns with full audit metadata including 
 When creating or editing a column with a score expression, Pawtograder provides an **Expression Builder** interface with live validation and debugging tools:
 
 - **Live validation**: As you type, the expression is parsed and validated in real-time. Parse errors and dependency errors (unknown column slugs, cycles) are shown immediately.
-- **Full-screen mode**: Click **Expression Builder** to expand to a full-screen editor with additional features:
-  - **Student picker**: Select a student to test the expression against their actual gradebook data
-  - **Per-line evaluation**: See the intermediate value of each statement in your expression, displayed inline
-  - **Score preview**: View both the raw numeric result and the rendered form (if a render expression is set)
-  - **Incomplete values panel**: See which dependencies are missing or not released for the selected student
-- **Save blocking**: The Save button is disabled until the expression parses correctly and all dependency slugs resolve
+- **Full-screen mode**: Click **Expression Builder** to expand to a full-screen Monaco editor with additional features:
+  - **Syntax highlighting and autocomplete**: The editor provides syntax highlighting for the gradebook expression language, with autocomplete for built-in functions and column slugs. Typing inside `gradebook_columns("…")` shows matching column slugs from your gradebook.
+  - **Hover documentation**: Hover over any sub-expression to see its current evaluated value for the selected student.
+  - **Student picker**: Select a student to test the expression against their actual gradebook data.
+  - **Per-line evaluation**: See the intermediate value of each statement in your expression, displayed as inline annotations (e.g. `= 42`) next to each line.
+  - **Score preview**: View both the raw numeric result and the rendered form (if a render expression is set).
+  - **Incomplete values panel**: See which dependencies are missing or not released for the selected student.
+- **Save blocking**: The Save button is disabled until the expression parses correctly and all dependency slugs resolve.
+- **Gradebook table filters**: The gradebook table now includes **Select all / Select none** toolbar buttons in column and section filter dropdowns for faster multi-select filtering.
 
 The Expression Builder helps you write and debug complex expressions before saving them, ensuring they work correctly for all students.
 

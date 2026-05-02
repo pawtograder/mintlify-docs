@@ -109,6 +109,14 @@ Once a review has been released to students, grading comments are locked to main
 
 If you need to make larger changes to feedback after release, unrelease the review first, make your edits, and then re-release it.
 
+### TA messaging when feedback is released
+
+When a TA attempts to add or change marks on a submission whose review has already been released, Pawtograder now shows a clear warning instead of a generic permission error:
+
+> "This grading feedback has already been released to students, so you cannot add or change marks. Ask your instructor to click **Unrelease** on this submission review if a change is needed; after edits, they can release again."
+
+This warning appears in the rubric sidebar and as a toast notification when a TA tries to save a comment or annotation on a released review. The rubric criteria panel also shows a warning banner so TAs see the restriction before attempting to save.
+
 ## Group Grading with Split Rubrics
 
 When grading group assignments, Pawtograder supports per-student adjustments even when using split rubrics. This allows you to:
@@ -197,6 +205,31 @@ When a student submits a new version of their work after grading has begun, Pawt
 - Preserve existing grading comments on the original submission
 - Reopen grading assignments so graders can review the new submission
 - Prevent data loss by detecting conflicts with existing grading work
+
+## Bulk Releasing and Unreleasing Reviews
+
+The instructor assignment submissions table supports **row selection** for bulk release and unrelease operations, giving you precise control over which submissions are released to students.
+
+### How to bulk release or unrelease
+
+1. Navigate to **Manage → Assignments → [Assignment]**.
+2. Use the **checkbox column** on the left to select individual rows, or click **All in view** in the column header to select all submissions matching the current filters.
+3. Click **None** to clear the selection.
+4. Once rows are selected, the **Release** and **Unrelease** buttons become active and show the count of selected submissions (e.g. "Release 12 selected submissions").
+5. Click the button to release or unrelease the selected submissions' reviews.
+
+The selection is automatically cleared after a successful release or unrelease, and resets when you change column filters.
+
+<Note>
+Only submissions with an active submission (i.e. the student has submitted) can be selected. Rows without a submission are not selectable.
+</Note>
+
+### Group mentor column
+
+When a group assignment has at least one group with an assigned mentor, a **Group mentor** column appears in the submissions table. You can:
+
+- **Filter by mentor**: Use the multi-select dropdown under the column header to filter submissions by mentor name, or select **No mentor** to find groups without an assigned mentor.
+- **Toggle visibility**: Use the column visibility controls to show or hide the Group mentor column.
 
 ## Bulk Completing Grading Reviews
 

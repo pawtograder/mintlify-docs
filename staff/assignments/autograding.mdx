@@ -16,6 +16,20 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Submission File Pattern Validation
+
+When a student pushes to their repository, Pawtograder matches the repository's files against the `submissionFiles` glob patterns configured in `pawtograder.yml`. If **no files match any of the configured patterns**, the submission is immediately rejected with a descriptive error message that:
+
+- Lists the patterns that matched nothing.
+- Identifies the grader repository and commit SHA where the configuration lives.
+- Guides the instructor to check `pawtograder.yml` for misconfigured patterns.
+
+This prevents silent empty submissions caused by glob patterns that don't match any file in the student repository (for example, `src/**/*.java` when the student's code is in a different directory). The error is surfaced on the submission page so both the student and instructor can see it.
+
+<Warning>
+If you see this error, check the `submissionFiles` section of your `pawtograder.yml` in the grader repository. Make sure the glob patterns match the actual file paths in student repositories.
+</Warning>
+
 ## Empty Submission Detection
 
 Pawtograder automatically detects empty submissions to help identify students who may need assistance. A submission is flagged as empty when:
