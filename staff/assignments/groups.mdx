@@ -67,3 +67,13 @@ When groups are formed:
 - Any group member can make submissions
 - All group members see the same grades and feedback
 - Late token usage affects all group members equally
+
+## Personal Repository Submissions Blocked for Group Members
+
+Once a student joins an assignment group, Pawtograder prevents them from submitting via their personal repository. If a student pushes to their personal repository after joining a group, the submission is rejected with a clear error message:
+
+> "Your assignment is now being submitted as a group. Please push to your group repository instead of your personal repository."
+
+This prevents accidental individual submissions that would conflict with the group's work. If the group repository is not yet provisioned, the student should wait for it to be created or contact their instructor or TA.
+
+When a student joins a group, any previously active individual submission is automatically deactivated so the group submission becomes the authoritative record.
