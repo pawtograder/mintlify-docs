@@ -15,12 +15,16 @@ icon: "clock-rotate-left"
 
 ### April 29, 2026
 
+#### Performance improvements
+- **Faster discussion thread and submission loading** - Discussion thread navigation is significantly faster. Hovering over a thread in the sidebar now prefetches its content, so clicking feels instant. Thread data is cached across navigations, eliminating redundant network requests when revisiting threads. Internal data subscriptions were also optimized to eliminate O(N²) fan-out on large discussion boards ([#740](https://github.com/pawtograder/platform/pull/740))
+
 #### Gradebook enhancements
 - **Improved Expression Builder editor** - The full-screen Expression Builder now uses a Monaco-based editor with syntax highlighting, autocomplete for built-in functions and column slugs, and hover tooltips showing intermediate values for any sub-expression. Per-line result annotations are displayed inline next to each statement ([#735](https://github.com/pawtograder/platform/pull/735))
 - **Gradebook table select-all/none filters** - Column and section filter dropdowns in the gradebook table now include **Select all** and **Select none** toolbar buttons for faster multi-select filtering ([#735](https://github.com/pawtograder/platform/pull/735))
 
 #### Autograding fixes
 - **Fail loudly when no files match submissionFiles patterns** - If no repository files match the configured `submissionFiles` glob patterns, the submission is now immediately rejected with a descriptive 400 error listing the unmatched patterns and guiding instructors to check `pawtograder.yml` ([#739](https://github.com/pawtograder/platform/pull/739))
+- **Prevent personal-repo submissions when student is in a group** - If a student is already a member of an assignment group, pushing to their personal repository now fails immediately with a clear error message directing them to push to the group repository instead ([#735](https://github.com/pawtograder/platform/pull/735))
 
 ### April 24, 2026
 
