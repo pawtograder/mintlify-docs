@@ -16,6 +16,17 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Autograder Configuration Self-Healing
+
+When you push to the `main` branch of a handout or template repository, Pawtograder automatically re-syncs the autograder configuration (`pawtograder.yml` and `grade.yml`) regardless of whether those files were changed in the push. This means:
+
+- **Multi-commit pushes are handled correctly.** GitHub delivers up to 20 commits per push event. Previously, a `grade.yml` change buried in a non-head commit could be silently missed. Now every push triggers a full re-sync.
+- **Stale configuration is self-healing.** If the autograder's recorded `workflow_sha` or configuration ever becomes stale (for example, due to a missed webhook), you can force a re-sync by pushing any commit to the handout or template repository — even a trivial change like updating `README.md`.
+
+<Tip>
+If submissions are running against an outdated autograder configuration, push any commit to the handout or template repository to trigger a re-sync. No SQL queries or redeployment are needed.
+</Tip>
+
 ## Submission File Pattern Validation
 
 When a student pushes to their repository, Pawtograder matches the repository's files against the `submissionFiles` glob patterns configured in `pawtograder.yml`. If **no files match any of the configured patterns**, the submission is immediately rejected with a descriptive error message that:
