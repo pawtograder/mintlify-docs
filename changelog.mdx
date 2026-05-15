@@ -4,6 +4,22 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 15, 2026
+
+#### Bug fixes
+- **Webhook self-healing for grade.yml/pawtograder.yml changes** - Fixed a bug where pushing multiple commits at once to a handout or template repository could leave the autograder configuration stale. The webhook now inspects all commits in a push (not just the head commit) and unconditionally re-syncs `grade.yml` and `pawtograder.yml` on every push to `main`. This means you can fix a stuck `workflow_sha` or stale autograder config by pushing any commit (e.g. touching `README.md`) — no SQL or redeploy needed ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Fixed instructor role invite for multiple classes** - Users invited to the instructor role on two classes at the same time are now correctly added to both classes upon accepting the GitHub organization invite ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 4, 2026
+
+#### Keyboard shortcuts
+- **Keyboard shortcut discovery** - A new keyboard shortcuts button (⌘ icon) is now visible in the course header toolbar. You can also open the shortcuts overlay from the **Support & Documentation** menu. Press `?` at any time to open the shortcuts dialog ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Infrastructure
+- **Postmark SMTP support** - Email notifications can now be delivered via Postmark's SMTP service (port 2525 with STARTTLS). Administrators deploying Pawtograder can configure `SMTP_HOST`, `SMTP_PORT=2525`, `SMTP_USER`, and `SMTP_PASS` to use Postmark ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
