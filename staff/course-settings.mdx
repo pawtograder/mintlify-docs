@@ -82,6 +82,18 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## Email (SMTP) Configuration
+
+Pawtograder sends notification emails (e.g. discussion replies, grading feedback) via SMTP. The following providers are supported:
+
+| Provider | Port | Notes |
+|---|---|---|
+| Standard TLS (default) | 465 | Secure connection using TLS |
+| Postmark | 2525 | Uses STARTTLS (`requireTLS`) instead of implicit TLS |
+| Local (Inbucket) | 54325 | Development only — no TLS |
+
+To configure SMTP, set the `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and `SMTP_PASSWORD` environment variables in your deployment. Pawtograder automatically detects the provider from the port and applies the correct TLS settings.
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
