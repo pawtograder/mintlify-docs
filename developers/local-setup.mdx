@@ -353,6 +353,24 @@ platform/
 |----------|-------------|
 | `ENABLE_SIGNUPS` | Enable user registration UI (`true`/`false`) |
 | `END_TO_END_SECRET` | Secret for E2E test authentication |
+| `SMTP_HOST` | SMTP server hostname for email notifications |
+| `SMTP_PORT` | SMTP server port (`465` for TLS, `2525` for Postmark STARTTLS) |
+| `SMTP_USER` | SMTP authentication username |
+| `SMTP_PASS` | SMTP authentication password |
+
+### Configuring email delivery
+
+Pawtograder supports several SMTP configurations for sending email notifications:
+
+| Provider | `SMTP_PORT` | Notes |
+|----------|-------------|-------|
+| Standard TLS (default) | `465` | Secure TLS connection |
+| Postmark | `2525` | Uses STARTTLS negotiation |
+| Inbucket (local dev) | `54325` | Captures emails locally; no real delivery |
+
+For **Postmark**, set `SMTP_PORT=2525` along with your Postmark SMTP credentials. The platform automatically detects this port and uses STARTTLS instead of direct TLS.
+
+For local development, Inbucket (port `54325`) captures all outgoing emails without delivering them. View captured emails at `http://localhost:54324`.
 
 ## Troubleshooting
 
