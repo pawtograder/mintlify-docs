@@ -4,6 +4,25 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 16, 2026
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** - Assignments can now be configured to automatically apply a student's late token when they submit after the deadline, instead of requiring students to extend their deadline in advance. Instructors control this per-assignment via the new **Require students to apply late tokens before the original due date** checkbox in assignment settings. When unchecked, submitting late automatically deducts the required tokens; if the student has insufficient tokens, the submission is rejected with a clear error message ([#692](https://github.com/pawtograder/platform/pull/692))
+
+#### Bug fixes
+- **Webhook detects grade.yml/pawtograder.yml changes across all push commits** - The webhook now correctly detects configuration file changes across all commits in a push, not just the most recent one ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Fixed instructor role invite for multiple classes** - Users invited to the instructor role in two classes are now correctly added to both upon accepting the organization invite ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 4, 2026
+
+#### UI improvements
+- **Keyboard shortcut discovery controls** - A **Keyboard shortcuts** button (⌘ icon) is now visible in the course header toolbar, and a **Keyboard shortcuts** entry has been added to the Support & Documentation menu. Both open the existing shortcuts overlay. Press `?` at any time to open it as well ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Infrastructure
+- **Postmark SMTP support** - Email notifications now support Postmark as an SMTP provider in addition to the existing options ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
