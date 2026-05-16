@@ -156,10 +156,24 @@ Empty submission detection works by:
 
 ## Due Date Exceptions
 
-Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired.
-Each token can be exchanged for a 24-hour extension, but the extension must be requested before the student's original due date.
+Instructors can set a class-wide number of late tokens, and configure assignments to allow students to use those tokens as desired. Each token can be exchanged for a 24-hour extension.
 
 Instructors and graders can also manually grant extensions to students, gift additional late tokens to individual students, and view all extensions granted to a student. This is done in the assignment configuration under **Due Date Exceptions**. For group assignments, due date exceptions are applied at the group level so all group members receive the same extension.
+
+### Late Token Mode
+
+When configuring an assignment, you can choose how students apply late tokens using the **Require students to apply late tokens before the original due date** checkbox (enabled by default):
+
+- **Checked (default — manual mode)**: Students must apply tokens themselves using the **Extend Due Date** button before the deadline. Once the deadline passes, tokens can no longer be applied.
+- **Unchecked (auto-apply mode)**: Tokens are applied automatically when a student submits after the deadline. The system calculates the number of tokens needed based on how late the submission is (rounded up to the nearest 24-hour increment) and deducts them atomically. If the student doesn't have enough tokens, the submission is rejected with a descriptive error.
+
+<Warning>
+Auto-apply mode requires **Max Late Tokens** to be at least 1. The assignment form enforces this validation.
+</Warning>
+
+<Note>
+Auto-apply uses an advisory lock to prevent race conditions — two simultaneous late pushes from the same student will never consume more tokens than intended.
+</Note>
 
 ### Granting Manual Extensions
 
