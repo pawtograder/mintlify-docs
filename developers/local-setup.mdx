@@ -353,6 +353,18 @@ platform/
 |----------|-------------|
 | `ENABLE_SIGNUPS` | Enable user registration UI (`true`/`false`) |
 | `END_TO_END_SECRET` | Secret for E2E test authentication |
+| `SMTP_HOST` | SMTP server hostname for outbound email notifications |
+| `SMTP_PORT` | SMTP server port. Use `54325` for local Inbucket, `2525` for Postmark SMTP, or `465` for standard TLS SMTP |
+| `SMTP_USER` | SMTP authentication username |
+| `SMTP_PASSWORD` | SMTP authentication password |
+
+#### SMTP provider notes
+
+Pawtograder automatically detects the SMTP provider from `SMTP_PORT` and adjusts TLS settings accordingly:
+
+- **Port 54325** (local Inbucket): TLS disabled, used for local development email capture.
+- **Port 2525** (Postmark): TLS negotiated via STARTTLS (`requireTLS: true`, `secure: false`).
+- **Port 465** (default): Full TLS (`secure: true`).
 
 ## Troubleshooting
 
