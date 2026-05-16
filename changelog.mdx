@@ -4,6 +4,25 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 16, 2026
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** - Instructors can now configure assignments to automatically apply late tokens when students submit after the deadline. When enabled, Pawtograder calculates the tokens needed based on how late the submission is and deducts them atomically — no manual extension required. Students see a clear message on the assignment page indicating whether tokens must be applied before the deadline or will be auto-applied on submission. If a student lacks sufficient tokens, the submission is rejected with a descriptive error ([#692](https://github.com/pawtograder/platform/pull/692))
+
+#### Bug fixes
+- **Detect grade.yml/pawtograder.yml changes across all push commits** - Webhook handler now correctly detects configuration file changes across all commits in a push, not just the most recent one ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Fixed instructor role invite for users in multiple classes** - Users invited to the instructor role in two classes now correctly receive access to both classes upon accepting the GitHub org invitation ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 4, 2026
+
+#### UI improvements
+- **Keyboard shortcut discovery controls** - A keyboard shortcuts button (⌘ icon) is now visible in the top-right toolbar on every course page. The Support & Documentation menu also includes a **Keyboard shortcuts** entry. Both open the existing shortcuts overlay. Press **?** anywhere to open it via keyboard ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Infrastructure
+- **Postmark SMTP support** - The notification email system now supports Postmark as an SMTP provider. When `SMTP_PORT=2525` is configured, TLS is negotiated via STARTTLS for reliable delivery ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
