@@ -16,6 +16,18 @@ The autograder system uses an "overlay grader" architecture that allows flexible
 
 *Detailed documentation coming soon.*
 
+## Autograder Configuration Self-Healing
+
+When you push to the `main` branch of a handout or grader repository, Pawtograder automatically re-reads and re-applies your `grade.yml` and `pawtograder.yml` configuration — even if the push didn't directly modify those files. This means:
+
+- **Multi-commit pushes are handled correctly.** Previously, if you pushed multiple commits at once and only a non-head commit modified `grade.yml` or `pawtograder.yml`, the change could be silently missed. Pawtograder now inspects all commits in the push.
+- **Self-healing.** If your autograder configuration ever becomes stale (for example, due to a missed webhook), you can force a re-sync by pushing any commit to `main` — even a trivial change like updating `README.md`.
+- **`latest_autograder_sha` is always the head commit.** The recorded SHA now correctly reflects the newest commit in the push, not the oldest.
+
+<Tip>
+If you notice that student submissions are running against an outdated autograder configuration, push any commit to the `main` branch of your grader repository to trigger a re-sync.
+</Tip>
+
 ## Submission File Pattern Validation
 
 When a student pushes to their repository, Pawtograder matches the repository's files against the `submissionFiles` glob patterns configured in `pawtograder.yml`. If **no files match any of the configured patterns**, the submission is immediately rejected with a descriptive error message that:
