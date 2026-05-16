@@ -27,6 +27,35 @@ To grant an extension:
 
 The system will automatically calculate the extension duration based on the original due date.
 
+## Late Token Policy
+
+When late tokens are enabled for an assignment (via **Max Late Tokens** > 0), you can control whether students must apply tokens manually before the deadline or whether tokens are applied automatically when a student submits late.
+
+### Require tokens before due date (default)
+
+By default, the **Require students to apply late tokens before the original due date** checkbox is enabled. In this mode:
+
+- Students must click **Extend Due Date** and apply a token before the deadline passes.
+- Once the deadline passes, students can no longer apply tokens and cannot submit late.
+- The assignment page shows: *"Tokens must be applied before the due date."*
+
+### Auto-apply tokens on late submission
+
+When you uncheck **Require students to apply late tokens before the original due date**, Pawtograder will automatically consume a late token when a student pushes after the deadline:
+
+- Students do not need to apply tokens in advance.
+- At submission time, Pawtograder calculates how many tokens are needed (based on how late the push is) and deducts them atomically.
+- If the student does not have enough tokens, the submission is rejected with a clear error message.
+- The assignment page shows: *"Deadline passed: submitting will auto-apply a late token if you have one remaining."*
+
+<Warning>
+**Max Late Tokens must be ≥ 1** when auto-apply is enabled. The assignment form will show a validation error if you uncheck the option while Max Late Tokens is 0.
+</Warning>
+
+<Note>
+Auto-apply is designed for courses that want to give students flexibility without requiring them to remember to extend deadlines in advance. Consider your course policy carefully before enabling this option, as students may not realize tokens are being consumed until after submission.
+</Note>
+
 ## Score Capping
 
 Instructors can configure a maximum score cap for assignments. This feature allows you to:
