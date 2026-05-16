@@ -4,6 +4,25 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 16, 2026
+
+#### Late token improvements
+- **Auto-apply late tokens on late submission** - Instructors can now configure assignments to automatically apply a student's late token when they submit after the deadline, rather than requiring students to apply tokens in advance. When enabled, Pawtograder atomically deducts the required tokens at submission time and rejects the push with a clear error if the student has insufficient tokens. The assignment creation form includes a new **Require students to apply late tokens before the original due date** checkbox (enabled by default) ([#692](https://github.com/pawtograder/platform/pull/692))
+
+#### Bug fixes
+- **Webhook detects grade.yml/pawtograder.yml changes across all push commits** - The webhook now correctly detects changes to `grade.yml` and `pawtograder.yml` across all commits in a push, not just the most recent one ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Instructor invited to two classes only added to one** - Fixed a bug where an instructor invited to the same GitHub organization for two different classes was only added to one class upon accepting the invite ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 4, 2026
+
+#### Navigation improvements
+- **Keyboard shortcut discovery controls** - A new **Keyboard shortcuts** button (⌘ icon) is now visible in the course header toolbar. The same dialog is also accessible from the **Support & Documentation** menu under **Keyboard shortcuts** (with the `?` shortcut hint shown). Both paths open the existing keyboard shortcuts overlay ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Infrastructure
+- **Postmark SMTP support** - Email notifications now work correctly when Postmark is configured as the SMTP provider (port 2525 with STARTTLS) ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
