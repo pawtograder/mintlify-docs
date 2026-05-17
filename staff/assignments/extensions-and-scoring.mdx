@@ -7,6 +7,31 @@ description: "Manage due date extensions and configure assignment score limits"
 
 Pawtograder provides flexible options for managing due date extensions and controlling assignment scores.
 
+## Late Token Mode
+
+When configuring an assignment with late tokens, you can choose how students apply them:
+
+### Require tokens before the due date (default)
+
+By default, students must manually apply late tokens **before** the deadline passes. Once the deadline passes, they can no longer extend it. This is the standard behavior and is appropriate for most assignments.
+
+### Auto-apply tokens on late submission
+
+When you uncheck **Require students to apply late tokens before the original due date** in the assignment settings, Pawtograder automatically deducts the required number of tokens when a student pushes a late submission:
+
+- The system calculates how many tokens are needed based on how late the submission is (rounded up to the nearest 24-hour period).
+- If the student has enough tokens remaining, the extension is applied atomically and the submission is accepted.
+- If the student does not have enough tokens, the submission is rejected with a clear error message showing how many tokens are needed versus how many remain.
+- Token deduction is idempotent — if a student pushes multiple times in the same late window, only one token is consumed.
+
+<Warning>
+When auto-apply is enabled, **Max Late Tokens** must be set to at least 1. The assignment form enforces this requirement.
+</Warning>
+
+Students see a notice on the assignment page indicating which mode is active:
+- *"Tokens must be applied before the due date."* — when the default mode is active
+- *"Deadline passed: submitting will auto-apply a late token if you have one remaining."* — when auto-apply is active and the deadline has passed
+
 ## Extended Due Date Picker
 
 When granting manual extensions to students, instructors can choose the extended due date directly using a date picker interface.
