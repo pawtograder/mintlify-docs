@@ -34,6 +34,36 @@ The date picker shows the original due date and allows you to select any future 
 You can grant extensions to individual students or to entire groups for group assignments. All group members will receive the same extended deadline.
 </Tip>
 
+## Automatic Late Token Application
+
+By default, students must apply late tokens **before** the assignment deadline using the **Extend Due Date** button. You can optionally configure an assignment to allow late tokens to be applied **automatically** when a student submits after the deadline.
+
+### Configuring auto-apply
+
+When creating or editing an assignment, find the **Late Tokens** section and look for the **Require students to apply late tokens before the original due date** checkbox:
+
+- **Checked (default)**: Students must manually apply tokens before the deadline. After the deadline passes, no further token applications are accepted.
+- **Unchecked**: When a student pushes code after the deadline, Pawtograder automatically deducts the required number of tokens and extends their deadline to cover the submission. If the student doesn't have enough tokens, the submission is rejected with a clear error message.
+
+<Warning>
+When auto-apply is enabled, **Max Late Tokens** must be set to at least 1. The assignment form enforces this requirement.
+</Warning>
+
+<Note>
+When auto-apply is disabled (the default), the assignment page shows students: *"Tokens must be applied before the due date."* When auto-apply is enabled, students see: *"Deadline passed: submitting will auto-apply a late token if you have one remaining."*
+</Note>
+
+### How auto-apply works
+
+When a student submits after the deadline and auto-apply is enabled:
+
+1. Pawtograder calculates how many tokens are needed based on how late the submission is (one token per 24-hour period, rounded up).
+2. The system atomically checks the student's remaining token balance and inserts a due date extension in a single database transaction, preventing race conditions.
+3. If the student has enough tokens, the extension is applied and the submission is accepted.
+4. If the student doesn't have enough tokens, the submission is rejected with a message indicating how many tokens are needed and how many remain.
+
+The auto-apply operation is idempotent — if a student pushes multiple commits in quick succession, only one token extension is applied.
+
 ## Assignment Score Capping
 
 Instructors can configure a maximum score cap for assignments to prevent scores from exceeding a specified limit.
