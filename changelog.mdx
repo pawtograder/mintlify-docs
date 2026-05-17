@@ -4,6 +4,34 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 17, 2026
+
+#### Security
+- **Fixed stored XSS in help-request chat attachments** - Attachment URLs in help-request chat messages are now validated against an allowlist of safe URL schemes (http, https, mailto, relative paths). Previously, a malicious `javascript:` URL in a chat message could be rendered as a clickable link visible to TAs and instructors ([#752](https://github.com/pawtograder/platform/pull/752))
+- **Added strict Content Security Policy** - A nonce-based CSP is now applied to every page response as defense-in-depth against script injection. The policy uses `strict-dynamic` and blocks `object-src`, `base-uri`, and `frame-ancestors` ([#752](https://github.com/pawtograder/platform/pull/752))
+
+#### Grading improvements
+- **Cleanup individual repositories** - Instructors can now remove mistaken individual repositories (created when groups were configured after assignment release) from the assignment Repositories page. The tool archives the GitHub repos and deletes all associated submissions and grades ([#720](https://github.com/pawtograder/platform/pull/720))
+
+### May 16, 2026
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** - Instructors can now configure assignments so that a late token is automatically deducted when a student submits after the deadline, rather than requiring students to apply tokens manually beforehand. Enable this by unchecking **Require students to apply late tokens before the original due date** in the assignment settings ([#692](https://github.com/pawtograder/platform/pull/692))
+
+#### Bug fixes
+- **Fixed grade.yml/pawtograder.yml change detection across push commits** - Webhook processing now correctly detects changes to `grade.yml` and `pawtograder.yml` across all commits in a push, not just the most recent one ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Fixed instructor role assignment when invited to multiple classes** - Users invited to an instructor role in two classes now correctly receive the role in both classes upon accepting the GitHub org invitation ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 4, 2026
+
+#### Keyboard shortcuts
+- **Keyboard shortcut discovery** - A **Keyboard shortcuts** button (⌘ icon) is now visible in the course header toolbar. The same dialog is also accessible from the **Support & Documentation** menu. Press `?` at any time to open it ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Infrastructure
+- **Postmark SMTP support** - Email notifications now support Postmark as an SMTP provider in addition to the existing providers ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
