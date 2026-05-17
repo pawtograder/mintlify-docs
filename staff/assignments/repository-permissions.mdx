@@ -35,6 +35,38 @@ After running the fix, you'll see a summary showing:
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
 
+## Cleanup Individual Repositories
+
+If students were given both an individual repository and a group repository by mistake (for example, groups were configured after the assignment was released), you can use the **Cleanup individual repositories** button to remove the individual repositories and their associated data.
+
+### Using the cleanup tool
+
+1. Navigate to the assignment's **Repositories** page.
+2. Click **Cleanup individual repositories** in the top-right area. The button is disabled if there are no individual repositories to clean up.
+3. A confirmation dialog explains what will happen:
+   - Individual student repositories (those not associated with a group) will be archived on GitHub.
+   - Related submissions, grades, and workflow data will be deleted from Pawtograder.
+   - Individual repository records will be removed (group repositories are unchanged).
+4. Click **Continue**, then type `CLEANUP` in the confirmation field and click **Confirm cleanup**.
+
+### Understanding the results
+
+After the cleanup, a success notification shows a summary including:
+
+- **Repositories enqueued for archive**: Number of individual repos queued for archival on GitHub.
+- **Repositories deleted**: Number of repository records removed from Pawtograder.
+- **Submissions deleted**: Number of submission records removed.
+- **Repositories skipped (unparseable)**: Repos with missing or malformed GitHub repository names (these are still deleted locally).
+- **Skipped (org mismatch)**: Repos whose GitHub org doesn't match the course's configured org (these are skipped entirely).
+
+<Warning>
+This operation cannot be undone. All individual submission data (grades, comments, autograder results) for the affected repositories will be permanently deleted. Only run this cleanup if you are certain the individual repositories were created by mistake.
+</Warning>
+
+<Note>
+GitHub archival is asynchronous — the repositories are queued for archival and may take a few moments to be archived on GitHub.
+</Note>
+
 ## When to Use Fix Permissions
 
 Use the Fix Permissions tool when:
