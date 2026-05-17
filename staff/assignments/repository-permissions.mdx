@@ -35,6 +35,28 @@ After running the fix, you'll see a summary showing:
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
 
+## Clean up individual repositories
+
+If groups were configured after an assignment was released, some students may have both an individual repository and a group repository. Use the **Cleanup individual repositories** button to remove the mistaken individual repositories.
+
+<Warning>
+This action is irreversible. Individual repositories and all associated submissions, grades, and workflow data are permanently deleted. Group repositories are not affected.
+</Warning>
+
+### Using the cleanup tool
+
+1. Navigate to the assignment's **Repositories** page.
+2. Click **Cleanup individual repositories** (the button is disabled if no individual repositories exist).
+3. Read the warning summary and click **Continue**.
+4. Type `CLEANUP` in the confirmation field and click **Confirm cleanup**.
+
+The tool will:
+- Archive each individual student repository on GitHub (queued asynchronously).
+- Delete all related submissions, grades, regrade requests, and workflow data from Pawtograder.
+- Remove the individual repository records.
+
+After the cleanup completes, the repository table refreshes automatically and a toast notification summarises the results.
+
 ## When to Use Fix Permissions
 
 Use the Fix Permissions tool when:
