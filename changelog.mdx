@@ -4,6 +4,35 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 17, 2026
+
+#### Security fixes
+- **Fixed stored XSS in help-request chat attachments** - Resolved a stored cross-site scripting vulnerability in help-request chat file attachments. A strict Content Security Policy (CSP) has also been added to the platform ([#752](https://github.com/pawtograder/platform/pull/752))
+
+#### Bug fixes
+- **Cleanup for mistaken individual assignment repositories** - Added tooling to clean up repositories that were incorrectly created for individual assignments ([#720](https://github.com/pawtograder/platform/pull/720))
+
+### May 16, 2026
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** - Assignments can now be configured to automatically apply a student's late token when they submit after the deadline, rather than requiring students to manually extend their due date beforehand. Instructors control this behavior per-assignment via the **Require students to apply late tokens before the original due date** checkbox in assignment settings. Students see a clear notice on the assignment page indicating whether tokens must be applied before the deadline or will be auto-applied on late submission ([#692](https://github.com/pawtograder/platform/pull/692))
+
+### May 15, 2026
+
+#### Bug fixes
+- **Webhook detects grade.yml/pawtograder.yml changes across all push commits** - The webhook now correctly detects changes to `grade.yml` and `pawtograder.yml` across all commits in a push, not just the most recent one ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Fixed instructor role assignment when invited to multiple classes** - Users invited to the instructor role in two classes now correctly receive the role in both classes upon accepting the organization invite ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 4, 2026
+
+#### UI improvements
+- **Keyboard shortcut discovery controls** - A keyboard shortcuts button (⌘) is now visible in the course header toolbar, and a **Keyboard shortcuts** entry has been added to the Support & Documentation menu. Both open the existing shortcuts overlay. Press `?` to open it at any time ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Infrastructure
+- **Postmark SMTP support** - Email notifications now support Postmark as an SMTP provider in addition to the existing options ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
