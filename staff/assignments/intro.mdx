@@ -172,6 +172,21 @@ When granting manual extensions, instructors choose the extended due date direct
 
 The date picker shows the student's current due date and allows you to select any future date and time for the extended deadline.
 
+### Automatic late token application
+
+By default, students must apply late tokens manually before the original due date. You can change this per assignment by unchecking **Require students to apply late tokens before the original due date** in the assignment settings.
+
+When this option is unchecked:
+
+- Students can submit after the deadline and a late token is automatically applied to cover the submission.
+- The system atomically checks the student's token balance and creates the extension in a single database operation, preventing race conditions.
+- If the student does not have enough tokens, the submission is rejected with a clear error message.
+- The assignment page shows students a notice that submitting late will consume a token.
+
+<Note>
+When disabling the "require tokens before due date" option, you must also set **Max Late Tokens** to at least 1, since automatic application requires tokens to be available.
+</Note>
+
 ### Gifting Late Tokens
 
 Instructors can gift additional late tokens to individual students beyond the class-wide allocation. Gifted tokens:
