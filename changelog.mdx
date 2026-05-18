@@ -4,6 +4,38 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 18, 2026
+
+#### Regrade requests
+- **Course-wide regrade requests dashboard** — Instructors can now view and manage all regrade requests across every assignment from a single page (**Manage → Assignments → All regrade requests**). The table supports filtering by status, assignment, rubric check, student, assignee, and escalation outcome, with deep links that jump directly to the submission files view at the regrade request anchor ([#733](https://github.com/pawtograder/platform/pull/733))
+
+#### Assessment export (CLI)
+- **`assessment export` command** — New CLI command to stream a privacy-controlled snapshot of class assessment data (rubrics, final grading review scores, autograder test results, hint feedback, and gradebook columns) to a local directory. Supports three identity modes: `opaque` (random per-run tokens), `hash` (deterministic HMAC tokens joinable across runs), and `raw` (real PII, requires explicit acknowledgement). Parallel per-assignment streaming with transient-error retry ([#746](https://github.com/pawtograder/platform/pull/746))
+- **`assessment deanonymize` command** — Companion command that maps subject tokens from a `hash`-mode export back to real student identifiers (name, email, SIS ID, sections) ([#746](https://github.com/pawtograder/platform/pull/746))
+
+#### Accessibility and usability
+- **Comprehensive accessibility fixes** — Multiple accessibility and usability improvements across the platform ([#753](https://github.com/pawtograder/platform/pull/753))
+
+### May 17, 2026
+
+#### Repository management
+- **Cleanup individual repositories** — New **Cleanup individual repositories** button on the assignment Repositories page. Use this when students ended up with both an individual and a group repository by mistake (e.g. groups were configured after release). The tool archives individual repos on GitHub and removes related submissions, grades, and workflow data from Pawtograder ([#720](https://github.com/pawtograder/platform/pull/720))
+
+### May 16, 2026
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** — Assignments can now be configured to automatically apply a late token when a student submits after the deadline, rather than requiring students to apply tokens in advance. Enable this by unchecking **Require students to apply late tokens before the original due date** in the assignment settings. Students see a notice on the assignment page when auto-apply is active ([#692](https://github.com/pawtograder/platform/pull/692))
+
+### May 4, 2026
+
+#### Keyboard shortcuts
+- **Keyboard shortcut discovery controls** — A new **keyboard shortcuts button** (⌘ icon) in the course header toolbar and a **Keyboard shortcuts** entry in the Support & Documentation menu both open the shortcuts overlay. Press **?** anywhere in the app to open it as well ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Infrastructure
+- **Postmark SMTP support** — Added support for Postmark as an SMTP provider for outgoing email ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
