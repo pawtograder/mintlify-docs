@@ -82,6 +82,27 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## Enrollment Management
+
+Instructors can manage student enrollments from **Manage → Enrollments**. The enrollments table shows all students and staff in the course, and supports editing roles, profiles, and GitHub account status.
+
+### GitHub account diagnostics
+
+For each student, instructors can open a **GitHub diagnostics** modal by clicking the GitHub icon in the enrollments table. This modal shows:
+
+- **Linked account**: The GitHub username currently linked to the student's Pawtograder account
+- **Username changed**: Whether the student's GitHub username has changed since they linked their account
+- **Organization membership**: Whether the student has accepted the GitHub organization invitation (active, pending, or not joined)
+- **Student team membership**: Whether the student is in the course's student GitHub team
+- **Database org status**: Whether Pawtograder has confirmed the student's org membership
+
+From the diagnostics modal, instructors can:
+
+- **Sync permissions**: Re-run the GitHub permission sync for the student, which updates their username and re-grants repository access
+- **Unlink GitHub identity**: Remove the student's GitHub account link from Pawtograder and remove them from the course GitHub organization. The student will need to re-link their GitHub account.
+
+Use the diagnostics modal when a student reports they cannot access their repositories, or when their GitHub username appears incorrect.
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
