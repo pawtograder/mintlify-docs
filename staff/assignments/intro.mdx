@@ -161,6 +161,19 @@ Each token can be exchanged for a 24-hour extension, but the extension must be r
 
 Instructors and graders can also manually grant extensions to students, gift additional late tokens to individual students, and view all extensions granted to a student. This is done in the assignment configuration under **Due Date Exceptions**. For group assignments, due date exceptions are applied at the group level so all group members receive the same extension.
 
+### Require tokens before due date
+
+When creating or editing an assignment, you can configure how late tokens are applied:
+
+- **Require students to apply late tokens before the original due date** (default, checked): Students must use the **Extend Due Date** button before the deadline passes. Once the deadline passes, they can no longer apply tokens manually.
+- **Auto-apply on late submission** (unchecked): When a student submits after the deadline, Pawtograder automatically deducts the required number of tokens from their balance. If they don't have enough tokens, the submission is rejected with a clear error message.
+
+<Warning>
+When auto-apply is enabled, **Max Late Tokens** must be set to at least 1. The assignment form enforces this requirement.
+</Warning>
+
+Auto-apply is useful for courses where students should be able to submit late without needing to remember to extend their deadline in advance. Students see a notice on the assignment page indicating that submitting late will consume tokens automatically.
+
 ### Granting Manual Extensions
 
 When granting manual extensions, instructors choose the extended due date directly using a date picker, rather than entering extension hours and minutes. This makes it easier to:
