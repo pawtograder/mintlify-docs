@@ -4,6 +4,43 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 18, 2026
+
+#### Accessibility and usability improvements
+- **Global search palette** — A new ⌘K / Ctrl+K command palette lets you search across assignments, submissions, and course sections from anywhere in the app ([#753](https://github.com/pawtograder/platform/pull/753))
+- **Dashboard quick links** — The student dashboard now shows a "Jump to" row with direct links to all enabled course sections (Assignments, Gradebook, Office Hours, Discussion, Surveys, Polls) ([#753](https://github.com/pawtograder/platform/pull/753))
+- **Keyboard shortcut discovery** — A keyboard shortcuts button (⌘ icon) in the top navigation bar and a "Keyboard shortcuts" entry in the Support menu both open the shortcuts overlay. The `?` key shortcut continues to work as before ([#744](https://github.com/pawtograder/platform/pull/744))
+- **Improved focus outlines and ARIA semantics** — Focus rings, semantic headings, and ARIA landmark roles have been improved across many pages for better screen reader and keyboard navigation support ([#753](https://github.com/pawtograder/platform/pull/753))
+- **Responsive layouts** — Assignment list, gradebook, submission review, and several other pages now reflow correctly on narrow viewports ([#753](https://github.com/pawtograder/platform/pull/753))
+- **Color mode change announcements** — Switching between light, dark, and system color modes now shows a toast and announces the change to screen readers ([#753](https://github.com/pawtograder/platform/pull/753))
+- **Assignment search** — The student assignments page now includes a search box to filter upcoming and past assignments by name, repo, group, or status ([#753](https://github.com/pawtograder/platform/pull/753))
+
+### May 17, 2026
+
+#### Security
+- **Fixed stored XSS in help-request chat attachments** — Attachment filenames in help-request chat are now sanitized to prevent stored cross-site scripting. A strict Content Security Policy has also been added ([#752](https://github.com/pawtograder/platform/pull/752))
+
+### May 16, 2026
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** — Instructors can now configure an assignment so that a late token is automatically consumed when a student submits after the deadline, rather than requiring students to apply tokens manually before the due date. The new **Require students to apply late tokens before the original due date** checkbox (enabled by default) controls this behavior ([#692](https://github.com/pawtograder/platform/pull/692))
+
+### May 15, 2026
+
+#### Assignment management
+- **Cleanup individual repositories** — A new **Cleanup individual repositories** button on the assignment Repositories page lets instructors bulk-archive and delete individual (non-group) student repositories. This is useful when groups were configured after an assignment was released and students ended up with both an individual and a group repository ([#720](https://github.com/pawtograder/platform/pull/720))
+
+#### Bug fixes
+- **Webhook detects grade.yml changes across all push commits** — The webhook now inspects all commits in a push event (not just the head commit) when deciding whether to re-sync `grade.yml` or `pawtograder.yml` ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Instructor role on multiple classes** — Fixed a bug where a user invited as an instructor to two classes would only be added to one class's GitHub organization upon accepting the invitation ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 4, 2026
+
+#### Email
+- **Postmark SMTP support** — The notification queue processor now correctly negotiates TLS when using Postmark's SMTP service on port 2525 ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
