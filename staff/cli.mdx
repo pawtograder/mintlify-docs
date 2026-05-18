@@ -471,6 +471,79 @@ npm run cli -- discussions export \
   --output discussions.csv
 ```
 
+### Assessment export
+
+Export a privacy-controlled snapshot of class assessment data — rubrics, scores, autograder test results, hint feedback, and gradebook columns — for downstream analysis.
+
+#### Identity modes
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt; tokens are only joinable within a single export run |
+| `hash` | Deterministic HMAC tokens derived from `--salt`; joinable across runs |
+| `raw` | Real student ids, emails, and names; requires `--i-understand-pii` |
+
+#### Export a class
+
+```bash
+# Export all assignments (opaque mode — safe default)
+npm run cli -- assessment export --class cs3500-fall-2025
+
+# Export with deterministic tokens (joinable across runs)
+npm run cli -- assessment export \
+  --class cs3500-fall-2025 \
+  --identity hash \
+  --salt "my-secret-salt-at-least-16-chars"
+
+# Export only specific assignments
+npm run cli -- assessment export \
+  --class cs3500-fall-2025 \
+  --assignment hw-1 \
+  --assignment hw-2
+
+# Export with raw PII (requires acknowledgement)
+npm run cli -- assessment export \
+  --class cs3500-fall-2025 \
+  --identity raw \
+  --i-understand-pii
+```
+
+The export writes a directory containing:
+- `manifest.json` — metadata about the export run
+- `subjects.json` — one record per enrolled student (tokenized or raw)
+- `sections.json` — class and lab section records
+- `assignments.json` — assignment catalog
+- `gradebook-columns.json` — gradebook column definitions
+- `assignments/<slug>/` — per-assignment data (rubric, submissions, scores, tests, hints)
+- `gradebook/scores.json` — instructor-side gradebook cells
+
+#### Deanonymize a hash export
+
+If you used `--identity hash`, you can produce a CSV mapping subject tokens back to real student identifiers:
+
+```bash
+npm run cli -- assessment deanonymize \
+  --class cs3500-fall-2025 \
+  --salt "my-secret-salt-at-least-16-chars" \
+  --i-understand-pii
+```
+
+<Warning>
+The deanonymize command writes real student names, emails, and SIS IDs to disk. Handle the output file accordingly and delete it when no longer needed.
+</Warning>
+
+#### Export options
+
+- `--identity <mode>`: `opaque` (default), `hash`, or `raw`
+- `--salt <string>`: Required for `--identity hash`; must be at least 16 characters
+- `--i-understand-pii`: Required for `--identity raw` and `assessment deanonymize`
+- `--output <dir>`: Output directory (default: `./assessment-export-<class>-<timestamp>`)
+- `--assignment <selector>`: Assignment id, slug, or glob (e.g. `hw-*`). Repeatable. Omit to export all.
+- `--gradebook-column <selector>`: Gradebook column id, slug, or glob. Repeatable. Omit to export all.
+- `--concurrency <n>`: Parallel per-assignment streams (1–8, default 4)
+- `--with-test-output`: Include autograder test output (can be large)
+- `--test-output-max-bytes <n>`: Per-test output cap when `--with-test-output` is set (default 4096)
+
 ## Common Workflows
 
 ### Copying a Course Between Semesters
