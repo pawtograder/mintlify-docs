@@ -44,6 +44,27 @@ Use the Fix Permissions tool when:
 - After manually modifying groups outside of the normal workflow
 - As a preventive measure before an assignment deadline
 
+## Cleanup Individual Repositories
+
+If an assignment was initially released as individual but later converted to group-based, some students may end up with both an individual repository and a group repository. Use the **Cleanup individual repositories** button to remove the mistaken individual repositories.
+
+### Using the cleanup tool
+
+1. Navigate to the assignment's **Repositories** page
+2. Click **Cleanup individual repositories** (the button is disabled if no individual repositories exist)
+3. Review the warning — this operation:
+   - Archives individual student repositories on GitHub (asynchronously)
+   - Deletes related submissions, grades, and workflow data from Pawtograder
+   - Removes the individual repository records (group repositories are unchanged)
+4. Click **Continue**, then type `CLEANUP` in the confirmation field
+5. Click **Confirm cleanup**
+
+After cleanup, the repository table refreshes automatically. A summary toast shows how many repositories were queued for archival and how many records were deleted.
+
+<Warning>
+This operation cannot be undone. Only run it when you are certain that the individual repositories are mistaken duplicates and that the group repositories contain the correct student work.
+</Warning>
+
 ## How Permissions Are Managed
 
 Pawtograder automatically manages repository permissions when:
