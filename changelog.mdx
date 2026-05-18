@@ -4,6 +4,28 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 18, 2026
+
+#### Discussion improvements
+- **Mark threads as duplicates** - Graders and instructors can now merge a duplicate discussion thread into the original. The duplicate thread and all its replies are moved under the original, a banner shows the former subject and who merged it, and the author receives an in-app notification with a link to their post ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### Instructor tools
+- **GitHub account diagnostics** - Instructors can now diagnose and fix student GitHub account issues directly from the Enrollments page. The diagnostics modal shows linked account, username changes, org and team membership status, and provides one-click sync and unlink actions ([#750](https://github.com/pawtograder/platform/pull/750))
+- **Course-wide regrade requests dashboard** - A new "All regrade requests" view at Manage → Assignments shows every regrade request across all assignments in one place, with filters for status, assignment, rubric check, student, assignee, and escalation status. By default, draft and resolved requests are hidden ([#733](https://github.com/pawtograder/platform/pull/733))
+- **Cleanup individual repositories** - A new "Cleanup individual repositories" button on the assignment Repositories page lets instructors remove mistaken individual repos (created when groups were set up after release) with a double-confirmation dialog ([#720](https://github.com/pawtograder/platform/pull/720))
+- **Keyboard shortcut discovery** - A keyboard shortcuts button (⌘) is now visible in the course header toolbar, and a "Keyboard shortcuts" item has been added to the Support & Documentation menu ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Late tokens
+- **Auto-apply late tokens on submission** - Instructors can now configure assignments to automatically consume a late token when a student submits after the deadline, instead of requiring students to apply tokens manually before the deadline. The assignment page shows a notice to students when this mode is active ([#692](https://github.com/pawtograder/platform/pull/692))
+
+#### CLI
+- **Assessment export** - New `assessment export` and `assessment deanonymize` CLI commands stream a privacy-controlled snapshot of class assessment data (rubrics, scores, autograder tests, hints, gradebook) to a local directory. Supports opaque, hash, and raw identity modes ([#746](https://github.com/pawtograder/platform/pull/746))
+
+#### Infrastructure
+- **Postmark SMTP support** - The notification email processor now correctly negotiates TLS when using Postmark's SMTP service on port 2525 ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
