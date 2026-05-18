@@ -9,8 +9,19 @@ icon: "clock"
 Pawtograder supports late submission policies based on "late tokens." Instructors determine how many late tokens are available to each student, and how many tokens can be used for each late submission. Each token extends the deadline by 24 hours, with no penalty.
 
 <Warning>
-Late tokens must be applied **before** the deadline. If multiple late tokens are permitted, you can apply them all at once or one at a time, but you must always apply them before the updated deadline.
+By default, late tokens must be applied **before** the deadline. If multiple late tokens are permitted, you can apply them all at once or one at a time, but you must always apply them before the updated deadline. Some assignments may allow automatic late token application — see below.
 </Warning>
+
+## Automatic late token application
+
+Some assignments are configured to **automatically apply a late token** when you submit after the deadline. For these assignments:
+
+- You do not need to apply a token before the deadline — submitting late will automatically consume a token and extend your deadline to cover the submission.
+- The assignment page will show a message like: *"Deadline passed: submitting will auto-apply a late token if you have one remaining."*
+- If you do not have enough tokens remaining, your submission will be rejected with a message explaining how many tokens are needed.
+- If you already have an extension that covers your submission time, no additional token is consumed.
+
+For assignments that require tokens to be applied before the deadline, the assignment page will show: *"Tokens must be applied before the due date."*
 
 ## Applying Late Tokens
 
