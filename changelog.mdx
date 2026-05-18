@@ -4,6 +4,33 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 18, 2026
+
+#### Instructor tools
+
+- **Course-wide regrade requests dashboard** — A new **All regrade requests** page (accessible from **Manage → Assignments → All regrade requests**) lists every regrade request across all assignments in one place. Filter by status, assignment, rubric check, student, assignee, and escalation status. By default, draft and resolved requests are hidden; toggle the filter to see the full history. Click **Open** on any row to jump directly to the submission's file view with the request highlighted ([#733](https://github.com/pawtograder/platform/pull/733))
+- **GitHub account diagnostics for students** — Instructors can now open a GitHub diagnostics modal for any student from the Enrollments table (click the GitHub icon). The modal shows linked account, username changes, organization membership, team membership, and database org status. From the modal, instructors can **Sync permissions** or **Unlink GitHub identity** for the student ([#750](https://github.com/pawtograder/platform/pull/750))
+
+#### Assignment management
+
+- **Cleanup individual repositories** — A new **Cleanup individual repositories** button on the assignment Repositories page removes mistaken individual student repositories when groups were configured after the assignment was released. The operation archives repos on GitHub and deletes related submissions and workflow data, with a two-step confirmation dialog ([#720](https://github.com/pawtograder/platform/pull/720))
+
+#### Late tokens
+
+- **Auto-apply late tokens on late submission** — Assignments can now be configured to automatically apply a late token when a student submits after the deadline, rather than requiring students to apply tokens manually before the due date. Enable this by unchecking **Require students to apply late tokens before the original due date** in the assignment settings. The system atomically checks token balance and creates the extension in a single database operation ([#692](https://github.com/pawtograder/platform/pull/692))
+
+### May 4, 2026
+
+#### CLI features
+
+- **Assessment export** — New `assessment export` CLI command streams a privacy-controlled snapshot of class assessment data (rubrics, scores, autograder test results, hint feedback, gradebook columns) to a local directory. Supports three identity modes: `opaque` (random per-run), `hash` (deterministic, joinable across runs), and `raw` (real PII, requires `--i-understand-pii`). A companion `assessment deanonymize` command maps hash-mode tokens back to real student identifiers ([#746](https://github.com/pawtograder/platform/pull/746))
+
+#### Accessibility and usability
+
+- **Keyboard shortcut discovery controls** — A keyboard shortcuts button (⌘ icon) is now visible in the top-right toolbar, and a **Keyboard shortcuts** entry has been added to the Support & Documentation menu. Both open the existing shortcuts overlay. Press **?** anywhere to open it ([#744](https://github.com/pawtograder/platform/pull/744))
+
 ## April 2026
 
 ### April 29, 2026
