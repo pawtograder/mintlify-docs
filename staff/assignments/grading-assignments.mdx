@@ -300,6 +300,41 @@ The **Grading Status Dashboard** provides a comprehensive overview of grading pr
 
 This dashboard helps instructors identify bottlenecks, balance workload across graders, follow up with graders who may need support, and ensure timely feedback delivery to students.
 
+## Course-Wide Regrade Requests Dashboard
+
+The **All regrade requests** page gives instructors a single view of every regrade request across all assignments in the course — without needing to navigate into each assignment individually.
+
+### Accessing the dashboard
+
+From the **Manage → Assignments** page, click the **All regrade requests** button in the toolbar. You can also navigate directly to `/course/<id>/manage/regrade-requests`.
+
+### What you can see
+
+The table shows every `submission_regrade_request` in the course with the following columns:
+
+- **Status** — Draft, Pending, Resolved, Escalated, or Closed
+- **Assignment** — Links to that assignment's per-assignment regrade requests page
+- **Rubric check** — The rubric check the request is associated with
+- **Student/Group** — The submitter, with an **Open** link that jumps directly to the submission files view at the regrade request anchor
+- **Assignee** — The grader assigned to the request
+- **Points** — Initial, resolved, and escalation points
+- **Escalation granted** — Whether the escalation changed the score
+- **Discord** — Link to the Discord thread for the request (if configured)
+- **Created / Last updated** — Timestamps
+
+### Filtering
+
+By default, the table shows only **Pending** and **Escalated** requests (active requests). Use the filter controls to:
+
+- **Filter by status** — Show draft, resolved, or closed requests in addition to active ones
+- **Filter by assignment** — Focus on a single assignment
+- **Filter by student** — Find all requests from a specific student or group
+- **Filter by rubric check** — See all requests for a particular rubric item
+- **Filter by assignee** — View requests assigned to a specific grader
+- **Filter by escalation granted** — Find requests where the escalation changed the score
+
+Click **Clear Filters** to reset all filters and return to the default active-only view.
+
 ## Managing Repository Permissions
 
 For assignments with GitHub repositories, the **Fix Permissions** button on the Repositories page lets you audit and correct GitHub repository permissions for all assignment repositories in a single operation:
