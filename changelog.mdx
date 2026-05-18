@@ -4,6 +4,39 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 18, 2026
+
+#### Assessment export (CLI)
+- **New `assessment export` command** - Export a privacy-controlled snapshot of class assessment data — rubrics, scores, autograder test results, hint feedback, and gradebook columns — to a local directory for downstream analysis. Supports three identity modes: `opaque` (random per-run tokens), `hash` (deterministic HMAC tokens joinable across runs), and `raw` (real PII, requires `--i-understand-pii`). Exports run in parallel with configurable concurrency and automatic retry on transient errors ([#746](https://github.com/pawtograder/platform/pull/746))
+- **New `assessment deanonymize` command** - When using `--identity hash`, generate a CSV mapping subject tokens back to real student identifiers (name, email, SIS ID, sections) ([#746](https://github.com/pawtograder/platform/pull/746))
+
+#### Accessibility and usability
+- **Comprehensive accessibility fixes** - Multiple accessibility and usability improvements across the platform ([#753](https://github.com/pawtograder/platform/pull/753))
+
+### May 17, 2026
+
+#### Assignment management
+- **Cleanup individual repositories** - Instructors can now remove mistaken individual student repositories when an assignment was converted to group-based after release. The new **Cleanup individual repositories** button on the assignment Repositories page archives repos on GitHub and deletes related submissions and workflow data ([#720](https://github.com/pawtograder/platform/pull/720))
+
+#### Bug fixes
+- **Fixed webhook detection for grade.yml/pawtograder.yml changes** - The webhook now correctly detects changes to `grade.yml` and `pawtograder.yml` across all commits in a push, not just the most recent one ([#748](https://github.com/pawtograder/platform/pull/748))
+- **Fixed instructor role assignment when invited to multiple classes** - Users invited to an instructor role in two classes now correctly receive the role in both classes upon accepting the organization invite ([#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 16, 2026
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** - Instructors can now configure assignments to automatically apply a student's late tokens when they submit after the deadline, rather than requiring students to apply tokens manually before the due date. The assignment creation form includes a new **Require students to apply late tokens before the original due date** checkbox (enabled by default). When disabled, submitting late automatically deducts the required tokens; if the student has insufficient tokens, the submission is rejected with a clear error message ([#692](https://github.com/pawtograder/platform/pull/692))
+
+### May 4, 2026
+
+#### Navigation
+- **Keyboard shortcut discovery** - A new keyboard shortcuts button (⌘ icon) in the top-right toolbar and a **Keyboard shortcuts** entry in the Support & Documentation menu make it easy to discover available keyboard shortcuts without needing to know the `?` shortcut first ([#744](https://github.com/pawtograder/platform/pull/744))
+
+#### Email
+- **Postmark SMTP support** - The notification queue processor now correctly negotiates TLS when using Postmark's SMTP service on port 2525 ([#743](https://github.com/pawtograder/platform/pull/743))
+
 ## April 2026
 
 ### April 29, 2026
