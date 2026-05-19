@@ -348,6 +348,28 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Cleanup Individual Repositories
+
+When groups are configured after an assignment is released, some students may end up with both an individual repository and a group repository. The **Cleanup individual repositories** button on the Repositories page removes these mistaken individual repositories.
+
+To clean up individual repositories:
+
+1. Navigate to the assignment's **Repositories** page.
+2. Click **Cleanup individual repositories** (disabled if no individual repos exist).
+3. Review the warning — this will archive individual repos on GitHub and delete all related submissions, grades, and workflow data from Pawtograder.
+4. Click **Continue**, then type `CLEANUP` to confirm.
+5. Click **Confirm cleanup**.
+
+The operation:
+- Enqueues each individual repository for archival on GitHub (async)
+- Deletes all submissions, grader results, regrade requests, and workflow data tied to those repositories
+- Removes the repository records from Pawtograder
+- Leaves group repositories untouched
+
+<Warning>
+This action cannot be undone. Only use it when you are certain that the individual repositories were created by mistake and should be replaced by group repositories.
+</Warning>
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
