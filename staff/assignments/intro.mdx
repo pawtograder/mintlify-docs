@@ -201,6 +201,46 @@ This is useful for accommodating special circumstances or rewarding exceptional 
 
 When an assignment's due date is extended (either through late tokens or instructor exceptions), self-review deadlines are automatically adjusted to maintain the appropriate time window for students to complete their self-reviews.
 
+## Course-Wide Regrade Requests Dashboard
+
+The **All regrade requests** page (accessible from **Manage → Assignments → All regrade requests**) provides a single view of every regrade request across all assignments in the course.
+
+By default, draft and resolved requests are hidden so you see only active (opened and escalated) requests. Use the **Filter by Status** dropdown to include other statuses.
+
+Available filters:
+- **Status**: Filter by opened, escalated, resolved, closed, or draft
+- **Assignment**: Filter by a specific assignment
+- **Rubric Check**: Filter by the rubric check the request is about
+- **Student/Group**: Filter by student or group name
+- **Assignee**: Filter by the grader assigned to the request
+- **Escalation Granted**: Filter by whether an escalation was granted
+
+Each row links directly to the submission's files view at the regrade request anchor, matching the deep link format used in notifications and Discord.
+
+<Tip>
+Access the course-wide dashboard quickly from the **All regrade requests** button in the Manage Assignments toolbar.
+</Tip>
+
+## GitHub Account Diagnostics
+
+Instructors can diagnose and fix GitHub account issues for individual students from the **Enrollments** page. This is useful when a student cannot access their repository or has a stale GitHub username.
+
+To open the diagnostics modal:
+
+1. Navigate to **Manage → Course → Enrollments**.
+2. Find the student row and click the GitHub icon (visible for student rows only).
+
+The modal shows:
+- **Linked account**: The GitHub username currently linked to the student's Pawtograder account, and their GitHub user ID.
+- **Username changed**: Whether the stored username differs from the current GitHub username (e.g., the student renamed their GitHub account).
+- **Organization**: Whether the student is an active or pending member of the course GitHub organization.
+- **Student team**: Whether the student is a member of the course's student GitHub team.
+- **Database org status**: Whether Pawtograder has confirmed the student's org membership.
+
+From the modal you can:
+- **Sync permissions**: Re-sync the student's GitHub username and repository permissions. This updates the stored username, re-invites the student to the org/team if needed, and ensures all repositories have correct access.
+- **Unlink GitHub identity**: Remove the student's GitHub identity from Pawtograder and remove them from the course GitHub organization. Use this when a student needs to re-link a different GitHub account.
+
 ## Time Zone Support
 
 Pawtograder supports configurable time zones for displaying assignment deadlines and other time-sensitive information. Instructors can set a default time zone for the course, and individual users can configure their preferred time zone in their settings. This ensures that all deadlines are displayed accurately regardless of where students and staff are located.
