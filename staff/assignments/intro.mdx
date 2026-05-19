@@ -161,6 +161,20 @@ Each token can be exchanged for a 24-hour extension, but the extension must be r
 
 Instructors and graders can also manually grant extensions to students, gift additional late tokens to individual students, and view all extensions granted to a student. This is done in the assignment configuration under **Due Date Exceptions**. For group assignments, due date exceptions are applied at the group level so all group members receive the same extension.
 
+### Automatic Late Token Application
+
+Instructors can configure an assignment so that late tokens are applied automatically when a student submits after the deadline, rather than requiring students to apply them manually beforehand. To enable this:
+
+1. Open the assignment configuration.
+2. Uncheck **Require students to apply late tokens before the original due date**.
+3. Ensure **Max Late Tokens** is set to at least 1.
+
+When this setting is off, students who push after the deadline will have the required number of tokens deducted automatically. If they don't have enough tokens, the submission is rejected with a clear error message.
+
+<Warning>
+When automatic late token application is enabled, students are not prompted before tokens are consumed. Make sure your course policy is clearly communicated to students.
+</Warning>
+
 ### Granting Manual Extensions
 
 When granting manual extensions, instructors choose the extended due date directly using a date picker, rather than entering extension hours and minutes. This makes it easier to:
