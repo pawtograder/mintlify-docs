@@ -27,6 +27,29 @@ To grant an extension:
 
 The system will automatically calculate the extension duration based on the original due date.
 
+## Late Token Policy
+
+### Require tokens before due date
+
+By default, students must apply late tokens manually before the original due date. You can change this per assignment to allow tokens to be applied automatically when a student submits after the deadline.
+
+To configure this:
+
+1. Navigate to the assignment settings
+2. Find the **Max Late Tokens** field and set it to 1 or more
+3. Check or uncheck **Require students to apply late tokens before the original due date**:
+   - **Checked (default)**: Students must use the **Extend Due Date** button before the deadline. Submitting after the deadline without extending is rejected.
+   - **Unchecked**: A late token is automatically deducted when a student submits after the deadline. If the student has no tokens remaining, the submission is rejected with a clear error message.
+
+<Note>
+When **Require tokens before due date** is unchecked, **Max Late Tokens** must be at least 1. The assignment form enforces this validation.
+</Note>
+
+Students see a label on the assignment page indicating which policy applies:
+
+- **Tokens must be applied before the due date** — when the default policy is in effect
+- **Deadline passed: submitting will auto-apply a late token if you have one remaining** — when auto-apply is enabled and the deadline has passed
+
 ## Score Capping
 
 Instructors can configure a maximum score cap for assignments. This feature allows you to:
