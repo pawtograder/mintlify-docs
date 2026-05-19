@@ -34,6 +34,23 @@ The date picker shows the original due date and allows you to select any future 
 You can grant extensions to individual students or to entire groups for group assignments. All group members will receive the same extended deadline.
 </Tip>
 
+## Automatic Late Token Application
+
+By default, students must apply late tokens manually before the original due date. You can change this per assignment to allow tokens to be applied automatically when a student submits after the deadline.
+
+### Configuring auto-apply
+
+When creating or editing an assignment, find the **Max Late Tokens** field and the checkbox below it:
+
+- **Require students to apply late tokens before the original due date** (checked by default) — students must click **Extend Due Date** before the deadline.
+- **Uncheck** this option to enable automatic application: when a student pushes a commit after the deadline, Pawtograder deducts the required tokens and extends the deadline automatically.
+
+<Warning>
+Auto-apply requires **Max Late Tokens ≥ 1**. If you uncheck the option, the form will require you to set a positive token limit.
+</Warning>
+
+When auto-apply is enabled, students see a notice on the assignment page: *"Deadline passed: submitting will auto-apply a late token if you have one remaining."* If they don't have enough tokens, the submission is rejected with a clear message.
+
 ## Assignment Score Capping
 
 Instructors can configure a maximum score cap for assignments to prevent scores from exceeding a specified limit.
