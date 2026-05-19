@@ -4,6 +4,36 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 19, 2026
+
+#### Gradebook fixes
+- **Gradebook recalculation on active submission changes** - The gradebook now automatically recalculates assignment-dependent columns whenever a submission's active status changes. Previously, manually activating an older submission would leave the gradebook showing stale scores until the next scheduled recalculation ([#763](https://github.com/pawtograder/platform/pull/763))
+
+### May 18, 2026
+
+#### Discussion improvements
+- **Mark discussion threads as duplicates** - Graders and instructors can now merge a duplicate discussion thread into another thread. The merged post keeps a banner showing the original subject and who merged it, and the duplicate author receives an in-app notification with a link to their post in the canonical thread ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### Instructor tools
+- **GitHub account diagnostics** - Instructors can now diagnose and fix GitHub account issues for individual students from the Enrollments page. The diagnostics modal shows linked account status, username changes, org and team membership, and provides actions to sync permissions or unlink a GitHub identity ([#750](https://github.com/pawtograder/platform/pull/750))
+- **Course-wide regrade requests dashboard** - A new "All regrade requests" view is available from the Manage Assignments page, showing every regrade request across all assignments in one place. Supports filtering by status, assignment, rubric check, student, assignee, and escalation status, with deep links to submission files ([#733](https://github.com/pawtograder/platform/pull/733))
+- **Cleanup individual repositories** - Instructors can now bulk-remove individual student repositories when students were mistakenly given both an individual and a group repository. The cleanup archives repos on GitHub and removes related submissions and workflow data ([#720](https://github.com/pawtograder/platform/pull/720))
+
+#### Accessibility
+- **Keyboard shortcut discovery** - A keyboard shortcuts button (⌘) is now visible in the course header toolbar, and a "Keyboard shortcuts" item has been added to the Support & Documentation menu. Both open the existing shortcuts overlay ([#744](https://github.com/pawtograder/platform/pull/744))
+
+### May 16, 2026
+
+#### Late tokens
+- **Automatic late token application** - Assignments can now be configured to automatically apply a late token when a student submits after the deadline, instead of requiring students to apply tokens manually beforehand. Enable this by unchecking "Require students to apply late tokens before the original due date" in the assignment settings ([#692](https://github.com/pawtograder/platform/pull/692))
+
+### May 15, 2026
+
+#### CLI features
+- **Assessment export** - New `assessment export` CLI command streams a privacy-controlled snapshot of class assessment data (rubrics, scores, autograder test results, hint feedback, gradebook columns) to a local directory. Supports three identity modes: `opaque` (per-run random tokens), `hash` (deterministic HMAC tokens joinable across runs), and `raw` (real student identifiers). A companion `assessment deanonymize` command maps hash tokens back to student PII ([#746](https://github.com/pawtograder/platform/pull/746))
+
 ## April 2026
 
 ### April 29, 2026
