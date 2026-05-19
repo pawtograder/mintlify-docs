@@ -300,6 +300,44 @@ The **Grading Status Dashboard** provides a comprehensive overview of grading pr
 
 This dashboard helps instructors identify bottlenecks, balance workload across graders, follow up with graders who may need support, and ensure timely feedback delivery to students.
 
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student or group repository directly from the assignment management interface. This is useful for investigating late submissions, verifying what code was pushed at a given time, or triggering grading for a specific commit.
+
+### Viewing commit history
+
+A **Commits** column appears in the assignment management table. Click the commit history icon for any student or group to open the commit history dialog, which shows:
+
+- Commit SHA (linked to GitHub)
+- Commit date and time
+- Author
+- Commit message
+- Workflow status (e.g., "Recorded by webhook", "In progress", "Completed")
+- All submissions associated with each commit
+
+The dialog merges data from Pawtograder's database (commits received via push webhook) with the full commit list from the GitHub API, so you can see commits that were never submitted as well as those that were.
+
+<Note>
+Commit timestamps shown in the "Date" column are the author-supplied git dates, which can be backdated by adjusting the local clock. For commits received via push webhook, a "received" timestamp is also shown — this server-side timestamp is trustworthy. Commits sourced only from the GitHub API have no server-side receipt.
+</Note>
+
+### Triggering grading manually
+
+From the commit history dialog on a student's submission page, instructors can manually trigger grading for any commit — including commits that were never submitted or that were pushed after the deadline.
+
+To trigger grading for a specific commit:
+
+1. Open the **Commit History** dialog from the submission view.
+2. Find the commit you want to grade.
+3. Click **Create submission and activate** (for commits with no existing submission) or **Activate** (for commits with an existing submission).
+4. Confirm the action in the pop-up.
+
+**Staff-triggered grading overrides deadlines and submission limits.** The resulting submission is automatically activated as the student's active submission once the grading workflow completes.
+
+<Warning>
+Manually triggering grading bypasses the assignment's due date and submission count limits. Use this only when you intentionally want to grade a commit outside the normal submission window.
+</Warning>
+
 ## Managing Repository Permissions
 
 For assignments with GitHub repositories, the **Fix Permissions** button on the Repositories page lets you audit and correct GitHub repository permissions for all assignment repositories in a single operation:
