@@ -34,6 +34,32 @@ The date picker shows the original due date and allows you to select any future 
 You can grant extensions to individual students or to entire groups for group assignments. All group members will receive the same extended deadline.
 </Tip>
 
+## Automatic Late Token Application
+
+By default, students must apply late tokens **before** the assignment deadline. You can change this behavior per assignment to allow tokens to be applied automatically when a student submits after the deadline.
+
+### Configuring automatic late token application
+
+When creating or editing an assignment, find the **Require students to apply late tokens before the original due date** checkbox:
+
+- **Checked (default)**: Students must manually apply tokens before the deadline using the **Extend Due Date** button. Submissions after the deadline are rejected.
+- **Unchecked**: When a student submits after the deadline, Pawtograder automatically deducts the required number of tokens and extends their deadline to cover the submission. If the student has insufficient tokens, the submission is rejected with a clear error message.
+
+<Warning>
+When unchecked, **Max Late Tokens** must be set to at least 1. The system enforces this validation when saving the assignment.
+</Warning>
+
+### Student experience
+
+When automatic application is enabled, students see:
+
+- A label on the assignment page: *"Deadline passed: submitting will auto-apply a late token if you have one remaining"*
+- A note in the Extend Due Date dialog explaining that tokens can be applied before the deadline or automatically on late submission
+
+### Idempotency
+
+The auto-apply mechanism is idempotent: if a student pushes multiple commits in quick succession after the deadline, only one token extension is created. Subsequent pushes within the same extended window are accepted without consuming additional tokens.
+
 ## Assignment Score Capping
 
 Instructors can configure a maximum score cap for assignments to prevent scores from exceeding a specified limit.
