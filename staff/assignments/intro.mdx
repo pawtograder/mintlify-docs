@@ -41,6 +41,46 @@ Run the audit periodically, especially after:
 Run the permissions audit if students report being unable to access their repositories or if you've made manual changes to GitHub teams.
 </Note>
 
+### GitHub Account Diagnostics
+
+Instructors can diagnose and fix GitHub account issues for individual students from the **Enrollments** page. This is useful when a student cannot access their repository or is not appearing in the course GitHub organization.
+
+To open the diagnostics panel for a student:
+
+1. Navigate to **Manage → Enrollments**.
+2. Find the student row and click the **GitHub** icon (diagnose GitHub errors).
+3. The diagnostics panel shows:
+   - **Linked account**: The GitHub username connected to the student's Pawtograder account.
+   - **Username changed**: Whether the stored username differs from the current GitHub username.
+   - **Organization**: Whether the student is an active or pending member of the course GitHub org.
+   - **Student team**: Whether the student is a member of the course student team.
+   - **Database org status**: Whether Pawtograder has confirmed the student's org membership.
+
+From this panel you can:
+
+- **Sync permissions**: Re-run the GitHub sync for the student, updating their username and re-inviting them to the org and team if needed.
+- **Unlink GitHub identity**: Remove the student's GitHub connection from Pawtograder and remove them from the course GitHub organization. The student will need to reconnect their GitHub account.
+
+<Warning>
+Unlinking a student's GitHub identity is irreversible. The student will lose access to their GitHub repositories until they reconnect their account.
+</Warning>
+
+### Cleaning Up Individual Repositories
+
+If groups were configured after an assignment was released, some students may have ended up with both an individual repository and a group repository. The **Cleanup individual repositories** button on the assignment's **Repositories** page removes these mistaken individual repositories.
+
+When you run the cleanup:
+
+- Individual student repositories (those not associated with a group) are queued for archival on GitHub.
+- Related submissions, grades, and workflow data are deleted from Pawtograder.
+- The individual repository records are removed. Group repositories are not affected.
+
+The button is disabled if there are no individual repositories for the assignment. A two-step confirmation dialog (including typing `CLEANUP`) is required before the operation runs.
+
+<Warning>
+This operation cannot be undone. Only run it when you are certain that individual repositories were created by mistake and all relevant work is in group repositories.
+</Warning>
+
 ## Repositories
 
 Two repositories are automatically created for each assignment: a "handout" repository and a "grader" repository. These repositories must be configured by the staff before the assignment is released.
