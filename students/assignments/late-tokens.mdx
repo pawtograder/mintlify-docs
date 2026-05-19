@@ -34,6 +34,21 @@ After applying the token, you'll see the new due date.
 
 To use multiple late tokens, click the **Extend Due Date** button again.
 
+## Automatic Late Token Application
+
+Some assignments allow late tokens to be applied automatically when you submit after the deadline. When this policy is enabled:
+
+- You do **not** need to click **Extend Due Date** before submitting.
+- When you push a commit after the deadline, Pawtograder automatically deducts the required number of tokens and extends your deadline to cover the submission.
+- If you don't have enough tokens remaining, the submission is rejected with a message explaining how many tokens are needed.
+- The assignment page shows the message: *"Deadline passed: submitting will auto-apply a late token if you have one remaining."*
+
+When the standard policy is in effect (tokens must be applied before the deadline), the assignment page shows: *"Tokens must be applied before the due date."*
+
+<Warning>
+Even with auto-apply enabled, you must have enough tokens available at the time of submission. Check your remaining token balance before submitting late.
+</Warning>
+
 ## Gifted Late Tokens
 
 Instructors can gift additional late tokens to individual students beyond the class-wide allocation, on a case-by-case basis. Gifted tokens:
