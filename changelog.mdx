@@ -4,6 +4,28 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 19, 2026
+
+#### Discussion improvements
+- **Mark duplicate threads** - Graders and instructors can now merge a duplicate discussion thread into another thread. The duplicate post and all its replies are moved under the original thread, a banner shows the former subject and who merged it, and the duplicate author receives an in-app notification (and email) with a deep link to their merged post ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### Instructor tools
+- **GitHub account diagnostics** - A new GitHub diagnostics modal is available on the Enrollments page for each student. Instructors can view the student's linked GitHub account, check organization and team membership status, detect username changes, and take action to sync permissions or unlink the GitHub identity ([#750](https://github.com/pawtograder/platform/pull/750))
+- **Course-wide regrade requests dashboard** - A new **All regrade requests** page under Manage → Assignments lists every regrade request across all assignments in one place. Filter by status, assignment, rubric check, student, assignee, and escalation status. Draft and resolved requests are hidden by default; uncheck **Hide draft and resolved** to see the full history ([#733](https://github.com/pawtograder/platform/pull/733))
+- **Cleanup individual assignment repositories** - A new **Cleanup individual repositories** button on the assignment Repositories page lets instructors bulk-archive and remove individual student repos when groups were configured after the assignment was released ([#720](https://github.com/pawtograder/platform/pull/720))
+
+#### Late tokens
+- **Auto-apply late tokens on late submission** - Assignments can now be configured to automatically apply a late token when a student submits after the deadline, instead of requiring students to apply tokens manually before the due date. Enable this by unchecking **Require students to apply late tokens before the original due date** in the assignment settings ([#692](https://github.com/pawtograder/platform/pull/692))
+
+#### CLI features
+- **Assessment export** - The CLI now supports `pawtograder assessment export` to stream a privacy-controlled snapshot of rubrics, scores, autograder test results, hint feedback, and gradebook columns for a class. Supports `--identity opaque` (default), `--identity hash` (deterministic, joinable across runs), and `--identity raw` (real PII, requires `--i-understand-pii`). A companion `pawtograder assessment deanonymize` command maps subject tokens back to student identifiers ([#746](https://github.com/pawtograder/platform/pull/746))
+
+#### Bug fixes
+- **Sync handout to repository now works with large files (>5 MB)** - The handout sync pipeline now handles large binary and text files without running out of memory. Files are fetched lazily one at a time, binary blobs are copied using a raw-bytes path that avoids double base64 materialization, and a per-file cap (75 MB) and cumulative budget (200 MB) guard against oversized handouts ([#749](https://github.com/pawtograder/platform/pull/749))
+- **Gradebook recalculation on active submission changes** - Fixed an issue where the gradebook was not recalculated when the active submission changed ([#763](https://github.com/pawtograder/platform/pull/763))
+
 ## April 2026
 
 ### April 29, 2026
