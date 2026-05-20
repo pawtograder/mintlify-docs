@@ -310,6 +310,58 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Course-Wide Regrade Requests Dashboard
+
+The **All regrade requests** page provides a single view of every regrade request across all assignments in the course. Access it from **Manage → Assignments → All regrade requests**.
+
+By default, the dashboard shows only active requests (status: **Pending** or **Escalated**). Draft and resolved requests are hidden to reduce noise. Uncheck **Hide draft and resolved** to load the full history.
+
+### Filtering and sorting
+
+Use the filter controls to narrow results by:
+
+- **Status**: Draft, Pending, Resolved, Escalated, or Closed
+- **Assignment**: Filter to a specific assignment
+- **Rubric check**: Filter by the rubric check the request is about
+- **Student/Group**: Filter by student or group name
+- **Assignee**: Filter by the grader assigned to the request
+- **Escalation granted**: Show only requests where an escalation was or was not granted
+
+Click any column header to sort. Click **Clear Filters** to reset all filters and sorting.
+
+### Opening a request
+
+Click **Open** next to any row to jump directly to the submission's files view with the regrade request highlighted. The assignment title in each row links to that assignment's dedicated regrade requests page.
+
+## Viewing Commit History and Triggering Grading
+
+Instructors can view the full commit history for any student repository and manually trigger grading for any commit, bypassing due-date deadlines and submission limits.
+
+### From the submission view
+
+When viewing a student's submission as an instructor, click **Commit History** to open a full-screen dialog showing all commits for that repository. The dialog shows:
+
+- Commit SHA, date/time, author, and message
+- Workflow status (e.g. "Completed: success", "In progress", "Not triggered")
+- All submissions linked to each commit
+
+The currently active submission is highlighted. You can:
+
+- **Activate** an existing submission for a commit (makes it the active submission used for grading).
+- **Create submission and activate** for a commit that has no submission yet — this triggers the grading workflow and automatically activates the resulting submission when it arrives.
+
+### From the assignment management table
+
+A **Commits** column in the assignment management table provides quick access to the commit history dialog for any student or group.
+
+### Timestamp notes
+
+The commit date shown is the author date set by git on the committer's machine, which can be backdated. For commits recorded via a push webhook, a **received** timestamp shows when Pawtograder's server first saw the commit — this timestamp is trustworthy. Commits sourced only from the GitHub API show only the author-supplied date.
+
+<Note>
+Instructor-triggered grading overrides deadlines and submission limits. Use this feature to grade late work or re-run grading for a specific commit.
+</Note>
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
