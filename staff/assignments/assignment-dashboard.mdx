@@ -80,6 +80,35 @@ Perform common assignment management tasks directly from the dashboard:
 - **Check security**: Open the security dashboard.
 - **Export data**: Download submission and grading data.
 
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student repository and manually trigger grading for any commit — including commits that were never submitted or that were submitted after the deadline.
+
+### Viewing commit history
+
+From a student's submission page, click **Commit History** to open the commit history dialog. The dialog shows:
+
+- **Commit SHA** (linked to GitHub)
+- **Commit date and time** (the author-supplied date; for commits recorded via push webhook, a "received" timestamp shows when Pawtograder first saw the commit)
+- **Author**
+- **Commit message**
+- **Workflow status** (Not triggered, Requested, Workflow triggered, In progress, Completed)
+- **Submissions** linked to each commit
+
+<Note>
+The commit date is set by git on the committer's machine and can be backdated. For commits recorded via push webhook, the "received" timestamp is trustworthy. For commits sourced only from the GitHub API, only the author-supplied date is available.
+</Note>
+
+### Triggering grading manually
+
+For commits that have no submission yet, click **Create submission and activate** to trigger the grading workflow. The resulting submission will automatically become the active submission once the workflow completes.
+
+For commits that already have a submission, click **Activate** to make that submission the active one.
+
+<Warning>
+Instructor-triggered grading overrides deadlines and submission limits. Use this to grade late work or re-grade a specific commit.
+</Warning>
+
 ## Filtering and Sorting
 
 Customize your dashboard view:
