@@ -46,6 +46,26 @@ Score capping is configured in the assignment settings and applies automatically
 
 The score cap will apply to all submissions for that assignment.
 
+## Late Token Policy
+
+### Require tokens before due date
+
+By default, students must apply late tokens **before** the original due date. You can change this behavior per assignment:
+
+- **Checked (default)**: Students must manually apply tokens before the deadline using the **Extend Due Date** button. Submissions after the deadline are rejected.
+- **Unchecked**: A late token is applied **automatically** when a student submits after the deadline. The system deducts the required number of tokens from the student's balance at submission time. If the student does not have enough tokens, the submission is rejected with a clear error message.
+
+To configure this setting:
+
+1. Navigate to the assignment settings (create or edit an assignment).
+2. Find the **Max Late Tokens** field and set it to at least 1 (required when automatic application is enabled).
+3. Check or uncheck **Require students to apply late tokens before the original due date**.
+4. Save the assignment.
+
+<Note>
+When automatic late-token application is enabled, **Max Late Tokens** must be greater than 0. The form will show a validation error if you try to save with 0 max tokens and automatic application enabled.
+</Note>
+
 ## Export Options
 
 ### Loading States for Export Buttons
