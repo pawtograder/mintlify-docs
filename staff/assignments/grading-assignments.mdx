@@ -310,6 +310,46 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student's assignment repository and manually trigger grading for specific commits.
+
+### Viewing commit history
+
+From the submission view for a student, click **Commit History** to open a full-screen dialog showing:
+
+- Every commit in the repository (fetched from GitHub), merged with any commits already recorded by Pawtograder's webhook
+- Commit date/time, author, and message
+- Workflow status for each commit (Not triggered, Requested, In progress, Completed)
+- All submissions linked to each commit, with autograder scores and links to the submission page
+
+Commits are color-coded by source:
+- **Recorded by webhook**: Pawtograder received a push event for this commit
+- **Recorded by webhook + GitHub**: Commit is in both the database and GitHub's API
+- **From GitHub**: Commit exists only in GitHub's history (no push event was received)
+
+<Note>
+The "Date" column shows the commit's author date, which is set by git on the committer's machine and can be backdated. For commits recorded via webhook, a "received" timestamp shows when Pawtograder's server first saw the commit — that timestamp is trustworthy. For GitHub-only commits, only the author-supplied date is available.
+</Note>
+
+### Triggering grading manually
+
+For commits that have no submission yet, instructors can trigger grading directly from the commit history dialog:
+
+1. Find the commit in the history table.
+2. Click **Create submission and activate** in the Action column.
+3. Confirm the action in the pop-up.
+
+Pawtograder will trigger the grading workflow for that commit. When the resulting submission appears, it is automatically activated as the student's active submission.
+
+**Staff-triggered grading overrides deadlines and submission limits.** This is intentional — use it to grade late work, re-run grading after a rubric change, or recover from a missed push event.
+
+For commits that already have a submission, you can click **Activate** to make that submission the active one without re-running the autograder.
+
+### Triggering grading from the assignments table
+
+Instructors can also access commit history from the **Manage → Assignments** table. A **Commits** column provides a quick link to the commit history dialog for each student row.
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
