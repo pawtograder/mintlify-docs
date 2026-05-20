@@ -116,6 +116,69 @@ npm run cli -- assignments delete <identifier> \
 - `--workdir <path>`: Local directory for git clones (required for repo operations)
 - `--concurrency <n>`: Parallel operations (1-8, default 4)
 
+### Assessment export
+
+Export a privacy-controlled snapshot of class assessment data — rubrics, final grading review scores, autograder test results, hint feedback, and gradebook columns.
+
+```bash
+# Export with opaque (per-run random) identifiers (default)
+npm run cli -- assessment export --class <identifier>
+
+# Export with deterministic hash identifiers (joinable across runs)
+npm run cli -- assessment export \
+  --class <identifier> \
+  --identity hash \
+  --salt <at-least-16-chars>
+
+# Export with real student identifiers (requires acknowledgement)
+npm run cli -- assessment export \
+  --class <identifier> \
+  --identity raw \
+  --i-understand-pii
+
+# Export only specific assignments
+npm run cli -- assessment export \
+  --class <identifier> \
+  --assignment hw-1 \
+  --assignment hw-2
+
+# Export with test output included (can be large)
+npm run cli -- assessment export \
+  --class <identifier> \
+  --with-test-output \
+  --test-output-max-bytes 8192
+```
+
+The export writes a directory containing:
+- `manifest.json` — metadata about the export (identity mode, timestamp, totals)
+- `subjects.json` — enrolled students with section assignments
+- `sections.json` — class and lab section metadata
+- `assignments.json` — assignment catalog
+- `gradebook-columns.json` — gradebook column definitions
+- `assignments/<slug>/` — per-assignment data (rubric, autograder config, submissions, scores, tests, hints)
+- `gradebook/scores.json` — instructor-side gradebook cells
+
+#### Identity modes
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt; tokens are only joinable within a single export run |
+| `hash` | HMAC of student ID with a caller-supplied `--salt`; tokens are deterministic and joinable across runs with the same salt |
+| `raw` | Real student IDs, emails, and names; requires `--i-understand-pii` |
+
+#### Deanonymize (hash mode only)
+
+After exporting with `--identity hash`, you can produce a CSV mapping subject tokens back to real student identifiers:
+
+```bash
+npm run cli -- assessment deanonymize \
+  --class <identifier> \
+  --salt <same-salt-as-export> \
+  --i-understand-pii
+```
+
+The output CSV contains: `subject_token, name, email, sis_user_id, class_section, lab_section`.
+
 ### Rubrics
 
 Import and export rubrics in YAML format:
