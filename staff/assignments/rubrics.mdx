@@ -285,7 +285,38 @@ parts:
 
 ## Editing Rubrics
 
-When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
+The rubric editor offers two views you can switch between at any time using the **GUI** and **YAML source** toggle buttons at the top of the editor.
+
+### GUI editor
+
+The GUI editor provides a visual tree of your rubric's parts, criteria, and checks. You can:
+
+- **Drag and drop** parts, criteria, and checks to reorder them within their parent container.
+- **Add criteria from templates** — click **Add criterion** inside a part to choose from built-in templates such as Met / partial / not met, Four-tier, Multi-option check, and Code-quality deductions.
+- **Edit inline** — click any field to edit it directly. Changes are debounced so typing doesn't cause lag on large rubrics.
+- **Manage check references** — expand the **References** section on any check to link it to a check from another rubric round (e.g., link a grading-review check to the matching self-review check).
+
+The preview pane on the right updates in real time as you make changes in the GUI editor.
+
+### YAML source editor
+
+The YAML source editor gives you direct access to the underlying YAML representation. It includes:
+
+- Syntax highlighting and schema validation via Monaco editor.
+- Inline error markers for invalid YAML or schema violations.
+- Points-adjustment warnings when negative point values are automatically corrected.
+
+Switching from YAML to GUI requires the YAML to be valid. If there are errors, fix them first before toggling.
+
+### Switching between views
+
+Your view preference (GUI or YAML source) is remembered per browser session. Both views are bound to the same in-memory rubric, so toggling is lossless — edits made in one view are reflected in the other.
+
+When you save, the editor uses whichever view is currently active. If you are in GUI mode, any pending debounced edits are flushed before saving.
+
+### Unsaved changes protection
+
+Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
 
@@ -296,15 +327,6 @@ This protection applies when:
 - Using the mobile navigation dropdown
 
 The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning clears automatically.
-
-### Keyboard shortcuts
-
-Speed up rubric editing with keyboard shortcuts:
-
-- `Ctrl/Cmd + S`: Save rubric
-- `Ctrl/Cmd + Z`: Undo last change
-- `Ctrl/Cmd + Shift + Z`: Redo
-- `Esc`: Close current dialog
 
 <Tip>
 If you're working on rubrics across multiple tabs, only the currently visible tab will manage the unsaved changes warning to avoid false alerts.
