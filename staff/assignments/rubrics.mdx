@@ -285,7 +285,33 @@ parts:
 
 ## Editing Rubrics
 
-When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
+The rubric editor offers two views that you can switch between at any time using the **GUI** and **YAML source** buttons in the toolbar:
+
+### GUI editor
+
+The GUI editor provides a visual tree of your rubric with drag-and-drop reordering and inline forms for every field. Use it to:
+
+- **Add parts, criteria, and checks** using the **Add part** / **Add criterion** / **Add check** buttons. Criteria can be added from built-in templates (Met/Not met, Met/Partial/Not met, four-tier, multi-option, annotation deductions, and penalty-only).
+- **Reorder** parts, criteria, and checks by dragging the grip handle on the left of each row.
+- **Edit fields inline** — names, descriptions, points, scoring mode, student visibility, and more — without leaving the tree.
+- **Configure check type** — checkbox (or radio when min/max checks are both 1), multi-option, or annotation — using the radio group inside each check card.
+- **Manage cross-rubric references** from within each check card (see [References Across Rubrics](#references-across-rubrics)).
+
+The preview pane on the right updates in real time as you make changes.
+
+### YAML source editor
+
+The YAML source editor gives you direct access to the underlying YAML with syntax highlighting and schema validation. Switch to it when you need to paste in a rubric from another tool, make bulk edits, or use advanced fields not yet exposed in the GUI.
+
+<Tip>
+Switching from YAML to GUI requires valid YAML. If there are parse errors, fix them first before toggling to the GUI view.
+</Tip>
+
+Both views share the same in-memory rubric, so toggling between them is lossless. The **Save** button works the same way in both views.
+
+### Unsaved changes protection
+
+Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears. Tabs with unsaved changes are marked with an asterisk (*).
 
 This protection applies when:
 
