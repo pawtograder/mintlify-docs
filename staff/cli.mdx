@@ -471,6 +471,105 @@ npm run cli -- discussions export \
   --output discussions.csv
 ```
 
+### Assessment export
+
+Export a privacy-controlled snapshot of class assessment data — rubrics, final grading review scores, autograder test results, hint feedback, and gradebook columns — for downstream analysis.
+
+```bash
+# Export with opaque (per-run random) subject tokens (default)
+npm run cli -- assessment export --class cs3500-fall-2025
+
+# Export with deterministic tokens joinable across runs
+npm run cli -- assessment export \
+  --class cs3500-fall-2025 \
+  --identity hash \
+  --salt "your-secret-salt-here"
+
+# Export real student identifiers (requires acknowledgement)
+npm run cli -- assessment export \
+  --class cs3500-fall-2025 \
+  --identity raw \
+  --i-understand-pii
+
+# Export only specific assignments
+npm run cli -- assessment export \
+  --class cs3500-fall-2025 \
+  --assignment hw-1 \
+  --assignment hw-2
+
+# Export with test output included (can be large)
+npm run cli -- assessment export \
+  --class cs3500-fall-2025 \
+  --with-test-output \
+  --test-output-max-bytes 8192
+
+# Deanonymize: map subject tokens back to real student identifiers
+npm run cli -- assessment deanonymize \
+  --class cs3500-fall-2025 \
+  --salt "your-secret-salt-here" \
+  --i-understand-pii
+```
+
+#### Identity modes
+
+| Mode | Description |
+|------|-------------|
+| `opaque` (default) | Random salt generated per run. Tokens are only joinable within a single export run. |
+| `hash` | Deterministic HMAC tokens derived from `--salt`. Tokens are joinable across runs that use the same salt. |
+| `raw` | Real student IDs, emails, and names. Requires `--i-understand-pii`. |
+
+#### Output structure
+
+The export writes to a timestamped directory (e.g. `assessment-export-cs3500-fall-2025-20260520-120000/`):
+
+```
+manifest.json          # Export metadata and totals
+subjects.json          # One record per enrolled student
+sections.json          # Class and lab sections
+assignments.json       # Assignment catalog
+gradebook-columns.json # Gradebook column definitions
+assignments/
+  hw-1/
+    manifest.json
+    rubric.json        # Rubric tree (parts, criteria, checks)
+    autograder.json    # Autograder config and test catalog
+    submissions.json   # Active submissions
+    scores.json        # Rubric check results from final grading review
+    tests.json         # Autograder test results
+    hints.json         # Hint feedback
+gradebook/
+  scores.json          # Instructor-side gradebook cells
+```
+
+All files are written with restrictive permissions (`0o600`) to protect student data.
+
+#### Assignment and gradebook column selectors
+
+Use `--assignment` and `--gradebook-column` to filter the export. Each selector can be:
+- A numeric ID
+- An exact slug
+- A glob pattern (e.g. `hw-*`, `lab?`)
+
+Unmatched selectors are reported as warnings in the output.
+
+#### Deanonymization
+
+If you exported with `--identity hash`, you can later produce a CSV mapping subject tokens back to real student identifiers:
+
+```bash
+npm run cli -- assessment deanonymize \
+  --class cs3500-fall-2025 \
+  --salt "your-secret-salt-here" \
+  --i-understand-pii \
+  --output roster.csv
+```
+
+The output CSV has columns: `subject_token, name, email, sis_user_id, class_section, lab_section`.
+
+<Warning>
+The deanonymization CSV contains real student PII. Store it securely and handle it according to your institution's data policies.
+</Warning>
+
 ## Common Workflows
 
 ### Copying a Course Between Semesters
