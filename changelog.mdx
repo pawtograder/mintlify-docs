@@ -4,6 +4,38 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 20, 2026
+
+#### Performance improvements
+- **Faster instructor page loading** - Instructor and grader pages now stream immediately instead of blocking on large data prefetches. High-volume management tables (enrollments, due-date exceptions, repositories, workflow runs, grading review assignments) now use row virtualization for smooth scrolling with large classes ([#708](https://github.com/pawtograder/platform/pull/708))
+- **Unified due-date exceptions table** - The Assignment Exceptions page now shows all exceptions in a single virtualized table with assignment, student/group, and token filters, replacing the previous per-assignment accordion layout ([#708](https://github.com/pawtograder/platform/pull/708))
+
+#### Bug fixes
+- **Submission history scores update in real time** - The Submission History popover's Total Score column now updates live when a grading review is completed, without requiring a page reload ([#769](https://github.com/pawtograder/platform/pull/769))
+
+### May 19, 2026
+
+#### Instructor tools
+- **Commit history and manual grading trigger** - Instructors can now open a full commit history dialog from any submission view. The dialog shows each commit's date, author, message, and workflow status alongside linked submissions. Instructors can trigger grading for any commit — including commits past the deadline — and the resulting submission is automatically activated ([#764](https://github.com/pawtograder/platform/pull/764))
+- **GitHub diagnostics for students** - A new GitHub diagnostics modal on the Enrollments page lets instructors check a student's linked GitHub account, org/team membership status, and username changes. Instructors can also sync GitHub permissions or unlink a student's GitHub identity directly from the modal ([#750](https://github.com/pawtograder/platform/pull/750))
+- **Course-wide regrade requests dashboard** - A new **All regrade requests** page (accessible from Manage → Assignments toolbar) shows every regrade request across all assignments in one place. Filter by status, assignment, rubric check, student, assignee, and escalation status. Draft and resolved requests are hidden by default ([#733](https://github.com/pawtograder/platform/pull/733))
+- **Cleanup individual repositories** - A new **Cleanup individual repositories** button on the assignment Repositories page removes mistaken individual repos when an assignment should be group-only (for example, when groups were configured after the assignment was released). The operation archives repos on GitHub and deletes related submissions and workflow data ([#720](https://github.com/pawtograder/platform/pull/720))
+
+#### Bug fixes
+- **Gradebook recalculation on active submission changes** - Fixed an issue where the gradebook was not recalculating correctly when the active submission changed ([#763](https://github.com/pawtograder/platform/pull/763))
+- **Handout sync with large files** - Fixed syncing handout repositories that contain files larger than 5 MB ([#749](https://github.com/pawtograder/platform/pull/749))
+- **Large assignment deletes** - Assignment deletion now uses an async archive queue, preventing timeouts for assignments with many submissions ([#765](https://github.com/pawtograder/platform/pull/765))
+
+### May 18, 2026
+
+#### Discussion improvements
+- **Mark thread as duplicate** - Graders and instructors can now merge a duplicate discussion thread into the original. The duplicate's replies are moved under the original thread, a banner shows the former subject and who merged it, and the duplicate author receives a notification with a link to their post in the canonical thread ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### CLI features
+- **Assessment export** - New `pawtograder assessment export` command streams a privacy-controlled snapshot of class assessment data (rubrics, scores, autograder test results, hint feedback, gradebook) to a local directory. Supports `--identity opaque/hash/raw` modes for anonymization, parallel per-assignment export, and a `deanonymize` subcommand to map tokens back to student identifiers ([#746](https://github.com/pawtograder/platform/pull/746))
+
 ## April 2026
 
 ### April 29, 2026
