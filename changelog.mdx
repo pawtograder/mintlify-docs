@@ -4,6 +4,34 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 20, 2026
+
+#### Instructor tools
+- **Commit history and manual grading trigger** - Instructors can now view the full commit history for any student repository and manually trigger grading for specific commits, bypassing deadlines and submission limits. The commit history dialog merges webhook-recorded commits with the live GitHub commit list and shows workflow status and linked submissions for each commit. A "Commits" column in the assignment management table provides quick access ([#764](https://github.com/pawtograder/platform/pull/764))
+- **Fix: submission history now reflects real-time review changes** - The submission history panel now updates in real-time when grading reviews change ([#769](https://github.com/pawtograder/platform/pull/769))
+- **Fix: code renderer follows app theme** - The code renderer in submission views now follows the application's light/dark mode setting instead of the OS setting ([#770](https://github.com/pawtograder/platform/pull/770))
+
+### May 19, 2026
+
+#### Instructor tools
+- **Instructor page performance improvements** - Instructor and grader pages now stream immediately for large courses. Server-side prefetch is skipped for staff roles, and high-volume tables (enrollments, repositories, workflow runs, review assignments, due-date exceptions) now use lightweight row-window virtualization for smooth scrolling ([#708](https://github.com/pawtograder/platform/pull/708))
+- **Cleanup individual repositories** - A new **Cleanup individual repositories** button on the assignment Repositories page lets instructors remove mistaken individual student repos when groups were configured after the assignment was released. The operation archives repos on GitHub and deletes related submissions and workflow data ([#720](https://github.com/pawtograder/platform/pull/720))
+- **Fix: gradebook recalculation on active submission changes** - Gradebook scores now correctly recalculate when the active submission changes ([#763](https://github.com/pawtograder/platform/pull/763))
+- **Fix: large assignment deletes now use async queue** - Deleting assignments with many repositories now uses an async archive queue to avoid timeouts ([#765](https://github.com/pawtograder/platform/pull/765))
+
+### May 18, 2026
+
+#### Discussion
+- **Mark thread as duplicate** - Graders and instructors can now merge a duplicate discussion thread into an existing thread. The duplicate's replies are moved under the original, a banner shows the former subject and who merged it, and the duplicate author receives an in-app notification with a link to their post ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### Instructor tools
+- **Course-wide regrade requests dashboard** - A new **All regrade requests** page (accessible from the Manage Assignments toolbar) shows every regrade request across all assignments in one virtualized table. Filter by status, assignment, rubric check, student, assignee, and escalation outcome. By default, draft and resolved requests are hidden ([#733](https://github.com/pawtograder/platform/pull/733))
+- **Instructor GitHub diagnostics** - Instructors can now diagnose and fix GitHub account issues for individual students from the Enrollments page. The diagnostics modal shows linked account, username changes, org/team membership, and database org status, with actions to sync permissions or unlink the GitHub identity ([#750](https://github.com/pawtograder/platform/pull/750))
+- **Assessment export (CLI)** - The Pawtograder CLI now supports `assessment export` and `assessment deanonymize` commands for streaming privacy-controlled snapshots of rubrics, scores, autograder results, hint feedback, and gradebook columns ([#746](https://github.com/pawtograder/platform/pull/746))
+- **Fix: sync handout to repository works with large files** - Handout sync now correctly handles files larger than 5 MB ([#749](https://github.com/pawtograder/platform/pull/749))
+
 ## April 2026
 
 ### April 29, 2026
