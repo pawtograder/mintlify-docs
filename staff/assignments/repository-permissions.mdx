@@ -44,6 +44,77 @@ Use the Fix Permissions tool when:
 - After manually modifying groups outside of the normal workflow
 - As a preventive measure before an assignment deadline
 
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student repository and manually trigger grading for specific commits.
+
+### Viewing commit history
+
+From the assignment's **Repositories** page, click the **Commits** button in the Actions column for any repository. The commit history dialog shows:
+
+- Commit SHA, date/time, author, and message
+- Workflow status (requested, in progress, completed, etc.)
+- All submissions linked to each commit
+
+Commits are sourced from both Pawtograder's webhook records and the GitHub API, so you can see commits that were never submitted as well as those that were.
+
+<Note>
+The "Date" column shows the commit's author date, which is set by git on the committer's machine and can be backdated. For commits recorded via a push webhook, a "received" timestamp shows when Pawtograder's server first saw the commit — that timestamp is trustworthy.
+</Note>
+
+### Triggering grading manually
+
+For commits that have no submission yet, click **Create submission and activate** in the commit history dialog. This:
+
+1. Triggers the grading workflow for that specific commit.
+2. Automatically activates the resulting submission once it appears.
+3. Bypasses due-date deadlines and submission limits (staff-triggered grading always overrides these).
+
+You can also activate an existing (non-active) submission for a commit by clicking **Activate** in the Actions column.
+
+## Cleanup Individual Repositories
+
+If students were given both an individual repository and a group repository by mistake (for example, groups were configured after the assignment was released), you can remove the individual repositories in bulk.
+
+### Using the cleanup tool
+
+1. Navigate to the assignment's **Repositories** page.
+2. Click **Cleanup individual repositories** in the toolbar.
+3. Read the warning — this operation deletes submissions, grades, and workflow data for the individual repositories.
+4. Click **Continue**, then type `CLEANUP` to confirm.
+5. Click **Confirm cleanup**.
+
+The cleanup operation:
+- Archives individual student repositories on GitHub (asynchronously).
+- Deletes related submissions, grader results, and workflow data from Pawtograder.
+- Removes the individual repository records (group repositories are unchanged).
+
+<Warning>
+This operation cannot be undone. Only use it when you are certain that the individual repositories are mistaken duplicates and all relevant data is in the group repositories.
+</Warning>
+
+## GitHub Diagnostics
+
+Instructors can diagnose and fix GitHub account issues for individual students from the **Enrollments** page.
+
+### Accessing diagnostics
+
+1. Navigate to **Manage → Course → Enrollments**.
+2. Find the student row and click the GitHub icon (purple) in the Actions column.
+
+The diagnostics modal shows:
+
+- **Linked account**: The GitHub username linked to the student's Pawtograder account.
+- **Username changed**: Whether the stored username differs from the current GitHub username (detected via GitHub user ID).
+- **Organization**: Whether the student has joined the course GitHub organization.
+- **Student team**: Whether the student is a member of the course student team.
+- **Database org status**: Whether Pawtograder has recorded the student as having confirmed org membership.
+
+### Actions
+
+- **Sync permissions**: Re-syncs the student's GitHub username and re-invites them to the org/team and any assignment repositories. Use this when a student's GitHub username has changed or their permissions are out of sync.
+- **Unlink GitHub identity**: Removes the student's GitHub identity from Pawtograder, removes them from the course GitHub organization, and clears stored GitHub metadata. Use this when a student needs to re-link a different GitHub account.
+
 ## How Permissions Are Managed
 
 Pawtograder automatically manages repository permissions when:
