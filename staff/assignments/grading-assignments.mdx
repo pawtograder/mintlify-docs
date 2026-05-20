@@ -300,6 +300,41 @@ The **Grading Status Dashboard** provides a comprehensive overview of grading pr
 
 This dashboard helps instructors identify bottlenecks, balance workload across graders, follow up with graders who may need support, and ensure timely feedback delivery to students.
 
+## Viewing Commit History and Triggering Grading
+
+Instructors and graders can view the full commit history for a student's repository and manually trigger grading for any commit, including commits made after the deadline.
+
+### Accessing commit history
+
+From a student's submission page, click **Commit History** to open the commit history dialog. The dialog shows:
+
+- **Commit SHA** (linked to GitHub)
+- **Commit date/time** (author date from git, plus a "received" timestamp for commits recorded via webhook)
+- **Author**
+- **Commit message**
+- **Workflow status** (Not triggered, Requested, In progress, Completed)
+- **Submission** linked to that commit (if any), with a link to the submission page
+
+The dialog merges data from Pawtograder's database (commits received via push webhook) with the live GitHub commit list, so you can see commits that were never submitted.
+
+### Triggering grading for a commit
+
+For commits that have no submission yet, click **Create submission and activate** to trigger the grading workflow. This:
+
+1. Dispatches the `grade.yml` workflow for that commit on GitHub.
+2. Waits for the resulting submission to appear, then automatically activates it as the student's active submission.
+3. Bypasses the assignment deadline and submission limits — instructor-triggered grading always succeeds regardless of due date.
+
+For commits that already have a submission, click **Activate** to make that submission the student's active submission without re-running the autograder.
+
+<Note>
+Instructor-triggered grading overrides deadlines and submission limits. Use this to grade late work or to re-run grading for a specific commit.
+</Note>
+
+### Loading more commits
+
+By default, the dialog shows the most recent commits. Click **Load more commits** to fetch additional pages from GitHub.
+
 ## Managing Repository Permissions
 
 For assignments with GitHub repositories, the **Fix Permissions** button on the Repositories page lets you audit and correct GitHub repository permissions for all assignment repositories in a single operation:
