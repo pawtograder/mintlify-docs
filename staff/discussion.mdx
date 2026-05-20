@@ -187,6 +187,36 @@ When a student has an active help request in office hours, a widget appears in t
 
 This integration ensures students never miss updates on their help requests, even while browsing the discussion board.
 
+## Marking Threads as Duplicates
+
+When a student posts a question that has already been answered in another thread, graders and instructors can merge the duplicate thread under the original.
+
+### How to mark a thread as a duplicate
+
+1. Open the duplicate thread.
+2. Click **Mark Duplicate** in the thread actions toolbar (visible to graders and instructors only).
+3. In the dialog, search for the original thread by title or post number (e.g. `#42`).
+4. Select the original thread from the results list.
+5. Click **Merge into original**.
+
+Pawtograder will:
+- Move the duplicate thread and all of its replies under the original thread as replies.
+- Display a banner on the merged post showing the former subject and who merged it.
+- Send an in-app notification (and email when the queue processor runs) to the duplicate's author with a link to their post in the original thread.
+- Remove the duplicate from the discussion feed so it no longer appears as a separate thread.
+
+<Note>
+Only root-level threads can be marked as duplicates. Replies cannot be merged this way. A thread that has already been marked as a duplicate cannot be marked again.
+</Note>
+
+### What students see
+
+After a merge, the student who authored the duplicate receives a notification:
+
+> "Staff marked your post **[original subject]** as a duplicate of **[original thread]** and merged it into that thread."
+
+The merged post itself shows a banner: "Originally [subject] — [staff name] marked this as a duplicate and merged it here."
+
 ## Notifications
 
 By default, users do not get notifications for new posts, but can optionally "watch" a post to receive notifications when the post is updated or receives a new reply. Interacting with a post (e.g. replying to it) will automatically watch the post.
