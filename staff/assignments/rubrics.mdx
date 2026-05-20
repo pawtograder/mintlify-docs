@@ -440,10 +440,30 @@ A check on one rubric can reference a check on another rubric. During grading, a
 
 ### How to Configure
 
-1. Navigate to the rubric preview/editor for an assignment.
-2. For the check you want to augment, click "Add Reference".
-3. Search/select a check from other rubrics (the current rubric's checks are excluded).
+**In the GUI editor:**
+
+1. Expand the check you want to augment.
+2. Click **References** to open the references panel.
+3. Click **Add reference** and select a check from another rubric round (grouped by review round in the dropdown). Checks in tabs with unsaved changes are shown as disabled — save those tabs first.
 4. Save. The relationship is stored so that, when grading, the referenced feedback appears under the referencing check.
+
+**In the YAML source editor**, add a `references` list to the check:
+
+```yaml
+checks:
+  - name: Reflection quality
+    points: 5
+    is_annotation: false
+    is_required: false
+    is_comment_required: false
+    references:
+      - review_round: self-review
+        part: Reflection
+        criterion: Quality
+        check: Reflection quality
+```
+
+References are resolved by name at save time. Same-round references are rejected. If the target check lives in a rubric tab with unsaved changes, save that tab first.
 
 ### Good Use Cases
 
