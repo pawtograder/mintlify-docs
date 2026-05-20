@@ -287,6 +287,69 @@ Use the **Bulk edit grading due dates** or **Bulk edit self-review due dates** b
 
 The system updates all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately for clarity.
 
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student repository and trigger grading for any commit — including commits that were never submitted.
+
+### Opening the commit history
+
+From a student's submission page, click **Commit History** in the submission history panel. The dialog merges commits recorded by Pawtograder's push webhook with live data from the GitHub API, showing:
+
+- Commit SHA (linked to GitHub)
+- Commit date/time (author date, plus a "received" timestamp for webhook-recorded commits)
+- Author
+- Commit message
+- Workflow status (Requested, Workflow triggered, In progress, Completed)
+- All submissions associated with that commit
+
+### Activating an existing submission
+
+If a commit already has a submission, the **Action** column shows:
+
+- **Currently active** — this submission is already the active one
+- **Activate** — click to make this submission the active one for grading
+
+### Creating a submission for a commit with no submission
+
+If a commit has no submission, click **Create submission and activate**. This triggers the grading workflow for that commit. When the workflow completes and a submission is created, it is automatically activated.
+
+<Note>
+Staff-triggered grading bypasses due-date deadlines and submission limits. A toast notification confirms when the workflow has been triggered.
+</Note>
+
+### Timestamp trustworthiness
+
+The commit date column shows the author-supplied date, which can be backdated by adjusting the local clock. For commits recorded via the push webhook, a "received" line shows when Pawtograder's server first saw the commit — that timestamp is trustworthy. For commits sourced only from the GitHub API, only the author-supplied date is available.
+
+## Course-Wide Regrade Requests Dashboard
+
+The **All regrade requests** page (Manage → All regrade requests) shows every regrade request across all assignments in one place.
+
+### Accessing the dashboard
+
+Click **All regrade requests** in the toolbar on the Manage Assignments page, or navigate directly to `/course/[id]/manage/regrade-requests`.
+
+### Default view
+
+By default, the dashboard shows only **opened** and **escalated** requests — the active requests that need attention. Draft and resolved requests are hidden.
+
+### Filters
+
+Use the filter controls to narrow the list:
+
+- **Status**: Filter by opened, escalated, resolved, draft, or closed
+- **Assignment**: Filter by assignment title
+- **Rubric check**: Filter by the rubric check the request is about
+- **Student/Group**: Filter by student or group name
+- **Assignee**: Filter by the grader assigned to the request
+- **Escalation granted**: Filter by whether the escalation was granted
+
+### Deep links
+
+The **Open** link in each row navigates directly to the submission's files view with the regrade request anchor, matching the same deep link used in notifications and Discord.
+
+The assignment title in each row links to that assignment's per-assignment regrade requests page.
+
 ## Grading Status Dashboard
 
 The **Grading Status Dashboard** provides a comprehensive overview of grading progress across your course. Access it from the assignment's grading page (or from the course navigation) to see:
