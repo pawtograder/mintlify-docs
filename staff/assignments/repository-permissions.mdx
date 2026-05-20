@@ -35,6 +35,58 @@ After running the fix, you'll see a summary showing:
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
 
+## Cleanup Individual Repositories
+
+Use the **Cleanup individual repositories** button when students end up with both an individual repository and a group repository by mistake — for example, when groups were configured after the assignment was released.
+
+### What the cleanup does
+
+- Archives each individual (non-group) student repository on GitHub via the async queue
+- Deletes related submissions, grades, and workflow data from Pawtograder
+- Removes the individual repository records; group repositories are unchanged
+
+### Running the cleanup
+
+1. Navigate to the assignment's **Repositories** page.
+2. Click **Cleanup individual repositories** in the toolbar. The button is disabled if no individual repositories exist.
+3. Read the warning summary and click **Continue**.
+4. Type `CLEANUP` in the confirmation field and click **Confirm cleanup**.
+
+After the operation completes, a toast shows how many repositories were queued for archival and how many records were removed locally.
+
+<Warning>
+This operation cannot be undone. Submissions and grades tied to the individual repositories are permanently deleted.
+</Warning>
+
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student repository and manually trigger grading for any commit, including commits past the deadline.
+
+### Opening commit history
+
+From a student's submission page, click **Commit History** to open the dialog. The dialog shows each commit's:
+
+- Short SHA (linked to GitHub)
+- Commit date and time
+- Author
+- Commit message
+- Workflow status (requested, in progress, completed)
+- Linked submissions
+
+### Triggering grading for a commit
+
+If a commit has no submission yet, click **Create submission and activate** next to that commit. This:
+
+1. Triggers the grading workflow for that commit on GitHub.
+2. Waits for the resulting submission to appear.
+3. Automatically activates the new submission.
+
+Staff-triggered grading bypasses due-date deadlines and submission limits.
+
+<Note>
+The commit history dialog also appears on the assignment Repositories management page, where you can view commit history for any student's repository.
+</Note>
+
 ## When to Use Fix Permissions
 
 Use the Fix Permissions tool when:
