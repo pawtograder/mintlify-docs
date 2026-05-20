@@ -82,6 +82,33 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## GitHub Account Diagnostics
+
+Instructors can diagnose and fix GitHub account issues for individual students from the **Manage → Course → Enrollments** page.
+
+### Accessing diagnostics
+
+Click the GitHub icon next to any student row in the enrollments table to open the GitHub diagnostics modal.
+
+### What the modal shows
+
+| Field | Description |
+|-------|-------------|
+| **Linked account** | The GitHub username currently linked to the student's account |
+| **Username changed** | Whether the student's GitHub username has changed since it was stored |
+| **Organization** | Whether the student is a member of the course GitHub organization (Active / Pending / Not joined) |
+| **Student team** | Whether the student is a member of the course student team |
+| **Database org status** | Whether Pawtograder has confirmed the student's org membership |
+
+### Actions
+
+- **Sync permissions**: Re-syncs the student's GitHub username and re-invites them to the course organization and team. Use this when a student has changed their GitHub username or when their org/team membership is missing.
+- **Unlink GitHub identity**: Removes the student's GitHub identity from Pawtograder, removes them from the course GitHub organization, and clears stored GitHub metadata. The student will need to re-link their GitHub account.
+
+<Warning>
+Unlinking a student's GitHub identity removes them from the course GitHub organization. They will lose access to all course repositories until they re-link their account.
+</Warning>
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
