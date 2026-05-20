@@ -186,6 +186,94 @@ npm run cli -- flashcards copy \
   --deck <name>
 ```
 
+### Assessment Export
+
+Export a privacy-controlled snapshot of class assessment data — rubrics, final grading review scores, autograder test results, hint feedback, and gradebook columns — for downstream analysis.
+
+```bash
+# Export with opaque (per-run random) subject tokens (default)
+npm run cli -- assessment export --class <identifier>
+
+# Export with deterministic tokens joinable across runs
+npm run cli -- assessment export \
+  --class <identifier> \
+  --identity hash \
+  --salt <at-least-16-char-secret>
+
+# Export real student identifiers (requires acknowledgement)
+npm run cli -- assessment export \
+  --class <identifier> \
+  --identity raw \
+  --i-understand-pii
+
+# Export only specific assignments
+npm run cli -- assessment export \
+  --class <identifier> \
+  --assignment hw-1 \
+  --assignment hw-2
+
+# Export with test output included (can be large)
+npm run cli -- assessment export \
+  --class <identifier> \
+  --with-test-output \
+  --test-output-max-bytes 8192
+
+# Specify output directory
+npm run cli -- assessment export \
+  --class <identifier> \
+  --output ./my-export
+```
+
+The export writes a directory containing:
+
+- `manifest.json` — metadata about the export (identity mode, timestamp, totals)
+- `subjects.json` — one record per enrolled student with their subject token
+- `sections.json` — class and lab section records
+- `assignments.json` — assignment catalog
+- `gradebook-columns.json` — gradebook column definitions
+- `assignments/<slug>/` — per-assignment directory with:
+  - `rubric.json` — rubric tree (parts, criteria, checks)
+  - `autograder.json` — autograder config and test catalog
+  - `submissions.json` — active submissions
+  - `scores.json` — rubric check results from final grading reviews
+  - `tests.json` — autograder test results
+  - `hints.json` — hint feedback
+- `gradebook/scores.json` — instructor-side gradebook cells
+
+#### Identity modes
+
+| Mode | Description |
+|------|-------------|
+| `opaque` (default) | Random per-run salt. Tokens are stable within one export but cannot be joined across runs. |
+| `hash` | Deterministic HMAC tokens derived from `--salt`. Joinable across runs with the same salt. |
+| `raw` | Real student IDs, emails, and names. Requires `--i-understand-pii`. |
+
+#### Deanonymizing a hash export
+
+If you used `--identity hash`, you can produce a CSV mapping subject tokens back to real student identifiers:
+
+```bash
+npm run cli -- assessment deanonymize \
+  --class <identifier> \
+  --salt <same-salt-as-export> \
+  --i-understand-pii \
+  --output roster.csv
+```
+
+The output CSV has columns: `subject_token`, `name`, `email`, `sis_user_id`, `class_section`, `lab_section`.
+
+#### Export options
+
+- `--identity <mode>`: `opaque` (default), `hash`, or `raw`
+- `--salt <string>`: Required for `--identity hash`; ignored for `opaque` (random salt is generated)
+- `--i-understand-pii`: Required for `--identity raw`
+- `--assignment <selector>`: Assignment id, slug, or glob (e.g. `hw-*`). Repeatable. Omit to export all.
+- `--gradebook-column <selector>`: Gradebook column id, slug, or glob. Repeatable. Omit to export all.
+- `--concurrency <n>`: Parallel per-assignment streams (1–8, default 4)
+- `--with-test-output`: Include autograder test output (off by default — can be large)
+- `--test-output-max-bytes <n>`: Per-test output cap when `--with-test-output` is set (default 4096)
+- `--output <dir>`: Output directory (default: `./assessment-export-<class>-<timestamp>`)
+
 ### Submissions
 
 Import comments and artifacts:
