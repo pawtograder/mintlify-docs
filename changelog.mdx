@@ -4,6 +4,30 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 20, 2026
+
+#### Rubric editor
+- **GUI rubric editor with drag-and-drop** — The rubric editor now offers a visual GUI tree alongside the existing YAML source editor. Switch between views with the **GUI** / **YAML source** toggle. The GUI supports drag-and-drop reordering of parts, criteria, and checks; quick-add criterion templates (Met/Not met, Met/Partial/Not met, four-tier, multi-option, annotation deductions, penalty-only); inline editing of all fields; and cross-rubric check references managed directly from each check card. Both views share the same in-memory rubric so toggling is lossless ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Cross-rubric references in YAML** — Rubric check references can now be expressed in YAML using a name-keyed form (`review_round / part / criterion / check`) and are resolved at save time. The CLI export/import also preserves references ([#766](https://github.com/pawtograder/platform/pull/766))
+
+#### Instructor tools
+- **Commit history and manual grading trigger** — Instructors can now view the full commit history for any student repository from the submission page. For commits without a submission, click **Create submission and activate** to trigger grading; the resulting submission becomes active automatically. Instructor-triggered grading overrides deadlines and submission limits ([#764](https://github.com/pawtograder/platform/pull/764))
+- **Course-wide regrade requests dashboard** — A new **All regrade requests** page (accessible from the Manage Assignments toolbar) lists every regrade request across all assignments. Defaults to showing only opened and escalated requests; filters by status, assignment, rubric check, student, assignee, and escalation outcome ([#733](https://github.com/pawtograder/platform/pull/733))
+- **Assessment export CLI command** — `pawtograder assessment export` streams a privacy-controlled snapshot of rubrics, grading review scores, autograder test results, hint feedback, and gradebook columns to a local directory. Supports opaque (default), hash (deterministic, joinable), and raw identity modes. A companion `assessment deanonymize` command maps hash tokens back to real student identifiers ([#746](https://github.com/pawtograder/platform/pull/746))
+- **GitHub account diagnostics** — Instructors can diagnose and fix GitHub account issues for individual students from the Enrollments page. The diagnostics modal shows linked account, username changes, org/team membership, and database org status, with **Sync permissions** and **Unlink GitHub identity** actions ([#750](https://github.com/pawtograder/platform/pull/750))
+
+#### Discussion board
+- **Mark thread as duplicate** — Graders and instructors can merge a duplicate discussion thread into another thread. The duplicate and its replies move under the original; the author receives an in-app notification; and a banner on the merged post shows the former subject and who merged it ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### Bug fixes
+- **Submission history reflects real-time review changes** — The submission history panel now updates in real time when grading review changes are made ([#598](https://github.com/pawtograder/platform/pull/598))
+- **Code renderer follows app theme** — The code renderer now follows the application's light/dark theme instead of the OS theme ([#711](https://github.com/pawtograder/platform/pull/711))
+- **Gradebook recalculation on active submission changes** — The gradebook now correctly recalculates when the active submission changes ([#763](https://github.com/pawtograder/platform/pull/763))
+- **Instructor page performance** — Improved instructor page performance with streaming and virtualization ([#708](https://github.com/pawtograder/platform/pull/708))
+- **Re-enqueue failed repo creations** — Failed repository creations are now automatically re-enqueued ([#710](https://github.com/pawtograder/platform/pull/710))
+
 ## April 2026
 
 ### April 29, 2026
