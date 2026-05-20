@@ -285,6 +285,42 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two views that you can toggle between at any time:
+
+- **GUI view** (default): A visual tree editor with drag-and-drop reordering, inline forms for every field, and quick-add criterion templates. Changes in the GUI are reflected in the YAML source immediately.
+- **YAML source view**: A Monaco-based code editor for direct YAML editing with schema validation and autocomplete.
+
+Use the **GUI** and **YAML source** buttons in the editor toolbar to switch between views. Your preferred view is remembered for the session.
+
+### GUI editor features
+
+- **Drag-and-drop reordering**: Drag the grip handle on any part, criterion, or check to reorder it within its parent.
+- **Quick-add criterion templates**: Click **Add criterion** inside a part to choose from pre-built templates (Met/Not met, Met/Partial/Not met, four-tier, multi-option, annotation deductions, and more).
+- **Inline validation**: The GUI surfaces the same validation errors as the YAML editor — duplicate IDs, missing required fields, and invalid option counts — so you can fix issues before saving.
+- **Points warnings**: If you enter a negative point value, the editor automatically converts it to its absolute value and shows a warning explaining why.
+- **Live preview**: The rubric preview pane on the right updates in real time as you edit in either view.
+
+### Cross-rubric check references
+
+Checks can reference checks from other rubrics on the same assignment (for example, a grading-review check that links to the matching self-review check). During grading, the referenced feedback is shown inline under the referencing check.
+
+To add a reference in the GUI editor:
+
+1. Expand the check you want to augment.
+2. Click **References** to expand the references section.
+3. Click **Add reference** and select the target check from the dropdown (grouped by review round).
+4. Save the rubric.
+
+References are stored by check name in the YAML (`references:` field on a check). If the target check's name is ambiguous, the editor falls back to a numeric `id:` reference.
+
+<Note>
+References are cross-round only. You cannot reference a check in the same review round. If the target rubric tab has unsaved changes, save it first — the editor will warn you and skip unresolvable references.
+</Note>
+
+### Saving
+
+Click **Save** to persist all changes. The save operation is atomic: parts, criteria, checks, and references are all written in a single database transaction. After a successful save, a toast notification summarizes what changed (including how many submission reviews were recomputed if check scores changed).
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
