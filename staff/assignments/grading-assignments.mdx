@@ -310,6 +310,34 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Course-Wide Regrade Requests Dashboard
+
+The **All regrade requests** dashboard gives instructors a single view of every regrade request across all assignments in the course.
+
+### Accessing the dashboard
+
+From the **Manage → Assignments** page, click **All regrade requests** in the toolbar. You can also navigate directly to `/course/[id]/manage/regrade-requests`.
+
+### What the dashboard shows
+
+The table displays all regrade requests with columns for:
+
+- **Status**: Draft, Pending, Escalated, Resolved, or Closed
+- **Assignment**: Links to the per-assignment regrade requests page
+- **Rubric Check**: The rubric check the request is about
+- **Student/Group**: The submitter, with an **Open** link to the submission files at the regrade request anchor
+- **Assignee**: The grader assigned to the request
+- **Points**: Initial, resolved, and escalation points
+- **Escalation Granted**: Whether the escalation changed the score
+- **Discord**: Link to the Discord thread for the request (if any)
+- **Created / Last Updated**: Timestamps
+
+### Filtering
+
+By default, the dashboard shows only **opened** and **escalated** requests (active requests). Use the **Filter by Status** dropdown to include draft, resolved, or closed requests. Additional filters are available for assignment, student, rubric check, assignee, and escalation outcome.
+
+Click **Clear Filters** to reset all filters and return to the default view.
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
