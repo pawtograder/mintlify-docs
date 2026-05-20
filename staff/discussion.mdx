@@ -187,6 +187,28 @@ When a student has an active help request in office hours, a widget appears in t
 
 This integration ensures students never miss updates on their help requests, even while browsing the discussion board.
 
+## Marking Threads as Duplicates
+
+Graders and instructors can merge a duplicate discussion thread into another thread. This is useful when students post the same question multiple times, or when a question is better answered in an existing thread.
+
+### How to mark a thread as a duplicate
+
+1. Open the root thread you want to mark as a duplicate.
+2. Click **Mark Duplicate** in the thread actions toolbar.
+3. Search for the original thread by title or post number (e.g. `#42`).
+4. Select the original thread from the results list.
+5. Click **Merge into original**.
+
+When a thread is merged:
+- The duplicate thread and all of its replies are moved under the original thread as replies.
+- A banner is shown on the merged post indicating the original subject and who merged it.
+- The duplicate author receives an in-app notification (and email when the queue processor runs) with a link to their post under the canonical thread.
+- The duplicate thread disappears from the discussion feed.
+
+<Note>
+Only root-level threads can be marked as duplicates. You cannot mark a reply as a duplicate.
+</Note>
+
 ## Notifications
 
 By default, users do not get notifications for new posts, but can optionally "watch" a post to receive notifications when the post is updated or receives a new reply. Interacting with a post (e.g. replying to it) will automatically watch the post.
