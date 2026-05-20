@@ -80,6 +80,39 @@ Perform common assignment management tasks directly from the dashboard:
 - **Check security**: Open the security dashboard.
 - **Export data**: Download submission and grading data.
 
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student repository and manually trigger grading for specific commits. This is useful when a student pushed work before the deadline but the autograder did not run, or when you need to grade a specific commit that was not automatically submitted.
+
+### Viewing commit history
+
+From the assignment submissions table, click the **Commits** column icon for any student to open the commit history dialog. The dialog shows:
+
+- **Commit SHA** (linked to GitHub)
+- **Commit date/time** (author date from git, plus a "received" timestamp for commits recorded via webhook)
+- **Author**
+- **Commit message**
+- **Workflow status**: Whether grading was triggered, in progress, or completed
+- **Submissions**: Any submissions linked to that commit, with links to the submission page
+
+The dialog merges data from Pawtograder's database (commits received via push webhook) with the live GitHub commit list, so you can see commits that were never submitted alongside those that were.
+
+<Note>
+The commit date shown is the author date set by git on the committer's machine. For commits recorded via push webhook, a "received" timestamp shows when Pawtograder's server first saw the commit — that timestamp is trustworthy. For commits sourced only from the GitHub API, only the author-supplied date is available.
+</Note>
+
+### Triggering grading manually
+
+From the commit history dialog (or from the submission view), instructors can trigger grading for any commit:
+
+1. Find the commit you want to grade in the history table.
+2. Click **Trigger grading** (from the assignment management table) or **Create submission and activate** (from the submission view).
+3. Confirm the action in the confirmation dialog.
+
+Instructor-triggered grading **overrides deadlines and submission limits**. The resulting submission is automatically activated as the student's active submission once the workflow completes.
+
+You can also trigger grading from the **Repositories** page for any repository in the assignment.
+
 ## Filtering and Sorting
 
 Customize your dashboard view:
