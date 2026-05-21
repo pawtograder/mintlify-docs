@@ -285,6 +285,33 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two views that you can switch between at any time:
+
+- **GUI view** (default): A visual tree editor with drag-and-drop reordering, inline forms for every field, and quick-add templates for common criterion shapes.
+- **YAML source view**: The raw YAML editor for power users who prefer to paste or hand-edit the rubric definition.
+
+Both views are bound to the same in-memory rubric, so toggling between them is lossless. The preview pane on the right updates in real time as you make changes in either view.
+
+### GUI editor
+
+In the GUI view you can:
+
+- **Drag and drop** parts, criteria, and checks to reorder them within their parent.
+- **Add criteria from templates** using the **Add criterion** menu on each part. Available templates include:
+  - Blank checkbox criterion
+  - Met / not met (binary)
+  - Met / partial / not met
+  - Four-tier (excellent / good / fair / poor)
+  - Multi-option check
+  - Code-quality deductions (multiple annotations)
+  - Penalty-only annotation
+- **Edit all fields inline** — name, description, points, scoring mode, visibility, and more.
+- **Manage cross-rubric references** directly on each check (see [Check References](#check-references-cross-rubric-context)).
+
+### Switching between GUI and YAML
+
+Click **GUI** or **YAML source** in the toolbar to switch views. The editor validates the YAML before switching to GUI mode; if the YAML contains errors, you'll see a toast explaining what needs to be fixed first.
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
