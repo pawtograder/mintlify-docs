@@ -285,7 +285,34 @@ parts:
 
 ## Editing Rubrics
 
-When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
+The rubric editor offers two modes you can switch between at any time using the **GUI** and **YAML source** buttons at the top of the editor:
+
+- **GUI mode** (default): A visual tree editor with drag-and-drop reordering of parts, criteria, checks, and options. Use the **Add part** button to add a new part, then use the **Add criterion** dropdown to pick from built-in templates (Met/Not met, Met/Partial/Not met, four-tier, multi-option, annotation deductions, and more). Changes in GUI mode are reflected instantly in the preview pane.
+- **YAML source mode**: A Monaco-based YAML editor with schema validation, autocomplete, and inline error markers. Switching from GUI to YAML serializes the current rubric; switching back parses the YAML and loads it into the GUI tree.
+
+Both modes share the same in-memory rubric, so toggling between them is lossless as long as the YAML is valid.
+
+### Drag-and-drop reordering
+
+In GUI mode, every part, criterion, check, and option row has a drag handle on the left. Drag items vertically within their parent to reorder them. Ordinals are updated automatically on drop.
+
+### Criterion templates
+
+When adding a criterion in GUI mode, a dropdown offers pre-built templates:
+
+| Template | Description |
+|---|---|
+| Blank checkbox criterion | Single checkbox check |
+| Met / not met (binary) | Two radio-button checks (min/max = 1) |
+| Met / partial / not met | Three radio-button checks |
+| Four-tier (excellent / good / fair / poor) | Four radio-button checks |
+| Multi-option check | Single check with selectable options |
+| Code-quality deductions (multiple annotations) | Penalty-only annotation criterion |
+| Penalty-only annotation (single) | Single annotation deduction |
+
+### Unsaved changes protection
+
+Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
 
