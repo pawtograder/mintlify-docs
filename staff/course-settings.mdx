@@ -82,6 +82,42 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## Feature Flags
+
+Feature flags let you enable or disable specific course features. Navigate to **Course Settings** → **Feature flags** to manage them.
+
+Available flags include:
+
+- **Discussion board** — show or hide the discussion board for students and staff
+- **Office hours** — show or hide the office hours queue
+- **Surveys** — show or hide surveys
+- **Polls** — show or hide polls
+- **Gradebook What-If** — allow students to use the What-If grade calculator
+
+When a flag is disabled, the corresponding navigation item and dashboard widget are hidden automatically — no page refresh required. Staff can still access the feature directly via URL when a menu entry is hidden.
+
+## GitHub Diagnostics
+
+Instructors can diagnose and fix GitHub account issues for individual students from the **Enrollments** page.
+
+### Accessing diagnostics
+
+1. Navigate to **Course Settings** → **Enrollments**.
+2. Click the GitHub icon (purple) next to a student's row.
+
+### What the diagnostics modal shows
+
+- **Linked account** — the GitHub username currently linked to the student's Pawtograder account.
+- **Username changed** — whether the student's GitHub username has changed since they linked their account (the stored username vs. the current one).
+- **Organization** — whether the student has joined the course GitHub organization (active, pending invitation, or not joined).
+- **Student team** — whether the student is a member of the course student team.
+- **Database org status** — whether Pawtograder has confirmed the student's org membership.
+
+### Available actions
+
+- **Sync permissions** — re-runs the GitHub sync for the student, updating their username and re-inviting them to the org and team if needed.
+- **Unlink GitHub identity** — removes the student's GitHub identity from Pawtograder and removes them from the course GitHub organization. Use this when a student needs to re-link a different GitHub account.
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
