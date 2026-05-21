@@ -118,7 +118,7 @@ npm run cli -- assignments delete <identifier> \
 
 ### Rubrics
 
-Import and export rubrics in YAML format:
+Import and export rubrics in YAML format. Cross-rubric check references (e.g. a grading-review check that references a self-review check) are preserved on both export and import.
 
 ```bash
 # List rubrics for an assignment
@@ -142,6 +142,73 @@ npm run cli -- rubrics import \
 ```
 
 Rubric types: `grading`, `self_review`, `meta`
+
+### Assessment export
+
+Export a privacy-controlled snapshot of class assessment data — rubrics, final grading review scores, autograder test results, hint feedback, and gradebook columns — for downstream analysis.
+
+```bash
+# Export with opaque (per-run) subject tokens (default)
+npm run cli -- assessment export --class <identifier>
+
+# Export with deterministic tokens joinable across runs
+npm run cli -- assessment export \
+  --class <identifier> \
+  --identity hash \
+  --salt <at-least-16-chars>
+
+# Export with real student identifiers (requires acknowledgement)
+npm run cli -- assessment export \
+  --class <identifier> \
+  --identity raw \
+  --i-understand-pii
+
+# Export only specific assignments
+npm run cli -- assessment export \
+  --class <identifier> \
+  --assignment hw-1 \
+  --assignment hw-2
+
+# Export with test output included (can be large)
+npm run cli -- assessment export \
+  --class <identifier> \
+  --with-test-output \
+  --test-output-max-bytes 8192
+```
+
+The export writes a directory containing:
+- `manifest.json`: Export metadata and totals
+- `subjects.json`: Enrolled students (tokenized or raw)
+- `sections.json`: Class and lab sections
+- `assignments.json`: Assignment catalog
+- `gradebook-columns.json`: Gradebook column definitions
+- `assignments/<slug>/rubric.json`: Rubric tree
+- `assignments/<slug>/submissions.json`: Active submissions
+- `assignments/<slug>/scores.json`: Rubric check results
+- `assignments/<slug>/tests.json`: Autograder test results
+- `assignments/<slug>/hints.json`: Hint feedback
+- `gradebook/scores.json`: Instructor-side gradebook cells
+
+#### Identity modes
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt; tokens are only joinable within a single export |
+| `hash` | HMAC tokens derived from `--salt`; joinable across runs with the same salt |
+| `raw` | Real student IDs, emails, and names; requires `--i-understand-pii` |
+
+#### Deanonymize (hash mode only)
+
+After a `--identity hash` export, generate a CSV mapping subject tokens back to real student identifiers:
+
+```bash
+npm run cli -- assessment deanonymize \
+  --class <identifier> \
+  --salt <same-salt-as-export> \
+  --i-understand-pii
+```
+
+The output CSV contains: `subject_token, name, email, sis_user_id, class_section, lab_section`.
 
 ### Surveys
 
