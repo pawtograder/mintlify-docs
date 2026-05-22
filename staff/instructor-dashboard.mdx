@@ -58,6 +58,21 @@ Each assignment row provides links to:
 - **Regrade Requests**: Manage student regrade requests
 - **Due Date Exceptions**: View and manage extensions
 
+## GitHub Diagnostics
+
+Instructors can diagnose and fix GitHub account issues for individual students from the **Manage → Enrollments** page. Click the GitHub icon on any student row to open the diagnostics modal, which shows:
+
+- **Linked account**: The GitHub username currently linked to the student's Pawtograder account.
+- **Username changed**: Whether the student's GitHub username has changed since it was last synced (the stored username vs. the current one from the GitHub API).
+- **Organization membership**: Whether the student is an active or pending member of the course GitHub organization.
+- **Student team membership**: Whether the student is a member of the course's student team.
+- **Database org status**: Whether Pawtograder has confirmed the student's org membership.
+
+**Actions available:**
+
+- **Sync permissions** — Forces a re-sync of the student's GitHub username and re-invites them to the org/team/repositories as needed. Bypasses the 24-hour cooldown that applies to student-initiated syncs.
+- **Unlink GitHub identity** — Removes the student's GitHub identity from Pawtograder, removes them from the course GitHub organization, and clears stored GitHub metadata. The student will need to re-link their GitHub account.
+
 ## Office Hours Activity
 
 View recent help queue activity including:
