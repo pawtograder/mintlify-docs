@@ -285,6 +285,25 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor provides two complementary views: a **GUI tree editor** and a **YAML editor**. You can switch between them at any time, and changes in one view are reflected in the other.
+
+### GUI tree editor
+
+The GUI tree editor displays your rubric as a visual hierarchy of parts, criteria, and checks. You can:
+
+- **Drag and drop** parts, criteria, and checks to reorder them within the rubric
+- **Add, edit, and delete** items using inline controls without writing YAML
+- **Manage cross-rubric references** directly in the GUI — click "Add Reference" on any check to link it to a check from another rubric
+- **Preview** how the rubric will appear to graders in real time
+
+This is the recommended starting point for building new rubrics or making structural changes.
+
+### YAML editor
+
+The YAML editor gives you full control over the rubric schema. It supports copy-paste of YAML from external sources, and the editor state is refreshed automatically after saving to prevent stale data from appearing.
+
+### Unsaved changes protection
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
