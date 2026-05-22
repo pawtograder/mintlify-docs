@@ -342,6 +342,85 @@ You can use `content_file` instead of `content_base64` to reference an external 
 }
 ```
 
+### Assessment export
+
+Export a privacy-controlled snapshot of class assessment data — rubrics, final grading review scores, autograder test results, hint feedback, and gradebook columns — for downstream analysis.
+
+#### Identity modes
+
+| Mode | Description |
+|------|-------------|
+| `opaque` (default) | Random per-run salt; tokens are only joinable within a single export run. |
+| `hash` | Deterministic HMAC tokens derived from a caller-supplied `--salt`; joinable across runs with the same salt. |
+| `raw` | Real student ids, emails, and names. Requires `--i-understand-pii`. |
+
+#### Export a class
+
+```bash
+# Default (opaque tokens, all assignments, all gradebook columns)
+npm run cli -- assessment export --class cs3500-spring-2026
+
+# Hash mode (joinable across runs)
+npm run cli -- assessment export \
+  --class cs3500-spring-2026 \
+  --identity hash \
+  --salt "my-secret-salt-at-least-16-chars"
+
+# Specific assignments and gradebook columns
+npm run cli -- assessment export \
+  --class cs3500-spring-2026 \
+  --assignment hw-01 --assignment hw-02 \
+  --gradebook-column final-grade
+
+# Include autograder test output (truncated to 4 KB per test by default)
+npm run cli -- assessment export \
+  --class cs3500-spring-2026 \
+  --with-test-output \
+  --test-output-max-bytes 8192
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--class` / `-c` | Class ID, slug, or name |
+| `--identity` | `opaque` (default), `hash`, or `raw` |
+| `--salt` | Required for `--identity hash`; must be ≥ 16 characters |
+| `--i-understand-pii` | Required for `--identity raw` |
+| `--output` / `-o` | Output directory (default: `./assessment-export-<class>-<timestamp>`) |
+| `--assignment` / `-a` | Assignment selector (id, slug, or glob like `hw-*`). Repeatable. Omit for all. |
+| `--gradebook-column` | Gradebook column selector (id, slug, or glob). Repeatable. Omit for all. |
+| `--concurrency` | Parallel per-assignment streams (1–8, default 4) |
+| `--with-test-output` | Include autograder test output (off by default — can be large) |
+| `--test-output-max-bytes` | Per-test output cap when `--with-test-output` is set (default 4096) |
+
+The export writes a directory with:
+
+- `manifest.json` — metadata and grand totals
+- `subjects.json` — enrolled students (tokenized or raw)
+- `sections.json` — class and lab sections
+- `assignments.json` — assignment catalog
+- `gradebook-columns.json` — gradebook column definitions
+- `assignments/<slug>/` — per-assignment data (rubric, submissions, scores, tests, hints)
+- `gradebook/scores.json` — instructor-side gradebook cells
+
+#### Deanonymize (hash mode only)
+
+After exporting with `--identity hash`, generate a CSV that maps subject tokens back to real student identifiers:
+
+```bash
+npm run cli -- assessment deanonymize \
+  --class cs3500-spring-2026 \
+  --salt "my-secret-salt-at-least-16-chars" \
+  --i-understand-pii
+```
+
+The output CSV contains: `subject_token, name, email, sis_user_id, class_section, lab_section`.
+
+<Warning>
+The deanonymize command writes real student names, emails, and SIS IDs to disk. Handle the output file accordingly.
+</Warning>
+
 ### Help requests
 
 List office hours help requests:
