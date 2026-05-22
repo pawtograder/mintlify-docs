@@ -285,6 +285,43 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor supports two modes: a **GUI tree editor** and a **YAML source editor**. Toggle between them using the **GUI** / **YAML source** buttons at the top of the editor. Both views are bound to the same in-memory rubric, so switching is lossless.
+
+### GUI editor
+
+The GUI editor provides a visual tree of parts, criteria, and checks with:
+
+- **Drag-and-drop reordering** at every level (parts, criteria, checks, and options) — drag the grip handle to reorder within the parent.
+- **Quick-add criterion templates** — click **Add criterion** inside a part to choose from common shapes: Met / not met, Met / partial / not met, four-tier, multi-option, code-quality deductions, and penalty-only annotation.
+- **Inline reference picker** — expand the **References** section on any check to link it to a check from another rubric on the same assignment (cross-round only). The grader sees the referenced feedback inline while grading.
+- **Points sanitization** — negative point values are automatically converted to their absolute value with a warning banner.
+- **Live preview** — the rubric preview pane on the right updates in real time as you edit.
+
+### YAML source editor
+
+The YAML source editor provides a Monaco-based editor with syntax highlighting, autocomplete, and schema validation. Changes are reflected in the preview pane after a short debounce.
+
+### Cross-rubric check references in YAML
+
+Checks can reference checks from other rubrics using a name-keyed path:
+
+```yaml
+checks:
+  - name: Code quality
+    points: 5
+    references:
+      - review_round: self-review
+        part: Code Quality
+        criterion: Style
+        check: Follows style guide
+```
+
+You can also use a numeric `id` fallback for paste-from-DB scenarios. References are resolved at save time against the live sibling rubrics on the same assignment. Same-round references are rejected. If a target tab has unsaved changes, the reference is preserved from the last saved state and a toast warns you to save that tab first.
+
+### Saving
+
+The rubric editor uses an **atomic save** — all parts, criteria, checks, and references are written in a single database transaction. After saving, a toast shows a summary of what changed (including how many submission reviews were recomputed).
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
