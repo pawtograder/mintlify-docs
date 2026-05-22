@@ -100,6 +100,32 @@ Instructors can invite multiple students or staff to a course at once using bulk
 
 Invited users receive an email with a link to join the course. You can view pending invitations and revoke them at any time from the same page.
 
+## GitHub Diagnostics
+
+The GitHub Diagnostics page gives instructors visibility into the health of their course's GitHub integration. Use it to troubleshoot repository creation failures, permission sync issues, and GitHub API errors.
+
+### Accessing GitHub diagnostics
+
+Navigate to **Course Settings** → **GitHub Diagnostics**.
+
+### What you can see
+
+- **Repository creation status**: Which student repositories have been created successfully and which are pending or failed.
+- **Permission sync state**: Whether repository collaborator permissions are in sync with current group membership.
+- **Recent GitHub API errors**: A log of recent errors returned by the GitHub API, with timestamps and context to help identify the root cause.
+
+### Common issues
+
+| Symptom | Likely cause | Action |
+|---|---|---|
+| Repository not created | GitHub API rate limit or transient error | Failed jobs are automatically re-enqueued; check back in a few minutes |
+| Student missing repository access | Permission sync out of date | Use **Fix Permissions** on the assignment's Repositories page |
+| API errors in the log | Expired or revoked GitHub token | Re-authorize the GitHub integration in course settings |
+
+<Tip>
+If you see a pattern of failures for a specific student, check that their GitHub username is confirmed in their profile before re-triggering repository creation.
+</Tip>
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
