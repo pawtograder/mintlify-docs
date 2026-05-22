@@ -287,6 +287,27 @@ Use the **Bulk edit grading due dates** or **Bulk edit self-review due dates** b
 
 The system updates all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately for clarity.
 
+## Regrade Requests for Unapplied Checks
+
+Students can request a regrade for a rubric check that was *not* applied to their submission — for example, if they believe a check should have been applied but wasn't. These requests appear in the rubric sidebar (for graders and instructors) and in the student's grade view.
+
+When a grader resolves such a request, Pawtograder creates the backing grading comment and updates the gradebook automatically. If the check is an annotation check, the grader must specify the file and line (or artifact) where the comment should appear.
+
+### Auto-resolution when a comment is deleted
+
+If a grader deletes or re-grades a comment that backs an open regrade request, the request is automatically resolved (with a "comment deleted" reason) instead of being left stuck as "pending." Students receive a notification and can still escalate to an instructor if they disagree.
+
+## Course-Wide Regrade Requests Dashboard
+
+A **Manage → All regrade requests** page lists every regrade request across all assignments in the course. Use it to:
+
+- Filter by status (opened, escalated, resolved, closed, draft)
+- Filter by assignment, rubric check, student, or assignee
+- See escalation outcomes at a glance
+- Deep-link directly to the submission and regrade thread
+
+Active requests (opened and escalated) are shown by default. Toggle the status filter to include drafts and resolved requests.
+
 ## Grading Status Dashboard
 
 The **Grading Status Dashboard** provides a comprehensive overview of grading progress across your course. Access it from the assignment's grading page (or from the course navigation) to see:
