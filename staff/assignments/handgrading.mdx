@@ -804,6 +804,32 @@ To view and manage dangling regrade requests:
 Dismissing a dangling regrade request closes it without awarding points. Always communicate with the student if you dismiss a request that was submitted in good faith.
 </Note>
 
+## Viewing Commit History and Triggering Grading
+
+Instructors can browse the full commit history of a student's assignment repository and manually trigger grading on any commit — not just the most recent submission.
+
+### Viewing commit history
+
+1. Navigate to the student's submission page for the assignment.
+2. Click **Commit History** to open the commit browser.
+3. The list shows all commits pushed to the student's repository, with author, timestamp, and commit message.
+
+### Triggering grading on a specific commit
+
+1. In the commit history view, find the commit you want to grade.
+2. Click **Grade this commit**.
+3. Confirm the action. Pawtograder will create a new submission from that commit and run the autograder.
+
+This is useful when:
+
+- A student accidentally pushed a broken commit and you want to grade an earlier working version.
+- You need to verify that a specific commit meets the assignment requirements.
+- A student claims their code was working at a particular point in time.
+
+<Note>
+Triggering grading on a historical commit creates a new submission entry. The student's active submission is not changed unless you explicitly promote the new submission.
+</Note>
+
 ## Rerunning the Autograder
 
 Instructors can rerun the autograder on existing submissions without creating a new submission. This is useful when:
