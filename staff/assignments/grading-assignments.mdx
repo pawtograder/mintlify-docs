@@ -300,6 +300,37 @@ The **Grading Status Dashboard** provides a comprehensive overview of grading pr
 
 This dashboard helps instructors identify bottlenecks, balance workload across graders, follow up with graders who may need support, and ensure timely feedback delivery to students.
 
+## Viewing Commit History and Triggering Grading
+
+Instructors can view the full commit history for a student's repository and manually trigger grading for any commit.
+
+### From the submission view
+
+Open any submission and click **Commit History** (staff only). The dialog shows:
+
+- Every commit recorded by the push webhook (with the server-received timestamp) merged with commits fetched live from the GitHub API.
+- Workflow status for each commit (requested, triggered, in progress, completed).
+- All submissions linked to each commit.
+
+**Actions available per commit:**
+
+| Situation | Action |
+|-----------|--------|
+| Commit has an existing submission that is not active | **Activate** — makes it the active submission |
+| Commit has no submission yet | **Create submission and activate** — triggers the grading workflow; the resulting submission is automatically activated when it arrives |
+
+<Note>
+Staff-triggered grading overrides deadlines and submission limits. The resulting submission is treated as instructor-initiated and bypasses the normal due-date and submission-count gates.
+</Note>
+
+### From the assignment repositories page
+
+The **Repositories** page for an assignment also shows a **Commits** column in the submissions table, providing quick access to the commit history dialog for any student.
+
+### Commit timestamps
+
+The **Date** column shows the commit's author date, which is set by git on the committer's machine and can be backdated. For commits recorded via the push webhook, a **received** timestamp shows when Pawtograder's server first saw the commit — that timestamp is trustworthy. For commits sourced only from the GitHub API, only the author-supplied date is available.
+
 ## Managing Repository Permissions
 
 For assignments with GitHub repositories, the **Fix Permissions** button on the Repositories page lets you audit and correct GitHub repository permissions for all assignment repositories in a single operation:
