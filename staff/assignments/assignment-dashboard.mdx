@@ -132,6 +132,28 @@ Export assignment data for further analysis, department records, or to analyze a
 - Student progress data
 - Autograder results
 
+## Commit History and Manual Grading
+
+Instructors can view the full commit history for a student's repository directly from the submission view. Click **Commit History** in the submission toolbar to open the commit history dialog.
+
+The dialog shows each commit with:
+
+- Commit date and time (author date from git, plus the server-received timestamp for webhook-recorded commits)
+- Author name
+- Commit message
+- Workflow status (not triggered, requested, in progress, completed)
+- All submissions linked to that commit
+
+### Manually triggering grading
+
+For commits that have no submission yet, instructors can click **Create submission and activate** to trigger the grading workflow for that commit. The resulting submission is automatically activated once the workflow starts.
+
+For commits that already have a submission, instructors can click **Activate** to make that submission the active one.
+
+<Note>
+Instructor-triggered grading bypasses due-date deadlines and submission limits. Use this to grade late work or re-grade a specific commit.
+</Note>
+
 ## Integration with Other Features
 
 The assignment dashboard integrates with:
