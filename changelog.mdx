@@ -4,6 +4,56 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 22, 2026
+
+#### Regrade requests improvements
+- **Regrade requests for unapplied rubric checks** — Students can now request a regrade for a rubric check that was not applied to their submission. Graders resolve these "bare-check" requests by applying the check (with annotation location if needed), which creates the backing grading comment and triggers a grade recompute ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolve dangling regrade requests** — When a grader deletes or re-grades a comment that backs an open regrade request, the request is automatically resolved with `resolution_reason: comment_deleted`. The student receives a notification and can still escalate to an instructor ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Unified student grade view** — Students now land on a dedicated **Grade** tab when their review is released. The tab shows a grade ledger (total, autograder contribution, hand-grading contribution, adjustments) alongside the full rubric breakdown with regrade affordances for each check ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Rubric descriptions toggle** — The rubric sidebar now has a **Show rubric descriptions** toggle. Descriptions are shown by default for graders/instructors and collapsed by default for students to keep the sidebar scannable ([#772](https://github.com/pawtograder/platform/pull/772))
+
+### May 21, 2026
+
+#### Feature flags
+- **Course dashboards gated by feature flags** — Course-level dashboards (analytics, test insights, etc.) are now controlled by per-course feature flags ([#776](https://github.com/pawtograder/platform/pull/776))
+
+### May 20, 2026
+
+#### Rubric editor
+- **GUI tree editor with drag-and-drop** — The rubric editor now has a dual-mode interface: a visual GUI tree editor alongside the existing YAML source editor. The GUI supports drag-and-drop reordering of parts, criteria, checks, and options; quick-add criterion templates; inline reference picker; and live preview. Both views share the same in-memory rubric so switching is lossless ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Cross-rubric check references in YAML** — Rubric checks can now reference checks from other rubrics using a name-keyed YAML path (`review_round / part / criterion / check`). References are resolved at save time and surface related feedback inline during grading ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Atomic rubric save** — All parts, criteria, checks, and references are now written in a single database transaction via the `update_rubric_full` RPC. The save toast shows a summary of what changed ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Fixed rubric YAML copy/paste save** — Resolved an issue where pasting YAML and saving could produce incorrect results ([#775](https://github.com/pawtograder/platform/pull/775))
+- **Fixed rubric preview with duplicate/sentinel IDs** — Rubric preview no longer drops items with duplicate or sentinel IDs ([#773](https://github.com/pawtograder/platform/pull/773))
+
+#### Bug fixes
+- **Fixed code renderer dark/light mode** — The code renderer now follows the app theme instead of the OS theme ([#770](https://github.com/pawtograder/platform/pull/770))
+- **Fixed submission history real-time updates** — Submission history now reflects real-time review changes ([#769](https://github.com/pawtograder/platform/pull/769))
+
+### May 19, 2026
+
+#### Instructor tools
+- **Instructor commit history and manual grading trigger** — Instructors can now view the full commit history for a student's repository from the submission view. For each commit, instructors can activate an existing submission or trigger grading for a commit that has no submission yet. Staff-triggered grading overrides deadlines and submission limits ([#764](https://github.com/pawtograder/platform/pull/764))
+- **Assessment export CLI command** — New `pawtograder assessment export` CLI command streams a privacy-controlled snapshot of class assessment data (rubrics, scores, autograder tests, hint feedback, gradebook) for downstream analysis. Supports `opaque`, `hash`, and `raw` identity modes. Includes a `deanonymize` subcommand for mapping tokens back to student identifiers ([#746](https://github.com/pawtograder/platform/pull/746))
+- **Fixed gradebook recalculation on active submission changes** — Gradebook now correctly recalculates when grades change after release for active submissions ([#763](https://github.com/pawtograder/platform/pull/763))
+
+#### Infrastructure
+- **Re-enqueue failed repo creations** — Failed repository creations are now automatically re-enqueued, and the create-content rate limit budget has been reduced to avoid hitting GitHub limits ([#771](https://github.com/pawtograder/platform/pull/771))
+
+### May 18, 2026
+
+#### Discussion board
+- **Mark thread as duplicate** — Graders and instructors can now merge a duplicate discussion thread into another thread. The duplicate and all its replies are moved under the original thread, a banner shows the former subject and who merged it, and the duplicate author receives a notification ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### Regrade requests
+- **Course-wide regrade requests dashboard** — New **Manage → All regrade requests** page lists every regrade request across all assignments. Defaults to showing only active (opened/escalated) requests; a status filter reveals the full history. Each row links directly to the submission with the regrade request anchor ([#733](https://github.com/pawtograder/platform/pull/733))
+
+#### Instructor tools
+- **Instructor GitHub diagnostics** — New GitHub diagnostics modal on the Enrollments page lets instructors check a student's GitHub link status (linked account, username changes, org/team membership, DB org status) and take actions: force-sync permissions or unlink the GitHub identity ([#750](https://github.com/pawtograder/platform/pull/750))
+- **Instructor assignment submissions performance** — Improved instructor page performance with streaming and virtualization ([#708](https://github.com/pawtograder/platform/pull/708))
+
 ## April 2026
 
 ### April 29, 2026
