@@ -4,6 +4,46 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 22, 2026
+
+#### Rubric editor improvements
+- **GUI tree editor with drag-and-drop** — The rubric editor now offers a **GUI** mode alongside the existing YAML source editor. Switch between modes with the **GUI** / **YAML source** toggle. In GUI mode you can add parts, criteria, and checks from a menu of templates (met/not met, multi-option, annotation deductions, etc.), drag-and-drop to reorder items at every level, and edit all fields inline without touching YAML. Both views stay in sync — toggling is lossless ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Cross-rubric check references in YAML** — Rubric checks can now reference checks from other rubrics on the same assignment (e.g. a grading-review check that surfaces the matching self-review response). References are authored in YAML by name (`review_round / part / criterion / check`) and are preserved through GUI ↔ YAML round-trips ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Atomic rubric save** — Rubric saves now use a single database RPC (`update_rubric_full`) instead of many individual inserts/updates/deletes, making saves faster and eliminating partial-save states ([#766](https://github.com/pawtograder/platform/pull/766))
+
+#### Enrollment improvements
+- **Invitation auto-expiry removed** — Invitations no longer expire automatically after 30 days. The `expired` status has been renamed to `dropped`, which now means exactly "removed from the SIS roster." Manually-created invitations remain `pending` until accepted or cancelled ([#777](https://github.com/pawtograder/platform/pull/777))
+- **One profile per student per class** — A new database constraint prevents duplicate enrollments for the same student in the same class. All enrollment paths (invitation accept, SIS sync, manual enrollment) now reuse the existing profile pair instead of creating a second one, eliminating the duplicate gradebook rows that could appear previously ([#777](https://github.com/pawtograder/platform/pull/777))
+
+### May 20, 2026
+
+#### Grading improvements
+- **Regrade requests for unapplied rubric checks** — Students can now request a regrade for a rubric check that was *not* applied to their submission (in addition to checks that were applied). The request appears in the rubric sidebar and in the new grade view. Instructors and graders can resolve these requests, which creates the backing grading comment and updates the gradebook automatically ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolve dangling regrade requests** — When a grader deletes or re-grades a comment that backs an open regrade request, the request is now automatically resolved (with `resolution_reason = comment_deleted`) instead of being left stuck as "pending." Students receive a notification and can still escalate to an instructor if they disagree ([#772](https://github.com/pawtograder/platform/pull/772))
+- **New student grade view** — Submissions now have a dedicated **Grade** tab that shows a unified grade ledger: headline total, progress bar, autograder contribution, hand-grading breakdown (with applied and unapplied checks), and any manual adjustments. Students land on this tab by default once grades are released ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Rubric descriptions toggle** — The rubric sidebar now includes a **Show rubric descriptions** toggle. Descriptions are shown by default for graders/instructors and collapsed by default for students to keep the sidebar scannable ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Performance improvements
+- **Instructor page streaming** — Instructor and grader pages now stream immediately instead of waiting for a full server-side data prefetch. Table controllers load on-demand on the client, which significantly reduces time-to-first-paint for large courses ([#708](https://github.com/pawtograder/platform/pull/708))
+- **Virtualized tables** — High-volume instructor tables (enrollments, due-date exceptions, repositories, workflow runs, review assignments) now use row-window virtualization, keeping DOM node count bounded and scroll performance smooth even with thousands of rows ([#708](https://github.com/pawtograder/platform/pull/708))
+- **Unified due-date exceptions table** — The per-assignment exceptions view has been replaced with a single virtualized table that supports assignment, student, and token filters ([#708](https://github.com/pawtograder/platform/pull/708))
+
+### May 19, 2026
+
+#### Grading improvements
+- **Instructor commit history and manual grading trigger** — Instructors can now view the full commit history for a student's repository directly from the submission view. The history shows commit date/time, author, message, workflow status, and all submissions for each commit. Instructors can also manually trigger grading for any commit, bypassing due-date deadlines — the resulting submission is automatically activated ([#764](https://github.com/pawtograder/platform/pull/764))
+- **Course-wide regrade requests dashboard** — A new **Manage → All regrade requests** page lists every regrade request across all assignments in the course. Filter by status, assignment, rubric check, student, assignee, and escalation status. Active requests (opened and escalated) are shown by default; toggle to include drafts and resolved requests ([#733](https://github.com/pawtograder/platform/pull/733))
+
+### May 18, 2026
+
+#### Discussion improvements
+- **Mark thread as duplicate** — Graders and instructors can now merge a duplicate discussion thread into another thread. The duplicate thread and all its replies become replies under the original thread. A banner shows the former subject and who merged it, and the duplicate author receives a notification with a deep link to their merged post ([#727](https://github.com/pawtograder/platform/pull/727))
+
+#### GitHub diagnostics
+- **Instructor GitHub diagnostics** — A new GitHub diagnostics modal is accessible from the enrollments table for each student. It shows the student's linked GitHub account, whether the username has changed, organization membership status, team membership status, and database org confirmation. Instructors can also sync GitHub permissions or unlink a student's GitHub identity directly from this modal ([#750](https://github.com/pawtograder/platform/pull/750))
+
 ## April 2026
 
 ### April 29, 2026
