@@ -365,6 +365,18 @@ After reviews are released to students, grading comments cannot be edited or del
 
 Students can request regrades on rubric items where they believe the grading was incorrect. Regrade requests are automatically prevented on self-review rubric items, since those are completed by the students themselves.
 
+### Requesting a regrade on an unapplied check
+
+Students can also request a regrade for a rubric check that was **not applied** to their submission — for example, if they believe a check should have been applied but wasn't. This creates a "bare-check" regrade request that the grader can resolve by applying the check (and specifying the annotation location if needed).
+
+### Dangling regrade requests
+
+If a grader deletes or re-grades a comment that backs an open regrade request, the request is automatically resolved with `resolution_reason: comment_deleted`. The student receives a notification and can still escalate the auto-resolved request to an instructor if they disagree with the updated grade.
+
+### Course-wide regrade requests dashboard
+
+Instructors can view all regrade requests across all assignments from **Manage → All regrade requests**. The dashboard defaults to showing only active requests (opened and escalated). Use the **Status** filter to include draft, resolved, and closed requests. Each row links directly to the submission with the regrade request anchor highlighted.
+
 ## Split-Rubric Group Grading
 
 For group assignments, you can apply per-student adjustments when using split-rubric grading. This allows you to assign different scores or provide individualized feedback to group members while maintaining the efficiency of group grading workflows.
