@@ -285,7 +285,33 @@ parts:
 
 ## Editing Rubrics
 
-When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
+The rubric editor offers two modes: a **GUI** tree editor and a **YAML source** editor. Switch between them with the **GUI** / **YAML source** toggle at the top of the editor. Both views stay in sync — toggling is lossless and you can switch at any time.
+
+### GUI editor
+
+The GUI editor lets you build and edit rubrics without writing YAML. Use it to:
+
+- **Add parts** — Click **Add part** to create a new rubric part. Each part can be set to Standard, Individual grading, or Assign-to-student mode.
+- **Add criteria from templates** — Click **Add criterion** inside a part to choose from built-in templates: blank checkbox, met/not met, met/partial/not met, four-tier, multi-option, code-quality deductions, and penalty-only annotation.
+- **Edit inline** — Click any field to edit it directly. Changes are debounced so you can type freely without triggering a save on every keystroke.
+- **Drag-and-drop reordering** — Drag the grip handle (⠿) to reorder parts, criteria, and checks within their parent.
+- **Add cross-rubric references** — Expand the **References** section on any check to link it to a check from another rubric on the same assignment (e.g. a grading-review check that surfaces the matching self-review response). References are cross-round only.
+
+### YAML source editor
+
+The YAML source editor provides full control over the rubric schema. It includes:
+
+- Monaco-based editor with syntax highlighting and schema validation
+- Inline error markers for invalid YAML
+- Points-adjustment warnings when negative point values are detected
+
+### Saving
+
+Click **Save** to save the rubric. Saves use a single atomic database operation, so there are no partial-save states. After a successful save, a toast shows a summary of what changed (including how many submission reviews were recomputed).
+
+### Unsaved changes protection
+
+Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears. Unsaved changes are tracked per review-round tab — a `* (Unsaved Changes)` marker appears on the tab.
 
 This protection applies when:
 
@@ -294,8 +320,6 @@ This protection applies when:
 - Closing the browser tab or window
 - Refreshing the page
 - Using the mobile navigation dropdown
-
-The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning clears automatically.
 
 ### Keyboard shortcuts
 
