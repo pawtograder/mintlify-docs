@@ -4,6 +4,58 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 23, 2026
+
+#### Grading improvements
+- **Confirm review button in rubric sidebar** — A "Complete Review" button now appears at the bottom of the rubric sidebar so graders no longer need to scroll back to the top. When all required checks are satisfied, the button shows two options: **Complete** (stay on current submission) and **Complete + Next** (mark complete and navigate to the next incomplete submission automatically) ([#695](https://github.com/pawtograder/platform/pull/695))
+
+### May 22, 2026
+
+#### Rubric editor
+- **GUI tree editor with drag-and-drop** — The rubric editor now offers a visual GUI mode alongside the existing YAML source editor. Switch between modes using the GUI/YAML source toggle. The GUI editor supports drag-and-drop reordering of parts, criteria, checks, and options; quick-add criterion templates (Met/not met, four-tier, multi-option, code-quality deductions, etc.); inline validation; and a cross-rubric check references picker ([#766](https://github.com/pawtograder/platform/pull/766))
+- **References in YAML** — Cross-rubric check references can now be defined in YAML using name-keyed entries (`review_round / part / criterion / check`). References round-trip through export/import via the CLI ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Atomic save** — Rubric saves now use a single atomic database call (`update_rubric_full`) instead of per-item create/update/delete operations, reducing the chance of partial saves ([#766](https://github.com/pawtograder/platform/pull/766))
+
+#### Regrade requests
+- **Regrade requests for unapplied checks** — Students can now request a regrade for a rubric check that was not applied to their submission. When a grader resolves the request, Pawtograder automatically creates the backing grading comment and updates the submission score ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolution of dangling regrade requests** — When a grader deletes or re-grades a comment that has an open regrade request, the request is automatically resolved with reason "comment_deleted" and the student is notified. Students can still escalate auto-resolved requests to an instructor ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Unified Grade tab for students** — Students now land on a dedicated "Grade" tab when their review is released, showing a grade ledger with autograder and hand-grading breakdowns, unapplied check visibility, and regrade affordances ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Enrollment
+- **Bulk invitations: no auto-expiry** — Invitations no longer expire automatically based on age. The "expired" status has been renamed to "dropped," which now specifically means the student was removed from the SIS roster ([#777](https://github.com/pawtograder/platform/pull/777))
+- **Deduplicated enrollment profiles** — All enrollment paths now reuse the existing profile pair for a student already enrolled in a class, preventing duplicate gradebook rows. A `merge_duplicate_class_enrollments` tool is available for cleaning up pre-existing duplicates ([#777](https://github.com/pawtograder/platform/pull/777))
+
+### May 21, 2026
+
+#### Bug fixes
+- **Fixed syncing deleted files** — Repository sync now correctly handles files that were deleted from the handout ([#783](https://github.com/pawtograder/platform/pull/783))
+- **Fixed gradebook recalculation on active submission changes** — Gradebook now correctly recalculates when the active submission changes ([#763](https://github.com/pawtograder/platform/pull/763))
+
+### May 20, 2026
+
+#### Instructor tools
+- **Commit history and manual grading trigger** — Instructors can now view the full commit history for any student repository from the submission view. The dialog shows commit metadata, workflow status, and linked submissions. Instructors can trigger grading for any commit that lacks a submission; staff-triggered grading bypasses due-date deadlines and submission limits ([#764](https://github.com/pawtograder/platform/pull/764))
+
+#### Rubric fixes
+- **Fixed rubric YAML copy/paste save** — Saving a rubric after pasting YAML now works correctly and refreshes the editor ([#775](https://github.com/pawtograder/platform/pull/775))
+- **Fixed rubric preview dropping items with duplicate or sentinel IDs** — The rubric preview no longer drops checks with duplicate or placeholder IDs ([#773](https://github.com/pawtograder/platform/pull/773))
+
+#### Performance
+- **Improved instructor page performance** — The instructor submissions page now uses streaming and virtualization for faster load times on large classes ([#708](https://github.com/pawtograder/platform/pull/708))
+
+#### Bug fixes
+- **Fixed submission history not reflecting realtime review changes** — The submission history panel now updates in real time when review changes are made ([#769](https://github.com/pawtograder/platform/pull/769))
+- **Fixed code renderer dark/light mode** — The code renderer now follows the app theme instead of the OS theme ([#770](https://github.com/pawtograder/platform/pull/770))
+- **Re-enqueue failed repo creations** — Failed repository creation jobs are now automatically re-enqueued ([#771](https://github.com/pawtograder/platform/pull/771))
+
+### May 19, 2026
+
+#### Bug fixes
+- **Fixed handout sync with large files** — Syncing handout files larger than 5 MB to student repositories now works correctly ([#749](https://github.com/pawtograder/platform/pull/749))
+- **Async archive queue for large assignment deletes** — Deleting large assignments now uses an async queue to avoid timeouts ([#765](https://github.com/pawtograder/platform/pull/765))
+
 ## April 2026
 
 ### April 29, 2026
