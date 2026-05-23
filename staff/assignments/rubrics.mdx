@@ -285,6 +285,29 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two modes you can switch between at any time using the **GUI** and **YAML source** buttons in the toolbar:
+
+### GUI editor
+
+The GUI editor provides a visual tree of your rubric with drag-and-drop reordering at every level (parts, criteria, checks, and options). Key features:
+
+- **Add criterion templates** — click "Add criterion" inside a part to choose from pre-built templates: Met/not met, Met/partial/not met, four-tier, multi-option, code-quality deductions, and penalty-only annotations.
+- **Drag-and-drop reordering** — grab the grip handle on any row to reorder parts, criteria, checks, or options within their parent.
+- **Inline validation** — the GUI surfaces the same errors as the YAML editor (duplicate IDs, missing required fields, single-option checks) before you save.
+- **Cross-rubric references** — expand the "References" section on any check to link it to a check from another rubric on the same assignment. The grader sees the referenced feedback inline while grading. References are cross-round only (e.g., a grading-review check can reference a self-review check).
+
+### YAML source editor
+
+The YAML source editor gives you full control over the rubric schema with Monaco-based syntax highlighting and autocomplete. Switch to YAML source to paste in a rubric, make bulk edits, or use advanced fields not yet exposed in the GUI.
+
+<Note>
+Switching from YAML source to GUI requires valid YAML. If there are parse errors, fix them first before toggling to GUI mode.
+</Note>
+
+### Saving
+
+Both editors share the same in-memory rubric state. Clicking **Save** commits the current state atomically via a single database call. After a successful save, a toast shows a summary of what changed (parts, criteria, checks, and references updated).
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
