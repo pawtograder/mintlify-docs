@@ -166,6 +166,22 @@ After a review has been released to students, grading comments become locked to 
 Self-review rubric items do not support regrade requests. Students cannot request regrades on items they evaluated themselves during the self-review process.
 </Note>
 
+### Regrade requests for unapplied checks
+
+Students can now request a regrade for a rubric check that was **not applied** to their submission — for example, if they believe a check should have been applied but wasn't. These "bare-check" regrade requests work the same way as comment-backed requests:
+
+1. The student opens a regrade request from the **Grade** tab on their submission page.
+2. The request appears in the grader's queue with the check name and "Not applied" context.
+3. When the grader resolves the request, Pawtograder automatically creates the backing grading comment and updates the submission score.
+
+**For graders resolving bare-check requests:** the resolve popover asks you to specify where the grade should appear (for annotation checks, you must select a file and line number or artifact). The submission score updates automatically once you confirm.
+
+### Auto-resolution of dangling regrade requests
+
+When a grader deletes or re-grades a comment that has an open regrade request attached to it, the request is automatically resolved with status "Resolved" and reason "comment_deleted". The student receives a notification explaining that the grade was changed during re-grading and they can escalate if they still disagree.
+
+This prevents regrade requests from getting stuck in a "Pending" state when the underlying grade has already changed. Auto-resolved requests are **not** terminal — students can still escalate to an instructor.
+
 <Note>
 After a review is released to students, grading comments can no longer be edited or deleted. This ensures students receive consistent feedback and prevents changes after they've viewed their grades.
 </Note>
