@@ -15,6 +15,40 @@ icon: "chart-line"
 
 Pawtograder provides analytics for student assignment repositories, allowing you to track commit activity, repository engagement, and development patterns across your course.
 
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for any student repository and, when needed, manually trigger grading for a specific commit.
+
+### Viewing commit history
+
+A **Commit History** button appears in the submission view for instructors and graders. Clicking it opens a dialog that shows:
+
+- Every commit in the repository (sourced from GitHub and from Pawtograder's webhook records)
+- Commit date/time, author, and message
+- Workflow status (not triggered, requested, in progress, completed)
+- All submissions linked to each commit
+
+Commits are color-coded by source:
+- **From GitHub** (blue) — fetched from the GitHub API; no webhook record exists
+- **Recorded by webhook** (purple) — Pawtograder received a push webhook for this commit
+- **Recorded by webhook + GitHub** (green) — both sources agree
+
+<Note>
+The commit date shown is the author date set by git on the committer's machine and can be backdated. For commits recorded via push webhook, a "received" timestamp is also shown — that timestamp is server-side and trustworthy.
+</Note>
+
+### Triggering grading manually
+
+From the commit history dialog, instructors can trigger grading for any commit that does not yet have a submission. Click **Create submission and activate** next to the commit. Pawtograder will:
+
+1. Trigger the grading workflow for that commit.
+2. Wait for the resulting submission to appear.
+3. Automatically activate it as the student's active submission.
+
+**Staff-triggered grading overrides deadlines and submission limits.** This is useful for grading late work, re-grading after a bug fix, or grading commits that were pushed before the assignment was configured.
+
+A **Commits** column also appears in the instructor assignment submissions table for quick access to each student's commit history.
+
 ## Viewing Repository Analytics
 
 Navigate to an assignment's analytics page to see repository statistics for all student submissions.
