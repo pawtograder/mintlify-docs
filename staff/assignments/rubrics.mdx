@@ -285,7 +285,30 @@ parts:
 
 ## Editing Rubrics
 
-When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
+The rubric editor offers two modes, switchable via the **GUI** / **YAML source** toggle at the top of the editor:
+
+### GUI editor
+
+The GUI editor provides a visual tree of your rubric with drag-and-drop reordering at every level (parts, criteria, checks, and options). Use it to:
+
+- **Add parts, criteria, and checks** using the **Add part** / **Add criterion** / **Add check** buttons. Criteria can be added from built-in templates (Met/Not met, Met/Partial/Not met, four-tier, multi-option, annotation deductions, penalty-only).
+- **Reorder** items by dragging the grip handle on the left of each row.
+- **Configure scoring mode** per criterion: *Award per check* (additive), *Deduct from total* (non-additive), or *Penalty only* (deduction-only).
+- **Manage cross-rubric references** inline on each check via the **References** collapsible section.
+
+The preview pane on the right updates in real time as you edit.
+
+### YAML source editor
+
+The YAML source editor (Monaco-based) provides full control over the rubric schema. Switch to it when you need to paste in a rubric from another source or use advanced fields not yet exposed in the GUI. The GUI and YAML source are kept in sync — switching between them is lossless as long as the YAML is valid.
+
+<Note>
+You cannot switch to the GUI editor if the YAML contains a syntax error. Fix the error first, then switch.
+</Note>
+
+### Unsaved changes protection
+
+Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
 
