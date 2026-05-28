@@ -96,8 +96,7 @@
               "staff/assignments/grading-status",
               "staff/assignments/leaderboard",
               "staff/assignments/extensions-and-scoring",
-              "staff/assignments/repository-permissions",
-              "staff/assignments/analytics"
+              "staff/assignments/repository-permissions"
             ]
           },
           {
