@@ -1,0 +1,79 @@
+---
+title: "Late Tokens and Extensions"
+description: "Extend an assignment deadline with late tokens, or receive an instructor-granted extension"
+icon: "clock"
+---
+
+# Late Tokens and Extensions
+
+There are two ways your assignment deadline can move past its original date:
+
+- **Late tokens**: you choose to spend a token to extend a deadline.
+- **Instructor-granted extensions**: staff manually add time to your deadline, separately from tokens.
+
+## Late Tokens
+
+Pawtograder supports late submission policies based on "late tokens." Instructors decide how many late tokens are available to each student, and how many tokens can be used per assignment. Each token extends the deadline by 24 hours, with no grade penalty.
+
+<Warning>
+Late tokens must be applied **before** the deadline. If multiple late tokens are permitted, you can apply them all at once or one at a time, but each must be applied before the current deadline.
+</Warning>
+
+### Applying Late Tokens
+
+On each assignment page where late tokens can be applied, you'll see an **Extend Due Date** button next to your due date.
+
+<Frame>
+  <img src="/images/students/assignments/late-tokens-1754513689169.png" alt="Assignment page showing Extend Due Date button" />
+</Frame>
+
+A confirmation dialog explains the course's policy (configured by your instructor).
+
+<Frame>
+  <img src="/images/students/assignments/late-tokens-1754590579057.png" alt="Late token confirmation dialog with course policy" />
+</Frame>
+
+After applying the token, you'll see the new due date.
+
+<Frame>
+  <img src="/images/students/assignments/late-tokens-1754590617225.png" alt="Updated due date after applying late token" />
+</Frame>
+
+To use multiple late tokens, click **Extend Due Date** again.
+
+### Gifted Late Tokens
+
+Instructors can gift additional late tokens to individual students beyond the class-wide allocation. Gifted tokens:
+
+- Are added to your available token balance automatically
+- Work exactly like your original tokens — each extends a deadline by 24 hours and must be applied before your current due date
+- Are included in your remaining token count
+- Can be used even after you've exhausted your initial allocation
+
+For example, if you've used all 4 of your initial tokens but your instructor gifts you 1 additional token, you'll have 1 remaining to use.
+
+### Late Tokens and Group Assignments
+
+For group assignments, late token semantics are designed to be straightforward and fair:
+
+- Any group member with at least one token available can apply a late token (so long as the assignment's per-assignment token cap hasn't been reached). It does not matter if a groupmate is out of tokens.
+- All group members have a token deducted from their balance.
+- All group members see the same extended due date.
+
+## Instructor-Granted Extensions
+
+Separately from late tokens, instructors can grant extensions directly. These are different from late tokens in two important ways:
+
+- **They don't consume your token budget.** Your remaining token count is unchanged.
+- **You don't apply them yourself.** The extension is added by staff and takes effect automatically; your due date simply moves.
+
+Extensions can be granted:
+
+- **For a specific assignment**, just for you (or your group)
+- **Across all of your assignments**, e.g. as a blanket accommodation
+
+When an extension is in effect, the assignment page shows your adjusted due date. You don't need to do anything to "apply" it.
+
+<Note>
+If you believe you need an extension, contact your instructor directly. Extensions are not requested through Pawtograder — they're entered by staff on your behalf.
+</Note>
