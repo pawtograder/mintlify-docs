@@ -169,7 +169,7 @@ Once Supabase is running, these services are available:
 |---------|-----|-------------|
 | API | http://127.0.0.1:54321 | Supabase REST API |
 | Studio | http://localhost:54323 | Database management UI |
-| Inbucket | http://localhost:54324 | Email testing interface |
+| Mailpit | http://localhost:54324 | Email testing interface |
 | MCP Server | http://127.0.0.1:54321/mcp | Model Context Protocol server for AI assistance |
 | Application | https://localhost:3000 | Next.js frontend |
 
@@ -366,7 +366,7 @@ The notification system selects its TLS behavior from `SMTP_PORT`:
 |------|-----------------|
 | `465` | Standard SMTP over full TLS (`secure: true`) |
 | `2525` | Postmark — STARTTLS (`secure: false`, `requireTLS: true`) |
-| `54325` | Local Inbucket (dev only, no TLS) — captures mail for local testing |
+| `54325` | Local Mailpit (dev only, no TLS) — captures mail for local testing |
 
 For Postmark, set `SMTP_PORT=2525` along with your Postmark `SMTP_HOST`, `SMTP_USER`, and `SMTP_PASSWORD`.
 
