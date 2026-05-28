@@ -6,11 +6,14 @@ icon: "robot"
 
 # Configuring Autograders
 
-Pawtograder's autograder is implemented as a GitHub Action,
+Pawtograder's autograder is a GitHub Action,
 [`pawtograder/assignment-action`](https://github.com/pawtograder/assignment-action),
-that runs inside each student repository on every push. This page is a
-reference for the `pawtograder.yml` config that lives in the grader/solution
-repo and a description of the runtime flow that the action follows.
+that runs inside each student repository on every push. It overlays the
+student's submission onto your grader repo, runs the linter, build, and
+instructor test suite (and optionally the student's own tests with
+mutation/coverage analysis), then reports per-test results, scores, and
+artifacts back to Pawtograder. This page is the reference for the
+`pawtograder.yml` config that drives that flow.
 
 <Note>
 The `pawtograder.yml` schema is published at
@@ -22,87 +25,52 @@ Reference it from the top of your YAML to get IDE autocomplete:
 ```
 </Note>
 
-## Running a Forked Action
+## On This Page
 
-The grading action is fully open source at
-[`pawtograder/assignment-action`](https://github.com/pawtograder/assignment-action),
-so if the `pawtograder.yml` schema documented below isn't expressive enough
-for what your assignment needs, you can fork the action and point your
-assignment's grading workflow at your fork instead. Common reasons to do
-this include adding a new build preset, changing how scores are computed,
-or wiring up custom artifact handling.
-
-Each assignment's handout (template) repository ships with a
-`.github/workflows/grade.yml` that invokes the action by reference:
-
-```yaml
-- name: Collect Submission and Run Grader
-  uses: pawtograder/assignment-action@v3
-```
-
-To use a fork, change that one line to point at your fork and the ref
-(tag, branch, or commit SHA) you want students to run:
-
-```yaml
-- name: Collect Submission and Run Grader
-  uses: your-org/assignment-action@your-tag
-```
-
-<Tip>
-Forks work because the grading server identifies submissions by the
-student's OIDC token, not by which copy of the action is running. The
-`action_ref` and `action_repository` inputs are still passed through so
-the server can record exactly which build of the action graded each
-submission.
-</Tip>
-
-<Warning>
-Forking means **you** own the grader from that point forward. Upstream
-improvements and bug fixes won't reach your students until you merge
-them into your fork and bump the ref in `grade.yml`. Only fork when the
-configurable surface of `pawtograder.yml` (documented in the rest of
-this page) genuinely isn't enough — most customization needs can be
-expressed via `build`, `gradedParts`, and the `python-script` preset
-without touching the action itself.
-</Warning>
-
-## Architecture Overview
-
-There are three repositories involved in every autograder run:
-
-- The **handout (template) repository**, which is forked into each student repository when the assignment is released. It contains starter code and `.github/workflows/grade.yml`.
-- The **grader (solution) repository**, which contains the reference solution, the instructor test suite, and `pawtograder.yml`. Students never see this repo.
-- The **student repository**, which holds the student's submission. Every push triggers `grade.yml`, which runs `pawtograder/assignment-action`.
-
-When the action runs in the student repo, it:
-
-<Steps>
-<Step title="Authenticates with the grading server">
-GitHub issues an OIDC token to the workflow. The action sends that token to the `autograder-create-submission` edge function. The grading server verifies the token (so it knows which repo and commit the request came from), runs security checks, registers a new submission, and returns a one-time download URL for the matching grader repository tarball.
-</Step>
-<Step title="Downloads the grader and reads pawtograder.yml">
-The action extracts the grader tarball alongside the student's checkout and reads `pawtograder.yml` from the grader repo. The config selects an "overlay" grader and a build preset (`java-gradle`, `python-script`, or `none`).
-</Step>
-<Step title="Overlays student files onto the grader">
-For each glob in `submissionFiles.files` and `submissionFiles.testFiles`, the action deletes the matching files in the grader checkout and copies the student's files in. This is the "overlay": the grader repo provides the harness, the student's files are layered on top.
-</Step>
-<Step title="Lints, builds, and runs instructor tests">
-The selected builder runs the linter (if configured), then a clean build, then the instructor test suite. Results are parsed into per-test pass/fail records. If `linter.policy: fail` is set and the linter fails, or if the build fails, grading stops and a zero is recorded.
-</Step>
-<Step title="Optionally runs student tests and mutation analysis">
-If `student_tests` is configured, the action resets the grader's solution files, layers in only the student test files, and runs them against the instructor implementation (and optionally mutation testing). It can also run the student's tests against the student's own implementation to report branch and mutation coverage.
-</Step>
-<Step title="Scores parts and units, resolves dependencies">
-Scores are computed for every `gradedUnit`, summed into `gradedPart` scores, and then dependency rules are applied — units or parts whose dependencies aren't satisfied are replaced with a message instead of their actual results.
-</Step>
-<Step title="Submits feedback and uploads artifacts">
-The action calls `autograder-submit-feedback` with the tests, lint output, and logs. If the grader emitted any `artifacts`, they are uploaded to Supabase storage via the signed URLs returned by the server. A summary table is also written to the GitHub Actions job summary.
-</Step>
-</Steps>
-
-<Note>
-If the action detects that the push came from a handout/template repo rather than a student repo, the server returns a `handout_notice` and the action exits successfully without grading. There is no longer any need to configure a `handout_repo` input — that parameter is deprecated and ignored as of v3, and will be removed in v4.
-</Note>
+<CardGroup cols={2}>
+  <Card title="grade.yml Workflow" icon="file-code" href="#the-gradeyml-workflow">
+    The workflow file students run, plus action inputs and outputs.
+  </Card>
+  <Card title="pawtograder.yml Configuration" icon="gear" href="#the-pawtograderyml-configuration">
+    Top-level reference for `build`, `gradedParts`, `submissionFiles`, and friends.
+  </Card>
+  <Card title="Dependencies" icon="diagram-project" href="#dependencies">
+    Gate parts or units on prior results.
+  </Card>
+  <Card title="Limiting Feedback" icon="eye-slash" href="#limiting-student-visible-feedback">
+    Trim what students see with `maxImplementationHints` and `hide_output`.
+  </Card>
+  <Card title="Feedbot" icon="message-bot" href="#feedbot">
+    LLM-generated hints attached to failing tests.
+  </Card>
+  <Card title="Examples" icon="code" href="#examples">
+    Working `pawtograder.yml` files for Java, Python, and mutation testing.
+  </Card>
+  <Card title="Submission Validation" icon="circle-check" href="#submission-file-pattern-validation">
+    Pattern validation and empty-submission detection.
+  </Card>
+  <Card title="Submission Viewer" icon="folder-open" href="#submission-file-viewer">
+    How files and grader artifacts render in the UI.
+  </Card>
+  <Card title="AI-Powered Test Hints" icon="wand-magic-sparkles" href="#ai-powered-test-hints">
+    Per-test `extra_data.llm` blocks for one-shot hints.
+  </Card>
+  <Card title="Rerunning the Autograder" icon="rotate" href="#rerunning-the-autograder">
+    Regrade existing submissions against a chosen grader version.
+  </Card>
+  <Card title="Test Insights & Bulk Regrading" icon="chart-line" href="#test-insights-and-bulk-regrading">
+    Find systemic test failures and regrade affected submissions in bulk.
+  </Card>
+  <Card title="Running the Grader Locally" icon="terminal" href="#running-the-grader-locally">
+    Iterate on your grader outside GitHub Actions.
+  </Card>
+  <Card title="Architecture Overview" icon="sitemap" href="#architecture-overview">
+    Advanced: the three repos involved and the action's step-by-step flow.
+  </Card>
+  <Card title="Running a Forked Action" icon="code-fork" href="#running-a-forked-action">
+    Advanced: point students at your fork of the action.
+  </Card>
+</CardGroup>
 
 ## The `grade.yml` Workflow
 
@@ -866,3 +834,85 @@ npx tsimp src/grading/main.ts \
 Use absolute paths. The grader produces output in a `pawtograder-grading/`
 directory in your current working directory; delete it between runs
 (or you may hit `EACCES` errors copying files).
+
+## Architecture Overview
+
+There are three repositories involved in every autograder run:
+
+- The **handout (template) repository**, which is forked into each student repository when the assignment is released. It contains starter code and `.github/workflows/grade.yml`.
+- The **grader (solution) repository**, which contains the reference solution, the instructor test suite, and `pawtograder.yml`. Students never see this repo.
+- The **student repository**, which holds the student's submission. Every push triggers `grade.yml`, which runs `pawtograder/assignment-action`.
+
+When the action runs in the student repo, it:
+
+<Steps>
+<Step title="Authenticates with the grading server">
+GitHub issues an OIDC token to the workflow. The action sends that token to the `autograder-create-submission` edge function. The grading server verifies the token (so it knows which repo and commit the request came from), runs security checks, registers a new submission, and returns a one-time download URL for the matching grader repository tarball.
+</Step>
+<Step title="Downloads the grader and reads pawtograder.yml">
+The action extracts the grader tarball alongside the student's checkout and reads `pawtograder.yml` from the grader repo. The config selects an "overlay" grader and a build preset (`java-gradle`, `python-script`, or `none`).
+</Step>
+<Step title="Overlays student files onto the grader">
+For each glob in `submissionFiles.files` and `submissionFiles.testFiles`, the action deletes the matching files in the grader checkout and copies the student's files in. This is the "overlay": the grader repo provides the harness, the student's files are layered on top.
+</Step>
+<Step title="Lints, builds, and runs instructor tests">
+The selected builder runs the linter (if configured), then a clean build, then the instructor test suite. Results are parsed into per-test pass/fail records. If `linter.policy: fail` is set and the linter fails, or if the build fails, grading stops and a zero is recorded.
+</Step>
+<Step title="Optionally runs student tests and mutation analysis">
+If `student_tests` is configured, the action resets the grader's solution files, layers in only the student test files, and runs them against the instructor implementation (and optionally mutation testing). It can also run the student's tests against the student's own implementation to report branch and mutation coverage.
+</Step>
+<Step title="Scores parts and units, resolves dependencies">
+Scores are computed for every `gradedUnit`, summed into `gradedPart` scores, and then dependency rules are applied — units or parts whose dependencies aren't satisfied are replaced with a message instead of their actual results.
+</Step>
+<Step title="Submits feedback and uploads artifacts">
+The action calls `autograder-submit-feedback` with the tests, lint output, and logs. If the grader emitted any `artifacts`, they are uploaded to Supabase storage via the signed URLs returned by the server. A summary table is also written to the GitHub Actions job summary.
+</Step>
+</Steps>
+
+<Note>
+If the action detects that the push came from a handout/template repo rather than a student repo, the server returns a `handout_notice` and the action exits successfully without grading. There is no longer any need to configure a `handout_repo` input — that parameter is deprecated and ignored as of v3, and will be removed in v4.
+</Note>
+
+## Running a Forked Action
+
+The grading action is fully open source at
+[`pawtograder/assignment-action`](https://github.com/pawtograder/assignment-action),
+so if the `pawtograder.yml` schema documented above isn't expressive enough
+for what your assignment needs, you can fork the action and point your
+assignment's grading workflow at your fork instead. Common reasons to do
+this include adding a new build preset, changing how scores are computed,
+or wiring up custom artifact handling.
+
+Each assignment's handout (template) repository ships with a
+`.github/workflows/grade.yml` that invokes the action by reference:
+
+```yaml
+- name: Collect Submission and Run Grader
+  uses: pawtograder/assignment-action@v3
+```
+
+To use a fork, change that one line to point at your fork and the ref
+(tag, branch, or commit SHA) you want students to run:
+
+```yaml
+- name: Collect Submission and Run Grader
+  uses: your-org/assignment-action@your-tag
+```
+
+<Tip>
+Forks work because the grading server identifies submissions by the
+student's OIDC token, not by which copy of the action is running. The
+`action_ref` and `action_repository` inputs are still passed through so
+the server can record exactly which build of the action graded each
+submission.
+</Tip>
+
+<Warning>
+Forking means **you** own the grader from that point forward. Upstream
+improvements and bug fixes won't reach your students until you merge
+them into your fork and bump the ref in `grade.yml`. Only fork when the
+configurable surface of `pawtograder.yml` (documented above) genuinely
+isn't enough — most customization needs can be expressed via `build`,
+`gradedParts`, and the `python-script` preset without touching the
+action itself.
+</Warning>
