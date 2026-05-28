@@ -1,53 +1,93 @@
 ---
 title: "Assignment Configuration"
-description: "Configure assignment settings including due dates, score capping, and grading options"
+description: "Reference for the per-assignment settings: dates, points, late tokens, leaderboard, and more"
 icon: "gear"
 ---
 
 # Assignment Configuration
 
-Pawtograder provides flexible configuration options for assignments to support various grading policies and workflows.
+Per-assignment settings are configured from **Manage → Assignments →
+[Assignment] → Configuration**. This page documents what each field
+does. Group-specific settings are covered in
+[Groups](/staff/assignments/groups); the extension and late-token
+workflow is in [Extensions](/staff/assignments/extensions).
 
-## Due Date Management
+## Dates and time zone
 
-### Extended Due Date Picker
+All dates are displayed in the course's configured time zone (set
+under **Course Settings**); the field label includes the time zone for
+clarity. Individual users can override their display time zone in their
+own user settings.
 
-When granting manual extensions to students, instructors can choose an extended due date directly using a date picker interface, rather than entering extension hours and minutes. This makes it easier to:
+- **Release Date** — when the assignment becomes visible to students
+  and student repositories are created.
+- **Due Date** — the default submission deadline. Per-student or
+  per-group overrides are configured under
+  [Extensions](/staff/assignments/extensions).
+- **Regrade Request Deadline** — the cut-off for students opening
+  regrade requests after grades are released.
 
-- Set specific deadlines for individual students or groups
-- Visualize the extended due date in context
-- Avoid calculation errors when determining extension length
+For lab-section-specific due dates, set **Minutes due after lab
+meeting** or **Hours due after programming assignment** on the group
+configuration; Pawtograder computes a per-section due date from the
+section's meeting time.
 
-To grant an extension:
+## Points possible and score capping
 
-1. Navigate to the assignment's "Due Date Exceptions" section
-2. Select the student or group
-3. Use the date picker to choose the extended due date
-4. Save the extension
+- **Points Possible** is the assignment's maximum, displayed in the
+  gradebook and used as the denominator for percentages.
+- **Score capping** is configured on the rubric (not the assignment).
+  In the rubric editor, toggle **Cap score to assignment points** on
+  the Grading Rubric to cap the combined autograder + handgrading score
+  at the assignment's Points Possible.
 
-The system will automatically calculate the extension duration based on the original due date.
+When the cap is enabled, students see both their raw and capped scores
+on the submission page; the gradebook stores the capped value. Use the
+cap when your rubric or autograder can sum past the assignment max
+(extra credit, bonus tests).
 
-## Score Capping
+## Empty submission policy
 
-Instructors can configure a maximum score cap for assignments. This feature allows you to:
+- **Permit Empty Submissions** (default: on) — submissions whose
+  collected files are unchanged from the handout are flagged as empty
+  but accepted.
+- **Reject Empty Submissions** — the autograder rejects empty
+  submissions with an error directing the student to commit their
+  changes. Instructors and graders can still submit empty for testing.
 
-- Set a maximum possible score for an assignment
-- Prevent extra credit from exceeding a specified limit
-- Ensure consistent grading across all submissions
+Empty detection compares SHA-256 hashes of the files matching
+`submissionFiles` against every recorded handout version, so it
+respects whatever scope the autograder config defines.
 
-Score capping is configured in the assignment settings and applies automatically when calculating final grades. When a student's total score (autograder + handgrading) exceeds the cap, their final score will be limited to the maximum value.
+## Late tokens
 
-### Configuring Score Caps
+- **Max Late Tokens** is the class-wide allotment for the assignment.
+  Students spend tokens to push their own due date back in 24-hour
+  increments, requested before the original due date.
+- Instructors can gift extra tokens to individual students and grant
+  manual extensions; see [Extensions](/staff/assignments/extensions).
 
-1. Navigate to the assignment settings
-2. Find the "Score Capping" section
-3. Enter the maximum score value
-4. Save the configuration
+## Leaderboard
 
-The score cap will apply to all submissions for that assignment.
+Toggle **Show Leaderboard** to display a class-wide ranking of
+autograder scores on the assignment page. See
+[Leaderboard](/staff/assignments/leaderboard) for what students see and
+how rankings are computed.
 
-## Export Options
+## Grader pseudonymous mode
 
-### Loading States for Export Buttons
+When enabled, students see grader feedback under a stable pseudonym
+rather than the grader's real name. Useful when course policy requires
+anonymized grading.
 
-When exporting grades or other assignment data, the export buttons now display loading states to provide feedback during the export process. This helps you understand that the system is processing your request, especially for large datasets.
+## Repository analytics
+
+**Enable Repository Analytics** turns on commit-frequency and
+push-timing analytics for the assignment's student repositories. See
+[Repository Analytics](/staff/assignments/repository-analytics).
+
+## Handout URL
+
+If you maintain the handout outside Pawtograder's GitHub flow, set the
+**Handout URL** to the publicly viewable URL students should reference.
+This is independent of the handout GitHub repository Pawtograder creates.

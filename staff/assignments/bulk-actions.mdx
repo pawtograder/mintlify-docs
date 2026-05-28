@@ -1,0 +1,125 @@
+---
+title: "Bulk Actions"
+description: "Instructor bulk operations on submissions: complete, release, unrelease, reassign graders, and update review due dates"
+icon: "check-double"
+---
+
+# Bulk Actions
+
+Pawtograder exposes several bulk operations across an assignment's
+submissions so instructors don't have to click through one submission
+at a time. All of them live on either the assignment's **All
+Submissions** tab or the **Grading Assignments** page.
+
+## Selecting rows
+
+The submissions table supports row selection via the leftmost checkbox
+column:
+
+- Click an individual checkbox to toggle a row.
+- Click **All in view** in the column header to select every row that
+  matches the current filters.
+- Click **None** to clear the selection.
+
+The Release / Unrelease / Complete buttons show the count of selected
+rows (e.g. "Release 12 selected submissions") and become active only
+when at least one selectable row is checked. Rows for students who
+haven't submitted yet are not selectable. The selection clears
+automatically after a successful action or when you change column
+filters.
+
+## Mark All Grading Complete
+
+The **Mark All Grading Complete** button on the **All Submissions** tab
+marks every eligible incomplete review complete in one step.
+
+A review is **eligible** when:
+
+- All required rubric checks have been applied.
+- All criteria min/max check requirements are satisfied.
+- The submission's student is still active in the course.
+- The review is not already complete.
+
+Clicking the button opens a popover that summarizes how many reviews
+will be marked complete and how many will be skipped because of missing
+required checks. Confirm to apply.
+
+<Note>
+Completing a review does not release it to the student. Use **Release**
+(below) separately when you're ready to make grades visible.
+</Note>
+
+Use the **Grading Complete** column filter on the submissions table to
+focus on only complete or only incomplete reviews.
+
+## Bulk Complete (Grading Progress page)
+
+For finer-grained control than "complete all eligible", use the **Bulk
+Complete** action on the **Grading Progress** page:
+
+1. Filter incomplete reviews by grader, due date, rubric part, or
+   completion status.
+2. Select the reviews you want to complete using the checkboxes.
+3. Click **Bulk Complete**.
+4. Optionally choose to preserve existing grades, apply default scores,
+   or excuse from grading.
+5. Optionally add a note explaining the bulk action.
+6. Click **Confirm Bulk Complete**.
+
+Common uses: closing out the end of a grading period, excusing students
+who dropped, or completing placeholder reviews.
+
+## Bulk Release and Unrelease
+
+Once rows are selected on the submissions table, the **Release** and
+**Unrelease** buttons publish or retract the selected reviews. Released
+reviews become visible to students; unreleased reviews are hidden again
+and grading comments unlock for graders to edit.
+
+<Warning>
+Unreleasing a review hides it from the student but keeps it in their
+gradebook history. Don't unrelease without a plan to re-release — the
+student may have already seen the previous grade.
+</Warning>
+
+## Bulk Reassign Graders
+
+From the **Grading Assignments** page:
+
+1. Select the submissions or rubric parts to reassign.
+2. Click **Bulk Reassign**.
+3. Choose the new grader(s).
+4. Optionally update the review due date or add a note.
+5. Preview the change and confirm.
+
+Existing scores, comments, and annotations are preserved and visible to
+the new grader. If the new grader had already completed a different
+rubric part on one of the reassigned submissions, the system clears the
+`completed_at` timestamp so the new work appears in their pending list.
+Conflict-of-interest rules are still enforced. See
+[Assigning Grading Tasks](/staff/assignments/grading-assignments) for
+the per-row reassignment flow and the underlying assignment algorithm.
+
+## Bulk Review Due Date Updates
+
+The **Bulk edit grading due dates** and **Bulk edit self-review due
+dates** buttons on the Grading Assignments page update many review
+deadlines at once:
+
+1. Choose a rubric (required).
+2. Set the new due date and time.
+3. Optionally check **Only rows not yet completed** to skip finished
+   reviews.
+4. Click **Apply to matching rows**.
+
+The system reports how many rows were updated. Grading-rubric and
+self-review due dates are managed separately to avoid accidental
+cross-edits. For per-student due-date changes use the inline edit
+control on the submissions table or the student's gradebook row.
+
+## Group Mentor Column
+
+When at least one group has an assigned mentor, a **Group mentor**
+column appears on the submissions table. Filter by mentor (or **No
+mentor**) using the column header dropdown to scope any of the bulk
+actions above to a specific mentor's groups.
