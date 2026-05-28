@@ -19,7 +19,7 @@ Pawtograder supports configurable time zones for displaying dates and times thro
 3. Select your preferred time zone from the dropdown menu
 4. Click **Save** to apply the changes
 
-Once set, all dates and times throughout Pawtograder will be displayed in this time zone for all users in the course.
+Once set, dates and times throughout Pawtograder default to this time zone for all users in the course. Individual viewers may switch their display to their browser's local time zone via the time-zone toggle in the user menu (Pawtograder prompts on first visit when the two differ). The preference is stored per-browser in `localStorage`; it does not change the course's configured time zone or affect other users.
 
 ### Default Time Zone
 
@@ -43,7 +43,7 @@ The configured time zone affects:
 
 When a time zone is configured:
 
-- All users see dates and times in the course's configured time zone
+- Dates and times default to the course's configured time zone for all users; each viewer may opt to display them in their browser's local time zone instead (per-browser preference, stored in `localStorage`)
 - Countdown timers automatically calculate based on the configured time zone
 - Date pickers use the configured time zone for deadline selection
 - Export files include timestamps in the configured time zone

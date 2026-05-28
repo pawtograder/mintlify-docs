@@ -1,69 +1,103 @@
 ---
-title: "Managing Groups"
-description: "Create, manage, and export group assignments with student and mentor information"
+title: "Groups"
+description: "Create, manage, and export student groups for group assignments"
 icon: "users"
 ---
 
-# Managing Groups
+# Groups
 
-Pawtograder supports group assignments where students can work together on programming assignments. Instructors have full control over group formation, management, and data export.
+Pawtograder supports group assignments where two or more students share
+a single repository, submit together, and (by default) receive the same
+grade. Instructors manage groups from the assignment's **Groups** page.
 
-## Group Assignment Types
+## Group assignment types
 
-Pawtograder supports two kinds of group assignments:
+Set the type when creating the assignment:
 
-- **Group optional**: Students can choose to work alone or form a group
-- **Group required**: Students must form a group to submit
+- **Group optional** — students can submit alone or form a group.
+- **Group required** — students must be in a group to submit.
 
-## Group Formation
+Group settings also include a minimum and maximum group size and a
+group-formation deadline (after which the student-side group UI is
+locked).
 
-When creating a group assignment, instructors can choose how groups are formed:
+## Forming groups
 
-- **Student-formed groups**: Students create and join groups themselves using an invitation system
-- **Instructor-assigned groups**: Instructors manually assign students to groups
-- **Reuse groups**: Instructors can reuse group configurations from a prior assignment
+Three formation methods are available:
 
-## Exporting Group Data
+- **Student-formed** — students create and join groups themselves via
+  the invitation flow described in
+  [Forming Groups](/students/assignments/form-groups).
+- **Instructor-assigned** — staff assign students from the Groups page.
+- **Copy from another assignment** — reuse the group composition (and
+  optionally mentor assignments) from a previous assignment.
 
-Instructors can export group information to CSV for record-keeping, communication, and analysis.
+Use the Groups page to create groups manually, add or remove members,
+rename or delete groups, and move students between groups. Changes are
+staged locally and applied atomically when you click **Publish**.
+Publishing creates or updates memberships in the database, creates
+GitHub repositories for any new groups, and queues permission-sync
+jobs.
 
-### Group Export Format
+<Note>
+Students are not notified about group assignments until the assignment
+is released, so you can prepare and adjust groups in advance.
+</Note>
 
-The group export includes comprehensive information about each group:
+## Group mentors
+
+Each group can have a single assigned mentor — typically a grader or
+instructor. Set the mentor from the **Mentor** dropdown for each row;
+the change saves immediately.
+
+Mentors are:
+
+- Displayed to students on their submission page and group widget.
+- Available as an auto-assign target via the
+  [**Assign to group mentors**](/staff/assignments/grading-assignments#assignment-modes)
+  bulk grading mode.
+- Preserved when copying groups between assignments.
+- Included in the CSV export below.
+
+## Individual grading
+
+For group assignments, rubric parts can be marked
+`is_individual_grading: true` so each group member receives a separate
+score on that part, or `is_assign_to_student: true` so the grader picks
+which member a part applies to. The full schema and grading flow are in
+[Handgrading → Individual grading for group assignments](/staff/assignments/handgrading#individual-grading-for-group-assignments).
+
+## Exporting groups to CSV
+
+Click **Export to CSV** on the Groups page to download:
+
+| Column | Contents |
+|---|---|
+| `GroupName` | The group's name. |
+| `StudentNames` | All members in `Name <email>` format, comma-separated. |
+| `MentorName` | Assigned mentor in `Name <email>` format, or empty. |
 
 ```csv
 GroupName,StudentNames,MentorName
-team-alpha,"Alice Smith <alice@university.edu>, Bob Jones <bob@university.edu>",Dr. Johnson <johnson@university.edu>
-team-beta,"Carol White <carol@university.edu>, David Brown <david@university.edu>, Eve Davis <eve@university.edu>",Prof. Williams <williams@university.edu>
+team-alpha,"Alice Smith <alice@example.com>, Bob Jones <bob@example.com>",Dr. Johnson <johnson@example.com>
+team-beta,"Carol White <carol@example.com>, David Brown <david@example.com>",Prof. Lee <lee@example.com>
 ```
 
-**Export features:**
-- Group name for easy identification
-- All student names with email addresses in `Name <email>` format
-- Mentor/grader name with email address (if assigned)
-- UTF-8 BOM encoding for Excel compatibility
-- Formula-safe CSV escaping to prevent injection attacks
-- Sorted rows for stable, consistent exports
+The file is UTF-8 with BOM (so Excel opens it correctly), rows are
+sorted alphabetically, and any cell starting with `=`, `+`, `-`, or `@`
+is escaped to prevent CSV-injection in spreadsheet apps.
 
-### Student Export with Emails
+The student export (from the **Students** page) uses the same
+`Name <email>` format for the student column.
 
-When exporting student lists, the export now includes email addresses in the same `Name <email>` format for consistency:
+## Group permissions and grades
 
-```csv
-Student,Section,Status
-Alice Smith <alice@university.edu>,Section 1,Active
-Bob Jones <bob@university.edu>,Section 2,Active
-```
+When a group is published:
 
-This unified format makes it easy to:
-- Import contact information into email clients
-- Cross-reference students across different exports
-- Maintain consistent data formats across the platform
-
-## Group Permissions
-
-When groups are formed:
-- All group members have access to the shared repository
-- Any group member can make submissions
-- All group members see the same grades and feedback
-- Late token usage affects all group members equally
+- All members are added as collaborators to the shared GitHub repo.
+- Any member can push; the submission is recorded for the group.
+- All members see the same handgrading feedback and rubric scores,
+  unless a part is configured for individual grading.
+- Late tokens and extensions apply at the group level — using a token
+  or being granted an extension covers every member. See
+  [Extensions](/staff/assignments/extensions).

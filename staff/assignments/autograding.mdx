@@ -1,121 +1,488 @@
 ---
 title: "Configuring Autograders"
-description: "Set up automated grading for programming assignments with the overlay grader system"
+description: "Reference for the pawtograder.yml configuration and the assignment-action runtime"
 icon: "robot"
 ---
 
 # Configuring Autograders
 
+Pawtograder's autograder is a GitHub Action,
+[`pawtograder/assignment-action`](https://github.com/pawtograder/assignment-action),
+that runs inside each student repository on every push. It overlays the
+student's submission onto your grader repo, runs the linter, build, and
+instructor test suite (and optionally the student's own tests with
+mutation/coverage analysis), then reports per-test results, scores, and
+artifacts back to Pawtograder. This page is the reference for the
+`pawtograder.yml` config that drives that flow.
+
 <Note>
-This documentation is under construction. Check back soon for detailed autograder configuration guides.
+The `pawtograder.yml` schema is published at
+`https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json`.
+Reference it from the top of your YAML to get IDE autocomplete:
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+```
 </Note>
 
-## Summary of Autograding Architecture
+## On This Page
 
-The autograder system uses an "overlay grader" architecture that allows flexible grading configurations.
+<CardGroup cols={2}>
+  <Card title="grade.yml Workflow" icon="file-code" href="#the-gradeyml-workflow">
+    The workflow file students run, plus action inputs and outputs.
+  </Card>
+  <Card title="pawtograder.yml Configuration" icon="gear" href="#the-pawtograderyml-configuration">
+    Top-level reference for `build`, `gradedParts`, `submissionFiles`, and friends.
+  </Card>
+  <Card title="Dependencies" icon="diagram-project" href="#dependencies">
+    Gate parts or units on prior results.
+  </Card>
+  <Card title="Feedbot" icon="message-bot" href="#feedbot">
+    LLM-generated hints attached to failing tests, including per-test hints from custom graders.
+  </Card>
+  <Card title="Examples" icon="code" href="#examples">
+    Working `pawtograder.yml` files for Java, Python, and mutation testing.
+  </Card>
+  <Card title="Empty Submission Detection" icon="circle-check" href="#empty-submission-detection">
+    How Pawtograder flags submissions that haven't been changed from the starter.
+  </Card>
+  <Card title="Submission Viewer" icon="folder-open" href="#submission-viewer">
+    How files and grader artifacts render in the UI.
+  </Card>
+  <Card title="Rerunning the Autograder" icon="rotate" href="#rerunning-the-autograder">
+    Regrade existing submissions against a chosen grader version.
+  </Card>
+  <Card title="Test Insights & Bulk Regrading" icon="chart-line" href="#test-insights-and-bulk-regrading">
+    Find systemic test failures and regrade affected submissions in bulk.
+  </Card>
+  <Card title="Running the Grader Locally" icon="terminal" href="#running-the-grader-locally">
+    Iterate on your grader outside GitHub Actions.
+  </Card>
+  <Card title="Architecture Overview" icon="sitemap" href="#architecture-overview">
+    Advanced: the three repos involved and the action's step-by-step flow.
+  </Card>
+  <Card title="Running a Forked Action" icon="code-fork" href="#running-a-forked-action">
+    Advanced: point students at your fork of the action.
+  </Card>
+</CardGroup>
 
-*Detailed documentation coming soon.*
+## The `grade.yml` Workflow
 
-## Submission File Pattern Validation
+The handout repository ships with a `.github/workflows/grade.yml` that is
+cloned into each student repository. You must edit this file to install any
+language toolchains or dependencies your build needs before the action runs.
+The action itself only does grading — it does not install Java, Python,
+Node, etc.
 
-When a student pushes to their repository, Pawtograder matches the repository's files against the `submissionFiles` glob patterns configured in `pawtograder.yml`. If **no files match any of the configured patterns**, the submission is immediately rejected with a descriptive error message that:
+A minimal Java workflow looks like this:
 
-- Lists the patterns that matched nothing.
-- Identifies the grader repository and commit SHA where the configuration lives.
-- Guides the instructor to check `pawtograder.yml` for misconfigured patterns.
+```yaml
+name: Submit Assignment and Run Grader
+permissions:
+  id-token: write
+  contents: read
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-This prevents silent empty submissions caused by glob patterns that don't match any file in the student repository (for example, `src/**/*.java` when the student's code is in a different directory). The error is surfaced on the submission page so both the student and instructor can see it.
+jobs:
+  grade:
+    name: Submit and Grade Assignment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: submission
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Collect Submission and Run Grader
+        uses: pawtograder/assignment-action@v3
+        with:
+          grading_server: 'https://api.pawtograder.com'
+          action_ref: '${{ github.action_ref }}'
+          action_repository: '${{ github.action_repository }}'
+```
 
 <Warning>
-If you see this error, check the `submissionFiles` section of your `pawtograder.yml` in the grader repository. Make sure the glob patterns match the actual file paths in student repositories.
+The `id-token: write` permission is required so the action can request an OIDC token. Without it, the action will fail with an "Unable to get OIDC token" error.
 </Warning>
 
-## Empty Submission Detection
+The student's code is checked out into `submission/`. The action downloads
+the grader into a sibling `grader/` directory. Both you and the student can
+view the run output (including the action's job summary table) under the
+Actions tab of the student repo.
 
-Pawtograder automatically detects empty submissions to help identify students who may need assistance. A submission is flagged as empty when:
+### Action Inputs
 
-- The repository contains no files beyond the initial starter code
-- No meaningful changes have been made to the starter files
-- The submission appears to be unmodified from the template
+| Input | Required | Description |
+|-------|----------|-------------|
+| `grading_server` | yes | URL of the Pawtograder API, typically `https://api.pawtograder.com`. |
+| `action_ref` | yes | Pass `${{ github.action_ref }}` — used by the server to record which grader version ran. |
+| `action_repository` | yes | Pass `${{ github.action_repository }}` — used for the same reason. |
+| `regression_test_job` | no | Numeric ID of a regression-test job. When set, the action swaps the roles of "submission" and "grader" so that a known grader version can be run against a snapshot of a student submission. Set by the Pawtograder backend when launching regression tests, not by hand. |
+| `handout_repo` | no | **Deprecated.** Ignored as of v3, will be removed in v4. Handout detection is now performed server-side. |
 
-Empty submissions are flagged in the grading interface and students are notified. This helps instructors:
+### Action Outputs
 
-- Quickly identify students who may be struggling to get started
-- Catch accidental submissions before grading
-- Provide early intervention for students who need help
+| Output | Description |
+|--------|-------------|
+| `score` | The numeric score reported by the grader. |
+| `status` | A human-readable status message. |
 
-Empty submission detection is based on the content of files configured for the assignment, analyzing whether the submission contains substantive changes from the assignment template or starter code.
+## The `pawtograder.yml` Configuration
 
-## Submission File Support
+`pawtograder.yml` lives at the root of the grader/solution repo. There is
+currently exactly one grader type (`grader: overlay`) and it has three
+required top-level sections:
 
-Pawtograder supports both text and binary files in student submissions.
+- `build` — how to build, lint, and test the project.
+- `gradedParts` — what tests are worth what points, organized into parts.
+- `submissionFiles` — which files from the student repo are collected and overlaid onto the grader.
 
-### Text files
+Optional top-level fields:
 
-Text files (code, configuration, etc.) are displayed with syntax highlighting in the submission viewer. Students and graders can view the file contents directly in the browser.
+- `feedbot`, `llm`, `mutantAdvice` — LLM-based features (see [Feedbot](#feedbot) and [Mutation Test Units](#mutation-test-units)).
+- `maxImplementationHints: N` — across all regular units, show full output for at most `N` failing tests. Once the limit is reached, additional failing tests still count against the score but are summarized as "N additional failing tests not shown." This is a running total across the entire submission, so put the most important parts first in `gradedParts` if you care which hints "win." For per-unit suppression, use `hide_output: true` on a regular unit (see below).
+- `maxMutantHints: N` — caps `mutantAdvice` hints shown to students; covered with the mutation example in [Mutation Test Units](#mutation-test-units).
+- `fallbackFiles` — provides defaults for files the student didn't submit (see below).
 
-### Binary files
+### `build`
 
-Binary files (images, PDFs, compiled executables, etc.) are:
+The only required field is `preset`. The other fields are conditional:
+`script_info` and `venv` apply to the `python-script` preset,
+`student_tests` controls mutation/coverage features, and `timeouts_seconds`
+overrides the built-in timeouts.
 
-- Stored securely in the submission
-- Available for download by students and graders
-- Displayed with a download button in the file viewer
-- Shown with file metadata (name, size, type)
+#### Presets
 
-### Markdown preview
+- **`java-gradle`** — Builds with `./gradlew test`, uses Surefire XML for test results, JaCoCo for coverage, Checkstyle for linting, and Pitest for mutation testing. The grader repo must contain a working `build.gradle`.
+- **`python-script`** — Runs the shell commands you provide in `script_info` (see below). Use this when you want full control over how tests, coverage, and mutation are produced.
+- **`none`** — Disables building, linting, and testing entirely. The action still records the submission and runs handgrading flows. Useful for write-only / artifact-only assignments.
 
-Markdown files (`.md`, `.markdown`) are automatically rendered with a live preview, so students and graders can view formatted documentation, README files, and written responses without downloading. The preview supports:
+#### Linter
 
-- Standard markdown syntax (headings, lists, links, code blocks)
-- Inline code and code blocks with syntax highlighting
-- Images and links
-- Tables and blockquotes
+```yaml
+build:
+  linter:
+    preset: checkstyle # currently the only option
+    policy: fail       # or: ignore
+```
 
-## Artifacts
+- `policy: ignore` — lint errors are reported in the grading summary but tests still run.
+- `policy: fail` — if the linter finds errors, the rest of grading is skipped and the student receives a zero. The submission does not count against any per-assignment submission cap if you have configured one.
 
-Autograders can generate artifacts (files) that are displayed to students and graders alongside submission results.
+#### `student_tests`
 
-### Supported artifact types
+Controls what to do with the student's own test suite. Tests are run in two
+contexts:
 
-- **Plaintext files** (`.txt`, `.log`, etc.): Displayed with syntax highlighting and line numbers, useful for test output, logs, or simple reports.
-- **Markdown files** (`.md`): Rendered as formatted HTML with proper styling. Ideal for detailed feedback reports or documentation. Supports headings, lists, code blocks, and other markdown features.
-- **Binary files** (images, PDFs, etc.): Available for download but not rendered inline.
+```yaml
+build:
+  student_tests:
+    instructor_impl:
+      run_tests: true              # run student tests against the instructor's solution
+      run_mutation: true           # run student tests against mutants of the instructor solution
+      report_mutation_coverage: true
+    student_impl:
+      run_tests: true              # run student tests against the student's own implementation
+      report_branch_coverage: true # emit a coverage report artifact
+      run_mutation: true           # run mutation against the student's implementation
+      report_mutation_coverage: true
+```
 
-### Configuring artifacts
+<Note>
+Mutation analysis under `instructor_impl` only runs if the student's tests first **pass** against the instructor's reference solution. The rationale is that if a student's tests fail against a known-correct implementation, they're asserting wrong behavior, so their mutation score isn't meaningful. The action surfaces those failing tests in a dedicated "your test suite contains incorrect tests" message.
+</Note>
 
-To include artifacts in your autograder output:
+#### `timeouts_seconds`
 
-1. Generate the artifact files in your grading script.
-2. Place them in the expected output directory.
-3. Configure the artifact list in your assignment settings.
-4. Artifacts will automatically appear in the submission view.
+All sub-fields are optional; the defaults are:
 
-### Artifact annotations
+| Phase | Default (seconds) |
+|---|---|
+| `build` | 600 |
+| `instructor_tests` | 300 |
+| `student_tests` | 300 |
+| `mutants` | 1800 |
 
-Graders can apply rubric checks as annotations directly to artifacts:
+```yaml
+build:
+  timeouts_seconds:
+    build: 900
+    mutants: 3600
+```
 
-- Use `annotation_target: artifact` in your rubric check configuration
-- Specify the artifact filename in the `artifact` field
-- Graders can select text or sections of the artifact to attach feedback
-- Useful for grading written reports, documentation, or generated output files
+#### `venv` and `script_info` (Python preset)
 
-See the [Rubrics documentation](/staff/assignments/rubrics) for more details on configuring artifact annotations.
+For the `python-script` preset, you supply the shell commands the builder
+should run for each phase:
 
-## AI-Powered Hints
+```yaml
+build:
+  preset: python-script
+  venv:
+    dir_name: '.venv'
+    cache_key: 'sp26-cs2100-lab0' # used to cache the venv across runs of the same assignment
+  script_info:
+    install_deps: 'pip install -r requirements.txt'
+    setup_venv: 'python3 -m venv .venv'
+    activate_venv: '. .venv/bin/activate'
+    linting_report: './generate_linting_reports.sh'
+    html_coverage_reports: './generate_coverage_reports.sh'
+    textual_coverage_reports: './generate_textual_coverage_reports.sh'
+    test_runner: 'python3 test_runner.py'
+    mutation_test_runner: 'python3 mutation_test_runner.py'
+```
 
-Pawtograder supports AI-generated hints for autograder test failures. When a student fails a test, they can request a hint that provides guidance without giving away the solution.
+All `script_info` fields are required even if a given phase isn't used —
+provide a no-op command if you don't need one. `cache_key` keys the cached
+venv across runs; bump it when `requirements.txt` changes.
 
-### Supported providers
+#### `artifacts`
 
-- **OpenAI** — GPT models (default: `gpt-4o-mini`). Use `"provider": "openai"` with models like `gpt-4o-mini` or `gpt-4o`.
-- **Azure OpenAI** — Azure-hosted OpenAI models. Use `"provider": "azure"` with your Azure deployment.
-- **Anthropic** — Claude models. Use `"provider": "anthropic"` with models like `claude-3-haiku` or `claude-3-sonnet`.
-- **OpenRouter** — Access to multiple LLM providers through a unified API. Use `"provider": "openrouter"` with any OpenRouter-supported model (e.g., `openai/gpt-4o-mini`, `anthropic/claude-3-haiku`).
+A list of files or directories the grader will produce and upload to the
+submission view. Each entry has a `name` (shown in the UI), a `path`
+(relative to the grading workspace, or absolute), and optional `data` (a
+free-form object — for example, `{ "format": "zip", "display": "html_site" }`
+tells the UI to render a directory as a navigable HTML site).
 
-### Configuration
+```yaml
+build:
+  artifacts:
+    - name: 'Coverage HTML'
+      path: 'build/reports/jacoco/test/html'
+      data:
+        format: zip
+        display: html_site
+```
 
-Add an `llm` object to the test's `extra_data` in your test configuration:
+Missing artifacts are logged but not fatal. The mutation/coverage reports
+that the action generates automatically (when `report_mutation_coverage` or
+`report_branch_coverage` is enabled) are added to this list at runtime —
+you don't need to declare them yourself.
+
+### `gradedParts`
+
+```yaml
+gradedParts:
+  - name: 'Part 1: Basics'
+    hide_until_released: false # default
+    gradedUnits:
+      - ...
+```
+
+Each part has a `name` and an array of `gradedUnits`. Optional fields:
+
+- `hide_until_released: true` — students cannot see this part's score or test output until the submission is released for grading.
+- `dependencies` — see [Dependencies](#dependencies) below.
+- `hideFeedbot: true` — Feedbot will not generate hints for any failing test in this part.
+
+There are two kinds of unit, and they can be mixed freely within a part.
+
+#### Regular Test Units
+
+```yaml
+- name: 'Valid Construction'
+  tests:
+    - CreditCardPublicTest.testValidConstruction
+  points: 1
+  testCount: 1
+  allow_partial_credit: true
+  hide_output: false
+```
+
+- `tests` may be a single string or an array of strings. Each string is matched as a **prefix** against the fully qualified test names emitted by the test runner (for JUnit, `package.ClassName.testMethod`). A prefix like `CreditCardPublicTest.` matches every method on that class.
+- `testCount` is the number of tests you expect to match. Setting this explicitly is intentional: it prevents a typo in a prefix from silently awarding full marks for zero tests.
+- `points` is the unit's max score.
+- `allow_partial_credit` — defaults to **`false`**. When false, the student earns `points` only if all matched tests pass and the number of passing tests equals `testCount`. When true, the student earns `points * (passing / testCount)`.
+- `hide_output: true` — replaces student-visible test output with "Output for this test is intentionally hidden." The full output is still recorded as `hidden_output` and is visible to staff.
+- `hideFeedbot: true` — suppresses Feedbot hints for this unit only.
+
+<Warning>
+The old documentation claimed partial credit was enabled by default. It is not — `allow_partial_credit` defaults to `false`, meaning by default a unit is all-or-nothing.
+</Warning>
+
+#### Mutation Test Units
+
+```yaml
+- name: 'Detect bugs in BoxSet'
+  locations:
+    - 'box.SimpleBoxSet'        # whole class
+    - 'box.SimpleBoxSet:10-50'  # line range within a class
+    - 'MathMutator'              # name of a Pitest mutator
+  breakPoints:
+    - minimumMutantsDetected: 5
+      pointsToAward: 5
+    - minimumMutantsDetected: 10
+      pointsToAward: 10
+```
+
+- `locations` is an array of strings. Each entry can be a class name (the unit counts mutants whose location starts with that class), a class with a line range (`ClassName:startLine:endLine` or, accepted equivalently, `ClassName-startLine-endLine`), or the name of a Pitest mutator (matched against the mutator field of each mutant).
+- Scoring uses **either** `breakPoints` **or** `linearScoring`, not both:
+  - `breakPoints` — array of `{ minimumMutantsDetected, pointsToAward }`. The unit picks the first (highest-numbered) breakpoint whose threshold the student met. Order them descending; the unit's max score is taken from the first entry.
+  - `linearScoring: { total_faults, points }` — awards `(detected / total_faults) * points`.
+- `hideFeedbot: true` — same meaning as on regular units.
+
+If `mutantAdvice` is configured at the top level, mutants the student
+**didn't** detect can show a personalized hint:
+
+```yaml
+mutantAdvice:
+  - name: 'Off-by-one'
+    sourceClass: 'box.SimpleBoxSet'
+    targetClass: 'box.SimpleBoxSet_ROR_1'
+    prompt: 'What happens at the boundary when the set is exactly at capacity?'
+maxMutantHints: 5
+```
+
+`maxMutantHints` caps the total number of `mutantAdvice` hints shown
+across all mutation units in a single submission. Like
+`maxImplementationHints`, it's a running total — order `gradedParts` so
+the most important parts come first if you care which hints "win." Omit
+it to show all available hints.
+
+### `submissionFiles`
+
+```yaml
+submissionFiles:
+  files:
+    - 'src/main/java/**/*.java'
+  testFiles:
+    - 'src/test/java/**/*.java'
+```
+
+- `files` are the source/implementation files that get overlaid onto the grader for the instructor test runs.
+- `testFiles` are student-written tests; they are kept separate so they can be overlaid only when the action wants to grade the student's own tests, and so that mutation/coverage analysis has a clean target.
+- Patterns are GitHub Actions globs — `**` for "any subdirectories", `*` for "any name in this directory". You can list a literal file alongside a glob to make that file required.
+
+<Warning>
+If **none** of the student's files match **any** pattern in `submissionFiles`, the submission is rejected immediately with an error that lists the unmatched patterns and identifies the grader repository and commit SHA where the config lives. The error is surfaced on the submission page so both the student and instructor can see it. This is the most common cause of a "submission has no files" error — usually a glob in the grader repo that doesn't match the project layout in the handout repo.
+</Warning>
+
+### `fallbackFiles`
+
+Optional. The path (relative to the grader repo) of a directory whose
+contents should be copied into the grading workspace **for any file the
+student did not submit**. Useful when students may delete files that your
+test harness expects to exist.
+
+```yaml
+fallbackFiles: 'fallback'
+```
+
+Files already present from the student's submission are never overwritten
+by fallbacks.
+
+## Dependencies
+
+Both `gradedParts` and `gradedUnits` accept a `dependencies` array. If any
+dependency is not met, that part (or unit) is replaced in the feedback with
+a message explaining which dependency failed instead of the actual grading
+output.
+
+A dependency may be written in any of three forms:
+
+```yaml
+dependencies:
+  # 1. String shorthand: requires full marks on the named part
+  - 'Part 1: Basics'
+
+  # 2. Part reference with a raw-score threshold
+  - part: 'Part 1: Basics'
+    minScore: 15
+
+  # 3. Unit reference with a raw-score threshold
+  - unit: 'Unit 1.1: Setup'
+    minScore: 8
+```
+
+- If `minScore` is omitted, the dependency requires the maximum score for the referenced part or unit.
+- `minScore` is a **raw score**, not a percentage.
+- When a **part's** dependencies fail, the entire part is replaced with one feedback entry.
+- When a **unit's** dependencies fail (but the part's are satisfied), only that unit is replaced.
+
+```yaml
+gradedParts:
+  - name: 'Part 1: Basics'
+    gradedUnits:
+      - name: 'Unit 1.1: Setup'
+        tests: '[T1.1'
+        points: 10
+        testCount: 5
+      - name: 'Unit 1.2: Core'
+        dependencies:
+          - unit: 'Unit 1.1: Setup' # require 100% on 1.1
+        tests: '[T1.2'
+        points: 15
+        testCount: 8
+
+  - name: 'Part 2: Advanced'
+    dependencies:
+      - 'Part 1: Basics'
+    gradedUnits:
+      - name: 'Unit 2.1: Advanced Ops'
+        dependencies:
+          - part: 'Part 1: Basics'
+            minScore: 20
+          - unit: 'Unit 1.2: Core'
+        tests: '[T2.1'
+        points: 20
+        testCount: 10
+```
+
+## Feedbot
+
+Feedbot is optional, LLM-generated feedback that the grading server can
+attach to failing tests. When enabled in `pawtograder.yml`, the action
+includes an `llm` block on each failing test result so the grading server
+knows which model and account to use.
+
+```yaml
+feedbot:
+  enabled: true
+  spec_url: 'https://example.com/path/to/assignment-spec.md'
+  provider: openrouter
+  model: openai/gpt-4o-mini
+  account: default
+  prompt: chain_of_thought    # or: checklist, or any free-form string
+  rate_limit:
+    cooldown: 5               # seconds between requests for the same student
+    assignment_total: 100     # cap per assignment (default: server-side)
+    class_total: 5000         # cap per class (default: server-side)
+```
+
+- `enabled` is required for Feedbot to run at all.
+- `provider`, `model`, `account`, and `spec_url` are all required when `enabled: true`. If any are missing, Feedbot is disabled for the run and a warning is written to the visible output.
+- `spec_url` should point to a markdown file with the assignment spec. The action fetches it at grading time with a 10-second timeout; if the fetch fails, Feedbot is disabled for that run and the failure is logged.
+- `prompt` selects the response strategy. The two built-ins are `chain_of_thought` (default) and `checklist`. Any other string is used as a free-form custom strategy instruction; the embedded assignment spec and the underlying role/rules are not changed.
+- `account` selects which set of provider credentials the server uses — for example, `account: cs2100` will look up `OPENROUTER_API_KEY_cs2100` (falling back to `OPENROUTER_API_KEY`) when Feedbot dispatches the call.
+
+Supported providers and the environment variables the server uses to
+look up credentials (where `{account}` is the value of the `account`
+field):
+
+- `openai` — `OPENAI_API_KEY` or `OPENAI_API_KEY_{account}`.
+- `azure` — `AZURE_OPENAI_ENDPOINT` plus `AZURE_OPENAI_KEY` (or `AZURE_OPENAI_KEY_{account}`).
+- `anthropic` — `ANTHROPIC_API_KEY` or `ANTHROPIC_API_KEY_{account}`.
+- `openrouter` — `OPENROUTER_API_KEY` or `OPENROUTER_API_KEY_{account}`. Use models like `openai/gpt-4o-mini`, `anthropic/claude-3-haiku`, `google/gemini-pro`.
+
+You can suppress Feedbot per-part or per-unit by setting
+`hideFeedbot: true` on the part or unit.
+
+### Per-Test Hints from Custom Graders
+
+When Feedbot is enabled, the action automatically emits an
+`extra_data.llm` block on each failing test so the server knows which
+model/account to invoke. If you are writing a custom `python-script`
+grader and want to provide per-test hint configuration directly (rather
+than going through the `feedbot` block), you can author the `llm` block
+in your test output yourself:
 
 ```json
 {
@@ -131,136 +498,375 @@ Add an `llm` object to the test's `extra_data` in your test configuration:
 }
 ```
 
-Set API keys as environment variables. Use the `account` field in your LLM configuration to select an account-specific key:
+The `provider`, `model`, and `account` fields use the same key lookups
+documented above.
 
-- `OPENAI_API_KEY` or `OPENAI_API_KEY_{account}` for OpenAI
-- `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_KEY` (or `AZURE_OPENAI_KEY_{account}`) for Azure
-- `ANTHROPIC_API_KEY` or `ANTHROPIC_API_KEY_{account}` for Anthropic
-- `OPENROUTER_API_KEY` or `OPENROUTER_API_KEY_{account}` for OpenRouter
+## Examples
 
-For OpenRouter, model names use the format `provider/model`, for example:
+### Java with Gradle and JUnit
 
-- `openai/gpt-4o-mini`
-- `anthropic/claude-3-haiku`
-- `google/gemini-pro`
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+grader: 'overlay'
+build:
+  preset: 'java-gradle'
+  cmd: './gradlew test'
+  linter:
+    preset: 'checkstyle'
+    policy: 'ignore'
+  student_tests:
+    student_impl:
+      report_branch_coverage: true
+gradedParts:
+  - name: Public Tests
+    gradedUnits:
+      - name: Valid Construction
+        points: 1
+        testCount: 1
+        allow_partial_credit: true
+        tests:
+          - CreditCardPublicTest.testValidConstruction
+      - name: Invalid Construction
+        points: 3
+        testCount: 3
+        allow_partial_credit: true
+        tests:
+          - CreditCardPublicTest.testInvalidCreditLimitOnConstruction
+          - CreditCardPublicTest.testInvalidAprOnConstruction
+          - CreditCardPublicTest.testInvalidLateFeeOnConstruction
+submissionFiles:
+  files:
+    - 'src/main/java/**/*.java'
+  testFiles:
+    - 'src/test/java/**/*.java'
+```
 
-## AI-Powered Feedback with Feedbot
+### Python with Custom Scripts
 
-Feedbot is an AI-powered tool that provides automated feedback on student submissions using large language models (LLMs). It can analyze code quality, provide suggestions, generate personalized feedback at scale, and help students understand their mistakes.
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+grader: 'overlay'
+build:
+  preset: 'python-script'
+  linter:
+    preset: 'checkstyle'
+    policy: 'ignore'
+  student_tests:
+    student_impl:
+      run_tests: true
+      report_branch_coverage: false
+    instructor_impl:
+      run_tests: true
+      run_mutation: false
+      report_mutation_coverage: false
+  venv:
+    dir_name: '.venv'
+    cache_key: 'sp26-cs2100-lab0'
+  script_info:
+    install_deps: 'pip install -r requirements.txt'
+    setup_venv: 'python3 -m venv .venv'
+    activate_venv: '. .venv/bin/activate'
+    linting_report: './generate_linting_reports.sh'
+    html_coverage_reports: './generate_coverage_reports.sh'
+    textual_coverage_reports: './generate_textual_coverage_reports.sh'
+    test_runner: 'python3 test_runner.py'
+    mutation_test_runner: 'python3 mutation_test_runner.py'
+gradedParts:
+  - name: Instructor tests on Student Implementation
+    gradedUnits:
+      - name: Is a palindrome
+        tests:
+          - test_q1.TestIsPalindromeTrue
+        points: 20
+        testCount: 1
+      - name: Is not a palindrome
+        tests:
+          - test_q1.TestIsPalindromeFalse
+        points: 20
+        testCount: 1
+      - name: Style (Pylint and Mypy)
+        tests:
+          - test_style.TestStyleReports
+        points: 40
+        testCount: 1
+submissionFiles:
+  files:
+    - 'src/*.py'
+  testFiles:
+    - 'tests/test_*.py'
+```
 
-### Supported LLM providers
+### Java with Mutation Testing (Pitest)
 
-Feedbot supports multiple LLM providers for flexibility and cost optimization:
+This example also grades the student's own tests for fault-detection
+strength. The Gradle plugin used is
+[`info.solidsoft.pitest`](https://github.com/szpak/gradle-pitest-plugin).
 
-- **OpenAI**: GPT-4, GPT-4 Turbo, GPT-3.5 Turbo. Best for high-quality feedback and complex code analysis.
-- **Anthropic Claude**: Claude 3 Opus, Sonnet, and Haiku. Best for detailed explanations and educational feedback.
-- **OpenRouter**: A single API that provides access to OpenAI, Anthropic, Google Gemini, Meta Llama, and many other models.
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+grader: 'overlay'
+build:
+  preset: 'java-gradle'
+  cmd: './gradlew test'
+  linter:
+    preset: 'checkstyle'
+    policy: 'fail'
+  student_tests:
+    instructor_impl:
+      run_tests: true
+      run_mutation: true
+      report_mutation_coverage: true
+    student_impl:
+      run_tests: true
+      run_mutation: true
+      report_mutation_coverage: true
+      report_branch_coverage: true
 
-**Benefits of OpenRouter:**
+gradedParts:
+  - name: Student-Visible Test Results
+    gradedUnits:
+      - name: Simple BoxSet Visible
+        points: 35
+        testCount: 7
+        allow_partial_credit: true
+        tests:
+          - SimpleBoxSetVisibleTest.
+  - name: Hidden Test Results
+    hide_until_released: true
+    gradedUnits:
+      - name: Simple BoxSet Hidden
+        points: 25
+        testCount: 5
+        allow_partial_credit: true
+        tests:
+          - SimpleBoxSetHiddenTest.
+  - name: Fault Detection
+    gradedUnits:
+      - name: Detect bugs in BoxSet
+        locations:
+          - 'box.SimpleBoxSet'
+        breakPoints:
+          - minimumMutantsDetected: 5
+            pointsToAward: 5
+          - minimumMutantsDetected: 10
+            pointsToAward: 10
+submissionFiles:
+  files:
+    - 'src/main/java/box/BoxSet.java'
+    - 'src/main/java/box/SimpleBoxSet.java'
+    - 'src/main/java/**/*.java'
+  testFiles:
+    - 'src/test/java/SimpleBoxSetTest.java'
+    - 'src/test/java/**/*.java'
+```
 
-- Single API key for multiple providers
-- Automatic fallback if primary model is unavailable
-- Cost optimization through model selection
-- Access to latest models without separate integrations
+A matching `build.gradle` enables the Pitest plugin:
 
-### Configuring Feedbot
+```gradle
+plugins {
+    id 'java'
+    id 'application'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'info.solidsoft.pitest' version '1.15.0'
+}
 
-1. Navigate to the assignment settings page.
-2. Scroll to the **AI Grading** section and enable **Feedbot**.
-3. Select your LLM provider (OpenAI, Anthropic, or OpenRouter).
-4. Enter the appropriate API key. For OpenRouter, sign up at [openrouter.ai](https://openrouter.ai) and generate an API key from your dashboard.
-5. Choose the model you want to use (e.g., `anthropic/claude-3-sonnet`, `meta-llama/llama-3-70b`).
-6. Configure feedback parameters:
-   - Feedback style (concise, detailed, encouraging)
-   - Focus areas (code quality, style, logic, testing)
-   - Temperature (creativity level)
-   - Max tokens (response length)
-   - System prompt (instructions for the AI)
-   - Language and tone preferences
+pitest {
+    targetClasses = ['box.*']
+    targetTests = ['*']
+    pitestVersion = '1.15.8'
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
+    testPlugin = 'junit'
+    exportLineCoverage = true
+    failWhenNoMutations = false
+}
 
-### Feedbot feedback types
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = false
+        csv.required = true
+    }
+}
 
-- **Code quality analysis**: Identifies code smells and anti-patterns, suggests refactoring opportunities, and evaluates naming conventions and readability.
-- **Logic and correctness**: Reviews algorithm efficiency, identifies potential bugs or edge cases, and suggests alternative approaches.
-- **Style and best practices**: Checks adherence to language conventions, recommends documentation improvements, and evaluates code organization.
-- **Custom prompts**: Create assignment-specific prompts by clicking **Add Custom Prompt** in the Feedbot configuration. Write a prompt describing what to evaluate, specify which files or code sections to analyze, and set priority and weight for this feedback type.
+test {
+    useJUnit()
+    finalizedBy tasks.jacocoTestReport
+    ignoreFailures = true
+}
 
-### Viewing Feedbot results
+checkstyle {
+    toolVersion = '10.23.1'
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
+    ignoreFailures = false
+}
 
-Students see Feedbot feedback on their submission page, including inline comments on specific code lines, summary feedback at the submission level, suggestions for improvement, and links to relevant documentation.
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+```
 
-Instructors can review all Feedbot feedback before releasing to students, edit or override AI-generated feedback, disable Feedbot for specific submissions, and track Feedbot usage and costs.
+## Empty Submission Detection
 
-### Best practices
+Pawtograder automatically flags submissions whose collected files are
+identical to (or essentially unchanged from) the starter code. These show
+up in the grading interface so you can quickly find students who pushed
+without making any actual changes — for example, students who set up the
+repository but never started the assignment.
 
-- Start with conservative feedback settings and adjust based on results.
-- Review Feedbot output on sample submissions before enabling for all students.
-- Combine Feedbot with traditional autograding for comprehensive assessment.
-- Use custom prompts to align feedback with course learning objectives.
-- Monitor API costs and set usage limits if needed.
+Empty submission detection looks only at the files that match
+`submissionFiles`, so it respects whatever scope you defined for the
+assignment.
 
-## Test Insights and Error Explorer
+## Submission Viewer
 
-Pawtograder provides powerful tools to help you understand and address common errors across student submissions.
+Submission files and grader-generated artifacts are displayed side by
+side in the submission viewer.
 
-### Error Explorer
+**Submitted files:**
 
-The error explorer groups similar test failures and build errors across all student submissions, making it easy to:
+- **Text files** render with syntax highlighting.
+- **Markdown files** (`.md`, `.markdown`) render as formatted HTML with code-block highlighting, images, tables, and links.
+- **Binary files** (images, PDFs, executables) are stored with the submission and exposed as a download button alongside file metadata.
 
-- **Identify patterns**: See which errors affect multiple students.
-- **View affected students**: Click on any error group to see the list of students experiencing that issue.
-- **Copy student emails**: Quickly copy email addresses of affected students for bulk communication.
-- **Pin error groups globally**: Highlight common issues across assignments.
-- **Launch regrades**: Start a regrade workflow directly from an error group.
+**Grader artifacts** appear next to the submitted files. The action
+recognizes a few rendering hints via the `data` object on each artifact:
 
-### Regrade workflow
+- Plain-text artifacts (`.txt`, `.log`) render with line numbers and syntax highlighting.
+- Markdown artifacts render as formatted HTML.
+- Directory artifacts with `data: { format: zip, display: html_site }` are uploaded as a zip and rendered as a navigable HTML site (this is how Jacoco/Pitest HTML reports show up).
+- Other binary artifacts are exposed as downloads.
 
-When you need to regrade submissions after fixing a test or updating the autograder:
-
-1. **Launch from error explorer**: Click the regrade button from any error group.
-2. **Preselected submissions**: Students affected by that error are automatically selected on the autograder page.
-3. **Choose grader version**: Select specific commits from the repository history, or enter a manual SHA in the regrade dialog.
-4. **Auto-promote**: Optionally promote the new submission as the active submission if it scores higher.
-
-This streamlined workflow makes it much faster to address issues that affect multiple students, with conflict detection and clearer validation built in.
+Graders can attach rubric checks directly to an artifact by setting
+`annotation_target: artifact` on the rubric check and naming the artifact
+in the `artifact` field. See the
+[Rubrics documentation](/staff/assignments/rubrics) for details.
 
 ## Rerunning the Autograder
 
-You can rerun the autograder on existing submissions to apply updated grading logic, fix bugs, or update scores after adjusting test cases. The enhanced rerun feature provides more control over the regrading process.
+You can rerun the autograder on an existing submission from the assignment
+page, the test-insights page, or an individual submission. Reruns keep the
+original submission record (same timestamp, same submission count) and
+replace the autograder result.
 
-### Rerun options
+Each rerun lets you choose which grader version to use:
 
-- **Reuse the same submission**: The autograder runs again on the existing submission without creating a new one, preserving the original submission timestamp, history, and active-submission status.
-- **Select grader version**: Choose which version of the grader to use for the rerun. Use the latest grader commit, select a specific commit SHA, or choose from recent grader versions.
-- **Batch operations**: Rerun the autograder on multiple submissions at once.
+- The current grader (latest commit on the grader repo's default branch).
+- A specific commit from the recent history list.
+- A manual SHA, for precise version control.
 
-### How to rerun
-
-You can launch autograder reruns from multiple places:
-
-- **From the assignment page**: Select submissions and click **Rerun Autograder**.
-- **From test insights**: Launch reruns directly from error groups. Affected submissions are automatically preselected.
-- **From individual submissions**: Rerun the autograder for a single submission.
-
-In the regrade dialog:
-
-1. Choose a grader version from the commit list, or enter a specific commit SHA.
-2. Optionally enable **Auto-promote** to set this version as the active grader for all future submissions after the rerun completes successfully.
-
-### Auto-promote
-
-The auto-promote option is useful when:
-
-- You've fixed a bug in the grader and want to apply it going forward
-- You've updated test cases and want all new submissions to use them
-- You're confident the new grader version should be the default
+Optionally, enable **Auto-promote** to make the chosen grader version the
+new default for all future submissions if the rerun completes
+successfully. This is useful after fixing a bug in the grader or amending
+tests — you don't have to push a new commit, you just rerun against the
+old SHA and promote.
 
 <Warning>
-Rerunning the autograder will replace the existing autograder results for the selected submissions. Make sure you've tested your grader changes before applying them to student submissions.
+Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
 
-## Quickstart: Java and Python
+## Test Insights and Bulk Regrading
 
-Build system integration guides for common programming languages.
+The **Test Insights** view groups identical test failures across the whole
+class so you can quickly find systemic problems (a flaky test, an
+ambiguous spec, an off-by-one in your reference solution). From any error
+group you can:
 
-*Detailed documentation coming soon.*
+- See the number of affected submissions and their average score.
+- View and copy the email addresses of affected students.
+- Pin globally important issues so they remain visible across assignments.
+- Launch a regrade with those submissions preselected on the rerun-autograder dialog.
+
+The regrade flow accepts the same grader-version options as the
+single-submission rerun, including Auto-promote.
+
+## Running the Grader Locally
+
+You can run the grader against a local solution and a local submission
+without involving GitHub Actions or the Pawtograder server. From a clone
+of `pawtograder/assignment-action`:
+
+```bash
+npx tsimp src/grading/main.ts \
+  -s /full/path/to/solution/repo \
+  -u /full/path/to/submission/repo
+```
+
+Use absolute paths. The grader produces output in a `pawtograder-grading/`
+directory in your current working directory; delete it between runs
+(or you may hit `EACCES` errors copying files).
+
+## Architecture Overview
+
+When the action runs in the student repo, it:
+
+<Steps>
+<Step title="Authenticates with the grading server">
+GitHub issues an OIDC token to the workflow. The action sends that token to the `autograder-create-submission` edge function. The grading server verifies the token (so it knows which repo and commit the request came from), runs security checks, registers a new submission, and returns a one-time download URL for the matching grader repository tarball.
+</Step>
+<Step title="Downloads the grader and reads pawtograder.yml">
+The action extracts the grader tarball alongside the student's checkout and reads `pawtograder.yml` from the grader repo. The config selects an "overlay" grader and a build preset (`java-gradle`, `python-script`, or `none`).
+</Step>
+<Step title="Overlays student files onto the grader">
+For each glob in `submissionFiles.files` and `submissionFiles.testFiles`, the action deletes the matching files in the grader checkout and copies the student's files in. This is the "overlay": the grader repo provides the harness, the student's files are layered on top.
+</Step>
+<Step title="Lints, builds, and runs instructor tests">
+The selected builder runs the linter (if configured), then a clean build, then the instructor test suite. Results are parsed into per-test pass/fail records. If `linter.policy: fail` is set and the linter fails, or if the build fails, grading stops and a zero is recorded.
+</Step>
+<Step title="Optionally runs student tests and mutation analysis">
+If `student_tests` is configured, the action resets the grader's solution files, layers in only the student test files, and runs them against the instructor implementation (and optionally mutation testing). It can also run the student's tests against the student's own implementation to report branch and mutation coverage.
+</Step>
+<Step title="Scores parts and units, resolves dependencies">
+Scores are computed for every `gradedUnit`, summed into `gradedPart` scores, and then dependency rules are applied — units or parts whose dependencies aren't satisfied are replaced with a message instead of their actual results.
+</Step>
+<Step title="Submits feedback and uploads artifacts">
+The action calls `autograder-submit-feedback` with the tests, lint output, and logs. If the grader emitted any `artifacts`, they are uploaded to Supabase storage via the signed URLs returned by the server. A summary table is also written to the GitHub Actions job summary.
+</Step>
+</Steps>
+
+If the action detects that the push came from a handout/template repo
+rather than a student repo, the server returns a `handout_notice` and
+the action exits successfully without grading.
+
+## Running a Forked Action
+
+The grading action is fully open source at
+[`pawtograder/assignment-action`](https://github.com/pawtograder/assignment-action),
+so if the `pawtograder.yml` schema documented above isn't expressive enough
+for what your assignment needs, you can fork the action and point your
+assignment's grading workflow at your fork instead. Common reasons to do
+this include adding a new build preset, changing how scores are computed,
+or wiring up custom artifact handling.
+
+To use a fork, change the `uses:` line in `grade.yml` to point at your
+fork and the ref (tag, branch, or commit SHA) you want students to run:
+
+```yaml
+- name: Collect Submission and Run Grader
+  uses: your-org/assignment-action@your-tag
+```
+
+<Tip>
+Forks work because the grading server identifies submissions by the
+student's OIDC token, not by which copy of the action is running. The
+`action_ref` and `action_repository` inputs are still passed through so
+the server can record exactly which build of the action graded each
+submission.
+</Tip>
+
+<Warning>
+Forking means **you** own the grader from that point forward. Upstream
+improvements and bug fixes won't reach your students until you merge
+them into your fork and bump the ref in `grade.yml`. Only fork when the
+configurable surface of `pawtograder.yml` (documented above) genuinely
+isn't enough — most customization needs can be expressed via `build`,
+`gradedParts`, and the `python-script` preset without touching the
+action itself.
+</Warning>

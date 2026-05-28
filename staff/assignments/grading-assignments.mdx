@@ -84,24 +84,14 @@ When using the **Assign to group mentors** mode in bulk grading, each group's su
 Export the groups table to CSV to see mentor assignments alongside group membership.
 </Tip>
 
-## Managing Review Due Dates
+## Review Due Dates
 
-Instructors can set and update review due dates for grading tasks and self-reviews in bulk or on a per-student basis. This is available for both grading rubrics and self-review rubrics.
-
-### Bulk review due date updates
-
-From the assignment's grading page, you can set review due dates for multiple students at once:
-
-1. Select the students whose review due dates you want to update.
-2. Choose the rubric type (grading rubric or self-review).
-3. Set the new due date.
-4. Apply the changes to all selected students.
-
-This is particularly useful when you need to extend deadlines for an entire section or group of students.
-
-### Per-student review due date adjustments
-
-You can also adjust review due dates for individual students directly from the gradebook view. This allows for fine-grained control when handling individual extension requests or special circumstances.
+Each review assignment has its own due date — separate from the
+student's submission due date. Adjust them per row by editing the
+review assignment in the Grading Assignments table, or in bulk via the
+**Bulk edit grading due dates** / **Bulk edit self-review due dates**
+buttons; details in
+[Bulk Actions → Bulk Review Due Date Updates](/staff/assignments/bulk-actions#bulk-review-due-date-updates).
 
 ## Grading Comments and Review Release
 
@@ -206,47 +196,11 @@ When a student submits a new version of their work after grading has begun, Pawt
 - Reopen grading assignments so graders can review the new submission
 - Prevent data loss by detecting conflicts with existing grading work
 
-## Bulk Releasing and Unreleasing Reviews
+## Bulk Operations on Submissions
 
-The instructor assignment submissions table supports **row selection** for bulk release and unrelease operations, giving you precise control over which submissions are released to students.
-
-### How to bulk release or unrelease
-
-1. Navigate to **Manage → Assignments → [Assignment]**.
-2. Use the **checkbox column** on the left to select individual rows, or click **All in view** in the column header to select all submissions matching the current filters.
-3. Click **None** to clear the selection.
-4. Once rows are selected, the **Release** and **Unrelease** buttons become active and show the count of selected submissions (e.g. "Release 12 selected submissions").
-5. Click the button to release or unrelease the selected submissions' reviews.
-
-The selection is automatically cleared after a successful release or unrelease, and resets when you change column filters.
-
-<Note>
-Only submissions with an active submission (i.e. the student has submitted) can be selected. Rows without a submission are not selectable.
-</Note>
-
-### Group mentor column
-
-When a group assignment has at least one group with an assigned mentor, a **Group mentor** column appears in the submissions table. You can:
-
-- **Filter by mentor**: Use the multi-select dropdown under the column header to filter submissions by mentor name, or select **No mentor** to find groups without an assigned mentor.
-- **Toggle visibility**: Use the column visibility controls to show or hide the Group mentor column.
-
-## Bulk Completing Grading Reviews
-
-The **Mark All Grading Complete** button allows you to efficiently complete multiple grading reviews at once.
-
-When you click this button:
-
-1. The system checks which incomplete submission reviews can be marked complete.
-2. A review is eligible if all required rubric checks have been applied.
-3. You'll see a summary showing how many reviews can be marked complete and how many have missing required checks (and will be skipped).
-4. Confirming will mark all eligible reviews as complete.
-
-This feature is useful for completing reviews after a grading session, finalizing grades before releasing them to students, and ensuring all required feedback has been provided.
-
-<Note>
-Only reviews with all required rubric checks applied will be marked complete. Reviews with missing required checks are automatically skipped to prevent incomplete grading.
-</Note>
+For row-selected bulk release, unrelease, mark-complete, and reassign
+operations, plus filtering by group mentor, see
+[Bulk Actions](/staff/assignments/bulk-actions).
 
 ## Managing Review Assignments
 
@@ -287,18 +241,11 @@ Use the **Bulk edit grading due dates** or **Bulk edit self-review due dates** b
 
 The system updates all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately for clarity.
 
-## Grading Status Dashboard
+## Tracking Progress
 
-The **Grading Status Dashboard** provides a comprehensive overview of grading progress across your course. Access it from the assignment's grading page (or from the course navigation) to see:
-
-- **Overall progress**: Visual progress bars showing completion rates for each rubric part, and how many submissions have been graded versus pending.
-- **Grader performance**: Individual grader statistics including assigned tasks, completed tasks, and completion rates.
-- **Submission status**: Which submissions have been graded and which are still pending.
-- **Rubric part breakdown**: Progress on specific rubric components.
-- **Due date tracking**: Upcoming grading deadlines and overdue assignments.
-- **Bottleneck identification**: Quickly spot where grading is falling behind.
-
-This dashboard helps instructors identify bottlenecks, balance workload across graders, follow up with graders who may need support, and ensure timely feedback delivery to students.
+Use the [Grading Status](/staff/assignments/grading-status) view to
+monitor overall progress, per-grader workload, and pending reviews
+across the assignment.
 
 ## Managing Repository Permissions
 
