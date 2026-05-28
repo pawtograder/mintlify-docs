@@ -1,158 +1,71 @@
 ---
-title: "Grading Status Dashboard"
-description: "Track grading progress and manage grader assignments across submissions"
+title: "Grading Status"
+description: "Track handgrading progress, grader workloads, and pending reviews across an assignment"
 icon: "clipboard-check"
 ---
 
-# Grading Status Dashboard
+# Grading Status
 
-The grading status dashboard provides a comprehensive view of grading progress for an assignment (and across all assignments in your course), helping you track which submissions have been graded, manage grader assignments, identify bottlenecks, and ensure timely completion of grading tasks.
+The Grading Status view shows how far along handgrading is for an
+assignment: how many submissions have been graded, who's assigned to
+what, where the bottlenecks are, and which reviews are still pending
+release. There is a per-assignment view (on the assignment's management
+page) and a course-wide view (in the course navigation). Both are
+available to instructors and head TAs.
 
-## Accessing the Dashboard
+## What it shows
 
-- **Per assignment**: Navigate to an assignment and select the **Grading Status** tab, or view the grading status overview on the assignment's management page.
-- **Across the course**: Navigate to the **Grading Status** section from the course navigation menu.
+- **Submissions**: total, graded, in-progress, pending.
+- **Progress bar**: percentage of reviews complete.
+- **Grader workload**: per-grader assigned / completed / pending counts,
+  with overdue reviews flagged.
+- **Average time per submission** for each grader.
+- **Due dates** for grading tasks; the course-wide view also shows each
+  assignment's release status and due date.
 
-The dashboard is available to instructors and head TAs.
+## Review states
 
-## Dashboard Overview
+A submission review is in one of four states:
 
-The dashboard displays:
-
-- **Total submissions**: Number of student submissions for the assignment.
-- **Graded / pending submissions**: How many have been fully graded and how many remain.
-- **Grading progress**: A visual progress bar showing the percentage of submissions graded.
-- **Grader assignments**: Which staff members are assigned to which submissions.
-- **Completion timeline**: When grading tasks were completed.
-- **Average grading time**: How long graders are taking per submission.
-
-For a course-wide view, each assignment row shows the assignment name and due date, total submissions received, grading progress, ungraded submission count, and assigned graders.
-
-## Grading Progress Tracking
-
-### Overall progress
-
-- **Completion percentage**: Visual progress bar showing grading completion.
-- **Submissions by status**: Breakdown of graded vs. pending submissions.
-- **Estimated time to completion**: Projected time to finish all pending submissions based on the current pace.
-
-### Per-grader statistics
-
-- **Assigned submissions**: How many submissions each grader has.
-- **Completed submissions**: How many they've finished grading.
-- **Pending submissions**: What's still in their queue.
-- **Average time per submission**: Grading efficiency metrics.
-- Overdue assignments are highlighted in red.
-
-## Grading States
-
-Submissions can be in one of several states:
-
-- **Not started**: No grading has been completed.
-- **In progress**: Some rubric items have been graded, but the review is not complete.
-- **Completed**: All required rubric items have been graded (but not necessarily released).
-- **Released**: Grades have been released to students.
+- **Not started** — no rubric items have been graded.
+- **In progress** — some required checks applied; review not complete.
+- **Completed** — all required checks applied. Not yet visible to the
+  student.
+- **Released** — the instructor has released the review to the student.
 
 <Note>
-Completing a review does not automatically release it to students. Instructors must explicitly release grades when ready.
+Completing a review does not release it. Releasing is a separate step
+performed by an instructor; see [Handgrading](/staff/assignments/handgrading).
 </Note>
 
-## Managing Grader Assignments
+## Actions
 
-### Assigning graders
+From a row in the dashboard you can:
 
-You can assign graders to submissions in two ways:
+- Click an assignment or submission to jump to the grading interface.
+- Click a grader to see only their assignments and reassign work.
+- Send a reminder to graders with pending work.
+- Adjust review due dates — bulk or per student. See
+  [Assigning Grading Tasks](/staff/assignments/grading-assignments).
 
-- **Bulk assignment**: Assign multiple submissions to a grader at once.
-- **Individual assignment**: Assign specific submissions to specific graders.
+For bulk completion, release, and unrelease across all selected
+submissions, see [Bulk Actions](/staff/assignments/bulk-actions).
 
-### Partial rubric grading
+## Filtering
 
-Instructors can assign graders to specific parts of the rubric rather than entire submissions:
+Filter the view to focus on what matters:
 
-- **Full rubric assignment**: Grader handles all rubric items for a submission.
-- **Partial assignment**: Grader only grades specific rubric parts.
+- Pending grading tasks only.
+- A specific grader, section, or instructor group.
+- By assignment due date or grading deadline.
+- Sort by progress (least to most complete).
 
-This allows you to distribute grading work more efficiently and leverage grader expertise.
+## Best practices
 
-### Reassigning submissions
-
-If a grader is overloaded or unavailable:
-
-1. Select the submissions to reassign.
-2. Choose a new grader from the dropdown.
-3. Click **Reassign** to update the assignments.
-
-See [Assigning Grading Tasks](/staff/assignments/grading-assignments) for more details on reassignment.
-
-## Taking Action
-
-From the grading status dashboard, you can:
-
-- **Reassign tasks**: Click a grader to view their assignments and reassign if needed.
-- **Send reminders**: Notify graders about pending assignments approaching their due dates.
-- **View submissions**: Click any assignment to jump directly to the grading interface.
-- **Adjust deadlines**: Extend grading deadlines for assignments that are behind schedule.
-
-## Filtering and Sorting
-
-Use the filters at the top of the dashboard to:
-
-- Show only assignments with pending grading tasks
-- Filter by assignment due date or grading deadline
-- Sort by grading progress (least to most complete)
-- Filter by specific graders or sections
-
-## Grading Workflow
-
-<Steps>
-<Step title="Review submissions">
-Check the grading status dashboard to see overall progress.
-</Step>
-
-<Step title="Assign graders">
-Distribute submissions among your grading team based on workload and expertise.
-</Step>
-
-<Step title="Monitor progress">
-Track completion rates and identify bottlenecks.
-</Step>
-
-<Step title="Review and release">
-Once grading is complete, review results and release grades to students.
-</Step>
-</Steps>
-
-When you have submissions assigned to grade as a grader, the assignment landing page shows submissions assigned to you. Click any submission to open the grading interface and see [the handgrading documentation](/staff/assignments/handgrading) for details.
-
-## Grading Metrics
-
-### Quality metrics
-
-- **Score distribution**: How grades are distributed across submissions.
-- **Rubric item usage**: Which rubric items are most commonly applied.
-- **Feedback length**: Average length of grader comments.
-
-## Grading Notifications
-
-Graders receive notifications when:
-
-- New submissions are assigned to them
-- Submission deadlines are approaching
-- Students submit regrade requests
-
-Configure notification preferences in your user settings.
-
-## Best Practices
-
-- **Balance workload**: Distribute submissions evenly among graders and use the grader breakdown to identify overloaded graders.
-- **Leverage expertise**: Consider grader expertise when assigning specific rubric parts.
-- **Set realistic deadlines**: Allow sufficient time between assignment due dates and grade release dates.
-- **Check regularly**: Review the dashboard weekly during the grading period to ensure grading stays on track.
-- **Address bottlenecks early**: Reassign tasks or recruit additional graders when progress falls behind.
-- **Review quality**: Review a sample of each grader's work to ensure consistent application of rubric criteria, and provide feedback to graders on grading quality.
-- **Communicate**: Keep graders informed of deadlines, share common issues or clarifications, and recognize graders who complete work efficiently.
-
-<Tip>
-Check the grading status dashboard regularly during the grading period to ensure all submissions are being processed on time.
-</Tip>
+- Distribute submissions evenly using
+  [bulk assignment](/staff/assignments/grading-assignments). The dashboard
+  surfaces overloaded graders.
+- Check the dashboard a few times during each grading window so
+  bottlenecks don't slip past the release deadline.
+- Spot-check a sample of each grader's work — the dashboard makes
+  outliers (very fast or very slow grading) easy to find.

@@ -1,0 +1,66 @@
+---
+title: "Extensions"
+description: "Late tokens, manual due-date extensions, gifted tokens, and self-review deadline shifts"
+icon: "clock-rotate-left"
+---
+
+# Extensions
+
+Pawtograder provides three mechanisms for letting a student submit past
+the original due date: student-spent **late tokens**, instructor-granted
+**manual extensions**, and instructor-**gifted tokens**. All three are
+managed from the assignment's **Due Date Exceptions** page.
+
+For the class-wide token allotment per assignment, see
+[Configuration → Late tokens](/staff/assignments/configuration#late-tokens).
+
+## Late tokens
+
+When the assignment allows late tokens, each enrolled student can spend
+one token per 24 hours of extension on their own due date. Tokens must
+be requested **before** the original due date.
+
+- Token requests are recorded in the student's submission history.
+- Group assignments treat tokens at the group level — one token covers
+  the whole group's deadline.
+- A student's remaining token balance is shown on their assignments page.
+
+## Granting a manual extension
+
+From **Due Date Exceptions**, click **Add Exception** and choose the
+student (or group, for group assignments). The form accepts either:
+
+- A **Target Due Date** (date picker) — choose the new deadline directly.
+- **Hours Extended** and **Minutes Extended** — extend by a duration
+  rather than choosing an end time.
+
+Use **Tokens to Consume** if you want the extension to be billed
+against the student's late-token balance, or leave it at 0 for a free
+extension. The **Notes** field is internal and helps future-you
+remember why the exception was granted.
+
+For group assignments, the exception applies to every member of the
+group automatically.
+
+## Gifting late tokens
+
+Gifted tokens are added to a student's available balance and are
+spendable like any other token. Use this to compensate for special
+circumstances (illness, accommodation, transit issues) without picking
+a specific new deadline. The gifted tokens stack on top of the
+class-wide allocation.
+
+## Self-review deadline shift
+
+When an assignment's due date is extended — via a token or a manual
+exception — Pawtograder shifts the affected student's self-review
+deadline by the same amount, so they retain the normal review window
+after submitting. No manual action is required.
+
+## Bulk review-due-date updates
+
+The **Grading Assignments** page lets you adjust *grading* and
+*self-review* review due dates in bulk for a section, a rubric, or a
+set of selected rows. See
+[Bulk Actions](/staff/assignments/bulk-actions#bulk-review-due-date-updates)
+for the procedure.
