@@ -22,6 +22,50 @@ Reference it from the top of your YAML to get IDE autocomplete:
 ```
 </Note>
 
+## Running a Forked Action
+
+The grading action is fully open source at
+[`pawtograder/assignment-action`](https://github.com/pawtograder/assignment-action),
+so if the `pawtograder.yml` schema documented below isn't expressive enough
+for what your assignment needs, you can fork the action and point your
+assignment's grading workflow at your fork instead. Common reasons to do
+this include adding a new build preset, changing how scores are computed,
+or wiring up custom artifact handling.
+
+Each assignment's handout (template) repository ships with a
+`.github/workflows/grade.yml` that invokes the action by reference:
+
+```yaml
+- name: Collect Submission and Run Grader
+  uses: pawtograder/assignment-action@v3
+```
+
+To use a fork, change that one line to point at your fork and the ref
+(tag, branch, or commit SHA) you want students to run:
+
+```yaml
+- name: Collect Submission and Run Grader
+  uses: your-org/assignment-action@your-tag
+```
+
+<Tip>
+Forks work because the grading server identifies submissions by the
+student's OIDC token, not by which copy of the action is running. The
+`action_ref` and `action_repository` inputs are still passed through so
+the server can record exactly which build of the action graded each
+submission.
+</Tip>
+
+<Warning>
+Forking means **you** own the grader from that point forward. Upstream
+improvements and bug fixes won't reach your students until you merge
+them into your fork and bump the ref in `grade.yml`. Only fork when the
+configurable surface of `pawtograder.yml` (documented in the rest of
+this page) genuinely isn't enough — most customization needs can be
+expressed via `build`, `gradedParts`, and the `python-script` preset
+without touching the action itself.
+</Warning>
+
 ## Architecture Overview
 
 There are three repositories involved in every autograder run:
