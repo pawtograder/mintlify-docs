@@ -24,7 +24,7 @@
     ]
   },
   "footer": {
-    "copyright": "Copyright \u00a9 2025 Jonathan Bell."
+    "copyright": "Copyright © 2025 Jonathan Bell."
   },
   "navigation": {
     "global": {
@@ -121,12 +121,9 @@
             "group": "Course Features",
             "pages": [
               "staff/instructor-dashboard",
-              "staff/dashboard",
               "staff/discussion",
               "staff/gradebook",
               "staff/surveys",
-              "staff/office-hours/intro",
-              "staff/office-hours/ai-assistance",
               "staff/ai-assistance"
             ]
           },
@@ -134,6 +131,12 @@
             "group": "Automation",
             "pages": [
               "staff/cli"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "changelog"
             ]
           }
         ]
@@ -150,9 +153,28 @@
             ]
           },
           {
-            "group": "Tools",
+            "group": "Feature Internals",
             "pages": [
-              "developers/cli"
+              "developers/polls",
+              "developers/surveys"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "developers/mcp-server"
+            ]
+          },
+          {
+            "group": "Operations",
+            "pages": [
+              "developers/monitoring"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "changelog"
             ]
           }
         ]
