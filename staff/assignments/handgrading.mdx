@@ -143,7 +143,12 @@ Students see only their own breakdown; instructors and graders see all group mem
 
 ## Completing a review
 
-Once all required rubric checks are applied, click **Complete Review** to mark the review done. This does **not** release the review to the student; it indicates to the instructor that the review is ready to be released.
+A **Complete Review** button appears at the bottom of the rubric sidebar (so you don't need to scroll back to the top). Once all required rubric checks are applied, it offers two options:
+
+- **Complete** — mark the review done and stay on the current submission.
+- **Complete + Next** — mark the review done and automatically advance to the next incomplete submission in your queue, wrapping around to the start when you reach the end.
+
+Completing a review does **not** release it to the student; it indicates to the instructor that the review is ready to be released.
 
 When you complete an assigned rubric part, Pawtograder will also automatically complete any other review assignments on the same submission whose assigned parts are a subset of yours. For example, if you complete parts A, B, and C, another grader assigned only to A+B has their assignment auto-completed.
 
@@ -224,6 +229,14 @@ After a review is released to students, grading comments can no longer be edited
 </Note>
 
 Note that self-review rubric items do not support regrade requests — students cannot request regrades on items they evaluated themselves during the self-review process.
+
+### Resolving regrade requests
+
+After a review is released, students can open regrade requests on rubric checks. In addition to disputing an applied check, a student can request a check that was **not** applied to their submission ("bare-check" requests). To resolve one of these, apply the check (adding an annotation location if the check is an annotation) — Pawtograder creates the backing grading comment and recomputes the grade.
+
+If you later delete or re-grade the comment that backs an open regrade request, the request is automatically resolved with reason `comment_deleted`. The student is notified and can still escalate to an instructor if needed.
+
+When a grading review is released, students land on a dedicated **Grade** tab showing their total, a breakdown of autograder, hand-grading, and adjustment contributions, the full rubric with regrade affordances, and any open regrade requests.
 
 ## Rerunning the autograder
 

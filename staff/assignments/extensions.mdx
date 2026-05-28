@@ -17,13 +17,31 @@ For the class-wide token allotment per assignment, see
 ## Late tokens
 
 When the assignment allows late tokens, each enrolled student can spend
-one token per 24 hours of extension on their own due date. Tokens must
-be requested **before** the original due date.
+one token per 24 hours of extension on their own due date.
 
 - Token requests are recorded in the student's submission history.
 - Group assignments treat tokens at the group level — one token covers
   the whole group's deadline.
 - A student's remaining token balance is shown on their assignments page.
+
+### When tokens are applied
+
+Each assignment chooses *when* students spend tokens, via the **Require
+students to apply late tokens before the original due date** checkbox in
+[Configuration → Late tokens](/staff/assignments/configuration#late-tokens):
+
+- **Checked (default)** — manual mode. Students must apply tokens
+  **before** the original due date to extend it.
+- **Unchecked** — auto-apply mode. When a student submits after the
+  deadline, the required tokens are deducted automatically and the
+  deadline is extended to cover the submission. Tokens are computed per
+  24-hour period (rounded up) and deducted atomically and idempotently
+  (resubmitting within the same window does not spend extra tokens). If
+  the student has insufficient tokens, the late submission is rejected
+  with a clear error.
+
+Auto-apply mode requires **Max Late Tokens** to be at least 1; the
+assignment settings form enforces this.
 
 ## Granting a manual extension
 

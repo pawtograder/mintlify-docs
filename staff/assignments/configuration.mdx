@@ -65,7 +65,14 @@ respects whatever scope the autograder config defines.
 
 - **Max Late Tokens** is the class-wide allotment for the assignment.
   Students spend tokens to push their own due date back in 24-hour
-  increments, requested before the original due date.
+  increments.
+- **Require students to apply late tokens before the original due date**
+  controls *when* tokens are spent. When checked (the default), students
+  must apply tokens before the original due date. When unchecked, a late
+  submission automatically consumes the required tokens (requires
+  **Max Late Tokens** ≥ 1). See
+  [Extensions → When tokens are applied](/staff/assignments/extensions#when-tokens-are-applied)
+  for the full behavior.
 - Instructors can gift extra tokens to individual students and grant
   manual extensions; see [Extensions](/staff/assignments/extensions).
 

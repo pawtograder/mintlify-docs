@@ -368,6 +368,58 @@ npm run cli -- reviews list \
   --assignment hw1
 ```
 
+### Assessment export
+
+Export a privacy-controlled snapshot of a class's assessment data — rubrics, scores, autograder test results, hint feedback, and gradebook columns — to a local directory for downstream analysis.
+
+```bash
+npm run cli -- assessment export \
+  --class cs3500-spring-2026 \
+  --identity hash \
+  --salt my-study-salt \
+  --output ./export
+```
+
+Exports run in parallel (with automatic retry on transient errors) and the output files are written with restrictive permissions (`0o600`).
+
+#### Identity modes
+
+`--identity` controls how student identifiers appear in the export:
+
+| Mode | Behavior |
+|------|----------|
+| `opaque` (default) | Random per-run tokens. Not joinable across runs. |
+| `hash` | Deterministic HMAC tokens (keyed by `--salt`), joinable across runs without exposing PII. |
+| `raw` | Real student identifiers (name, email, SIS ID). Requires `--i-understand-pii`. |
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--class` / `-c` | Class to export (ID, slug, or name) |
+| `--identity` | `opaque` (default), `hash`, or `raw` |
+| `--salt` | HMAC salt for `--identity hash` |
+| `--i-understand-pii` | Required to export real PII with `--identity raw` |
+| `--output` | Output directory |
+| `--assignment` | Limit the export to specific assignment(s) |
+| `--gradebook-column` | Limit gradebook export to specific column(s) |
+| `--with-test-output` | Include autograder test stdout/stderr |
+| `--test-output-max-bytes` | Cap per-test output size |
+| `--concurrency` | Parallel export operations |
+
+The output directory contains a top-level manifest plus `subjects`, `sections`, `assignments`, and `gradebook-columns`, with per-assignment rubric, autograder, submission, score, test, and hint data.
+
+#### Deanonymize
+
+When you exported with `--identity hash`, the companion command maps subject tokens back to real student identifiers (name, email, SIS ID, sections) as a CSV:
+
+```bash
+npm run cli -- assessment deanonymize \
+  --class cs3500-spring-2026 \
+  --salt my-study-salt \
+  --output subjects.csv
+```
+
 ## Repository operations
 
 Repository commands use local SSH git operations for reliability and performance.
