@@ -37,23 +37,17 @@ Reference it from the top of your YAML to get IDE autocomplete:
   <Card title="Dependencies" icon="diagram-project" href="#dependencies">
     Gate parts or units on prior results.
   </Card>
-  <Card title="Limiting Feedback" icon="eye-slash" href="#limiting-student-visible-feedback">
-    Trim what students see with `maxImplementationHints` and `hide_output`.
-  </Card>
   <Card title="Feedbot" icon="message-bot" href="#feedbot">
-    LLM-generated hints attached to failing tests.
+    LLM-generated hints attached to failing tests, including per-test hints from custom graders.
   </Card>
   <Card title="Examples" icon="code" href="#examples">
     Working `pawtograder.yml` files for Java, Python, and mutation testing.
   </Card>
-  <Card title="Submission Validation" icon="circle-check" href="#submission-file-pattern-validation">
-    Pattern validation and empty-submission detection.
+  <Card title="Empty Submission Detection" icon="circle-check" href="#empty-submission-detection">
+    How Pawtograder flags submissions that haven't been changed from the starter.
   </Card>
-  <Card title="Submission Viewer" icon="folder-open" href="#submission-file-viewer">
+  <Card title="Submission Viewer" icon="folder-open" href="#submission-viewer">
     How files and grader artifacts render in the UI.
-  </Card>
-  <Card title="AI-Powered Test Hints" icon="wand-magic-sparkles" href="#ai-powered-test-hints">
-    Per-test `extra_data.llm` blocks for one-shot hints.
   </Card>
   <Card title="Rerunning the Autograder" icon="rotate" href="#rerunning-the-autograder">
     Regrade existing submissions against a chosen grader version.
@@ -151,10 +145,12 @@ required top-level sections:
 - `gradedParts` — what tests are worth what points, organized into parts.
 - `submissionFiles` — which files from the student repo are collected and overlaid onto the grader.
 
-A handful of optional top-level fields control LLM-based features
-(`feedbot`, `llm`, `mutantAdvice`, `maxMutantHints`,
-`maxImplementationHints`), and `fallbackFiles` provides defaults for files
-the student didn't submit.
+Optional top-level fields:
+
+- `feedbot`, `llm`, `mutantAdvice` — LLM-based features (see [Feedbot](#feedbot) and [Mutation Test Units](#mutation-test-units)).
+- `maxImplementationHints: N` — across all regular units, show full output for at most `N` failing tests. Once the limit is reached, additional failing tests still count against the score but are summarized as "N additional failing tests not shown." This is a running total across the entire submission, so put the most important parts first in `gradedParts` if you care which hints "win." For per-unit suppression, use `hide_output: true` on a regular unit (see below).
+- `maxMutantHints: N` — caps `mutantAdvice` hints shown to students; covered with the mutation example in [Mutation Test Units](#mutation-test-units).
+- `fallbackFiles` — provides defaults for files the student didn't submit (see below).
 
 ### `build`
 
@@ -345,9 +341,11 @@ mutantAdvice:
 maxMutantHints: 5
 ```
 
-`maxMutantHints` caps the total number of hints shown across all mutation
-units in a single submission (oldest-first wins). Omit it to show all
-available hints.
+`maxMutantHints` caps the total number of `mutantAdvice` hints shown
+across all mutation units in a single submission. Like
+`maxImplementationHints`, it's a running total — order `gradedParts` so
+the most important parts come first if you care which hints "win." Omit
+it to show all available hints.
 
 ### `submissionFiles`
 
@@ -364,7 +362,7 @@ submissionFiles:
 - Patterns are GitHub Actions globs — `**` for "any subdirectories", `*` for "any name in this directory". You can list a literal file alongside a glob to make that file required.
 
 <Warning>
-If **none** of the student's files match **any** pattern in `submissionFiles`, the submission is rejected immediately with an error that lists the patterns and identifies the grader commit. This is the most common cause of a "submission has no files" error — usually a glob in the grader repo that doesn't match the project layout in the handout repo.
+If **none** of the student's files match **any** pattern in `submissionFiles`, the submission is rejected immediately with an error that lists the unmatched patterns and identifies the grader repository and commit SHA where the config lives. The error is surfaced on the submission page so both the student and instructor can see it. This is the most common cause of a "submission has no files" error — usually a glob in the grader repo that doesn't match the project layout in the handout repo.
 </Warning>
 
 ### `fallbackFiles`
@@ -438,22 +436,6 @@ gradedParts:
         testCount: 10
 ```
 
-## Limiting Student-Visible Feedback
-
-For assignments where you don't want to give away which specific tests
-failed, two top-level options trim the feedback shown to students:
-
-- `maxImplementationHints: N` — across all regular units, show full output for at most `N` failing tests. Once the limit is reached, additional failing tests still count against the score but are summarized as "N additional failing tests not shown."
-- `maxMutantHints: N` — across all mutation units, show at most `N` `mutantAdvice` hints. The student still sees how many mutants were detected and which ones, but only the first `N` advisory hints.
-
-Both limits are running totals across the entire submission, so put the
-most important parts first in `gradedParts` if you care which hints
-"win."
-
-You can also set `hide_output: true` on a single regular unit to suppress
-its output entirely (students see a placeholder; staff see the full
-output).
-
 ## Feedbot
 
 Feedbot is optional, LLM-generated feedback that the grading server can
@@ -481,10 +463,43 @@ feedbot:
 - `prompt` selects the response strategy. The two built-ins are `chain_of_thought` (default) and `checklist`. Any other string is used as a free-form custom strategy instruction; the embedded assignment spec and the underlying role/rules are not changed.
 - `account` selects which set of provider credentials the server uses — for example, `account: cs2100` will look up `OPENROUTER_API_KEY_cs2100` (falling back to `OPENROUTER_API_KEY`) when Feedbot dispatches the call.
 
-Supported providers: `openai`, `azure`, `anthropic`, `openrouter`.
+Supported providers and the environment variables the server uses to
+look up credentials (where `{account}` is the value of the `account`
+field):
+
+- `openai` — `OPENAI_API_KEY` or `OPENAI_API_KEY_{account}`.
+- `azure` — `AZURE_OPENAI_ENDPOINT` plus `AZURE_OPENAI_KEY` (or `AZURE_OPENAI_KEY_{account}`).
+- `anthropic` — `ANTHROPIC_API_KEY` or `ANTHROPIC_API_KEY_{account}`.
+- `openrouter` — `OPENROUTER_API_KEY` or `OPENROUTER_API_KEY_{account}`. Use models like `openai/gpt-4o-mini`, `anthropic/claude-3-haiku`, `google/gemini-pro`.
 
 You can suppress Feedbot per-part or per-unit by setting
 `hideFeedbot: true` on the part or unit.
+
+### Per-Test Hints from Custom Graders
+
+When Feedbot is enabled, the action automatically emits an
+`extra_data.llm` block on each failing test so the server knows which
+model/account to invoke. If you are writing a custom `python-script`
+grader and want to provide per-test hint configuration directly (rather
+than going through the `feedbot` block), you can author the `llm` block
+in your test output yourself:
+
+```json
+{
+  "llm": {
+    "type": "v1",
+    "prompt": "You are a helpful CS tutor. Guide the student to fix their code without giving away the solution.",
+    "provider": "openrouter",
+    "model": "openai/gpt-4o-mini",
+    "account": "default",
+    "temperature": 0.85,
+    "max_tokens": 500
+  }
+}
+```
+
+The `provider`, `model`, and `account` fields use the same key lookups
+documented above.
 
 ## Examples
 
@@ -698,24 +713,6 @@ tasks.withType(Checkstyle) {
 }
 ```
 
-## Submission File Pattern Validation
-
-When a student pushes to their repository, Pawtograder matches the
-repository's files against the `submissionFiles` glob patterns configured
-in `pawtograder.yml`. If **no files match any of the configured patterns**,
-the submission is immediately rejected with a descriptive error message
-that:
-
-- Lists the patterns that matched nothing.
-- Identifies the grader repository and commit SHA where the configuration lives.
-- Guides the instructor to check `pawtograder.yml` for misconfigured patterns.
-
-This prevents silent empty submissions caused by glob patterns that don't
-match any file in the student repository (for example, `src/**/*.java`
-when the student's code is in a different directory). The error is
-surfaced on the submission page so both the student and instructor can see
-it.
-
 ## Empty Submission Detection
 
 Pawtograder automatically flags submissions whose collected files are
@@ -728,19 +725,19 @@ Empty submission detection looks only at the files that match
 `submissionFiles`, so it respects whatever scope you defined for the
 assignment.
 
-## Submission File Viewer
+## Submission Viewer
 
-Submission files are displayed inline in the submission viewer:
+Submission files and grader-generated artifacts are displayed side by
+side in the submission viewer.
+
+**Submitted files:**
 
 - **Text files** render with syntax highlighting.
 - **Markdown files** (`.md`, `.markdown`) render as formatted HTML with code-block highlighting, images, tables, and links.
 - **Binary files** (images, PDFs, executables) are stored with the submission and exposed as a download button alongside file metadata.
 
-## Artifacts in the Submission Viewer
-
-Grader-generated artifacts appear next to the submission's files. The
-action recognizes a few rendering hints via the `data` object on each
-artifact:
+**Grader artifacts** appear next to the submitted files. The action
+recognizes a few rendering hints via the `data` object on each artifact:
 
 - Plain-text artifacts (`.txt`, `.log`) render with line numbers and syntax highlighting.
 - Markdown artifacts render as formatted HTML.
@@ -751,35 +748,6 @@ Graders can attach rubric checks directly to an artifact by setting
 `annotation_target: artifact` on the rubric check and naming the artifact
 in the `artifact` field. See the
 [Rubrics documentation](/staff/assignments/rubrics) for details.
-
-## AI-Powered Test Hints
-
-In addition to Feedbot (configured in `pawtograder.yml`), individual tests
-can carry an `extra_data.llm` block that lets students request a one-shot
-hint when that specific test fails. The action emits these automatically
-for Feedbot-enabled assignments, but you can also author them directly in
-test output when writing a custom `python-script` grader:
-
-```json
-{
-  "llm": {
-    "type": "v1",
-    "prompt": "You are a helpful CS tutor. Guide the student to fix their code without giving away the solution.",
-    "provider": "openrouter",
-    "model": "openai/gpt-4o-mini",
-    "account": "default",
-    "temperature": 0.85,
-    "max_tokens": 500
-  }
-}
-```
-
-Supported providers and key lookups:
-
-- `openai` — `OPENAI_API_KEY` or `OPENAI_API_KEY_{account}`.
-- `azure` — `AZURE_OPENAI_ENDPOINT` plus `AZURE_OPENAI_KEY` (or `AZURE_OPENAI_KEY_{account}`).
-- `anthropic` — `ANTHROPIC_API_KEY` or `ANTHROPIC_API_KEY_{account}`.
-- `openrouter` — `OPENROUTER_API_KEY` or `OPENROUTER_API_KEY_{account}`. Use models like `openai/gpt-4o-mini`, `anthropic/claude-3-haiku`, `google/gemini-pro`.
 
 ## Rerunning the Autograder
 
@@ -837,12 +805,6 @@ directory in your current working directory; delete it between runs
 
 ## Architecture Overview
 
-There are three repositories involved in every autograder run:
-
-- The **handout (template) repository**, which is forked into each student repository when the assignment is released. It contains starter code and `.github/workflows/grade.yml`.
-- The **grader (solution) repository**, which contains the reference solution, the instructor test suite, and `pawtograder.yml`. Students never see this repo.
-- The **student repository**, which holds the student's submission. Every push triggers `grade.yml`, which runs `pawtograder/assignment-action`.
-
 When the action runs in the student repo, it:
 
 <Steps>
@@ -869,9 +831,9 @@ The action calls `autograder-submit-feedback` with the tests, lint output, and l
 </Step>
 </Steps>
 
-<Note>
-If the action detects that the push came from a handout/template repo rather than a student repo, the server returns a `handout_notice` and the action exits successfully without grading. There is no longer any need to configure a `handout_repo` input — that parameter is deprecated and ignored as of v3, and will be removed in v4.
-</Note>
+If the action detects that the push came from a handout/template repo
+rather than a student repo, the server returns a `handout_notice` and
+the action exits successfully without grading.
 
 ## Running a Forked Action
 
@@ -883,16 +845,8 @@ assignment's grading workflow at your fork instead. Common reasons to do
 this include adding a new build preset, changing how scores are computed,
 or wiring up custom artifact handling.
 
-Each assignment's handout (template) repository ships with a
-`.github/workflows/grade.yml` that invokes the action by reference:
-
-```yaml
-- name: Collect Submission and Run Grader
-  uses: pawtograder/assignment-action@v3
-```
-
-To use a fork, change that one line to point at your fork and the ref
-(tag, branch, or commit SHA) you want students to run:
+To use a fork, change the `uses:` line in `grade.yml` to point at your
+fork and the ref (tag, branch, or commit SHA) you want students to run:
 
 ```yaml
 - name: Collect Submission and Run Grader
