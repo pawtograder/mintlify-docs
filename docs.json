@@ -28,7 +28,23 @@
   },
   "navigation": {
     "global": {
-      "anchors": []
+      "anchors": [
+        {
+          "anchor": "Changelog",
+          "href": "/changelog",
+          "icon": "list"
+        },
+        {
+          "anchor": "GitHub",
+          "href": "https://github.com/pawtograder/platform",
+          "icon": "github"
+        },
+        {
+          "anchor": "Status",
+          "href": "https://status.pawtograder.com",
+          "icon": "signal"
+        }
+      ]
     },
     "tabs": [
       {
@@ -38,7 +54,7 @@
             "group": "Getting Started",
             "pages": [
               "students/intro",
-              "changelog"
+              "students/dashboard"
             ]
           },
           {
@@ -46,20 +62,37 @@
             "pages": [
               "students/assignments/create-submission",
               "students/assignments/form-groups",
-              "students/assignments/late-tokens",
+              "students/assignments/late-tokens-and-extensions",
               "students/assignments/self-review",
+              "students/assignments/regrade-requests",
               "students/assignments/leaderboard"
             ]
           },
           {
-            "group": "Course Features",
+            "group": "Grades",
             "pages": [
-              "students/discussion-board",
-              "students/gradebook",
-              "students/gradebook-whatif",
+              "students/gradebook"
+            ]
+          },
+          {
+            "group": "Getting Help",
+            "pages": [
               "students/office-hours",
+              "students/discussion-board"
+            ]
+          },
+          {
+            "group": "Participation",
+            "pages": [
               "students/polls",
               "students/surveys"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "students/notifications",
+              "changelog"
             ]
           }
         ]
@@ -71,57 +104,94 @@
             "group": "Getting Started",
             "pages": [
               "staff/intro",
-              "staff/course-settings"
+              "staff/course-settings",
+              "staff/exports"
             ]
           },
           {
             "group": "Assignments",
             "pages": [
               "staff/assignments/intro",
-              "staff/assignments/assignment-dashboard",
-              "staff/assignments/grading-dashboard",
-              "staff/assignments/test-insights",
-              "staff/assignments/security-dashboard",
-              "staff/assignments/configuration",
-              "staff/assignments/dashboards",
-              "staff/assignments/managing-groups",
-              "staff/assignments/repository-analytics",
-              "staff/assignments/groups",
-              "staff/assignments/grading-assignments",
-              "staff/assignments/grading-status-dashboard",
-              "staff/assignments/handgrading",
-              "staff/assignments/autograding",
-              "staff/assignments/rubrics",
-              "staff/assignments/testing",
-              "staff/assignments/grading-status",
-              "staff/assignments/leaderboard",
-              "staff/assignments/extensions-and-scoring",
-              "staff/assignments/repository-permissions"
+              {
+                "group": "Setup & Configuration",
+                "pages": [
+                  "staff/assignments/configuration",
+                  "staff/assignments/testing",
+                  "staff/assignments/repository-permissions"
+                ]
+              },
+              {
+                "group": "Autograding",
+                "pages": [
+                  "staff/assignments/autograding"
+                ]
+              },
+              {
+                "group": "Hand Grading",
+                "pages": [
+                  "staff/assignments/rubrics",
+                  "staff/assignments/handgrading",
+                  "staff/assignments/grading-assignments",
+                  "staff/assignments/bulk-actions"
+                ]
+              },
+              {
+                "group": "Groups & Extensions",
+                "pages": [
+                  "staff/assignments/groups",
+                  "staff/assignments/extensions"
+                ]
+              },
+              {
+                "group": "Dashboards & Insights",
+                "pages": [
+                  "staff/assignments/assignment-dashboard",
+                  "staff/assignments/grading-status",
+                  "staff/assignments/test-insights",
+                  "staff/assignments/security-dashboard",
+                  "staff/assignments/repository-analytics"
+                ]
+              },
+              {
+                "group": "Optional Features",
+                "pages": [
+                  "staff/assignments/leaderboard"
+                ]
+              }
             ]
           },
           {
-            "group": "Polls",
+            "group": "Instructor Dashboard",
             "pages": [
+              "staff/instructor-dashboard"
+            ]
+          },
+          {
+            "group": "Discussion & Engagement",
+            "pages": [
+              "staff/discussion",
               "staff/polls/intro",
               "staff/polls/creating-polls",
               "staff/polls/poll-types",
-              "staff/polls/visualizations"
+              "staff/polls/visualizations",
+              "staff/surveys"
             ]
           },
           {
             "group": "Office Hours",
             "pages": [
-              "staff/office-hours/intro",
-              "staff/office-hours/ai-assistance"
+              "staff/office-hours/intro"
             ]
           },
           {
-            "group": "Course Features",
+            "group": "Gradebook",
             "pages": [
-              "staff/instructor-dashboard",
-              "staff/discussion",
-              "staff/gradebook",
-              "staff/surveys",
+              "staff/gradebook"
+            ]
+          },
+          {
+            "group": "AI Assistance",
+            "pages": [
               "staff/ai-assistance"
             ]
           },
