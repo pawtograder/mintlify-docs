@@ -61,7 +61,7 @@ This allows graders to provide feedback on documentation, reports, and other non
 
 ### References Across Rubrics
 
-- Checks can reference checks from other rubrics to surface related feedback when grading. This is managed inline in the sidebar (preview mode).
+- Checks can reference checks from other rubrics to surface related feedback when grading. References can be managed in the GUI editor's **References** panel on each check, or declared directly in YAML (see [Check References (Cross-Rubric Context)](#check-references-cross-rubric-context)).
 
 ## YAML Schema Quick Reference
 
@@ -285,6 +285,13 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two views of the same rubric. Toggle between them with the **GUI** / **YAML source** buttons; both views are bound to the same in-memory rubric, so switching is lossless and your view preference is remembered for the session.
+
+- **GUI editor** — a visual tree of parts, criteria, checks, and options. Drag-and-drop any item to reorder it at its level, edit every field inline, and pick a check type (checkbox / multi-option / annotation). The **Add criterion** menu offers quick-start templates: Met/Not met, Met/Partial/Not met, four-tier, multi-option, code-quality (annotation) deductions, and penalty-only. A live preview pane shows how the rubric will render in the hand-grader.
+- **YAML source editor** — edit the rubric directly as YAML using the schema described below. Useful for bulk edits, copy/paste between rubrics, and version-controlled rubric files exported via the CLI.
+
+Rubric saves are atomic: all parts, criteria, checks, and references are reconciled in a single transaction, so a rubric is never left in a partially-saved state.
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
@@ -381,7 +388,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Check**
 - Mandatory: `name`, `is_annotation` (boolean), `is_required` (boolean), `is_comment_required` (boolean), `points` (number; use `0` when the check relies on `data.options`)
-- Optional: `id`, `description`, `file`, `artifact`, `annotation_target` (`file` | `artifact`; default behavior in UI is `file` when omitted for annotations), `max_annotations`, `data` (see below), `student_visibility` (default: `always`)
+- Optional: `id`, `description`, `file`, `artifact`, `annotation_target` (`file` | `artifact`; default behavior in UI is `file` when omitted for annotations), `max_annotations`, `data` (see below), `student_visibility` (default: `always`), `references` (name-keyed cross-rubric check references; see [Check References](#check-references-cross-rubric-context))
 
 **Check `data.options`** (for multiple-choice checks)
 - Mandatory per option: `label`, `points`
@@ -418,10 +425,32 @@ A check on one rubric can reference a check on another rubric. During grading, a
 
 ### How to Configure
 
-1. Navigate to the rubric preview/editor for an assignment.
-2. For the check you want to augment, click "Add Reference".
-3. Search/select a check from other rubrics (the current rubric's checks are excluded).
-4. Save. The relationship is stored so that, when grading, the referenced feedback appears under the referencing check.
+**In the GUI editor:** open the **References** panel on the check you want to augment, then search/select a check from another rubric (the current rubric's checks are excluded). Save — the relationship is stored so that, when grading, the referenced feedback appears under the referencing check as "Related Feedback from Other Reviews."
+
+**In YAML:** add a `references:` list to a check. Each entry uses a name-keyed path identifying the referenced check by `review_round`, `part`, `criterion`, and `check` name (with a numeric `id` accepted as a fallback). References are resolved at save time and are preserved through CLI export/import, so they round-trip with your rubric YAML files.
+
+```yaml
+name: Grading Rubric
+parts:
+  - name: Code Quality
+    criteria:
+      - name: Style
+        total_points: 5
+        is_additive: false
+        checks:
+          - name: Naming conventions
+            is_annotation: false
+            is_required: false
+            is_comment_required: false
+            points: 1
+            references:
+              - review_round: self-review
+                part: Self-Assessment
+                criterion: Style
+                check: Naming conventions
+```
+
+References point at checks in *other* review rounds (e.g. surfacing self-review evidence during grading). They are informational only and do not contribute points.
 
 ### Good Use Cases
 

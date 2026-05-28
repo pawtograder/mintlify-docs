@@ -353,6 +353,22 @@ platform/
 |----------|-------------|
 | `ENABLE_SIGNUPS` | Enable user registration UI (`true`/`false`) |
 | `END_TO_END_SECRET` | Secret for E2E test authentication |
+| `SMTP_HOST` | SMTP server hostname for outbound notification email |
+| `SMTP_PORT` | SMTP port. The provider is auto-detected by port (see below) |
+| `SMTP_USER` | SMTP username |
+| `SMTP_PASSWORD` | SMTP password |
+
+#### SMTP / email delivery
+
+The notification system selects its TLS behavior from `SMTP_PORT`:
+
+| Port | Provider / mode |
+|------|-----------------|
+| `465` | Standard SMTP over full TLS (`secure: true`) |
+| `2525` | Postmark — STARTTLS (`secure: false`, `requireTLS: true`) |
+| `54325` | Local Inbucket (dev only, no TLS) — captures mail for local testing |
+
+For Postmark, set `SMTP_PORT=2525` along with your Postmark `SMTP_HOST`, `SMTP_USER`, and `SMTP_PASSWORD`.
 
 ## Troubleshooting
 

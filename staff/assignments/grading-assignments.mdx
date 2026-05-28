@@ -241,6 +241,17 @@ Use the **Bulk edit grading due dates** or **Bulk edit self-review due dates** b
 
 The system updates all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately for clarity.
 
+## Commit History and Manual Grading
+
+The instructor submissions table includes a **Commits** column. Opening it shows the full commit history for that student's or group's repository, merging webhook-recorded commits with live data from the GitHub API. For each commit you can see the date and time, author, commit message, autograder workflow status, and any submissions associated with it. Use **Load more commits** to page through longer histories.
+
+From the commit history dialog, instructors can:
+
+- **Activate** an existing submission tied to a commit, making it the graded submission.
+- **Create submission and activate** for any commit in the history — including commits the student never submitted or pushed after the deadline. This triggers a grading workflow for that commit and automatically activates the resulting submission.
+
+Staff-triggered grading bypasses the assignment's due-date deadline and submission limits, so you can grade work that the normal submission flow would have rejected.
+
 ## Tracking Progress
 
 Use the [Grading Status](/staff/assignments/grading-status) view to
