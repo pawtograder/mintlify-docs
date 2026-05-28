@@ -1,0 +1,97 @@
+---
+title: "Exporting Course Data"
+description: "Reference for the CSV exports available to course staff"
+icon: "file-export"
+---
+
+# Exporting Course Data
+
+Pawtograder exposes several CSV exports for course staff. Each is reached
+by an **Export to CSV** button on the corresponding management page.
+Exports apply current filters where applicable, are UTF-8 encoded (with
+BOM where the file is meant to be opened in Excel), and use formula-safe
+quoting.
+
+## Enrollment Roster
+
+**Where**: Manage course → Enrollments → **Export to CSV**.
+
+Exports every row currently visible in the enrollments table (the export
+honors active filters). Columns:
+
+| Column | Notes |
+|---|---|
+| Status | `Enrolled`, `Dropped`, or the invitation status. |
+| Name | Profile name, or invitation name. |
+| Email | Account email, or invitation email. |
+| Role | `student`, `grader`, `instructor`. |
+| Class Section | Section name, or `Not assigned`. |
+| Lab Section | Lab section name, or `Not assigned`. |
+| GitHub Username | Empty for pending invitations. |
+| GitHub Org Status | `Joined` / `Not joined`. |
+| SIS User ID | SIS identifier if linked. |
+| SIS Linked | `Yes` / `No`. |
+| SIS Sync Opt Out | `Yes` / `No`. |
+| Tags | Semicolon-separated tag names, or `No tags`. |
+
+Filename: `enrollments-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Lab Roster
+
+**Where**: Manage course → Lab Roster → select a lab section → **Export to CSV**.
+
+Exports the students assigned to the selected lab section, plus columns
+for each lab assignment configured on the course (attendance / completion
+per lab). Base columns:
+
+- Lab Section
+- Name
+- Email
+- GitHub Username
+
+Filename: `lab-roster-<section>-<YYYY-MM-DD>.csv`.
+
+## Assignment Groups
+
+**Where**: Manage course → Assignments → *assignment* → Groups → **Export as CSV**.
+
+Exports group composition for a single assignment. Rows are sorted by
+group name; students who are not in any group are emitted with the group
+name `(Ungrouped)`.
+
+| Column | Format |
+|---|---|
+| GroupName | Group name, or `(Ungrouped)`. |
+| StudentNames | Comma-separated list of `Name <email>` per member, sorted. |
+| MentorName | Assigned mentor/grader as `Name <email>`, or empty if none. |
+
+Filename: `assignment_groups_<YYYY-MM-DD>.csv`.
+
+## Gradebook
+
+**Where**: Manage course → Gradebook → **Export**.
+
+Exports the full gradebook (all students, all columns). A toggle in the
+export dialog controls whether render expressions (formulas) are
+exported alongside their computed values. The file is UTF-8 with BOM so
+Excel opens it correctly.
+
+Filename: `gradebook.csv`.
+
+## Survey Responses
+
+**Where**: Manage course → Surveys → *survey* → Responses → **Export**.
+
+Exports the responses to a single survey. Columns are one per survey
+question plus identification columns. UTF-8 with BOM.
+
+Filename: `<survey_title>_responses_<timestamp>.csv`.
+
+## Discussion Engagement
+
+**Where**: Manage course → Discussion Engagement → **Export CSV**.
+
+Exports the per-student engagement metrics shown on the page (posts,
+replies, watches, etc.) for the current course.
+
+Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.

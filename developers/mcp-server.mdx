@@ -1,165 +1,156 @@
 ---
-title: "MCP Server & AI Assistance"
-description: "Model Context Protocol server for AI-powered student support and development assistance"
+title: "MCP Server"
+description: "Architecture, auth model, and extension points for the Pawtograder MCP server"
 icon: "brain-circuit"
 ---
 
-# MCP Server & AI Assistance
+# MCP Server
 
-Pawtograder includes a Model Context Protocol (MCP) server that enables AI assistants to help instructors and TAs support students who are struggling with programming assignments.
+Pawtograder exposes a Model Context Protocol (MCP) server as a Supabase
+Edge Function. This page covers the implementation: how authentication
+works, what the RLS guarantees are, what tools are available, and how to
+extend the server.
 
-## Overview
+For instructor-facing setup (connecting Claude Desktop, creating API
+tokens, using the AI Help button), see
+[AI assistance for helping students](/staff/ai-assistance).
 
-The MCP server provides AI assistants with secure, authenticated access to course data, allowing them to:
+## Architecture
 
-- Fetch help requests and discussion threads
-- Access student submissions and test results
-- Review build output and error messages
-- Provide context-aware assistance to course staff
+The MCP server is a Supabase Edge Function that speaks streamable HTTP
+MCP. In production it is reachable at:
 
-All access is controlled through Supabase OAuth authentication and restricted to instructors and graders only.
+```
+<SUPABASE_URL>/functions/v1/mcp-server
+```
 
-## Authentication and security
+When running Supabase locally, the function is served under the local
+Edge Function URL printed by `npx supabase start` (the Supabase CLI also
+prints a convenience MCP URL at `http://127.0.0.1:54321/mcp`).
 
-The MCP server uses Supabase OAuth to ensure secure access. Only instructors and graders can use MCP tools.
+The function shares types and helpers with the rest of Pawtograder's
+edge functions under `supabase/functions/_shared/`. Database queries go
+through the standard typed Supabase server client, so every query
+respects the same Postgres row-level security policies the rest of the
+app uses.
 
-<Warning>
-The MCP server never exposes sensitive user data such as the `users` table or private profile information. All data access is scoped to course-related information only.
-</Warning>
+## Authentication
 
-Privacy and security guarantees:
+The server accepts long-lived JWTs issued by Pawtograder's API token
+system (Settings → API Tokens) in the `Authorization: Bearer <token>`
+header. Token properties:
 
-- **Role-based access** – Only instructors and graders can use the MCP server.
-- **No user table access** – The server never queries the `users` table directly.
-- **No private profiles** – The `is_private_profile` flag is never exposed.
-- **RLS enforcement** – All database queries respect Supabase row-level security policies.
-- **Audit logging** – MCP requests are logged for security and debugging.
+- Issued and signed by Pawtograder; carry the issuing user's identity.
+- Scoped to MCP read access (`mcp:read`).
+- Revocable from the UI; revocation is checked on every request.
+- Tracked with a `last_used_at` timestamp for audit.
+
+A request that arrives without a valid, non-revoked token is rejected
+with `401`.
+
+## Authorization and RLS
+
+Authorization happens in two layers:
+
+1. **Role gate** – Before any tool runs, the server checks that the
+   authenticated user has `instructor` or `grader` role in the
+   class targeted by the request. Students cannot use the MCP server,
+   even with a valid token.
+2. **Postgres RLS** – Every database query runs as the authenticated
+   user, so the same RLS policies that govern the web app also govern
+   MCP responses. There is no service-role escalation inside tool
+   handlers.
+
+The server is designed to never leak data that the same user couldn't
+see in the web app:
+
+- The `users` table is never queried directly from tool handlers.
+- The `is_private_profile` flag is not exposed in any tool response.
+- All access goes through views and tables already guarded by RLS.
 
 ## Available tools
 
-The MCP server exposes the following tools for AI assistants.
+The full tool list is defined in the edge function source. At time of
+writing it covers:
 
-### Help request tools
+**Context**
 
-- **Fetch help requests** – Retrieve active and resolved help requests from office hours queues.
-- **View help request details** – Access full context including chat history between students and staff.
-- **Get discussion threads** – Access discussion board posts and replies.
+- `get_help_request` — help request plus full chat history
+- `get_discussion_thread` — thread plus replies
+- `get_assignment` — assignment spec, `handout_url`, and rubric
 
-### Submission tools
+**Submissions**
 
-- **Fetch submissions** – Access student code submissions for specific assignments.
-- **Get test results** – Retrieve autograder test output and results.
-- **View build output** – Access compilation errors and build logs.
+- `get_submission`, `list_submission_files`, `get_submission_files`
+- `list_submission_tests`, `get_test_output`, `get_submission_build_output`
 
-### Assignment context
+**Repositories**
 
-- **Assignment details** – Retrieve course settings and assignment descriptions.
-- **Handout URL** – Access assignment handout links via the `handout_url` field for full context.
+- `list_grader_files`, `get_grader_files`
+- `list_handout_files`, `get_handout_files`
 
-## AI Help button
+**Search**
 
-Course staff can access AI assistance directly from:
+- `search_help_requests`, `search_discussion_threads`
+- `get_submissions_for_student`
 
-- **Help request chat** – Click the "AI Help" button in the help request interface.
-- **Discussion threads** – Use AI assistance when responding to student questions.
+The authoritative list lives next to the handler implementations; treat
+this section as a quick reference, not a contract.
 
-The AI Help button generates an MCP context URL that can be used with any MCP-compatible client (such as Claude Desktop, Cursor, or other AI development tools).
+## Assignment handout context
 
-## Setup
+Assignments carry an optional `handout_url` column that points to the
+spec students see. Several tools (notably `get_assignment` and the help
+request / thread context tools) include `handout_url` in their response
+so that an AI assistant can fetch the assignment description without
+needing additional credentials.
 
-### Local development
+## Extension points
 
-When running Supabase locally, the MCP server is automatically available at:
+Common reasons to extend the MCP server:
 
-```
-http://127.0.0.1:54321/mcp
-```
-
-This URL is displayed in the output when you run `npx supabase start`.
-
-### Configuration
-
-To enable AI assistance for your course:
-
-1. Ensure the MCP server is configured with Supabase OAuth credentials.
-2. Add the `handout_url` field to assignments to provide assignment context.
-3. Course staff will see an "AI Help" button in help request chats and discussion threads.
-
-#### Assignment handout URL
-
-Assignments can include a `handout_url` field that points to the assignment description or requirements document. This provides AI assistants with context about what students are working on:
-
-```sql
-ALTER TABLE assignments ADD COLUMN handout_url TEXT;
-```
-
-Update your assignments to include handout URLs:
-
-```sql
-UPDATE assignments
-SET handout_url = 'https://example.com/assignments/hw1.pdf'
-WHERE id = 'assignment-id';
-```
-
-## Usage
-
-### For course staff
-
-1. Navigate to a help request or discussion thread where you want AI assistance.
-2. Click the **AI Help** button in the interface.
-3. Copy the generated MCP context URL.
-4. Paste the URL into your MCP-compatible AI client (for example, Claude Desktop).
-
-The AI assistant will then have access to:
-
-- The student's question or help request
-- Their code submission
-- Test results and error messages
-- Assignment requirements (if `handout_url` is configured)
-
-### For developers
-
-The MCP server is implemented as a Supabase Edge Function and follows the Model Context Protocol specification. You can extend it by:
-
-1. **Adding new tools** – Define additional MCP tools in the Edge Function.
-2. **Expanding data access** – Add new database queries that respect RLS policies.
-3. **Customizing context** – Modify what information is provided to AI assistants.
-
-## MCP-compatible clients
-
-The MCP server works with any client that supports the Model Context Protocol:
-
-- **Claude Desktop** – Anthropic's desktop application with MCP support
-- **Cursor** – AI-powered code editor with MCP integration
-- **Custom clients** – Build your own MCP client using the protocol specification
-
-Refer to your AI client's documentation for instructions on connecting to an MCP server.
+- **Adding a tool** — Define the tool descriptor (name, parameters,
+  description) and implement the handler. Read data through the
+  authenticated Supabase client so RLS is enforced automatically. Add
+  the tool to the registry so it shows up in `tools/list`.
+- **Expanding context** — When you add fields to existing tools, prefer
+  composing existing queries over loosening RLS. If a new field requires
+  privileged access, surface it through a dedicated view with explicit
+  RLS rather than service-role queries inside the handler.
+- **New auth scopes** — The API token system supports multiple scopes.
+  If a tool needs to mutate state (e.g. posting a draft response), add a
+  new scope rather than overloading `mcp:read`.
 
 ## Troubleshooting
 
-### MCP server not accessible
+### `401 Unauthorized`
 
-1. Verify Supabase is running: `npx supabase status`.
-2. Check that Edge Functions are running: `npx supabase functions serve`.
-3. Ensure you're authenticated as an instructor or grader.
+- Token revoked, expired, or malformed.
+- Missing `Authorization: Bearer` header.
 
-### AI assistant can't access data
+### `403 Forbidden`
 
-1. Verify your account has the instructor or grader role in the course.
-2. Check that RLS policies allow access to the requested data.
-3. Ensure the MCP context URL is correctly formatted.
+- The user is authenticated but not an instructor or grader in the
+  class the request targets.
 
-### Missing assignment context
+### `404` from a tool with no data
 
-1. Verify the assignment has a `handout_url` configured.
-2. Check that the URL is accessible to the AI assistant.
-3. Ensure the handout document is in a format the AI can read (PDF, Markdown, HTML).
+- The query succeeded but RLS filtered the result to empty. Verify the
+  user really has access in the web app.
 
-## Future enhancements
+### Local server not reachable
 
-Planned improvements to the MCP server include:
+- Confirm Supabase is running: `npx supabase status`.
+- Confirm the edge function is being served (the Supabase CLI runs
+  edge functions automatically when you start it; if you are using
+  `npx supabase functions serve` manually, make sure `mcp-server` is
+  in the served set).
 
-- **Expanded tool set** – Additional tools for accessing course analytics and gradebook data
-- **Real-time updates** – Support for streaming updates to AI assistants
-- **Custom prompts** – Configurable system prompts for different types of assistance
-- **Integration with autograder** – Direct access to test case details and grading rubrics
+## Contributing
+
+The MCP server lives under `supabase/functions/mcp-server/` in the
+[platform repo](https://github.com/pawtograder/platform). When changing
+tool signatures, regenerate any shared types (`npm run client-local`)
+and update the staff-facing docs in
+[`staff/ai-assistance.mdx`](/staff/ai-assistance) if the tool list or
+setup flow changes.
