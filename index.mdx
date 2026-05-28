@@ -1,16 +1,34 @@
 ---
 title: "Pawtograder Documentation"
-description: "Documentation for Pawtograder, a platform for automated grading of programming assignments"
+description: "Course management and autograding for university programming courses"
 ---
 
-# Pawtograder Documentation
+Pawtograder is a course-management and autograding platform for university programming courses. Students push code to GitHub, an autograder runs on each push as a GitHub Action, and results — per-test outcomes, rubric scores, and feedback — flow back into the Pawtograder UI. Beyond grading, Pawtograder includes discussion boards, office-hours queues, polls, surveys, a gradebook, and an MCP server and CLI for power users.
 
-This is the documentation for Pawtograder, a platform for automated grading of programming assignments.
+## Pick your guide
 
-[Learn more about Pawtograder](https://pawtograder.com)
+<CardGroup cols={3}>
+  <Card title="Students" icon="graduation-cap" href="/students/intro">
+    Connect GitHub, submit assignments, read autograder feedback, and use discussion boards and office hours.
+  </Card>
+  <Card title="Course Staff" icon="chalkboard-user" href="/staff/intro">
+    Set up courses, configure autograders and rubrics, manage grading, and run polls, surveys, and office hours.
+  </Card>
+  <Card title="Developers" icon="code" href="/developers/intro">
+    Local setup, architecture, the CLI, and the MCP server for contributing to or extending Pawtograder.
+  </Card>
+</CardGroup>
 
-Documentation is organized into three sections:
+## More
 
-- [For Students](/students/intro)
-- [For Course Staff](/staff/intro)
-- [For Developers](/developers/intro)
+<CardGroup cols={3}>
+  <Card title="Changelog" icon="clock-rotate-left" href="/changelog">
+    What's new in Pawtograder.
+  </Card>
+  <Card title="Source on GitHub" icon="github" href="https://github.com/pawtograder/platform">
+    The platform monorepo.
+  </Card>
+  <Card title="Status" icon="signal" href="https://status.pawtograder.com">
+    Current platform status and incident history.
+  </Card>
+</CardGroup>
