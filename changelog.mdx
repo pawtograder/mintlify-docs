@@ -4,6 +4,45 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 29, 2026
+
+#### Instructor tools
+
+- **View as student** — Instructors can now preview the course exactly as a specific student sees it. From the student roster, click **View as this student** to enter a read-only view of that student's dashboard, assignments, submissions, grades, discussion board, and office hours. A sticky orange banner confirms the mode and provides a one-click exit. All write actions are disabled and unreleased grades are hidden ([#779](https://github.com/pawtograder/platform/pull/779))
+
+### May 23, 2026
+
+#### Grading improvements
+
+- **Confirm review button in rubric sidebar** — A **Complete Review** button now appears at the bottom of the rubric sidebar so graders no longer need to scroll back to the top after finishing all checks. The confirmation popover includes an **Auto-advance** toggle (saved per browser) that automatically navigates to the next incomplete submission after confirming ([#695](https://github.com/pawtograder/platform/pull/695))
+
+### May 22, 2026
+
+#### Rubric editor
+
+- **GUI tree editor with drag-and-drop** — The rubric editor now offers a **GUI** mode alongside the existing **YAML source** mode. The GUI presents the rubric as an interactive tree of parts, criteria, and checks with drag-and-drop reordering, quick-add criterion templates (met/not met, multi-option, deduction-only, etc.), inline validation, and a points breakdown. Both modes edit the same rubric and switching between them is lossless ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Cross-rubric references in YAML** — Check references can now be specified in YAML using a name-keyed form (`review_round` / `part` / `criterion` / `check`) that is resolved at save time. The GUI editor also includes a reference picker grouped by review round ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Atomic save via RPC** — Rubric saves now use a single `update_rubric_full` RPC call instead of many individual create/update/delete operations, making saves faster and more reliable ([#766](https://github.com/pawtograder/platform/pull/766))
+
+#### Regrade requests
+
+- **Regrade unapplied rubric checks** — Students can now request a regrade for a rubric check that was never applied to their submission (not just checks that were applied). The **Grade** tab on a submission shows all rubric checks — applied and unapplied — with regrade buttons on each ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolve dangling requests** — When a grader deletes or re-grades a comment that backs an open regrade request, the request is automatically resolved with reason "grade updated" and the student is notified. The student can still escalate the auto-resolved request to an instructor ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Unified Grade tab** — Submissions now have a dedicated **Grade** tab (the default for students once grades are released) showing the full grade ledger: headline score, autograder results, hand-grading breakdown, adjustments, and all regrade requests in one place ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Enrollment
+
+- **Invitation auto-expiry removed** — Invitations no longer expire automatically based on age. The "expired" status has been renamed to "dropped" to mean specifically "removed from the SIS roster." Dropped invitations are reactivated when the student re-appears on the roster ([#777](https://github.com/pawtograder/platform/pull/777))
+- **One enrollment per student per course** — All enrollment paths now reuse an existing (user, class) profile pair instead of creating a duplicate, preventing double gradebook rows ([#777](https://github.com/pawtograder/platform/pull/777))
+
+### May 19, 2026
+
+#### Instructor tools
+
+- **Commit history and manual grading trigger** — Instructors can now view the full commit history for a student's repository from the submission page. For commits without a submission, clicking **Create submission and activate** triggers the grading workflow and automatically activates the resulting submission. Staff-triggered grading overrides deadlines and submission limits ([#764](https://github.com/pawtograder/platform/pull/764))
+
 ## April 2026
 
 ### April 29, 2026
