@@ -285,6 +285,57 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two views that you can switch between at any time using the **GUI** and **YAML source** buttons at the top of the editor:
+
+- **GUI view** — A visual tree editor with drag-and-drop reordering of parts, criteria, and checks. Use the **Add part** button to add a new part, then use the **Add criterion** menu to pick from built-in templates (met/not met, met/partial/not met, multi-option, annotation deductions, and more). Changes in the GUI are reflected immediately in the preview pane.
+- **YAML source view** — The raw YAML editor (Monaco-based) for power users who prefer to work directly with the schema. Switching from YAML to GUI validates the YAML first; if there are errors you must fix them before switching.
+
+Both views share the same in-memory rubric, so toggling between them is lossless. The view preference is saved per session.
+
+### Drag-and-drop reordering
+
+In GUI view, every part, criterion, check, and option has a drag handle (⠿) on its left edge. Drag items vertically within their parent to reorder them. Ordinals are updated automatically on drop.
+
+### Quick-add criterion templates
+
+Click **Add criterion** inside any part to open a menu of templates:
+
+| Template | Description |
+|---|---|
+| Blank checkbox criterion | Single checkbox check |
+| Met / not met (binary) | Two radio checks (met = full points, not met = 0) |
+| Met / partial / not met | Three radio checks with tiered points |
+| Four-tier | Excellent / good / fair / poor radio checks |
+| Multi-option check | Single check with selectable options |
+| Code-quality deductions | Multiple annotation checks in a penalty-only criterion |
+| Penalty-only annotation | Single annotation check in a penalty-only criterion |
+
+### Cross-rubric check references (YAML)
+
+Checks can reference checks from other rubrics on the same assignment. References are authored in YAML using a name-keyed path:
+
+```yaml
+checks:
+  - name: Reflection quality
+    points: 5
+    is_annotation: false
+    is_required: false
+    is_comment_required: false
+    references:
+      - review_round: self-review
+        part: Reflection
+        criterion: Quality
+        check: Thoughtful reflection
+```
+
+When grading, the referenced check's applied feedback is shown inline under the referencing check as "Related Feedback from Other Reviews". References are cross-round only (same-round references are rejected). If the target rubric has unsaved changes, save it first before saving the referencing rubric.
+
+### Points sanitization
+
+Negative point values are not allowed. If you enter a negative number, the editor converts it to its absolute value and shows a warning. Use a deduction-only or non-additive criterion instead of negative check points.
+
+### Unsaved changes protection
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
