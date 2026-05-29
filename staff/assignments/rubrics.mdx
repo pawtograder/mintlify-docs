@@ -285,6 +285,36 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two modes that you can switch between at any time using the **GUI** and **YAML source** buttons in the editor toolbar. Both modes edit the same underlying rubric — switching between them is lossless as long as the YAML is valid.
+
+### GUI editor
+
+The GUI editor presents the rubric as an interactive tree of parts, criteria, and checks. You can:
+
+- **Add parts** with the **Add part** button; each part can be set to Standard, Individual grading, or Assign-to-student mode.
+- **Add criteria** using the **Add criterion** menu, which offers ready-made templates: blank checkbox, met/not met, met/partial/not met, four-tier, multi-option, code-quality deductions, and penalty-only annotation.
+- **Add checks** within a criterion using the **Add check** button; each check can be a checkbox, multi-option, or annotation type.
+- **Drag and drop** parts, criteria, and checks to reorder them within their parent.
+- **Edit inline** — all name, description, and points fields update as you type, with changes committed after a short pause or on blur.
+- **Manage cross-rubric references** directly on each check via the **References** section (see [Check References](#check-references-cross-rubric-context) below).
+
+The GUI editor shows a **Points adjusted** warning banner when any points value is negative (Pawtograder converts negative points to their absolute value and shows which fields were affected).
+
+### YAML source editor
+
+The YAML source editor provides a Monaco-based editor with syntax highlighting and schema validation. It is the same editor that was available before the GUI was added. Switch to it when you need to paste in a rubric from another source or make bulk edits.
+
+When editing in YAML source mode, the preview sidebar updates after a short pause. If the YAML contains errors, the preview is paused and the error is shown in the editor.
+
+### Switching between modes
+
+- **YAML → GUI**: The YAML must be valid before switching. If there are parse errors, Pawtograder shows a toast and keeps you in YAML mode.
+- **GUI → YAML**: Any pending GUI edits are flushed to YAML before the switch, so the source editor always reflects the latest state.
+
+The selected mode is remembered per browser session.
+
+### Unsaved changes protection
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
@@ -299,7 +329,7 @@ The warning only appears when you have actual unsaved changes in the rubric edit
 
 ### Keyboard shortcuts
 
-Speed up rubric editing with keyboard shortcuts:
+Speed up rubric editing with keyboard shortcuts (YAML source mode):
 
 - `Ctrl/Cmd + S`: Save rubric
 - `Ctrl/Cmd + Z`: Undo last change
