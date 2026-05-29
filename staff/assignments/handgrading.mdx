@@ -233,6 +233,35 @@ After a review is released to students, grading comments can no longer be edited
 
 Note that self-review rubric items do not support regrade requests — students cannot request regrades on items they evaluated themselves during the self-review process.
 
+## Viewing commit history and triggering grading
+
+Instructors and graders can view the full commit history for a student's repository directly from the submission page. Click **Commit History** in the submission toolbar to open the commit history dialog.
+
+The dialog shows every commit Pawtograder has recorded (via push webhook) merged with commits fetched live from GitHub. For each commit you can see:
+
+- The short SHA (linked to GitHub)
+- Commit date/time (author date from git, plus the server-received timestamp for webhook-recorded commits)
+- Author name
+- Commit message
+- Workflow status (not triggered, requested, in progress, completed)
+- Any submissions created from that commit
+
+### Triggering grading for a specific commit
+
+For commits that have no submission yet, a **Create submission and activate** button appears in the Action column. Clicking it:
+
+1. Triggers the grading workflow for that commit on GitHub.
+2. Waits for the resulting submission to appear (up to 10 minutes).
+3. Automatically activates the new submission as the student's active submission.
+
+Staff-triggered grading **overrides deadlines and submission limits**. This is useful for grading late work, re-grading after a bug fix, or grading a commit the student forgot to push before the deadline.
+
+For commits that already have a submission, you can click **Activate** to make that submission the active one without re-running the autograder.
+
+<Note>
+The commit date shown is the author date set by git on the committer's machine and can be backdated. For webhook-recorded commits, the "received" timestamp shown below the commit date is the trustworthy server-side receipt time.
+</Note>
+
 ## Rerunning the autograder
 
 Instructors can rerun the autograder on an existing submission without creating a new submission — useful after fixing an autograder bug, updating tests, or regrading with a different grader version.
