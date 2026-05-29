@@ -68,6 +68,40 @@ The **Activity Chart** view shows a stacked daily bar chart across all tracked i
 
 Use the type filter buttons (or a rubric check's KPI link) to narrow the items table. Click **Export CSV** to download the currently visible items, including type, GitHub ID, title, author, date, state, file-change summary, and GitHub URL.
 
+## Commit History and Manual Grading Trigger
+
+Instructors and graders can view the full commit history for a student's repository and manually trigger grading for any commit — including commits that were pushed after the deadline.
+
+### Viewing commit history
+
+From a submission page, click **Commit History** in the submission toolbar. A dialog opens showing every commit Pawtograder has recorded (via push webhook) merged with commits fetched directly from the GitHub API. Each row shows:
+
+- Commit SHA (linked to GitHub)
+- Commit date/time (author date from git; see note below)
+- Author
+- Commit message
+- Workflow status (not triggered, requested, in progress, completed)
+- Linked submissions (if any)
+- Action button (activate an existing submission, or create a new one)
+
+The row for the currently active submission is highlighted.
+
+**About timestamps:** The commit date is set by git on the committer's machine and can be backdated. For commits Pawtograder received via a push webhook, a "received" timestamp is also shown — that timestamp is server-side and trustworthy. For commits sourced only from the GitHub API, only the author-supplied date is available.
+
+### Triggering grading for a commit
+
+If a commit has no submission yet, click **Create submission and activate** to trigger the grading workflow for that commit. A confirmation dialog explains that:
+
+- This triggers the autograder workflow for the selected commit.
+- The resulting submission will be automatically activated when it appears.
+- Staff-triggered grading overrides deadlines and submission limits.
+
+After confirming, the button changes to **Waiting for workflow…** while Pawtograder waits for the submission to appear. Once the submission is created, it is automatically activated and a success notification appears.
+
+### Activating an existing submission
+
+If a commit already has a submission that is not currently active, click **Activate** to make it the active submission without re-running the autograder.
+
 ## Access Control
 
 Repo Analytics is staff-only. The underlying tables (`repository_analytics_daily`, `repository_analytics_items`, `repository_analytics_fetch_status`) restrict reads to graders and instructors of the class via RLS; students cannot see the tab on their own or anyone else's submission.
