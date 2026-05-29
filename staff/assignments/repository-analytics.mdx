@@ -71,3 +71,36 @@ Use the type filter buttons (or a rubric check's KPI link) to narrow the items t
 ## Access Control
 
 Repo Analytics is staff-only. The underlying tables (`repository_analytics_daily`, `repository_analytics_items`, `repository_analytics_fetch_status`) restrict reads to graders and instructors of the class via RLS; students cannot see the tab on their own or anyone else's submission.
+
+## Commit History and Manual Grading Trigger
+
+Instructors can view the full commit history for a student's repository and manually trigger grading for any commit, including commits made after the deadline.
+
+### Viewing commit history
+
+From a submission page, click **Commit History** to open the commit history dialog. The dialog merges:
+
+- Commits recorded by Pawtograder's push webhook (shown as "Recorded by webhook")
+- Commits fetched directly from the GitHub API (shown as "From GitHub")
+
+Each row shows the commit SHA (linked to GitHub), the commit date/time, the author, the commit message, the workflow status, and any submissions that were created from that commit.
+
+The **Date** column shows the commit's author date, which is set by git on the committer's machine and can be backdated. For webhook-recorded commits, a **received** timestamp shows when Pawtograder's server first saw the commit — that timestamp is trustworthy. For GitHub-API-only commits, only the author-supplied date is available.
+
+Use **Load more commits** to page through older commits.
+
+### Triggering grading manually
+
+For commits that have no submission yet, click **Create submission and activate**. This:
+
+1. Triggers the grading workflow for that commit.
+2. Waits for the resulting submission to appear (up to 10 minutes).
+3. Automatically activates the new submission as the student's active submission.
+
+Staff-triggered grading **overrides deadlines and submission limits**. Use this to grade late work, re-grade after a bug fix, or create a submission for a commit that was pushed outside the normal workflow.
+
+For commits that already have a submission, you can click **Activate** to make that submission the student's active submission without re-running the autograder.
+
+<Note>
+The commit history dialog is available to instructors and graders. Triggering grading requires instructor or grader permissions.
+</Note>
