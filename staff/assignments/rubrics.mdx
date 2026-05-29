@@ -285,6 +285,31 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two views that you can switch between at any time using the **GUI** and **YAML source** buttons in the editor toolbar:
+
+- **GUI view** — a visual tree editor with drag-and-drop reordering, inline forms for every field, and quick-add criterion templates. Changes in the GUI are reflected in the YAML source immediately.
+- **YAML source view** — the Monaco-based text editor for power users who prefer to write or paste YAML directly. The preview pane on the right updates as you type.
+
+Both views are bound to the same in-memory rubric, so switching between them is lossless. The editor remembers your last-used view per session.
+
+### GUI editor
+
+In GUI view you can:
+
+- **Drag and drop** parts, criteria, checks, and options to reorder them. Drag handles appear on the left of each row.
+- **Add criteria from templates** using the **Add criterion** menu inside each part. Templates include common patterns such as Met / Partial / Not met, multi-option scoring, and code-quality deductions.
+- **Edit all fields inline** — names, descriptions, points, scoring mode, visibility, annotation targets, and more — without switching to YAML.
+- **Manage check references** directly in the check row (see [Check References](#check-references-cross-rubric-context) below).
+
+### Keyboard shortcuts (YAML source view)
+
+- `Ctrl/Cmd + S`: Save rubric
+- `Ctrl/Cmd + Z`: Undo last change
+- `Ctrl/Cmd + Shift + Z`: Redo
+- `Esc`: Close current dialog
+
+### Unsaved changes protection
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
@@ -296,15 +321,6 @@ This protection applies when:
 - Using the mobile navigation dropdown
 
 The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning clears automatically.
-
-### Keyboard shortcuts
-
-Speed up rubric editing with keyboard shortcuts:
-
-- `Ctrl/Cmd + S`: Save rubric
-- `Ctrl/Cmd + Z`: Undo last change
-- `Ctrl/Cmd + Shift + Z`: Redo
-- `Esc`: Close current dialog
 
 <Tip>
 If you're working on rubrics across multiple tabs, only the currently visible tab will manage the unsaved changes warning to avoid false alerts.
