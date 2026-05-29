@@ -58,6 +58,32 @@ Each assignment row provides links to:
 - **Regrade Requests**: Manage student regrade requests
 - **Due Date Exceptions**: View and manage extensions
 
+## Viewing the Course as a Student
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — in a read-only mode.
+
+To enter student view:
+
+1. Navigate to **Manage** → **Students** and select a student.
+2. Click **View as this student** on the student summary page.
+
+A sticky orange banner appears at the top of every page while you are in student view. The banner shows the student's name and a one-click **Exit student view** button.
+
+**What you can see in student view:**
+
+- The student's assignment dashboard and submission history
+- Released grades (unreleased grades are hidden, matching what the student sees)
+- The student's discussion board posts and office hours requests
+- Autograder results filtered to student-visible tests only
+
+**What is disabled in student view:**
+
+- All write actions (posting, liking, following, submitting, requesting regrades)
+- Staff-only navigation (the `/manage` pages redirect back to the course home)
+- Account settings, notification preferences, and MCP tokens
+
+Student view uses a per-course cookie and does not change your authentication. Reloading the page preserves the view; navigating to a different course or clicking **Exit student view** restores your instructor identity.
+
 ## Office Hours Activity
 
 View recent help queue activity including:
