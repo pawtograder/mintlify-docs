@@ -382,6 +382,61 @@ TAs and instructors can edit or delete rubric scores even after completing a rev
 Editing completed reviews does not automatically notify students. If grades have been released, you may need to communicate changes to affected students.
 </Note>
 
+## Hiding a Rubric Until a Review Is Assigned
+
+By default, students can see a rubric's parts, criteria, and checks as soon as the rubric exists. For self-review rubrics, this can bias students' work — they may tailor their submission to the rubric questions before completing the assignment.
+
+Enable **Hide from students until assigned** on a rubric to prevent students from seeing its contents until a review assignment has been created for them and its release date (if any) has passed.
+
+### Enabling in the GUI editor
+
+1. Open the rubric in the GUI editor.
+2. In the **Rubric** header card at the top, toggle **Hide from students until assigned**.
+3. Save.
+
+### Enabling in YAML
+
+Add `hide_unless_assigned: true` at the rubric level:
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Effort
+        total_points: 5
+        checks:
+          - name: Completed reflection
+            points: 5
+```
+
+### How it works
+
+- Students cannot see the rubric's parts, criteria, or checks until a `review_assignments` row exists for them on that rubric **and** the row's release date (if any) has passed.
+- Instructors and graders always see the rubric regardless of this setting.
+- The student's view updates in real time when the review assignment is created or released — no page refresh needed.
+
+## Self-Review Release Timing
+
+By default, self-review assignments are created for each student when their individual due date passes (accounting for extensions). You can instead set a fixed **release time** so all students receive their self-review at the same wall-clock moment, regardless of per-student due-date exceptions.
+
+### Setting a release time
+
+1. Open the assignment configuration form (create or edit assignment).
+2. In the **Self-Evaluation** section, enable self-review.
+3. Set the **Release self-review at** field to the desired date and time (displayed in the course's time zone).
+4. Save.
+
+When a release time is set:
+
+- Self-review assignments are created for all students at that exact time, ignoring per-student due-date exceptions.
+- The review's due date is computed as `release_at + deadline_offset hours`.
+- Students who finalize their submission early still receive their self-review at `release_at`, not immediately.
+- If the rubric has `hide_unless_assigned: true`, the rubric becomes visible to students at `release_at`.
+
+Leave the field blank to keep the default per-student behavior.
+
 ## Notes and Tips
 
 - Keep criteria focused and keep check names short; longer explanation should go in `description`.
