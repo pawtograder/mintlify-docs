@@ -85,3 +85,28 @@ Track autograder and background job health:
 <Tip>
 Click on any metric to navigate directly to the relevant management page for detailed information and actions.
 </Tip>
+
+## View as Student
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — without affecting any data.
+
+### How to enter student view
+
+1. Navigate to **Manage → Students** and open a student's overview page.
+2. Click **View as this student** (only available for active, non-dropped students).
+3. A sticky orange banner appears at the top of every page: **Viewing as [student name] — read only.**
+
+While in student view:
+
+- All navigation and content is scoped to that student's identity.
+- Write actions (submitting help requests, posting to discussion, liking, following, completing self-review, etc.) are disabled.
+- Unreleased grades and instructor-only content are hidden, matching what the student actually sees.
+- Realtime updates (office hours queue, discussion) work normally.
+
+### Exiting student view
+
+Click **Exit student view** in the orange banner to return to your instructor view. The banner is always visible so you cannot accidentally stay in student view.
+
+<Note>
+Student view is read-only and purely presentational. No data is written under the student's identity. RLS (row-level security) still runs under your instructor session, so the view applies a presentation-layer mask rather than impersonating the student at the database level.
+</Note>

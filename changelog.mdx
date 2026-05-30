@@ -4,6 +4,39 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 30, 2026
+
+#### Rubric editor improvements
+- **GUI tree editor with drag-and-drop** — The rubric editor now offers a visual GUI mode alongside the existing YAML source editor. Switch between them with the **GUI / YAML source** toggle. The GUI editor provides a full tree of parts, criteria, and checks with drag-and-drop reordering at every level, quick-add criterion templates (met/not-met, four-tier, multi-option, deduction-only, etc.), and inline editing of all fields including scoring mode, visibility, and annotation settings ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Cross-rubric check references in YAML** — Rubric checks can now declare `references` in YAML using a name-keyed path (`review_round / part / criterion / check`) or a numeric `id` fallback. References are resolved at save time and round-trip through CLI export/import ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Hide rubric from students until assigned** — A new `hide_unless_assigned` toggle (GUI header or YAML field) prevents students from seeing a rubric's contents until a review on that rubric has been assigned to them. Useful for self-review rubrics where seeing the questions in advance would bias student work ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-review explicit release time** — Assignments with self-review enabled can now set a specific wall-clock release time (`self_review_release_at`) so all students' self-reviews open simultaneously, independent of per-student due-date exceptions ([#788](https://github.com/pawtograder/platform/pull/788))
+
+#### Grading improvements
+- **Confirm review button in rubric sidebar** — A **Complete Review** button now appears at the bottom of the rubric sidebar so graders don't need to scroll back to the top after finishing all checks ([#695](https://github.com/pawtograder/platform/pull/695))
+- **Auto-advance to next submission** — The review completion popover now offers **Complete + Next** to immediately navigate to the next incomplete submission. An optional auto-advance toggle (saved per-browser) makes this the default behavior ([#695](https://github.com/pawtograder/platform/pull/695))
+- **Instructor "view as student" mode** — Instructors can now preview the course exactly as a specific student sees it. Open a student's overview page and click **View as this student**. A sticky orange banner indicates read-only mode; click **Exit student view** to return ([#779](https://github.com/pawtograder/platform/pull/779))
+- **Grade tab for released submissions** — Students now land on a unified **Grade** tab when their submission has been graded and released. The tab shows a headline total with a progress bar, autograder breakdown, hand-grading criteria with applied and unapplied checks, adjustments, and regrade requests — all in one place ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Toggleable rubric descriptions in sidebar** — The rubric sidebar now has a **Show rubric descriptions** toggle. Descriptions are shown by default for graders/instructors and collapsed by default for students to keep the sidebar scannable ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Regrade requests
+- **Request regrades on unapplied checks** — Students can now open a regrade request on a rubric check that was never applied to their submission (not just on checks that were applied). The **Request regrade — check not applied** button appears on each visible-but-unapplied check in the Grade tab and rubric sidebar ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolve dangling requests** — When a grader soft-deletes a grading comment that backs an open regrade request (e.g., during re-grading), the request is automatically resolved with `resolution_reason = comment_deleted` and the student is notified. Students can still escalate an auto-resolved request to an instructor ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Grouped regrade request list** — The student regrade requests page now groups requests by submission, with active requests first and an "action needed" badge when a backing grade was changed ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Data export
+- **CLI assessment export: hint feedback and error-pin engagement** — `pawtograder assessment export` now produces `hints.json` (Feedbot hint responses and student feedback ratings, with a `source` field distinguishing explicit feedback from LLM-generated hints) and `error-pin-engagement.json` (per-student read/like engagement with error-pinned discussion posts). The export is now sectioned and paginated so large classes don't hit edge-function CPU limits ([#780](https://github.com/pawtograder/platform/pull/780))
+- **CLI submissions export** — New `pawtograder submissions export` command streams submission metadata and source files with the same identity modes as assessment export. Supports JSON and CSV output, include/exclude file glob filters, and optional binary file contents ([#780](https://github.com/pawtograder/platform/pull/780))
+
+#### Enrollment management
+- **Invitation status renamed: "expired" → "dropped"** — Invitations removed from the SIS roster are now marked `dropped` instead of `expired`. Time-based auto-expiry has been removed; invitations no longer have an `expires_at` column ([#777](https://github.com/pawtograder/platform/pull/777))
+- **One profile per student per class** — All enrollment paths now reuse an existing (user, class) profile pair instead of creating a duplicate. A partial unique index prevents a second active enrollment for the same user in the same class. A `merge_duplicate_class_enrollments()` function is available for manual cleanup of any pre-existing duplicates ([#777](https://github.com/pawtograder/platform/pull/777))
+
+#### Bug fixes
+- **Fixed advisory lock in finalize_submission_early** — Restored the advisory lock that prevents race conditions when multiple concurrent early-finalization calls arrive for the same submission ([#794](https://github.com/pawtograder/platform/pull/794))
+
 ## April 2026
 
 ### April 29, 2026

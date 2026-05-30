@@ -95,3 +95,69 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## CLI Assessment Export
+
+The Pawtograder CLI (`pawtograder assessment export`) produces a privacy-controlled snapshot of rubrics, autograder results, hand-grading scores, Feedbot hint feedback, and gradebook data for offline analysis.
+
+### What is exported
+
+Each assignment gets its own subdirectory containing:
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata, identity mode, totals |
+| `rubric.json` | Rubric tree (parts, criteria, checks) |
+| `autograder.json` | Autograder configuration and test definitions |
+| `submissions.json` | One row per submission with tokenized student/group identity |
+| `scores.json` | Rubric check scores from the grading review |
+| `tests.json` | Autograder test results per submission |
+| `hints.json` | Feedbot hint responses and student feedback ratings |
+| `error-pin-engagement.json` | Per-student read/like engagement with error-pinned discussion posts |
+| `instructor-build-output.json` | Hidden build logs (only with `--with-instructor-build-output`) |
+
+The top-level `manifest.json` includes grand totals across all assignments.
+
+### Identity modes
+
+Student identities are tokenized to protect privacy:
+
+| Mode | Flag | Description |
+|---|---|---|
+| `opaque` | (default) | Random per-run salt; tokens are stable within one export but cannot be reproduced across runs |
+| `hash` | `--identity hash --salt <value>` | Deterministic HMAC tokens; joinable across exports on the same deployment |
+| `raw` | `--identity raw --i-understand-pii` | Real names, emails, and IDs; requires explicit acknowledgement |
+
+### Key options
+
+```bash
+pawtograder assessment export \
+  --class <class-id-or-slug> \
+  --output ./my-export \
+  --identity hash --salt my-secret-salt \
+  --all-submissions \
+  --with-instructor-build-output \
+  --skip-gradebook
+```
+
+| Option | Description |
+|---|---|
+| `--all-submissions` | Include every submission attempt, not just the active one |
+| `--with-test-output` | Include autograder test stdout/stderr (truncated to 4 KB by default) |
+| `--with-instructor-build-output` | Include hidden build logs with grading paths sanitized |
+| `--skip-gradebook` | Omit gradebook column metadata and private cell data |
+| `--assignment <slug>` | Export only specific assignments (repeatable, supports globs) |
+| `--concurrency <n>` | Parallel assignment exports (default: 4, max: 8) |
+
+### Hint feedback
+
+`hints.json` contains two types of rows distinguished by the `source` field:
+
+- `"source": "feedback"` — a student explicitly rated a Feedbot hint (useful/not useful) and optionally left a comment.
+- `"source": "llm"` — a Feedbot hint was generated for a student who did not leave explicit feedback.
+
+Each row links back to the submission and the specific autograder test via tokenized references.
+
+### Error-pin engagement
+
+`error-pin-engagement.json` records whether each student read or liked a discussion post that an instructor pinned to a specific autograder error. Use this to measure how effectively error-pinned posts reach students who encounter that error.

@@ -59,6 +59,30 @@ This allows graders to provide feedback on documentation, reports, and other non
 - If a check has `data.options`, the selected option's `points` replaces the check's base `points` when applied.
 - Options must be 2+ (single options are disallowed by the editor and schema).
 
+### Hide from students until assigned
+
+Each rubric has a **Hide from students until assigned** toggle (in the rubric header in the GUI editor, or the `hide_unless_assigned` field in YAML). When enabled:
+
+- Students cannot see the rubric's parts, criteria, or checks until a review on that rubric has been assigned to them.
+- Once a review is assigned (and its release date, if set, has passed), the rubric becomes visible.
+- Instructors and graders always see the rubric regardless of this setting.
+
+This is most useful for **self-review rubrics**: enabling it prevents students from reading the self-review questions before they finalize their submission, which could bias their work.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: What did you learn?
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Thoughtful reflection
+            points: 5
+```
+
 ### References Across Rubrics
 
 - Checks can reference checks from other rubrics to surface related feedback when grading. This is managed inline in the sidebar (preview mode).
@@ -285,6 +309,30 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two modes, switchable at any time with the **GUI** / **YAML source** toggle:
+
+### GUI editor
+
+The GUI editor provides a visual tree of parts, criteria, and checks with drag-and-drop reordering at every level. Use it to:
+
+- **Add parts** with the **Add part** button; each part expands into its criteria and checks.
+- **Add criteria** from a template menu — choose from blank checkbox, met/not-met, met/partial/not-met, four-tier, multi-option, code-quality deductions, or penalty-only annotation.
+- **Reorder** parts, criteria, and checks by dragging the grip handle on the left of each row.
+- **Edit** names, descriptions, points, scoring mode, visibility, and annotation settings inline.
+- **Manage references** to checks in other rubrics directly from each check's **References** section.
+
+Changes in the GUI editor are reflected immediately in the preview sidebar and in the YAML source when you switch modes.
+
+### YAML source editor
+
+The YAML source editor (Monaco-based) gives you full control over the rubric schema. It supports syntax highlighting, schema validation, and autocomplete. Switch to it when you need to paste a rubric from another assignment or make bulk edits.
+
+### Switching between modes
+
+Switching from YAML to GUI validates the YAML first — if there are errors, you'll see a message and the switch is blocked until the YAML is valid. Switching from GUI to YAML flushes any pending edits and serializes the current rubric to YAML.
+
+### Unsaved changes protection
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
@@ -369,7 +417,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Rubric**
 - Mandatory: `name`, `parts`
-- Optional: `description`
+- Optional: `description`, `cap_score_to_assignment_points` (boolean, default: `false`), `hide_unless_assigned` (boolean, default: `false` — see [Hide from students until assigned](#hide-from-students-until-assigned))
 
 **Part**
 - Mandatory: `name`, `criteria`
@@ -381,7 +429,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Check**
 - Mandatory: `name`, `is_annotation` (boolean), `is_required` (boolean), `is_comment_required` (boolean), `points` (number; use `0` when the check relies on `data.options`)
-- Optional: `id`, `description`, `file`, `artifact`, `annotation_target` (`file` | `artifact`; default behavior in UI is `file` when omitted for annotations), `max_annotations`, `data` (see below), `student_visibility` (default: `always`)
+- Optional: `id`, `description`, `file`, `artifact`, `annotation_target` (`file` | `artifact`; default behavior in UI is `file` when omitted for annotations), `max_annotations`, `data` (see below), `student_visibility` (default: `always`), `references` (list of cross-rubric references — see [Check References](#check-references-cross-rubric-context))
 
 **Check `data.options`** (for multiple-choice checks)
 - Mandatory per option: `label`, `points`
@@ -418,10 +466,22 @@ A check on one rubric can reference a check on another rubric. During grading, a
 
 ### How to Configure
 
-1. Navigate to the rubric preview/editor for an assignment.
-2. For the check you want to augment, click "Add Reference".
-3. Search/select a check from other rubrics (the current rubric's checks are excluded).
-4. Save. The relationship is stored so that, when grading, the referenced feedback appears under the referencing check.
+**GUI editor**: Expand a check, open the **References** section, and click **Add reference**. A dropdown grouped by review round lets you pick a target check from another rubric on the same assignment. Checks in tabs with unsaved changes are shown as disabled — save those tabs first.
+
+**YAML source**: Add a `references` list to a check. Each entry is either a name-keyed path or a numeric `id` fallback:
+
+```yaml
+checks:
+  - name: Code quality
+    points: 5
+    references:
+      - review_round: self-review
+        part: Reflection
+        criterion: What did you learn?
+        check: Thoughtful reflection
+```
+
+Save. The relationship is stored so that, when grading, the referenced feedback appears under the referencing check.
 
 ### Good Use Cases
 
