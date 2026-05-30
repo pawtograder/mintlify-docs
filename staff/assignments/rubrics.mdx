@@ -59,9 +59,32 @@ This allows graders to provide feedback on documentation, reports, and other non
 - If a check has `data.options`, the selected option's `points` replaces the check's base `points` when applied.
 - Options must be 2+ (single options are disallowed by the editor and schema).
 
+### Hide Rubric Until Assigned
+
+When `hide_unless_assigned: true` is set on a rubric, students cannot see the rubric's contents (parts, criteria, checks) until a review on it has been assigned to them. This is useful for self-review rubrics where seeing the questions before submitting would bias the student's work.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Code quality self-assessment
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Identified at least one improvement
+            is_annotation: false
+            is_required: true
+            is_comment_required: true
+            points: 5
+```
+
+You can also set a **self-review release time** on the assignment to control exactly when the self-review is assigned to all students at once, rather than per-student when their deadline passes. This pairs naturally with `hide_unless_assigned` to ensure students cannot see the self-review questions until the configured release time.
+
 ### References Across Rubrics
 
-- Checks can reference checks from other rubrics to surface related feedback when grading. This is managed inline in the sidebar (preview mode).
+- Checks can reference checks from other rubrics to surface related feedback when grading. This is managed in the GUI editor's check settings panel or inline in the YAML via `references`.
 
 ## YAML Schema Quick Reference
 
@@ -285,6 +308,30 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two modes you can switch between at any time:
+
+- **GUI mode** — A visual tree editor with drag-and-drop reordering, quick-add criterion templates, and inline validation. This is the default.
+- **YAML source mode** — A Monaco-based code editor for direct YAML editing with syntax highlighting and schema validation.
+
+Both modes are bound to the same in-memory rubric, so toggling between them is lossless. The preview pane on the right updates in real time as you make changes in either mode.
+
+### GUI editor
+
+In GUI mode, the rubric is displayed as a collapsible tree of parts, criteria, and checks. You can:
+
+- **Drag and drop** parts, criteria, and checks to reorder them within their parent.
+- **Add criteria from templates** using the "Add criterion" menu on each part. Templates include common patterns like Met/Not met, Met/Partial/Not met, multi-option scoring, and code-quality deductions.
+- **Expand or collapse** any node to focus on the section you're editing.
+- **Toggle descriptions** — a "Show rubric descriptions" switch at the top of the sidebar collapses or expands all part, criteria, and check descriptions. Descriptions are shown by default for graders and instructors, and collapsed by default for students.
+
+### YAML source mode
+
+Switch to YAML source to paste in a rubric, make bulk edits, or configure advanced fields not yet exposed in the GUI. The editor validates your YAML against the rubric schema and highlights errors inline.
+
+### Saving
+
+Click **Save** to persist your changes. The save button shows a summary of what changed (parts added/updated/removed, criteria, checks, references, and any submission reviews that were recomputed). The summary is shown in a toast notification for 15 seconds.
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
@@ -296,15 +343,6 @@ This protection applies when:
 - Using the mobile navigation dropdown
 
 The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning clears automatically.
-
-### Keyboard shortcuts
-
-Speed up rubric editing with keyboard shortcuts:
-
-- `Ctrl/Cmd + S`: Save rubric
-- `Ctrl/Cmd + Z`: Undo last change
-- `Ctrl/Cmd + Shift + Z`: Redo
-- `Esc`: Close current dialog
 
 <Tip>
 If you're working on rubrics across multiple tabs, only the currently visible tab will manage the unsaved changes warning to avoid false alerts.
@@ -369,7 +407,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Rubric**
 - Mandatory: `name`, `parts`
-- Optional: `description`
+- Optional: `description`, `hide_unless_assigned` (boolean, default `false`)
 
 **Part**
 - Mandatory: `name`, `criteria`

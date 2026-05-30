@@ -58,6 +58,33 @@ Each assignment row provides links to:
 - **Regrade Requests**: Manage student regrade requests
 - **Due Date Exceptions**: View and manage extensions
 
+## View as Student (Read-Only Preview)
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — without making any changes.
+
+To enter student view:
+
+1. Navigate to **Manage** → **Students** and select a student.
+2. Click **View as this student** on the student summary page.
+
+A sticky orange banner appears at the top of every page while you are in student view. Click **Exit student view** in the banner to return to your instructor view.
+
+**What you can do in student view:**
+
+- See the student's assignment dashboard, submission history, and released grades exactly as they appear to the student.
+- View the student's discussion board feed, including which threads are visible to them.
+- Browse the office hours queue from the student's perspective.
+
+**What is blocked in student view:**
+
+- All write actions are disabled: you cannot post to the discussion board, submit help requests, submit assignments, or request regrades on behalf of the student.
+- Staff-only pages (under **Manage**) redirect back to the course home.
+- Unreleased grades and instructor-only content are hidden, matching what the student actually sees.
+
+<Note>
+Student view is read-only and purely presentational. Your authentication and RLS identity are unchanged — the override only affects what is displayed. Any write attempt is blocked at the UI level and would also be rejected by the database.
+</Note>
+
 ## Office Hours Activity
 
 View recent help queue activity including:
