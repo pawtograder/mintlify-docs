@@ -19,6 +19,32 @@ Pawtograder has these key features for course staff:
 - **Gradebook**: For tracking student performance and managing grades
 - **Emailer**: For sending emails to students
 
+## Viewing the Course as a Student
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — without affecting any data.
+
+### How to enter student view
+
+1. Navigate to **Manage course → Enrollments** (or the **Student Summary** page for a specific student).
+2. Click the **View as this student** button (eye icon) next to an active student.
+3. An orange banner appears at the top of every page: **"Viewing as [student name] — read only."**
+
+While in student view:
+
+- You see the course through that student's eyes: their submissions, their grades (only released grades), their discussion posts, their office hours requests.
+- All write actions are disabled. Buttons that would create or modify data are hidden or shown as read-only.
+- The rubric sidebar shows only what the student can see (respecting `student_visibility` and release state).
+- Autograder output shows only student-visible tests; instructor-only debug output is hidden.
+- Flashcard progress is not loaded (to avoid mixing your progress with the student's).
+
+### Exiting student view
+
+Click **Exit student view** in the orange banner. You return to your normal instructor view immediately.
+
+<Note>
+Student view is read-only and purely presentational. No data is written under the student's identity. RLS (row-level security) still runs under your real instructor credentials, so the view is a presentation layer, not a true impersonation.
+</Note>
+
 ## Course Configuration
 
 ### Time Zone Settings
