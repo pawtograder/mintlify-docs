@@ -189,7 +189,7 @@ npm run cli -- flashcards copy \
 
 ### Submissions
 
-Import comments and artifacts:
+Import comments and artifacts, or export submission source files:
 
 ```bash
 # Import submission comments
@@ -212,7 +212,71 @@ npm run cli -- submissions artifacts import \
   --assignment <identifier> \
   --file manifest.json \
   --overwrite
+
+# Export submission source files
+npm run cli -- submissions export \
+  --class <identifier> \
+  [--assignment <slug-or-glob>] \
+  [--output <dir>] \
+  [--identity opaque|hash|raw] \
+  [--all-submissions] \
+  [--with-binary] \
+  [--include-file 'src/**'] \
+  [--exclude-file 'build/**'] \
+  [--format json|csv]
 ```
+
+#### `submissions export` options
+
+Exports submission metadata and source files for one or more assignments. By default only the active (final) submission per student is exported; use `--all-submissions` to include every attempt.
+
+| Option | Default | Description |
+|---|---|---|
+| `--class`, `-c` | *(required)* | Class ID, slug, or name. |
+| `--assignment`, `-a` | all assignments | Assignment selector — id, slug, or glob (e.g. `hw-*`). Repeatable. |
+| `--output`, `-o` | auto-generated | Output directory. |
+| `--identity` | `opaque` | Subject identifier mode: `opaque` (random per-run, intra-dump only), `hash` (deterministic from `--salt`, joinable across runs on the same deployment), or `raw` (real ids/emails/names; requires `--i-understand-pii`). |
+| `--salt` | *(required for hash)* | Salt for `--identity hash`. Must be at least 16 characters. |
+| `--i-understand-pii` | `false` | Required when using `--identity raw`. |
+| `--all-submissions` | `false` | Include every submission attempt, not just the active one. |
+| `--with-binary` | `false` | Include binary file contents as base64 in JSON output. |
+| `--include-file` | *(all files)* | Only export files whose path matches this glob. Repeatable. |
+| `--exclude-file` | *(none)* | Skip files whose path matches this glob. Repeatable. |
+| `--format` | `json` | Output format: `json` (includes file contents) or `csv` (metadata index only). |
+| `--concurrency` | `4` | Parallel assignment exports (1–8). |
+
+The export writes a `manifest.json` at the root and per-assignment subdirectories containing `submissions.json` (or `.csv`) and `files.json` (or `.csv`).
+
+#### Assessment export
+
+Export a privacy-controlled snapshot of rubric scores, autograder results, hint feedback, and gradebook data for research or analysis:
+
+```bash
+npm run cli -- assessment export \
+  --class <identifier> \
+  [--assignment <slug-or-glob>] \
+  [--output <dir>] \
+  [--identity opaque|hash|raw] \
+  [--all-submissions] \
+  [--skip-gradebook] \
+  [--with-test-output] \
+  [--with-instructor-build-output]
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `--class`, `-c` | *(required)* | Class ID, slug, or name. |
+| `--assignment`, `-a` | all assignments | Assignment selector. Repeatable. |
+| `--output`, `-o` | auto-generated | Output directory. |
+| `--identity` | `opaque` | Subject identifier mode (same as submissions export). |
+| `--salt` | *(required for hash)* | Salt for `--identity hash`. |
+| `--all-submissions` | `false` | Include every submission attempt, not just the active one. Needed for hint feedback history. |
+| `--skip-gradebook` | `false` | Omit gradebook column metadata and private cell export. |
+| `--with-test-output` | `false` | Include autograder test stdout/stderr (truncated to `--test-output-max-bytes`). |
+| `--with-instructor-build-output` | `false` | Include hidden (instructor-only) build logs, with grading paths sanitized. |
+| `--instructor-build-output-from-sentinel` | *(all output)* | When set with `--with-instructor-build-output`, trim each log to start at this substring. |
+
+Per-assignment output files: `manifest.json`, `rubric.json`, `autograder.json`, `submissions.json`, `scores.json`, `tests.json`, `hints.json`, `error-pin-engagement.json`. When `--with-instructor-build-output` is set, also `instructor-build-output.json`.
 
 ## Repository maintenance
 
