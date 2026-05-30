@@ -429,7 +429,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Check**
 - Mandatory: `name`, `is_annotation` (boolean), `is_required` (boolean), `is_comment_required` (boolean), `points` (number; use `0` when the check relies on `data.options`)
-- Optional: `id`, `description`, `file`, `artifact`, `annotation_target` (`file` | `artifact`; default behavior in UI is `file` when omitted for annotations), `max_annotations`, `data` (see below), `student_visibility` (default: `always`)
+- Optional: `id`, `description`, `file`, `artifact`, `annotation_target` (`file` | `artifact`; default behavior in UI is `file` when omitted for annotations), `max_annotations`, `data` (see below), `student_visibility` (default: `always`), `references` (list of cross-rubric references — see [Check References](#check-references-cross-rubric-context))
 
 **Check `data.options`** (for multiple-choice checks)
 - Mandatory per option: `label`, `points`
