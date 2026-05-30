@@ -82,6 +82,33 @@ Track autograder and background job health:
 - **Last 24 Hours**: Daily workflow statistics
 - **Recent Errors**: Quick access to failed workflow runs
 
+## View as student
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion, and office hours — in a read-only mode.
+
+### Entering student view
+
+1. Navigate to **Manage → Enrollments** (or **Manage → Student → [student name]**).
+2. Click the **View as this student** button (eye icon) next to an active student.
+
+A sticky orange banner appears at the top of every page confirming you are in student view and naming the student. All write actions (submitting, posting, liking, requesting regrades, etc.) are disabled.
+
+### What you see in student view
+
+- The student's assignment dashboard, including their submission history and grades (unreleased grades are hidden, matching what the student sees).
+- The student's discussion feed, filtered to threads visible to that student.
+- The student's office hours queue, filtered to requests visible to that student.
+- The student's gradebook entries (private/instructor-only columns are hidden).
+- Autograder test results filtered to released tests only.
+
+### Exiting student view
+
+Click **Exit student view** in the orange banner. Your instructor view is restored immediately.
+
+<Note>
+Student view is read-only. Auth and RLS identity are unchanged — the override is purely presentational. Any write attempted while in student view is blocked by the application layer and by database row-level security.
+</Note>
+
 <Tip>
 Click on any metric to navigate directly to the relevant management page for detailed information and actions.
 </Tip>
