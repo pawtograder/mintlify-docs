@@ -59,6 +59,30 @@ This allows graders to provide feedback on documentation, reports, and other non
 - If a check has `data.options`, the selected option's `points` replaces the check's base `points` when applied.
 - Options must be 2+ (single options are disallowed by the editor and schema).
 
+### Hide from students until assigned
+
+Each rubric has a **Hide from students until assigned** toggle (in the rubric header in the GUI editor, or the `hide_unless_assigned` field in YAML). When enabled:
+
+- Students cannot see the rubric's parts, criteria, or checks until a review on that rubric has been assigned to them.
+- Once a review is assigned (and its release date, if set, has passed), the rubric becomes visible.
+- Instructors and graders always see the rubric regardless of this setting.
+
+This is most useful for **self-review rubrics**: enabling it prevents students from reading the self-review questions before they finalize their submission, which could bias their work.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: What did you learn?
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Thoughtful reflection
+            points: 5
+```
+
 ### References Across Rubrics
 
 - Checks can reference checks from other rubrics to surface related feedback when grading. This is managed inline in the sidebar (preview mode).
