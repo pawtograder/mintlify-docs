@@ -285,6 +285,35 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two views that you can switch between at any time using the **GUI** and **YAML source** buttons in the editor toolbar:
+
+- **GUI view** (default): A visual tree editor with drag-and-drop reordering of parts, criteria, and checks. Use the **Add part** button to add a new part, then use the **Add criterion** menu to pick from built-in templates (met/not met, multi-option, deduction-only, etc.). Each check expands to reveal all its fields, including a **References** section for cross-rubric links.
+- **YAML source view**: The raw YAML editor backed by Monaco. Useful for bulk edits, copy-paste from another rubric, or when you need precise control over field values.
+
+Switching from YAML to GUI validates the YAML first — if there are parse errors, you'll see a toast explaining what to fix before the switch can complete. Switching from GUI to YAML flushes any pending edits and serializes the current rubric tree.
+
+Both views share the same underlying rubric state, so toggling between them is lossless. The view preference is saved per browser session.
+
+### Drag-and-drop reordering
+
+In GUI view, every part, criterion, and check has a drag handle (⠿) on its left edge. Drag items vertically within their parent to reorder them. Ordinals are updated automatically on drop.
+
+### Quick-add criterion templates
+
+Click **Add criterion** inside a part to open a menu of templates:
+
+| Template | Description |
+|---|---|
+| Blank checkbox criterion | Single checkbox check, 1 point |
+| Met / not met (binary) | Two radio-button checks (met/not met), min/max = 1 |
+| Met / partial / not met | Three radio-button checks, min/max = 1 |
+| Four-tier (excellent / good / fair / poor) | Four radio-button checks, min/max = 1 |
+| Multi-option check | Single check with three selectable options |
+| Code-quality deductions | Three annotation checks in a penalty-only criterion |
+| Penalty-only annotation (single) | One annotation check in a penalty-only criterion |
+
+### Unsaved-changes protection
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
