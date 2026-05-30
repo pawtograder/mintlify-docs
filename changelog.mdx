@@ -4,6 +4,41 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 30, 2026
+
+#### Rubric improvements
+- **Rubrics hide until assigned** — A new `hide_unless_assigned` option on rubrics prevents students from seeing rubric contents (parts, criteria, checks) until a review has been assigned to them. Useful for self-review rubrics where seeing the questions in advance would bias student work ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-review explicit release time** — Assignments with self-review can now set an explicit `release_at` wall-clock time for when self-reviews become available to students, independent of per-student due-date exceptions ([#788](https://github.com/pawtograder/platform/pull/788))
+
+### May 29, 2026
+
+#### Instructor tools
+- **View as student (read-only preview)** — Instructors can now preview the course exactly as a specific student sees it. Access via **Manage → Students → [student] → View as this student**. A sticky orange banner indicates preview mode; all write actions are disabled. Exit via the banner ([#779](https://github.com/pawtograder/platform/pull/779))
+
+### May 23, 2026
+
+#### Grading improvements
+- **Confirm review button in rubric sidebar** — A "Complete Review" button now appears at the bottom of the rubric sidebar so graders don't need to scroll back to the top after finishing all checks ([#695](https://github.com/pawtograder/platform/pull/695))
+- **Auto-advance to next submission** — After completing a review, graders can click "Complete + Next" to automatically navigate to their next incomplete submission. The preference is saved per browser ([#695](https://github.com/pawtograder/platform/pull/695))
+
+### May 22, 2026
+
+#### Regrade requests
+- **Regrade requests for unapplied checks** — Students can now request a regrade for rubric checks that were never applied to their submission (not just checks that were applied). A "Request regrade — check not applied" button appears on visible, unreleased checks in the Grade tab ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolve dangling regrade requests** — When a grader deletes or re-grades a comment that backs an open regrade request, the request is automatically resolved with a notification to the student. Students can still escalate auto-resolved requests to an instructor ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Unified Grade tab for students** — Submissions now have a dedicated **Grade** tab showing a grade ledger with autograder and hand-grading breakdowns. Students land on this tab by default once grades are released ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Enrollment improvements
+- **Invitation auto-expiry removed** — Invitations no longer expire automatically based on age. The "expired" status has been renamed to "dropped" and is now set only when a student is removed from the SIS roster ([#777](https://github.com/pawtograder/platform/pull/777))
+- **One enrollment per student per course** — All enrollment paths now reuse an existing (user, class) profile pair instead of creating duplicate profiles, eliminating duplicate gradebook rows ([#777](https://github.com/pawtograder/platform/pull/777))
+
+#### Rubric editor
+- **GUI tree editor with drag-and-drop** — The rubric editor now offers a visual GUI mode alongside the YAML source editor. Switch between modes at any time. GUI mode supports drag-and-drop reordering of parts, criteria, checks, and options, plus quick-add criterion templates ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Cross-rubric check references in YAML** — Rubric checks can now declare `references:` in YAML using human-readable name paths (review_round / part / criterion / check). References are resolved at save time and surface related feedback during grading ([#766](https://github.com/pawtograder/platform/pull/766))
+- **Atomic rubric save** — Rubric saves now use a single `update_rubric_full` RPC that atomically reconciles all parts, criteria, checks, and references in one transaction, with cascading point updates to existing grading comments ([#766](https://github.com/pawtograder/platform/pull/766))
+
 ## April 2026
 
 ### April 29, 2026
