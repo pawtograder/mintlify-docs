@@ -285,6 +285,30 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two modes you can switch between at any time:
+
+- **GUI mode** — A visual tree editor with drag-and-drop reordering, quick-add criterion templates, and inline validation. This is the default.
+- **YAML source mode** — A Monaco-based code editor for direct YAML editing with syntax highlighting and schema validation.
+
+Both modes are bound to the same in-memory rubric, so toggling between them is lossless. The preview pane on the right updates in real time as you make changes in either mode.
+
+### GUI editor
+
+In GUI mode, the rubric is displayed as a collapsible tree of parts, criteria, and checks. You can:
+
+- **Drag and drop** parts, criteria, and checks to reorder them within their parent.
+- **Add criteria from templates** using the "Add criterion" menu on each part. Templates include common patterns like Met/Not met, Met/Partial/Not met, multi-option scoring, and code-quality deductions.
+- **Expand or collapse** any node to focus on the section you're editing.
+- **Toggle descriptions** — a "Show rubric descriptions" switch at the top of the sidebar collapses or expands all part, criteria, and check descriptions. Descriptions are shown by default for graders and instructors, and collapsed by default for students.
+
+### YAML source mode
+
+Switch to YAML source to paste in a rubric, make bulk edits, or configure advanced fields not yet exposed in the GUI. The editor validates your YAML against the rubric schema and highlights errors inline.
+
+### Saving
+
+Click **Save** to persist your changes. The save button shows a summary of what changed (parts added/updated/removed, criteria, checks, references, and any submission reviews that were recomputed). The summary is shown in a toast notification for 15 seconds.
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
@@ -296,15 +320,6 @@ This protection applies when:
 - Using the mobile navigation dropdown
 
 The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning clears automatically.
-
-### Keyboard shortcuts
-
-Speed up rubric editing with keyboard shortcuts:
-
-- `Ctrl/Cmd + S`: Save rubric
-- `Ctrl/Cmd + Z`: Undo last change
-- `Ctrl/Cmd + Shift + Z`: Redo
-- `Esc`: Close current dialog
 
 <Tip>
 If you're working on rubrics across multiple tabs, only the currently visible tab will manage the unsaved changes warning to avoid false alerts.
