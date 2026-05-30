@@ -4,6 +4,28 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 30, 2026
+
+#### Grading improvements
+- **Confirm review button in rubric sidebar** — A **Complete Review** button now appears at the bottom of the rubric sidebar so graders no longer need to scroll back to the top after finishing all checks. The completion popover also includes a **Complete + Next** button that marks the review complete and navigates to the next incomplete submission, with an optional auto-advance toggle saved in browser storage ([#695](https://github.com/pawtograder/platform/pull/695))
+- **Rubrics hide unless assigned** — Rubrics can now be configured to hide their contents from students until a review has been assigned to them. Enable **Hide from students until assigned** in the rubric editor to prevent students from seeing self-review questions before submitting. Pairs with a new **Release self-review at** field on assignments for scheduling self-review releases at a specific wall-clock time ([#788](https://github.com/pawtograder/platform/pull/788))
+
+#### Assignment configuration
+- **Advisory suggested due date** — Assignments now support an optional **Suggested Due Date** shown to students above the hard due date. It is purely informational and does not affect submission enforcement, late tokens, or lab scheduling — students can continue submitting until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+
+### May 29, 2026
+
+#### Instructor tools
+- **View as student mode** — Instructors can now preview the course exactly as a specific student sees it. Navigate to **Manage → Students**, select a student, and click **View as this student**. A sticky orange banner indicates the mode and provides a one-click exit. All write actions are disabled and unreleased grades are hidden while in student view ([#779](https://github.com/pawtograder/platform/pull/779))
+
+### May 22, 2026
+
+#### Exports
+- **CLI submissions export** — New `pawtograder submissions export` command streams submission metadata and source files with the same identity modes as assessment export. Supports include/exclude file globs, optional binary file contents, JSON/CSV formats, and per-assignment manifests ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Linked grader hint feedback export** — Assessment export now includes `hints.json` with both explicit student ratings of Feedbot hints (`source: "feedback"`) and cached LLM hint responses (`source: "llm"`). Also exports `error-pin-engagement.json` with per-student read/like state for discussion posts pinned to autograder errors ([#780](https://github.com/pawtograder/platform/pull/780))
+
 ## April 2026
 
 ### April 29, 2026

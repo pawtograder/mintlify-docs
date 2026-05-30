@@ -23,6 +23,12 @@ zone or what other users see.
 
 - **Release Date** — when the assignment becomes visible to students
   and student repositories are created.
+- **Suggested Due Date** — an optional, advisory target date shown to
+  students above the hard due date. It is purely informational and
+  changes no enforcement: submission gating, late tokens, and lab
+  scheduling all continue to use the Due Date. Use this for
+  standards/mastery workflows where students can resubmit freely until
+  the hard deadline. Must be on or before the Due Date.
 - **Due Date** — the default submission deadline. Per-student or
   per-group overrides are configured under
   [Extensions](/staff/assignments/extensions).
@@ -87,6 +93,17 @@ anonymized grading.
 **Enable Repository Analytics** turns on commit-frequency and
 push-timing analytics for the assignment's student repositories. See
 [Repository Analytics](/staff/assignments/repository-analytics).
+
+## Self-review release time
+
+When self-review is enabled for an assignment, you can optionally set a **Release self-review at** time. When set:
+
+- All students' self-reviews are assigned and become visible at that exact wall-clock time, regardless of per-student due-date exceptions.
+- The self-review due date is computed as `release_at + deadline_offset hours`.
+
+Leave this blank to use the default behavior: self-reviews are released when each student's individual programming assignment due date passes.
+
+This pairs with the rubric option **Hide from students until assigned** — set both to ensure students cannot see the self-review questions before the release time.
 
 ## Handout URL
 

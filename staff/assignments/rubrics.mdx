@@ -283,6 +283,29 @@ parts:
             student_visibility: if_applied
 ```
 
+## Hide from students until assigned
+
+When you enable **Hide from students until assigned** on a rubric, students cannot see the rubric's parts, criteria, or checks until a review has been assigned to them and the review's release date has passed. This is useful for self-review rubrics where seeing the questions before submitting would bias the student's work.
+
+To enable this option, open the rubric editor and toggle **Hide from students until assigned** in the rubric header settings. You can also set it in YAML:
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Code quality reflection
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Identified strengths
+            is_annotation: false
+            points: 5
+```
+
+When `hide_unless_assigned` is `true`, the rubric is invisible to students until a `review_assignments` row exists for them on that rubric and the review's release date has passed (or is `null`). Instructors and graders always see the rubric regardless of this setting.
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
