@@ -4,6 +4,24 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 30, 2026
+
+#### Assignment improvements
+- **Advisory suggested due date** — Instructors can now set an optional "Suggested Due Date" on assignments. It is shown to students above the hard due date with a tooltip explaining the difference. The suggested date is purely informational: submission enforcement, late tokens, and lab scheduling all continue to use the hard due date. Useful for standards/mastery workflows where students resubmit freely until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Grading improvements
+- **Rubric "hide unless assigned"** — A new `hide_unless_assigned` toggle on rubrics prevents students from seeing rubric parts, criteria, and checks until a review has been assigned to them and its release date has passed. Instructors and graders always see the rubric. Pairs with the new **Release self-review at** date on self-review settings to control exactly when the self-review rubric becomes visible ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-review explicit release date** — Instructors can now set a wall-clock release time for self-reviews (`release_at`). When set, all students' self-reviews are released at that exact time regardless of per-student due-date exceptions, and the review due date is computed as `release_at + deadline_offset` ([#788](https://github.com/pawtograder/platform/pull/788))
+
+#### Instructor tools
+- **View as student (read-only preview)** — Instructors can now preview the course exactly as a specific student sees it. Enter student view from the Enrollments roster or the Student Summary page. A sticky orange banner confirms the mode and provides a one-click exit. All write actions are disabled; auth and RLS identity are unchanged ([#779](https://github.com/pawtograder/platform/pull/779))
+
+#### CLI / exports
+- **New `submissions export` command** — Export submission metadata and source files for one or more assignments with privacy-controlled identity modes (`opaque`, `hash`, `raw`), file glob filters (`--include-file`, `--exclude-file`), optional binary file contents, and JSON or CSV output ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Assessment export enhancements** — The `assessment export` command now supports `--all-submissions` (export every attempt, not just the active one), `--skip-gradebook`, `--with-instructor-build-output` (sanitized hidden build logs), and exports error-pin engagement data (`error-pin-engagement.json`). Hint export now includes both student feedback ratings and LLM-generated hint text ([#780](https://github.com/pawtograder/platform/pull/780))
+
 ## April 2026
 
 ### April 29, 2026
