@@ -245,6 +245,25 @@ parts:
             points: 2
 ```
 
+### Hide Rubric Until Assigned
+
+Use `hide_unless_assigned: true` on a self-review rubric to prevent students from seeing the rubric questions before they submit. Once a self-review is assigned to a student, the rubric becomes visible to them.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Code quality reflection
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Identified areas for improvement
+            is_annotation: false
+            points: 5
+```
+
 ### Student Visibility
 
 ```yaml
