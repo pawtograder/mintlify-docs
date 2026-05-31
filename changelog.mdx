@@ -4,6 +4,51 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## May 2026
+
+### May 31, 2026
+
+#### Bug fixes
+- **Fixed group dissolution when submissions exist** — When an instructor moves a student into a new group on a group-optional assignment, the student's old single-member group is now preserved (along with its repository and submission history) if it has any submissions. Previously, dissolving the empty group deleted the repository, causing a foreign-key violation ([#800](https://github.com/pawtograder/platform/pull/800))
+- **New assignments default to rejecting empty submissions** — The "Permit Empty Submissions" setting now defaults to **off** for newly created assignments. Empty (handout-matching) submissions create throwaway repositories that can complicate group formation; instructors can still enable the setting per-assignment ([#800](https://github.com/pawtograder/platform/pull/800))
+
+### May 30, 2026
+
+#### Assignment configuration
+- **Advisory suggested due date** — Instructors can now set an optional **Suggested Due Date** on an assignment. This date is shown to students above the hard due date as a recommended target, but does not affect submission enforcement, late tokens, or lab scheduling. Useful for standards/mastery workflows where students are encouraged to submit early but may resubmit freely until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Rubrics
+- **Hide rubric until assigned** — Rubrics now support a **Hide from students until assigned** toggle. When enabled, students cannot see the rubric's contents (parts, criteria, checks) until a review on it has been assigned to them. Instructors and graders always see rubrics. Pairs with the new **Release self-review at** setting to control exactly when students see self-review questions ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Explicit self-review release time** — Instructors can now set a specific wall-clock time at which self-reviews are assigned and become visible to all students, independent of per-student due-date exceptions. Leave blank to use the existing behavior (release when each student's due date passes) ([#788](https://github.com/pawtograder/platform/pull/788))
+
+#### Assessment export (CLI)
+- **Error-pin engagement export** — The `pawtograder assessment export` command now produces an `error-pin-engagement.json` file per assignment containing per-student read/like status for discussion posts pinned to autograder errors ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Linked grader hint feedback** — `hints.json` now includes both student feedback ratings and LLM-derived Feedbot hint responses, with deduplication so each (grader test, student) pair appears once ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Instructor build output export** — New `--with-instructor-build-output` flag exports hidden build logs with grading paths sanitized. Use `--instructor-build-output-from-sentinel` to trim logs to a specific starting line ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Sectioned export for large classes** — The export now calls the edge function in sectioned slices (meta → submissions → scores → tests → engagement) so each invocation stays within CPU limits on large classes ([#780](https://github.com/pawtograder/platform/pull/780))
+
+### May 29, 2026
+
+#### Instructor tools
+- **View as student (read-only preview)** — Instructors can now preview the course exactly as a specific student sees it. From the student overview page, click **View as this student** to enter a read-only mode showing the student's dashboard, assignments, submissions, grades, discussion board, and office hours. A sticky orange banner indicates the mode; click **Exit student view** to return to the normal instructor view ([#779](https://github.com/pawtograder/platform/pull/779))
+
+### May 23, 2026
+
+#### Grading
+- **Complete + Next auto-advance** — The **Complete Review** popover now includes a **Complete + Next** button that saves the review and immediately navigates to the next incomplete submission in your queue. A **Complete Review** button also appears at the bottom of the rubric sidebar so you don't need to scroll back to the top after finishing all checks ([#695](https://github.com/pawtograder/platform/pull/695))
+
+### May 22, 2026
+
+#### Regrade requests
+- **Request regrades on unapplied checks** — Students can now open a regrade request on a rubric check that was *not* applied to their submission (in addition to checks that were applied). The **Request regrade — check not applied** button appears on each visible, unreleased check in the grade view. When a grader resolves the request, a real grading comment is created and the gradebook updates automatically ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolve dangling requests** — When a grader soft-deletes a grading comment that backs an open regrade request, the request is now automatically resolved with the reason "grade updated" instead of being left stuck as "pending". Students receive a notification and can still escalate to an instructor if they disagree ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Unified grade view for students** — Submissions now have a dedicated **Grade** tab showing a headline score, progress bar, autograder breakdown, hand-grading criteria with applied and unapplied checks, and all regrade requests in one place. Students land on this tab by default when their grade is released ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Grouped regrade request list** — The student regrade requests page now groups requests by submission with collapsible sections, showing an "Action needed" badge when a request requires attention ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Enrollment management
+- **Invitation status renamed: "expired" → "dropped"** — The invitation status previously called "expired" is now called "dropped" to more accurately reflect that it means the student was removed from the SIS roster. Time-based auto-expiry has been removed; invitations no longer expire automatically ([#777](https://github.com/pawtograder/platform/pull/777))
+- **One profile per student per class** — Enrollment paths now reuse an existing (user, class) profile pair instead of creating a duplicate, preventing duplicate gradebook rows. A `merge_duplicate_class_enrollments()` database function is available for manual cleanup of any pre-existing duplicates ([#777](https://github.com/pawtograder/platform/pull/777))
+
 ## April 2026
 
 ### April 29, 2026
