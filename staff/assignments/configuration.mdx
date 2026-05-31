@@ -23,6 +23,12 @@ zone or what other users see.
 
 - **Release Date** — when the assignment becomes visible to students
   and student repositories are created.
+- **Suggested Due Date** *(optional)* — an advisory target date shown
+  to students above the hard due date. It is purely informational:
+  submission enforcement, late tokens, and lab scheduling all continue
+  to use the Due Date. Use this for standards/mastery workflows where
+  students are encouraged to submit early but may resubmit freely until
+  the hard deadline. Must be on or before the Due Date.
 - **Due Date** — the default submission deadline. Per-student or
   per-group overrides are configured under
   [Extensions](/staff/assignments/extensions).
@@ -33,6 +39,14 @@ For lab-section-specific due dates, set **Minutes due after lab
 meeting** or **Hours due after programming assignment** on the group
 configuration; Pawtograder computes a per-section due date from the
 section's meeting time.
+
+## Self-review settings
+
+When self-review is enabled for an assignment, you can configure:
+
+- **Deadline offset** — how many hours after the student's due date the self-review is due.
+- **Allow early finalization** — lets students lock in their submission early and start the self-review before the programming deadline.
+- **Release self-review at** *(optional)* — a specific wall-clock time at which the self-review is assigned and becomes visible to all students, ignoring per-student due-date exceptions. Leave blank to release when each student's programming due date passes (the default). Pairs with the rubric option **Hide from students until assigned** to prevent students from seeing self-review questions before they submit.
 
 ## Points possible and score capping
 
@@ -50,7 +64,7 @@ cap when your rubric or autograder can sum past the assignment max
 
 ## Empty submission policy
 
-- **Permit Empty Submissions** (default: on) — submissions whose
+- **Permit Empty Submissions** (default: off for new assignments) — when enabled, submissions whose
   collected files are unchanged from the handout are flagged as empty
   but accepted.
 - **Reject Empty Submissions** — the autograder rejects empty

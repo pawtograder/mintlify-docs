@@ -257,6 +257,30 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## View as Student (Read-Only Preview)
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — without making any changes.
+
+### Entering student view
+
+1. Navigate to **Manage** → **Students** → select a student.
+2. Click **View as this student** (orange button, visible to instructors only for active, non-disabled students).
+3. A sticky orange banner appears at the top of every page: **"Viewing as [student name] — read only. You cannot make changes in this mode."**
+
+While in student view:
+- All write actions (submitting help requests, posting to discussion, liking/following, completing self-review, requesting regrades, etc.) are disabled.
+- Unreleased grades are hidden, matching what the student actually sees.
+- Instructor-only debug output and hidden autograder tests are not shown.
+- The `/manage` section is inaccessible; navigating there redirects to the course home.
+
+### Exiting student view
+
+Click **Exit student view** in the orange banner to return to your normal instructor view. The view-as state persists across page loads until you exit.
+
+<Note>
+Student view is read-only and purely presentational. Your authentication and RLS identity are unchanged — any write attempted while in student view is rejected by the database's authorization rules.
+</Note>
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
