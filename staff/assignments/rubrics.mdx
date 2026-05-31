@@ -21,6 +21,9 @@ Rubrics can only be edited by instructors. When editing a rubric, you will be pr
   - `total_points`: Max points for this criteria. It is not possible for a grader to assign more points to nested checks, even if you allow them to select that many points.
   - `min_checks_per_submission` / `max_checks_per_submission`: How many checks must/can be applied for the criteria.
   - One or more checks.
+- **Rubric-level options**:
+  - `hide_unless_assigned` (boolean, default `false`): When `true`, students cannot see the rubric's contents (parts, criteria, checks) until a review on it has been assigned to them. Use this for self-review rubrics where seeing the questions before submitting would bias the student's work. Instructors and graders always see rubrics regardless of this setting.
+  - `cap_score_to_assignment_points` (boolean): Cap the combined score at the assignment's Points Possible.
 - **Check**: The atom of feedback and scoring. A check can be global or an annotation applied to a file line or to an artifact. Checks can have:
   - `points` or selectable `data.options` with distinct labels/points
   - `is_annotation` + `annotation_target` (`file` or `artifact`), optional `file`/`artifact` to link
