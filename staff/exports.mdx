@@ -95,3 +95,73 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## CLI Assessment Export
+
+The Pawtograder CLI provides a richer, privacy-controlled export of
+assessment data (rubrics, scores, autograder test results, Feedbot hint
+feedback, and gradebook columns). See the [CLI documentation](/developers/cli)
+for installation and authentication.
+
+```bash
+pawtograder assessment export --class <class-id> --output ./my-export
+```
+
+### Identity modes
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt; tokens are only joinable within a single dump. |
+| `hash` | Deterministic HMAC using `--salt`; tokens are joinable across dumps on the same deployment. |
+| `raw` | Real student IDs, emails, and names. Requires `--i-understand-pii`. |
+
+### Key options
+
+| Option | Description |
+|---|---|
+| `--assignment <slug>` | Export only specific assignments (repeatable, supports globs). |
+| `--skip-gradebook` | Omit gradebook column metadata and private cell export. |
+| `--all-submissions` | Include every submission attempt, not just the active one. |
+| `--with-test-output` | Include autograder test stdout/stderr (truncated to 4 KB by default). |
+| `--with-instructor-build-output` | Include hidden grader build logs (path-sanitized). |
+| `--output <dir>` | Output directory (default: `./assessment-export-<class>-<timestamp>`). |
+
+### Output files (per assignment)
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Dump metadata, identity mode, and grand totals. |
+| `rubric.json` | Rubric tree (parts, criteria, checks). |
+| `autograder.json` | Autograder configuration and test definitions. |
+| `submissions.json` | One row per submission (active only by default). |
+| `scores.json` | Rubric check scores from the final grading review. |
+| `tests.json` | Autograder test results. |
+| `hints.json` | Feedbot hint feedback (student ratings and LLM responses). |
+| `error-pin-engagement.json` | Per-student engagement with discussion posts pinned to autograder errors. |
+
+## CLI Submissions Export
+
+Export raw submission files and metadata with the same identity modes as the assessment export.
+
+```bash
+pawtograder submissions export --class <class-id> --output ./submissions
+```
+
+### Key options
+
+| Option | Description |
+|---|---|
+| `--assignment <slug>` | Export specific assignments (repeatable, supports globs). |
+| `--all-submissions` | Include every attempt, not just the active submission. |
+| `--include-file <glob>` | Only export files matching this glob (repeatable). |
+| `--exclude-file <glob>` | Skip files matching this glob (repeatable). |
+| `--with-binary` | Include binary file contents as base64. |
+| `--format json\|csv` | `json` includes file contents; `csv` is a metadata index only. |
+
+### Output files (per assignment)
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Dump metadata and totals. |
+| `submissions.json` / `submissions.csv` | One row per submission. |
+| `files.json` / `files.csv` | One row per file per submission. |
