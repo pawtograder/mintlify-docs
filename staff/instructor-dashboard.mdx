@@ -8,6 +8,10 @@ icon: "gauge"
 
 The instructor dashboard provides a comprehensive overview of your course's grading status, student activity, and system health. Access it from the course navigation menu.
 
+<Note>
+Dashboard widgets for Surveys, Discussion Activity, and Office Hours are automatically hidden when the corresponding course feature flag is disabled. Changes to feature flags take effect immediately without requiring a page reload. See [Course Settings](/staff/course-settings) to manage feature flags.
+</Note>
+
 ## Assignment Grading Overview
 
 The dashboard displays all assignments in a consolidated table organized into three sections:
@@ -85,3 +89,28 @@ Track autograder and background job health:
 <Tip>
 Click on any metric to navigate directly to the relevant management page for detailed information and actions.
 </Tip>
+
+## View as student (read-only preview)
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — without affecting any data.
+
+### Entering student view
+
+1. Navigate to **Manage** → **Students** → select a student.
+2. Click **View as this student** (visible only to instructors for active, non-dropped students).
+3. An orange banner appears at the top of every page confirming you are in read-only student view.
+
+While in student view:
+
+- All write actions (submitting, posting, liking, requesting regrades, etc.) are disabled.
+- Unreleased grades and instructor-only content are hidden, matching what the student actually sees.
+- Navigation items for disabled course features are hidden.
+- The banner shows the student's name and an **Exit student view** button.
+
+### Exiting student view
+
+Click **Exit student view** in the orange banner, or navigate to any `/manage/` page (which redirects back to the instructor view automatically).
+
+<Note>
+Student view is read-only and purely presentational. Your authentication identity is unchanged — all RLS policies still run as your instructor account. No data is written on behalf of the student.
+</Note>

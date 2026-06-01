@@ -63,6 +63,29 @@ This allows graders to provide feedback on documentation, reports, and other non
 
 - Checks can reference checks from other rubrics to surface related feedback when grading. This is managed inline in the sidebar (preview mode).
 
+## Rubric visibility options
+
+Two top-level rubric settings control when students can see the rubric:
+
+- **`is_private`** — when `true`, the rubric is never visible to students (staff-only). Defaults to `false`.
+- **`hide_unless_assigned`** — when `true`, students cannot see the rubric's contents (parts, criteria, checks) until a review on that rubric has been assigned to them **and** the review's release date has passed. Once assigned, the rubric becomes visible. Defaults to `false`.
+
+`hide_unless_assigned` is designed for self-review rubrics where seeing the questions before submitting would bias the student's work. Pair it with the **Release self-review at** setting on the assignment (see [Assignment Configuration](/staff/assignments/configuration)) to control exactly when the self-review rubric becomes visible.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Code quality self-assessment
+        total_points: 10
+        is_additive: true
+        checks:
+          - name: Identified key strengths
+            points: 5
+```
+
 ## YAML Schema Quick Reference
 
 These examples conform to `public/RubricSchema.json`.
@@ -369,7 +392,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Rubric**
 - Mandatory: `name`, `parts`
-- Optional: `description`
+- Optional: `description`, `hide_unless_assigned` (default: `false`)
 
 **Part**
 - Mandatory: `name`, `criteria`

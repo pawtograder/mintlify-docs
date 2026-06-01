@@ -23,6 +23,13 @@ zone or what other users see.
 
 - **Release Date** — when the assignment becomes visible to students
   and student repositories are created.
+- **Suggested Due Date** *(optional)* — an advisory target date shown
+  to students above the hard due date. It is purely informational:
+  submission enforcement, late tokens, and lab scheduling all continue
+  to use the Due Date. The suggested date must be on or before the Due
+  Date. Use this for standards/mastery workflows where students can
+  resubmit freely until the hard deadline but you want to encourage an
+  earlier target.
 - **Due Date** — the default submission deadline. Per-student or
   per-group overrides are configured under
   [Extensions](/staff/assignments/extensions).
@@ -33,6 +40,12 @@ For lab-section-specific due dates, set **Minutes due after lab
 meeting** or **Hours due after programming assignment** on the group
 configuration; Pawtograder computes a per-section due date from the
 section's meeting time.
+
+## Self-review settings
+
+When self-review is enabled for an assignment, an additional optional field controls when the self-review is released to students:
+
+- **Release self-review at** *(optional)* — an explicit wall-clock time at which the self-review is assigned and becomes visible to all students, regardless of per-student due-date exceptions. When left blank (the default), the self-review is released when each student's individual programming assignment due date passes. Setting this field is useful when you want all students to start their self-review at the same time (for example, after a class session). Pairs with the rubric option **Hide from students until assigned** (`hide_unless_assigned`) to keep the self-review rubric hidden until this moment.
 
 ## Points possible and score capping
 
