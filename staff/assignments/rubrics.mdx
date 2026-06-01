@@ -283,6 +283,18 @@ parts:
             student_visibility: if_applied
 ```
 
+## Hide unless assigned
+
+When **Hide unless assigned** is enabled on a rubric, students cannot see the rubric (its parts, criteria, or checks) until a review assignment has been created for them and its release date has passed. Instructors and graders always see all rubrics regardless of this setting.
+
+This is useful for self-review rubrics that you want to keep hidden until after the submission deadline, so students cannot preview the criteria before submitting.
+
+To enable it, toggle **Hide unless assigned** in the rubric editor header before saving.
+
+<Note>
+When a rubric is hidden and a student finalizes their submission early, the review assignment is created with a `release_date` matching the assignment's configured self-review `release_at` time (if set), so the rubric remains hidden until that time even for early finalizers.
+</Note>
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
