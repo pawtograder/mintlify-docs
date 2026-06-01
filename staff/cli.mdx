@@ -187,6 +187,56 @@ npm run cli -- flashcards copy \
   --deck <name>
 ```
 
+### Assessment export
+
+Export a privacy-controlled snapshot of rubrics, grading scores, autograder test results, Feedbot hint responses, hint feedback, and gradebook columns for a class. The export streams NDJSON records and supports three identity modes:
+
+- `raw` — real ids, emails, and names (requires `confirm_pii: true`)
+- `hash` — HMAC-derived tokens, joinable across runs with the same salt
+- `opaque` — per-run random tokens, intra-run only
+
+```bash
+# Export preamble (students, sections, assignments, gradebook columns)
+npm run cli -- assessment export preamble \
+  --class <identifier> \
+  --identity-mode hash \
+  --salt <your-salt>
+
+# Export per-assignment data (rubric, submissions, scores, tests, hints)
+npm run cli -- assessment export assignment \
+  --class <identifier> \
+  --assignment <slug> \
+  --identity-mode hash \
+  --salt <your-salt>
+
+# Export gradebook column scores
+npm run cli -- assessment export gradebook \
+  --class <identifier> \
+  --identity-mode hash \
+  --salt <your-salt>
+
+# Deanonymize: map subject tokens back to real student PII (hash mode only)
+npm run cli -- assessment export roster \
+  --class <identifier> \
+  --identity-mode hash \
+  --salt <your-salt> \
+  --confirm-pii
+```
+
+The `assignment` export is split into sections for large classes. Use `--section` to export one slice at a time:
+
+- `meta` — rubric, autograder config, groups
+- `submissions` — submission records
+- `scores` — rubric check results from the final grading review
+- `tests` — autograder test results (add `--with-test-output` for full output text)
+- `build_output` — hidden instructor build logs (add `--with-instructor-build-output`)
+- `engagement` — Feedbot hint responses and student hint feedback ratings, plus error-pin discussion engagement
+
+The `engagement` section exports two kinds of hint records:
+
+- `source: "feedback"` — a student explicitly rated a hint (useful/not useful) and optionally left a comment
+- `source: "llm"` — a Feedbot hint was generated for a test; no explicit rating was submitted
+
 ### Submissions
 
 Import comments and artifacts:

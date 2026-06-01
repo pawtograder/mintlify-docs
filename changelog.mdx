@@ -4,6 +4,47 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 1, 2026
+
+#### Bug fixes
+- **Fixed non-deterministic line comment ordering under load** — When multiple submission file comments share the same `created_at` timestamp (common when added in quick succession during grading), the comment sort now uses `comment.id` as a stable tiebreaker. This eliminates scrambled annotation blocks in instructor views and visual test flakes under parallel load ([#803](https://github.com/pawtograder/platform/pull/803))
+
+### May 31, 2026
+
+#### Bug fixes
+- **Preserve group repos with submissions when dissolving empty groups** — When publishing group changes, Pawtograder now preserves any empty group whose repository already has submissions (for example, a student who submitted individually before being moved into a real group). Previously, dissolving such a group deleted the repository and its check runs, violating foreign-key constraints and destroying submission history. Preserved groups are excluded from the GitHub permission sync ([#800](https://github.com/pawtograder/platform/pull/800))
+
+### May 30, 2026
+
+#### Assignment features
+- **Advisory suggested due date** — Assignments now support an optional **Suggested Due Date** shown to students as a recommended completion target. This date is display-only and never affects submission enforcement, late tokens, or lab scheduling. The hard due date remains the actual deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+- **Export linked grader hint feedback** — The CLI assessment export now includes student hint feedback ratings (`useful`/`not useful` + optional comment) from the `engagement` section. Feedback rows are exported as `{kind: "hint", source: "feedback"}` records alongside Feedbot LLM hint records ([#780](https://github.com/pawtograder/platform/pull/780))
+
+#### Bug fixes
+- **Restored advisory lock in finalize_submission_early** — Fixed a regression where the advisory lock was missing from the early-finalization RPC, which could allow duplicate self-review assignments under concurrent requests ([#794](https://github.com/pawtograder/platform/pull/794))
+
+### May 29, 2026
+
+#### Grading features
+- **Instructor read-only "view as student" mode** — Instructors can now preview the course exactly as a specific student sees it. A sticky orange banner appears at the top of every page while in student view, with a one-click **Exit student view** button. All write operations are blocked in this mode ([#779](https://github.com/pawtograder/platform/pull/779))
+
+### May 22, 2026
+
+#### Grading features
+- **Regrade requests on unapplied rubric checks** — Students can now open a regrade request on a rubric check that was never applied to their submission (for example, if they believe they should have received credit for a check the grader left blank). When a grader resolves such a request, Pawtograder automatically creates the grading comment and updates the submission score ([#772](https://github.com/pawtograder/platform/pull/772))
+- **Auto-resolve dangling regrade requests** — When a grader deletes or re-grades a comment that backs an open regrade request, the request is now automatically resolved (with `resolution_reason: comment_deleted`) instead of remaining stuck as pending. The student is notified and can escalate to an instructor if they still disagree ([#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Enrollment improvements
+- **Bulk invitations: no auto-expiry, deduplication** — Invitations no longer expire automatically. The `expired` status has been renamed to `dropped` to reflect that it means "removed from the SIS roster" rather than "timed out". When a student accepts an invitation and a profile already exists for their email, Pawtograder now merges the records instead of creating a duplicate ([#777](https://github.com/pawtograder/platform/pull/777))
+
+### May 22, 2026 (rubrics)
+
+#### Rubric features
+- **Rubrics hide unless assigned** — Rubrics can now be configured with **Hide unless assigned**, which prevents students from seeing the rubric (its parts, criteria, and checks) until a review assignment has been created for them and its release date has passed. Instructors and graders always see all rubrics. Useful for self-review rubrics that should remain hidden until after the submission deadline ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-review explicit release_at** — Self-review settings now support an explicit `release_at` timestamp. When set, self-review assignments are released at that wall-clock time (ignoring per-student due-date exceptions), and the review due date is computed as `release_at + deadline_offset` ([#788](https://github.com/pawtograder/platform/pull/788))
+
 ## April 2026
 
 ### April 29, 2026

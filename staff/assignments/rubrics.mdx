@@ -14,7 +14,7 @@ Rubrics can only be edited by instructors. When editing a rubric, you will be pr
 
 ## High-Level Overview
 
-- **Rubric**: Named collection of parts used for a specific review round (self-review, grading-review, meta-grading-review). The grading review is the main review that students will see.
+- **Rubric**: Named collection of parts used for a specific review round (self-review, grading-review, meta-grading-review). The grading review is the main review that students will see. A rubric can optionally be set to **hide unless assigned** (see below).
 - **Part**: Logical section within a rubric (e.g., Code Quality, Functionality). Contains criteria. Parts can be configured for individual grading or assign-to-student modes for group submissions.
 - **Criteria**: A scoring rule block with:
   - `is_additive`: If true, checks add points up to `total_points`. If false, checks deduct points from `total_points`.
@@ -282,6 +282,18 @@ parts:
             points: 0
             student_visibility: if_applied
 ```
+
+## Hide unless assigned
+
+When **Hide unless assigned** is enabled on a rubric, students cannot see the rubric (its parts, criteria, or checks) until a review assignment has been created for them and its release date has passed. Instructors and graders always see all rubrics regardless of this setting.
+
+This is useful for self-review rubrics that you want to keep hidden until after the submission deadline, so students cannot preview the criteria before submitting.
+
+To enable it, toggle **Hide unless assigned** in the rubric editor header before saving.
+
+<Note>
+When a rubric is hidden and a student finalizes their submission early, the review assignment is created with a `release_date` matching the assignment's configured self-review `release_at` time (if set), so the rubric remains hidden until that time even for early finalizers.
+</Note>
 
 ## Editing Rubrics
 
