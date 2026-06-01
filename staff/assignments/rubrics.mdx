@@ -63,6 +63,38 @@ This allows graders to provide feedback on documentation, reports, and other non
 
 - Checks can reference checks from other rubrics to surface related feedback when grading. This is managed inline in the sidebar (preview mode).
 
+## Rubric visibility options
+
+Two rubric-level settings control when students can see a rubric's contents:
+
+### Hide from students until assigned
+
+When **Hide from students until assigned** is enabled (`hide_unless_assigned: true` in YAML), students cannot see the rubric's parts, criteria, or checks until a review on that rubric has been assigned to them. Once assigned, the rubric becomes visible.
+
+Use this for self-review rubrics where seeing the questions before submitting would bias the student's work. Toggle the switch in the rubric editor's header form, or set the YAML field:
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Code quality reflection
+        total_points: 5
+        checks:
+          - name: Identified strengths
+            points: 5
+```
+
+### Self-review release time
+
+By default, self-review assignments are released to students when their submission deadline passes. You can instead set an explicit **Release self-review at** time in the assignment form's self-evaluation section. When set:
+
+- All students receive their self-review assignment at that exact wall-clock time, regardless of individual due-date exceptions.
+- The self-review due date is computed as `release_at + deadline_offset hours`.
+
+This pairs naturally with `hide_unless_assigned` to ensure students cannot see the self-review rubric before the scheduled release time.
+
 ## YAML Schema Quick Reference
 
 These examples conform to `public/RubricSchema.json`.
