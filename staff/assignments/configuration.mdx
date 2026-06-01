@@ -48,14 +48,16 @@ on the submission page; the gradebook stores the capped value. Use the
 cap when your rubric or autograder can sum past the assignment max
 (extra credit, bonus tests).
 
+## Suggested due date
+
+The optional **Suggested Due Date** field sets an advisory target date shown to students alongside the hard deadline. It is purely informational — it does not gate submissions, affect late tokens, or change any enforcement. Students can still submit freely until the hard due date.
+
+The suggested date must be on or before the hard due date. When set, students see it labeled "Suggested due:" above the hard deadline with a tooltip explaining the difference.
+
 ## Empty submission policy
 
-- **Permit Empty Submissions** (default: on) — submissions whose
-  collected files are unchanged from the handout are flagged as empty
-  but accepted.
-- **Reject Empty Submissions** — the autograder rejects empty
-  submissions with an error directing the student to commit their
-  changes. Instructors and graders can still submit empty for testing.
+- **Permit Empty Submissions** (default: off for new assignments) — when enabled, submissions whose collected files are unchanged from the handout are flagged as empty but accepted. New assignments default to rejecting empty submissions to avoid throwaway individual repos that can complicate group formation.
+- **Reject Empty Submissions** — the autograder rejects empty submissions with an error directing the student to commit their changes. Instructors and graders can still submit empty for testing.
 
 Empty detection compares SHA-256 hashes of the files matching
 `submissionFiles` against every recorded handout version, so it
