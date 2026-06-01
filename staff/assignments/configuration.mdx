@@ -41,6 +41,12 @@ meeting** or **Hours due after programming assignment** on the group
 configuration; Pawtograder computes a per-section due date from the
 section's meeting time.
 
+## Self-review settings
+
+When self-review is enabled for an assignment, an additional optional field controls when the self-review is released to students:
+
+- **Release self-review at** *(optional)* — an explicit wall-clock time at which the self-review is assigned and becomes visible to all students, regardless of per-student due-date exceptions. When left blank (the default), the self-review is released when each student's individual programming assignment due date passes. Setting this field is useful when you want all students to start their self-review at the same time (for example, after a class session). Pairs with the rubric option **Hide from students until assigned** (`hide_unless_assigned`) to keep the self-review rubric hidden until this moment.
+
 ## Points possible and score capping
 
 - **Points Possible** is the assignment's maximum, displayed in the
