@@ -236,6 +236,18 @@ After a review is released to students, grading comments can no longer be edited
 
 Note that self-review rubric items do not support regrade requests — students cannot request regrades on items they evaluated themselves during the self-review process.
 
+## Regrade requests for unapplied checks
+
+Students can now request a regrade for rubric checks that were **not** applied to their submission — for example, if they believe a check should have been applied but wasn't. These requests appear in the rubric sidebar under the relevant check, and in the submission's regrade requests panel.
+
+When resolving a bare-check regrade request (one with no backing comment yet), the grader selects where to materialize the grade:
+
+- **Global checks** — no location needed; a submission-level comment is created automatically.
+- **File annotation checks** — the grader selects the file and line number.
+- **Artifact annotation checks** — the grader selects the artifact.
+
+The resolved request creates a real grading comment, which feeds into the gradebook recompute.
+
 ## Rerunning the autograder
 
 Instructors can rerun the autograder on an existing submission without creating a new submission — useful after fixing an autograder bug, updating tests, or regrading with a different grader version.
