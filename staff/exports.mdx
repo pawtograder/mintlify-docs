@@ -95,3 +95,18 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Assessment Export (CLI)
+
+The Pawtograder CLI's `assessment export` command streams a privacy-controlled snapshot of rubrics, grading review scores, autograder test results, Feedbot hint responses, hint feedback, and gradebook columns for a class.
+
+New in this release:
+
+- **Linked grader hint feedback** — `hints.json` now includes both student-submitted feedback rows (`source: "feedback"`) and LLM-derived Feedbot responses (`source: "llm"`). Feedback rows that already have a student rating are not duplicated in the LLM section.
+- **Error-pin engagement** — a new `error-pin-engagement.json` file is emitted per assignment, containing per-submission × per-student read/like state for discussion posts pinned to autograder errors.
+- **`--skip-gradebook`** — omit gradebook column metadata and private cell export.
+- **`--all-submissions`** — include every submission attempt, not just the active one. Needed for hint feedback and autograder history on earlier tries.
+- **`--with-instructor-build-output`** — include hidden grader build output (truncated, grading paths sanitized). Off by default.
+- **Sectioned streaming** — the CLI now calls the edge function in sectioned slices (meta → submissions → scores → tests → engagement) so each invocation stays within CPU limits on large classes.
+
+See the [CLI documentation](/developers/cli) for full usage.
