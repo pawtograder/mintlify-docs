@@ -90,6 +90,14 @@ is escaped to prevent CSV-injection in spreadsheet apps.
 The student export (from the **Students** page) uses the same
 `Name <email>` format for the student column.
 
+## Dissolving empty groups
+
+When you move all members out of a group (for example, when reorganizing groups after submissions have started), Pawtograder automatically dissolves the now-empty group. If the group's repository already has submissions attached to it, the group, repository, and submission history are **preserved** rather than deleted — this prevents foreign-key violations and avoids losing graded work. The preserved group's GitHub permissions are left untouched.
+
+<Note>
+New assignments default to **rejecting** submissions that match the handout unchanged (`permit_empty_submissions` is off by default). This reduces the number of throwaway individual submissions that can complicate later group formation.
+</Note>
+
 ## Group permissions and grades
 
 When a group is published:
