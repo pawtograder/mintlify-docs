@@ -257,6 +257,14 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Regrade requests for unapplied checks
+
+Students can now open a regrade request on a rubric check that was **not** applied to their submission — for example, if they believe a check should have been applied but wasn't. These "bare-check" requests appear in the rubric sidebar (for graders) and in the **Regrade Requests** panel on the student's **Grade** tab.
+
+When resolving a bare-check request, the grader selects where to place the resulting grade (file + line for annotation checks, or artifact for artifact checks). Pawtograder then creates the backing grading comment automatically and recomputes the submission score.
+
+If a grading comment that backs an open regrade request is deleted during re-grading, the request is automatically resolved with the reason **"grade changed"** and the student is notified. The student can still escalate the auto-resolved request to an instructor.
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
