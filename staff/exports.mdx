@@ -95,3 +95,55 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Assessment Data Export (CLI)
+
+The Pawtograder CLI provides a privacy-controlled bulk export of rubric
+scores, autograder test results, Feedbot hint feedback, error-pin
+engagement, and gradebook data for research and analysis.
+
+**Command**: `pawtograder assessment export -c <class>`
+
+The export streams data into a local directory organized by assignment.
+Each assignment folder contains:
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata, identity mode, and grand totals. |
+| `rubric.json` | Rubric structure (parts, criteria, checks). |
+| `autograder.json` | Autograder configuration and test definitions. |
+| `submissions.json` | One record per submission (active by default). |
+| `scores.json` | Rubric check results from the final grading review. |
+| `tests.json` | Autograder test results, optionally with output. |
+| `hints.json` | Feedbot hint responses and student feedback ratings. |
+| `error-pin-engagement.json` | Per-student read/like state for error-pinned discussion posts. |
+| `gradebook/scores.json` | Private gradebook cell values. |
+
+### Identity modes
+
+Student identifiers are privacy-controlled via `--identity`:
+
+| Mode | Behavior |
+|---|---|
+| `opaque` (default) | Random per-run tokens; intra-dump only. |
+| `hash` | Deterministic tokens from `--salt`; joinable across runs on the same deployment. |
+| `raw` | Real IDs, emails, and names. Requires `--i-understand-pii`. |
+
+### Key options
+
+- `--assignment <slug>` — export a single assignment (repeatable; supports globs like `hw-*`).
+- `--all-submissions` — include every submission attempt, not just the active one.
+- `--with-test-output` — include autograder test stdout/stderr (truncated to 4 KB by default).
+- `--skip-gradebook` — omit the private gradebook export.
+- `--output <dir>` — override the output directory.
+
+### Submissions export
+
+A separate command exports raw submission source files:
+
+```
+pawtograder submissions export -c <class> [--include-file 'src/**'] [--format json|csv]
+```
+
+This streams submission metadata and file contents (text inline; binary
+as base64 with `--with-binary`) into a per-assignment directory.

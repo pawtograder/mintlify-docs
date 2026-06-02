@@ -283,6 +283,37 @@ parts:
             student_visibility: if_applied
 ```
 
+## Hiding a rubric until assigned
+
+Set `hide_unless_assigned: true` on a rubric to prevent students from seeing its parts, criteria, and checks until a review has been assigned to them. This is useful for self-review rubrics where seeing the questions before submitting would bias the student's work.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Identifies strengths
+        total_points: 5
+        checks:
+          - name: Clearly articulates one strength
+            points: 5
+```
+
+When `hide_unless_assigned` is enabled:
+
+- Students cannot read the rubric (parts, criteria, checks) until a `review_assignments` row exists for them and its `release_date` has passed.
+- Instructors and graders always see the rubric regardless of this setting.
+- The toggle is available in the rubric editor under the rubric header settings.
+
+### Scheduling self-review release
+
+By default, self-review assignments are created for each student when their individual due date passes. You can instead set an explicit **Release self-review at** time on the assignment form (under the self-evaluation settings). When set:
+
+- All students' self-reviews are released at that exact wall-clock time, ignoring per-student due-date exceptions.
+- The review due date is computed as `release_at + deadline_offset hours`.
+- Pairs naturally with `hide_unless_assigned` to keep the rubric hidden until the scheduled release.
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
@@ -369,7 +400,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Rubric**
 - Mandatory: `name`, `parts`
-- Optional: `description`
+- Optional: `description`, `hide_unless_assigned` (default: `false`)
 
 **Part**
 - Mandatory: `name`, `criteria`
