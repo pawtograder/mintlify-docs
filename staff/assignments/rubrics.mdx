@@ -353,6 +353,12 @@ TAs and instructors can edit or delete rubric scores even after completing a rev
 Editing completed reviews does not automatically notify students. If grades have been released, you may need to communicate changes to affected students.
 </Note>
 
+## Hiding rubrics until assigned
+
+By default, rubrics are visible to all graders as soon as they are created. You can configure a rubric to be hidden from graders until it is explicitly assigned to them. This is useful when you want to prevent graders from seeing rubric criteria before they are assigned to grade specific submissions.
+
+To enable this, set `hide_unless_assigned: true` on the rubric. Graders will only see the rubric once they have a grading assignment that includes it.
+
 ## Notes and Tips
 
 - Keep criteria focused and keep check names short; longer explanation should go in `description`.

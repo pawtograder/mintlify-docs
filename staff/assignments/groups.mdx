@@ -40,6 +40,13 @@ GitHub repositories for any new groups, and queues permission-sync
 jobs.
 
 <Note>
+When dissolving an empty group (a group with no members), Pawtograder
+preserves the group's GitHub repository if it already has submissions
+associated with it. This prevents accidental data loss when cleaning up
+groups that were created but never used for active work.
+</Note>
+
+<Note>
 Students are not notified about group assignments until the assignment
 is released, so you can prepare and adjust groups in advance.
 </Note>
