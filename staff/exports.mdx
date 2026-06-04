@@ -95,3 +95,55 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## CLI Assessment Export
+
+The Pawtograder CLI provides a privacy-controlled bulk export of rubrics, scores, autograder test results, Feedbot hint feedback, and gradebook data. Run:
+
+```bash
+pawtograder assessment export -c <class>
+```
+
+### Identity modes
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt + server pepper. Tokens are stable within one run but cannot be reproduced later. |
+| `hash` | Deterministic from `--salt` + server pepper. Same salt on the same deployment produces the same tokens across runs (joinable). |
+| `raw` | Real student ids, emails, and names. Requires `--i-understand-pii`. |
+
+### Key options
+
+| Option | Description |
+|---|---|
+| `--assignment <slug>` | Export only specific assignments (repeatable, supports globs). |
+| `--skip-gradebook` | Omit gradebook column metadata and private cell export. |
+| `--all-submissions` | Include every submission attempt, not just the active one. |
+| `--with-test-output` | Include autograder test output text (truncated to `--test-output-max-bytes`). |
+| `--with-instructor-build-output` | Include hidden grader build logs (paths sanitized). |
+| `--instructor-build-output-from-sentinel <text>` | Trim each build log to start at this substring. |
+
+### Output files (per assignment)
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata and totals. |
+| `rubric.json` | Rubric hierarchy (parts, criteria, checks). |
+| `autograder.json` | Autograder configuration and test definitions. |
+| `submissions.json` | One record per submission (active by default). |
+| `scores.json` | Rubric check scores from the final grading review. |
+| `tests.json` | Autograder test results per submission. |
+| `hints.json` | Feedbot hint feedback (student ratings and LLM-generated hints). |
+| `error-pin-engagement.json` | Per-student read/like status for discussion posts pinned to autograder errors. |
+| `instructor-build-output.json` | Hidden build logs (only when `--with-instructor-build-output`). |
+| `gradebook/scores.json` | Private gradebook cell values. |
+
+### Submissions export
+
+To export submission source files:
+
+```bash
+pawtograder submissions export -c <class> [--include-file 'src/**'] [--exclude-file 'build/**']
+```
+
+Supports the same identity modes as assessment export. Output includes `submissions.json` (metadata) and `files.json` (file contents) per assignment, plus a root `manifest.json`.

@@ -353,12 +353,36 @@ TAs and instructors can edit or delete rubric scores even after completing a rev
 Editing completed reviews does not automatically notify students. If grades have been released, you may need to communicate changes to affected students.
 </Note>
 
+## Hiding a rubric until assigned
+
+Set `hide_unless_assigned: true` on a rubric to prevent students from seeing its parts, criteria, and checks until a review has been assigned to them and the review's release date has passed.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Effort
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Demonstrated effort
+            is_annotation: false
+            points: 5
+```
+
+This is useful for self-review rubrics where seeing the questions before submitting would bias the student's work. Instructors and graders always see the rubric regardless of this setting.
+
+When combined with the **Release self-evaluation at** field on the assignment form, you can schedule the exact wall-clock time when the self-review rubric becomes visible to students — independent of each student's individual due date.
+
 ## Notes and Tips
 
 - Keep criteria focused and keep check names short; longer explanation should go in `description`.
 - Use `max_annotations` to prevent over-counting nitpicks.
 - Prefer options when the same check has graded tiers (e.g., Complete/Partial/Incomplete).
 - Use `student_visibility` to separate internal notes from student-facing feedback.
+- Use `hide_unless_assigned: true` on self-review rubrics to prevent students from seeing the questions before they submit.
 - Grade override notes are now properly displayed in the grading interface.
 
 - Rubric scores are automatically recalculated when check scores change, ensuring the gradebook stays up-to-date.
@@ -369,7 +393,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Rubric**
 - Mandatory: `name`, `parts`
-- Optional: `description`
+- Optional: `description`, `hide_unless_assigned` (default: `false`), `cap_score_to_assignment_points` (default: `false`)
 
 **Part**
 - Mandatory: `name`, `criteria`
