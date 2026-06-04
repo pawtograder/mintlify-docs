@@ -4,6 +4,48 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 4, 2026
+
+#### Infrastructure
+- **Kubernetes Helm chart** — Full Helm chart for self-hosted Pawtograder deployments, including all Supabase services (Postgres, GoTrue, PostgREST, Realtime, Storage, Edge Functions, Kong, Studio). Supports per-PR preview environments that deploy automatically on PR open and tear down on PR close, a shared Redis-backed Next.js cache for multi-replica deployments, Prometheus metrics with five Grafana dashboards, and edge-functions autoscaling ([#741](https://github.com/pawtograder/platform/pull/741))
+
+### June 2, 2026
+
+#### Bug fixes
+- **Fixed non-deterministic line comment ordering under load** — Submission file comments with the same timestamp are now sorted by ID, preventing scrambled annotation blocks in instructor views under parallel grading load ([#803](https://github.com/pawtograder/platform/commit/b854ac6824561c04279f4be2a3ed79877a1a533a))
+
+## May 2026
+
+### May 31, 2026
+
+#### Group management
+- **Preserve group repos with submissions when dissolving empty groups** — When dissolving an empty group, Pawtograder now preserves the group's GitHub repository if it already has submissions, preventing accidental data loss ([#800](https://github.com/pawtograder/platform/commit/5650f182ec090b7ab30b850f191b7f1118c54bfd))
+
+### May 30, 2026
+
+#### Assignment configuration
+- **Advisory suggested due date** — Assignments can now have a non-enforced suggested due date shown to students as a recommended completion milestone, separate from the hard due date ([#791](https://github.com/pawtograder/platform/commit/d0e5bb01f9cbb8ce97439274d28167f1fd50049f))
+
+#### Exports
+- **Export linked grader hint feedback** — Submission exports can now include AI grader hint feedback and student ratings, allowing instructors to review hint quality and student engagement ([#780](https://github.com/pawtograder/platform/commit/356a02eac5302ee84c4be4935f3b7954245492ec))
+
+### May 29, 2026
+
+#### Grading improvements
+- **Instructor read-only "view as student" mode** — Instructors can now preview the course exactly as a specific student sees it. A persistent orange banner indicates student view mode and provides a one-click exit ([#779](https://github.com/pawtograder/platform/commit/0e852368d64a9dbfbcb19c3336b3172ccd4b4164))
+
+### May 23, 2026
+
+#### Grading improvements
+- **Confirm review button with auto-advance** — The rubric sidebar now includes a **Confirm Review** button that marks the current review complete and automatically advances to the next ungraded submission in the grader's queue ([#695](https://github.com/pawtograder/platform/commit/8bc747cc97baee6cd924109839d46be23e5ca04f))
+
+### May 22, 2026
+
+#### Rubrics
+- **Rubrics hide unless assigned** — Rubrics can now be configured to be hidden from graders until they are explicitly assigned to grade submissions using that rubric ([#788](https://github.com/pawtograder/platform/commit/436ea83b683fc1aba6e1db2440ff80dad1337983))
+
 ## April 2026
 
 ### April 29, 2026
