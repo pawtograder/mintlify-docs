@@ -95,3 +95,48 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## CLI Assessment Export
+
+The Pawtograder CLI (`pawtograder assessment export`) provides a comprehensive privacy-controlled export of assignment data for research and analysis. The export includes:
+
+- **Rubric structure**: Parts, criteria, and checks
+- **Autograder configuration**: Test definitions and raw config
+- **Submissions**: Active (or all) submission attempts per student/group
+- **Scores**: Rubric check results from the final grading review
+- **Grader tests**: Autograder test results with optional output
+- **Hints**: Feedbot hint feedback (student ratings) and LLM-derived hint responses, deduplicated
+- **Error-pin engagement**: Per-student read and like status for discussion posts pinned to autograder errors (`error-pin-engagement.json`)
+- **Instructor build output** (optional, `--with-instructor-build-output`): Hidden grader output with CI paths sanitized
+
+### Identity modes
+
+The CLI supports three identity modes to control how student identifiers appear in the export:
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt + server pepper; tokens are stable within one run but not reproducible across runs |
+| `hash` | Deterministic from `--salt` + server pepper; joinable across runs on the same deployment |
+| `raw` | Real ids, emails, and names; requires `--i-understand-pii` |
+
+### Key options
+
+| Option | Description |
+|---|---|
+| `--skip-gradebook` | Omit gradebook column metadata and private cell export |
+| `--all-submissions` | Include every submission attempt, not just the active one |
+| `--with-instructor-build-output` | Include hidden grader output (paths sanitized) |
+| `--instructor-build-output-from-sentinel` | Trim each build log to start at a specific substring |
+
+See `pawtograder assessment export --help` for the full option list.
+
+## CLI Submissions Export
+
+The CLI also provides `pawtograder submissions export` to stream submission metadata and source files:
+
+- **Submissions**: Metadata (sha, ordinal, timestamps, group, repository token)
+- **Files**: Source file contents (text inline; binary as base64 with `--with-binary`)
+
+Supports `--include-file` and `--exclude-file` glob patterns to filter which files are exported, and `--format json|csv` to choose between full JSON (with file contents) and a metadata-only CSV index.
+
+See `pawtograder submissions export --help` for the full option list.
