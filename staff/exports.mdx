@@ -95,3 +95,54 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Assessment export (CLI)
+
+The CLI provides a comprehensive privacy-controlled export of rubrics, grading scores, autograder test results, Feedbot hint feedback, and gradebook columns. Run via:
+
+```bash
+pawtograder assessment export -c <class> [options]
+```
+
+Key options:
+
+| Option | Description |
+|---|---|
+| `--identity opaque` | Default. Random per-run salt; tokens are intra-dump only. |
+| `--identity hash --salt <s>` | Deterministic tokens joinable across runs on the same deployment. |
+| `--identity raw --i-understand-pii` | Real student ids, emails, and names. |
+| `--skip-gradebook` | Omit gradebook column metadata and private cell export. |
+| `--all-submissions` | Include every submission attempt, not just the active one. |
+| `--with-test-output` | Include autograder test stdout (truncated). |
+| `--with-instructor-build-output` | Include hidden grader build logs (paths sanitized). |
+
+The export produces per-assignment directories containing:
+- `manifest.json` — metadata and totals
+- `rubric.json` — rubric tree
+- `autograder.json` — autograder configuration
+- `submissions.json` — submission records
+- `scores.json` — rubric check results from the final grading review
+- `tests.json` — autograder test results
+- `hints.json` — Feedbot hint feedback (student ratings) and LLM-generated hints
+- `error-pin-engagement.json` — per-student read/like state for discussion posts pinned to autograder errors
+
+Tokens use HMAC with a server-side vault pepper combined with the CLI-supplied salt. In `hash` mode, the same salt on the same deployment produces the same tokens across runs, enabling longitudinal analysis. The pepper never leaves the server.
+
+## Submissions export (CLI)
+
+Export submission source files with the same identity modes as assessment export:
+
+```bash
+pawtograder submissions export -c <class> [-a hw-*] [--include-file 'src/**'] [--exclude-file 'build/**']
+```
+
+Key options:
+
+| Option | Description |
+|---|---|
+| `--format json` | Default. Includes file contents inline. |
+| `--format csv` | Metadata index only (no file contents). |
+| `--all-submissions` | Include every attempt, not just the active one. |
+| `--with-binary` | Include binary file contents as base64. |
+| `--include-file <glob>` | Only export files matching this glob (repeatable). |
+| `--exclude-file <glob>` | Skip files matching this glob (repeatable). |

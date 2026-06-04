@@ -90,6 +90,10 @@ is escaped to prevent CSV-injection in spreadsheet apps.
 The student export (from the **Students** page) uses the same
 `Name <email>` format for the student column.
 
+## Dissolving groups
+
+When you remove all members from a group (making it empty), Pawtograder checks whether the group's repository contains any submissions. If it does, the repository is preserved and the group is kept in a dormant state rather than deleted. This prevents accidental data loss when restructuring groups mid-assignment.
+
 ## Group permissions and grades
 
 When a group is published:
