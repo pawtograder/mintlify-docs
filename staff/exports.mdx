@@ -95,3 +95,50 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## CLI Assessment Export
+
+The Pawtograder CLI provides a privacy-controlled bulk export of
+rubrics, scores, autograder test results, Feedbot hint feedback, and
+gradebook data. Run:
+
+```bash
+pawtograder assessment export --class <id-or-slug>
+```
+
+### Output files (per assignment)
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata, identity mode, and grand totals. |
+| `rubric.json` | Rubric hierarchy (parts, criteria, checks). |
+| `autograder.json` | Autograder configuration and test definitions. |
+| `submissions.json` | One record per submission (active only by default). |
+| `scores.json` | Rubric check scores from the final grading review. |
+| `tests.json` | Autograder test results, with optional output text. |
+| `hints.json` | Feedbot hint feedback (student ratings) and LLM-generated hint text. |
+| `error-pin-engagement.json` | Per-student read and like status for discussion posts pinned to autograder errors. |
+| `instructor-build-output.json` | Hidden grader build logs (only with `--with-instructor-build-output`). |
+
+### Key options
+
+| Option | Description |
+|---|---|
+| `--identity opaque` | Default. Random per-run salt; tokens are intra-dump only. |
+| `--identity hash --salt <s>` | Deterministic tokens joinable across runs on the same deployment. |
+| `--identity raw --i-understand-pii` | Real student ids, emails, and names. |
+| `--all-submissions` | Include every submission attempt, not just the active one. |
+| `--skip-gradebook` | Omit gradebook column metadata and private cell export. |
+| `--with-test-output` | Include autograder test output text (truncated). |
+| `--with-instructor-build-output` | Include hidden grader build logs (paths sanitized). |
+| `--assignment <slug>` | Export only the specified assignment(s). |
+
+### CLI Submissions Export
+
+Export submission source files with:
+
+```bash
+pawtograder submissions export --class <id-or-slug>
+```
+
+Streams submission metadata and file contents. Supports `--format json` (default, includes file contents) or `--format csv` (metadata index only), `--include-file` / `--exclude-file` glob filters, `--with-binary` for binary file contents, and the same identity modes as the assessment export.
