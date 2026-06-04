@@ -1,0 +1,210 @@
+---
+title: "Deploying Pawtograder"
+description: "Deploy Pawtograder to Kubernetes using the official Helm chart, including staging and per-PR preview environments"
+icon: "rocket"
+---
+
+# Deploying Pawtograder
+
+Pawtograder ships a Helm chart that bundles the Next.js web app together with all Supabase services it depends on (Postgres, GoTrue, PostgREST, Realtime, Storage API, Edge Functions, Kong, Studio, and more). A single `helm install` brings up the full stack on any Kubernetes cluster.
+
+## Components
+
+| Component | Image | Default replicas |
+|---|---|---|
+| postgres | `supabase/postgres:17` | 1 (StatefulSet) |
+| supavisor | `supabase/supavisor` | 2 |
+| gotrue (auth) | `supabase/gotrue` | 2 |
+| postgrest | `postgrest/postgrest` | 2 |
+| realtime | `supabase/realtime` (clustered) | 3 (StatefulSet) |
+| storage-api | `supabase/storage-api` | 2 |
+| imgproxy | `darthsim/imgproxy` | 1 |
+| postgres-meta | `supabase/postgres-meta` | 1 |
+| studio | `supabase/studio` | 1 |
+| edge-runtime | `ghcr.io/pawtograder/edge-functions` | 2 |
+| kong | `kong:3` | 2 |
+| web (Next.js) | `ghcr.io/pawtograder/web` | 2 |
+
+## Requirements
+
+- Kubernetes >= 1.27
+- Helm >= 3.14
+- An S3-compatible object store (MinIO, Ceph, AWS S3, etc.)
+- A PostgreSQL-compatible storage class for the Postgres StatefulSet
+
+## Quick start
+
+The chart requires a set of JWT secrets, Postgres passwords, and S3 credentials. Use the helper script to generate the JWT bundle:
+
+```sh
+# 1. Generate the full JWT bundle
+npx tsx scripts/GenerateJwtKeys.ts --env > .secrets/pawtograder-jwt.env
+
+# 2. Create the namespace and required Secrets
+kubectl create namespace pawtograder
+kubectl -n pawtograder create secret generic pawtograder-jwt \
+  --from-env-file=.secrets/pawtograder-jwt.env
+kubectl -n pawtograder create secret generic pawtograder-postgres \
+  --from-literal=POSTGRES_PASSWORD=$(openssl rand -base64 32) \
+  --from-literal=PAWTOGRADER_PASSWORD=$(openssl rand -base64 32)
+kubectl -n pawtograder create secret generic pawtograder-s3 \
+  --from-literal=AWS_ACCESS_KEY_ID=$S3_KEY \
+  --from-literal=AWS_SECRET_ACCESS_KEY=$S3_SECRET
+
+# 3. Install the chart
+helm install pawtograder oci://ghcr.io/pawtograder/charts/pawtograder \
+  --version 0.1.0 \
+  --namespace pawtograder \
+  --set global.hostname=pawtograder.example.com \
+  --set ingress.className=nginx \
+  --set postgres.persistence.storageClass=local-path \
+  --set storage.backend=s3 \
+  --set storage.s3.endpoint=https://s3.example.com \
+  --set storage.s3.bucket=pawtograder
+```
+
+## Required secrets
+
+When `secrets.create=false` (the default), you must pre-create these Kubernetes Secrets in the release namespace:
+
+| Secret name | Required keys |
+|---|---|
+| `pawtograder-postgres` | `POSTGRES_PASSWORD`, `PAWTOGRADER_PASSWORD` |
+| `pawtograder-jwt` | `JWT_SECRET`, `ANON_KEY`, `SERVICE_ROLE_KEY`, `JWT_PRIVATE_JWKS`, `JWT_PUBLIC_JWKS`, `JWT_REALTIME_JWKS`, `REALTIME_ENC_KEY`, `PG_META_CRYPTO_KEY`, `PGSODIUM_ROOT_KEY` |
+| `pawtograder-smtp` | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_ADMIN_EMAIL` (if `auth.smtp.enabled=true`) |
+| `pawtograder-s3` | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` (if S3 storage) |
+| `pawtograder-web` | Optional. Mounted into the web pod for GitHub App, Discord, Canvas, LLM credentials, etc. |
+| `pawtograder-edge-functions` | Optional. Mounted into the edge-runtime pod. |
+
+Generate the entire JWT bundle (private/public/realtime JWKs, anon + service-role tokens, realtime/pg-meta/pgsodium keys) using `scripts/GenerateJwtKeys.ts`.
+
+<Warning>
+`JWT_SECRET` must be at least 64 base64 characters. Realtime uses this value as Phoenix's `secret_key_base`, which requires ≥ 64 bytes. If it is shorter, realtime crash-loops with "secret_key_base is too short."
+</Warning>
+
+## Build-time vs runtime env vars
+
+`NEXT_PUBLIC_*` variables are inlined into the client bundle at build time. The chart cannot override them at deploy time. Build the web image with the correct hostnames and anon key for your deployment:
+
+```sh
+docker build \
+  --build-arg NEXT_PUBLIC_PAWTOGRADER_WEB_URL=https://pawtograder.example.com \
+  --build-arg NEXT_PUBLIC_SUPABASE_URL=https://api.pawtograder.example.com \
+  --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_JWT \
+  -t ghcr.io/pawtograder/web:$VERSION .
+```
+
+The release pipeline reads `ANON_KEY` directly from the cluster's `pawtograder-jwt` Secret at build time so the baked value always matches the running JWT bundle.
+
+## Staging deployment
+
+The repository includes a `charts/pawtograder/examples/values-staging.yaml` overlay for the long-lived staging environment. It assumes:
+
+- A dedicated `tier: prod-staging` node pool with a matching `NoSchedule` taint
+- An ingress controller on the `nginx` ingressClass with cert-manager wired to `letsencrypt-prod`
+- DNS records for `staging.pawtograder.net`, `api.staging.pawtograder.net`, and `studio.staging.pawtograder.net`
+- S3 buckets for backups and storage
+
+To deploy or redeploy staging:
+
+```sh
+scripts/redeploy-staging.sh
+```
+
+This script uninstalls any existing release, drops the Postgres PVC (staging data is disposable), waits for the namespace to settle, then runs `helm upgrade --install` with the staging values file.
+
+## Per-PR preview environments
+
+The repository includes a GitHub Actions workflow (`.github/workflows/preview.yml`) that automatically deploys a full Pawtograder stack for each pull request and tears it down when the PR closes.
+
+### How previews work
+
+1. **On PR open/sync**: The workflow builds per-PR images (`web`, `edge-functions`, `migrations`, `seeder`) tagged `pr-<number>-<sha>`, provisions secrets in a dedicated namespace (`pawtograder-preview-pr-<number>`), and runs `helm upgrade --install` with the preview values overlay.
+2. **On PR close**: The workflow runs `helm uninstall` and deletes the namespace.
+3. **PR comment**: After a successful deploy, the workflow posts a sticky comment with the preview URL, API URL, and sample login credentials.
+
+### Preview login credentials
+
+Each preview is seeded with a demo class. Sample accounts:
+
+| Role | Email |
+|---|---|
+| Instructor | `instructor@pawtograder.net` |
+| Grader | `grader@pawtograder.net` |
+| Student | `student@pawtograder.net` |
+
+The shared password is stored in OpenBao at `kv/apps/pawtograder/preview-shared`. You can also request a magic link from the app sign-in page.
+
+### Required repository secrets
+
+| Secret | Purpose |
+|---|---|
+| `KUBECONFIG_BASE64` | Base64-encoded kubeconfig with access to create namespaces and run Helm in `pawtograder-preview-*` |
+| `MINIO_PREVIEW_ACCESS_KEY` | S3 access key for the shared preview storage bucket |
+| `MINIO_PREVIEW_SECRET_KEY` | S3 secret key for the shared preview storage bucket |
+
+## Migrations
+
+A pre-install/pre-upgrade Helm hook runs the migrations Job, which applies `supabase/migrations/*.sql` in lexicographic order. The migrations image tracks applied versions in `supabase_migrations.schema_migrations` (the same table the Supabase CLI uses).
+
+### Drift detection
+
+The migrations runner records a SHA-256 hash of each file when it is applied. On subsequent runs it recomputes the hash and compares it to the stored value. If a file was edited after being applied:
+
+- **`MIGRATIONS_RESET_ON_DRIFT=true`** (preview/dev only): drops and recreates the `public` schema, then replays all migrations from scratch.
+- **Default**: fails loudly, listing the drifted versions. The operator must rename the migration to a new timestamp or accept the drift manually.
+
+Never set `resetOnDrift: true` in production values.
+
+## Monitoring
+
+Enable Prometheus metrics and Grafana dashboards by setting `monitoring.enabled=true` in your values overlay. The chart emits Prometheus Operator `ServiceMonitor` CRs and Grafana-discoverable `ConfigMap`s — it does **not** deploy Prometheus or Grafana itself.
+
+### Prerequisites
+
+- A Prometheus instance managed by `prometheus-operator` whose `serviceMonitorSelector` permits `ServiceMonitor` CRs in this namespace
+- Grafana with the `kiwigrid/k8s-sidecar` discovery sidecar
+
+### Scraped components
+
+| Component | Path / port | Auth |
+|---|---|---|
+| postgres | `:9187 /metrics` (sidecar) | none |
+| storage-api | `:5000 /metrics` | none |
+| edge-functions | `:9000 /metrics` | none |
+| auth (GoTrue) | `:9100 /metrics` | none |
+| kong | `:8001 /metrics` (admin) | none |
+| realtime | `:4000 /metrics` | HS256 JWT |
+| web (Next.js) | `:3000 /api/metrics` | bearer token |
+
+### Grafana dashboards
+
+Five dashboards land in the **Pawtograder** Grafana folder when `monitoring.enabled=true`:
+
+| Dashboard | Covers |
+|---|---|
+| Stack Overview | Pod readiness, restart count, error rate, p95 latency |
+| Postgres Deep Dive | Cache hit, replication lag, top statements, table sizes |
+| Realtime Fanout | Connection churn, broadcast rate, Erlang VM load |
+| Edge Functions | Per-function RPS, p95 latency, errors |
+| App Business | Submissions/min, grading actions, queue depth, per-class views |
+
+### Additional monitoring secrets
+
+When `monitoring.enabled=true`, add these keys to `pawtograder-jwt`:
+
+| Key | Purpose |
+|---|---|
+| `REALTIME_METRICS_BEARER` | Scrapes `realtime:/metrics` |
+| `SUPAVISOR_METRICS_BEARER` | Scrapes `supavisor:/metrics` |
+| `METRICS_SCRAPE_TOKEN` | Scrapes `web:/api/metrics` |
+
+Both `secrets.autogenerate=true` and `scripts/GenerateJwtKeys.ts` emit these alongside the existing key bundle.
+
+## Shared Redis cache
+
+With multiple web replicas, Next.js's default in-process cache means `revalidateTag()` only invalidates the replica that handled the request. The chart supports a shared Redis-backed cache handler (`cache-handler.cjs`) that makes tag revalidation global across all replicas.
+
+Set `redis.provider=shared` and point `REDIS_URL` at a shared Redis instance. The `charts/pawtograder/examples/shared-redis/` directory contains bootstrap manifests for a cluster-shared Redis StatefulSet.
+
+For more details on the metrics endpoint and app-level instrumentation, see [Monitoring and Metrics](/developers/monitoring).
