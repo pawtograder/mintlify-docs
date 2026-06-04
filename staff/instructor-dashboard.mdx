@@ -82,6 +82,40 @@ Track autograder and background job health:
 - **Last 24 Hours**: Daily workflow statistics
 - **Recent Errors**: Quick access to failed workflow runs
 
+## Viewing the course as a student
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — in a read-only mode.
+
+### Entering student view
+
+1. Navigate to **Manage → Students** and open a student's profile page.
+2. Click **View as this student** (only shown for active, non-disabled students when you are an instructor).
+
+A sticky orange banner appears at the top of every page while you are in student view:
+
+> **Viewing as [student name] — read only. You cannot make changes in this mode.**
+
+Click **Exit student view** in the banner to return to your instructor view.
+
+### What you can see
+
+In student view you see the course exactly as that student does:
+
+- Their assignment dashboard, submission history, and grades (unreleased grades are hidden, matching what the student sees).
+- Their discussion board feed, including only threads visible to students.
+- Their office hours queue and help requests.
+- Their surveys and polls.
+
+### What is read-only
+
+All write actions are disabled while in student view. You cannot submit assignments, post to the discussion board, like or follow threads, submit help requests, or take surveys on behalf of the student. The student's data is never modified.
+
+### Privacy notes
+
+- Account settings, notification preferences, and MCP tokens are hidden in the user menu while in student view to prevent accidentally modifying your own instructor settings.
+- Instructor-only debug output and unreleased test results are hidden, matching the student's actual view.
+- The student view is purely presentational — authentication and database permissions remain those of the real instructor.
+
 <Tip>
 Click on any metric to navigate directly to the relevant management page for detailed information and actions.
 </Tip>
