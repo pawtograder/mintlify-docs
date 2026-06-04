@@ -58,6 +58,23 @@ Each assignment row provides links to:
 - **Regrade Requests**: Manage student regrade requests
 - **Due Date Exceptions**: View and manage extensions
 
+## View as student
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — in a read-only mode.
+
+To enter student view:
+
+1. Go to **Manage course → Enrollments** (or the **Student Summary** page for a specific student).
+2. Click the **View as this student** button next to the student's name.
+
+A sticky orange banner appears at the top of every page while you are in student view. The banner shows the student's name and an **Exit student view** button. All write actions (posting, submitting, liking, grading) are disabled while in this mode.
+
+Student view is read-only and uses your real instructor session — no data is modified on behalf of the student. RLS (row-level security) remains enforced under your instructor identity, so the view mirrors what the student sees through the application's own data-masking layer rather than by switching auth users.
+
+<Note>
+Manage pages (under `/manage/`) are not accessible while in student view. Navigating to a manage page automatically redirects you back to the course home.
+</Note>
+
 ## Office Hours Activity
 
 View recent help queue activity including:
