@@ -82,6 +82,48 @@ Track autograder and background job health:
 - **Last 24 Hours**: Daily workflow statistics
 - **Recent Errors**: Quick access to failed workflow runs
 
+## View as Student
+
+Instructors can preview the course exactly as a specific student sees it — their dashboard, assignments, submissions, grades, discussion board, and office hours — in a read-only mode.
+
+### Entering student view
+
+1. Navigate to **Manage** → **Students** and select a student.
+2. Click **View as this student** on the student overview page.
+
+A sticky orange banner appears at the top of every page while you are in student view:
+
+> **Viewing as [student name] — read only. You cannot make changes in this mode.**
+
+Click **Exit student view** in the banner to return to your instructor view.
+
+### What you can see
+
+In student view you see:
+
+- The student's assignment dashboard (their submissions, scores, and due dates)
+- Their submission history and grading feedback (only released grades, matching what the student sees)
+- Their discussion board feed (filtered to threads visible to that student)
+- Their office hours queue and help requests
+- Their gradebook entries
+
+### What is read-only
+
+All write actions are disabled in student view. You cannot:
+
+- Submit assignments or finalize submissions
+- Post, reply, like, or follow discussion threads
+- Submit help requests
+- Complete surveys or flashcard sessions
+- Edit any settings
+
+### Notes
+
+- The view-as session is stored in a per-course browser cookie. Reloading the page preserves the session.
+- Navigating to `/manage/` pages while in student view redirects you back to the course home.
+- Account settings, notification preferences, and MCP tokens are hidden while in student view to prevent accidentally modifying your own instructor settings.
+- RLS (row-level security) is the backstop: any write attempted under the student's profile is rejected by the database.
+
 <Tip>
 Click on any metric to navigate directly to the relevant management page for detailed information and actions.
 </Tip>
