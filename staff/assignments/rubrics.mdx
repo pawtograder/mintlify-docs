@@ -283,6 +283,28 @@ parts:
             student_visibility: if_applied
 ```
 
+## Rubric visibility: hide until assigned
+
+By default, students can see a rubric's parts, criteria, and checks as soon as the assignment is released. For self-review rubrics — where seeing the questions before submitting could bias the student's work — you can hide the rubric until a review is assigned.
+
+Enable **Hide from students until assigned** in the rubric header form. When this option is on:
+
+- Students cannot see the rubric's contents (parts, criteria, checks) until a `review_assignments` row exists for them on that rubric **and** the review's release date has passed.
+- Instructors and graders always see the rubric unconditionally.
+- The rubric becomes visible to the student automatically once their self-review is assigned (either when their submission deadline passes or when an instructor uses the explicit **Release self-evaluation at** date on the assignment).
+
+This option is available in the YAML schema as `hide_unless_assigned: true` at the rubric level.
+
+### Self-evaluation release date
+
+When using `hide_unless_assigned` for self-review rubrics, you can also set an explicit **Release self-evaluation at** date on the assignment (under the self-evaluation settings). When set:
+
+- All students' self-reviews are assigned at that wall-clock time, regardless of individual due-date exceptions.
+- The self-review due date is computed as `release_at + deadline_offset hours`.
+- Students who finalize early still get a review assignment, but the rubric remains hidden until `release_at`.
+
+Leave this field blank to use the default behavior: self-reviews are assigned when each student's (per-student) final due date passes.
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
