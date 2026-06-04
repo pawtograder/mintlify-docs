@@ -4,6 +4,33 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 4, 2026
+
+#### Assignment dashboard overhaul
+- **Richer assignment dashboard** — The assignment home page is now a single-page dashboard with score statistics (min/avg/max with sparkline histograms), a section/lab filter, and a collapsible rubric breakdown panel. The old "All Submissions" tab is replaced by the Dashboard tab, which embeds the submissions table ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Rubric report builder** — The rubric breakdown panel shows how often each check was applied across a cohort. Switch between Bars, Options, Table, and By-section visualizations; build AND/OR/NOT filters; click any bar or row to filter the submissions table to matching students. Instructors can save the current view as the shared default for all staff ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Finalize grading, Release all, Unrelease all** — New assignment-level grading actions in the dashboard header. "Finalize grading" marks every eligible review complete (those with all required checks applied) after showing a preview count. "Release all" and "Unrelease all" act on every submission at once with a confirmation step ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Contextual release/unrelease** — Per-submission release and unrelease are now contextual on row selection in the submissions table, replacing the previous always-visible toolbar buttons ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Lab section deletion fixed** — Instructors can now delete lab sections. The previous implementation used a soft-delete path that failed because `lab_sections` has no `deleted_at` column ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Submission review scores floored at 0** — Submission-review scores can no longer go negative; the progress bar is also clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+
+### May 30, 2026
+
+#### New features
+- **Suggested due date** — Assignments can now have an optional advisory "Suggested Due Date" shown to students alongside the hard deadline. It is purely informational and does not affect submission enforcement, late tokens, or lab scheduling. Useful for standards/mastery workflows where students are encouraged to submit early but may resubmit freely until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+- **Rubrics hide unless assigned** — A new rubric option, "Hide from students until assigned", prevents students from seeing a rubric's contents until a review has been assigned to them. Pairs with the new "Release self-evaluation at" field on the assignment configuration for explicit wall-clock release timing ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Instructor read-only "view as student" mode** — Instructors can now preview the course exactly as a specific student sees it. Open a student's profile page and click "View as this student". A sticky orange banner indicates the mode and provides a one-click exit. All write actions are disabled; the student's data is never modified ([#779](https://github.com/pawtograder/platform/pull/779))
+- **Export linked grader hint feedback** — The CLI assessment export now includes `hints.json` with both student-rated Feedbot feedback and LLM-generated hint text, and a new `error-pin-engagement.json` file with per-student read/like status for discussion posts pinned to autograder errors. The export is now sectioned and paginated so large classes no longer time out ([#780](https://github.com/pawtograder/platform/pull/780))
+- **CLI submissions export** — New `pawtograder submissions export` command streams submission metadata and source files with the same identity modes as the assessment export. Supports JSON and CSV formats, include/exclude file glob filters, and optional binary file contents ([#780](https://github.com/pawtograder/platform/pull/780))
+
+#### Bug fixes
+- **Preserve group repos with submissions when dissolving empty groups** — When a student with existing submissions is moved into a real group, their old single-member group is now preserved (along with its repository and submission history) instead of being deleted, preventing a foreign-key violation ([#800](https://github.com/pawtograder/platform/pull/800))
+- **Empty submissions prohibited by default** — New assignments now default to rejecting submissions whose files match the handout exactly (`permit_empty_submissions` defaults to `false`). Existing assignments are unaffected ([#800](https://github.com/pawtograder/platform/pull/800))
+
 ## April 2026
 
 ### April 29, 2026
