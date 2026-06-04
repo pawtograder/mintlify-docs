@@ -4,6 +4,47 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 4, 2026
+
+#### Assignment dashboard overhaul + rubric report builder
+
+- **Redesigned assignment dashboard** — The assignment home page now opens on a **Dashboard** tab (instead of the submissions list) with a grading status panel, score statistics with sparklines, section/lab filtering, and a collapsible **Rubric breakdown** section ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Rubric report** — The rubric breakdown panel shows how often each check was applied across a cohort of submissions. Switch between bars, options, table, and by-section views. Use the quick filter or the advanced AND/OR/NOT filter builder to define the cohort. Click any bar or row to filter the submissions table to matching students ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Shared default views** — Instructors can save the current rubric report filter + visualization as the shared default for all staff on an assignment. Graders see the saved default on first load and can reset to it at any time ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Finalize grading / Release all / Unrelease all** — New assignment-level bulk actions in the grading status panel. **Finalize grading** marks every eligible review complete; **Release all** and **Unrelease all** publish or hide grades for every submission with a confirmation step ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Score flooring fix** — Submission-review scores are now floored at 0; the progress bar is clamped so it never overflows ([#812](https://github.com/pawtograder/platform/pull/812))
+
+### May 30, 2026
+
+#### Rubrics
+
+- **Rubrics hide unless assigned** — Rubrics can now be hidden from students until a review is assigned to them. Enable **Hide from students until assigned** in the rubric header. Useful for self-review rubrics where seeing the questions before submitting would bias the student's work ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-evaluation release date** — Assignments can now have an explicit **Release self-evaluation at** date. When set, all students' self-reviews are assigned at that wall-clock time (ignoring per-student due-date exceptions), and the review due date is computed as `release_at + deadline_offset` ([#788](https://github.com/pawtograder/platform/pull/788))
+
+#### Extensions
+
+- **Advisory suggested due date** — Assignments can now have an optional **Suggested Due Date** shown to students alongside the hard deadline. It is purely informational and does not affect submission enforcement, late tokens, or lab scheduling. Supports a standards/mastery workflow where students are encouraged to submit early but can resubmit freely until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Exports
+
+- **Linked grader hint feedback** — The CLI assessment export (`pawtograder assessment export`) now exports Feedbot hint feedback and LLM-derived hint responses into `hints.json`, deduplicated by (grader test, student) pair. A new `error-pin-engagement.json` file exports per-student read and like status for discussion posts pinned to autograder errors ([#780](https://github.com/pawtograder/platform/pull/780))
+- **New CLI submissions export** — `pawtograder submissions export` streams submission metadata and source files with the same identity modes as assessment export. Supports `--include-file`/`--exclude-file` glob patterns, `--with-binary`, and `--format json|csv` ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Server-side pepper for tokenization** — Assessment export tokens now use a two-step HMAC (client salt + server vault pepper) so dump recipients cannot recompute subject/submission tokens offline even if they capture the salt ([#780](https://github.com/pawtograder/platform/pull/780))
+
+### May 29, 2026
+
+#### Instructor tools
+
+- **View as student** — Instructors can now preview the course exactly as a specific student sees it. Navigate to **Manage → Students**, select a student, and click **View as this student**. A sticky orange banner indicates read-only mode; click **Exit student view** to return to the instructor view ([#779](https://github.com/pawtograder/platform/pull/779))
+
+### May 23, 2026
+
+#### Grading improvements
+
+- **Confirm review button in rubric sidebar** — A **Complete Review** button now appears at the bottom of the rubric sidebar so graders no longer need to scroll back to the top after finishing all checks. The completion popover offers **Complete** (stay on current submission) and **Complete + Next** (mark complete and navigate to the next incomplete submission) ([#695](https://github.com/pawtograder/platform/pull/695))
+
 ## April 2026
 
 ### April 29, 2026
