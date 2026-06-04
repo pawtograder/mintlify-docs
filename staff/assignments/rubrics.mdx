@@ -353,6 +353,33 @@ TAs and instructors can edit or delete rubric scores even after completing a rev
 Editing completed reviews does not automatically notify students. If grades have been released, you may need to communicate changes to affected students.
 </Note>
 
+## Hiding a rubric until a review is assigned
+
+By default, students can see a rubric's structure (parts, criteria, and checks) as soon as the assignment is released. For self-review rubrics, this can bias student work — they may write their submission to match the rubric questions rather than engaging authentically.
+
+Toggle **Hide from students until assigned** in the rubric header to gate visibility. When enabled:
+
+- Students cannot see the rubric's contents until a review has been assigned to them **and** the review's release date has passed.
+- Instructors and graders always see the rubric unconditionally.
+- The setting is reflected in the YAML as `hide_unless_assigned: true`.
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: What did you learn?
+        total_points: 5
+        is_additive: true
+        checks:
+          - name: Substantive reflection
+            is_annotation: false
+            points: 5
+```
+
+This option pairs with the **Release self-evaluation at** field on the assignment configuration, which lets you set an explicit wall-clock time for when self-reviews are assigned and become visible — independent of each student's individual due date.
+
 ## Notes and Tips
 
 - Keep criteria focused and keep check names short; longer explanation should go in `description`.
