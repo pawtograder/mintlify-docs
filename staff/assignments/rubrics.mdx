@@ -283,6 +283,32 @@ parts:
             student_visibility: if_applied
 ```
 
+## Rubric-level options
+
+Two top-level boolean flags control rubric behavior:
+
+### `cap_score_to_assignment_points`
+
+When enabled, the final score for a submission is capped to the assignment's maximum points even if the rubric awards more. Useful when autograder and hand-grading points can overlap.
+
+### `hide_unless_assigned` (self-review)
+
+When enabled, students **cannot see the rubric's contents** (parts, criteria, checks) until a review on it has been assigned to them. Use this for self-review rubrics where seeing the questions before submitting would bias the student's work.
+
+Toggle this option in the rubric editor's header form. It is serialized in YAML as:
+
+```yaml
+hide_unless_assigned: true
+```
+
+When `hide_unless_assigned` is `true`, the rubric becomes visible to a student only after:
+
+1. Their submission deadline has passed (or they have finalized early), **and**
+2. A `review_assignments` row has been created for them on this rubric, **and**
+3. The review's `release_date` (if set) has passed.
+
+Instructors and graders always see the rubric regardless of this flag.
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
