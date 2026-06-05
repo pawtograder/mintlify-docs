@@ -4,6 +4,48 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 5, 2026
+
+#### Infrastructure
+- **Kubernetes Helm chart** — Full Helm chart for self-hosted Pawtograder deployments, including per-PR preview deploy/destroy workflows, image release pipeline, Prometheus metrics endpoint, Grafana dashboards, shared cross-replica Redis cache, and edge-functions autoscaling ([#741](https://github.com/pawtograder/platform/pull/741))
+
+### June 4, 2026
+
+#### Assignment dashboard
+- **Reworked assignment dashboard** — The assignment home page is now a single-page dashboard (tabs: Dashboard, Grading assigned to me). The Dashboard tab shows score statistics with section/lab filters and sparkline histograms, a collapsible rubric breakdown with multiple visualizations, and the submissions table beneath ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Rubric report builder** — Instructors can analyze how often each rubric check was applied across a cohort of submissions. Supports bars, options, table, and by-section visualizations; AND/OR/NOT filter builder; CSV export; and a shared per-assignment default view that all staff see ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Finalize grading + bulk release controls** — New **Finalize grading** button marks all eligible reviews complete in one action. **Release all** and **Unrelease all** buttons apply to the whole assignment. Per-submission release/unrelease remains contextual in the submissions table ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Assignment form improvements** — Reorganized into grouped cards (Basics, Schedule, Late submissions, Groups, Self-evaluation, Advanced settings). Validation errors now show a summary toast and auto-scroll to the first invalid field ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Fixed lab section deletion** — Lab sections can now be hard-deleted by instructors ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Fixed submission-review score floor** — Submission-review scores are now floored at 0; the progress bar is clamped accordingly ([#812](https://github.com/pawtograder/platform/pull/812))
+
+### June 2, 2026
+
+#### Bug fixes
+- **Fixed group repo preservation** — Group repositories with submissions are now preserved when dissolving empty groups ([#800](https://github.com/pawtograder/platform/pull/800))
+
+## May 2026
+
+### May 30, 2026
+
+#### Rubrics
+- **Rubrics hide unless assigned** — A new `hide_unless_assigned` option on rubrics prevents students from seeing the rubric's contents until a review has been assigned to them. Useful for self-review rubrics where seeing the questions before submitting would bias the student's work ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-review explicit release time** — Assignments can now specify a `release_at` timestamp for self-reviews. When set, all students' self-reviews are released at that exact wall-clock time (ignoring per-student due-date exceptions), and the review due date is computed as `release_at + deadline_offset` ([#788](https://github.com/pawtograder/platform/pull/788))
+
+#### Extensions
+- **Advisory suggested due date** — Assignments can now have an optional suggested due date shown to students as a recommended target. It is purely informational and does not affect submission enforcement, late tokens, or lab scheduling ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Exports
+- **Export linked grader hint feedback** — The CLI assessment export now includes `hints.json` with both student-rated Feedbot feedback and cached LLM hint responses, plus `error-pin-engagement.json` with per-student read/like engagement on discussion posts pinned to autograder errors ([#780](https://github.com/pawtograder/platform/pull/780))
+- **New CLI export options** — `--skip-gradebook`, `--all-submissions`, `--with-instructor-build-output`, `--instructor-build-output-from-sentinel`, and a new `submissions export` command for exporting source files ([#780](https://github.com/pawtograder/platform/pull/780))
+
+#### Bug fixes
+- **Fixed advisory lock in finalize_submission_early** — Restored advisory lock to prevent race conditions when multiple students finalize simultaneously ([#794](https://github.com/pawtograder/platform/pull/794))
+
 ## April 2026
 
 ### April 29, 2026
