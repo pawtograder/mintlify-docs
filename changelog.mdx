@@ -4,6 +4,36 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco code editor for submission review** — The submission file viewer now uses a Monaco-based editor (the same editor as VS Code) with syntax highlighting, a file tree sidebar with comment count badges, file tabs, and an optional split-view pane for side-by-side file comparison. Cross-file **Go to Definition** is supported for Java, Python, and TypeScript. A toggle in the file header lets graders switch back to the classic view; the preference is saved automatically ([#565](https://github.com/pawtograder/platform/pull/565))
+- **Keyboard shortcuts for grading** — When viewing submission files, use `j`/`k` (or arrow keys) to move between files, `n`/`p` to jump between commented lines, and `Ctrl/Cmd+.` to open a quick-apply rubric check palette for the cursor line ([#565](https://github.com/pawtograder/platform/pull/565))
+
+### June 4, 2026
+
+#### Assignment dashboard
+- **Richer assignment dashboard** — The assignment home page is now a single-page dashboard with a grading status panel (graded/released counts, **Finalize grading**, **Release all**, **Unrelease all**), score statistics with section/lab filtering and sparkline histograms, and a collapsible rubric breakdown report ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Rubric report builder** — The rubric breakdown section shows how often each rubric check was applied across a cohort of submissions. Supports bars, options, table, and by-section visualizations; an AND/OR/NOT filter builder for defining cohorts; a rubric items selector; CSV export; and drill-in to filter the submissions table to matching students. Instructors can save the current view as the shared default for all staff ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Export controls moved to page header** — **Export grades** and **Download all** buttons are now in the assignment page header (instructor-only) rather than the submissions table toolbar ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Lab sections can now be deleted** — Hard-deletes lab sections so instructors can remove them ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Submission review scores floored at 0** — Scores from submission reviews are now floored at 0 and the progress bar is clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+
+### May 30, 2026
+
+#### Assignment configuration
+- **Suggested due date** — Assignments now support an optional advisory suggested due date shown to students. The hard due date remains the actual deadline; students may resubmit freely until then ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Grading improvements
+- **Export linked grader hint feedback** — Grader hint feedback linked to rubric checks is now included in grade exports ([#780](https://github.com/pawtograder/platform/pull/780))
+
+#### Bug fixes
+- **Group repos with submissions preserved when dissolving empty groups** — Repositories that have submissions are no longer deleted when an empty group is dissolved ([#800](https://github.com/pawtograder/platform/pull/800))
+
 ## April 2026
 
 ### April 29, 2026
