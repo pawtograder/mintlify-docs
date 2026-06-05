@@ -50,6 +50,35 @@ circumstances (illness, accommodation, transit issues) without picking
 a specific new deadline. The gifted tokens stack on top of the
 class-wide allocation.
 
+## Suggested due date
+
+Assignments can have an optional **Suggested Due Date** — an advisory
+target shown to students alongside the hard deadline. The suggested date
+is purely informational: submission enforcement, late tokens, and lab
+scheduling all continue to use the hard **Due Date** unchanged. Students
+can resubmit freely until the hard deadline regardless of whether the
+suggested date has passed.
+
+Set the suggested due date in the assignment create/edit form. It must
+be on or before the hard due date.
+
+## Self-review release date
+
+By default, self-review assignments are created for each student when
+their individual hard deadline passes. You can override this with an
+explicit **Release self-evaluation at** time on the assignment. When
+set:
+
+- All students' self-reviews are released at that exact wall-clock time,
+  ignoring per-student due-date exceptions.
+- The self-review due date is computed as `release_at + deadline_offset`
+  hours.
+- Students who finalize their submission early still receive a
+  review_assignment row, but the rubric remains hidden until `release_at`
+  (when the rubric has `hide_unless_assigned: true`).
+
+Leave the field blank to keep the default per-student behavior.
+
 ## Self-review deadline shift
 
 When an assignment's due date is extended — via a token or a manual

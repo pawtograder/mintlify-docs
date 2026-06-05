@@ -95,3 +95,56 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Assessment Export (CLI)
+
+The `pawtograder assessment export` CLI command produces a privacy-controlled
+snapshot of rubrics, grading review scores, autograder test results, Feedbot
+hint feedback, and gradebook columns for a class. See the
+[CLI documentation](/staff/cli) for full usage.
+
+Key output files per assignment:
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata, identity mode, and grand totals. |
+| `rubric.json` | Rubric tree (parts, criteria, checks). |
+| `autograder.json` | Autograder configuration and test definitions. |
+| `submissions.json` | One record per submission (active by default; use `--all-submissions` for all attempts). |
+| `scores.json` | Rubric check scores from the final grading review. |
+| `tests.json` | Autograder test results per submission. |
+| `hints.json` | Feedbot hint feedback. Includes both student ratings (`source: "feedback"`) and cached LLM responses (`source: "llm"`). Feedback rows are deduplicated against LLM rows for the same (test, student) pair. |
+| `error-pin-engagement.json` | Per-student read and like status for discussion posts pinned to autograder errors on exported submissions. |
+| `instructor-build-output.json` | Hidden grader build logs (only when `--with-instructor-build-output` is set; paths are sanitized). |
+
+### Identity modes
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt + server pepper. Tokens are stable within one run but not reproducible. |
+| `hash` | Deterministic from `--salt` + server pepper. Joinable across runs on the same deployment. |
+| `raw` | Real student ids, emails, and names. Requires `--i-understand-pii`. |
+
+### Useful flags
+
+- `--skip-gradebook` — Omit gradebook column metadata and private cell export.
+- `--all-submissions` — Include every submission attempt, not just the active one.
+- `--with-instructor-build-output` — Include hidden grader build logs (truncated, paths sanitized).
+- `--instructor-build-output-from-sentinel <string>` — Trim each build log to start at the first occurrence of this substring.
+
+## Submissions Export (CLI)
+
+The `pawtograder submissions export` CLI command streams submission metadata
+and source files with the same identity modes as assessment export.
+
+Output per assignment:
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata and totals. |
+| `submissions.json` / `submissions.csv` | One record per submission. |
+| `files.json` / `files.csv` | Submission file metadata (and contents in JSON mode). |
+
+Use `--include-file` and `--exclude-file` glob patterns to filter which files
+are exported. Use `--with-binary` to include binary file contents as
+base64-encoded strings. Use `--format csv` for a metadata-only index.
