@@ -4,6 +4,37 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 5, 2026
+
+#### Assignment dashboard and rubric report builder
+- **Redesigned assignment dashboard** — The assignment home page now opens on a **Dashboard** tab with a grading status panel (graded/released counts), score statistics (min/avg/max + sparkline histograms for total score, autograder score, and submissions per student), and a section/lab filter. A **Grading assigned to me** tab replaces the old separate submissions view for graders ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Finalize grading, Release all, Unrelease all** — New bulk grading actions in the dashboard header let instructors finalize all eligible reviews at once, release all grades, or unrelease all grades with a single click and confirmation ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Rubric report builder** — A collapsible **Rubric breakdown** panel on the dashboard shows how often each rubric check was applied across the cohort. Switch between bars, options, table, and by-section views; filter the cohort with a nestable AND/OR/NOT filter builder; click any bar or row to filter the submissions table to matching students; export as CSV. Instructors can save the current view as the shared default for all staff ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Assignment form improvements** — The create/edit assignment form is reorganized into labeled cards (Basics, Schedule, Late submissions, Groups, Self-evaluation, Advanced settings). Validation errors now show a toast naming the invalid fields and auto-scroll to the first problem, opening the Advanced section if the error is hidden there ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Lab sections can now be deleted** — Lab sections that have no submissions are now fully deleted when removed by an instructor ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Submission-review scores floored at 0** — Scores from submission reviews are now clamped to a minimum of 0; the progress bar is also clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+
+### June 4, 2026
+
+#### Rubric visibility
+- **Hide rubric until assigned** — Rubrics now support a `hide_unless_assigned` option. When enabled, students cannot see the rubric's parts, criteria, or checks until a review has been assigned to them. Useful for self-review rubrics where seeing the questions before submitting would bias student work ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-review explicit release time** — Instructors can now set a `Release self-evaluation at` date/time on the assignment. When set, all students' self-reviews are released simultaneously at that wall-clock time (ignoring per-student due-date exceptions), and the self-review deadline is computed as `release_at + hours_due_after` ([#788](https://github.com/pawtograder/platform/pull/788))
+
+### May 30, 2026
+
+#### Assignment configuration
+- **Advisory suggested due date** — Assignments now support an optional **Suggested Due Date** shown to students above the hard deadline. It is purely informational and does not affect submission enforcement, late tokens, or lab scheduling. Use it for standards/mastery workflows where students resubmit freely until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Assessment export
+- **Hint feedback and LLM hints in export** — `hints.json` now includes both student ratings of Feedbot hints (`source: feedback`) and the cached Feedbot responses themselves (`source: llm`), deduplicated so a student who rated a hint doesn't produce a duplicate LLM row ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Error-pin engagement export** — Each assignment export now includes `error-pin-engagement.json` with per-student read and like status for discussion posts pinned to autograder errors ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Submissions export CLI command** — New `pawtograder submissions export` command streams submission metadata and source files with the same identity modes as assessment export. Supports include/exclude file globs, optional binary file contents, JSON and CSV formats, and concurrent assignment exports ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Server-side pepper for tokenization** — Export tokens now use a two-step HMAC (client salt + server vault pepper) so dump recipients cannot recompute subject/submission tokens offline even if they capture the salt ([#780](https://github.com/pawtograder/platform/pull/780))
+
 ## April 2026
 
 ### April 29, 2026
