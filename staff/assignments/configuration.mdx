@@ -94,6 +94,15 @@ anonymized grading.
 push-timing analytics for the assignment's student repositories. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
+## Self-evaluation
+
+When self-evaluation is enabled, students complete a self-review after the assignment deadline. Two scheduling options control when the self-review becomes available:
+
+- **Hours due after this assignment** — the self-review deadline is set to this many hours after each student's effective due date (including any per-student extensions). This is the default behavior.
+- **Release self-evaluation at** *(optional)* — set an explicit wall-clock time at which the self-review is assigned and becomes visible to all students simultaneously. When set, per-student due-date exceptions are ignored for release timing, and the self-review deadline is computed as `release_at + hours_due_after`. Leave blank to use the per-student deadline behavior.
+
+Pair **Release self-evaluation at** with `hide_unless_assigned: true` on the self-review rubric to ensure students cannot see the self-review questions before the release time.
+
 ## Handout URL
 
 If you maintain the handout outside Pawtograder's GitHub flow, set the
