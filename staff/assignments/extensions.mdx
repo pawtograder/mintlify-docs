@@ -71,6 +71,24 @@ exception — Pawtograder shifts the affected student's self-review
 deadline by the same amount, so they retain the normal review window
 after submitting. No manual action is required.
 
+## Self-review release scheduling
+
+By default, self-review assignments are created for each student when
+their individual due date passes. You can override this with an explicit
+**Release self-review at** timestamp on the assignment:
+
+- When set, all students' self-reviews are released at that exact
+  wall-clock time, regardless of per-student due-date exceptions.
+- The self-review due date is computed as `release_at + deadline_offset`
+  hours.
+- Pairs with the rubric option **Hide from students until assigned**
+  (`hide_unless_assigned: true`) so students cannot see the self-review
+  rubric questions before the release time.
+
+Set this in the assignment creation or edit form under **Self-evaluation**
+→ **Release self-evaluation at**. Leave blank to use the default
+per-student behavior.
+
 ## Bulk review-due-date updates
 
 The **Grading Assignments** page lets you adjust *grading* and
