@@ -191,6 +191,53 @@ View captured emails at `http://localhost:54324`. Useful for testing:
 - Notification emails
 - Email verification
 
+## Kubernetes / Helm Deployment
+
+For production or staging deployments, Pawtograder ships a Helm chart that bundles the Next.js web app with all Supabase services (Postgres, GoTrue, PostgREST, Realtime, Storage, Edge Functions, Kong, Studio).
+
+### Quick start
+
+```bash
+# 1. Generate the JWT bundle
+npx tsx scripts/GenerateJwtKeys.ts --env > .secrets/pawtograder-jwt.env
+
+# 2. Create secrets in your namespace
+kubectl create namespace pawtograder
+kubectl -n pawtograder create secret generic pawtograder-jwt \
+  --from-env-file=.secrets/pawtograder-jwt.env
+kubectl -n pawtograder create secret generic pawtograder-postgres \
+  --from-literal=POSTGRES_PASSWORD=$(openssl rand -base64 32) \
+  --from-literal=PAWTOGRADER_PASSWORD=$(openssl rand -base64 32)
+kubectl -n pawtograder create secret generic pawtograder-s3 \
+  --from-literal=AWS_ACCESS_KEY_ID=$S3_KEY \
+  --from-literal=AWS_SECRET_ACCESS_KEY=$S3_SECRET
+
+# 3. Install the chart
+helm install pawtograder oci://ghcr.io/pawtograder/charts/pawtograder \
+  --version 0.1.0 \
+  --namespace pawtograder \
+  --set global.hostname=pawtograder.example.com \
+  --set ingress.className=nginx \
+  --set postgres.persistence.storageClass=local-path \
+  --set storage.backend=s3 \
+  --set storage.s3.endpoint=https://s3.example.com \
+  --set storage.s3.bucket=pawtograder
+```
+
+### Per-PR preview deployments
+
+The repository includes a GitHub Actions workflow (`.github/workflows/preview.yml`) that automatically deploys a full preview environment for each pull request and tears it down when the PR closes. Previews are seeded with demo data and accessible at `pr-<number>.preview.pawtograder.net`.
+
+### Chart documentation
+
+See `charts/pawtograder/README.md` in the repository for full documentation including:
+
+- Required secrets and their keys
+- Staging overlay (`charts/pawtograder/examples/values-staging.yaml`)
+- Preview overlay (`charts/pawtograder/examples/values-preview.yaml`)
+- Monitoring (Prometheus ServiceMonitors + Grafana dashboards)
+- Shared Redis for cross-replica cache and rate-limiter state
+
 ## CI/CD Pipeline
 
 Pawtograder uses GitHub Actions for continuous integration and deployment. The build process was migrated from Coolify to GitHub Actions to improve reliability and reduce test flakiness.
