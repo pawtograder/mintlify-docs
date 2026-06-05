@@ -95,3 +95,47 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Assessment data (CLI)
+
+The Pawtograder CLI provides a richer export of assessment data for
+research and analysis. Run `pawtograder assessment export` to stream a
+privacy-controlled snapshot of rubrics, scores, autograder test results,
+hint feedback, and gradebook columns.
+
+### Hint feedback (`hints.json`)
+
+Each assignment directory contains a `hints.json` file with two types
+of hint records:
+
+| `source` | Description |
+|---|---|
+| `feedback` | A student's explicit rating of a Feedbot hint (useful / not useful, optional comment). |
+| `llm` | The cached Feedbot response for a grader test, linked to the student who received it. Rows where the student already submitted a rating are deduplicated. |
+
+Both record types include a tokenized `submission` reference and a
+tokenized `grader_test` reference so they can be joined with
+`tests.json`.
+
+### Error-pin engagement (`error-pin-engagement.json`)
+
+Each assignment directory also contains an `error-pin-engagement.json`
+file. Each row represents one student's engagement with a discussion
+post that is pinned to an autograder error on their submission:
+
+| Field | Description |
+|---|---|
+| `submission` | Tokenized submission reference. |
+| `subject` | Tokenized student reference. |
+| `discussion_thread_id` | The discussion thread id. |
+| `error_pin_id` | The error pin id. |
+| `grader_test` | Tokenized grader test reference (if the pin is linked to a specific test). |
+| `read_at` | Timestamp when the student read the thread, or `null`. |
+| `liked` | Whether the student liked the thread. |
+
+For group submissions, one row is emitted per group member so
+per-student engagement is preserved.
+
+See the [CLI documentation](/developers/cli) for full usage, identity
+modes, and options such as `--all-submissions`, `--skip-gradebook`, and
+`--with-instructor-build-output`.
