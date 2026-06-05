@@ -55,13 +55,40 @@ Click a student or group name to open the grading interface for that submission.
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
 
+## Monaco code editor
+
+The grading interface uses a Monaco-based code editor (the same editor that powers VS Code) for viewing source files. The editor provides:
+
+- **Syntax highlighting** for Java, Python, TypeScript, and many other languages
+- **File tree sidebar** on the left for navigating between submission files, with comment count badges on each file
+- **File tabs** showing open files across the top of the editor pane
+- **Split-view** — click the split-pane icon in the tab bar to open a second editor pane side-by-side for comparing files
+- **Cross-file Go to Definition** for Java, Python, and TypeScript — press `F12` or `Cmd/Ctrl+Click` on a symbol to jump to its definition, even in another file
+- **Minimap** and standard Monaco navigation features
+
+A toggle in the file header lets you switch to the classic plain-text view if preferred. Your preference is saved automatically.
+
+### Keyboard shortcuts for grading
+
+When viewing submission files, the following keyboard shortcuts speed up grading:
+
+| Shortcut | Action |
+| --- | --- |
+| `j` / `↓` | Move to the next file in the file tree |
+| `k` / `↑` | Move to the previous file in the file tree |
+| `n` | Jump to the next commented line in the current file |
+| `p` | Jump to the previous commented line in the current file |
+| `Ctrl/Cmd+.` | Open the quick-apply rubric check palette for the cursor line |
+
+The quick-apply palette (`Ctrl/Cmd+.`) lets you fuzzy-search and apply any rubric check to the current line without using the right-click context menu. Checks that do not require a comment are applied immediately; checks that require a comment open the annotation dialog.
+
 ## Viewing files and artifacts
 
 The grading interface supports a range of file types in both the **Files** and **Artifacts** tabs.
 
 | Format | Rendering |
 | --- | --- |
-| Source code | Syntax highlighting, line numbers |
+| Source code | Monaco editor with syntax highlighting, line numbers, and Go to Definition |
 | Plain text (`.txt`, `.log`, `.csv`) | Inline view with line numbers and copy support |
 | Markdown (`.md`) | Full formatting: headers, lists, code blocks, links, tables |
 | HTML | Sandboxed iframe with CSS preserved |
