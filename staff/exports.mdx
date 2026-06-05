@@ -95,3 +95,43 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Assessment Export (CLI)
+
+The Pawtograder CLI (`pawtograder assessment export`) produces a privacy-controlled snapshot of rubric scores, autograder test results, Feedbot hint feedback, and gradebook columns for a class. Run it from a terminal with the CLI installed.
+
+```sh
+pawtograder assessment export --class <id-or-slug> --output ./export
+```
+
+The export writes one subdirectory per assignment containing:
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata (identity mode, dump id, totals). |
+| `rubric.json` | Rubric hierarchy (parts, criteria, checks). |
+| `autograder.json` | Autograder configuration and test definitions. |
+| `submissions.json` | One row per active submission (or all attempts with `--all-submissions`). |
+| `scores.json` | Rubric check application records from the final grading review. |
+| `tests.json` | Autograder test results per submission. |
+| `hints.json` | Feedbot hint feedback — both student ratings (`source: feedback`) and cached LLM responses (`source: llm`). |
+| `error-pin-engagement.json` | Per-student read/like status for discussion posts pinned to autograder errors. |
+
+### Identity modes
+
+Student identifiers are pseudonymized by default. Use `--identity` to control the mode:
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt; tokens are only joinable within one dump. |
+| `hash` | Deterministic from `--salt`; tokens are joinable across dumps on the same deployment. |
+| `raw` | Real ids, emails, and names. Requires `--i-understand-pii`. |
+
+### Useful options
+
+- `--all-submissions` — include every submission attempt, not just the active one.
+- `--skip-gradebook` — omit gradebook column metadata and private cell data.
+- `--with-instructor-build-output` — include hidden grader build logs (paths sanitized).
+- `--assignment hw-*` — export only assignments matching a glob.
+
+See `pawtograder assessment export --help` for the full option list.
