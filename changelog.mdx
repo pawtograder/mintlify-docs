@@ -4,6 +4,57 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 4, 2026
+
+#### Assignment dashboard overhaul
+
+- **Richer assignment dashboard** — the assignment home page is now a single-page dashboard with score statistics (min/avg/max with sparklines), section/lab filtering, grading status panel, and the submissions table. The old "All Submissions" tab is replaced by the Dashboard tab ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Rubric report builder** — a new collapsible "Rubric breakdown" panel on the assignment dashboard shows how often each rubric check was applied across the cohort. Supports four visualizations (bars, options, table, by-section), advanced AND/OR/NOT filters, per-check include/exclude, CSV export, and drill-in to filter the submissions table to matching students ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Shared default rubric view** — instructors can save the current rubric report configuration as the shared default for all staff. Graders can read but not overwrite it ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Finalize grading button** — a new "Finalize grading" button in the grading status panel marks every eligible submission review complete (those with all required rubric checks applied) in one click ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Release all / Unrelease all** — bulk release and unrelease actions are now in the grading status panel at the top of the dashboard, with confirmation popovers ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Submission review scores floored at 0** — subtractive rubric scores can no longer go below zero; the progress bar is also clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+
+#### Lab sections
+
+- **Hard-delete lab sections** — instructors can now fully delete lab sections; previously they were only soft-deleted, which prevented re-creation ([#811](https://github.com/pawtograder/platform/pull/811))
+
+### June 3, 2026
+
+#### Infrastructure
+
+- **Helm chart and Kubernetes deployment** — a full Helm chart is now available for self-hosting Pawtograder on Kubernetes. Includes per-PR preview deploy/destroy via GitHub Actions, Prometheus metrics endpoints, Grafana dashboards, shared cross-replica Redis cache, and edge-functions autoscaling ([#741](https://github.com/pawtograder/platform/pull/741))
+
+## May 2026
+
+### May 30, 2026
+
+#### Rubrics
+
+- **Rubrics hide unless assigned** — a new `hide_unless_assigned` flag on rubrics prevents students from seeing rubric contents until a review has been assigned to them. Useful for self-review rubrics where seeing the questions before submitting would bias the student's work ([#788](https://github.com/pawtograder/platform/pull/788))
+- **Self-review explicit release time** — assignments can now set an explicit `release_at` timestamp for self-review. When set, all students' self-reviews are released at that wall-clock time regardless of individual due-date exceptions ([#788](https://github.com/pawtograder/platform/pull/788))
+
+#### Extensions
+
+- **Advisory suggested due date** — assignments can now have an optional suggested due date shown to students as a recommended target. It is purely informational and does not gate submissions, late tokens, or any enforcement logic ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Exports
+
+- **Export linked grader hint feedback** — the CLI assessment export now includes `hints.json` with both student ratings (`source: feedback`) and cached Feedbot LLM responses (`source: llm`), and `error-pin-engagement.json` with per-student read/like status for discussion posts pinned to autograder errors ([#780](https://github.com/pawtograder/platform/pull/780))
+- **Assessment export improvements** — new `--skip-gradebook`, `--all-submissions`, and `--with-instructor-build-output` flags; sectioned/paginated streaming so large classes don't time out; server-side pepper for HMAC tokenization ([#780](https://github.com/pawtograder/platform/pull/780))
+
+### May 29, 2026
+
+#### Instructor tools
+
+- **View as student** — instructors can now preview the course exactly as a specific student sees it. Enter student view from the Enrollments page or Student Summary. A sticky banner indicates read-only mode; all write actions are disabled ([#779](https://github.com/pawtograder/platform/pull/779))
+
+#### Groups
+
+- **Preserve group repos with submissions when dissolving empty groups** — dissolving a group that has no members but does have submissions no longer deletes the repository ([#800](https://github.com/pawtograder/platform/pull/800))
+
 ## April 2026
 
 ### April 29, 2026
