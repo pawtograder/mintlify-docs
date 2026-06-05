@@ -30,6 +30,13 @@ Rubrics can only be edited by instructors. When editing a rubric, you will be pr
   - `student_visibility`: `always` | `if_applied` | `if_released` | `never`
   - `kpi_category`: Optional link to repository analytics (commits, prs_opened, pr_review_comments, issues_opened, issues_closed, issue_comments)
 
+### Rubric-level options
+
+In addition to the per-check settings above, rubrics have two top-level options:
+
+- **`cap_score_to_assignment_points`**: When true, the final score is capped to the assignment's maximum points even if the rubric total exceeds it.
+- **`hide_unless_assigned`**: When true, students cannot see the rubric's contents (parts, criteria, checks) until a review on it has been assigned to them and the review's release date has passed. Instructors and graders always see rubrics unconditionally. Use this for self-review rubrics where seeing the questions before submitting would bias the student's work. Pairs with the **Release self-review at** setting on the assignment.
+
 ### Where This Shows Up in the Hand-Grader
 
 - The right-hand panel is the rubric sidebar. Global checks render as radio/checkbox options. Annotation checks are applied from the code view or artifact cards by right-clicking a line or selecting an artifact.
@@ -71,6 +78,7 @@ These examples conform to `public/RubricSchema.json`.
 
 ```yaml
 name: Sample Rubric
+# hide_unless_assigned: true  # Uncomment to hide from students until a review is assigned
 parts:
   - name: Code Quality
     criteria:
@@ -369,7 +377,7 @@ Editing completed reviews does not automatically notify students. If grades have
 
 **Rubric**
 - Mandatory: `name`, `parts`
-- Optional: `description`
+- Optional: `description`, `cap_score_to_assignment_points` (default: `false`), `hide_unless_assigned` (default: `false`)
 
 **Part**
 - Mandatory: `name`, `criteria`

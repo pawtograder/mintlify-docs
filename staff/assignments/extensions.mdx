@@ -14,6 +14,20 @@ managed from the assignment's **Due Date Exceptions** page.
 For the class-wide token allotment per assignment, see
 [Configuration → Late tokens](/staff/assignments/configuration#late-tokens).
 
+## Suggested due date
+
+Assignments can have an optional **suggested due date** — an advisory
+target shown to students alongside the hard deadline. The suggested date
+is purely informational: it does not gate submissions, affect late tokens,
+or change any enforcement. Students see it labeled "Suggested due:" above
+the hard due date, with a tooltip explaining the difference.
+
+Use this for standards/mastery workflows where students are encouraged to
+submit by an earlier target but may resubmit freely until the hard deadline.
+
+Set the suggested due date in the assignment creation or edit form. It must
+be on or before the hard due date.
+
 ## Late tokens
 
 When the assignment allows late tokens, each enrolled student can spend
@@ -56,6 +70,24 @@ When an assignment's due date is extended — via a token or a manual
 exception — Pawtograder shifts the affected student's self-review
 deadline by the same amount, so they retain the normal review window
 after submitting. No manual action is required.
+
+## Self-review release scheduling
+
+By default, self-review assignments are created for each student when
+their individual due date passes. You can override this with an explicit
+**Release self-review at** timestamp on the assignment:
+
+- When set, all students' self-reviews are released at that exact
+  wall-clock time, regardless of per-student due-date exceptions.
+- The self-review due date is computed as `release_at + deadline_offset`
+  hours.
+- Pairs with the rubric option **Hide from students until assigned**
+  (`hide_unless_assigned: true`) so students cannot see the self-review
+  rubric questions before the release time.
+
+Set this in the assignment creation or edit form under **Self-evaluation**
+→ **Release self-evaluation at**. Leave blank to use the default
+per-student behavior.
 
 ## Bulk review-due-date updates
 
