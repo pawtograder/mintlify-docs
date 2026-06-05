@@ -1,47 +1,112 @@
 ---
 title: "Monitoring and Metrics"
-description: "Prometheus metrics for monitoring system performance and rate limiting"
+description: "Prometheus metrics, Grafana dashboards, and Kubernetes deployment for Pawtograder"
 icon: "chart-line"
 ---
 
 # Monitoring and Metrics
 
-Pawtograder exposes Prometheus metrics for monitoring system performance, queue health, and rate limiting behavior.
+Pawtograder exposes Prometheus metrics for monitoring system performance, queue health, rate limiting behavior, and business-level activity.
 
-## Metrics Endpoint
+## Metrics endpoint (web app)
 
-Metrics are available at the `/metrics` endpoint and can be scraped by Prometheus or compatible monitoring systems.
+The Next.js web app exposes a Prometheus scrape endpoint at `/api/metrics`. It is gated by a bearer token set in the `METRICS_SCRAPE_TOKEN` environment variable. Without that variable the endpoint returns `503`.
 
-## Rate Limiter Metrics
+The endpoint collects:
 
-Pawtograder uses Bottleneck with Upstash Redis for distributed rate limiting. The system exposes detailed metrics about limiter state:
+- Default Node.js process metrics (`process_*`, `nodejs_*`, GC, event loop lag) under the `web_` prefix.
+- Custom application counters and histograms (see below).
 
-### Limiter Gauges
+### Custom metrics
 
-The following gauges are exposed with a `limiter_id` label to track each rate limiter independently:
+| Metric | Type | Description |
+|---|---|---|
+| `web_http_request_duration_seconds` | Histogram | HTTP request latency by route and status. |
+| `web_submission_created_total` | Counter | Submissions created, labeled by `class_id`. |
+| `web_grading_action_total` | Counter | Grading actions (comment, score, release), labeled by `kind` and `class_id`. |
+| `web_realtime_broadcast_total` | Counter | Server-initiated realtime broadcasts, labeled by `channel_class`. |
+| `web_edge_function_invocation_total` | Counter | Web app calls to edge functions, labeled by `function` and `status`. |
+| `web_workflow_runs_recent` | Gauge | Workflow run counts in sliding windows, labeled by `class_id`, `conclusion`, and `window`. |
+| `web_workflow_queue_seconds` | Gauge | Workflow queue duration percentiles (P50/P95/P99). |
+| `web_workflow_run_seconds` | Gauge | Workflow run duration percentiles. |
+| `web_workflow_errors_recent` | Gauge | Recent workflow errors by name and class. |
 
-#### `pawtograder_limiter_running_weight`
+### Using metrics helpers
 
-Total weight of currently running jobs for this limiter. This represents the active workload being processed.
+```ts
+import { timeHttp, timeRpc, getMetrics } from "@/lib/metrics";
 
-#### `pawtograder_limiter_queued_count`
+// Wrap a route handler — observes web_http_request_duration_seconds.
+export async function POST(req: NextRequest) {
+  return timeHttp("/api/my-route", "POST", () => handler(req));
+}
 
-Number of jobs waiting in the queue for this limiter. Uses the same logic as Bottleneck's `queued.lua` script to ensure consistency with the rate limiting behavior.
+// Increment a business counter.
+const m = await getMetrics();
+m?.submissionCreated.inc({ class_id: String(classId) });
+```
 
-#### `pawtograder_limiter_concurrent_clients`
+## Rate limiter metrics
 
-Number of clients with active work (running or queued) for this limiter. Helps identify how many distinct clients are competing for rate-limited resources.
+Pawtograder uses Bottleneck with Redis for distributed rate limiting. The following gauges are exposed with a `limiter_id` label:
 
-### Implementation Details
+| Metric | Description |
+|---|---|
+| `pawtograder_bottleneck_queued` | Jobs waiting in the queue for this limiter. |
+| `pawtograder_bottleneck_running` | Total running job weight for this limiter. |
+| `pawtograder_bottleneck_concurrent_clients` | Clients with active work for this limiter. |
+| `pawtograder_circuit_breaker_open` | Whether a GitHub-org circuit breaker is open (1 = open). |
 
-The metrics system scans Redis for `b_*_settings` keys to discover all active limiters. For each limiter, it evaluates:
+## Queue metrics
 
-- Running weight from the limiter's internal state
-- Queued count using Bottleneck's queue counting logic
-- Active client count based on clients with non-zero running or queued jobs
+| Metric | Description |
+|---|---|
+| `pawtograder_async_queue_size` | GitHub async worker queue depth. |
+| `pawtograder_async_low_priority_queue_size` | Low-priority GitHub async queue depth. |
+| `pawtograder_discord_queue_size` | Discord async queue depth. |
+| `pawtograder_gradebook_row_recalculate_queue_size` | Gradebook recalculation queue depth. |
+| `pawtograder_async_dlq_size` | GitHub async dead-letter queue depth. |
+| `pawtograder_discord_dlq_size` | Discord dead-letter queue depth. |
 
-Redis errors during metric collection are non-fatal, allowing Postgres queue metrics to continue scraping successfully.
+## Kubernetes deployment (Helm chart)
 
-## Queue Metrics
+Pawtograder ships a Helm chart that bundles the Next.js web app with all Supabase services (Postgres, GoTrue, PostgREST, Realtime, Storage, Edge Functions, Kong, Studio). See the [chart README](https://github.com/pawtograder/platform/tree/main/charts/pawtograder) for full installation instructions.
 
-In addition to rate limiter metrics, Pawtograder exposes metrics for job queue health and performance (implementation details vary by queue backend).
+### Enabling monitoring
+
+Set `monitoring.enabled=true` in your values overlay to deploy Prometheus Operator `ServiceMonitor` CRs and Grafana-discoverable `ConfigMap` dashboards. The chart does **not** deploy Prometheus or Grafana itself — it assumes a `kube-prometheus-stack` (or compatible) instance is already running in the cluster.
+
+```yaml
+monitoring:
+  enabled: true
+```
+
+### What gets scraped
+
+| Component | Path / port | Auth |
+|---|---|---|
+| postgres | `:9187 /metrics` (sidecar) | none |
+| storage-api | `:5000 /metrics` | none |
+| edge-functions | `:9000 /metrics` | none |
+| auth (GoTrue) | `:9100 /metrics` | none |
+| kong | `:8001 /metrics` | none |
+| realtime | `:4000 /metrics` | HS256 JWT |
+| web (Next.js) | `:3000 /api/metrics` | bearer token |
+
+### Grafana dashboards
+
+When `monitoring.enabled=true`, five dashboards are loaded into the **Pawtograder** Grafana folder:
+
+| Dashboard | Covers |
+|---|---|
+| Stack Overview | Pod readiness, restart count, error rate, P95 latency |
+| Postgres Deep Dive | Cache hit, replication lag, top statements, table sizes |
+| Realtime Fanout | Connection churn, broadcast rate, Erlang VM load |
+| Edge Functions | Per-function RPS, P95 latency, errors |
+| App Business | Submissions/min, grading actions, queue depth, per-class views |
+
+### Per-PR preview deployments
+
+The repository includes a GitHub Actions workflow (`.github/workflows/preview.yml`) that automatically deploys a full Pawtograder stack for each pull request and tears it down when the PR closes. Preview URLs follow the pattern `pr-<number>.preview.pawtograder.net`.
+
+Each preview gets its own namespace, JWT keys, and database. Previews share a cluster-wide Redis instance for Bottleneck rate-limiter state.
