@@ -70,6 +70,24 @@ The grading interface supports a range of file types in both the **Files** and *
 
 Artifacts are files configured by the instructor in the autograder settings (for example, `reports/*.md` or `output.txt`). They typically contain test output, generated reports, coverage data, or other deliverables that provide context for grading.
 
+### Monaco code editor
+
+The **Files** tab uses a Monaco-based code editor (the same editor that powers VS Code) by default. A toggle in the file viewer lets you switch back to the classic plain-text view if preferred — your choice is saved automatically.
+
+The Monaco editor adds several grading-focused features:
+
+- **File tree sidebar** — browse all submission files in a collapsible tree with comment-count badges on each file.
+- **File tabs** — open multiple files at once and switch between them without losing your scroll position.
+- **Split view** — click the split-pane button in the tab bar to compare two files side by side.
+- **Cross-file Go to Definition** — `Cmd/Ctrl+Click` (or `F12`) on a symbol in Java, Python, or TypeScript jumps to its definition, even if it lives in a different file.
+- **Quick-apply rubric checks** — press `Ctrl+.` (or `Cmd+.` on Mac) while the editor is focused to open a searchable palette of rubric checks for the current line. Checks that don't require a comment are applied in one keystroke.
+- **Keyboard navigation** — use `j`/`k` (or `↓`/`↑`) to move between files in the tree, and `n`/`p` to jump between commented lines in the active file.
+- **Comment glyphs** — lines with existing annotations show a 💬 glyph in the margin; click it to expand the comment inline.
+
+<Tip>
+Use `Ctrl+.` to quickly apply rubric checks without reaching for the mouse. The palette supports fuzzy search so you can type a few letters of the check name to narrow the list.
+</Tip>
+
 ## Applying rubric checks and annotations
 
 Rubric checks are applied from the rubric sidebar. For checks that target specific lines of code or sections of an artifact, you can leave inline annotations:

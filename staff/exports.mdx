@@ -95,3 +95,44 @@ Exports the per-student engagement metrics shown on the page (posts,
 replies, watches, etc.) for the current course.
 
 Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+
+## Assessment export (CLI)
+
+The `pawtograder assessment export` CLI command produces a privacy-controlled
+snapshot of an assignment's rubric, scores, autograder test results, hint
+feedback, and gradebook columns. Each run writes a directory of JSON files:
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Run metadata, identity mode, totals |
+| `rubric.json` | Rubric hierarchy (parts, criteria, checks) |
+| `autograder.json` | Autograder config and test definitions |
+| `submissions.json` | One record per active (or all) submission |
+| `scores.json` | Rubric check results from the final grading review |
+| `tests.json` | Autograder test results per submission |
+| `hints.json` | Feedbot hint feedback — both student ratings (`source: feedback`) and cached LLM responses (`source: llm`) |
+| `error-pin-engagement.json` | Per-student read/like engagement with discussion posts pinned to autograder errors |
+| `instructor-build-output.json` | Hidden grader build logs (opt-in via `--with-instructor-build-output`) |
+| `gradebook/scores.json` | Private gradebook column values |
+
+### Identity modes
+
+Student identifiers are pseudonymized by default. Three modes are available:
+
+| Mode | Description |
+|---|---|
+| `opaque` (default) | Random per-run salt; tokens are stable within one run but not reproducible across runs |
+| `hash` | Deterministic tokens from a `--salt` you supply; joinable across runs on the same deployment |
+| `raw` | Real ids, emails, and names; requires `--i-understand-pii` |
+
+### Key options
+
+| Option | Description |
+|---|---|
+| `--all-submissions` | Include every submission attempt, not just the active one |
+| `--with-test-output` | Include autograder test output text (truncated to `--test-output-max-bytes`) |
+| `--with-instructor-build-output` | Include hidden grader build logs (path-sanitized) |
+| `--skip-gradebook` | Omit gradebook column metadata and private cell export |
+| `--assignment <slug>` | Export only specific assignments (repeatable, supports globs) |
+
+See `pawtograder assessment export --help` for the full option list.

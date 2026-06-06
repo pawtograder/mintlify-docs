@@ -4,6 +4,30 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco code editor for submission grading** — The Files tab in the grading interface now uses a Monaco-based editor (the same engine as VS Code) by default. New features include a collapsible file tree sidebar with comment-count badges, file tabs, optional split-view pane, cross-file Go to Definition for Java/Python/TypeScript, a quick-apply rubric palette (`Ctrl+.`/`Cmd+.`), and keyboard shortcuts for file navigation (`j`/`k`) and comment jumping (`n`/`p`). A toggle in the file viewer lets graders switch back to the classic view ([#565](https://github.com/pawtograder/platform/pull/565))
+
+### June 4, 2026
+
+#### Assignment dashboard
+- **Rubric breakdown report** — The assignment dashboard now includes a collapsible **Rubric breakdown** panel showing how often each rubric check was applied across a cohort of submissions. Supports bars, options, table, and by-section visualizations; AND/OR/NOT cohort filters; CSV export; and drill-in to filter the submissions table to matching students. Instructors can save the current view as the shared default for all staff ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Grading status panel** — The top of the assignment dashboard now shows graded/released counts and hosts assignment-level actions: **Finalize grading** (marks all eligible reviews complete), **Release all**, and **Unrelease all** ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Assignment form improvements** — The create/edit assignment form is reorganized into grouped cards (Basics, Schedule, Late submissions, Groups, Self-evaluation, Advanced settings). Validation errors now show a summary toast, auto-expand the Advanced section if the invalid field is hidden, and scroll to the first invalid field ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Lab sections can now be deleted** — Lab sections are now hard-deleted so instructors can remove them ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Submission review scores floored at 0** — Scores from submission reviews are now clamped to a minimum of 0 and the progress bar is capped correctly ([#812](https://github.com/pawtograder/platform/pull/812))
+
+### May 30, 2026
+
+#### New features
+- **Advisory suggested due date** — Assignments can now have an optional **Suggested Due Date** shown to students as a recommended target. It is purely informational — submission enforcement, late tokens, and lab scheduling all continue to use the hard due date. Supports a standards/mastery workflow where students resubmit freely until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+- **Export linked grader hint feedback** — The `pawtograder assessment export` CLI now exports Feedbot hint feedback (both student ratings and cached LLM responses) in `hints.json`, and per-student read/like engagement with error-pinned discussion posts in `error-pin-engagement.json`. New options include `--all-submissions`, `--skip-gradebook`, `--with-instructor-build-output`, and `--instructor-build-output-from-sentinel` ([#780](https://github.com/pawtograder/platform/pull/780))
+
 ## April 2026
 
 ### April 29, 2026
