@@ -132,6 +132,54 @@ Export assignment data for further analysis, department records, or to analyze a
 - Student progress data
 - Autograder results
 
+## Rubric breakdown
+
+The **Rubric breakdown** panel (collapsed by default) shows how often each rubric check was applied across a cohort of submissions. Use it to identify which checks are most commonly applied, spot patterns in student errors, and compare performance across class sections.
+
+### Cohort filters
+
+Use the **Quick filter** dropdown to instantly scope the report to a single criterion or check. For more complex queries, expand **Advanced filter** to build AND/OR/NOT conditions over:
+
+- **Check applied** — submissions where a specific rubric check was applied
+- **Option selected** — submissions where a specific sub-option of a choice check was selected
+- **Class section** / **Lab section** — filter by enrollment section
+- **Score ≥ / Score ≤** — filter by total score range
+
+### Visualizations
+
+Switch between four views using the buttons in the toolbar:
+
+| View | Description |
+| --- | --- |
+| **Bars** | Horizontal progress bars showing the application rate for each check |
+| **Options** | Per-option breakdown for choice-style checks |
+| **Table** | Compact tabular view of all checks and rates |
+| **By section** | Heatmap comparing application rates across class sections |
+
+### Filtering the submissions table
+
+Click any bar, option row, or table row to filter the submissions table below to only the students in that cohort. Use **Filter table to these N** to apply the current cohort filter directly. Click **Clear filter** in the submissions table to restore the full list.
+
+### Saving a shared default view
+
+Instructors can save the current filter, visualization, and included checks as the shared default for all staff on this assignment. Click **Save as default** (a confirmation popover warns that this affects all staff). Graders can see the saved default and reset to it at any time, but cannot overwrite it.
+
+### Exporting
+
+Click **Export CSV** to download the current view as a CSV file. The export includes the criterion name, check name, applied count, cohort size, and percentage for each row.
+
+## Grading status panel
+
+The top of the dashboard shows a compact grading status panel with:
+
+- **Graded / Total** — how many submissions have a completed review
+- **Released / Total** — how many reviews have been released to students
+- **Finalize grading** — marks every eligible submission review complete (those whose required rubric checks are all applied). This does not release grades to students.
+- **Release all** — makes grades visible to all students for every submission in the assignment
+- **Unrelease all** — hides grades from all students (reverses Release all)
+
+Per-submission release and unrelease remain available in the submissions table by selecting rows and using the contextual toolbar.
+
 ## Integration with Other Features
 
 The assignment dashboard integrates with:
