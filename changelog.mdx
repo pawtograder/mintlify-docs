@@ -4,6 +4,60 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 7, 2026
+
+#### Bug fixes
+- **Fixed edge function Sentry DSN configuration** — Mounted the `pawtograder-sentry` secret so `SENTRY_DSN` is correctly set in edge functions ([#819](https://github.com/pawtograder/platform/pull/819))
+
+### June 6, 2026
+
+#### Bug fixes
+- **Fixed Monaco editor model leak in submission grading view** — Resolved a memory leak where Monaco editor models were not properly disposed when switching between submissions ([#820](https://github.com/pawtograder/platform/pull/820))
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco editor for submission grading** — The submission file viewer now uses the Monaco editor (the same editor that powers VS Code) by default, with a toggle to switch back to the classic view. New capabilities include ([#565](https://github.com/pawtograder/platform/pull/565)):
+  - **File tree sidebar** with comment count badges for easy navigation between submission files
+  - **File tabs** and optional **split-view** pane for multi-file review
+  - **Cross-file Go to Definition** (F12 / Cmd+Click) for Java, Python, and TypeScript
+  - **Quick-apply rubric checks** with keyboard shortcut **Ctrl+.** (or **Cmd+.**)
+  - **Keyboard shortcuts**: j/k or ↓/↑ to move between files; n/p to jump between commented lines
+
+#### Bug fixes
+- **Fixed stale-bundle errors on deploy skew** — The app now self-heals "reading 'call'" errors that occur when a new deployment is active but a user still has an old bundle loaded ([#810](https://github.com/pawtograder/platform/pull/810))
+
+### June 4, 2026
+
+#### Grading improvements
+- **Assignment dashboard and rubric report builder** — The assignment home page is now a full dashboard with ([#806](https://github.com/pawtograder/platform/pull/806)):
+  - **Grading status panel** with Finalize grading, Release all, and Unrelease all assignment-level actions
+  - **Score statistics** (min/avg/max) with section/lab filter and score-distribution histograms
+  - **Rubric breakdown** — collapsible report showing how often each check was applied, with bars, options, table, and by-section visualizations; AND/OR/NOT filter builder; CSV export; and drill-in to filter the submissions table to a matching cohort
+  - **Shared default views** — instructors can save the current rubric report configuration as the default for all staff
+  - Submissions table now shows the grader column by default and has a cleaner selection toolbar
+
+#### Bug fixes
+- **Fixed lab section deletion** — Lab sections can now be deleted by instructors (hard-delete instead of soft-delete) ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Fixed submission review scores floored at 0** — Submission review scores are now correctly floored at 0 and the progress bar is clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+
+### June 1, 2026
+
+#### Bug fixes
+- **Fixed non-deterministic line comment ordering under load** — Comments on the same line now sort deterministically by `id` as a tiebreaker, preventing scrambled annotation blocks when multiple comments share the same timestamp ([#803](https://github.com/pawtograder/platform/pull/803))
+
+### May 31, 2026
+
+#### Bug fixes
+- **Fixed group repo preservation when dissolving empty groups** — Repositories with submissions are now preserved when an empty group is dissolved ([#800](https://github.com/pawtograder/platform/pull/800))
+
+### May 30, 2026
+
+#### New features
+- **Advisory suggested due date for assignments** — Instructors can set an optional suggested due date on assignments — an earlier, recommended target shown to students alongside the hard deadline. It is purely informational and does not affect submission enforcement, late tokens, or lab scheduling. Supports standards/mastery workflows where students resubmit freely until the hard deadline ([#791](https://github.com/pawtograder/platform/pull/791))
+
 ## April 2026
 
 ### April 29, 2026
