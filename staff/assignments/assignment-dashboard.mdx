@@ -12,73 +12,80 @@ The assignment dashboard provides a centralized view of all key metrics and info
 
 Navigate to any assignment to view its dashboard — it is the default landing page for each assignment. For a course-wide view of all assignments, access the assignment dashboard from the course navigation.
 
-## Dashboard Components
+## Dashboard tabs
 
-### Assignment overview
+The assignment home page has two tabs:
 
-The top section displays essential assignment information:
+- **Dashboard** — the default view, described below.
+- **Grading assigned to me** — shows only the submissions assigned to the current grader for review.
 
-- **Assignment name and description**
-- **Due date and time**
-- **Release status**: Whether the assignment is visible to students (Draft, Released, Due, Closed)
-- **Submission count**: Number of students who have submitted
+## Dashboard components
 
-### Submission statistics
+### Grading status panel
 
-Track student progress with real-time statistics:
+The top of the dashboard shows a compact grading status bar with:
 
-- **Total submissions**: Number of student submissions received
-- **On-time vs. late**: Breakdown of submission timing
-- **Missing submissions**: Students who haven't submitted yet
-- **Submission rate**: Percentage of enrolled students who have submitted
-- **Average score**: Current average across all graded submissions
+- **Graded / total**: How many submission reviews have been marked complete.
+- **Released / total**: How many reviews have been released to students.
+- **Finalize grading**: Marks every eligible submission review complete (those whose required rubric checks are all applied). This does not release grades to students.
+- **Release all** / **Unrelease all**: Bulk-release or bulk-unrelease all grading reviews for the assignment, with a confirmation step.
 
-### Grading progress
+Per-submission release and unrelease remain available in the submissions table below by selecting rows.
 
-Monitor grading status across all submissions:
+### Score statistics
 
-- **Graded**: Submissions with completed reviews
-- **In progress**: Submissions currently being graded
-- **Not started / pending**: Submissions awaiting grading assignment or review
-- **Released grades**: Grades that have been released to students
+Compact stat tiles show **min / average / max** and a sparkline histogram for:
 
-#### Grader workload
+- **Total score**
+- **Autograder score**
+- **Submissions per student**
 
-View grading distribution across your staff:
+Use the **Filter** dropdown to scope statistics to a specific class section or lab section.
 
-- Which graders are assigned to which submissions
-- Completion rates per grader
-- Overdue grading tasks
+Click **Show detailed distributions** to expand full histograms for each metric.
 
-### Student engagement metrics
+### Rubric breakdown
 
-Track how students are engaging with the assignment:
+The **Rubric breakdown** section (collapsed by default) shows how often each rubric check was applied across a cohort of submissions. It is instructor-only and loads on first open.
 
-- **Repository activity**: Commit frequency and timing
-- **Autograder runs**: How often students are testing their code
-- **Help requests**: Office hours requests related to this assignment
-- **Discussion posts**: Questions and discussions about the assignment
+#### Visualizations
 
-### Recent activity
+Switch between four views using the buttons in the toolbar:
 
-See the latest updates and actions:
+| View | Description |
+| --- | --- |
+| **Bars** | Horizontal progress bars showing the application rate per check, grouped by criterion. |
+| **Options** | Per-option breakdown for choice-style checks (checks with multiple point options). |
+| **Table** | Tabular view of check name, applied count, and percentage. |
+| **By section** | Heatmap comparing application rates across class sections. |
 
-- Recent submissions
-- Grading completions
-- Student questions or issues
-- System notifications
+#### Cohort filtering
+
+By default the cohort is all students with an active submission. Use the **Quick filter** dropdown to instantly scope to a criterion or a specific check. For more complex filters, expand **Advanced filter** to build AND/OR/NOT trees over predicates including:
+
+- Check applied / option selected
+- Class section / lab section
+- Score at least / score at most
+
+Click any bar, option row, or table row to filter the submissions table below to the matching students. Use **Filter table to these N** to apply the current cohort filter to the table.
+
+#### Saved default view
+
+Instructors can save the current filter + visualization as the **shared default** for all staff on this assignment. Click **Save as default** (a confirmation popover warns that this is a shared view). Any staff member can click **Reset to default** to restore the saved view. The provenance (saved by whom and when) is shown below the toolbar.
+
+Export the current view as CSV with **Export CSV**.
+
+### Submissions table
+
+The submissions table lists all students who have made at least one submission. Select rows to release or unrelease their grading reviews. Use the **Export grades** and **Download all** buttons in the page header to export data for the whole assignment.
+
+<Note>
+Only students who have made a submission appear in the table. To see every student's repository status, visit the **Repository Status** page.
+</Note>
 
 ### Quick actions
 
-Perform common assignment management tasks directly from the dashboard:
-
-- **View all submissions**: Navigate to the submissions list.
-- **Manage grading**: Assign grading tasks to staff.
-- **Release grades**: Make graded submissions visible to students.
-- **Edit assignment**: Modify assignment settings and configuration.
-- **View test insights**: Access the test insights dashboard.
-- **Check security**: Open the security dashboard.
-- **Export data**: Download submission and grading data.
+Export controls (**Export grades**, **Download all**) appear in the assignment page header for instructors.
 
 ## Filtering and Sorting
 
