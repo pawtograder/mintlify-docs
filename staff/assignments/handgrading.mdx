@@ -61,7 +61,7 @@ The grading interface supports a range of file types in both the **Files** and *
 
 | Format | Rendering |
 | --- | --- |
-| Source code | Syntax highlighting, line numbers |
+| Source code | Monaco editor with syntax highlighting, line numbers, and code navigation |
 | Plain text (`.txt`, `.log`, `.csv`) | Inline view with line numbers and copy support |
 | Markdown (`.md`) | Full formatting: headers, lists, code blocks, links, tables |
 | HTML | Sandboxed iframe with CSS preserved |
@@ -69,6 +69,25 @@ The grading interface supports a range of file types in both the **Files** and *
 | Other binary | Download link |
 
 Artifacts are files configured by the instructor in the autograder settings (for example, `reports/*.md` or `output.txt`). They typically contain test output, generated reports, coverage data, or other deliverables that provide context for grading.
+
+### Monaco editor
+
+By default, source code files open in the Monaco editor — the same editor that powers VS Code. The Monaco editor provides:
+
+- **File tree sidebar**: Navigate between submission files with a collapsible folder tree. Comment count badges show which files have annotations.
+- **File tabs**: Open multiple files as tabs and switch between them without losing your place.
+- **Split view**: Click the split-pane icon in the tab bar to open a second editor pane side-by-side for comparing files.
+- **Cross-file Go to Definition**: Press `F12` or `Cmd/Ctrl+Click` on a symbol to jump to its definition — works across files for Java, Python, and TypeScript.
+- **Keyboard shortcuts for navigation**:
+  - `j` / `k` or `↓` / `↑` — move to the next or previous file in the tree
+  - `n` / `p` — jump to the next or previous commented line
+  - `Cmd/Ctrl+.` — open the quick-apply rubric palette for the cursor's line
+
+A **New editor view** toggle in the file viewer lets graders switch back to the classic plain-text view if preferred. The choice is saved per user.
+
+### Quick-apply rubric checks
+
+Press `Cmd/Ctrl+.` while the editor is focused to open the **quick-apply palette**. Type to fuzzy-search rubric checks by name or criterion, then press `Enter` (or a number key `1`–`9`) to apply the check to the current line. Checks that require a comment open the annotation dialog automatically.
 
 ## Applying rubric checks and annotations
 
