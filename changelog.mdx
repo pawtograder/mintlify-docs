@@ -4,6 +4,22 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 5–7, 2026
+
+#### Grading improvements
+- **Monaco editor for submission grading** — The submission file viewer now uses the Monaco editor (the same editor as VS Code) by default. New capabilities include a file tree sidebar with comment count badges, multi-file tabs, optional split-view pane, cross-file Go to Definition for Java/Python/TypeScript, a quick-apply rubric check palette (`Ctrl+.`/`Cmd+.`), and keyboard shortcuts for file navigation (`j`/`k`) and comment jumping (`n`/`p`). A toggle in the file pane lets graders switch back to the classic syntax-highlighted view; the preference is saved automatically ([#565](https://github.com/pawtograder/platform/pull/565))
+- **Assignment dashboard + rubric report builder** — The assignment home page is now a full dashboard with a grading status panel (Finalize grading, Release all, Unrelease all), score statistics with section/lab filtering and sparkline histograms, and a collapsible rubric breakdown report. The rubric report shows per-check application rates across a cohort, supports AND/OR/NOT filter trees, four visualization modes (bars, options, table, by-section), CSV export, drill-in cohort filtering of the submissions table, and a shared per-assignment saved default view for instructors ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Grader name column now visible by default** — The grader name column in the submissions table is now shown by default ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Submission review scores floored at 0** — Submission review scores can no longer go below 0; the progress bar is also clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+
+#### Bug fixes
+- **Fixed lab section deletion** — Instructors can now delete lab sections that have no active students ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Fixed Monaco editor model leak** — Resolved a memory leak in the submission grading view when switching between files ([#820](https://github.com/pawtograder/platform/pull/820))
+- **Fixed stale-bundle errors on deploy** — The app now self-heals "reading 'call'" errors that could appear after a deployment ([#810](https://github.com/pawtograder/platform/pull/810))
+- **Fixed group repo preservation** — Group repositories with submissions are now preserved when dissolving empty groups ([#800](https://github.com/pawtograder/platform/pull/800))
+
 ## April 2026
 
 ### April 29, 2026
