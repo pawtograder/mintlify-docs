@@ -4,6 +4,48 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 8, 2026
+
+#### Infrastructure
+- **Shared wildcard TLS certificate for preview environments** — Preview deploy environments now use a shared wildcard TLS certificate instead of per-PR Let's Encrypt certificates, reducing provisioning time for preview deployments ([#822](https://github.com/pawtograder/platform/pull/822))
+
+### June 7, 2026
+
+#### Bug fixes
+- **Auth API URL fix** — Fixed an issue where the `/auth/v1` prefix was missing from the API external URL, which could cause authentication failures in some configurations ([#818](https://github.com/pawtograder/platform/pull/818))
+
+### June 6, 2026
+
+#### Bug fixes
+- **Monaco editor memory leak fix** — Fixed a model leak in the submission grading view that could cause memory growth when switching between many files ([#820](https://github.com/pawtograder/platform/pull/820))
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco code editor for submission grading** — The submission file viewer now uses a Monaco-based editor (the same editor that powers VS Code) by default. New capabilities include ([#565](https://github.com/pawtograder/platform/pull/565)):
+  - **File tree sidebar** with collapsible folders and comment count badges
+  - **File tabs** and optional **split-view** pane for side-by-side file comparison
+  - **Cross-file Go to Definition** (F12 / Cmd+Click) for Java, Python, and TypeScript
+  - **Quick-apply rubric checks** via keyboard shortcut (`Ctrl+.` / `Cmd+.`) — opens a searchable palette to apply a check to the cursor line without the right-click menu
+  - **Keyboard navigation**: `j`/`k` or arrow keys to move between files; `n`/`p` to jump between commented lines
+  - Graders can toggle back to the classic syntax-highlighted view using the **New editor view** switch
+
+### June 4, 2026
+
+#### Grading improvements
+- **Assignment dashboard and rubric report builder** — The assignment home page is now a full dashboard with ([#806](https://github.com/pawtograder/platform/pull/806)):
+  - **Grading status panel** with Finalize grading, Release all, and Unrelease all actions
+  - **Score statistics** (min/max/avg) with class-section and lab-section filtering and sparkline histograms
+  - **Rubric breakdown** — shows how often each rubric check was applied across the cohort, with bars, options, table, and by-section visualizations; supports AND/OR/NOT filter builder; clicking a bar filters the submissions table to matching students
+  - **Shared default views** — instructors can save the current rubric breakdown configuration as the default for all staff
+  - Per-submission Release/Unrelease is now contextual on row selection in the submissions table
+
+#### Bug fixes
+- **Lab sections can now be deleted** — Fixed an issue where lab sections with no students could not be deleted due to soft-delete constraints ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Submission review scores floored at 0** — Submission review scores are now clamped to a minimum of 0; the progress bar is also clamped to prevent overflow ([#812](https://github.com/pawtograder/platform/pull/812))
+
 ## April 2026
 
 ### April 29, 2026
