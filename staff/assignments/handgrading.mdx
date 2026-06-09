@@ -66,6 +66,13 @@ Click a student or group name to open the grading interface for that submission.
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
 
+### Grading score display
+
+The rubric sidebar always shows the correct earned score for each criterion:
+
+- **Deduction-only criteria**: The penalty is clamped to the criterion's `total_points`, so the earned score never goes below 0 and the header can never show earned > possible.
+- **Grader sidebar tally**: The running tally in the grader-facing sidebar shows the raw applied sum uncapped, so over-cap adjustments (e.g. a regrade tweak that pushes a criterion above its max) are visible to graders. The student-facing summary always caps at the criterion maximum.
+
 ## Viewing files and artifacts
 
 The grading interface supports a range of file types in both the **Files** and **Artifacts** tabs.
