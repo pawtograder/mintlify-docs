@@ -61,7 +61,7 @@ The grading interface supports a range of file types in both the **Files** and *
 
 | Format | Rendering |
 | --- | --- |
-| Source code | Syntax highlighting, line numbers |
+| Source code | Monaco editor with syntax highlighting, line numbers, and code navigation |
 | Plain text (`.txt`, `.log`, `.csv`) | Inline view with line numbers and copy support |
 | Markdown (`.md`) | Full formatting: headers, lists, code blocks, links, tables |
 | HTML | Sandboxed iframe with CSS preserved |
@@ -69,6 +69,19 @@ The grading interface supports a range of file types in both the **Files** and *
 | Other binary | Download link |
 
 Artifacts are files configured by the instructor in the autograder settings (for example, `reports/*.md` or `output.txt`). They typically contain test output, generated reports, coverage data, or other deliverables that provide context for grading.
+
+### Monaco code editor
+
+Source code files open in a Monaco-based editor (the same editor used in VS Code) in read-only mode. The Monaco editor provides:
+
+- **File tree sidebar**: Navigate between submission files with comment count badges showing how many annotations exist per file.
+- **File tabs**: Switch between recently opened files without leaving the grading view.
+- **Split-view pane**: Open a second file side-by-side for multi-file review.
+- **Cross-file Go to Definition**: Jump to definitions across files for Java, Python, and TypeScript submissions.
+- **Quick-apply rubric checks**: Press `Ctrl+.` (or `Cmd+.` on macOS) on any line to apply a rubric check directly from the editor without switching to the sidebar.
+- **Keyboard shortcuts**:
+  - `j` / `↓` and `k` / `↑` — navigate between files in the file tree
+  - `n` and `p` — jump to the next or previous inline comment in the current file
 
 ## Applying rubric checks and annotations
 
