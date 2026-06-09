@@ -55,6 +55,25 @@ Click a student or group name to open the grading interface for that submission.
   <img src="/images/staff/assignments/handgrading-1756060471440.png" alt="Individual submission grading interface" />
 </Frame>
 
+## Monaco editor view
+
+The grading interface includes a full Monaco-based code editor for reviewing submission files. This view provides a richer code navigation experience alongside the standard file viewer.
+
+### Features
+
+- **File tree sidebar**: Navigate between submission files with a collapsible tree. Comment count badges show how many annotations exist per file.
+- **File tabs**: Open multiple files in tabs and switch between them without losing your place.
+- **Split-view pane**: Open a second editor pane to compare two files side by side.
+- **Cross-file Go to Definition**: Jump to definitions across files for Java, Python, and TypeScript submissions.
+- **Quick-apply rubric checks**: Press `Ctrl+.` (or `Cmd+.` on macOS) to open the rubric check picker and apply a check at the current cursor position without leaving the editor.
+- **Keyboard shortcuts for navigation**:
+  - `j` / `↓` — next file
+  - `k` / `↑` — previous file
+  - `n` — jump to next comment
+  - `p` — jump to previous comment
+
+The Monaco editor is available as an alternative view option on the submission grading page. The standard file viewer remains available for submissions where the editor is not needed.
+
 ## Viewing files and artifacts
 
 The grading interface supports a range of file types in both the **Files** and **Artifacts** tabs.
