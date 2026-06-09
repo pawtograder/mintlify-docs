@@ -61,7 +61,7 @@ The grading interface supports a range of file types in both the **Files** and *
 
 | Format | Rendering |
 | --- | --- |
-| Source code | Syntax highlighting, line numbers |
+| Source code | Monaco editor with syntax highlighting, line numbers, and minimap |
 | Plain text (`.txt`, `.log`, `.csv`) | Inline view with line numbers and copy support |
 | Markdown (`.md`) | Full formatting: headers, lists, code blocks, links, tables |
 | HTML | Sandboxed iframe with CSS preserved |
@@ -70,9 +70,41 @@ The grading interface supports a range of file types in both the **Files** and *
 
 Artifacts are files configured by the instructor in the autograder settings (for example, `reports/*.md` or `output.txt`). They typically contain test output, generated reports, coverage data, or other deliverables that provide context for grading.
 
+### Monaco code editor
+
+The **Files** tab uses a Monaco-based editor (the same editor that powers VS Code) by default. A toggle in the file header lets you switch to the classic plain-text view if preferred — your choice is saved automatically.
+
+The Monaco editor provides:
+
+- **File tree sidebar** — navigate between submission files with comment-count badges on each file.
+- **File tabs** — open multiple files at once and switch between them without losing your place.
+- **Split view** — click the split-pane icon in the tab bar to open a second editor pane side-by-side for comparing files.
+- **Cross-file go to definition** — press `F12` or `Cmd/Ctrl+Click` on a symbol to jump to its definition, even across files. Supported for Java, Python, and TypeScript.
+- **Minimap** — a scrollable overview of the file on the right edge of the editor.
+- **Deep-link line anchors** — links to specific lines (e.g. from help requests) scroll and highlight the target line automatically.
+
+### Keyboard shortcuts (Files tab)
+
+| Action | Shortcut |
+| --- | --- |
+| Next file | `j` or `↓` |
+| Previous file | `k` or `↑` |
+| Next comment | `n` or `]` |
+| Previous comment | `p` or `[` |
+| Quick-apply a rubric check | `Ctrl/Cmd+.` |
+
 ## Applying rubric checks and annotations
 
-Rubric checks are applied from the rubric sidebar. For checks that target specific lines of code or sections of an artifact, you can leave inline annotations:
+Rubric checks are applied from the rubric sidebar. For checks that target specific lines of code or sections of an artifact, you can leave inline annotations.
+
+**In the Monaco editor (default):**
+
+1. Right-click on the line you want to annotate.
+2. Select a criterion from the context menu — a flyout lists the checks for that criterion.
+3. Click a check to apply it immediately, or choose **Apply with comment…** to add a note.
+4. For a faster workflow, press `Ctrl/Cmd+.` to open the quick-apply palette, type to filter checks, and press `Enter` to apply.
+
+**In the classic view:**
 
 1. Open the **Files** or **Artifacts** tab.
 2. Click on the line (or section, for markdown) you want to annotate.
