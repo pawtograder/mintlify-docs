@@ -4,6 +4,57 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 9, 2026
+
+#### Bug fixes
+- **Fixed PostgREST query-param accumulation** - Resolved 400 errors caused by query parameter accumulation in PostgREST requests, and reduced filter extension noise ([#829](https://github.com/pawtograder/platform/pull/829))
+- **Monaco editor YAML worker crash recovery** - The Monaco editor now recovers gracefully from YAML worker crashes instead of becoming unresponsive ([#827](https://github.com/pawtograder/platform/pull/827))
+- **Corrupt session token recovery** - Pawtograder now automatically clears corrupt session tokens and prompts re-authentication instead of showing a broken state ([#827](https://github.com/pawtograder/platform/pull/827))
+
+### June 8, 2026
+
+#### Grading fixes
+- **Active submission score on student dashboard** - The assignments tab now correctly shows the grade for the active (graded) submission. Previously, if a later non-grading submission existed, the dashboard showed that submission's unreleased autograder-only score instead of the active submission's released total ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Hand-grading rollup earned/possible display** - Fixed a display bug where deduction-only criteria could show earned points exceeding the possible maximum (e.g., "15 / 9"). The rollup now correctly floors deduction penalties and the header can never show earned > possible ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Unreleased scores gated in student summary** - The `get_student_summary` function no longer leaks total scores to students before grades are released. Students see `null` until the review is released; staff continue to see in-progress totals ([#823](https://github.com/pawtograder/platform/pull/823))
+
+#### Infrastructure
+- **Auto-build and deploy on push to staging** - Pushes to the `staging` branch now automatically trigger a build and deploy ([#817](https://github.com/pawtograder/platform/pull/817))
+- **Shared wildcard TLS certificate for preview environments** - Preview deploy environments now use a shared wildcard TLS certificate instead of per-PR Let's Encrypt certificates, reducing provisioning time and rate-limit risk ([#822](https://github.com/pawtograder/platform/pull/822))
+
+### June 7, 2026
+
+#### Bug fixes
+- **Auth API external URL prefix** - Fixed authentication issues caused by a missing `/auth/v1` prefix in `API_EXTERNAL_URL` ([#818](https://github.com/pawtograder/platform/pull/818))
+- **Sentry DSN for edge functions** - Edge functions now correctly receive the `SENTRY_DSN` environment variable for error reporting ([#819](https://github.com/pawtograder/platform/pull/819))
+
+### June 6, 2026
+
+#### Bug fixes
+- **Monaco editor model leak in submission grading view** - Fixed a memory leak where Monaco editor models were not disposed when navigating between submissions, which could degrade browser performance during long grading sessions ([#820](https://github.com/pawtograder/platform/pull/820))
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco editor for submission grading** - The submission grading view now includes a full Monaco-based code editor with a file tree sidebar, file tabs, split-view pane, cross-file Go to Definition (Java, Python, TypeScript), quick-apply rubric checks (`Ctrl+.`), and keyboard shortcuts for file and comment navigation ([#565](https://github.com/pawtograder/platform/pull/565))
+
+#### Bug fixes
+- **Self-heal stale-bundle errors on deploy skew** - The app now automatically recovers from "reading 'call'" errors caused by stale JavaScript bundles after a deployment ([#810](https://github.com/pawtograder/platform/pull/810))
+
+### June 4, 2026
+
+#### Grading improvements
+- **Assignment dashboard rubric report builder** - Instructors can now open a **Rubric Report** from the assignment dashboard to see how frequently each rubric check was applied across all submissions ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Submission review scores floored at 0** - Submission review scores can no longer go below 0; the progress bar is also clamped to prevent overflow display ([#812](https://github.com/pawtograder/platform/pull/812))
+
+#### Bug fixes
+- **Lab sections can now be deleted** - Lab sections are now hard-deleted so instructors can remove them from the course ([#811](https://github.com/pawtograder/platform/pull/811))
+
+#### Infrastructure
+- **Kubernetes Helm chart** - Added a full Kubernetes Helm chart for deployment and per-PR preview environments, including app components (web, auth, realtime, storage, edge functions), Prometheus metrics, Grafana dashboards, shared cross-replica cache, and edge-functions autoscaling ([#741](https://github.com/pawtograder/platform/pull/741))
+
 ## April 2026
 
 ### April 29, 2026
