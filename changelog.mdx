@@ -4,6 +4,35 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 9, 2026
+
+#### Bug fixes
+- **Monaco editor crash recovery** — The Monaco YAML worker crash no longer takes down the editor; it now self-heals automatically. Corrupt session tokens are also detected and cleared on startup so users are not stuck in a broken state ([#827](https://github.com/pawtograder/platform/pull/827))
+
+### June 8, 2026
+
+#### Grading improvements
+- **Active submission score on student dashboard** — The assignments tab now always shows the score for the active (graded) submission. Previously, if a student made a later ungraded submission, the dashboard could show the wrong denominator or fall back to the autograder-only score ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Hand-grading rollup fix** — Deduction-only rubric criteria no longer produce "earned exceeds possible" totals. The per-criterion earned points are now computed consistently with the server-side score recomputation logic ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Unreleased scores gated from students** — The `get_student_summary` RPC no longer leaks `total_score` / `total_autograde_score` to students before a review is released ([#823](https://github.com/pawtograder/platform/pull/823))
+
+#### CI/CD
+- **Auto-build and deploy on push to staging** — Pushes to the `staging` branch now automatically build and deploy ([#817](https://github.com/pawtograder/platform/pull/817))
+
+### June 5–6, 2026
+
+#### New features
+- **Monaco code editor for submission grading** — The submission file viewer now uses a Monaco-based editor (the same editor that powers VS Code) by default. New capabilities include a file tree sidebar with comment-count badges, file tabs, optional split-view pane, cross-file "Go to Definition" for Java/Python/TypeScript, a quick-apply rubric palette (`Ctrl/Cmd+.`), and keyboard shortcuts for file navigation (`j`/`k`) and comment jumping (`n`/`p`). A toggle in the file header lets graders switch back to the classic view ([#565](https://github.com/pawtograder/platform/pull/565))
+- **Assignment dashboard + instructor rubric report builder** — The assignment home page is now a single-page dashboard with score statistics (min/max/avg with sparklines), section/lab filtering, and a collapsible **Rubric breakdown** panel. The rubric breakdown shows how often each check was applied across a cohort, supports bars/options/table/by-section visualizations, a nested AND/OR/NOT filter builder, a rubric-item selector, CSV export, and drill-in to filter the submissions table. Instructors can save the current view as a shared default for all staff. The dashboard also adds **Finalize grading**, **Release all**, and **Unrelease all** assignment-level actions ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Monaco editor model leak fixed** — Switching between submissions in the grading view no longer leaks Monaco editor models ([#820](https://github.com/pawtograder/platform/pull/820))
+- **Submission scores floored at 0** — Submission review scores can no longer go below 0; the progress bar is also clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+- **Lab sections can now be deleted** — Lab sections are now hard-deleted so instructors can remove them ([#811](https://github.com/pawtograder/platform/pull/811))
+- **Stale-bundle errors self-heal on deploy** — "reading 'call'" errors caused by deploy skew now trigger an automatic page reload ([#810](https://github.com/pawtograder/platform/pull/810))
+
 ## April 2026
 
 ### April 29, 2026
