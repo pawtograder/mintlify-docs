@@ -4,6 +4,51 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 14, 2026
+
+#### Grading improvements
+- **Preview test assignment submissions as students** — Staff can now click any submission link on the Test Assignment page to open it in student view. A banner confirms the view and shows your name; hidden autograder tests, unreleased rubric comments, and staff-only controls are filtered out. Click **Exit student view** in the banner to return to the full instructor or grader view of the same submission. Both instructors and graders can use this preview ([#835](https://github.com/pawtograder/platform/pull/835))
+
+### June 9, 2026
+
+#### Bug fixes
+- **Fixed SSR crash on avatar images** — Sanitized avatar image sources to prevent server-side rendering stream crashes ([#828](https://github.com/pawtograder/platform/pull/828))
+- **Fixed PostgREST query-param accumulation** — Resolved 400 errors caused by query parameter accumulation in PostgREST requests ([#829](https://github.com/pawtograder/platform/pull/829))
+- **Fixed Monaco editor YAML worker crash and corrupt session token recovery** — The editor now recovers gracefully from YAML worker crashes and corrupt session tokens ([#827](https://github.com/pawtograder/platform/pull/827))
+
+### June 8, 2026
+
+#### Grading improvements
+- **Fixed grade display on student dashboard** — The assignments tab now correctly shows the active submission's grade. Previously, if a later non-graded submission existed, the dashboard showed the wrong score and denominator ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed hand-grading rollup "earned exceeds possible"** — Deduction-only rubric criteria no longer produce earned scores that exceed the criterion maximum ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Gated unreleased scores in student summary** — The `get_student_summary` RPC no longer leaks total scores to students before grades are released ([#823](https://github.com/pawtograder/platform/pull/823))
+
+#### Infrastructure
+- **Auto-build and deploy on push to staging** — Staging now automatically builds and deploys on every push ([#817](https://github.com/pawtograder/platform/pull/817))
+- **Shared wildcard TLS certificate for preview environments** — Preview environments now use a shared wildcard TLS certificate instead of per-PR Let's Encrypt certificates ([#822](https://github.com/pawtograder/platform/pull/822))
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco code editor for submission grading** — The Files tab in the grading interface now uses a Monaco-based editor (the same editor that powers VS Code) by default. New features include a file tree sidebar with comment count badges, file tabs, optional split-view pane, cross-file go-to-definition for Java/Python/TypeScript, a quick-apply rubric palette (Cmd/Ctrl+.), and keyboard shortcuts for file navigation (j/k or arrow keys) and comment jumping (n/p). A toggle lets graders switch back to the classic view ([#565](https://github.com/pawtograder/platform/pull/565))
+- **Fixed Monaco editor model leak** — Resolved a memory leak in the Monaco editor when switching between submissions ([#820](https://github.com/pawtograder/platform/pull/820))
+
+#### Infrastructure
+- **Fixed stale-bundle errors on deploy skew** — The app now self-heals "reading 'call'" errors that occur when a new deployment is served while old bundles are still cached ([#810](https://github.com/pawtograder/platform/pull/810))
+
+### June 4, 2026
+
+#### Assignment dashboard
+- **Richer assignment dashboard** — The assignment home page is now a full dashboard with score statistics (min/max/avg with sparklines), section/lab filtering, score distribution histograms, and a **Rubric breakdown** section. The rubric breakdown shows how often each check was applied across the cohort, supports AND/OR/NOT filters, multiple visualization modes (bars, options, table, by-section), CSV export, and a shared per-assignment default view that instructors can save for all staff ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Finalize grading and bulk release controls** — The dashboard now includes **Finalize grading** (marks all eligible reviews complete), **Release all**, and **Unrelease all** assignment-level actions with confirmation popovers. Per-submission release/unrelease remains contextual in the submissions table ([#806](https://github.com/pawtograder/platform/pull/806))
+- **Improved assignment creation form** — The new-assignment form is reorganized into grouped cards (Basics, Schedule, Late submissions, Groups, Self-evaluation) with a collapsible Advanced settings section. Validation errors now show a toast naming the invalid fields and auto-scroll to the first problem ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Fixed submission review scores floored at 0** — Submission review scores no longer go negative; the progress bar is also clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+- **Fixed lab section deletion** — Lab sections can now be hard-deleted by instructors ([#811](https://github.com/pawtograder/platform/pull/811))
+
 ## April 2026
 
 ### April 29, 2026
