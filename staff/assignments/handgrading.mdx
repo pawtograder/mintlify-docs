@@ -61,7 +61,7 @@ The grading interface supports a range of file types in both the **Files** and *
 
 | Format | Rendering |
 | --- | --- |
-| Source code | Syntax highlighting, line numbers |
+| Source code | Monaco editor with syntax highlighting, line numbers, and code navigation |
 | Plain text (`.txt`, `.log`, `.csv`) | Inline view with line numbers and copy support |
 | Markdown (`.md`) | Full formatting: headers, lists, code blocks, links, tables |
 | HTML | Sandboxed iframe with CSS preserved |
@@ -69,6 +69,22 @@ The grading interface supports a range of file types in both the **Files** and *
 | Other binary | Download link |
 
 Artifacts are files configured by the instructor in the autograder settings (for example, `reports/*.md` or `output.txt`). They typically contain test output, generated reports, coverage data, or other deliverables that provide context for grading.
+
+### Monaco code editor
+
+The **Files** tab uses a Monaco-based code editor (the same editor that powers VS Code) by default. The Monaco editor provides:
+
+- **File tree sidebar** — navigate between submission files with comment count badges on each file.
+- **File tabs** — open multiple files as tabs and switch between them without losing your place.
+- **Split view** — click the split-pane icon in the tab bar to open a second editor pane side-by-side for comparing files.
+- **Cross-file go to definition** — press **F12** (or **Cmd/Ctrl+Click**) on a symbol in Java, Python, or TypeScript to jump to its definition, even if it is in a different file.
+- **Keyboard shortcuts** — navigate files and comments without leaving the keyboard:
+  - **j / k** or **↓ / ↑** — move to the next or previous file in the tree.
+  - **n / p** — jump to the next or previous commented line in the current file.
+  - **Cmd/Ctrl+.** — open the quick-apply rubric palette to apply a check to the cursor line.
+- **Deep-link scrolling** — links to specific lines (e.g. from help requests or rubric annotations) scroll the editor to the correct line and briefly highlight it.
+
+A toggle in the file viewer lets you switch back to the classic plain-text view if preferred. Your choice is saved per-user.
 
 ## Applying rubric checks and annotations
 
