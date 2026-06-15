@@ -82,6 +82,23 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## Creating a New Course
+
+Platform administrators can create new courses from the **Admin** panel. The **Create Class** form includes:
+
+- **Course name and term** (required)
+- **GitHub Organization** — a dropdown populated from GitHub organizations where the Pawtograder GitHub App is installed. Select the organization that will host student repositories. If your organization is not listed, click **Install the GitHub App** and reopen the dialog after installation.
+- **Template Prefix** (required) — the prefix used for GitHub repository names (for example, `hw` produces repositories named `hw1`, `hw2`, etc.). This is required because enrolling staff triggers a GitHub team sync that needs both the organization and the prefix.
+- **Instructors** — add one or more instructors by email at creation time. When you enter an email address, Pawtograder checks whether the user already exists:
+  - **Matched existing user**: the instructor's name is pre-filled from their most recent enrollment profile. You can edit the name before submitting.
+  - **No match — enter name manually**: the user will be created and enrolled as an instructor with the name you provide.
+
+  Click **Add instructor** to add additional rows. Only rows with an email address entered are enrolled.
+
+<Note>
+The Template Prefix and GitHub Organization are both required when creating a class. Enrolling staff fires a GitHub team sync that needs both values. If you need to create a class without GitHub configuration (for example, via SIS import), the enrollment will succeed but GitHub team sync will be skipped until the organization and prefix are configured later.
+</Note>
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
