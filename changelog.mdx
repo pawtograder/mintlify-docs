@@ -4,6 +4,36 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 15, 2026
+
+#### Admin improvements
+- **Add instructors by email when creating a class** — The Create Class form now lets admins add instructors by email address at creation time. Pawtograder looks up whether the email matches an existing user and pre-fills their name; unrecognized emails prompt for a name and create a new account. Multiple instructors can be added in one step ([#834](https://github.com/pawtograder/platform/pull/834))
+- **Required GitHub org dropdown in Create Class** — The GitHub organization field is now a validated dropdown populated from the GitHub App installations, replacing the free-text box. Only orgs where the App is installed appear; an "Install the GitHub App" link is shown for orgs not yet listed. The Template Prefix field is also now required ([#834](https://github.com/pawtograder/platform/pull/834))
+
+### June 14, 2026
+
+#### Grading improvements
+- **Preview test assignment submissions as students** — Instructors and graders can now click a test submission link to open it in student view, with the same read-only banner, grade-release rules, rubric visibility, and hidden autograder-output behavior that students see. A banner at the top lets you exit back to the staff view at any time ([#835](https://github.com/pawtograder/platform/pull/835))
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco code editor for submission grading** — The submission file viewer now uses a Monaco-based editor (VS Code's editor) by default, with a toggle to switch back to the classic view. New features include:
+  - File tree sidebar with comment count badges for easy navigation between submission files
+  - File tabs and optional split-view pane for multi-file review
+  - Cross-file "Go to Definition" support for Java, Python, and TypeScript (F12 or Cmd+Click)
+  - Quick-apply rubric checks with keyboard shortcut (`Ctrl`+`.` / `Cmd`+`.`) for faster grading
+  - Keyboard shortcuts for file navigation (`j`/`k` or arrow keys) and comment jumping (`n`/`p`)
+  - Submission timestamp shown in the header without opening Submission History
+  ([#565](https://github.com/pawtograder/platform/pull/565))
+
+#### Bug fixes
+- **Fixed grade display on student dashboard** — The assignments dashboard now correctly shows the grade for the active submission rather than the most recently created one, fixing cases where a later non-graded submission caused the wrong score to appear ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed hand-grading rollup for deduction-only criteria** — Deduction-only rubric criteria no longer show earned points exceeding the maximum in the grading sidebar ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed unreleased score visibility** — Students can no longer see total scores before a review is released; the `get_student_summary` function now gates score data on release status ([#823](https://github.com/pawtograder/platform/pull/823))
+
 ## April 2026
 
 ### April 29, 2026
