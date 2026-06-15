@@ -236,7 +236,8 @@
           {
             "group": "Operations",
             "pages": [
-              "developers/monitoring"
+              "developers/monitoring",
+              "developers/deployment-channels"
             ]
           },
           {
