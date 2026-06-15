@@ -1,0 +1,88 @@
+---
+title: "Deployment Channels"
+description: "Run concurrent A/B builds of Pawtograder against the same database, pinned per course"
+icon: "split"
+---
+
+# Deployment Channels
+
+Deployment channels let you run multiple concurrent builds of the Pawtograder web app and edge functions against the **same database**, with each course pinned to a specific channel. This is the basis for the "ouroboros" workflow where a cohort developing Pawtograder runs their own build against real shared data.
+
+## How it works
+
+Each channel is served on its own single-label host (`<name>.<base-host>`). The app reads the `classes.deployment_channel` column in middleware and redirects `/course/<id>` requests to the channel's host, so one user can be enrolled in courses on different channels in the same session.
+
+Kong routes a channel host's `/functions/v1` traffic to that channel's edge-functions deployment. All other Supabase services (auth, REST, realtime, storage) are shared across channels.
+
+Channels are **off by default** — an empty `channels: []` in the Helm values renders the stable release byte-for-byte unchanged.
+
+## Configuring channels
+
+Add entries to the `channels` list in your Helm values:
+
+```yaml
+channels:
+  - name: team7
+    # host: team7.staging.pawtograder.net   # optional; default <name>.<global.hostname>
+    web:
+      image:
+        tag: "team7-<sha>"      # repository/pullPolicy default from web.image
+      replicas: 1
+    edgeFunctions:
+      image:
+        tag: "team7-<sha>"      # repository/pullPolicy default from edgeFunctions.image
+      replicas: 1
+
+# Required when channels with `web` are set and ingress.tls.enabled:
+channelWildcardTlsSecret: "staging-wildcard-tls"
+```
+
+Each channel entry renders its own `web-<name>` and `functions-<name>` Service and Deployment, plus a per-channel Ingress.
+
+## TLS
+
+Channel Ingresses use a shared wildcard TLS secret (`channelWildcardTlsSecret`) covering `*.<global.hostname>`. This avoids per-channel ACME issuance — provision the wildcard cert once with cert-manager DNS-01 and a reflector, the same way the `*.preview.pawtograder.net` cert is provisioned.
+
+If a channel's `host` is outside the wildcard zone, set `channels[].tls.secretName` to a per-channel cert secret instead.
+
+## Building channel images
+
+Channel web images must be built with the following build args baked in at image build time:
+
+| Build arg | Value |
+| --- | --- |
+| `NEXT_PUBLIC_PAWTOGRADER_CHANNEL` | The channel name (e.g. `team7`) |
+| `NEXT_PUBLIC_SUPABASE_URL` | The channel's public API URL |
+| `NEXT_PUBLIC_PAWTOGRADER_WEB_URL` | The channel's web host URL |
+| `NEXT_PUBLIC_CHANNEL_HOST_SUFFIX` | The base hostname suffix (e.g. `staging.pawtograder.net`) |
+| `NEXT_PUBLIC_SESSION_COOKIE_DOMAIN` | The parent domain for cross-channel session cookies (e.g. `.staging.pawtograder.net`) |
+
+`NEXT_PUBLIC_*` values are baked into the Next.js client bundle at build time and cannot be overridden at runtime.
+
+## Cross-channel sessions
+
+When `NEXT_PUBLIC_SESSION_COOKIE_DOMAIN` is set, auth cookies are scoped to the parent domain (e.g. `.staging.pawtograder.net`) so a session survives redirects between channel hosts. Leave this unset for local development, single-channel staging, or production.
+
+## Pinning a course to a channel
+
+Set the `deployment_channel` column on the course's row in the `classes` table. The value must be a DNS-1123 label (lowercase alphanumeric with optional internal hyphens, max 63 characters). The default value is `stable`.
+
+There is no in-app UI for this — use Supabase Studio or a SQL migration:
+
+```sql
+update public.classes
+set deployment_channel = 'team7'
+where id = <course_id>;
+```
+
+## Schema compatibility
+
+All channels share the same database. Channel code must be schema-compatible with the stable release — use expand/contract migrations only. Do not deploy a channel build that requires a migration that has not yet been applied to the shared database.
+
+## DNS prerequisites
+
+Before enabling channels, ensure:
+
+1. A wildcard DNS record `*.<global.hostname>` points to the load balancer.
+2. A cert-manager `Certificate` for `*.<global.hostname>` (DNS-01 challenge) is reflected into the namespace.
+3. `channelWildcardTlsSecret` is set to the reflected secret name.
