@@ -82,6 +82,25 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## Creating a New Class (Admin)
+
+Platform administrators can create new classes from the **Admin** portal. The Create Class form includes:
+
+### Adding instructors by email
+
+When creating a class, you can add instructors directly by email address. As you type an email and move focus away, Pawtograder looks up whether the address matches an existing user:
+
+- **Matched existing user** — the instructor's name is pre-filled from their most recent enrollment profile. You can edit the name before submitting.
+- **No match — enter name manually** — the email doesn't match any existing account. Enter the instructor's full name; Pawtograder will create an account and send an invitation.
+
+Click **Add instructor** to add additional rows. Each instructor is enrolled in the new class immediately when you click **Create Class**.
+
+### GitHub organization dropdown
+
+The GitHub organization field is now a required dropdown populated from the GitHub App installations. Only organizations where the Pawtograder GitHub App is already installed appear in the list. If your organization isn't listed, click **Install the GitHub App** and follow the GitHub prompts, then reopen the Create Class dialog to see it.
+
+The **Template Prefix** field (e.g., `hw`) is also required. It is used to name GitHub repositories for the course and must be set before instructors can be enrolled (GitHub team sync requires both the organization and prefix).
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
