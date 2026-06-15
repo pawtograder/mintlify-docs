@@ -4,6 +4,36 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 15, 2026
+
+#### Bug fixes
+- **Redirect home on missing course role** - Users who have no role in a course are now redirected to the home page instead of seeing a 500 error ([#830](https://github.com/pawtograder/platform/pull/830))
+
+### June 14, 2026
+
+#### Grading improvements
+- **Preview test submissions as students** - Instructors and graders can now click a test submission link and see exactly what a student would see: the "Viewing as student" banner is shown, unreleased scores and hidden autograder output are filtered out, and staff-only rubric checks are hidden. Click **Exit student view** in the banner to return to the full staff view of the same submission ([#835](https://github.com/pawtograder/platform/pull/835))
+
+### June 5–8, 2026
+
+#### Grading improvements
+- **Monaco editor for submission files** - The submission file viewer now uses the Monaco editor (the same editor that powers VS Code) by default, with a toggle to switch back to the classic view. New features include a file tree sidebar with comment count badges, file tabs, optional split-view pane, cross-file "Go to Definition" for Java/Python/TypeScript, keyboard shortcuts for file navigation (`j`/`k`) and comment jumping (`n`/`p`), and a quick-apply rubric palette (`Ctrl+.` / `Cmd+.`) ([#565](https://github.com/pawtograder/platform/pull/565))
+- **Fixed Monaco editor model leak** - Resolved a memory leak in the Monaco editor when switching between submissions in the grading view ([#820](https://github.com/pawtograder/platform/pull/820))
+
+#### Grade display fixes
+- **Fixed active submission score on dashboard** - The student assignments dashboard now correctly shows the grade for the active/graded submission rather than the most recently created one. Previously, if a later non-grading submission existed, the dashboard could show the wrong score ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed hand-grading rollup for deduction-only criteria** - Deduction-only rubric criteria no longer show "earned exceeds possible" in the hand-grading section. The earned points for deduction-only criteria are now correctly computed and capped ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Gated unreleased scores in student summary** - The student-callable `get_student_summary` function no longer leaks total scores before they are released to students ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Floored submission review scores at 0** - Submission review scores can no longer go below 0; the progress bar is also clamped ([#812](https://github.com/pawtograder/platform/pull/812))
+
+#### Bug fixes
+- **Fixed YAML worker crash recovery** - The Monaco YAML worker and corrupt session tokens are now recovered from gracefully ([#827](https://github.com/pawtograder/platform/pull/827))
+- **Fixed PostgREST query-param accumulation** - Resolved 400 errors caused by query parameter accumulation in PostgREST requests ([#829](https://github.com/pawtograder/platform/pull/829))
+- **Fixed SSR crash on avatar images** - Sanitized avatar image sources to prevent server-side rendering stream crashes ([#828](https://github.com/pawtograder/platform/pull/828))
+- **Fixed lab section deletion** - Lab sections can now be hard-deleted by instructors ([#811](https://github.com/pawtograder/platform/pull/811))
+
 ## April 2026
 
 ### April 29, 2026
