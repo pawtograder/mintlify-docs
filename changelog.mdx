@@ -4,6 +4,27 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 15, 2026
+
+#### Admin improvements
+- **Add instructors by email when creating a class** — The Create Class form now includes an **Instructors** section. Enter an instructor's email and Pawtograder looks up whether the user already exists: matched users have their name pre-filled; unmatched users can be created with a manually entered name. Multiple instructors can be added at creation time ([#834](https://github.com/pawtograder/platform/pull/834))
+- **GitHub org dropdown in Create Class** — The GitHub Organization field is now a validated dropdown populated from organizations where the Pawtograder GitHub App is installed, replacing the free-text input. An **Install the GitHub App** link is shown when your organization is not listed ([#834](https://github.com/pawtograder/platform/pull/834))
+
+#### Grading improvements
+- **Preview test submissions as a student** — Clicking a test submission link on the Test Assignment page now opens the submission in student view, showing exactly what students see: hidden autograder output, unreleased rubric comments, and staff-only controls are all filtered out. A banner identifies the student-view mode and provides an **Exit student view** button that returns to the same submission in the full instructor/grader view. Both instructors and graders can use this preview ([#835](https://github.com/pawtograder/platform/pull/835))
+
+#### Bug fixes
+- **Fixed grade display for active submissions** — The student assignments dashboard now correctly shows the grade for the active (graded) submission rather than the most recently created one. Previously, if a later non-graded submission existed, the dashboard showed that submission's score instead of the released grade ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed hand-grading rollup for deduction-only criteria** — Deduction-only rubric criteria no longer show "earned exceeds possible" in the grading sidebar. The earned points for a deduction-only criterion are now correctly computed as the penalty (capped at the criterion total), matching the canonical score computation ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed redirect on course access without a role** — Users who navigate to a course they have no role in are now redirected to the home page instead of seeing a 500 error ([#830](https://github.com/pawtograder/platform/pull/830))
+
+### June 8, 2026
+
+#### Grading improvements
+- **Monaco code editor for submission grading** — Source code files in the grading interface now open in a Monaco-based editor (the same engine as VS Code) by default. New capabilities include: a file tree sidebar with comment count badges, file tabs, optional split-view pane, cross-file Go to Definition for Java/Python/TypeScript, keyboard shortcuts for file navigation (`j`/`k`) and comment jumping (`n`/`p`), and a quick-apply rubric palette (`Ctrl+.`). A toggle lets graders switch back to the classic view; the preference is saved per user ([#565](https://github.com/pawtograder/platform/pull/565))
+
 ## April 2026
 
 ### April 29, 2026
