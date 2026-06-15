@@ -4,6 +4,34 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 15, 2026
+
+#### Deployment infrastructure
+- **A/B deployment channels** - Operators can now run multiple concurrent web and edge-functions builds against the same database, pinned per course via a new `classes.deployment_channel` column. Each channel is served on its own host (`<name>.<base-host>`); the app redirects each course to its channel's host so one user can use stable and canary courses in the same session. Channels are off by default — an empty `channels: []` in the Helm values renders the stable release unchanged ([#826](https://github.com/pawtograder/platform/pull/826))
+- **Redirect home instead of 500 when user has no role in course** - Users who navigate to a course they have no role in are now redirected home instead of seeing a 500 error ([#830](https://github.com/pawtograder/platform/pull/830))
+
+### June 14, 2026
+
+#### Assignment testing
+- **Preview test assignment submissions as students** - Staff can now open their own test assignment submissions in student view directly from the Test Assignment page. Submission links open with the same read-only banner, grade-release rules, rubric visibility, and hidden autograder-output behavior that students see. Both instructors and graders can use this feature. Use the banner to exit student view and compare the instructor or grader view ([#835](https://github.com/pawtograder/platform/pull/835))
+
+### June 8, 2026
+
+#### Grade display fixes
+- **Active submission score shown on dashboard** - The student assignments dashboard now correctly shows the grade for the active/graded submission. Previously, if a later non-grading submission existed, the dashboard showed that submission's score (which had no released grade) instead of the active submission's score ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Hand-grading rollup no longer shows earned exceeding possible** - Fixed a bug where deduction-only rubric criteria could cause the hand-grading section to display an earned score higher than the maximum possible (e.g. "15 / 9"). Deduction-only criteria now correctly compute the penalty as a floor at `-total_points` ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Unreleased scores hidden from student-callable API** - The `get_student_summary` function now gates total scores on release status, preventing students from seeing unreleased grades via the API ([#823](https://github.com/pawtograder/platform/pull/823))
+
+#### CI/CD
+- **Auto-build and deploy on push to staging** - Pushes to the staging branch now automatically trigger a build and deploy ([#817](https://github.com/pawtograder/platform/pull/817))
+
+### June 5, 2026
+
+#### Grading improvements
+- **Monaco editor for submission grading** - The submission grading view now uses Monaco editor in read-only mode, with a file tree sidebar, cross-file "Go to Definition" support for Java, Python, and TypeScript, quick-apply rubric checks with keyboard shortcuts (Ctrl+.), and keyboard shortcuts for file navigation (j/k or arrow keys) and comment jumping (n/p) ([#565](https://github.com/pawtograder/platform/pull/565))
+
 ## April 2026
 
 ### April 29, 2026
