@@ -6,7 +6,7 @@ icon: "flask-vial"
 
 # Testing an Assignment
 
-Although Pawtograder does *not* provide a feature to "impersonate" a student, it *does* provide a robust feature to allow staff to test an assignment. This feature provisions staff with a repository just like any other student would have, but it does *not* show up in the list of student submissions. You can even mark up the submission with rubric checks to perform a complete end-to-end test of the assignment.
+Pawtograder provides a robust feature to allow staff to test an assignment. This feature provisions staff with a repository just like any other student would have, but it does *not* show up in the list of student submissions. You can even mark up the submission with rubric checks to perform a complete end-to-end test of the assignment.
 
 ## Creating a Test Repository
 
@@ -32,9 +32,23 @@ After the submission completes, you'll see a link to view it on that "Test Assig
   <img src="/images/staff/assignments/testing-1756921180898.png" alt="Link to view the test submission" />
 </Frame>
 
+## Previewing submissions as a student
+
+Clicking a submission link on the Test Assignment page opens the submission in **student view** — the same read-only mode used when an instructor views a student's submission as that student. A banner at the top of the page identifies whose view you are in.
+
+In student view you see exactly what the student sees:
+
+- Only released autograder tests and output tabs are shown; hidden staff-only tests and output are filtered out.
+- Unreleased rubric comments and scores are hidden.
+- Staff-only UI controls (grading sidebar, "Complete Review" button, "Student's Due Date" panel, etc.) are not shown.
+
+Both instructors and graders can enter student view for their own test submissions.
+
+**To exit student view**, click **Exit student view** in the banner. The page returns to the same submission in the full staff view, so you can compare what students see against the instructor or grader view side-by-side.
+
 ## Grading Test Submissions
 
-The test submission page will look just like it will when viewing a student's submission. You can navigate between rubrics (if applicable) from the dropdown in the right sidebar. You can also navigate between submissions (from students or even from other staff members) from the dropdown in the top bar.
+After exiting student view, the submission page shows the full staff interface. You can navigate between rubrics (if applicable) from the dropdown in the right sidebar. You can also navigate between submissions (from students or even from other staff members) from the dropdown in the top bar.
 
 <Frame>
   <img src="/images/staff/assignments/testing-1756921280690.png" alt="Test submission grading interface with rubric sidebar" />
