@@ -90,3 +90,31 @@ Additional course-wide settings may include:
 - Enrollment synchronization preferences
 - GitHub organization settings
 - Email notification preferences
+
+---
+
+# Creating a new class (admin)
+
+Platform administrators create new classes from the **Admin → Classes** page.
+
+## GitHub organization
+
+The **GitHub Organization** field is now a required dropdown populated from the GitHub organizations where the Pawtograder GitHub App is installed. Select the organization that will host student repositories for this course.
+
+If your organization is not listed, click **Install the GitHub App** to install it on the organization, then reopen the dialog — the list refreshes automatically each time the dialog opens.
+
+<Note>
+The **Template Prefix** field is also required. It is used as the prefix for all GitHub repository names created for this course (for example, `hw` produces repos like `hw1-student-username`). Both the GitHub organization and template prefix must be set before instructors can be enrolled, because enrolling staff triggers a GitHub team sync that requires both values.
+</Note>
+
+## Adding instructors at creation
+
+You can add one or more instructors when creating the class. For each instructor row:
+
+1. Enter the instructor's email address and press **Tab** or click away.
+2. Pawtograder looks up the email against existing users:
+   - **Matched existing user** — the instructor's name is pre-filled from their most recent enrollment profile. You can edit the name before saving.
+   - **No match — enter name manually** — the email is not yet registered; type the instructor's full name. Pawtograder will create an account for them when the class is created.
+3. Click **Add instructor** to add more rows.
+
+Instructors are enrolled concurrently after the class is created. If any enrollment fails (for example, due to a duplicate email), a warning toast lists the affected emails — the class is still created successfully.
