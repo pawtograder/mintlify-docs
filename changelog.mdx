@@ -4,6 +4,37 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 18, 2026
+
+#### Assignment configuration
+- **Unified per-assignment student repository configuration** — The assignment create/edit form now has a **Student Repositories** section with five repository modes: staff-only template (default), student-visible template with student forks, fork from a prior assignment (multi-checkpoint workflows), no repository (file upload), and no submission (manual grading). Branch protection rules (block force-push, require pull request, required reviewers) are configurable per assignment. ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Pull request submission mode** — Fork-based assignments can now use **Pull request** mode: a PR the student opens against the upstream/class repo is the submission. Each push to the PR is recorded as a new submission version. Configurable PR identification (by base branch, head branch convention, or manual), upstream base branch, and optional "require open PR" grading condition. ([#781](https://github.com/pawtograder/platform/pull/781))
+- **File upload submissions** — Assignments with `repo_mode = none` accept file uploads directly from the student assignment page. Instructors and graders can also upload files on behalf of students from the assignment dashboard. ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-submission assignments** — Assignments with `repo_mode = no_submission` (presentations, oral exams) automatically create placeholder submissions for every student so graders have a row to attach rubric scores to. ([#781](https://github.com/pawtograder/platform/pull/781))
+
+### June 15, 2026
+
+#### Admin
+- **Add instructors by email when creating a class** — The Create Class dialog now supports adding instructors at creation time. Entering an email auto-looks up the user and pre-fills their name; unknown emails prompt for a name. Instructors are enrolled concurrently after the class is created. ([#834](https://github.com/pawtograder/platform/pull/834))
+- **Required GitHub org dropdown in Create Class** — The GitHub organization field is now a required dropdown populated from orgs where the Pawtograder GitHub App is installed, replacing the free-text input. An "Install the GitHub App" link is shown for orgs not yet listed. ([#834](https://github.com/pawtograder/platform/pull/834))
+
+#### Grading
+- **Preview test assignment submissions as students** — Submission links on the Test Assignment page now open in student view, showing exactly what students see (hidden staff-only tests, unreleased comments, rubric visibility rules). An **Exit student view** banner lets staff return to the full grading view of the same submission. Both instructors and graders can use this preview. ([#835](https://github.com/pawtograder/platform/pull/835))
+
+### June 5, 2026
+
+#### Grading
+- **Monaco editor for submission files** — The Files tab now uses the Monaco editor (VS Code's editor) by default, with a file tree sidebar, file tabs, optional split-view pane, cross-file Go to Definition (Java, Python, TypeScript), inline comment overlays, and keyboard shortcuts (`j`/`k` for file navigation, `n`/`p` for comment jumping, `Cmd/Ctrl+.` for quick-apply rubric palette). Toggle **New editor view** off to revert to the classic syntax-highlighted view. ([#565](https://github.com/pawtograder/platform/pull/565))
+- **Quick-apply rubric palette** — Press `Cmd/Ctrl+.` in the Monaco editor to open a fuzzy-search palette listing all applicable rubric checks for the current file. Number keys `1`–`9` apply the Nth visible check directly. ([#565](https://github.com/pawtograder/platform/pull/565))
+- **Fixed Monaco editor model leak** — Resolved a memory leak in the submission grading view that caused the Monaco editor to accumulate stale text models across file switches. ([#820](https://github.com/pawtograder/platform/pull/820))
+
+#### Bug fixes
+- **Fixed grade display on student dashboard** — The assignments tab now shows the grade for the active submission rather than the most recently created one, fixing cases where a later non-graded submission caused the dashboard to show an incorrect score. ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed hand-grading rollup for deduction-only criteria** — Deduction-only rubric criteria no longer produce "earned exceeds possible" totals in the grading sidebar. ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Redirect home instead of 500 when user has no role in course** — Users who navigate to a course they are not enrolled in now see a redirect to the home page instead of a 500 error. ([#830](https://github.com/pawtograder/platform/pull/830))
+
 ## April 2026
 
 ### April 29, 2026
