@@ -66,6 +66,23 @@ Reference it from the top of your YAML to get IDE autocomplete:
   </Card>
 </CardGroup>
 
+## Editing Config Files In-Browser
+
+You can edit `pawtograder.yml` and `.github/workflows/grade.yml` directly in Pawtograder without leaving the browser. The editor is available in two places:
+
+- **Assignment autograder page** — navigate to **Manage → Assignments → [Assignment] → Autograder**. Once a grader repository is configured, an **Edit config files** panel appears below the autograder settings with a Monaco editor pre-loaded with the solution repo's files.
+- **Admin GitHub Orgs page** — platform admins can edit the default template repos' config files from **Admin → GitHub Orgs → [Org] → Edit template repo files**.
+
+The editor provides:
+- Live YAML schema validation and autocomplete for both `pawtograder.yml` and GitHub Actions workflow files.
+- A file picker to switch between `pawtograder.yml` and `.github/workflows/grade.yml` in the same repo.
+- A commit message field — changes are committed directly back to GitHub when you click **Save & commit**.
+- Conflict detection: if the file changed on GitHub since you opened the editor, you are prompted to reload before saving.
+
+<Note>
+Writes are rate-limited to 3 saves per file per minute to prevent accidental rapid commits.
+</Note>
+
 ## The `grade.yml` Workflow
 
 The handout repository ships with a `.github/workflows/grade.yml` that is
