@@ -4,6 +4,29 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 19, 2026
+
+#### Assignment repository and submission modes
+- **Unified per-assignment student repository configuration** — The assignment create/edit form now includes a **Student Repositories** section with five modes: staff-only template (default), student-visible template with student forks, fork from a prior assignment (multi-checkpoint workflows), no repository with file upload, and no submission (manually graded, e.g. presentations). Branch protection rules (block force-push, require pull request, required reviewers) are configurable per assignment. ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Pull request submission mode** — Assignments using fork-based repository modes can now accept a pull request against the upstream/handout repository as the submission. Each push to the PR is recorded as a new submission version. PR identification can be by base branch, head branch name convention (regex), or manual linking. Optionally require an open PR as a graded condition. ([#781](https://github.com/pawtograder/platform/pull/781))
+- **File upload submissions** — Assignments with **No repository** mode accept drag-and-drop file uploads directly in the Pawtograder UI. Instructors and graders can also upload files on behalf of a student or group from the assignment dashboard. ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-submission assignments** — Assignments with **No submission** mode (presentations, oral exams) automatically create a placeholder submission for every enrolled student so graders always have a row to grade. ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Submission Checks and Deployments tabs** — PR-mode submissions now show **Checks** (GitHub Actions runs) and **Deployments** (GitHub deployment statuses) tabs on the submission detail page. ([#781](https://github.com/pawtograder/platform/pull/781))
+
+#### Admin improvements
+- **Add instructors by email when creating a class** — The Create Class dialog now includes an instructor section. Enter an email address and Pawtograder looks up the user; if found, the name is pre-filled from their most recent enrollment profile. Multiple instructors can be added at creation time. ([#834](https://github.com/pawtograder/platform/pull/834))
+- **Required GitHub org dropdown** — The GitHub Organization field in Create Class is now a validated dropdown populated from orgs where the GitHub App is installed, with a link to install the App on new orgs. ([#834](https://github.com/pawtograder/platform/pull/834))
+
+#### Testing improvements
+- **Preview test submissions as a student** — Clicking a submission link on the Test Assignment page now opens the submission in student view, showing exactly what students see (hidden tests, unreleased rubric comments, grade release rules). A banner identifies the student-view mode; click **Exit student view** to return to the full instructor/grader view of the same submission. Both instructors and graders can use this preview. ([#835](https://github.com/pawtograder/platform/pull/835))
+
+#### Bug fixes
+- **Fixed active submission grade on student dashboard** — The assignments dashboard now correctly shows the grade for the active (graded) submission rather than the most recently created submission. ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed hand-grading rollup for deduction-only criteria** — Deduction-only rubric criteria no longer show "earned exceeds possible" in the grading sidebar. ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed unreleased scores visible to students** — The student summary RPC no longer leaks total scores before a review is released. ([#823](https://github.com/pawtograder/platform/pull/823))
+
 ## April 2026
 
 ### April 29, 2026
