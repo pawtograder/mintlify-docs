@@ -82,11 +82,39 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## Creating a new class (admin)
+
+Platform admins create classes from the **Admin → Classes** page. The **Create Class** dialog includes:
+
+- **GitHub Organization** — a required dropdown populated from the GitHub organizations where the Pawtograder GitHub App is installed. If your organization is not listed, click **Install the GitHub App** to install it, then reopen the dialog.
+- **Template Prefix** — required. Used as the prefix for GitHub repository and team names (e.g. `hw` → `hw1`, `hw2`, …).
+- **Instructors** — add one or more instructors by email at creation time. If the email matches an existing Pawtograder user, their name is pre-filled automatically. For new users, enter their name manually. Instructors are enrolled immediately after the class is created.
+
+<Note>
+The Template Prefix is required when adding instructors at creation time because GitHub team sync needs both the organization and the prefix to be set.
+</Note>
+
+## GitHub Template Repositories
+
+By default, Pawtograder uses the standard `pawtograder/template-assignment-handout` and `pawtograder/template-assignment-grader` repositories when creating new assignment repos. Instructors can override these defaults at the course level.
+
+### Setting course-level template overrides
+
+1. Navigate to **Course Settings → GitHub Templates** in the course navigation menu.
+2. Enter an `owner/repo` value in the **Handout template repository** or **Solution (grader) template repository** field.
+3. Leave a field blank to inherit the default for your GitHub organization (set by a platform admin), or the Pawtograder default if no org default is configured.
+4. Click **Save**.
+
+The **Effective templates** card shows the resolved values — the result of the class override → org default → Pawtograder default chain — so you can confirm what will be used when the next assignment is created.
+
+<Note>
+Template overrides only affect new assignment repositories created after the override is saved. Existing repositories are not changed.
+</Note>
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
 
 - Course name and description
 - Enrollment synchronization preferences
-- GitHub organization settings
 - Email notification preferences
