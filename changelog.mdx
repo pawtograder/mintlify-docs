@@ -4,6 +4,47 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 22, 2026
+
+#### Deployment channels
+- **A/B deployment channels** — Platform operators can now run concurrent web and edge-function builds against the same database, pinned per course via a `deployment_channel` column. Each channel is served on its own host; the app redirects each course to its channel's host so one user can use stable and canary courses in the same session ([#826](https://github.com/pawtograder/platform/pull/826), [#838](https://github.com/pawtograder/platform/pull/838))
+
+### June 19, 2026
+
+#### GitHub organization configuration
+- **Per-org and per-course template repository overrides** — Admins can now configure default handout and solution template repositories per GitHub organization. Instructors can further override these per course under **Course Settings → GitHub Templates**. New assignments use the resolved template (class override → org default → Pawtograder default) ([#831](https://github.com/pawtograder/platform/pull/831))
+- **In-browser config file editor** — The autograder configuration page now includes a Monaco-based editor for `pawtograder.yml` and `.github/workflows/grade.yml` with live YAML schema validation and commit-back to GitHub ([#831](https://github.com/pawtograder/platform/pull/831))
+- **"Enter as instructor" for admins** — Platform admins can now enter any course as an instructor directly from the admin dashboard, with a visible banner indicating the impersonation ([#831](https://github.com/pawtograder/platform/pull/831))
+
+### June 18, 2026
+
+#### Assignment repository configuration
+- **Unified per-assignment student repository configuration** — Assignments now have a **Student Repositories** section with four modes: staff-only template (default), student-visible template with student forks, fork from a prior assignment (multi-checkpoint workflows), no repository (file upload), and no submission (manual grading). Branch protection rules (block force-push, require pull request, required reviewers) are configurable per assignment ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Pull request submission mode** — Assignments using fork-based repository modes can now accept pull requests as submissions. Each push to the confirmed PR is recorded as a new submission version. Students see a PR submission panel on the assignment page to confirm which PR is their submission ([#781](https://github.com/pawtograder/platform/pull/781))
+- **File upload submissions** — Assignments with no repository now support drag-and-drop file uploads as submissions. Instructors can also upload on behalf of students from the assignment dashboard ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Submission Checks and Deployments tabs** — PR-mode submissions now show **Checks** (GitHub Actions runs) and **Deployments** tabs on the submission detail page ([#781](https://github.com/pawtograder/platform/pull/781))
+
+### June 15, 2026
+
+#### Admin improvements
+- **Add instructors by email when creating a class** — The admin Create Class form now includes an instructor-by-email section. Entering an email that matches an existing Pawtograder user pre-fills their name automatically; otherwise the admin enters the name manually. Multiple instructors can be added at creation time ([#834](https://github.com/pawtograder/platform/pull/834))
+- **Required GitHub org dropdown in Create Class** — The GitHub organization field is now a validated dropdown populated from orgs where the Pawtograder GitHub App is installed, replacing the free-text input ([#834](https://github.com/pawtograder/platform/pull/834))
+
+#### Grading improvements
+- **Improved instructor batch group update performance** — Batch group updates for large courses are significantly faster ([#816](https://github.com/pawtograder/platform/pull/816))
+
+### June 14, 2026
+
+#### Testing improvements
+- **Preview test submissions as students** — Clicking a test submission link on the Test Assignment page now opens the submission in student view, showing exactly what students see (grade-release rules, rubric visibility, hidden autograder output). A banner lets staff exit student view and return to the full instructor or grader interface ([#835](https://github.com/pawtograder/platform/pull/835))
+
+#### Bug fixes
+- **Fixed grade display on student dashboard** — The assignments dashboard now correctly shows the active submission's grade rather than the most recently created submission's grade ([#823](https://github.com/pawtograder/platform/pull/823), [#824](https://github.com/pawtograder/platform/pull/824))
+- **Fixed hand-grading rollup for deduction-only criteria** — Deduction-only rubric criteria no longer cause the earned score to exceed the possible score in the hand-grading section ([#823](https://github.com/pawtograder/platform/pull/823))
+- **Fixed redirect on missing course role** — Users with no role in a course are now redirected to the home page instead of seeing a 500 error ([#830](https://github.com/pawtograder/platform/pull/830))
+
 ## April 2026
 
 ### April 29, 2026
