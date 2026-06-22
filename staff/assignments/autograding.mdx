@@ -66,6 +66,20 @@ Reference it from the top of your YAML to get IDE autocomplete:
   </Card>
 </CardGroup>
 
+## Editing config files in the browser
+
+You can edit `pawtograder.yml` and `.github/workflows/grade.yml` directly from the Pawtograder UI without leaving the browser. On the **Autograder** page for an assignment, scroll to the **Edit config files** section. The in-browser editor:
+
+- Loads the current file from GitHub and lets you edit it with syntax highlighting and live YAML schema validation.
+- Validates `pawtograder.yml` against the Pawtograder schema and `.github/workflows/grade.yml` against the GitHub Actions workflow schema, showing errors inline before you save.
+- Commits the file back to GitHub with a commit message you provide.
+
+This is useful for quick fixes — for example, adjusting point values or adding a test — without needing to clone the repository locally.
+
+<Note>
+The editor only allows editing `pawtograder.yml` and `.github/workflows/*.yml`. Other files must be edited via a local clone.
+</Note>
+
 ## The `grade.yml` Workflow
 
 The handout repository ships with a `.github/workflows/grade.yml` that is
