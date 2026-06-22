@@ -82,6 +82,15 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## Adding instructors when creating a class
+
+When a platform admin creates a new class from the **Admin → Classes** page, the **Create Class** dialog now supports adding instructors directly at creation time:
+
+- Enter one or more instructor email addresses. On blur, Pawtograder looks up the email and pre-fills the instructor's name if they already have a Pawtograder account.
+- If no match is found, enter the instructor's name manually — Pawtograder will create an account for them.
+- The **GitHub Organization** field is now a required dropdown populated from the GitHub orgs where the Pawtograder GitHub App is installed. If your org is not listed, use the **Install the GitHub App** link and then reopen the dialog.
+- The **Template Prefix** field is also required (it is used for GitHub repository names).
+
 ## GitHub template repositories
 
 By default, Pawtograder uses the platform's built-in handout and solution (grader) template repositories when creating new assignment repos. Instructors can override these defaults per course.
