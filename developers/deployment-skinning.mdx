@@ -1,0 +1,99 @@
+---
+title: "Deployment Skinning"
+description: "Re-brand a self-hosted Pawtograder deployment with a custom name, logo, colors, and SSO buttons — without rebuilding the web image"
+icon: "palette"
+---
+
+# Deployment Skinning
+
+Self-hosted Pawtograder deployments can be re-branded — service name, tagline, logos, favicon, accent color, and sign-in SSO buttons — **without rebuilding the web image**. Branding is delivered as plain (non-`NEXT_PUBLIC_*`) runtime environment variables read server-side on every request (`lib/branding.ts`) and passed to the client via React context. The same published `ghcr.io/pawtograder/web` image renders whatever branding the Helm chart injects.
+
+## Helm chart configuration
+
+Configure branding under `web.branding` in your values overlay:
+
+```yaml
+web:
+  branding:
+    name: "MyGrader"                          # page titles, headings, wordmarks
+    description: "MyGrader — course grading"  # <meta name="description">
+    tagline: "Your course companion"           # line under the wordmark on auth screens
+    logoLight: "/branding/logo-light.png"      # bundled path OR absolute https:// URL
+    logoDark: "/branding/logo-dark.png"        # bundled path OR absolute https:// URL
+    favicon: "/branding/favicon.png"           # browser-tab icon
+    colorPalette: "teal"                       # accent color (see below)
+```
+
+Leave any field blank to keep the built-in Pawtograder default for it.
+
+### Color palettes
+
+`colorPalette` accepts any Chakra UI color palette name:
+
+`gray` · `red` · `orange` · `yellow` · `green` · `teal` · `blue` · `cyan` · `purple` · `pink`
+
+### Logos and favicon
+
+Custom logos and the favicon can be provided two ways:
+
+**Absolute `https://` URL** — logos render with a plain `<img>` (no `next.config` image-host allow-listing needed), and the favicon is set via `<link rel="icon">`.
+
+**Baked into the image (recommended)** — drop your files into the repo's `public/branding/` directory before `docker build`. Everything under `public/` is copied into the web image and served at `/branding/*`. Then point the values at those paths:
+
+```yaml
+web:
+  branding:
+    name: "MyGrader"
+    logoLight: "/branding/logo-light.png"
+    logoDark: "/branding/logo-dark.png"
+    favicon: "/branding/favicon.png"
+    colorPalette: "red"
+```
+
+The same published image can still be re-skinned per deployment from the environment variables; the assets just need to be present inside it.
+
+## Single sign-on (SSO)
+
+The sign-in page renders one button per provider in `web.branding.ssoProviders` (in order). Leaving it empty keeps the historical default — a single **Continue with Microsoft (Northeastern Login)** button. Configuring SSO is a two-part job: the **button** (frontend) and the **provider** (GoTrue) must both be set up.
+
+### 1. Buttons (frontend)
+
+```yaml
+web:
+  branding:
+    ssoProviders:
+      - provider: google          # Supabase/GoTrue OAuth provider id
+        label: "Continue with Google"
+        icon: google              # microsoft|github|google|apple|discord|gitlab|slack|twitch|linkedin|sso|generic
+      - provider: azure
+        label: "Continue with Microsoft"
+        icon: microsoft
+        scopes: "email User.Read" # optional OAuth scopes
+```
+
+Allowed `provider` values: `apple`, `azure`, `bitbucket`, `discord`, `facebook`, `figma`, `github`, `gitlab`, `google`, `kakao`, `keycloak`, `linkedin_oidc`, `notion`, `slack_oidc`, `spotify`, `twitch`, `workos`, `zoom`.
+
+To show **no** SSO buttons (email-only), set `BRAND_SSO_PROVIDERS: "[]"` via `web.extraEnv`.
+
+### 2. Provider (GoTrue)
+
+Enable each provider and supply its OAuth client id/secret. `github`, `azure`, and `discord` have first-class blocks; everything else uses the generic `auth.externalProviders` list:
+
+```yaml
+auth:
+  external:
+    github: { enabled: true }   # reads GITHUB_OAUTH_CLIENT_ID / _SECRET
+    azure: { enabled: true }    # reads AZURE_OAUTH_CLIENT_ID / _SECRET
+  externalProviders:
+    - name: google              # -> GOTRUE_EXTERNAL_GOOGLE_*
+      enabled: true             # reads GOOGLE_OAUTH_CLIENT_ID / _SECRET from the web Secret
+    - name: keycloak
+      enabled: true
+      url: https://sso.example.edu/realms/main  # required by some providers
+```
+
+Each enabled provider's redirect URI defaults to the API gateway origin + `/auth/v1/callback`. Register that exact URL in the provider's OAuth app. Put the client id/secret in the `pawtograder-web` Secret under `<NAME>_OAUTH_CLIENT_ID` / `<NAME>_OAUTH_CLIENT_SECRET` keys (e.g. `GOOGLE_OAUTH_CLIENT_ID`).
+
+## How it works
+
+Branding values are read from plain server-side environment variables at request time (`lib/branding.ts`). Unlike `NEXT_PUBLIC_*` variables (which are inlined into the client bundle at build time), these can be overridden per deployment without a rebuild. The root layout reads `getBranding()` on the server and passes the resolved values to the client via `BrandingProvider`.
