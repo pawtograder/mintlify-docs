@@ -215,6 +215,27 @@ When a student submits a new version of their work, Pawtograder handles the reas
 - Existing comments remain attached to the original submission they were written for, so graders can see their previous feedback in context.
 - The new submission starts fresh without carrying over old comments.
 
+## Releasing grades
+
+Instructors release grades from the submission page (**Release** button), from the assignment's **All Submissions** table (bulk release of selected rows), or from the **Grading Status** panel (**Release all**).
+
+### Incomplete-review warning
+
+Before releasing, Pawtograder checks whether any of the affected reviews are not yet marked complete. If incomplete reviews are detected, a warning dialog appears with three options:
+
+- **Cancel** — abort the release.
+- **Review** — navigate to the assignment's submissions table filtered to incomplete reviews so you can address them first.
+- **Continue anyway** — release the grades immediately, including the incomplete reviews.
+
+This warning appears for per-submission release, bulk selected release, and release-all.
+
+### Role-based completion policy
+
+- **Graders** can mark a review complete or update it as long as the review is not both released *and* already complete. Once a review is released and marked complete, graders cannot revert it to incomplete — only instructors can.
+- **Instructors** can mark reviews complete or incomplete at any time, regardless of release state.
+
+When a grader marks a review complete after it has already been released to students, a warning toast is shown to make the post-release edit visible.
+
 ## Grading after release
 
 Once an instructor **releases** a review to students, grading comments on that review are locked for non-instructor graders. Only instructors can edit or delete comments on a released review.
