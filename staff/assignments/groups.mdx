@@ -89,6 +89,27 @@ is escaped to prevent CSV-injection in spreadsheet apps.
 The student export (from the **Students** page) uses the same
 `Name <email>` format for the student column.
 
+## Copying groups from a prior assignment
+
+Use the **Copy Groups from Prior Assignment** button at the top of the Groups page to immediately overwrite the current assignment's group memberships with the groups and members from an earlier assignment.
+
+<Warning>
+This action is **not staged**. It runs immediately when you click **Overwrite Groups Now** and does not wait for the page's Publish Changes button.
+</Warning>
+
+The dialog shows only prior assignments that:
+- Have a group configuration (groups or both).
+- Have at least one group with members.
+- Have a due date earlier than this assignment's due date.
+
+Assignments are listed in due-date order. When you confirm:
+
+- Existing groups with the same name as a source group are reused so repository and submission history links are preserved.
+- All current group memberships are removed and replaced with the source assignment's memberships.
+- Any submissions belonging to removed members are deactivated.
+- Empty groups that have no submission history are deleted; groups with submission history are preserved so graded work stays intact.
+- If the assignment has a template repository and has been released, repositories are provisioned for any new groups.
+
 ## Group permissions and grades
 
 When a group is published:
