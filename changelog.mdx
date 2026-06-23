@@ -4,6 +4,37 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 23, 2026
+
+#### Deployment skinning
+- **Configurable branding for self-hosted deployments** — Self-hosted Pawtograder instances can now be re-branded (name, tagline, logos, favicon, accent color, and SSO buttons) without rebuilding the web image. Branding is configured via plain runtime environment variables injected by the Helm chart. See [Deployment Skinning](/developers/deployment-skinning) for details ([#840](https://github.com/pawtograder/platform/pull/840))
+
+#### Group management
+- **Copy groups moved to the Groups management page** — The "Copy groups from assignment" option has been removed from the assignment creation and edit forms. Instead, use the new **Copy Groups from Prior Assignment** button on the assignment's Groups page. The action runs immediately (not staged) and overwrites the current group memberships with those from the selected prior assignment, deactivating stale submissions and cleaning up empty groups ([#839](https://github.com/pawtograder/platform/pull/839))
+
+### June 19, 2026
+
+#### Admin features
+- **GitHub org configuration** — Admins can now configure default handout and solution template repositories per GitHub organization from the new **GitHub Orgs** admin page. Instructors can override these per course under **Course Settings → GitHub Templates**. The autograder configuration page also includes an in-browser Monaco editor for `pawtograder.yml` and `.github/workflows/grade.yml` with live YAML schema validation ([#831](https://github.com/pawtograder/platform/pull/831))
+- **Enter courses as instructor from admin dashboard** — Admins can now enter any course as an instructor directly from the admin dashboard using the course picker or the "Manage as instructor" button on each course. An orange banner is shown in the course manage area when viewing as an admin ([#831](https://github.com/pawtograder/platform/pull/831))
+
+### June 18, 2026
+
+#### Assignment configuration
+- **Unified per-assignment student repository configuration** — The assignment form now includes a **Student Repositories** section with five repository modes: staff-only template (default), student-visible template with forks, fork from a prior assignment, no repository (file upload), and no submission (manual grading). Branch protection rules (block force-push, require pull request, required reviewers) are configurable per assignment. A new **Submission mode** section supports pull-request submissions for fork-based assignments, with configurable PR identification and an optional "require open PR" grading condition. No-repository assignments support drag-and-drop file uploads by students and instructor-on-behalf-of-student uploads ([#781](https://github.com/pawtograder/platform/pull/781))
+
+### June 15, 2026
+
+#### Admin features
+- **Add instructors by email when creating a class** — The Create Class form now includes an instructor enrollment section. Enter instructor emails and Pawtograder will look up existing users and pre-fill their names. New users can be added by entering their name manually. The GitHub organization field is now a required dropdown populated from the GitHub App's installed organizations ([#834](https://github.com/pawtograder/platform/pull/834))
+
+### June 14, 2026
+
+#### Testing
+- **Preview test submissions as students** — Clicking a submission link on the Test Assignment page now opens it in student view, showing exactly what students see (same grade-release rules, rubric visibility, and hidden autograder output). A banner indicates you are in student view. Click **Exit student view** to return to the full instructor or grader view at the same submission ([#835](https://github.com/pawtograder/platform/pull/835))
+
 ## April 2026
 
 ### April 29, 2026

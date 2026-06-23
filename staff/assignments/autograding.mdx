@@ -787,6 +787,21 @@ group you can:
 The regrade flow accepts the same grader-version options as the
 single-submission rerun, including Auto-promote.
 
+## Editing config files in the browser
+
+The autograder configuration page includes an in-browser editor for `pawtograder.yml` and `.github/workflows/grade.yml` in the grader (solution) repository. The editor provides:
+
+- Live YAML schema validation and autocomplete for `pawtograder.yml`.
+- Live validation against the GitHub Actions workflow schema for `grade.yml`.
+- A file picker to switch between the two files.
+- A commit message field and a **Save & commit** button that writes the change directly back to GitHub.
+
+The editor is shown below the autograder configuration form when a valid `org/repo` grader repository is set. Changes are committed using the GitHub App's identity; the commit appears in the grader repo's history.
+
+<Note>
+The editor enforces a rate limit of 3 saves per file per minute to prevent accidental rapid commits.
+</Note>
+
 ## Running the Grader Locally
 
 You can run the grader against a local solution and a local submission
