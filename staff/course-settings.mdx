@@ -82,11 +82,21 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## GitHub template repositories
+
+By default, Pawtograder uses shared template repositories when creating handout and grader repos for new assignments. Instructors can override these defaults per course under **Course Settings → GitHub Templates**.
+
+- **Handout template repository** — the `owner/repo` used as the template when creating a new assignment's handout repo. Leave blank to inherit the org-level default (or the Pawtograder default if no org default is set).
+- **Solution (grader) template repository** — the `owner/repo` used as the template for the grader/solution repo. Leave blank to inherit.
+
+The **Effective templates** card shows the resolved values after applying the class override → org default → Pawtograder default chain.
+
+Admins can configure org-level defaults from the **Admin → GitHub Orgs** dashboard. Each org entry shows the default templates and the courses using that org, and lets admins edit `pawtograder.yml` and `.github/workflows/grade.yml` directly in the browser with live YAML validation.
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
 
 - Course name and description
 - Enrollment synchronization preferences
-- GitHub organization settings
 - Email notification preferences
