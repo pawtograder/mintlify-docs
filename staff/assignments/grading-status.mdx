@@ -51,6 +51,21 @@ From a row in the dashboard you can:
 For bulk completion, release, and unrelease across all selected
 submissions, see [Bulk Actions](/staff/assignments/bulk-actions).
 
+## Releasing grades with incomplete reviews
+
+When you attempt to release grades — whether for a single submission, a bulk selection, or all submissions — Pawtograder warns you if any of the selected reviews are not yet marked complete. A dialog appears showing how many reviews are incomplete and offers three options:
+
+- **Cancel** — abort the release.
+- **Review** — navigate to the assignment dashboard filtered to incomplete reviews so you can finish grading before releasing.
+- **Continue anyway** — release the grades immediately, including the incomplete reviews.
+
+Graders can still mark a review complete after grades have been released. A warning toast is shown when this happens so graders are aware the grade is already visible to students.
+
+### Role-based completion controls
+
+- **Instructors** can mark any review complete or incomplete at any time, including after release.
+- **Graders** can mark a review complete when it is released but not yet complete (released + incomplete → complete is allowed). Graders cannot revert a review to incomplete once it is both released and complete — ask an instructor to unrelease the review first if changes are needed.
+
 ## Filtering
 
 Filter the view to focus on what matters:
