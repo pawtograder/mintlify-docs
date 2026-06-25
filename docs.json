@@ -236,7 +236,9 @@
           {
             "group": "Operations",
             "pages": [
-              "developers/monitoring"
+              "developers/monitoring",
+              "developers/deployment-skinning",
+              "developers/deployment-channels"
             ]
           },
           {
