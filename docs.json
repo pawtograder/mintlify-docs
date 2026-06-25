@@ -217,6 +217,7 @@
             "pages": [
               "developers/intro",
               "developers/local-setup",
+              "developers/deployment",
               "developers/cli"
             ]
           },

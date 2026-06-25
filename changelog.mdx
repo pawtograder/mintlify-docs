@@ -4,6 +4,37 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 25, 2026
+
+#### Deployment & self-hosting
+- **Production deployment guide** — Added `DEPLOYMENT.md` to the repository covering the full self-hosted production setup: GitHub App registration (permissions, webhook events, credentials), optional AWS EventBridge webhook ingress, optional Upstash/Redis rate limiting, SMTP, Discord, and error reporting ([#849](https://github.com/pawtograder/platform/pull/849))
+
+### June 23, 2026
+
+#### Assignment configuration
+- **Unified per-assignment student repository configuration** — The assignment create/edit form now has a unified **Student Repositories** section with five modes: staff-only template (default), student-visible template with student forks, fork from a prior assignment (multi-checkpoint workflows), no repository (file upload), and no submission (manual grading). Branch protection rules (block force-push, require pull request, required reviewers) are configurable per assignment. A new **Submission mode** section supports pull-request-based submissions for fork-mode assignments, with configurable PR identification and an optional "require open PR" grading condition ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-repository upload submissions** — Assignments with `repo_mode=none` now support drag-and-drop file uploads as submissions. Students upload files directly; instructors and graders can upload on behalf of students or groups from the assignment dashboard ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-submission manual grading** — Assignments with `repo_mode=no_submission` (presentations, oral exams) automatically create stub submissions for every student so graders have a row to fill in. The student view shows a "no submission required" notice ([#781](https://github.com/pawtograder/platform/pull/781))
+- **PR submission checks and deployments tabs** — Submissions from pull-request-mode assignments now show **Checks** and **Deployments** tabs with GitHub Actions run status and deployment status for the submission's commit ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Fix admin SIS class creation** — The SIS import page now requires selecting a GitHub org when creating a new class, preventing classes from being created with a null `github_org`. Platform admins can now also trigger GitHub team sync (previously instructor-only) ([#846](https://github.com/pawtograder/platform/pull/846))
+
+#### Grading
+- **Guard release flow for incomplete grading** — The release flow now guards against releasing grades when grading is incomplete, with role-based completion checks ([#844](https://github.com/pawtograder/platform/pull/844))
+
+### June 19, 2026
+
+#### Deployment & self-hosting
+- **Deployment skinning / branding** — Self-hosted deployments can now re-brand the app (service name, tagline, logos, favicon, accent color, and sign-in SSO buttons) without rebuilding the web image. Branding is configured via `web.branding.*` Helm values and read as plain runtime env vars server-side. Supports baking custom logos into the image or pointing at external URLs. SSO buttons are fully configurable per deployment ([#840](https://github.com/pawtograder/platform/pull/840))
+- **GitHub org template configuration** — Platform admins can now configure default handout and solution template repositories per GitHub org via **Admin → GitHub Orgs**. Instructors can set per-class overrides under **Course Settings → GitHub Templates**. Resolution order: class override → org default → Pawtograder default. Includes an in-browser Monaco editor for `pawtograder.yml` and `.github/workflows/grade.yml` with live YAML validation ([#831](https://github.com/pawtograder/platform/pull/831))
+- **Admin "manage as instructor"** — Platform admins can now enter any course as an instructor from the admin dashboard, with an orange banner indicating the acting-as state ([#831](https://github.com/pawtograder/platform/pull/831))
+
+### June 14, 2026
+
+#### Testing
+- **Preview test assignment submissions as students** — Clicking a submission link from the Test Assignment page now opens the submission in student view (the same read-only experience students see, including grade-release rules and hidden autograder output). A banner indicates student view is active; click "Exit student view" to return to the full instructor/grader view. This applies to both instructors and graders viewing their own test submissions ([#835](https://github.com/pawtograder/platform/pull/835))
+
 ## April 2026
 
 ### April 29, 2026
