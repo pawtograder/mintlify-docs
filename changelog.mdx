@@ -4,6 +4,24 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 25, 2026
+
+#### Deployment and self-hosting
+- **Production deployment guide** - Added a comprehensive `DEPLOYMENT.md` covering GitHub App registration (permissions, webhook events, credentials), optional AWS EventBridge webhook ingress, and optional Upstash/Redis cluster-wide rate limiting for self-hosted deployments ([#849](https://github.com/pawtograder/platform/pull/849))
+- **Deployment branding / skinning** - Self-hosted deployments can now re-brand the app — service name, tagline, logos, favicon, and accent color — without rebuilding the web image. Configure via `web.branding.*` Helm values; branding is read from plain server-side env vars at request time. Configurable SSO buttons replace the hardcoded Microsoft/Northeastern button ([#840](https://github.com/pawtograder/platform/pull/840))
+
+### June 23, 2026
+
+#### Group management
+- **Copy Groups from Prior Assignment** - The assignment Groups page now has a **Copy Groups from Prior Assignment** button that immediately overwrites the current assignment's group memberships with groups and members from a prior assignment. Stale empty groups are cleaned up, submission history is preserved, and repositories are provisioned for new groups. The "copy groups" option has been removed from the assignment creation/edit form ([#839](https://github.com/pawtograder/platform/pull/839))
+
+#### Grading
+- **Incomplete-release warning dialogs** - When releasing grades (individually, in bulk, or via Release all) while some reviews are not yet marked complete, instructors now see a warning dialog with options to cancel, navigate to incomplete reviews, or continue anyway ([#844](https://github.com/pawtograder/platform/pull/844))
+- **Role-based review completion controls** - Graders can mark a released-but-incomplete review complete, but cannot mark a released-and-complete review incomplete. Instructors retain full control to mark any review complete or incomplete regardless of release state. A warning toast is shown when marking a review complete after grades are already released ([#844](https://github.com/pawtograder/platform/pull/844))
+- **Admin SIS class creation requires GitHub org** - The admin SIS import page now requires selecting an installed GitHub org when creating a new class, preventing classes from being created without a GitHub org configured. Platform admins can now also trigger GitHub team sync (previously restricted to class instructors only) ([#846](https://github.com/pawtograder/platform/pull/846))
+
 ## April 2026
 
 ### April 29, 2026

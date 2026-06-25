@@ -1,0 +1,261 @@
+---
+title: "Self-Hosted Deployment"
+description: "Production deployment guide: GitHub App setup, webhook ingress, Redis rate limiting, and deployment branding/skinning"
+icon: "server"
+---
+
+# Self-Hosted Deployment
+
+This guide covers deploying Pawtograder as a self-hosted production service. It explains how to register and wire up the **GitHub App** that powers repo and org integration, two strongly-recommended optional components — an **AWS EventBridge** webhook ingress and an **Upstash/Redis** rate limiter — and how to **re-brand the app** for your institution without rebuilding the web image.
+
+<Warning>
+`docker compose` is **not** a supported or tested production deployment path. The Docker-based stack from `npx supabase start` is for local development and CI only. For production, deploy the Helm chart on Kubernetes.
+</Warning>
+
+The supported production target is the Helm chart under `charts/pawtograder/`. See the chart README for cluster setup, secrets, ingress, storage, monitoring, and image builds. This guide focuses on the **integration credentials** the chart mounts into the web pod and Edge Functions runtime.
+
+## GitHub App setup
+
+Pawtograder integrates with GitHub through a **single GitHub App** (not a classic OAuth App or personal access token). One App serves three purposes:
+
+1. **Sign-in** — students and staff log in with GitHub via Supabase GoTrue's `github` external provider.
+2. **Repo and org automation** — creating assignment repos from templates, syncing org teams, managing branch rulesets, dispatching grading workflows, and posting check runs.
+3. **Webhook ingestion** — receiving `push`, `pull_request`, `check_run`, `workflow_run`, `deployment_status`, and org/membership events that drive submission processing.
+
+### 1. Register the App
+
+Go to your GitHub **organization** (or user) → **Settings** → **Developer settings** → **GitHub Apps** → **New GitHub App**. Registering it under the org that will own courses is recommended.
+
+Key fields:
+
+| Field | Value |
+|---|---|
+| **GitHub App name** | e.g. `Pawtograder` (the slug becomes part of install URLs). |
+| **Homepage URL** | Your deployment URL, e.g. `https://pawtograder.example.edu`. |
+| **Callback URL** | `https://<api-host>/auth/v1/callback` (the GoTrue callback). |
+| **Webhook → Active** | On. |
+| **Webhook → URL** | Your webhook ingress URL (see [AWS EventBridge](#aws-eventbridge-webhook-ingress) below). |
+| **Webhook → Secret** | A random string — this becomes `GITHUB_WEBHOOK_SECRET`. |
+
+The GoTrue callback URL depends on your chart's `global.apiOnSeparateHost` setting:
+- **Separate API host (default):** `https://api.<hostname>/auth/v1/callback`
+- **Path-based routing:** `https://<hostname>/auth/v1/callback`
+
+### 2. Permissions
+
+Grant exactly these permissions (least privilege):
+
+**Repository permissions**
+
+| Permission | Access | Why |
+|---|---|---|
+| **Administration** | Read & write | Repo settings, branch rulesets, collaborators, Actions permissions. |
+| **Contents** | Read & write | Git data, template generation, forks, reading repo files. |
+| **Checks** | Read & write | Create/update check runs for grading status. |
+| **Actions** | Read & write | Dispatch the grading workflow; set Actions permissions on new repos. |
+| **Pull requests** | Read & write | Create PRs, read PR/comments for submission ingestion. |
+| **Issues** | Read | Read issue comments. |
+| **Webhooks** | Read & write | Per-repo webhook management. |
+| **Deployments** | Read | Ingest `deployment_status` into `github_deployments`. |
+| **Metadata** | Read | Mandatory baseline. |
+
+**Organization permissions**
+
+| Permission | Access | Why |
+|---|---|---|
+| **Members** | Read & write | Create teams, add/remove team memberships, send org invitations. |
+| **Administration** | Read | Resolve org metadata for install deep-links. |
+
+**Account permissions** — email address (read) is sufficient for sign-in identity.
+
+### 3. Subscribe to webhook events
+
+Under **Permissions & events → Subscribe to events**, check:
+
+- Push
+- Pull request
+- Check run
+- Workflow run
+- Membership
+- Organization
+- Deployment status (and Deployment)
+
+### 4. Generate credentials
+
+After creating the App, collect:
+
+| Env var | Where to find it |
+|---|---|
+| `GITHUB_APP_ID` | App settings → "App ID". |
+| `GITHUB_APP_SLUG` | The URL slug of the App (e.g. `pawtograder`). |
+| `GITHUB_PRIVATE_KEY_STRING` | App settings → "Private keys" → **Generate a private key**. |
+| `GITHUB_WEBHOOK_SECRET` | The webhook secret you set above. |
+| `GITHUB_OAUTH_CLIENT_ID` | App settings → "Client ID". |
+| `GITHUB_OAUTH_CLIENT_SECRET` | App settings → "Generate a new client secret". |
+
+<Note>
+The PEM private key must be single-lined with literal `\n` escapes when stored in env files — the `--env-file` parser rejects multi-line quoted values. The Octokit SDK unescapes them at runtime.
+</Note>
+
+### 5. Configure GitHub sign-in (GoTrue)
+
+Enable the `github` external provider in the Helm chart:
+
+```yaml
+auth:
+  external:
+    github: { enabled: true } # reads GITHUB_OAUTH_CLIENT_ID / _SECRET
+```
+
+Put `GITHUB_OAUTH_CLIENT_ID` and `GITHUB_OAUTH_CLIENT_SECRET` in the `pawtograder-web` Secret. Register the GoTrue callback URL on the GitHub App (the **Callback URL** field from step 1).
+
+### 6. Install the App on each org
+
+Each course's GitHub org must have the App installed. Instructors can do this from within Pawtograder (the app surfaces an install deep-link when the App isn't installed on an org), or directly via `https://github.com/apps/<GITHUB_APP_SLUG>/installations/new`.
+
+## GitHub Actions runners for grading
+
+Autograding runs in GitHub Actions inside each student repo. You must provide runners with enough capacity for your grading load. The stock `grade.yml` template ships with Khoury's values — update two settings for your deployment:
+
+```yaml
+jobs:
+  grade:
+    runs-on: your-runner-labels   # (1) change to your runner labels
+    steps:
+      - name: Collect Submission and Run Grader
+        uses: pawtograder/assignment-action@v3
+        with:
+          grading_server: "https://api.your-domain.edu"  # (2) change to your API host
+```
+
+1. **`runs-on`** must target your runners' labels instead of `khoury-course-runners`.
+2. **`grading_server`** is your deployment's API gateway origin — `https://api.<hostname>` by default, or `https://<hostname>` with path-based routing.
+
+Set both in your **template repos** so every new assignment inherits them. Students must not edit `grade.yml` — Pawtograder hashes it against the handout's copy when registering a submission and rejects tampered workflows.
+
+## Default template repositories (admin)
+
+New assignment repos are created from template repositories. Self-hosted deployments must point these at templates in their own GitHub org. A platform admin sets the org-wide defaults:
+
+1. Go to **Admin → GitHub Orgs** (`/admin/github-orgs`).
+2. Click the org name to open `/admin/github-orgs/<org>`.
+3. Under **"Default template repositories"**, fill in:
+   - **Default handout template repository** — `your-org/template-assignment-handout`
+   - **Default solution (grader) template repository** — `your-org/template-assignment-grader`
+4. Click **Save defaults**.
+
+The same page has an **"Edit template repo files"** card with a live-validated editor for each template's `grade.yml` and `pawtograder.yml` — the easiest place to set the `runs-on` and API destination.
+
+## AWS EventBridge webhook ingress
+
+In production, route GitHub's webhook deliveries through **Amazon EventBridge** before they reach the `github-repo-webhook` Edge Function. EventBridge buffers and retries deliveries, smooths bursts, and gives you a durable audit trail and replay capability.
+
+**How authentication works — two distinct secrets:**
+
+- `GITHUB_WEBHOOK_SECRET` — set on the **GitHub App's webhook**. GitHub signs every delivery with it (`X-Hub-Signature-256`). Verify this signature at your ingress before trusting the payload.
+- `EVENTBRIDGE_SECRET` — guards the last hop into the Edge Function. The function rejects any request whose `Authorization` header doesn't match `EVENTBRIDGE_SECRET`. The EventBridge **API destination** injects this header.
+
+**Wiring (high level):**
+
+1. Stand up an ingress that receives GitHub's webhook POST, verifies `X-Hub-Signature-256` against `GITHUB_WEBHOOK_SECRET`, and publishes the event onto an EventBridge bus.
+2. Create an **API destination** pointing at your Edge Function URL (`https://<api-host>/functions/v1/github-repo-webhook`), with a **connection** that adds the header `Authorization: <EVENTBRIDGE_SECRET>`.
+3. Add a **rule** on the bus that matches GitHub events and targets the API destination. Attach a **dead-letter queue** (SQS) and a retry policy.
+4. Set `EVENTBRIDGE_SECRET` (a random string) in the `github-app` bundle.
+5. Point the GitHub App's **Webhook URL** at the ingress from step 1.
+
+## Redis / Upstash for rate limiting
+
+Without a shared store, each Edge Function instance rate-limits in-process only. With multiple replicas you can collectively exceed GitHub's secondary rate limits. A shared Redis gives you cluster-wide rate limiting.
+
+Pawtograder's Redis layer supports two backends:
+
+| Backend | Env vars | Notes |
+|---|---|---|
+| **Upstash (REST)** | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Serverless Redis over HTTPS — simplest for managed/edge deployments. |
+| **Standard Redis (TCP)** | `REDIS_URL` (e.g. `redis://…`) | Use any Redis you operate, including the chart's in-cluster Redis. |
+
+If neither is set, the code falls back to a local in-process limiter (acceptable only for single-instance or dev).
+
+## Deployment branding / skinning
+
+Self-hosted deployments can re-brand the app — service name, tagline, logos, favicon, and accent color — **without rebuilding the web image**. Branding is delivered as plain runtime env vars read server-side per request and handed to the client via React context, so the same published image renders whatever the deployment chart injects.
+
+Configure it under `web.branding` in your Helm values:
+
+```yaml
+web:
+  branding:
+    name: "YourGrader"              # titles, headings, wordmarks
+    description: "…"                # <meta name="description">
+    tagline: "…"                    # line under the wordmark on auth screens
+    logoLight: "/Logo-Light.png"    # bundled path OR absolute https:// URL
+    logoDark: "/Logo-Dark.png"      # bundled path OR absolute https:// URL
+    favicon: "/favicon.svg"         # browser-tab icon; bundled path OR https:// URL
+    colorPalette: "teal"            # gray|red|orange|yellow|green|teal|blue|cyan|purple|pink
+```
+
+Any field left blank keeps its built-in Pawtograder default.
+
+### Logos and favicon: bake into the image
+
+Custom logos and the favicon can be provided two ways:
+
+- **Absolute `https://` URL** to an externally hosted asset.
+- **Baked into the image (recommended).** Drop your files into `public/branding/` before `docker build`. Everything under `public/` is copied into the web image and served at `/branding/*`. Then point the values at those paths:
+
+```yaml
+web:
+  branding:
+    name: "TartanGrader"
+    logoLight: "/branding/logo-light.png"
+    logoDark: "/branding/logo-dark.png"
+    favicon: "/branding/favicon.png"
+    colorPalette: "red"
+```
+
+### Single sign-on (SSO)
+
+The sign-in page renders one button per provider in `web.branding.ssoProviders`. Leaving it empty keeps the default — a single **Continue with Microsoft (Northeastern Login)** button. Configuring SSO is a two-part job: the **button** (frontend) and the **provider** (GoTrue) must both be set up.
+
+**1. Buttons (frontend):**
+
+```yaml
+web:
+  branding:
+    ssoProviders:
+      - provider: google
+        label: "Continue with Google"
+        icon: google
+      - provider: azure
+        label: "Continue with Microsoft"
+        icon: microsoft
+        scopes: "email User.Read"
+```
+
+Allowed `provider` values: `apple, azure, bitbucket, discord, facebook, figma, github, gitlab, google, kakao, keycloak, linkedin_oidc, notion, slack_oidc, spotify, twitch, workos, zoom`.
+
+To show **no** SSO buttons (email-only), set `BRAND_SSO_PROVIDERS: "[]"` via `web.extraEnv`.
+
+**2. Provider (GoTrue):** enable each provider and supply its OAuth client id/secret. `github`, `azure`, and `discord` have first-class blocks; everything else uses the generic `auth.externalProviders` list:
+
+```yaml
+auth:
+  external:
+    github: { enabled: true }
+    azure: { enabled: true }
+  externalProviders:
+    - name: google
+      enabled: true
+    - name: keycloak
+      enabled: true
+      url: https://sso.example.edu/realms/main
+```
+
+Each enabled provider's redirect URI defaults to the API gateway origin + `/auth/v1/callback`. Register that exact URL in the provider's OAuth app. Put the client id/secret in the `pawtograder-web` Secret under `<NAME>_OAUTH_CLIENT_ID` / `<NAME>_OAUTH_CLIENT_SECRET` (e.g. `GOOGLE_OAUTH_CLIENT_ID`).
+
+## Further reading
+
+- `charts/pawtograder/README.md` — install, secrets, values reference.
+- `charts/pawtograder/PRODUCTION-READINESS.md` — what's hardened and what's still deferred.
+- `charts/pawtograder/examples/values-prod.yaml` — a documented production template.
+- `DEPLOYMENT.md` in the repository root — full production deployment guide including SMTP, Discord, Sentry/Bugsink, and other integrations.

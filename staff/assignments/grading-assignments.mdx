@@ -107,6 +107,36 @@ When a TA attempts to add or change marks on a submission whose review has alrea
 
 This warning appears in the rubric sidebar and as a toast notification when a TA tries to save a comment or annotation on a released review. The rubric criteria panel also shows a warning banner so TAs see the restriction before attempting to save.
 
+### Releasing incomplete reviews
+
+When you attempt to release a review (individually, in bulk, or via **Release all**) and one or more of the selected reviews are not yet marked complete, Pawtograder shows a warning dialog before publishing grades to students.
+
+The dialog offers three options:
+
+- **Cancel** — abort the release and return to the dashboard.
+- **Review** — navigate directly to the assignment dashboard filtered to show only incomplete grading reviews, so you can address them before releasing.
+- **Continue anyway** — release the grades immediately, including the incomplete reviews.
+
+This guard applies to:
+
+- The **Release** button on an individual submission review page.
+- The **Release selected** bulk action in the assignment dashboard.
+- The **Release all** button in the Grading Status panel.
+
+### Role-based completion controls
+
+Instructors and graders have different permissions for marking reviews complete or incomplete after grades are released:
+
+| Action | Grader / TA | Instructor |
+|---|---|---|
+| Mark complete when review is released but incomplete | ✅ Allowed | ✅ Allowed |
+| Mark incomplete when review is released and complete | ❌ Blocked | ✅ Allowed |
+| Mark complete/incomplete when review is not released | ✅ Allowed | ✅ Allowed |
+
+When a grader or instructor marks a review complete after grades have already been released to students, a warning toast is shown to make the post-release change visible.
+
+Instructors always retain full control to mark any review complete or incomplete regardless of release state.
+
 ## Group Grading with Split Rubrics
 
 When grading group assignments, Pawtograder supports per-student adjustments even when using split rubrics. This allows you to:
