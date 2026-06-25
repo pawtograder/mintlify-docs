@@ -4,6 +4,66 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 25, 2026
+
+#### Deployment documentation
+- **DEPLOYMENT.md added** — comprehensive deployment guide covering GitHub App setup, EventBridge configuration, and Redis setup ([#849](https://github.com/pawtograder/platform/pull/849))
+
+### June 23, 2026
+
+#### Assignment configuration
+- **Unified per-assignment student repository configuration** — instructors can now choose from five repository modes per assignment: staff-only template (default), student-visible template with student forks, fork from a prior assignment (multi-checkpoint workflows), no repository (file upload), and no submission (manual grading). Branch-protection rules (block force-push, require PR, required reviewers) are also configurable per assignment ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Pull request submission mode** — fork-based assignments can now accept a pull request against the upstream/class repo as the submission. Each push to the PR is recorded as a new submission version. Students see a PR submission panel with candidate PR detection and confirmation ([#781](https://github.com/pawtograder/platform/pull/781))
+- **File upload submission mode** — assignments with `repo_mode=none` accept drag-and-drop file uploads instead of a Git repository. Instructors can also upload submissions on behalf of students ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-submission mode** — assignments with `repo_mode=no_submission` (presentations, oral exams) auto-create a stub submission for every student so graders always have a row to grade ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Submission Checks and Deployments tabs** — PR-mode submissions now show GitHub Actions check runs and deployment statuses in dedicated tabs on the submission page ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Inline base→head diff for PR submissions** — the Files view for PR submissions shows a per-file diff between the PR base and head commits ([#781](https://github.com/pawtograder/platform/pull/781))
+
+#### Deployment skinning
+- **Configurable brand name, logo, favicon, and accent color** — self-hosted deployments can re-brand the app without rebuilding the web image. Set `web.branding.*` values in the Helm chart to override the name, tagline, logos, favicon, color palette, and SSO buttons ([#840](https://github.com/pawtograder/platform/pull/840))
+- **Configurable SSO providers** — the sign-in page now renders one button per configured provider (Google, Microsoft, GitHub, etc.) instead of a hardcoded Microsoft button ([#840](https://github.com/pawtograder/platform/pull/840))
+
+#### Admin improvements
+- **GitHub org required for class creation** — the admin Create Class form now requires selecting a GitHub organization where the Pawtograder App is installed ([#846](https://github.com/pawtograder/platform/pull/846))
+- **Admin team sync** — instructor accounts are automatically synced to the GitHub organization's admin team on class creation and update ([#846](https://github.com/pawtograder/platform/pull/846))
+
+#### Grading improvements
+- **Release flow guard** — bulk grade release now checks for incomplete grading and warns before releasing. Only instructors can release grades; graders can complete reviews but not release them ([#844](https://github.com/pawtograder/platform/pull/844))
+
+### June 22, 2026
+
+#### Infrastructure
+- **Staging and preview deploy fixes** — CI pipelines for staging and preview deployments now reliably reach the cluster and self-heal stuck Helm releases ([#842](https://github.com/pawtograder/platform/pull/842))
+
+### June 19, 2026
+
+#### Assignment management
+- **GitHub org configuration** — per-course GitHub organization settings are now configurable from the course management interface ([#831](https://github.com/pawtograder/platform/pull/831))
+
+#### Infrastructure
+- **Production-readiness hardening** — Helm chart hardening pass for production deployments including security context fixes for realtime ([#833](https://github.com/pawtograder/platform/pull/833))
+
+### June 18, 2026
+
+#### Assignment management
+- **Copy groups moved to group management** — the "Copy groups from another assignment" control has been moved to the group management page for better discoverability ([#839](https://github.com/pawtograder/platform/pull/839))
+
+### June 15, 2026
+
+#### Assignment management
+- **A/B deployment channels** — operators can now run concurrent canary and stable web + edge-functions builds against the same database, with each course pinned to a channel via `classes.deployment_channel` ([#826](https://github.com/pawtograder/platform/pull/826))
+- **Add instructors by email on Create Class** — the admin Create Class form now supports adding instructors by email address and requires selecting a GitHub organization ([#834](https://github.com/pawtograder/platform/pull/834))
+
+#### Bug fixes
+- **Redirect home instead of 500 when user has no role** — users who are not enrolled in a course are now redirected to the home page instead of seeing a 500 error ([#830](https://github.com/pawtograder/platform/pull/830))
+
+### June 14, 2026
+
+#### Assignment management
+- **Preview test assignment submissions as students** — staff can now preview the student view of an assignment page without creating a repository or triggering the autograder ([#835](https://github.com/pawtograder/platform/pull/835))
+
 ## April 2026
 
 ### April 29, 2026
