@@ -82,11 +82,25 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## GitHub Template Repositories
+
+Instructors can override the default handout and solution (grader) template repositories used when creating new assignment repositories for their course.
+
+Navigate to **Course Settings** → **GitHub Templates** to configure per-course overrides. Leave a field blank to inherit the default for your GitHub organization, then the Pawtograder platform default.
+
+- **Handout template repository** — the template used when creating student handout repos (e.g. `myorg/template-assignment-handout`).
+- **Solution (grader) template repository** — the template used when creating grader/solution repos (e.g. `myorg/template-assignment-grader`).
+
+The **Effective templates** card shows the resolved values after applying the class override → org default → platform default resolution chain.
+
+<Note>
+Platform administrators can configure org-level defaults from the **Admin → GitHub Orgs** dashboard. Instructors can override those defaults per course from this page.
+</Note>
+
 ## Course Display Settings
 
 Additional course-wide settings may include:
 
 - Course name and description
 - Enrollment synchronization preferences
-- GitHub organization settings
 - Email notification preferences

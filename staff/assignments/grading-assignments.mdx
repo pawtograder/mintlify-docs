@@ -107,6 +107,25 @@ When a TA attempts to add or change marks on a submission whose review has alrea
 
 This warning appears in the rubric sidebar and as a toast notification when a TA tries to save a comment or annotation on a released review. The rubric criteria panel also shows a warning banner so TAs see the restriction before attempting to save.
 
+### Releasing incomplete reviews
+
+When you attempt to release a review (individually, in bulk, or via **Release all**) that has not yet been marked complete, Pawtograder shows a warning dialog with three options:
+
+- **Cancel** — abort the release.
+- **Review** — navigate to the assignment dashboard filtered to incomplete reviews so you can finish grading before releasing.
+- **Continue anyway** — release the grade to the student even though the review is incomplete.
+
+This guard applies to:
+- The **Release** button on an individual submission review.
+- The **Release selected** bulk action in the assignment submissions table.
+- The **Release all** button in the Grading Status panel.
+
+### Role-based completion policy
+
+Graders and TAs can mark a review complete or incomplete as long as the review has not yet been both released **and** completed. Once a review is released and marked complete, only instructors can change the completion state. This prevents graders from accidentally reopening a finalized, published grade.
+
+Instructors always retain full control over completion state regardless of release status.
+
 ## Group Grading with Split Rubrics
 
 When grading group assignments, Pawtograder supports per-student adjustments even when using split rubrics. This allows you to:
