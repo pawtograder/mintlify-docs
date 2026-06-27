@@ -88,6 +88,43 @@ anonymized grading.
 push-timing analytics for the assignment's student repositories. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
+## Student repositories
+
+The **Student Repositories** section controls how (or whether) student repositories are created for the assignment.
+
+### Repository configuration
+
+| Mode | Description |
+|------|-------------|
+| **Template repo (staff-only)** | The default. Students get a fresh copy of the handout template; the template repo is not visible to students. |
+| **Template repo (visible to students)** | The handout template is visible to students and each student forks it. |
+| **Fork from prior assignment** | Each student's repository is forked from their own repository on a chosen source assignment. Useful for multi-checkpoint workflows. |
+| **No repository — upload** | No Git repository is created. Students upload submission files directly through the browser. |
+| **No submission** | No repository and no student submission artifact. Graded manually (for example, presentations or oral exams). |
+
+### Branch protection
+
+For repository-based modes, you can configure branch protection rules applied to the default branch of every student/group repository:
+
+- **Block force-push to default branch** — prevents non-fast-forward updates (enabled by default).
+- **Require pull request to update default branch** — changes must go through a PR.
+- **Required reviewers** — minimum number of approving reviews before a PR can be merged (0–5).
+
+Branch protection settings are not available for no-repository modes.
+
+### Submission mode
+
+For fork-based repository modes (`template_with_student_forks` and `fork_from_prior_assignment`), you can choose between:
+
+- **Push to student repository** — a push to the student's fork is the submission (default).
+- **Pull request against an upstream repository** — a PR opened against the assignment's handout repository is the submission. Each push to the PR is recorded as a new submission version automatically.
+
+When PR mode is selected, additional options are available:
+
+- **Upstream base branch** — PRs must target this branch (default: `main`).
+- **PR identification** — how the submission PR is identified: by base branch (auto-confirmed when there is only one candidate), by head branch name convention (regex), or manually linked by staff.
+- **Require an open pull request** — when enabled, having an open confirmed PR is itself a graded condition, shown as a signal in the grading view.
+
 ## Handout URL
 
 If you maintain the handout outside Pawtograder's GitHub flow, set the
