@@ -4,6 +4,61 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 28, 2026
+
+#### Infrastructure
+- **CI: exclude flaky analytics+vector from Supabase start** — E2E runs are more reliable with these optional services excluded from the local Supabase startup ([#854](https://github.com/pawtograder/platform/pull/854))
+
+### June 27, 2026
+
+#### Infrastructure
+- **Edge functions memory bump** — Preview deployments now allocate 6 GiB for edge function pods to provide headroom for V8 isolate startup ([#853](https://github.com/pawtograder/platform/pull/853))
+
+### June 25, 2026
+
+#### Infrastructure
+- **Guaranteed QoS for edge functions** — Edge function pods now use Guaranteed QoS to break OOM/page-table loops in preview environments ([#852](https://github.com/pawtograder/platform/pull/852))
+- **Per-branch build cache** — Preview build caches are now scoped per branch to prevent cross-PR cache thrash ([#847](https://github.com/pawtograder/platform/pull/847))
+
+### June 23, 2026
+
+#### Deployment skinning
+- **Configurable brand name, logo, and color** — Self-hosted deployments can now re-brand the app (service name, tagline, logos, favicon, accent color, and SSO buttons) without rebuilding the web image. Configure via `web.branding.*` Helm values. See [Deployment Skinning](/developers/deployment-skinning) ([#840](https://github.com/pawtograder/platform/pull/840))
+
+#### Grading improvements
+- **Incomplete-release warning dialogs** — Instructors now see a confirmation dialog when releasing reviews that are not yet marked complete, with options to review incomplete submissions first or continue anyway. The warning appears on per-submission release, bulk selected release, and release-all ([#844](https://github.com/pawtograder/platform/pull/844))
+- **Role-based review completion policy** — Graders can mark a released review complete if it is currently incomplete, but cannot mark a released+complete review incomplete. Instructors retain full control at all times ([#844](https://github.com/pawtograder/platform/pull/844))
+
+#### Admin fixes
+- **SIS class creation requires GitHub org** — The admin SIS import page now requires selecting an installed GitHub org when creating a new class, preventing classes from being created with a null `github_org` ([#846](https://github.com/pawtograder/platform/pull/846))
+- **Admin GitHub team sync** — Platform admins can now trigger GitHub team sync (previously instructor-only), fixing enrollment failures when admins ran SIS import for users who already had accounts ([#846](https://github.com/pawtograder/platform/pull/846))
+
+### June 19, 2026
+
+#### Admin features
+- **GitHub org configuration** — Admins can now configure default handout and solution template repositories per GitHub org from the new **Admin → GitHub Orgs** dashboard. Instructors can override templates per course under **Course Settings → GitHub Templates** ([#831](https://github.com/pawtograder/platform/pull/831))
+- **Enter course as instructor** — Admins can now enter any course as an instructor directly from the admin dashboard, with a visible banner indicating the acting-as context ([#831](https://github.com/pawtograder/platform/pull/831))
+- **In-browser config file editor** — The autograder configuration page and the admin GitHub Orgs dashboard now include a Monaco-based editor for `pawtograder.yml` and `.github/workflows/grade.yml` files, with live YAML schema validation ([#831](https://github.com/pawtograder/platform/pull/831))
+
+### June 15, 2026
+
+#### Admin features
+- **Add instructors by email at class creation** — The Create Class form now supports adding instructors by email. Existing Pawtograder users are matched and their name is pre-filled; new users can be added with a manually entered name ([#834](https://github.com/pawtograder/platform/pull/834))
+- **Required GitHub org dropdown** — The Create Class form now shows a dropdown of GitHub orgs the App is installed on, replacing the free-text org field and preventing classes from being created with an invalid org ([#834](https://github.com/pawtograder/platform/pull/834))
+
+#### A/B deployment channels
+- **Host-per-channel deployment channels** — Self-hosted deployments can now run concurrent web + edge-function builds against the same database, with each channel served on its own host. Courses are pinned to a channel via `classes.deployment_channel`. See [Deployment Channels](/developers/deployment-channels) ([#826](https://github.com/pawtograder/platform/pull/826))
+
+### June 18, 2026
+
+#### Assignment features
+- **Unified per-assignment repository configuration** — The assignment create/edit form now has a **Student Repositories** section with four modes: staff-only template (default), student-visible template with forks, fork from a prior assignment, no repository (upload), and no submission (manual grading). Branch protection rules are also configurable per assignment ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Pull request submission mode** — Fork-based assignments can now use PR submission mode: a pull request against the upstream/handout repo is the submission, with each push to the PR's head branch recorded as a new version. Includes a student-facing PR panel, inline base→head diffs in the Files view, and Checks/Deployments tabs ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Upload submission mode** — Assignments with `repo_mode=none` now support drag-and-drop file uploads as submissions. Instructors can also upload on behalf of students from the assignment dashboard ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-submission mode** — Assignments with `repo_mode=no_submission` (presentations, oral exams) automatically create placeholder submissions for all students so graders have a row to grade ([#781](https://github.com/pawtograder/platform/pull/781))
+
 ## April 2026
 
 ### April 29, 2026
