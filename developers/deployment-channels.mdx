@@ -1,0 +1,80 @@
+---
+title: "Deployment Channels"
+description: "Run concurrent A/B web and edge-function builds against the same database, routing courses to their pinned channel by host"
+icon: "split"
+---
+
+# Deployment channels
+
+Deployment channels let you run multiple concurrent web + edge-function builds against the **same database**, with each channel served on its own host. The app redirects each course to its channel's host based on a `deployment_channel` column on the `classes` table, so one user can use stable and canary courses in the same session.
+
+This is the basis for the "ouroboros" workflow where a cohort developing Pawtograder runs their own build against real shared data.
+
+## How it works
+
+- Each channel gets its own single-label host: `<name>.<global.hostname>`.
+- Kong routes that host's `/functions/v1` traffic to the channel's edge-functions deployment.
+- Auth, REST, Realtime, and Storage are **shared** across all channels.
+- The `classes.deployment_channel` column (default `stable`) pins a course to a channel. Set it via Supabase Studio or SQL — there is no in-app UI yet.
+- Middleware reads the column and 302-redirects `/course/<id>` requests to the correct channel host.
+
+Channel routing is **off by default** — an empty `channels: []` renders the stable release byte-for-byte unchanged.
+
+## Helm chart configuration
+
+```yaml
+channels:
+  - name: team7
+    # host: team7.staging.pawtograder.net   # optional; default <name>.<global.hostname>
+    web:
+      image:
+        tag: "team7-<sha>"      # repository/pullPolicy default from web.image
+      replicas: 1
+    edgeFunctions:
+      image:
+        tag: "team7-<sha>"      # repository/pullPolicy default from edgeFunctions.image
+      replicas: 1
+
+# Reflected *.<zone> wildcard TLS secret used by every channel Ingress.
+# Required when channels with `web` are set and ingress.tls.enabled.
+channelWildcardTlsSecret: "staging-wildcard-tls"
+```
+
+## Building channel images
+
+Channel web images must be built with the channel's own build args baked in at image build time (these are `NEXT_PUBLIC_*` vars and cannot be overridden at runtime):
+
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_PAWTOGRADER_CHANNEL=team7 \
+  --build-arg NEXT_PUBLIC_SUPABASE_URL=https://api.team7.staging.pawtograder.net \
+  --build-arg NEXT_PUBLIC_PAWTOGRADER_WEB_URL=https://team7.staging.pawtograder.net \
+  -t ghcr.io/pawtograder/web:team7-<sha> .
+```
+
+## DNS and TLS prerequisites
+
+- DNS: `*.<zone>` (e.g. `*.staging.pawtograder.net`) must point to the load balancer.
+- TLS: provision a cert-manager `*.<zone>` Certificate (DNS-01) and reflect it into the namespace. Set `channelWildcardTlsSecret` to the reflected secret name.
+
+This mirrors the existing `*.preview.pawtograder.net` setup.
+
+## Pinning a course to a channel
+
+Set `classes.deployment_channel` to the channel name via Supabase Studio or SQL:
+
+```sql
+UPDATE public.classes
+SET deployment_channel = 'team7'
+WHERE id = <course_id>;
+```
+
+The value must be a DNS-1123 label (lowercase alphanumeric and hyphens, starting and ending with alphanumeric, ≤63 chars). The `stable` value routes to the primary release.
+
+## Schema compatibility
+
+All channels share the same database. Channel code must be **schema-compatible** with the stable release — use expand/contract migrations only. Never deploy a channel build that requires a migration not yet applied to the shared database.
+
+## Cross-subdomain sessions
+
+When channel routing is enabled, set `NEXT_PUBLIC_SESSION_COOKIE_DOMAIN` to the parent domain (e.g. `.staging.pawtograder.net`) so auth cookies are shared across channel hosts. This is configured via the Helm chart alongside `NEXT_PUBLIC_CHANNEL_HOST_SUFFIX`.
