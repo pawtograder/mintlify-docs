@@ -6,9 +6,40 @@ icon: "code-commit"
 
 # Completing an Assignment
 
-Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears at the top of the assignment page. This repository is private, and only you and the course staff can see it.
+Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. How you submit depends on how your instructor configured the assignment.
 
-Your instructor may have provided starter code in that repository. Use this repository to complete the assignment.
+## Assignment types
+
+### Git repository assignments
+
+A link to your GitHub repository for the assignment appears at the top of the assignment page. This repository is private, and only you and the course staff can see it.
+
+Your instructor may have provided starter code in that repository. Use this repository to complete the assignment. Every push to your repository automatically creates a new submission.
+
+### File upload assignments
+
+Some assignments don't use a Git repository. Instead, you upload your submission files directly in Pawtograder:
+
+1. On the assignment page, drag and drop your files onto the upload area, or click to choose files.
+2. Review the file list and remove any files you don't want to include.
+3. Click **Upload submission**.
+
+Each upload creates a new active submission. You can upload again to replace your submission before the deadline.
+
+### Pull request assignments
+
+For some assignments, your submission is a pull request (PR) opened against the course's upstream repository:
+
+1. Fork the handout repository (your instructor will provide instructions).
+2. Push your work to a branch in your fork.
+3. Open a pull request against the upstream repository targeting the configured base branch.
+4. The **Pull request submission** panel on the assignment page shows your candidate PRs. If there is more than one, confirm which PR is your submission by clicking **This is my submission**.
+
+Each push to your confirmed PR is automatically recorded as a new submission version.
+
+### No-submission assignments
+
+Some assignments (for example, presentations or oral exams) have no submission artifact. Your instructor will grade you manually. The assignment page shows a notice explaining this — there is nothing to submit.
 
 ## Viewing Submission Results
 
