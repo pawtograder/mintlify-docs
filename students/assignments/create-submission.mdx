@@ -6,22 +6,54 @@ icon: "code-commit"
 
 # Completing an Assignment
 
-Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears at the top of the assignment page. This repository is private, and only you and the course staff can see it.
+Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. How you submit depends on how your instructor configured the assignment.
 
-Your instructor may have provided starter code in that repository. Use this repository to complete the assignment.
+## Assignment types
 
-## Viewing Submission Results
+### Git repository assignments
+
+A link to your GitHub repository for the assignment appears at the top of the assignment page. This repository is private, and only you and the course staff can see it.
+
+Your instructor may have provided starter code in that repository. Use this repository to complete the assignment. Every push to your repository automatically creates a new submission.
+
+### File upload assignments
+
+Some assignments don't use a Git repository. Instead, you upload your submission files directly in Pawtograder:
+
+1. On the assignment page, drag and drop your files onto the upload area, or click to choose files.
+2. Review the file list and remove any files you don't want to include.
+3. Click **Upload submission**.
+
+Each upload creates a new active submission. You can upload again to replace your submission before the deadline.
+
+### Pull request assignments
+
+For some assignments, your submission is a pull request (PR) opened against the course's upstream repository:
+
+1. Fork the handout repository (your instructor will provide instructions).
+2. Push your work to a branch in your fork.
+3. Open a pull request against the upstream repository targeting the configured base branch.
+4. The **Pull request submission** panel on the assignment page shows your candidate PRs. If there is more than one, confirm which PR is your submission by clicking **This is my submission**.
+
+Each push to your confirmed PR is automatically recorded as a new submission version.
+
+### No-submission assignments
+
+Some assignments (for example, presentations or oral exams) have no submission artifact. Your instructor will grade you manually. The assignment page shows a notice explaining this — there is nothing to submit.
+
+## Viewing submission results
 
 You'll see a list of all the submissions you've made for the assignment. The flag icon indicates your *active* submission, which is the one that will eventually be graded.
 
 The **Total Score** column shows:
 
 - **Pending**: Before grading is complete or released (may display a partial score based on autograder results)
+- **N/A**: For assignments without an autograder (file upload, no-submission, or PR-mode assignments)
 - **Actual score**: Once your instructor has graded and released your results (e.g., "85/100")
 
 This lets you see your final grade as soon as it's available, rather than waiting to check the gradebook separately.
 
-Every time you push changes to your repository, Pawtograder automatically runs your autograder. The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results.
+For Git repository assignments, every push automatically runs your autograder. The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results.
 
 <Frame>
   <img src="/images/students/assignments/create-submission-1754510547128.png" alt="Submission page showing autograder results and grading rubric preview" />
@@ -31,7 +63,7 @@ Every time you push changes to your repository, Pawtograder automatically runs y
 If you submit an empty repository or a repository with no meaningful content, Pawtograder will detect this and flag it for your instructor's review.
 </Note>
 
-## Viewing Submission Files
+## Viewing submission files
 
 The **Files** tab shows the files that your instructor configured for the submission. You can view plaintext and markdown files directly in the browser, and download other file types.
 
@@ -39,9 +71,11 @@ The **Files** tab shows the files that your instructor configured for the submis
   <img src="/images/students/assignments/create-submission-1754510607368.png" alt="Files tab displaying submitted code files" />
 </Frame>
 
-These pages also have a link to the specific GitHub commit that was used to create the submission, and a link to download that complete repository as a zip file. The file viewer uses efficient signed URLs for previewing images and binary files, ensuring smooth performance even when viewing multiple large files.
+For Git repository submissions, the Files tab also has a link to the specific GitHub commit that was used to create the submission, and a link to download that complete repository as a zip file. The file viewer uses efficient signed URLs for previewing images and binary files, ensuring smooth performance even when viewing multiple large files.
 
-### File Previews
+For pull request submissions, the Files tab shows the base→head diff: the changes your PR introduces relative to the upstream base commit.
+
+### File previews
 
 Pawtograder provides rich previews for different file types in your submission:
 
@@ -57,7 +91,7 @@ Markdown files are automatically rendered with formatting, making it easy to rev
 
 You can submit binary files up to 15 MB per file, including images, PDFs, and other document types.
 
-## Assignment Leaderboard
+## Assignment leaderboard
 
 If your instructor has enabled the leaderboard feature for an assignment, you can view your ranking compared to other students. The leaderboard:
 
@@ -70,7 +104,7 @@ If your instructor has enabled the leaderboard feature for an assignment, you ca
 Leaderboards are optional and controlled by your instructor. Not all assignments will have a leaderboard enabled.
 </Note>
 
-## Error Pins
+## Error pins
 
 When your submission encounters an error during autograding, Pawtograder may display "Error Pins": suggested discussion board posts that are relevant to your specific error. This feature helps you:
 
@@ -81,7 +115,7 @@ When your submission encounters an error during autograding, Pawtograder may dis
 
 Error pins appear automatically when the system detects that your error matches discussion posts that instructors have pinned or marked as relevant. Click on any suggested post to read the full discussion and potential solutions.
 
-## Viewing Artifacts
+## Viewing artifacts
 
 Some assignments may include artifacts—generated outputs from your code such as reports, visualizations, or analysis results. If your submission includes artifacts and your instructor has configured them, you'll see an **Artifacts** tab where you can view generated outputs.
 

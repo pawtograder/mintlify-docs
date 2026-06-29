@@ -1,0 +1,123 @@
+---
+title: "Deployment Skinning"
+description: "Customize the brand name, logo, favicon, accent color, and SSO buttons for self-hosted Pawtograder deployments"
+icon: "palette"
+---
+
+# Deployment Skinning
+
+Self-hosted Pawtograder deployments can re-brand the app — service name, tagline, logos, favicon, accent color, and sign-in SSO buttons — **without rebuilding the web image**. Branding is delivered as plain (non-`NEXT_PUBLIC_*`) runtime environment variables read server-side per request and handed to the client via React context, so the same published image renders whatever the deployment chart injects.
+
+## How it works
+
+Branding values are read from server-side environment variables at request time by `lib/branding.ts` and passed to the client via `BrandingProvider`. Because they are **not** `NEXT_PUBLIC_*` build-time variables, the same published `ghcr.io/pawtograder/web` image can be re-skinned per deployment with no rebuild.
+
+## Helm chart configuration
+
+Configure branding under `web.branding` in your Helm values:
+
+```yaml
+web:
+  branding:
+    name: "MyGrader"                  # page titles, headings, wordmarks
+    description: "…"                  # <meta name="description">
+    tagline: "…"                      # line under the wordmark on auth screens
+    logoLight: "/Logo-Light.png"      # bundled path OR absolute https:// URL
+    logoDark: "/Logo-Dark.png"        # bundled path OR absolute https:// URL
+    favicon: "/favicon.svg"           # browser-tab icon; bundled path OR https:// URL
+    colorPalette: "teal"              # accent: gray|red|orange|yellow|green|teal|blue|cyan|purple|pink
+```
+
+Any field left blank keeps its built-in Pawtograder default.
+
+## Logos and favicon
+
+Custom logos and the favicon can be provided two ways:
+
+### Option 1: Absolute URL (externally hosted)
+
+Point `logoLight`, `logoDark`, or `favicon` at an `https://` URL. Logos render with a plain `<img>` (no `next.config` image-host allow-listing needed), and the favicon is set via `<link rel="icon">`.
+
+### Option 2: Baked into the image (recommended)
+
+Drop your files into the repo's `public/branding/` directory before `docker build`. Everything under `public/` is copied into the web image and served at `/branding/*`. Then point the values at those paths:
+
+```yaml
+web:
+  branding:
+    name: "MyGrader"
+    logoLight: "/branding/logo-light.png"
+    logoDark: "/branding/logo-dark.png"
+    favicon: "/branding/favicon.png"
+    colorPalette: "red"
+```
+
+The same published image still re-skins per deployment from the env vars; the assets just need to be present inside it.
+
+## Single sign-on (SSO)
+
+The sign-in page renders one button per provider in `web.branding.ssoProviders` (in order). Leaving it empty keeps the historical default — a single **Continue with Microsoft (Northeastern Login)** button. Configuring SSO is a two-part job: the **button** (frontend) and the **provider** (GoTrue) must both be set up.
+
+### Step 1: Configure sign-in buttons
+
+```yaml
+web:
+  branding:
+    ssoProviders:
+      - provider: google          # Supabase/GoTrue OAuth provider id
+        label: "Continue with Google"
+        icon: google              # microsoft|github|google|apple|discord|gitlab|slack|twitch|linkedin|sso|generic
+      - provider: azure
+        label: "Continue with Microsoft"
+        icon: microsoft
+        scopes: "email User.Read" # optional OAuth scopes
+```
+
+Allowed `provider` values: `apple`, `azure`, `bitbucket`, `discord`, `facebook`, `figma`, `github`, `gitlab`, `google`, `kakao`, `keycloak`, `linkedin_oidc`, `notion`, `slack_oidc`, `spotify`, `twitch`, `workos`, `zoom`.
+
+To show **no** SSO buttons (email-only), set `BRAND_SSO_PROVIDERS: "[]"` via `web.extraEnv`.
+
+### Step 2: Enable the provider in GoTrue
+
+`github`, `azure`, and `discord` have first-class blocks; everything else uses the generic `auth.externalProviders` list:
+
+```yaml
+auth:
+  external:
+    github: { enabled: true }   # reads GITHUB_OAUTH_CLIENT_ID / _SECRET
+    azure: { enabled: true }    # reads AZURE_OAUTH_CLIENT_ID / _SECRET
+  externalProviders:
+    - name: google              # -> GOTRUE_EXTERNAL_GOOGLE_*
+      enabled: true             # reads GOOGLE_OAUTH_CLIENT_ID / _SECRET from the web Secret
+    - name: keycloak
+      enabled: true
+      url: https://sso.example.edu/realms/main  # some providers require an issuer URL
+```
+
+### OAuth redirect URI
+
+Each enabled provider's redirect URI defaults to the API gateway origin + `/auth/v1/callback`. That origin depends on `global.apiOnSeparateHost`:
+
+- **Separate API host (default, `apiOnSeparateHost: true`):** `https://api.<hostname>/auth/v1/callback`
+- **Path-based routing (`apiOnSeparateHost: false`, API shares the web host):** `https://<hostname>/auth/v1/callback`
+
+Register that exact URL in the provider's OAuth app. Put the client id/secret in the `pawtograder-web` Secret under the `<NAME>_OAUTH_CLIENT_ID` / `<NAME>_OAUTH_CLIENT_SECRET` keys (e.g. `GOOGLE_OAUTH_CLIENT_ID`).
+
+## Environment variables reference
+
+The Helm chart injects these as plain env vars into the web pod. You can also set them directly via `web.extraEnv` for non-Helm deployments:
+
+| Variable | Description |
+|---|---|
+| `BRAND_NAME` | Product name shown in titles, headings, and wordmarks. |
+| `BRAND_DESCRIPTION` | `<meta name="description">` / default site description. |
+| `BRAND_TAGLINE` | Short line under the wordmark on auth screens. |
+| `BRAND_LOGO_LIGHT` | Logo for light mode. Bundled path or absolute URL. |
+| `BRAND_LOGO_DARK` | Logo for dark mode. Bundled path or absolute URL. |
+| `BRAND_FAVICON` | Browser-tab icon. Bundled path or absolute URL. |
+| `BRAND_COLOR_PALETTE` | Chakra accent palette: `gray`, `red`, `orange`, `yellow`, `green`, `teal`, `blue`, `cyan`, `purple`, `pink`. |
+| `BRAND_SSO_PROVIDERS` | JSON array of `{provider, label, icon?, scopes?}` objects. |
+
+## Example: full custom skin
+
+See `charts/pawtograder/examples/values-tartangrader.yaml` in the repository for a complete worked example (custom logo, favicon, cardinal-red accent, and Google + Microsoft + GitHub SSO).
