@@ -50,7 +50,11 @@ Pawtograder automatically manages repository permissions when:
 
 - A new assignment is released (creates repositories with correct permissions)
 - Students join or leave groups (updates group repository permissions)
+- A group join request is approved
+- Groups are copied from a prior assignment
 - Groups are created or dissolved (creates/archives repositories)
 - Individual submissions are activated or deactivated
+
+Permission sync jobs are enqueued asynchronously and run in the background. If a repository is not yet ready on GitHub when a sync is triggered, the worker retries until the repository is available and then applies the correct collaborator list.
 
 The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
