@@ -82,11 +82,51 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
-## Course Display Settings
+## GitHub template repositories
+
+Instructors can override the default handout and solution (grader) template repositories used when creating new assignment repos for this course. Navigate to **Course Settings → GitHub Templates** to configure per-class overrides.
+
+- **Handout template repository** — the GitHub repo used as the template when creating student handout repos. Leave blank to inherit the org-wide default set by your platform admin.
+- **Solution (grader) template repository** — the GitHub repo used as the template when creating grader repos. Leave blank to inherit the org-wide default.
+
+The resolution order is: per-class override → org-wide default (set by a platform admin in **Admin → GitHub Orgs**) → the Pawtograder built-in default.
+
+The **Effective templates** card on the GitHub Templates page shows the resolved values so you can confirm what will be used for new assignments.
+
+## LMS (LTI) sync
+
+If your platform admin has connected Pawtograder to your LMS (Canvas or another LTI 1.3-compatible system), you can sync rosters and push grades back to the LMS gradebook from **Course Settings → LMS (LTI) Sync**.
+
+### Linked LMS contexts
+
+Once an admin has bound your LMS course to this Pawtograder class, the **Linked LMS contexts** card shows each connected LMS course with toggles for:
+
+- **Roster sync** — pull the LMS roster into Pawtograder on a schedule (hourly). Requires an NRPS membership URL captured at launch.
+- **Grade sync** — push released assignment grades back to the LMS gradebook via AGS.
+
+Click **Sync roster now** to trigger an immediate roster pull.
+
+### Section mapping
+
+Use the **Section mapping** card to configure how each linked LMS context maps to Pawtograder sections:
+
+- **Course-wide** — all members enroll without a section assignment.
+- **Lecture section** — all members in this context enroll in the selected lecture section.
+- **Lab section** — all members in this context enroll in the selected lab section.
+- **Split by member section** — members are placed into sections based on their Canvas section name. Use **Discover sections** to fetch the section names from the LMS roster, then map each Canvas section name to a Pawtograder section.
+
+<Note>
+Only sections with a SIS CRN are selectable for section mapping. Set CRNs on your sections in the admin portal.
+</Note>
+
+### Push assignment grades
+
+The **Push assignment grades** card lists all assignments. Click **Push grades** next to an assignment to immediately push released grades to the LMS gradebook. The assignment must have a linked gradebook column (shown as a "linked" badge) for the push to work.
+
+## Course display settings
 
 Additional course-wide settings may include:
 
 - Course name and description
 - Enrollment synchronization preferences
-- GitHub organization settings
 - Email notification preferences
