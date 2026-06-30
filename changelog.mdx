@@ -4,6 +4,45 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## June 2026
+
+### June 30, 2026
+
+#### LTI 1.3 integration
+- **LMS integration via LTI 1.3** — Pawtograder now acts as an LTI 1.3 tool, enabling single sign-on from Canvas (and other LMS platforms), roster sync via NRPS, and grade passback via AGS. Platform admins register the LMS at **Admin → LTI Platforms**; instructors configure roster and grade sync at **Course Settings → LMS (LTI) Sync**. See [LMS (LTI) Integration](/staff/lti-integration) ([#789](https://github.com/pawtograder/platform/pull/789))
+- **Section mapping for LTI rosters** — LTI roster sync can place students into the correct lecture and lab sections. Supports both context-level section assignment and per-member section splitting (topology B) using Canvas's `$com.instructure.User.sectionNames` custom variable ([#789](https://github.com/pawtograder/platform/pull/789))
+
+### June 23, 2026
+
+#### Assignment repository configuration
+- **Unified per-assignment student repository configuration** — The assignment form now has a **Student Repositories** section with five modes: template repo (staff-only), template repo (visible to students / student forks), fork from prior assignment, no repository (upload), and no submission. Branch protection rules (block force-push, require pull request, required reviewers) are configurable per assignment ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Pull request submission mode** — Fork-based assignments can now use PR submission mode, where a pull request against the upstream/class repo is the submission. Includes PR identification by base branch, head branch convention, or manual linking, plus an optional "require open PR" graded condition ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Upload submission mode** — Assignments with `repo_mode=none` accept file uploads directly. Students drag-and-drop files; instructors can upload on behalf of students from the assignment dashboard ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-submission mode** — Assignments with `repo_mode=no_submission` (presentations, oral exams) automatically create placeholder submissions for all students so graders have a row to grade ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Submission Checks and Deployments pages** — Submission detail pages now include **Checks** (GitHub Actions runs matching the submission's commit) and **Deployments** (GitHub deployment statuses) tabs for PR-mode submissions ([#781](https://github.com/pawtograder/platform/pull/781))
+
+#### Grading improvements
+- **Release guard for incomplete reviews** — When releasing grades (single, bulk selected, or release-all), Pawtograder now warns if any selected reviews are incomplete. A dialog offers Cancel, Review incomplete reviews (deep-links to the filtered table), or Continue anyway. Graders cannot mark a released+complete review incomplete; instructors retain full control ([#844](https://github.com/pawtograder/platform/pull/844))
+
+#### Group management
+- **Copy groups from prior assignment** — A new **Copy Groups from Prior Assignment** button on the assignment Groups page immediately overwrites the current group memberships with groups and members from a selected prior assignment. Stale empty groups are deleted; groups with submission history are preserved. This replaces the assignment-form copy-groups selector ([#839](https://github.com/pawtograder/platform/pull/839))
+
+### June 19, 2026
+
+#### GitHub organization configuration
+- **Per-org default template repositories** — Platform admins can configure default handout and solution template repositories per GitHub org at **Admin → GitHub Orgs**. Instructors can set per-class overrides at **Course Settings → GitHub Templates**. Resolution order: class override → org default → Pawtograder built-in default ([#831](https://github.com/pawtograder/platform/pull/831))
+- **In-browser config file editor** — The autograder page and the admin GitHub Orgs page now include a Monaco-based editor for `pawtograder.yml` and `.github/workflows/grade.yml` with live YAML schema validation and commit-back to GitHub ([#831](https://github.com/pawtograder/platform/pull/831))
+- **Admin "Manage as instructor" access** — Platform admins can enter any course as an instructor from the admin dashboard without needing a separate enrollment. An orange banner is shown in the course manage area when acting as an admin ([#831](https://github.com/pawtograder/platform/pull/831))
+
+### June 18, 2026
+
+#### Deployment
+- **Production deployment guide** — Added `DEPLOYMENT.md` covering GitHub App setup (permissions, webhook events, credentials), AWS EventBridge webhook ingress, Upstash/Redis rate limiting, email, Discord, and Sentry configuration for self-hosted deployments ([#849](https://github.com/pawtograder/platform/pull/849))
+
+#### Deployment skinning
+- **Configurable branding** — Self-hosted deployments can re-brand the app (name, tagline, logos, favicon, accent color, SSO buttons) via runtime environment variables without rebuilding the web image. Configure via `web.branding.*` in the Helm chart ([#840](https://github.com/pawtograder/platform/pull/840))
+- **Configurable SSO providers** — The sign-in page now renders SSO buttons from `web.branding.ssoProviders` instead of a hardcoded Microsoft button. Supports any GoTrue OAuth provider (Google, GitHub, Azure, etc.) ([#840](https://github.com/pawtograder/platform/pull/840))
+
 ## April 2026
 
 ### April 29, 2026
