@@ -88,6 +88,141 @@ anonymized grading.
 push-timing analytics for the assignment's student repositories. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
+## Student repositories
+
+The **Student Repositories** section controls how student repos are created and what students can see of the handout.
+
+### Repository mode
+
+| Mode | Description |
+|---|---|
+| **Template repo (staff-only)** | Students receive a fresh copy of the handout repo. The handout is not visible to students. This is the default. |
+| **Template repo (visible to students)** | Students fork the handout repo. The handout is visible to students. |
+| **Fork from prior assignment** | Each student's repo is forked from their own repo on a selected source assignment. Use this for multi-checkpoint workflows where students build on prior work. |
+| **No repository — upload** | Students upload submission files directly instead of using a Git repository. No GitHub repo is created. |
+| **No submission** | No artifact is required. Use for presentations, oral exams, or other manually graded work. Pawtograder creates a placeholder submission for each student so graders have a row to grade. |
+
+When **Fork from prior assignment** is selected, choose the source assignment from the **Source assignment** dropdown. Only assignments with per-student repos are eligible.
+
+### Branch protection
+
+For modes that create repositories, configure branch protection rules applied to the default branch of every student/group repo:
+
+- **Block force-push to default branch** — prevents non-fast-forward updates (enabled by default).
+- **Require pull request to update default branch** — requires changes to go through a PR.
+- **Required reviewers** — minimum number of approving reviews before a PR can be merged (0–5; only shown when pull request requirement is enabled).
+
+Branch protection is not available for no-repository modes.
+
+## Submission mode
+
+For fork-based repository modes (**Template repo (visible to students)** and **Fork from prior assignment**), you can choose how a submission is produced:
+
+- **Push to student repository** — a push to the student's fork is the submission (default).
+- **Pull request against an upstream repository** — a PR opened against the upstream/class repo is the submission.
+
+### Pull request submission settings
+
+When PR mode is selected:
+
+- **Upstream repository** — automatically set to the assignment's handout repo (the upstream students PR against). Shown read-only.
+- **Upstream base branch** — PRs must target this branch to count as a submission (default: `main`).
+- **PR identification** — how the submission PR is identified among a student's PRs:
+  - **By base branch** — any PR targeting the upstream base branch is a candidate; if more than one exists, the student confirms which is their submission.
+  - **By head branch name convention** — only PRs whose head branch matches a regex (e.g. `^submission/.+---
+title: "Assignment Configuration"
+description: "Reference for the per-assignment settings: dates, points, late tokens, leaderboard, and more"
+icon: "gear"
+---
+
+# Assignment Configuration
+
+Per-assignment settings are configured from **Manage → Assignments →
+[Assignment] → Configuration**. This page documents what each field
+does. Group-specific settings are covered in
+[Groups](/staff/assignments/groups); the extension and late-token
+workflow is in [Extensions](/staff/assignments/extensions).
+
+## Dates and time zone
+
+All dates are displayed in the course's configured time zone (set
+under **Course Settings**); the field label includes the time zone for
+clarity. Individual viewers may switch their display to their browser's
+local time zone via the time-zone toggle in the user menu — this is a
+per-browser preference and does not change the course's configured time
+zone or what other users see.
+
+- **Release Date** — when the assignment becomes visible to students
+  and student repositories are created.
+- **Due Date** — the default submission deadline. Per-student or
+  per-group overrides are configured under
+  [Extensions](/staff/assignments/extensions).
+- **Regrade Request Deadline** — the cut-off for students opening
+  regrade requests after grades are released.
+
+For lab-section-specific due dates, set **Minutes due after lab
+meeting** or **Hours due after programming assignment** on the group
+configuration; Pawtograder computes a per-section due date from the
+section's meeting time.
+
+## Points possible and score capping
+
+- **Points Possible** is the assignment's maximum, displayed in the
+  gradebook and used as the denominator for percentages.
+- **Score capping** is configured on the rubric (not the assignment).
+  In the rubric editor, toggle **Cap score to assignment points** on
+  the Grading Rubric to cap the combined autograder + handgrading score
+  at the assignment's Points Possible.
+
+When the cap is enabled, students see both their raw and capped scores
+on the submission page; the gradebook stores the capped value. Use the
+cap when your rubric or autograder can sum past the assignment max
+(extra credit, bonus tests).
+
+## Empty submission policy
+
+- **Permit Empty Submissions** (default: on) — submissions whose
+  collected files are unchanged from the handout are flagged as empty
+  but accepted.
+- **Reject Empty Submissions** — the autograder rejects empty
+  submissions with an error directing the student to commit their
+  changes. Instructors and graders can still submit empty for testing.
+
+Empty detection compares SHA-256 hashes of the files matching
+`submissionFiles` against every recorded handout version, so it
+respects whatever scope the autograder config defines.
+
+## Late tokens
+
+- **Max Late Tokens** is the class-wide allotment for the assignment.
+  Students spend tokens to push their own due date back in 24-hour
+  increments, requested before the original due date.
+- Instructors can gift extra tokens to individual students and grant
+  manual extensions; see [Extensions](/staff/assignments/extensions).
+
+## Leaderboard
+
+Toggle **Show Leaderboard** to display a class-wide ranking of
+autograder scores on the assignment page. See
+[Leaderboard](/staff/assignments/leaderboard) for what students see and
+how rankings are computed.
+
+## Grader pseudonymous mode
+
+When enabled, students see grader feedback under a stable pseudonym
+rather than the grader's real name. Useful when course policy requires
+anonymized grading.
+
+## Repository analytics
+
+**Enable Repository Analytics** turns on commit-frequency and
+push-timing analytics for the assignment's student repositories. See
+[Repository Analytics](/staff/assignments/repository-analytics).
+
+) are candidates.
+  - **Manually linked** — course staff link the PR to the submission.
+- **Require an open pull request** — when enabled, having an open confirmed PR is itself a graded condition shown to graders.
+
 ## Handout URL
 
 If you maintain the handout outside Pawtograder's GitHub flow, set the
