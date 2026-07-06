@@ -257,6 +257,22 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Grading students without a submission
+
+Every enrolled student appears on the assignment roster, even if they have not submitted. Students without an active submission show a **"Not submitted"** indicator in the roster and a **Grade anyway** button next to their name.
+
+Clicking **Grade anyway** opens a confirmation dialog and then creates an empty stub submission for that student (or their group), navigating directly to the grading page. If the student later makes a real submission, it automatically supersedes the stub.
+
+The **Grading Status** panel also shows a **Not submitted: N** count so you can see at a glance how many students still need a submission.
+
+### Bulk-assigning grading for non-submitters
+
+The **Bulk Assign Grading** page includes an **Assign grading for all students** toggle (off by default). When enabled, Pawtograder creates empty stub submissions for every student or group that has not yet submitted — respecting the current section, lab, and tag filters — and includes them in the grading assignment pool. This is useful when you want to assign graders to every enrolled student before submissions are in.
+
+<Note>
+Stub submissions created by "Grade anyway" or the bulk-assign toggle are superseded automatically when a student makes a real submission. Grading work on the stub is preserved and linked to the new submission.
+</Note>
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
