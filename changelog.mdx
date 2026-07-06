@@ -4,6 +4,39 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## July 2026
+
+### July 6, 2026
+
+#### Grading improvements
+- **Grade students without a submission** — Every enrolled student now appears on the assignment roster, even if they haven't submitted. A **Grade anyway** button creates an empty stub submission on demand so graders can start grading immediately. The Grading Status panel shows a **Not submitted: N** count. The Bulk Assign Grading page includes an **Assign grading for all students** toggle to stub out and assign all non-submitters at once ([#855](https://github.com/pawtograder/platform/pull/855))
+
+## June 2026
+
+### June 30, 2026
+
+#### Integrations
+- **LTI 1.3 integration with Canvas** — Pawtograder now acts as an LTI 1.3 tool, enabling SSO launch from Canvas, NRPS roster sync, and AGS grade passback. Instructors manage the integration from **Course Settings → LMS (LTI) Sync**. Platform admins register LMS platforms and bind Canvas courses to Pawtograder classes from the admin portal ([#789](https://github.com/pawtograder/platform/pull/789))
+
+### June 23, 2026
+
+#### Deployment
+- **Deployment skinning** — Self-hosted Pawtograder deployments can now configure a custom brand name, tagline, logos, favicon, accent color, and SSO buttons without rebuilding the web image. All branding is controlled via runtime environment variables ([#840](https://github.com/pawtograder/platform/pull/840))
+
+#### Admin features
+- **GitHub org configuration** — Admins can now configure default handout and solution template repositories per GitHub organization from **Admin → GitHub Orgs**. Instructors can override these per course from **Course Settings → GitHub Templates**. The autograder configuration page also includes an in-browser Monaco editor for `pawtograder.yml` and GitHub Actions workflow files with live YAML validation ([#831](https://github.com/pawtograder/platform/pull/831))
+- **Enter course as instructor** — Platform admins can now enter any course as an instructor directly from the admin dashboard using the **Manage as instructor** button. An orange banner is shown in the course manage area when viewing as an acting admin ([#831](https://github.com/pawtograder/platform/pull/831))
+- **SIS import requires GitHub org** — The admin SIS class creation flow now requires selecting a GitHub organization before creating a new class, preventing classes from being created without a GitHub org configured ([#846](https://github.com/pawtograder/platform/pull/846))
+
+#### Grading improvements
+- **Incomplete-release warning dialogs** — When releasing grades (individually, in bulk, or via Release all), Pawtograder now warns if any targeted reviews are incomplete. The dialog offers options to cancel, navigate to incomplete reviews, or continue anyway. Graders can still complete a released review, but cannot mark a released+complete review as incomplete — only instructors can ([#844](https://github.com/pawtograder/platform/pull/844))
+
+#### Group management
+- **Copy groups moved to group management page** — The "Copy groups from assignment" option has been removed from the assignment creation/edit form and replaced with a dedicated **Copy Groups from Prior Assignment** button on the assignment's Groups management page. The action now runs immediately (not staged) and fully overwrites target memberships, with groups that have submission history preserved ([#839](https://github.com/pawtograder/platform/pull/839))
+
+#### Bug fixes
+- **Fixed group repository write access** — GitHub repository write access is now correctly granted to group members across all group join paths ([#850](https://github.com/pawtograder/platform/pull/850))
+
 ## April 2026
 
 ### April 29, 2026
