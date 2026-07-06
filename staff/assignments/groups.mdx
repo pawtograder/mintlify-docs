@@ -40,6 +40,22 @@ Publishing creates or updates memberships in the database, creates
 GitHub repositories for any new groups, and queues permission-sync
 jobs.
 
+### Copying groups from a prior assignment
+
+The **Copy Groups from Prior Assignment** button (top-right of the Groups page) lets you overwrite the current assignment's group memberships with the groups and members from an earlier group assignment.
+
+<Warning>
+This action runs immediately — it does not wait for the page's **Publish Changes** button. Existing group memberships for the target assignment are replaced, and any groups that become empty (with no submission history) are removed.
+</Warning>
+
+To copy groups:
+
+1. Click **Copy Groups from Prior Assignment**.
+2. Select the source assignment from the dropdown (only prior group assignments with existing groups are listed, sorted by due date).
+3. Click **Overwrite Groups Now**.
+
+Groups with submission history are preserved even if they become empty after the copy, so graded work stays intact. A success toast reports how many groups were copied, members assigned, previous memberships removed, and empty groups deleted or preserved.
+
 <Note>
 Students are not notified about group assignments until the assignment
 is released, so you can prepare and adjust groups in advance.
