@@ -26,6 +26,14 @@ Pawtograder will automatically ensure that graders do not grade assignments that
   <img src="/images/staff/assignments/grading-assignments-1756052760269.png" alt="Grading Conflicts Dashboard showing declared conflicts and reasons" />
 </Frame>
 
+## Grading students without a submission
+
+Every assignment is now **submission-optional** for grading purposes. Students who have not submitted appear on the grader roster with a **Not submitted** status. Instructors and graders can still grade them by clicking **Grade anyway** next to the student's name, which creates an empty stub submission so grading can proceed.
+
+- If the student later makes a real submission, it automatically supersedes the stub and becomes the active submission.
+- The assignment dashboard shows a **Not submitted: N** count alongside the graded/total progress so you can see at a glance how many students still need a submission.
+- When using **Bulk Assign Grading**, enable the **Assign grading for all students** toggle to automatically create stub submissions for non-submitters and include them in the grading pool.
+
 ## Bulk Assign Grading
 
 Pawtograder's **Bulk Assign Grading** feature (from an Assignment's "Grading Assignments" page) allows instructors to assign grading tasks to staff in bulk. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the system automatically clears the completion timestamp so the new work appears in their pending work list.
