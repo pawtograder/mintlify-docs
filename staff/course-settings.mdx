@@ -82,11 +82,37 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
-## Course Display Settings
+## LMS (LTI) sync
+
+Pawtograder supports LTI 1.3 integration with Canvas and other LMS platforms. Once a platform admin has linked your Canvas course to Pawtograder, you can manage the integration from **Course Settings → LMS (LTI) Sync**.
+
+From this page you can:
+
+- **Enable roster sync** — pull the Canvas roster into Pawtograder on an hourly schedule. Requires the LMS context to have an NRPS membership URL.
+- **Enable grade sync** — push released assignment grades back to the Canvas gradebook via AGS.
+- **Map sections** — designate whether the linked Canvas context represents the whole course, a specific lecture section, or a lab section. For lab courses with multiple Canvas sections, you can split enrollment by Canvas section name.
+- **Sync roster now** — trigger an immediate roster pull without waiting for the next scheduled run.
+- **Push grades** — manually push released grades for a specific assignment to the Canvas gradebook.
+
+<Note>
+A platform admin must first bind the Canvas course to your Pawtograder class before the LMS Sync page shows any linked contexts. Contact your platform administrator if the page shows "This course is not yet linked to an LMS context."
+</Note>
+
+## GitHub template repositories
+
+Pawtograder uses template repositories when creating handout and solution (grader) repos for new assignments. By default it uses the platform-wide templates, but instructors can override them per course.
+
+Navigate to **Course Settings → GitHub Templates** to set per-course overrides:
+
+- **Handout template repository** — the `owner/repo` used as the template for student handout repos. Leave blank to inherit the org default or the Pawtograder default.
+- **Solution (grader) template repository** — the `owner/repo` used as the template for grader/solution repos. Leave blank to inherit.
+
+The **Effective templates** card shows the resolved values (class override → org default → Pawtograder default) so you can confirm what will be used for the next assignment.
+
+## Course display settings
 
 Additional course-wide settings may include:
 
 - Course name and description
 - Enrollment synchronization preferences
-- GitHub organization settings
 - Email notification preferences
