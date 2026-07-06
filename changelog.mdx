@@ -4,6 +4,29 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## July 2026
+
+### July 6, 2026
+
+#### Grading improvements
+- **Grade students without a submission** — Every assignment is now submission-optional for grading. Students who haven't submitted appear on the grader roster with a "Not submitted" status. Instructors and graders can click **Grade anyway** to create an empty stub submission and proceed with grading. If the student later submits, the real submission automatically supersedes the stub. The assignment dashboard now shows a **Not submitted: N** count alongside graded/total progress ([#855](https://github.com/pawtograder/platform/pull/855))
+- **Bulk assign grading for non-submitters** — The Bulk Assign Grading page now has an **Assign grading for all students** toggle. When enabled, stub submissions are automatically created for students who haven't submitted so they can be included in the grading pool ([#855](https://github.com/pawtograder/platform/pull/855))
+- **Incomplete-review release warnings** — Instructors now see a confirmation dialog before releasing reviews that are not yet marked complete. The dialog offers Cancel, **Review** (jumps to the submissions table filtered to incomplete reviews), or **Continue anyway**. This applies to per-submission release, bulk selected release, and Release all ([#844](https://github.com/pawtograder/platform/pull/844))
+- **Role-based review completion policy** — Graders can mark a released review complete but cannot revert a released+complete review to incomplete. Instructors retain full control to mark any review complete or incomplete at any time, even after release ([#844](https://github.com/pawtograder/platform/pull/844))
+- **Fixed bulk assign assignee labels** — Assignee names in the bulk grading selector now fall back to the profile ID when a grader's name is null or blank, preventing crashes and display issues ([#856](https://github.com/pawtograder/platform/pull/856))
+
+### June 30, 2026
+
+#### LTI 1.3 integration
+- **Canvas LTI 1.3 integration** — Pawtograder now supports LTI 1.3 as a tool, enabling single sign-on from Canvas (and other LMS platforms), NRPS roster sync, and AGS grade passback. Instructors can manage sync settings and push grades from **Course Settings → LMS (LTI) Sync** ([#789](https://github.com/pawtograder/platform/pull/789))
+
+### June 23, 2026
+
+#### Admin and instructor features
+- **GitHub org template configuration** — Administrators can now configure default handout and solution template repositories per GitHub organization from **Admin → GitHub Orgs**. Instructors can override these defaults per course from **Course Settings → GitHub Templates** ([#831](https://github.com/pawtograder/platform/pull/831))
+- **Enter course as instructor** — Administrators can now enter any course with instructor permissions directly from the admin dashboard using the **Manage as instructor** button, without needing a separate enrollment ([#831](https://github.com/pawtograder/platform/pull/831))
+- **In-browser config file editor** — The autograder configuration page and the admin GitHub Orgs page now include a Monaco-based editor for `pawtograder.yml` and `.github/workflows/grade.yml` files, with live YAML schema validation and commit-back to GitHub ([#831](https://github.com/pawtograder/platform/pull/831))
+
 ## April 2026
 
 ### April 29, 2026
