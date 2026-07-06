@@ -4,6 +4,39 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## July 2026
+
+### July 6, 2026
+
+#### Grading improvements
+- **Grade students without a submission** — Instructors and graders can now grade any enrolled student or group even if they have not submitted yet. Every student appears on the grader roster; rows without an active submission show a **Grade anyway** button that creates an empty stub submission on demand. A later real submission automatically supersedes the stub. The **Bulk Assign Grading** page also gains an **Assign grading for all students** toggle to include non-submitters in the assignment pool ([#855](https://github.com/pawtograder/platform/pull/855))
+
+## June 2026
+
+### June 30, 2026
+
+#### Integrations
+- **LTI 1.3 integration with Canvas** — Pawtograder now acts as an LTI 1.3 tool, enabling single sign-on from Canvas, NRPS roster sync (including per-section placement), and AGS grade passback to the LMS gradebook. Instructors manage sync settings and section mapping from **Course Settings → LMS (LTI) Sync** ([#789](https://github.com/pawtograder/platform/pull/789))
+
+### June 23, 2026
+
+#### Grading improvements
+- **Incomplete-review release warning** — Releasing grades (individually, in bulk, or via Release all) now shows a warning dialog when any selected reviews are not yet marked complete. Instructors can cancel, jump to the incomplete reviews, or continue anyway ([#844](https://github.com/pawtograder/platform/pull/844))
+- **Role-based review completion policy** — Graders can now mark a released review complete if it is currently incomplete. Once a review is both released and complete, only instructors can mark it incomplete again. Instructors retain full control at all times ([#844](https://github.com/pawtograder/platform/pull/844))
+
+#### Admin features
+- **Deployment skinning** — Self-hosted deployments can now re-brand the app (name, tagline, logos, favicon, accent color, and SSO buttons) via runtime environment variables, without rebuilding the web image. Configure via `web.branding.*` in the Helm chart ([#840](https://github.com/pawtograder/platform/pull/840))
+- **GitHub org template configuration** — Platform admins can configure default handout and solution template repositories per GitHub organization. Instructors can override these per class from **Course Settings → GitHub Templates** ([#831](https://github.com/pawtograder/platform/pull/831))
+- **Enter course as instructor** — Admins can now enter any course as an instructor from the admin dashboard, with a visible banner indicating the impersonation context ([#831](https://github.com/pawtograder/platform/pull/831))
+
+### June 18, 2026
+
+#### Assignment features
+- **Unified per-assignment repository configuration** — The assignment form now includes a **Student Repositories** section with four modes: staff-only template (default), student-visible template with forks, fork from a prior assignment (multi-checkpoint workflows), no repository (file upload), and no submission (manual grading). Branch protection rules are configurable per assignment ([#781](https://github.com/pawtograder/platform/pull/781))
+- **Pull request submission mode** — Fork-based assignments can now use PR submission mode, where a pull request against the upstream/handout repository is the submission. Includes PR identification options, base branch configuration, and a "require open PR" grading signal ([#781](https://github.com/pawtograder/platform/pull/781))
+- **File upload submissions** — Assignments with `repo_mode=none` accept file uploads directly from students. Instructors and graders can also upload on behalf of students from the assignment dashboard ([#781](https://github.com/pawtograder/platform/pull/781))
+- **No-submission assignments** — Assignments with `repo_mode=no_submission` (presentations, oral exams) automatically create placeholder submissions for every enrolled student so graders can record scores without any student action ([#781](https://github.com/pawtograder/platform/pull/781))
+
 ## April 2026
 
 ### April 29, 2026
