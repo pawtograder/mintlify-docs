@@ -88,6 +88,50 @@ anonymized grading.
 push-timing analytics for the assignment's student repositories. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
+## Student repositories
+
+The **Student Repositories** section controls how (or whether) GitHub repositories are created for students.
+
+### Repository configuration
+
+| Mode | Description |
+| --- | --- |
+| **Template repo (staff-only)** | Students receive a fresh copy of the handout template. The template repository is not visible to students. This is the default. |
+| **Template repo (visible to students)** | Students receive a fork of the handout template. The template repository is visible to students. |
+| **Fork from prior assignment** | Each student's repository is forked from their own repository on a selected prior assignment. Useful for multi-checkpoint workflows where students build on earlier work. |
+| **No repository — upload files** | Students upload submission files directly instead of using a Git repository. No GitHub repository is created. |
+| **No submission** | No submission is required. The assignment is graded manually (for example, a presentation or oral exam). Pawtograder creates a placeholder submission for each student so graders can record scores. |
+
+### Branch protection
+
+For repository modes that create student repos, you can configure branch protection rules applied to the default branch of every student or group repository:
+
+- **Block force-push to default branch** — prevents non-fast-forward updates (enabled by default).
+- **Require pull request to update default branch** — changes must go through a pull request.
+- **Required reviewers** — minimum number of approving reviews before a pull request can be merged (0–5).
+
+Branch protection is not available for the **No repository** and **No submission** modes.
+
+## Submission mode
+
+The **Submission mode** section controls how a submission is recorded. This section is hidden for **No repository** and **No submission** modes.
+
+| Mode | Description |
+| --- | --- |
+| **Push to student repository** | A push to the student's repository is the submission. This is the default. |
+| **Pull request against an upstream repository** | A pull request opened against the assignment's handout repository is the submission. Only available for fork-based repository modes. |
+
+### Pull request submission settings
+
+When **Pull request** mode is selected:
+
+- **Upstream base branch** — PRs must target this branch to count as a submission (default: `main`).
+- **PR identification** — how the submission PR is identified among a student's open PRs:
+  - **By base branch** — any PR targeting the upstream base branch is a candidate; if there is more than one, the student confirms which is their submission.
+  - **By head branch name convention** — only PRs whose head branch matches a regex (for example, `^submission/.+$`) are candidates.
+  - **Manually linked** — course staff link the PR to the submission.
+- **Require an open pull request** — when enabled, having an open confirmed PR is itself a graded condition, shown as an indicator in the grading interface.
+
 ## Handout URL
 
 If you maintain the handout outside Pawtograder's GitHub flow, set the

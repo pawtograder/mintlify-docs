@@ -76,6 +76,16 @@ Once rows are selected on the submissions table, the **Release** and
 reviews become visible to students; unreleased reviews are hidden again
 and grading comments unlock for graders to edit.
 
+### Incomplete-review warning
+
+If any selected reviews are not yet marked complete, Pawtograder shows a warning dialog before releasing. You can:
+
+- **Cancel** — return to the table without releasing.
+- **Review** — jump to the submissions table filtered to incomplete reviews so you can finish grading before releasing.
+- **Continue anyway** — release all selected reviews, including incomplete ones.
+
+The same warning appears when using **Release all** from the grading status panel.
+
 <Warning>
 Unreleasing a review hides it from the student but keeps it in their
 gradebook history. Don't unrelease without a plan to re-release — the

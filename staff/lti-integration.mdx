@@ -1,0 +1,82 @@
+---
+title: "LMS (LTI) Integration"
+description: "Connect Pawtograder to Canvas or another LMS via LTI 1.3 for single sign-on, roster sync, and grade passback"
+icon: "link"
+---
+
+# LMS (LTI) Integration
+
+Pawtograder integrates with Canvas and other LMS platforms via **LTI 1.3**, giving you three capabilities:
+
+- **Single sign-on (SSO)** — students and staff click a link in Canvas and land in Pawtograder, already signed in.
+- **Roster sync (NRPS)** — pull the LMS course roster, including section placement, into a Pawtograder class.
+- **Grade passback (AGS)** — push Pawtograder assignment grades back into the LMS gradebook.
+
+LTI integration is optional. If your institution does not use Canvas or another supported LMS, you can skip this section.
+
+## Prerequisites
+
+LTI integration requires a one-time setup by a **platform administrator**:
+
+1. Register Pawtograder as an LTI tool in the LMS (Canvas Developer Key).
+2. Register the LMS in Pawtograder's admin panel (**Admin → LTI Platforms**).
+3. Bind the LMS course context to a Pawtograder class (**Admin → LTI Contexts**).
+
+After the administrator completes setup, instructors can manage section mapping and sync settings from the course's **LMS (LTI) Sync** page.
+
+## Instructor: LMS sync settings
+
+Navigate to **Course Settings → LMS (LTI) Sync** to manage your course's LTI connection.
+
+### Linked contexts
+
+The page lists every LMS course context linked to your Pawtograder class. For each context you can see:
+
+- Whether NRPS (roster sync) and AGS (grade sync) are available.
+- The last roster sync time and status.
+- Toggle switches to enable or disable roster sync and grade sync.
+
+Click **Sync roster now** to trigger an immediate roster pull from the LMS.
+
+### Section mapping
+
+Use the **Section mapping** panel to configure how LMS enrollment maps to Pawtograder sections. Each linked context can be configured as:
+
+- **Course-wide** — all members enroll without a section assignment.
+- **Lecture section** — all members enroll into a specific lecture section.
+- **Lab section** — all members enroll into a specific lab section.
+
+For lab contexts where students are split across multiple lab sections within a single Canvas course, enable **Split by member section**. This reveals a mapping table where you can match each Canvas section name to a Pawtograder section.
+
+Click **Discover sections** to fetch the current Canvas section names from the LMS roster. Sections with a SIS CRN are selectable; sections without a CRN are shown but cannot be mapped until a CRN is added in the admin section settings.
+
+### Push assignment grades
+
+The **Push assignment grades** panel lists all assignments in the course. For each assignment that has a linked gradebook column, click **Push grades** to send released grades to the LMS gradebook.
+
+Grade passback creates or updates the LMS line item for the assignment and posts each student's released score. Grades are also pushed automatically when you release them in Pawtograder (if grade sync is enabled for the context).
+
+<Note>
+Only released grades are pushed. Unreleased grades are not sent to the LMS gradebook.
+</Note>
+
+## How roster sync works
+
+When a roster sync runs (scheduled hourly or triggered manually), Pawtograder:
+
+1. Fetches the current membership from the LMS via NRPS.
+2. Matches each LMS member to a Pawtograder user by email or institutional SIS ID.
+3. Enrolls new members, updates section assignments, and disables members who have been removed from the LMS course.
+4. Respects the section mapping you configured — members are placed into the correct lecture and lab sections.
+
+<Note>
+The first roster sync for a newly linked class must be triggered from the scheduled sync or via the **Sync roster now** button. The instructor UI requires enrollment to load, so the very first sync cannot be initiated from the course settings page.
+</Note>
+
+## Troubleshooting
+
+**"This course is not yet linked to an LMS context"** — The administrator has not yet bound an LMS course to this class. Ask your platform administrator to visit **Admin → LTI Contexts** and bind the captured context.
+
+**Roster sync shows "error" status** — Check that the LMS context still has an active NRPS membership URL. If the Canvas course was re-created or the LTI tool was re-installed, the context may need to be re-bound by an administrator.
+
+**Grades are not appearing in Canvas** — Confirm that grade sync is enabled for the context and that the assignment has a linked gradebook column (shown as "linked" in the Push assignment grades table). Also verify that the assignment's grades have been released in Pawtograder.

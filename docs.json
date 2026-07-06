@@ -105,6 +105,7 @@
             "pages": [
               "staff/intro",
               "staff/course-settings",
+              "staff/lti-integration",
               "staff/exports"
             ]
           },

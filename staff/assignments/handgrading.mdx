@@ -21,6 +21,25 @@ The assignment landing page shows a grading status dashboard with:
 
 Instructors use this view to monitor progress, identify bottlenecks, and rebalance workload among TAs before releasing grades.
 
+## Grading students without a submission
+
+Instructors and graders can grade any student or group even if they have not submitted yet. Every enrolled student appears on the grader roster — students without an active submission are shown with a **Not submitted** status.
+
+To grade a student who has not submitted:
+
+1. Open the assignment's **All Submissions** tab.
+2. Find the student or group row marked **Not submitted**.
+3. Click **Grade anyway** next to their name.
+4. Confirm the action in the dialog. Pawtograder creates an empty stub submission for that student or group and opens the grading interface.
+
+The stub submission is treated like any other submission: you can apply rubric checks, leave comments, and release the grade. If the student later pushes a real submission, it automatically supersedes the stub and becomes the active submission.
+
+For bulk grading workflows, the **Bulk Assign Grading** page includes an **Assign grading for all students** toggle. When enabled, Pawtograder creates stub submissions for all non-submitters (respecting any section, lab, or tag filters you have applied) before running the assignment algorithm, so every student is included in the grading pool.
+
+<Note>
+The **Not submitted** count shown in the grading status panel reflects students who have no active submission. Grading progress counts (graded, in-progress, pending) only include students with an active submission.
+</Note>
+
 ## Grading submissions assigned to you
 
 When you have submissions assigned to grade, a summary appears on the assignment's landing page.
@@ -222,6 +241,18 @@ Once an instructor **releases** a review to students, grading comments on that r
 <Note>
 After a review is released to students, grading comments can no longer be edited or deleted by graders. This protects the integrity of feedback that students have already seen. If changes are needed after release, an instructor must unrelease the review, make edits, and re-release it.
 </Note>
+
+### Completing a review after release
+
+Graders can still mark a review **complete** after it has been released, as long as the review is currently incomplete (not yet marked complete). This allows graders to finish their work even if the instructor released grades before all reviews were marked complete.
+
+Once a review is both released **and** marked complete, graders cannot mark it incomplete again. Only instructors can toggle completion on a released+complete review.
+
+When you mark a review complete after it has already been released, Pawtograder shows a warning toast to confirm that the grade is already visible to the student.
+
+### Instructor completion controls
+
+Instructors can mark any review complete or incomplete at any time, regardless of release status. This is useful for correcting grading state after a bulk release or when a grader's completion status needs to be adjusted.
 
 Note that self-review rubric items do not support regrade requests — students cannot request regrades on items they evaluated themselves during the self-review process.
 
