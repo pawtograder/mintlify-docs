@@ -21,6 +21,25 @@ The assignment landing page shows a grading status dashboard with:
 
 Instructors use this view to monitor progress, identify bottlenecks, and rebalance workload among TAs before releasing grades.
 
+## Grading students without a submission
+
+Instructors and graders can grade any student or group even if they have not submitted yet. Every enrolled student appears on the grader roster — students without an active submission are shown with a **Not submitted** status.
+
+To grade a student who has not submitted:
+
+1. Open the assignment's **All Submissions** tab.
+2. Find the student or group row marked **Not submitted**.
+3. Click **Grade anyway** next to their name.
+4. Confirm the action in the dialog. Pawtograder creates an empty stub submission for that student or group and opens the grading interface.
+
+The stub submission is treated like any other submission: you can apply rubric checks, leave comments, and release the grade. If the student later pushes a real submission, it automatically supersedes the stub and becomes the active submission.
+
+For bulk grading workflows, the **Bulk Assign Grading** page includes an **Assign grading for all students** toggle. When enabled, Pawtograder creates stub submissions for all non-submitters (respecting any section, lab, or tag filters you have applied) before running the assignment algorithm, so every student is included in the grading pool.
+
+<Note>
+The **Not submitted** count shown in the grading status panel reflects students who have no active submission. Grading progress counts (graded, in-progress, pending) only include students with an active submission.
+</Note>
+
 ## Grading submissions assigned to you
 
 When you have submissions assigned to grade, a summary appears on the assignment's landing page.
