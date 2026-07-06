@@ -82,11 +82,35 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
-## Course Display Settings
+## LMS (LTI) Sync
+
+If your institution uses an LMS such as Canvas, Pawtograder can integrate with it via **LTI 1.3** to provide single sign-on, roster sync, and grade passback — without requiring any LMS API tokens.
+
+Once an administrator has linked your Canvas course to Pawtograder, navigate to **Course Settings** → **LMS (LTI) Sync** to:
+
+- **Enable roster sync** — pull the LMS roster (including section placement) into Pawtograder on an hourly schedule.
+- **Enable grade sync** — push released assignment grades back to the LMS gradebook.
+- **Map sections** — designate whether the linked LMS context represents the whole course, a lecture section, or a lab section, and map Canvas section names to Pawtograder sections.
+- **Sync roster now** — trigger an immediate roster pull without waiting for the next scheduled run.
+- **Push grades** — manually push released grades for a specific assignment to the LMS gradebook.
+
+<Note>
+The first roster sync for a newly linked course must be triggered by the scheduled job or a manual `curl` call, because the instructor UI requires enrollment to be set up first. After the initial sync, instructors can self-serve from this page.
+</Note>
+
+## GitHub template repositories
+
+Instructors can override the default handout and solution (grader) template repositories used when creating new assignment repos. Navigate to **Course Settings** → **GitHub Templates** to set per-class overrides.
+
+- Leave a field blank to inherit the default for your GitHub organization, then the Pawtograder platform default.
+- The **Effective templates** card shows the resolved template after applying class override → org default → platform default.
+
+Administrators can configure org-level defaults from **Admin → GitHub Orgs**.
+
+## Course display settings
 
 Additional course-wide settings may include:
 
 - Course name and description
 - Enrollment synchronization preferences
-- GitHub organization settings
 - Email notification preferences
