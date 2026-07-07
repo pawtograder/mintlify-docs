@@ -4,6 +4,18 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## July 2026
+
+### July 7, 2026
+
+#### Grading improvements
+- **Grade students without a submission** — Every enrolled student now appears on the assignment roster, even without an active submission. Instructors and graders can click **Grade anyway** on any non-submitter row to create an empty stub submission and navigate directly to the grading page. If the student later submits, the stub is automatically superseded. The grading progress panel shows a separate **Not submitted: N** count so non-submitters don't skew completion percentages ([#855](https://github.com/pawtograder/platform/pull/855))
+- **Bulk assign grading for all students** — The **Bulk Assign Grading** form now includes an **Assign grading for all students** toggle. When enabled, empty stub submissions are created for non-submitters (respecting section, lab, and tag filters) before grading assignments are drafted, ensuring every enrolled student can be assigned a grader regardless of submission status ([#855](https://github.com/pawtograder/platform/pull/855))
+
+#### Bug fixes
+- **Fixed non-submitter roster scoping** — Corrected a bug where students who had submitted any other assignment in the course were incorrectly excluded from the non-submitter list for assignments they hadn't submitted to, causing the **Grade anyway** button to not appear for them ([#859](https://github.com/pawtograder/platform/pull/859))
+- **Fixed bulk assign assignee display** — Grader names in the bulk assign selector now fall back to the profile ID when a name is not yet loaded, preventing blank or broken entries in the assignee list ([#856](https://github.com/pawtograder/platform/pull/856))
+
 ## April 2026
 
 ### April 29, 2026
