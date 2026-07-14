@@ -354,6 +354,58 @@ platform/
 | `ENABLE_SIGNUPS` | Enable user registration UI (`true`/`false`) |
 | `END_TO_END_SECRET` | Secret for E2E test authentication |
 
+### Deployment branding variables
+
+Self-hosted deployments can re-brand the app without rebuilding the web image. These variables are read server-side at request time and passed to the client via React context, so the same published image can be re-skinned per deployment.
+
+| Variable | Description |
+|----------|-------------|
+| `BRAND_NAME` | Product name shown in page titles, headings, and wordmarks (default: `Pawtograder`) |
+| `BRAND_DESCRIPTION` | `<meta name="description">` content |
+| `BRAND_TAGLINE` | Short line shown under the wordmark on auth screens |
+| `BRAND_LOGO_LIGHT` | Logo for light mode — bundled path (e.g. `/branding/logo-light.png`) or absolute `https://` URL |
+| `BRAND_LOGO_DARK` | Logo for dark mode — same format as `BRAND_LOGO_LIGHT` |
+| `BRAND_FAVICON` | Browser-tab icon — bundled path or absolute URL |
+| `BRAND_COLOR_PALETTE` | Chakra accent palette: `gray`, `red`, `orange`, `yellow`, `green`, `teal`, `blue`, `cyan`, `purple`, or `pink` |
+| `BRAND_SSO_PROVIDERS` | JSON array of SSO buttons for the sign-in page (see below) |
+
+#### Custom logos and favicon
+
+To bake custom logos or a favicon into the image, place files in `public/branding/` before running `docker build`. Everything under `public/` is served at `/branding/*`. Then point the branding variables at those paths:
+
+```bash
+BRAND_LOGO_LIGHT=/branding/logo-light.png
+BRAND_LOGO_DARK=/branding/logo-dark.png
+BRAND_FAVICON=/branding/favicon.png
+```
+
+Alternatively, point the variables at any absolute `https://` URL to use externally hosted assets.
+
+#### Configuring SSO buttons
+
+`BRAND_SSO_PROVIDERS` is a JSON array of sign-in button definitions. Each entry requires a `provider` (a Supabase/GoTrue OAuth provider id) and a `label`. The `icon` and `scopes` fields are optional.
+
+```bash
+BRAND_SSO_PROVIDERS='[{"provider":"azure","label":"Continue with Microsoft","icon":"microsoft","scopes":"email User.Read"}]'
+```
+
+Supported `icon` values: `microsoft`, `github`, `google`, `apple`, `discord`, `gitlab`, `slack`, `twitch`, `linkedin`, `sso`, `generic`.
+
+Leave `BRAND_SSO_PROVIDERS` unset to keep the default Microsoft (Northeastern Login) button. Set it to `[]` for email-only sign-in.
+
+<Note>
+Each provider listed in `BRAND_SSO_PROVIDERS` must also be enabled in GoTrue. See the Helm chart README for full deployment configuration details.
+</Note>
+
+### LTI 1.3 variables
+
+| Variable | Description |
+|----------|-------------|
+| `LTI_KEY_ENCRYPTION_SECRET` | **32-byte, base64-encoded** key for encrypting tool RSA signing keys at rest. Generate with `openssl rand -base64 32`. |
+| `LTI_TOOL_ISSUER` | The tool's public base URL (e.g. `https://pawtograder.example.edu`). Used to build OIDC redirect URIs. |
+| `LTI_STATE_SECRET` | Signs the OIDC `state` (CSRF) token. Falls back to `LTI_KEY_ENCRYPTION_SECRET` if unset. |
+| `LTI_CRON_SHARED_SECRET` | Shared secret that authenticates scheduled roster-sync and grade-push calls from pg_cron. |
+
 ## Troubleshooting
 
 ### Supabase won't start

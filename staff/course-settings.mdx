@@ -82,6 +82,47 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## LMS (LTI) Sync
+
+If your institution uses an LMS such as Canvas, Pawtograder can integrate with it via **LTI 1.3** to provide:
+
+- **SSO launch** — students and staff click a link in the LMS and land in Pawtograder, already signed in.
+- **NRPS roster sync** — pull the LMS course roster (including per-section placement) into a Pawtograder class on a schedule.
+- **AGS grade passback** — push released Pawtograder grades back into the LMS gradebook.
+
+### Accessing LTI settings
+
+Once an administrator has linked your LMS course to your Pawtograder class, navigate to **Course Settings** → **LMS (LTI) Sync** to:
+
+- View linked LMS contexts and their sync status.
+- Enable or disable **roster sync** and **grade sync** per context.
+- Configure **section mapping** — designate whether a linked context represents the whole course, a lecture section, or a lab section, and map LMS section names to Pawtograder sections.
+- Trigger a **Sync roster now** to pull the latest enrollment from the LMS immediately.
+- **Push grades** for individual assignments to the LMS gradebook.
+
+### Section mapping
+
+Pawtograder supports two section topologies:
+
+- **Course-wide** — all members of the LMS course enroll without a section assignment.
+- **Lecture or lab section** — the entire context maps to one Pawtograder section (topology A).
+- **Split by member section** — members are placed into different Pawtograder sections based on their Canvas section name (topology B). Use **Discover sections** to fetch the section names from the LMS roster, then map each name to the corresponding Pawtograder section.
+
+<Note>
+Only Pawtograder sections that have a SIS CRN set are selectable in the section mapping UI. Set CRNs in the admin section management panel before mapping.
+</Note>
+
+### First-time setup
+
+LTI setup requires administrator action before instructors can self-serve:
+
+1. A platform admin registers the LMS in Pawtograder at **Admin → LTI Platforms**.
+2. The LMS course must be launched at least once so Pawtograder captures the context.
+3. A platform admin binds the captured context to your Pawtograder class at **Admin → LTI Contexts**.
+4. After binding, you can configure section mapping and enable sync from the **LMS (LTI) Sync** page.
+
+For full deployment and configuration instructions, see the [DEPLOYMENT.md](https://github.com/pawtograder/platform/blob/main/DEPLOYMENT.md) file in the platform repository.
+
 ## Course Display Settings
 
 Additional course-wide settings may include:

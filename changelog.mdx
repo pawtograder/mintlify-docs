@@ -6,6 +6,11 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 14, 2026
+
+#### GitHub repository improvements
+- **Self-healing student repository creation** — Repository creation is now convergent and self-healing. If a student's GitHub repository was created blank (a known GitHub template-generate race condition), Pawtograder detects the empty repo, deletes it, and regenerates it automatically. Deterministic failures (empty or missing template repository) are now surfaced as a **Creation failed** status with a human-readable reason in the Repositories page, along with a **Retry creation** button so instructors can re-queue after fixing the template. A background reconciler runs every 15 minutes to re-enqueue any repositories stuck in a pending state ([#861](https://github.com/pawtograder/platform/pull/861))
+
 ### July 7, 2026
 
 #### Grading improvements
@@ -15,6 +20,18 @@ icon: "clock-rotate-left"
 #### Bug fixes
 - **Fixed non-submitter roster scoping** — Corrected a bug where students who had submitted any other assignment in the course were incorrectly excluded from the non-submitter list for assignments they hadn't submitted to, causing the **Grade anyway** button to not appear for them ([#859](https://github.com/pawtograder/platform/pull/859))
 - **Fixed bulk assign assignee display** — Grader names in the bulk assign selector now fall back to the profile ID when a name is not yet loaded, preventing blank or broken entries in the assignee list ([#856](https://github.com/pawtograder/platform/pull/856))
+
+## June 2026
+
+### June 30, 2026
+
+#### LMS integration
+- **LTI 1.3 integration with Canvas** — Pawtograder now acts as an LTI 1.3 tool, enabling SSO launch (students click a link in Canvas and land in Pawtograder already signed in), NRPS roster sync (pull the LMS roster including per-section placement on a schedule), and AGS grade passback (push released grades back to the Canvas gradebook). Instructors manage sync settings and section mapping from **Course Settings → LMS (LTI) Sync**. Administrators register LMS platforms and bind Canvas courses to Pawtograder classes from the admin panel ([#789](https://github.com/pawtograder/platform/pull/789))
+
+### June 23, 2026
+
+#### Deployment
+- **Deployment skinning** — Self-hosted deployments can now re-brand the app (name, tagline, logos, favicon, accent color, and SSO buttons) without rebuilding the web image. Branding is configured via plain runtime environment variables (`BRAND_NAME`, `BRAND_LOGO_LIGHT`, `BRAND_COLOR_PALETTE`, `BRAND_SSO_PROVIDERS`, etc.) that are read server-side at request time. The sign-in page renders SSO buttons from the configured provider list, replacing the hardcoded Microsoft button ([#840](https://github.com/pawtograder/platform/pull/840))
 
 ## April 2026
 

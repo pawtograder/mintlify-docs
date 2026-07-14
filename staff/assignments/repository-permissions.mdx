@@ -54,3 +54,31 @@ Pawtograder automatically manages repository permissions when:
 - Individual submissions are activated or deactivated
 
 The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
+
+## Repository Creation Failures
+
+If a student's GitHub repository fails to be created (for example, because the template repository is empty or missing), Pawtograder surfaces the failure directly in the **Repositories** page rather than silently retrying forever.
+
+### Viewing and retrying failed repositories
+
+When a repository creation fails with a deterministic error (such as an empty or missing template), the repository row shows:
+
+- A **Creation failed** status with a human-readable reason
+- A **Retry creation** button to re-queue the creation after you've fixed the underlying issue
+
+To retry a failed repository:
+
+1. Navigate to the assignment's **Repositories** page.
+2. Find the row showing **Creation failed** and read the error message.
+3. Fix the root cause (for example, push at least one commit to the template repository).
+4. Click **Retry creation** on the affected row.
+
+### Automatic recovery
+
+Pawtograder also runs a background reconciler every 15 minutes that automatically re-enqueues repositories that are stuck in a pending state (no recorded error, not yet ready). This handles transient failures such as GitHub API timeouts without requiring manual intervention.
+
+Repositories with a recorded `creation_error` are intentionally left alone by the reconciler — they require a manual **Retry creation** after the underlying configuration issue is resolved.
+
+<Note>
+If a repository creation fails because the template repository is empty, push at least one commit to the template before retrying. An empty template cannot produce a populated student repository.
+</Note>
