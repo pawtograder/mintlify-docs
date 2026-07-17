@@ -6,6 +6,16 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions (from **Grade anyway** or no-submission assignments) from real student submissions. Filter by Yes/No to isolate or exclude stubs ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Hidden unreleased assignments from student dashboard** — Assignments whose release date is in the future no longer appear on the student Assignments tab. Previously, the student dashboard RPC bypassed row-level security and showed future-release assignments ([#866](https://github.com/pawtograder/platform/pull/866))
+- **GitHub org membership reconciliation on login** — Users who were already members of a course's GitHub organization (joined out-of-band or via another class) were stuck on the "accept your invitation" banner indefinitely. GitHub org membership is now reconciled automatically in the background on login ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Self-healing student repository creation** — Improved resilience of GitHub team sync and student repository creation to handle concurrent creation races, slug normalization mismatches, and partially-configured classes ([#861](https://github.com/pawtograder/platform/pull/861))
+
 ### July 7, 2026
 
 #### Grading improvements
@@ -15,6 +25,14 @@ icon: "clock-rotate-left"
 #### Bug fixes
 - **Fixed non-submitter roster scoping** — Corrected a bug where students who had submitted any other assignment in the course were incorrectly excluded from the non-submitter list for assignments they hadn't submitted to, causing the **Grade anyway** button to not appear for them ([#859](https://github.com/pawtograder/platform/pull/859))
 - **Fixed bulk assign assignee display** — Grader names in the bulk assign selector now fall back to the profile ID when a name is not yet loaded, preventing blank or broken entries in the assignee list ([#856](https://github.com/pawtograder/platform/pull/856))
+
+### June 23, 2026
+
+#### Group management
+- **Copy groups moved to group management page** — The **Copy Groups from Prior Assignment** action has moved from the assignment creation/edit form to a dedicated button on the assignment's **Groups** page. The action now immediately overwrites target group memberships (with a confirmation dialog), deactivates stale submissions, and cleans up empty groups — no longer staged behind the Publish button ([#839](https://github.com/pawtograder/platform/pull/839))
+
+#### Deployment
+- **Deployment skinning** — Self-hosted deployments can now configure a custom brand name, tagline, logos, favicon, and accent color via runtime environment variables, without rebuilding the web image. SSO sign-in buttons are also configurable per deployment ([#840](https://github.com/pawtograder/platform/pull/840))
 
 ## April 2026
 
