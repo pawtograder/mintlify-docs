@@ -90,3 +90,59 @@ Additional course-wide settings may include:
 - Enrollment synchronization preferences
 - GitHub organization settings
 - Email notification preferences
+
+## Deployment branding (self-hosted installs)
+
+Self-hosted Pawtograder deployments can re-brand the application — service name, tagline, logos, favicon, and accent color — without rebuilding the web image. Branding is configured via environment variables injected by the Helm chart at deploy time and read server-side on every request.
+
+| Variable | Description |
+|---|---|
+| `BRAND_NAME` | Product name shown in page titles, headings, and wordmarks. |
+| `BRAND_DESCRIPTION` | `<meta name="description">` / default site description. |
+| `BRAND_TAGLINE` | Short line shown under the wordmark on auth screens. |
+| `BRAND_LOGO_LIGHT` | Logo for light mode — bundled path (e.g. `/branding/logo-light.png`) or absolute `https://` URL. |
+| `BRAND_LOGO_DARK` | Logo for dark mode (same rules as `BRAND_LOGO_LIGHT`). |
+| `BRAND_FAVICON` | Browser-tab icon — bundled path or absolute URL. |
+| `BRAND_COLOR_PALETTE` | Chakra accent palette: `gray`, `red`, `orange`, `yellow`, `green`, `teal`, `blue`, `cyan`, `purple`, or `pink`. |
+| `BRAND_SSO_PROVIDERS` | JSON array of sign-in SSO buttons (see below). |
+
+Any variable left unset keeps the built-in Pawtograder default. Configure these under `web.branding` in your Helm values file:
+
+```yaml
+web:
+  branding:
+    name: "MyGrader"
+    tagline: "Grading for your institution"
+    logoLight: "/branding/logo-light.png"
+    logoDark: "/branding/logo-dark.png"
+    favicon: "/branding/favicon.png"
+    colorPalette: "teal"
+```
+
+### Custom logos and favicon
+
+Custom logos and the favicon can be provided two ways:
+
+- **Absolute `https://` URL** — logos render with a plain `<img>` tag; no `next.config` image-host allow-listing is needed.
+- **Baked into the image (recommended)** — drop files into `public/branding/` before `docker build`. Everything under `public/` is served at `/branding/*` inside the image. Point the values at those paths (e.g. `/branding/logo-light.png`).
+
+### Configuring SSO buttons
+
+The sign-in page renders one button per provider in `web.branding.ssoProviders`. Leaving it empty keeps the default Microsoft (Northeastern Login) button. Each provider must also be enabled in GoTrue.
+
+```yaml
+web:
+  branding:
+    ssoProviders:
+      - provider: google
+        label: "Continue with Google"
+        icon: google
+      - provider: azure
+        label: "Continue with Microsoft"
+        icon: microsoft
+        scopes: "email User.Read"
+```
+
+Supported `provider` values: `apple`, `azure`, `bitbucket`, `discord`, `facebook`, `figma`, `github`, `gitlab`, `google`, `kakao`, `keycloak`, `linkedin_oidc`, `notion`, `slack_oidc`, `spotify`, `twitch`, `workos`, `zoom`. To show no SSO buttons (email-only sign-in), set `BRAND_SSO_PROVIDERS: "[]"` via `web.extraEnv`.
+
+See the chart README "Deployment skinning / branding" and "Single sign-on (SSO)" sections for full configuration details.

@@ -29,8 +29,7 @@ Three formation methods are available:
   the invitation flow described in
   [Forming Groups](/students/assignments/form-groups).
 - **Instructor-assigned** — staff assign students from the Groups page.
-- **Copy from another assignment** — reuse the group composition (and
-  optionally mentor assignments) from a previous assignment.
+- **Copy from another assignment** — reuse the group composition (and mentor assignments) from a previous assignment using the **Copy Groups from Prior Assignment** button on the Groups page.
 
 Use the Groups page to create groups manually, add or remove members,
 rename or delete groups, and move students between groups. Changes are
@@ -38,6 +37,16 @@ staged locally and applied atomically when you click **Publish**.
 Publishing creates or updates memberships in the database, creates
 GitHub repositories for any new groups, and queues permission-sync
 jobs.
+
+### Copying groups from a prior assignment
+
+To copy group membership from a previous assignment, click **Copy Groups from Prior Assignment** at the top of the Groups page. Select the source assignment from the dropdown (only group assignments with existing groups that were due before this assignment are shown) and click **Overwrite Groups Now**.
+
+<Warning>
+This action runs immediately and does not wait for the page's **Publish Changes** button. It overwrites all current group assignments for this assignment with the groups and memberships from the selected source assignment. Existing groups that become empty and have no submission history are removed; groups with submission history are preserved.
+</Warning>
+
+After the copy completes, a success toast shows how many groups were copied, members assigned, previous memberships removed, and empty groups deleted or preserved.
 
 <Note>
 Students are not notified about group assignments until the assignment

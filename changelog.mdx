@@ -6,6 +6,11 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — After grading a student without a submission via **Grade anyway**, the assignment roster now shows a **Placeholder** column (hidden by default). Rows with instructor-created stub submissions are flagged **Yes** with an orange badge; rows with real student submissions show **No**. The column is filterable so you can focus on or exclude placeholder grades. Assignments that don't expect a file submission (presentations, oral exams) also flag their auto-created stubs as placeholders ([#865](https://github.com/pawtograder/platform/pull/865))
+
 ### July 7, 2026
 
 #### Grading improvements
@@ -15,6 +20,29 @@ icon: "clock-rotate-left"
 #### Bug fixes
 - **Fixed non-submitter roster scoping** — Corrected a bug where students who had submitted any other assignment in the course were incorrectly excluded from the non-submitter list for assignments they hadn't submitted to, causing the **Grade anyway** button to not appear for them ([#859](https://github.com/pawtograder/platform/pull/859))
 - **Fixed bulk assign assignee display** — Grader names in the bulk assign selector now fall back to the profile ID when a name is not yet loaded, preventing blank or broken entries in the assignee list ([#856](https://github.com/pawtograder/platform/pull/856))
+
+## June 2026
+
+### June 30, 2026
+
+#### Integrations
+- **LTI 1.3 integration with Canvas** — Added end-to-end LTI 1.3 support for Canvas, enabling grade passback and course roster sync via the LTI standard ([#789](https://github.com/pawtograder/platform/pull/789))
+
+### June 23, 2026
+
+#### Grading improvements
+- **Release guard for incomplete grading reviews** — When releasing grades (individually, in bulk, or via **Release all**), Pawtograder now shows a warning dialog if any selected reviews are not yet marked complete. The dialog shows how many reviews are incomplete and lets you navigate directly to the incomplete rows, cancel, or continue releasing anyway ([#844](https://github.com/pawtograder/platform/pull/844))
+- **Role-based review completion** — Instructors can now mark any review complete or incomplete at any time, even after release. Graders and TAs can still complete a released review that is currently incomplete, but cannot mark a released+completed review incomplete ([#844](https://github.com/pawtograder/platform/pull/844))
+
+#### Group management
+- **Copy Groups from Prior Assignment** — The **Copy Groups from Prior Assignment** action has moved from the assignment creation/edit form to a dedicated button on the assignment's **Groups** management page. The action now immediately overwrites the target assignment's group memberships with those from the selected source assignment, removes stale empty groups (preserving those with submission history), and reports a summary of groups copied, members assigned, and groups removed ([#839](https://github.com/pawtograder/platform/pull/839))
+
+#### Deployment
+- **Deployment skinning** — Self-hosted Pawtograder deployments can now re-brand the application — service name, tagline, logos, favicon, and accent color — without rebuilding the web image. Branding is configured via `BRAND_*` environment variables injected by the Helm chart. SSO sign-in buttons are also fully configurable, supporting any GoTrue-compatible OAuth provider ([#840](https://github.com/pawtograder/platform/pull/840))
+
+#### Bug fixes
+- **Fixed admin SIS class creation** — Admin class creation now requires a GitHub org and correctly allows admin team sync ([#846](https://github.com/pawtograder/platform/pull/846))
+- **Fixed group repo write access** — Group repository write access is now correctly granted across all join paths ([#850](https://github.com/pawtograder/platform/pull/850))
 
 ## April 2026
 
