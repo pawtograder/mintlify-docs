@@ -22,7 +22,10 @@ per-browser preference and does not change the course's configured time
 zone or what other users see.
 
 - **Release Date** — when the assignment becomes visible to students
-  and student repositories are created.
+  and student repositories are created. Assignments with a future
+  release date are hidden from the student Assignments tab; they do not
+  appear until the release date passes. A `NULL` release date means the
+  assignment is always visible.
 - **Due Date** — the default submission deadline. Per-student or
   per-group overrides are configured under
   [Extensions](/staff/assignments/extensions).
