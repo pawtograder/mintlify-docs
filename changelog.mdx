@@ -6,6 +6,21 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 17, 2026
+
+#### GitHub reliability
+- **Self-healing student repository creation** — Repository creation is now more resilient to transient GitHub errors. If a repository creation job fails partway through, it automatically retries and recovers without instructor intervention ([#861](https://github.com/pawtograder/platform/pull/861))
+- **Idempotent GitHub team sync** — GitHub team synchronization now handles concurrent creation races and slug-normalization mismatches gracefully, preventing spurious errors when teams are created out-of-band or when two sync jobs run simultaneously ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Automatic GitHub org reconciliation on login** — Users who are already members of a course's GitHub organization (joined via another class or added out-of-band) no longer get stuck on the "accept your invitation" banner. Pawtograder now reconciles org membership automatically in the background on first GitHub login ([#866](https://github.com/pawtograder/platform/pull/866))
+
+#### Bug fixes
+- **Unreleased assignments hidden from student dashboard** — Assignments with a future release date are now correctly hidden from the student Assignments tab. Previously, students could see upcoming assignments before their release date ([#866](https://github.com/pawtograder/platform/pull/866))
+
+### July 16, 2026
+
+#### Grading improvements
+- **Placeholder column in grader roster** — The assignment roster now includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions from real student submissions. Placeholder rows show a badge and can be filtered with a Yes/No selector. This covers both **Grade anyway** stubs on regular assignments and auto-created stubs on `no_submission` assignments ([#865](https://github.com/pawtograder/platform/pull/865))
+
 ### July 7, 2026
 
 #### Grading improvements
@@ -15,6 +30,11 @@ icon: "clock-rotate-left"
 #### Bug fixes
 - **Fixed non-submitter roster scoping** — Corrected a bug where students who had submitted any other assignment in the course were incorrectly excluded from the non-submitter list for assignments they hadn't submitted to, causing the **Grade anyway** button to not appear for them ([#859](https://github.com/pawtograder/platform/pull/859))
 - **Fixed bulk assign assignee display** — Grader names in the bulk assign selector now fall back to the profile ID when a name is not yet loaded, preventing blank or broken entries in the assignee list ([#856](https://github.com/pawtograder/platform/pull/856))
+
+### June 30, 2026
+
+#### Integrations
+- **LTI 1.3 integration with Canvas** — Pawtograder now supports LTI 1.3 as a tool, enabling SSO launch from Canvas (and other LMS platforms), NRPS roster sync, and AGS grade passback. Instructors can manage sync settings and push grades from **Manage → Course → LMS (LTI) Sync**. Administrators configure platforms and bind course contexts from the admin panel ([#789](https://github.com/pawtograder/platform/pull/789))
 
 ## April 2026
 
