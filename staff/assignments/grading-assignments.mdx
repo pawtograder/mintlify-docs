@@ -257,6 +257,15 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Placeholder submissions
+
+When you use **Grade anyway** on a non-submitter, or when an assignment is configured as `no_submission` (presentations, oral exams), Pawtograder creates a placeholder stub submission. The grader roster shows a **Placeholder** column so you can distinguish these instructor-created stubs from real student submissions.
+
+- **Placeholder: Yes** — an instructor-created stub; no student-submitted work exists.
+- **Placeholder: No** — a real submission from the student.
+
+You can filter the roster by placeholder status using the column header dropdown, and toggle the column's visibility with the **Placeholder** checkbox in the column visibility controls.
+
 ## Grading Students Without a Submission
 
 Every enrolled student appears on the assignment roster, even if they haven't submitted yet. Students without an active submission show a **"Not submitted"** status and a **Grade anyway** button.
