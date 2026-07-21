@@ -6,7 +6,17 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
-### July 7, 2026
+### July 21, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a hidden-by-default **Placeholder** column that distinguishes instructor-created stub submissions (from **Grade anyway** or no-submission assignments) from real student submissions. Enable the column from the column visibility controls and filter by Yes/No to focus on stubs or real submissions ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Unreleased assignments hidden from student dashboard** — Students no longer see assignments whose release date is in the future on their Assignments tab. Previously, the student dashboard RPC bypassed row-level security and returned all non-archived assignments regardless of release date ([#866](https://github.com/pawtograder/platform/pull/866))
+- **GitHub org membership reconciled on first login** — Students who were already members of a course's GitHub organization (added out-of-band or via another class) were previously stuck on the "accept your invitation" banner forever. Pawtograder now automatically reconciles GitHub org membership in the background when a user with a linked GitHub account logs in and has an unconfirmed enrollment ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Self-healing student repository creation** — Student repositories that fail to create due to transient GitHub errors are now automatically retried, reducing the need for manual intervention ([#861](https://github.com/pawtograder/platform/pull/861))
+
+### July 17, 2026
 
 #### Grading improvements
 - **Grade students without a submission** — Every enrolled student now appears on the assignment roster, even without an active submission. Instructors and graders can click **Grade anyway** on any non-submitter row to create an empty stub submission and navigate directly to the grading page. If the student later submits, the stub is automatically superseded. The grading progress panel shows a separate **Not submitted: N** count so non-submitters don't skew completion percentages ([#855](https://github.com/pawtograder/platform/pull/855))
