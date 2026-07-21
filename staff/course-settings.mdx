@@ -82,6 +82,26 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
+## LMS (LTI) Sync
+
+If your course is linked to a Canvas (or other LMS) course via LTI 1.3, the **LMS (LTI) Sync** page (under **Manage → Course → LMS (LTI) Sync**) lets you:
+
+- **Sync roster now** — pull the current LMS roster into Pawtograder via NRPS.
+- **Toggle roster sync** — enable or disable the hourly automatic roster sync for each linked LMS context.
+- **Toggle grade sync** — enable or disable automatic grade passback to the LMS gradebook.
+- **Map sections** — designate each linked LMS context as course-wide, a lecture section, or a lab section, and map Canvas section names to Pawtograder sections.
+- **Push assignment grades** — manually push released grades for a specific assignment back to the LMS gradebook via AGS.
+
+<Note>
+An administrator must first bind the LMS course context to your Pawtograder class before the LMS Sync page shows any linked contexts. Contact your platform administrator if the page shows "This course is not yet linked to an LMS context."
+</Note>
+
+<Note>
+The first roster sync for a newly bound class must be triggered manually (via **Sync roster now** or by the scheduled cron job) because the instructor UI requires enrollment, which the first sync itself creates.
+</Note>
+
+For deployment-level LTI setup (registering platforms, binding contexts, configuring secrets), see your platform administrator.
+
 ## Course Display Settings
 
 Additional course-wide settings may include:

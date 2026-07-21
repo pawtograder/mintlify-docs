@@ -257,6 +257,12 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Placeholder submissions
+
+When an instructor or grader creates a stub submission for a student who hasn't submitted (via **Grade anyway** or the bulk non-submitter flow), the roster marks that row as a **Placeholder**. The **Placeholder** column is hidden by default — toggle it on from the column visibility controls. You can also filter the roster to show only placeholder rows (Yes) or only real submissions (No).
+
+A placeholder is any submission created with `submitted_via = 'manual'`, which covers both **Grade anyway** stubs on regular assignments and the auto-created stubs on `no_submission` assignments (presentations, oral exams, etc.).
+
 ## Grading Students Without a Submission
 
 Every enrolled student appears on the assignment roster, even if they haven't submitted yet. Students without an active submission show a **"Not submitted"** status and a **Grade anyway** button.
