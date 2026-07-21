@@ -35,6 +35,18 @@ After running the fix, you'll see a summary showing:
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
 
+## Repository Creation Errors
+
+If a student's repository fails to create (for example, because the template repository is empty or missing), the **Repositories** page shows a **Creation failed** status with a human-readable reason and a **Retry creation** button.
+
+Click **Retry creation** to clear the recorded error and re-queue the repository creation job. Fix the underlying issue first (for example, push at least one commit to the template repository) before retrying.
+
+<Note>
+Repositories with a recorded creation error are not automatically retried by the background reconciler — they wait for an instructor to click **Retry creation** after the root cause is resolved.
+</Note>
+
+A background reconciler runs every 15 minutes and automatically re-enqueues repositories that are stuck in a pending state (no recorded error, not yet ready). Repositories that have been stuck for more than 12 hours are flagged in Sentry for operator review.
+
 ## When to Use Fix Permissions
 
 Use the Fix Permissions tool when:
