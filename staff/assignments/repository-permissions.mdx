@@ -8,6 +8,26 @@ icon: "shield-check"
 
 Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
 
+## Repository creation failures
+
+When a student repository fails to be created (for example, because the template repository is empty or missing), Pawtograder records the error on the repository row and surfaces it in the Repositories page.
+
+### Identifying failed repositories
+
+In the Repositories page, a repository with a creation failure shows:
+
+- A **Creation failed** status badge in red
+- A short description of the error (for example, "Source repository org/template is empty")
+- A **Retry creation** button
+
+### Retrying repository creation
+
+After fixing the underlying issue (for example, pushing content to an empty template repository), click **Retry creation** on the affected row. Pawtograder clears the recorded error and re-enqueues the creation job. The row updates automatically when the repository becomes ready.
+
+<Note>
+Pawtograder also runs a background reconciler every 15 minutes that automatically re-enqueues repositories that are stuck in a pending state (no recorded error, not yet ready). Repositories with a recorded creation error are left for an instructor to retry manually after the root cause is fixed.
+</Note>
+
 ## Fix Repository Permissions
 
 If you suspect that repository permissions are out of sync (for example, if students report they cannot access their repositories), you can use the **Fix Permissions** button to audit and correct all repository permissions for an assignment.
