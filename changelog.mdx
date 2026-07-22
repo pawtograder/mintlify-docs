@@ -6,6 +6,26 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 22, 2026
+
+#### Infrastructure
+- **Postgres stability fix** — Helm chart 0.3.6 stops version bumps from rolling the Postgres pod and adds fast SIGTERM handling to prevent data-loss incidents during deploys ([#870](https://github.com/pawtograder/platform/pull/870))
+
+### July 21, 2026
+
+#### Infrastructure
+- **Drill I/O isolation** — PITR and restore drills now run on their own scratch volumes (configurable `storageClass`, e.g. `netapp-economy`) instead of the primary's fast-tier storage, reducing I/O contention during backup verification ([#869](https://github.com/pawtograder/platform/pull/869))
+
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a **Placeholder** column (hidden by default, toggleable via column visibility) that distinguishes instructor-created stub submissions (from **Grade anyway** or no-submission assignments) from real student submissions. The column supports Yes/No filtering so you can quickly find or exclude placeholder rows ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Fixed unreleased assignments showing on student dashboard** — Students could previously see assignments whose release date was still in the future on their Assignments tab. Unreleased assignments are now correctly hidden until their release date ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Fixed GitHub org invitation banner stuck for existing members** — Users who were already a member of the course's GitHub org (joined via another class or added out-of-band) were stuck on the "accept your invitation" banner forever. GitHub org membership is now reconciled automatically in the background on login, clearing the banner without requiring a manual sync ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Self-healing student repository creation** — Repository creation is now convergent: blank repos left by a failed previous attempt are automatically detected and regenerated. Deterministic failures (e.g. an empty or missing template repository) are recorded on the repository row with a human-readable error and a **Retry creation** button in the Repositories page. A background reconciler re-enqueues transient stuck repos every 15 minutes ([#861](https://github.com/pawtograder/platform/pull/861))
+
 ### July 7, 2026
 
 #### Grading improvements
