@@ -35,6 +35,21 @@ After running the fix, you'll see a summary showing:
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
 
+## Repository Creation Failures
+
+If a student's repository could not be created (for example, because the template repository is empty or missing), the **Repositories** page shows a **Creation failed** status with a human-readable reason and a **Retry creation** button.
+
+### Retrying a failed repository
+
+1. Fix the underlying problem (for example, push at least one commit to the template repository).
+2. Navigate to the assignment's **Repositories** page.
+3. Find the row showing **Creation failed** and click **Retry creation**.
+4. The system re-queues the creation job. The page updates automatically once the repository is ready.
+
+<Note>
+Pawtograder also runs an automatic background reconciler every 15 minutes that re-enqueues repositories stuck in a pending state (no recorded error). Repositories with a recorded creation error are left for an instructor to retry after the root cause is fixed.
+</Note>
+
 ## When to Use Fix Permissions
 
 Use the Fix Permissions tool when:
