@@ -6,6 +6,21 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 23, 2026
+
+#### Infrastructure
+- **Vault secrets seeded on deploy** — Cache-invalidation vault secrets are now automatically seeded during every deployment, including preview deployments, eliminating a manual step when standing up new environments ([#873](https://github.com/pawtograder/platform/pull/873))
+
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a hidden-by-default **Placeholder** column. Rows with an instructor-created stub submission (from **Grade anyway** or a no-submission auto-stub) show a **Yes** badge so graders can distinguish them from real zero-score submissions. The column supports show/hide and Yes/No filtering ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Unreleased assignments hidden from student dashboard** — Students no longer see assignments whose release date is in the future on their Assignments tab. Previously, the student dashboard RPC bypassed row-level security and returned all non-archived assignments regardless of release date ([#866](https://github.com/pawtograder/platform/pull/866))
+- **GitHub org membership reconciled on first login** — Students who were already members of the course GitHub org (added out-of-band or via a previous class) were stuck on the "accept your invitation" banner forever. The auth callback now reconciles GitHub org membership in the background on first GitHub login, clearing the banner automatically ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Self-healing student repository creation** — If a student's GitHub repository was created blank (due to a template mirroring race), Pawtograder now detects the empty repo and automatically deletes and regenerates it. Deterministic failures (empty or missing template) are recorded on the repository row with a human-readable error and a **Retry creation** button, rather than retrying forever. A background reconciler re-enqueues transient stuck repos every 15 minutes ([#861](https://github.com/pawtograder/platform/pull/861))
+
 ### July 7, 2026
 
 #### Grading improvements
