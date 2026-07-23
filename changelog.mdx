@@ -6,6 +6,16 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 23, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions from real student submissions. Rows graded via **Grade anyway** or auto-created for no-submission assignments show a **Yes** badge; real submissions show **No**. The column supports filtering so you can quickly isolate placeholder rows ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Self-healing student repository creation** — Repository creation failures are now surfaced directly in the Repositories page with a human-readable reason and a **Retry creation** button. A background reconciler automatically re-enqueues stuck repositories every 15 minutes, and the creation worker no longer trips the org-wide circuit breaker on per-repo deterministic failures (such as an empty template repository) ([#861](https://github.com/pawtograder/platform/pull/861))
+- **Unreleased assignments hidden from student dashboard** — Assignments whose release date is in the future no longer appear on the student Assignments tab. Previously, the student dashboard RPC returned all non-archived assignments regardless of release date ([#866](https://github.com/pawtograder/platform/pull/866))
+- **GitHub org membership reconciled on first login** — Students who were already members of the course's GitHub organization (added out-of-band or via a previous class) were previously stuck on the "accept your invitation" banner. GitHub org membership is now reconciled automatically in the background when a user logs in with a linked GitHub account and has an unconfirmed enrollment ([#866](https://github.com/pawtograder/platform/pull/866))
+
 ### July 7, 2026
 
 #### Grading improvements
