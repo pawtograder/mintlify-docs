@@ -54,3 +54,20 @@ Pawtograder automatically manages repository permissions when:
 - Individual submissions are activated or deactivated
 
 The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
+
+## Repository Creation Failures
+
+Occasionally a student's repository may fail to be created — for example, if the template repository is empty or missing. When this happens, Pawtograder records the failure reason on the repository row and surfaces it in the Repositories table with a **Creation failed** status and a human-readable error message.
+
+### Retrying a failed repository
+
+1. Navigate to the assignment's **Repositories** page.
+2. Find the row showing **Creation failed** and read the error message.
+3. Fix the underlying issue (for example, push at least one commit to the template repository).
+4. Click **Retry creation** on the failed row.
+
+The system re-enqueues the creation job. The row updates automatically once the repository is ready.
+
+### Automatic recovery
+
+Pawtograder also runs a background reconciler every 15 minutes that re-enqueues any repository that is stuck in a pending state (not yet ready and no recorded error). This handles transient failures — such as a GitHub API timeout — without requiring manual intervention. Repositories with a recorded creation error are left for an instructor to retry after the underlying issue is resolved.
