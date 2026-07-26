@@ -1,0 +1,96 @@
+---
+title: "LMS (LTI) Integration"
+description: "Connect Pawtograder to Canvas or another LMS via LTI 1.3 for SSO launch, roster sync, and grade passback"
+icon: "link"
+---
+
+# LMS (LTI) Integration
+
+Pawtograder integrates with Canvas and other LMS platforms via **LTI 1.3**, giving you three capabilities:
+
+- **SSO launch** — students and staff click a link in Canvas and land in Pawtograder, already signed in.
+- **Roster sync** — pull the LMS course roster (including section placement) into a Pawtograder class on a schedule.
+- **Grade passback** — push Pawtograder assignment grades back into the LMS gradebook.
+
+LTI integration is optional and independent of GitHub-based sign-in.
+
+## Setup overview
+
+Setting up LTI requires coordination between a **platform admin** (who registers the LMS in Pawtograder) and an **LMS admin** (who registers Pawtograder as a tool in the LMS). Once both sides are configured, instructors self-serve roster sync and section mapping from their course settings.
+
+### Step 1 — Register Pawtograder in Canvas
+
+In Canvas, go to **Admin → Developer Keys → + Developer Key → + LTI Key** and configure:
+
+| Field | Value |
+| --- | --- |
+| **Target Link / redirect URI** | `https://<your-pawtograder-host>/api/lti/launch` |
+| **OpenID Connect init URL** | `https://<your-pawtograder-host>/api/lti/login` |
+| **JWK Method** | Public JWK URL → `https://<your-pawtograder-host>/api/lti/jwks` |
+| **Privacy level** | **Public** — launches must include the user's name and email |
+| **Scopes** | NRPS membership + AGS line item, score, and result.readonly |
+| **Custom field** | `section_names=$com.instructure.User.sectionNames` |
+| **Placement** | `course_navigation` with window target `_blank` |
+
+Enable the key (state **On**), note the **Client ID**, and deploy the tool to the account or courses where you want the nav link to appear.
+
+### Step 2 — Register the LMS in Pawtograder
+
+A **platform admin** adds the LMS at **Admin → LTI Platforms** (`/admin/lti-platforms`). Provide:
+
+| Field | Canvas value |
+| --- | --- |
+| `issuer` | `https://canvas.instructure.com` |
+| `client_id` | The Developer Key's Client ID from step 1 |
+| `auth_login_url` | `https://<canvas-host>/api/lti/authorize_redirect` |
+| `token_url` | `https://<canvas-host>/login/oauth2/token` |
+| `jwks_url` | `https://<canvas-host>/api/lti/security/jwks` |
+
+The **Tool registration details** card on the LTI Platforms page shows the exact URLs to give your LMS admin.
+
+### Step 3 — Bind courses and map sections
+
+After someone launches from a Canvas course for the first time, the context appears in **Admin → LTI Contexts** (`/admin/lti-contexts`). An admin binds it to a Pawtograder class there.
+
+Once bound, instructors map sections at **Course → LMS (LTI) Sync**:
+
+1. Choose whether the context is **course-wide**, a **lecture section**, or a **lab section**.
+2. Optionally enable **Split by member section** to map individual Canvas section names to Pawtograder sections (requires sections to have a SIS CRN).
+3. Enable **Roster sync** and/or **Grade sync** toggles.
+
+<Note>
+The first roster sync for a newly bound class must be triggered manually (via **Sync roster now** or the cron endpoint) because the instructor UI requires enrollment, which the first sync provides.
+</Note>
+
+## Roster sync
+
+When roster sync is enabled, Pawtograder pulls the Canvas course membership via NRPS and enrolls students into the correct Pawtograder sections. Sync runs automatically on a schedule (hourly by default) and can also be triggered manually from **Course → LMS (LTI) Sync → Sync roster now**.
+
+### Section mapping
+
+Roster sync places students into Pawtograder sections based on the context's section configuration:
+
+- **Course-wide** — all members are enrolled without a section assignment.
+- **Lecture section** — all members are placed into the selected lecture section.
+- **Lab section** — all members are placed into the selected lab section.
+- **Split by member section** — each member's Canvas section name is looked up in the section map and resolved to the matching Pawtograder section. Members whose Canvas section has no mapping are enrolled but flagged as unmapped in the sync result.
+
+Only sections with a **SIS CRN** are selectable for section mapping. Set CRNs in **Admin → Classes → Sections**.
+
+## Grade passback
+
+When grade sync is enabled, Pawtograder can push released assignment grades back to the Canvas gradebook via AGS. To push grades for an assignment:
+
+1. Navigate to **Course → LMS (LTI) Sync**.
+2. Find the assignment in the **Push assignment grades** table.
+3. Click **Push grades**.
+
+Grades are pushed only for released submissions. Pawtograder creates or updates the corresponding Canvas line item automatically.
+
+## Troubleshooting
+
+**"No enabled LTI platform" on launch** — Check that the `issuer` registered in Pawtograder matches exactly what Canvas sends (visible in the browser's network tab on the login redirect). For self-hosted Canvas, the `client_id` may be the key's local id rather than its global id; try registering both forms.
+
+**Roster sync shows "No NRPS" for a context** — The NRPS membership URL is captured at launch time. Have a user launch from the Canvas course to populate it, then retry sync.
+
+**Sections not selectable in the mapping UI** — Only sections with a SIS CRN are available. Add CRNs to your sections in **Admin → Classes → Sections**.
