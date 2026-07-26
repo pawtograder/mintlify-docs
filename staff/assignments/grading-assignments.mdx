@@ -277,6 +277,14 @@ The grading progress panel counts only students with an active submission toward
 
 When using **Bulk Assign Grading**, the default behavior assigns grading only to students who have already submitted. Enable the **Assign grading for all students** toggle to also create empty stub submissions for non-submitters (respecting the current section, lab, and tag filters) before drafting grading assignments. This is useful when you want to ensure every enrolled student receives a grading assignment regardless of submission status.
 
+### Placeholder column
+
+The assignment roster includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions from real student work. Placeholder rows display an orange **Yes** badge; rows with a real submission show **No**.
+
+A submission is marked as a placeholder when it was created by an instructor via **Grade anyway**, or when it was auto-created for a no-submission assignment (such as a presentation or oral exam). Placeholder status does not affect the grade — a non-zero score on a placeholder submission is recorded and displayed normally.
+
+To show the column, check **Placeholder** in the column visibility controls above the roster table. You can also filter the roster to show only placeholder or only real submissions using the column header dropdown.
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
