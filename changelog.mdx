@@ -6,6 +6,42 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 26, 2026
+
+#### Infrastructure
+- **Standby replication-lag alerts + planned-maintenance runbook** — Added Prometheus alerts for standby replication lag and a runbook for planned maintenance windows ([#874](https://github.com/pawtograder/platform/pull/874))
+
+### July 23, 2026
+
+#### Infrastructure
+- **Cache-invalidation vault secrets seeded on deploy** — Cache-invalidation vault secrets are now automatically seeded on all deployments, including preview environments ([#873](https://github.com/pawtograder/platform/pull/873))
+
+### July 22, 2026
+
+#### Bug fixes
+- **Fixed Postgres fast-shutdown and drain-friendly PDB** — Resolved an issue where version bumps could trigger rolling Postgres restarts; Postgres now receives a fast SIGTERM and the PodDisruptionBudget is drain-friendly ([#870](https://github.com/pawtograder/platform/pull/870), [#871](https://github.com/pawtograder/platform/pull/871))
+
+### July 21, 2026
+
+#### Infrastructure
+- **Drills use their own scratch volume** — PITR and restore drills now run on a dedicated `netapp-economy` scratch volume, moving restore I/O off the primary's fast storage tier ([#869](https://github.com/pawtograder/platform/pull/869))
+
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now shows a **Placeholder** column (hidden by default, filterable) that distinguishes instructor-created stub submissions (from **Grade anyway** or no-submission assignments) from real student submissions. Placeholder rows display an orange **Yes** badge; real submissions show **No** ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Fixed unreleased assignments visible to students** — A bug caused future-release assignments to appear on the student Assignments dashboard. Assignments are now hidden until their release date ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Fixed GitHub team sync idempotency** — GitHub team creation is now idempotent under concurrent syncs and slug-normalization mismatches. A 422 "already exists" on team creation now re-fetches the existing team instead of throwing ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Fixed GitHub org reconciliation on first login** — Users already in a course's GitHub org were stuck on the "accept your invitation" banner. The auth callback now reconciles org membership in the background on first GitHub login, clearing the banner automatically ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Self-healing student repository creation** — Repository creation is now convergent: blank repos are detected and regenerated, deterministic failures (e.g. empty template) are surfaced to instructors with a **Retry creation** button, and a background reconciler re-enqueues stuck repos every 15 minutes ([#861](https://github.com/pawtograder/platform/pull/861))
+
+### July 14, 2026
+
+#### Integrations
+- **LTI 1.3 integration with Canvas** — Pawtograder now acts as an LTI 1.3 tool, enabling SSO launch from Canvas, NRPS roster sync, and AGS grade passback. Admins register platforms at **Admin → LTI Platforms** and bind Canvas courses to Pawtograder classes at **Admin → LTI Contexts**. Instructors manage roster/grade sync and section mapping at **Course → LMS (LTI) Sync** ([#789](https://github.com/pawtograder/platform/pull/789))
+
 ### July 7, 2026
 
 #### Grading improvements
