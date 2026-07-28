@@ -6,6 +6,18 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 28, 2026
+
+#### Grading improvements
+- **Placeholder column in the grader roster** — The assignment roster now includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions from real student work. Rows created via **Grade anyway** or the bulk non-submitter stub flow are marked **Yes** (orange badge); real submissions show **No**. The column supports filtering so you can quickly scope the roster to only stubs or only real submissions ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Unreleased assignments hidden from student dashboard** — Assignments whose release date is in the future are no longer shown on the student Assignments tab. Previously, the student dashboard RPC bypassed row-level security and returned all non-archived assignments regardless of release date ([#866](https://github.com/pawtograder/platform/pull/866))
+- **GitHub org membership reconciled on first login** — Students who were already members of the course GitHub organization (added out-of-band or via a previous course) were stuck on the "accept your invitation" banner indefinitely. GitHub org membership is now reconciled automatically in the background on first login, clearing the banner without requiring a manual sync ([#866](https://github.com/pawtograder/platform/pull/866))
+
+#### Infrastructure
+- **Self-healing student repository creation** — Repository creation is now convergent: blank repositories left by a failed template-generate are automatically detected and regenerated. Deterministic failures (empty or missing template repository) are recorded as a human-readable **Creation failed** status on the Repositories page, with a **Retry creation** button for instructors to re-queue after fixing the root cause. A background reconciler re-enqueues transient stuck repositories every 15 minutes ([#861](https://github.com/pawtograder/platform/pull/861))
+
 ### July 7, 2026
 
 #### Grading improvements
