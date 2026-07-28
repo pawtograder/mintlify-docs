@@ -6,6 +6,16 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The grader roster now includes a hidden-by-default **Placeholder** column that distinguishes instructor-created stub submissions (from **Grade anyway** or `no_submission` auto-stubs) from real student submissions. Rows with a stub show an orange **Yes** badge; rows with a real submission show **No**. The column supports Yes/No filtering ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Unreleased assignments hidden from student dashboard** — Assignments whose release date is in the future no longer appear on the student Assignments tab. Previously, the student dashboard RPC bypassed the release-date check, so students could see upcoming assignments before they were released ([#866](https://github.com/pawtograder/platform/pull/866))
+- **GitHub org reconciliation on first login** — Users who were already members of a course's GitHub organization (joined out-of-band or via another class) were previously stuck on the "accept your invitation" banner forever. GitHub org membership is now reconciled automatically in the background on first GitHub login, clearing the banner without requiring a manual sync ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Idempotent GitHub team sync** — Fixed a race condition where concurrent team-creation attempts could throw a 422 error and leave the team sync in a broken state. Team creation is now fully idempotent ([#866](https://github.com/pawtograder/platform/pull/866))
+
 ### July 7, 2026
 
 #### Grading improvements
