@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### July 29, 2026
+
+#### Bug fixes
+- **Fixed async worker errors** — Resolved two production errors: the async worker no longer crashes when processing a shared handout repository, and duplicate-key errors on course invitations are now handled gracefully ([#880](https://github.com/pawtograder/platform/pull/880))
+
+### July 28, 2026
+
+#### Infrastructure
+- **Standby replication-lag alerts and planned-maintenance runbook** — Added Helm chart alerts for standby replication lag and a runbook for planned maintenance windows (chart 0.3.12) ([#874](https://github.com/pawtograder/platform/pull/874))
+
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions (from **Grade anyway** or no-submission auto-stubs) from real student submissions with a zero score. The column supports Yes/No filtering ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Unreleased assignments hidden from student dashboard** — Students no longer see assignments that have not yet been released on their Assignments tab. Previously, the student dashboard RPC returned all non-archived assignments regardless of release date ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Idempotent GitHub team sync** — GitHub team creation is now idempotent: concurrent syncs or teams created out-of-band no longer cause 422 errors. The sync also correctly resolves teams whose GitHub-normalized slug differs from the course slug ([#866](https://github.com/pawtograder/platform/pull/866))
+- **First-login GitHub org reconciliation** — Users who are already a member of the course's GitHub organization are no longer stuck on the "accept your invitation" banner. Pawtograder now reconciles org membership in the background on first GitHub login ([#866](https://github.com/pawtograder/platform/pull/866))
+
+### July 14, 2026
+
+#### Infrastructure
+- **Self-healing student repository creation** — Repository creation failures are now recorded with a human-readable reason on the repository row. Instructors can click **Retry creation** on the Repositories page after fixing the root cause (for example, an empty template repository). A background reconciler runs every 15 minutes to automatically re-enqueue repositories stuck in a pending state, and Sentry is alerted for any repository not ready after 12 hours ([#861](https://github.com/pawtograder/platform/pull/861))
+
 ### July 7, 2026
 
 #### Grading improvements
