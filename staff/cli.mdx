@@ -189,7 +189,7 @@ npm run cli -- flashcards copy \
 
 ### Submissions
 
-Import comments and artifacts:
+Import comments and artifacts, or export submission files:
 
 ```bash
 # Import submission comments
@@ -212,7 +212,97 @@ npm run cli -- submissions artifacts import \
   --assignment <identifier> \
   --file manifest.json \
   --overwrite
+
+# Export submission files (source code, metadata)
+npm run cli -- submissions export \
+  --class <identifier> \
+  [--assignment <slug-or-glob>] \
+  [--output <directory>] \
+  [--identity opaque|hash|raw] \
+  [--all-submissions] \
+  [--with-binary] \
+  [--include-file 'src/**'] \
+  [--exclude-file 'build/**'] \
+  [--format json|csv]
 ```
+
+#### Submissions export options
+
+| Option | Description |
+|---|---|
+| `--class` | Class ID, slug, or name (required) |
+| `--assignment` | Assignment selector — id, slug, or glob (e.g. `hw-*`). Repeatable. Omit to export all assignments. |
+| `--output` | Output directory (default: `./submissions-export-<class>-<timestamp>`) |
+| `--identity` | Subject identifier mode: `opaque` (default, random per-run), `hash` (deterministic with `--salt`), or `raw` (real names/emails, requires `--i-understand-pii`) |
+| `--salt` | Salt for `--identity hash` (minimum 16 characters) |
+| `--all-submissions` | Include every submission attempt, not just the active one |
+| `--with-binary` | Include binary file contents as base64 |
+| `--include-file` | Only export files matching this glob (repeatable) |
+| `--exclude-file` | Skip files matching this glob (repeatable) |
+| `--format` | `json` (default, includes file contents) or `csv` (metadata index only) |
+
+The export produces one directory per assignment containing `manifest.json`, `submissions.json` (or `.csv`), and `files.json` (or `.csv`).
+
+### Assessment export
+
+Export a privacy-controlled snapshot of rubrics, scores, autograder test results, Feedbot hint feedback, and gradebook columns for research or analysis:
+
+```bash
+npm run cli -- assessment export \
+  --class <identifier> \
+  [--assignment <slug-or-glob>] \
+  [--output <directory>] \
+  [--identity opaque|hash|raw] \
+  [--salt <string>] \
+  [--gradebook-column <slug>] \
+  [--skip-gradebook] \
+  [--all-submissions] \
+  [--with-test-output] \
+  [--with-instructor-build-output]
+```
+
+#### Assessment export options
+
+| Option | Description |
+|---|---|
+| `--class` | Class ID, slug, or name (required) |
+| `--assignment` | Assignment selector — id, slug, or glob. Repeatable. Omit to export all. |
+| `--output` | Output directory (default: `./assessment-export-<class>-<timestamp>`) |
+| `--identity` | Subject identifier mode: `opaque` (default), `hash`, or `raw` |
+| `--salt` | Salt for `--identity hash` (minimum 16 characters) |
+| `--gradebook-column` | Gradebook column selector. Repeatable. Omit to export all columns. |
+| `--skip-gradebook` | Omit gradebook column metadata and private cell data |
+| `--all-submissions` | Include every submission attempt, not just the active one |
+| `--with-test-output` | Include autograder test stdout/stderr (truncated to 4 KB by default) |
+| `--with-instructor-build-output` | Include hidden build logs (sanitized grading paths, truncated) |
+| `--instructor-build-output-from-sentinel <string>` | Trim hidden build logs to start at this substring |
+
+#### Identity modes and privacy
+
+Student identifiers in the export are pseudonymized by default:
+
+- **`opaque`** (default): Each export run generates a random salt. Tokens are stable within one run (so rows from different files can be joined) but cannot be reproduced in a future run. Use this for one-off analyses.
+- **`hash`**: Tokens are derived from your `--salt` combined with a server-side pepper. The same salt on the same deployment always produces the same tokens, so you can join exports across runs. The server pepper never leaves the server, so tokens cannot be recomputed offline.
+- **`raw`**: Real student IDs, emails, and names are written to disk. Requires `--i-understand-pii`.
+
+#### Output structure
+
+Each assignment gets its own subdirectory containing:
+
+| File | Contents |
+|---|---|
+| `manifest.json` | Export metadata (identity mode, dump ID, totals) |
+| `rubric.json` | Rubric tree (parts, criteria, checks) |
+| `autograder.json` | Autograder configuration and test definitions |
+| `groups.json` | Group membership (if applicable) |
+| `submissions.json` | One row per submission (pseudonymized) |
+| `scores.json` | Rubric check scores from final grading reviews |
+| `tests.json` | Autograder test results per submission |
+| `hints.json` | Feedbot hint feedback and LLM-generated hints |
+| `error-pin-engagement.json` | Student read/like state for error-pinned discussion posts |
+| `instructor-build-output.json` | Hidden build logs (only with `--with-instructor-build-output`) |
+
+The root directory also contains `manifest.json` with grand totals and `gradebook/scores.json` with private gradebook cell data.
 
 ## Repository maintenance
 

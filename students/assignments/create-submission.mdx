@@ -23,6 +23,20 @@ This lets you see your final grade as soon as it's available, rather than waitin
 
 Every time you push changes to your repository, Pawtograder automatically runs your autograder. The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results.
 
+## Grade Tab
+
+Once your instructor releases your grade, clicking on a submission opens the **Grade** tab by default. This tab shows a unified grade ledger for your submission:
+
+- **Headline score**: Your total points over the assignment maximum, with a progress bar.
+- **Autograder section**: A compact list of all autograder tests, grouped by part. Failing tests start expanded so you can see the output and any Feedbot hints. Passing tests are collapsed. Use the **Only failing** toggle to focus on tests you need to fix.
+- **Hand grading section**: A breakdown of each rubric criterion, showing which checks were applied (with the grader's comment and points) and which visible checks were *not* applied. You can open a regrade request directly from this view — both for applied checks you want reconsidered and for unapplied checks you believe should have been applied.
+- **Adjustments**: Any manual score tweak applied by your instructor, with an optional note.
+- **Regrade requests**: A summary of all your regrade requests for this submission, grouped by status.
+
+If the grade has not been released yet, the Grade tab shows an informational banner and still displays autograder results so you can see your automated score while waiting for hand grading.
+
+The **Autograder Detail** tab remains available for a more detailed view of autograder output, including the Feedbot AI hint interface.
+
 <Frame>
   <img src="/images/students/assignments/create-submission-1754510547128.png" alt="Submission page showing autograder results and grading rubric preview" />
 </Frame>

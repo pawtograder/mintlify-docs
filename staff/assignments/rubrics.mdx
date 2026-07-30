@@ -285,6 +285,35 @@ parts:
 
 ## Editing Rubrics
 
+The rubric editor offers two views that you can switch between at any time using the **GUI** and **YAML source** buttons in the editor toolbar:
+
+- **GUI view** (default): A visual tree editor with drag-and-drop reordering of parts, criteria, and checks. Use the **Add part** button to add a new part, then use the **Add criterion** menu to pick from built-in templates (met/not met, multi-option, deduction-only, etc.). Each check expands to reveal all its fields, including a **References** section for cross-rubric links.
+- **YAML source view**: The raw YAML editor backed by Monaco. Useful for bulk edits, copy-paste from another rubric, or when you need precise control over field values.
+
+Switching from YAML to GUI validates the YAML first — if there are parse errors, you'll see a toast explaining what to fix before the switch can complete. Switching from GUI to YAML flushes any pending edits and serializes the current rubric tree.
+
+Both views share the same underlying rubric state, so toggling between them is lossless. The view preference is saved per browser session.
+
+### Drag-and-drop reordering
+
+In GUI view, every part, criterion, and check has a drag handle (⠿) on its left edge. Drag items vertically within their parent to reorder them. Ordinals are updated automatically on drop.
+
+### Quick-add criterion templates
+
+Click **Add criterion** inside a part to open a menu of templates:
+
+| Template | Description |
+|---|---|
+| Blank checkbox criterion | Single checkbox check, 1 point |
+| Met / not met (binary) | Two radio-button checks (met/not met), min/max = 1 |
+| Met / partial / not met | Three radio-button checks, min/max = 1 |
+| Four-tier (excellent / good / fair / poor) | Four radio-button checks, min/max = 1 |
+| Multi-option check | Single check with three selectable options |
+| Code-quality deductions | Three annotation checks in a penalty-only criterion |
+| Penalty-only annotation (single) | One annotation check in a penalty-only criterion |
+
+### Unsaved-changes protection
+
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 
 This protection applies when:
@@ -353,6 +382,61 @@ TAs and instructors can edit or delete rubric scores even after completing a rev
 Editing completed reviews does not automatically notify students. If grades have been released, you may need to communicate changes to affected students.
 </Note>
 
+## Hiding a Rubric Until a Review Is Assigned
+
+By default, students can see a rubric's parts, criteria, and checks as soon as the rubric exists. For self-review rubrics, this can bias students' work — they may tailor their submission to the rubric questions before completing the assignment.
+
+Enable **Hide from students until assigned** on a rubric to prevent students from seeing its contents until a review assignment has been created for them and its release date (if any) has passed.
+
+### Enabling in the GUI editor
+
+1. Open the rubric in the GUI editor.
+2. In the **Rubric** header card at the top, toggle **Hide from students until assigned**.
+3. Save.
+
+### Enabling in YAML
+
+Add `hide_unless_assigned: true` at the rubric level:
+
+```yaml
+name: Self-Review Rubric
+hide_unless_assigned: true
+parts:
+  - name: Reflection
+    criteria:
+      - name: Effort
+        total_points: 5
+        checks:
+          - name: Completed reflection
+            points: 5
+```
+
+### How it works
+
+- Students cannot see the rubric's parts, criteria, or checks until a `review_assignments` row exists for them on that rubric **and** the row's release date (if any) has passed.
+- Instructors and graders always see the rubric regardless of this setting.
+- The student's view updates in real time when the review assignment is created or released — no page refresh needed.
+
+## Self-Review Release Timing
+
+By default, self-review assignments are created for each student when their individual due date passes (accounting for extensions). You can instead set a fixed **release time** so all students receive their self-review at the same wall-clock moment, regardless of per-student due-date exceptions.
+
+### Setting a release time
+
+1. Open the assignment configuration form (create or edit assignment).
+2. In the **Self-Evaluation** section, enable self-review.
+3. Set the **Release self-review at** field to the desired date and time (displayed in the course's time zone).
+4. Save.
+
+When a release time is set:
+
+- Self-review assignments are created for all students at that exact time, ignoring per-student due-date exceptions.
+- The review's due date is computed as `release_at + deadline_offset hours`.
+- Students who finalize their submission early still receive their self-review at `release_at`, not immediately.
+- If the rubric has `hide_unless_assigned: true`, the rubric becomes visible to students at `release_at`.
+
+Leave the field blank to keep the default per-student behavior.
+
 ## Notes and Tips
 
 - Keep criteria focused and keep check names short; longer explanation should go in `description`.
@@ -418,10 +502,37 @@ A check on one rubric can reference a check on another rubric. During grading, a
 
 ### How to Configure
 
-1. Navigate to the rubric preview/editor for an assignment.
-2. For the check you want to augment, click "Add Reference".
-3. Search/select a check from other rubrics (the current rubric's checks are excluded).
-4. Save. The relationship is stored so that, when grading, the referenced feedback appears under the referencing check.
+**In GUI view:**
+
+1. Expand the check you want to augment in the GUI editor.
+2. Click **References** to open the references panel.
+3. Click **Add reference** and select a target check from the grouped dropdown. Checks are grouped by review round. Checks in unsaved sibling tabs are shown as disabled — save that tab first.
+4. Click **Add**. The reference is stored in the rubric's in-memory state.
+5. Click **Save** to persist the rubric and its references.
+
+**In YAML source view:**
+
+Add a `references` list to the check using name-keyed paths:
+
+```yaml
+checks:
+  - name: Code quality
+    points: 5
+    references:
+      - review_round: self-review
+        part: Code Quality
+        criterion: Style and Clarity
+        check: Followed style guide
+```
+
+References are resolved by name at save time. If the target check's name is ambiguous across rubrics, use the numeric `id` fallback:
+
+```yaml
+references:
+  - id: 12345
+```
+
+If a sibling review-round tab has unsaved changes, references pointing into that tab are preserved from the last saved state rather than re-resolved. A toast notifies you which tab to save first to finalize those references.
 
 ### Good Use Cases
 

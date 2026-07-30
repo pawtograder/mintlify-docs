@@ -145,6 +145,19 @@ Students see only their own breakdown; instructors and graders see all group mem
 
 Once all required rubric checks are applied, click **Complete Review** to mark the review done. This does **not** release the review to the student; it indicates to the instructor that the review is ready to be released.
 
+A **Complete Review** button also appears at the bottom of the rubric sidebar, directly after the last rubric block. This lets you confirm completion without scrolling back to the top of the page.
+
+### Auto-advance to the next incomplete review
+
+When you click **Complete Review**, a popover appears with two options:
+
+- **Complete**: Mark the review done and stay on the current submission.
+- **Complete + Next**: Mark the review done and immediately navigate to the next submission that still has an incomplete review assigned to you.
+
+The **Complete + Next** button is only shown when there is another incomplete review in your queue. The next submission is chosen by looking ahead from the current submission ID, then wrapping around to the first incomplete submission if none are found after the current one.
+
+An **Auto-advance** toggle inside the popover lets you enable automatic navigation without clicking **Complete + Next** each time. When enabled, confirming a review automatically navigates to the next incomplete submission. This preference is saved in your browser.
+
 When you complete an assigned rubric part, Pawtograder will also automatically complete any other review assignments on the same submission whose assigned parts are a subset of yours. For example, if you complete parts A, B, and C, another grader assigned only to A+B has their assignment auto-completed.
 
 ### Editing after completion
