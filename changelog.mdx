@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### August 3, 2026
+
+#### Bug fixes
+- **Fixed autograder artifacts on self-hosted deployments** — The `submission-artifacts` storage bucket is now created automatically by the database migration, fixing artifact upload failures (`Failed to create signed URL for artifact`) on deployments built from migrations alone ([#882](https://github.com/pawtograder/platform/pull/882))
+- **Fixed autograder runner URL on self-hosted deployments** — The grading runner now receives the public Supabase URL instead of the internal in-cluster hostname, fixing `getaddrinfo ENOTFOUND` errors when uploading artifacts from GitHub Actions ([#882](https://github.com/pawtograder/platform/pull/882))
+- **Fixed handout commit errors causing infinite GitHub webhook redelivery** — A database sequence desync could cause every push to a handout repository to fail with a duplicate primary key error, blocking empty-submission detection and causing GitHub to redeliver the webhook indefinitely. The sequences are now resynced automatically on deploy ([#884](https://github.com/pawtograder/platform/pull/884))
+- **Fixed empty submission errors losing instructor-visible workflow errors** — When an empty submission was rejected and cleaned up, the associated workflow error was silently dropped due to a foreign key violation. Errors are now recorded without a submission reference so they remain visible to instructors ([#884](https://github.com/pawtograder/platform/pull/884))
+
+### July 29, 2026
+
+#### Bug fixes
+- **Fixed infinite requeue when assignments share a handout repository** — Copied assignments and multi-section courses can share a handout repository. A reverse lookup by repository name was ambiguous in this case and caused the async worker to error and requeue the job indefinitely, leaving student repositories stuck at `is_github_ready=false`. The lookup now uses the assignment ID directly ([#880](https://github.com/pawtograder/platform/pull/880))
+- **Fixed duplicate key error on roster re-import** — Re-importing a roster or re-inviting a previously removed student no longer fails with a unique constraint violation. Dropped invitations are now reactivated in place (preserving the existing profile pair), and concurrent invitation calls are serialized to prevent race conditions ([#880](https://github.com/pawtograder/platform/pull/880))
+- **Admin role now included in GitHub staff team sync** — Users with the `admin` role are now correctly added to and removed from the GitHub staff team, matching the behavior for instructors and graders. Disabling a staff member now also removes them from the GitHub staff team ([#880](https://github.com/pawtograder/platform/pull/880))
+
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a **Placeholder** column (hidden by default). A **Yes** badge identifies instructor-created stub submissions (from **Grade anyway** or auto-created stubs for no-submission assignments), making it easy to distinguish them from real student submissions. The column supports filtering by Yes/No ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Unreleased assignments now hidden from student dashboard** — Assignments with a future release date no longer appear on the student Assignments tab. Previously, the SECURITY DEFINER RPC bypassed the release-date check, so students could see upcoming assignments before they were released ([#866](https://github.com/pawtograder/platform/pull/866))
+- **GitHub org membership reconciled on first login** — Users who were already members of a course's GitHub organization (joined via another class or added out-of-band) were previously stuck on the "accept your invitation" banner because an invitation cannot be sent to an existing member. Pawtograder now reconciles GitHub org membership in the background on first GitHub login, clearing the banner automatically ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Self-healing student repository creation** — Blank student repositories (caused by a failed template-generate step) are now detected and automatically repaired: the empty repo is deleted and regenerated. Deterministic failures (empty or missing template repository) are recorded on the repository row with a human-readable reason and surfaced to instructors with a **Retry creation** button. A background reconciler re-enqueues stuck repositories every 15 minutes ([#861](https://github.com/pawtograder/platform/pull/861))
+
 ### July 7, 2026
 
 #### Grading improvements
