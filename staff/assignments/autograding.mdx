@@ -179,6 +179,10 @@ build:
 - `policy: ignore` — lint errors are reported in the grading summary but tests still run.
 - `policy: fail` — if the linter finds errors, the rest of grading is skipped and the student receives a zero. The submission does not count against any per-assignment submission cap if you have configured one.
 
+<Note>
+The `warn` policy was removed in v4 of the schema. If you have an existing `pawtograder.yml` using `policy: warn`, update it to either `fail` or `ignore`.
+</Note>
+
 #### `student_tests`
 
 Controls what to do with the student's own test suite. Tests are run in two
