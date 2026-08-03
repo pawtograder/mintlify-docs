@@ -139,8 +139,8 @@ Actions tab of the student repo.
 
 ## The `pawtograder.yml` Configuration
 
-`pawtograder.yml` lives at the root of the grader/solution repo. There is
-currently exactly one grader type (`grader: overlay`) and it has three
+`pawtograder.yml` lives at the root of the grader/solution repo. The top-level
+`grader: overlay` field is **required** (as of v4 of the schema). It has three
 required top-level sections:
 
 - `build` — how to build, lint, and test the project.
