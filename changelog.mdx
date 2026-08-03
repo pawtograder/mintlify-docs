@@ -4,6 +4,20 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 3, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions from real student work. Stubs created via **Grade anyway** or auto-generated for `no_submission` assignments show **Yes**; all other submissions show **No**. The column supports Yes/No filtering so graders can focus on either group ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Test Assignment preview stays open on unreleased assignments** — Clicking a test submission link on an assignment that has not yet been released to students no longer redirects staff to the dashboard. The student-facing preview now opens correctly, with the "Viewing as student" banner visible and an **Exit student view** button to return to the staff view ([#887](https://github.com/pawtograder/platform/pull/887))
+- **Unreleased assignments hidden from student dashboard** — Assignments whose release date is still in the future no longer appear on the student Assignments tab. Previously, the student dashboard RPC bypassed the release-date check, so students could see upcoming assignments before they were intended to be visible ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Automatic GitHub org reconciliation on login** — Students and staff who were already members of the course's GitHub organization (for example, from a previous course) are now automatically reconciled on login, clearing the "accept your invitation" banner without requiring a manual sync ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Unique class slug enforcement per GitHub org** — Pawtograder now prevents two classes in the same GitHub organization from sharing a slug (or a slug that normalizes to the same GitHub team name). A shared slug caused team syncs to delete each other's members and broke org-confirmation lookups. Existing duplicate slugs must be renamed before the migration applies ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Renamed GitHub logins re-resolved automatically** — When a student's GitHub username has changed since they linked their account, Pawtograder now looks up their current login from the stored account ID and retries the team invitation automatically, rather than failing and blocking the entire class import ([#888](https://github.com/pawtograder/platform/pull/888))
+
 ## July 2026
 
 ### July 7, 2026
