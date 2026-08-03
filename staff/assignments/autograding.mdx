@@ -17,12 +17,14 @@ artifacts back to Pawtograder. This page is the reference for the
 
 <Note>
 The `pawtograder.yml` schema is published at
-`https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json`.
+`https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json`.
 Reference it from the top of your YAML to get IDE autocomplete:
 
 ```yaml
-# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json
 ```
+
+The in-app config editor resolves this modeline locally (no network request needed) for v4 schemas, so validation and autocomplete work even in restricted environments.
 </Note>
 
 ## On This Page
