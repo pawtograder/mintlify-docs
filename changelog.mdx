@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 ## July 2026
 
+### August 3, 2026
+
+#### Autograding fixes
+- **Fixed autograder artifacts on self-hosted deployments** — Grader-produced artifacts (mutation reports, coverage HTML, etc.) now upload and display correctly on self-hosted Pawtograder instances. Two independent issues were resolved: the `submission-artifacts` storage bucket is now created automatically by a migration (previously it only existed on the managed deployment), and the grading runner is now given the correct public Supabase URL instead of an internal cluster hostname that it couldn't resolve ([#882](https://github.com/pawtograder/platform/pull/882))
+- **Fixed MCP and CLI authentication on self-hosted deployments** — The `JWT_SIGNING_JWK` secret required for MCP and CLI token minting is now automatically provisioned and wired into the edge functions deployment. Existing self-hosted installs can extract the key from their existing `JWT_PRIVATE_JWKS` secret; see the Helm chart README for instructions ([#882](https://github.com/pawtograder/platform/pull/882))
+
+### July 29, 2026
+
+#### Bug fixes
+- **Fixed student repository creation when assignments share a handout repo** — Copying an assignment or using multi-section courses where two assignments share the same handout repository no longer causes new student repositories to get stuck in an infinite requeue loop ([#880](https://github.com/pawtograder/platform/pull/880))
+- **Fixed duplicate invitation errors on roster re-import** — Re-importing a roster or re-inviting a previously-removed student no longer produces a duplicate key error. Dropped invitations are now reactivated in place, preserving the student's existing profile ([#880](https://github.com/pawtograder/platform/pull/880))
+- **Fixed admin role GitHub team sync** — Users with the `admin` role are now correctly added to and removed from the GitHub staff team, matching the behavior for instructors and graders. Disabling a staff member now also removes them from the GitHub staff team ([#880](https://github.com/pawtograder/platform/pull/880))
+
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment grading roster now includes a **Placeholder** column (hidden by default) that distinguishes instructor-created stub submissions from real student submissions. Stubs created via **Grade anyway** or for no-submission assignments show a yellow **Yes** badge; real submissions show **No**. The column is filterable ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Fixed unreleased assignments visible to students** — Assignments with a future release date no longer appear on the student Assignments tab. Previously, the student dashboard RPC bypassed the release-date check, so students could see assignments before they were released ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Fixed GitHub org invitation banner stuck for existing org members** — Students or staff who were already members of the course's GitHub organization (joined via another class or added out-of-band) were previously stuck on the "accept your invitation" banner. Pawtograder now automatically reconciles GitHub org membership in the background on login ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Fixed self-hosted GitHub team slug normalization** — GitHub team sync now correctly handles teams whose GitHub-normalized slug differs from the course slug (for example, teams created out-of-band). Member and permission operations now use the team's actual slug ([#866](https://github.com/pawtograder/platform/pull/866))
+
 ### July 7, 2026
 
 #### Grading improvements
