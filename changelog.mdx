@@ -4,6 +4,34 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 3, 2026
+
+#### Bug fixes
+- **Fixed realtime subscription race on navigation** — Navigating away from an assignment page while data was still loading could cause a silent "Cannot subscribe to channels after they have been closed" error. The realtime controllers now check whether the class controller has been torn down before subscribing, so navigating quickly between pages no longer produces unhandled rejections ([#886](https://github.com/pawtograder/platform/pull/886))
+- **Fixed autograder artifacts on self-hosted deployments** — The `submission-artifacts` storage bucket was never created by a database migration, so self-hosted deployments built from migrations alone had no bucket and every artifact upload failed. A migration now creates the bucket idempotently, and the grading runner is given the correct public Supabase URL instead of an in-cluster hostname it cannot resolve ([#882](https://github.com/pawtograder/platform/pull/882))
+- **Fixed handout commit history on shared template repos** — When two assignments shared the same handout repository (for example, copied assignments or multi-section courses), every push to that repo caused a duplicate-key error that looped forever and prevented handout file hashes from being stored. The webhook now resolves the handout SHA per-assignment rather than by repo name, and constraint violations no longer cause infinite GitHub redeliveries ([#884](https://github.com/pawtograder/platform/pull/884))
+- **Fixed empty-submission rejection errors visible to instructors** — When an empty submission was rejected, the workflow error recorded for instructors was silently dropped due to a foreign-key violation (the submission row was deleted before the error was recorded). Rejection errors are now recorded without a submission reference so they always appear in the instructor workflow error list ([#884](https://github.com/pawtograder/platform/pull/884))
+
+### July 29, 2026
+
+#### Bug fixes
+- **Fixed infinite requeue for repos on shared handout repos** — Student and group repositories could get stuck at `is_github_ready=false` and requeue forever when their assignment shared a handout repo with another assignment. The async worker now resolves the handout SHA from the repository's own assignment instead of doing an ambiguous reverse lookup ([#880](https://github.com/pawtograder/platform/pull/880))
+- **Fixed duplicate invitation key on roster re-import** — Re-importing a roster or re-inviting a previously-removed student could fail with a duplicate-key constraint violation. Invitations are now reactivated in place when a student's invitation was previously `dropped` (removed from the SIS roster), and concurrent invitation calls for the same student are serialized to prevent races ([#880](https://github.com/pawtograder/platform/pull/880))
+- **Fixed admin role excluded from GitHub staff team** — Users with the `admin` role were not being added to or removed from the GitHub staff team. Admin is now treated as a staff role across all GitHub team synchronization paths, and disabling a staff member now removes them from the team ([#880](https://github.com/pawtograder/platform/pull/880))
+- **Fixed repository readiness check timing out on slow repos** — GitHub's `size` field can stay at 0 for minutes after a repo is fully populated. Repository readiness now uses the existence of the default-branch ref as the authoritative signal, so repos are no longer incorrectly reported as "did not become ready in time" ([#880](https://github.com/pawtograder/platform/pull/880))
+
+### July 17, 2026
+
+#### Grading improvements
+- **Placeholder column in assignment roster** — The assignment roster now shows a **Placeholder** column that distinguishes instructor-created stub submissions (from **Grade anyway** or `no_submission` assignments) from real student submissions. The column is hidden by default and can be toggled on; it supports Yes/No filtering ([#865](https://github.com/pawtograder/platform/pull/865))
+
+#### Bug fixes
+- **Fixed unreleased assignments visible to students** — Students could see assignments in their **Assignments** tab before the release date. The student dashboard RPC now hides assignments whose release date is in the future; assignments with no release date remain visible ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Fixed "accept your invitation" banner stuck for existing org members** — Users who were already a member of the course's GitHub organization (joined via another class or added out-of-band) could not receive a GitHub invitation and were stuck on the banner forever. GitHub org membership is now reconciled automatically in the background on login, clearing the banner without requiring a manual sync ([#866](https://github.com/pawtograder/platform/pull/866))
+- **Fixed GitHub team sync failing on pre-existing teams** — Creating a GitHub team could fail with a 422 "already exists" error when a team was created out-of-band or two workers raced to create it. Team creation is now idempotent: on a 422, the existing team is re-fetched and used ([#866](https://github.com/pawtograder/platform/pull/866))
+
 ## July 2026
 
 ### July 7, 2026
