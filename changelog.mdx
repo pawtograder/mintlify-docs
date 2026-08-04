@@ -4,6 +4,29 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 4, 2026
+
+#### CLI published to npm
+- **`@pawtograder/cli` now available on npm** — Install the Pawtograder CLI globally with `npm install -g @pawtograder/cli` or run it without installing via `npx @pawtograder/cli`. No repository checkout required ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Six previously-stubbed commands now work end to end** — `discussions list`, `submissions list`, `help-requests list`, `help-requests close`, `reviews list`, and `reviews assign` were registered but printed "Not yet implemented". All six are now fully implemented ([#885](https://github.com/pawtograder/platform/pull/885))
+- **`reviews assign` — balanced round-robin allocation** — Spreads submissions across active graders and instructors, honoring `grading_conflicts` and never assigning someone their own submission. Supports `--by-part` to fan out per rubric part, `--file` for explicit manifests, and `--dry-run` to preview the plan before writing ([#885](https://github.com/pawtograder/platform/pull/885))
+- **`--json` on every list command** — All list commands now accept `--json` to emit the raw API response for scripting and piping into `jq` ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Improved `rubrics import` dry-run** — `--dry-run` now validates the YAML against the live rubric on the server and reports exactly what would change (row removals, point changes, reordering) rather than just printing the parsed file. Use `--strip-ids` on export to produce a template for importing into a different assignment ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Timezone-aware date display** — List commands that show dates now render them in the class's time zone and label the zone in the output header ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Cross-class authorization fixes** — Several server commands that accepted any instructor token regardless of class are now scoped to the caller's own classes ([#885](https://github.com/pawtograder/platform/pull/885))
+
+### August 3, 2026
+
+#### Accessibility
+- **WCAG 2.1 AA compliance for student-facing pages** — Addressed audit findings across student-facing routes: semantic heading hierarchy on submission results and gradebook pages, keyboard-operable navigation submenus and gradebook group toggles, `role="alert"` on grader/workflow errors, `role="status"` on pending notices, responsive reflow at 320px/400% zoom for discussion and office-hours layouts, and a visible focus ring on the global search input ([#862](https://github.com/pawtograder/platform/pull/862))
+
+#### Bug fixes
+- **Unique class slug enforcement** — Class slugs are now enforced as unique per GitHub organization, preventing duplicate slugs that could cause routing ambiguity ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Renamed GitHub logins re-resolved** — GitHub login names that have changed since enrollment are now re-resolved automatically ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Student preview kept open on unreleased assignments** — The student preview panel no longer closes when viewing an unreleased assignment ([#887](https://github.com/pawtograder/platform/pull/887))
+
 ## July 2026
 
 ### July 7, 2026
