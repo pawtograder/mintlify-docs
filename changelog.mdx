@@ -4,6 +4,46 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 4, 2026
+
+#### CLI v0.2.0 — fully implemented command groups, published to npm
+
+The Pawtograder CLI is now available on npm as `@pawtograder/cli` ([#885](https://github.com/pawtograder/platform/pull/885), [#889](https://github.com/pawtograder/platform/pull/889)):
+
+```bash
+npm install -g @pawtograder/cli
+pawtograder --help
+```
+
+Six command groups that previously printed "Not yet implemented" are now fully functional:
+
+| Command | What it does |
+|---------|-------------|
+| `submissions list -c <class> -a <assignment>` | Roster with active submission, autograder score, and per-student total |
+| `reviews list -c <class> -a <assignment>` | Review assignments with rubric parts and completion state |
+| `reviews assign -c <class> -a <assignment> --due-date <date>` | Create review assignments, balanced round-robin across class staff |
+| `discussions list -c <class>` | Discussion topics with thread, question, and unanswered counts |
+| `help-requests list -c <class>` | Office-hours help queue |
+| `help-requests close --id <id>` | Close or resolve a help request |
+
+Every `list` command now accepts `--json` for machine-readable output. All commands display dates in the class's configured time zone.
+
+Additional improvements in this release:
+- **Cross-class authorization** — all 24 server commands now verify the caller belongs to the specific class being accessed
+- **`rubrics import --dry-run`** — now validates against the live rubric on the server and shows a full plan of insertions, updates, deletions, and point changes
+- **`rubrics export --strip-ids`** — produces a template YAML that creates new rows on import rather than updating existing ones
+- **`reviews assign --by-part`** — creates one review assignment per rubric part; `--file` accepts an explicit manifest for custom allocations
+- **Improved table formatting** — columns are now padded to their widest cell rather than tab-separated
+
+### August 3, 2026
+
+#### Bug fixes
+- **Unique class slug per GitHub org** — Two classes in the same GitHub organization can no longer share a slug. The slug names every GitHub team and repository for a class, so a shared slug caused team syncs to delete each other's students. A database constraint now enforces uniqueness (case-insensitive, GitHub-normalized) and reports the conflicting class by name ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Renamed GitHub logins re-resolved automatically** — When a student renames their GitHub account, the platform now looks up their current login from the stored account ID and retries the team invitation automatically, rather than failing and blocking the entire class import ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Student preview kept open on unreleased assignments** — Fixed a regression where the student preview panel closed when viewing unreleased assignments ([#883](https://github.com/pawtograder/platform/pull/883))
+
 ## July 2026
 
 ### July 7, 2026
