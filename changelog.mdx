@@ -4,6 +4,50 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 4, 2026
+
+#### CLI 0.2.0 — published to npm
+
+The Pawtograder CLI is now available as [`@pawtograder/cli`](https://www.npmjs.com/package/@pawtograder/cli) on npm. Install it globally or run it with `npx`:
+
+```bash
+npm install -g @pawtograder/cli
+pawtograder --help
+```
+
+This release implements six command groups that were previously stubbed and exited without doing anything ([#885](https://github.com/pawtograder/platform/pull/885), [#889](https://github.com/pawtograder/platform/pull/889)):
+
+- **`submissions list`** — Roster with active submission, autograder score, and total score per student
+- **`reviews list`** — Review assignments with rubric parts and completion state
+- **`reviews assign`** — Create review assignments balanced round-robin across graders, honoring grading conflicts and never assigning someone their own submission. Supports `--by-part`, `--dry-run`, and explicit `--file` manifests
+- **`discussions list`** — Discussion topics with thread, question, and unanswered counts
+- **`help-requests list`** — Office-hours help queue with status filtering
+- **`help-requests close`** — Close or resolve a help request with optional resolution notes
+
+Every `list` command now accepts `--json` for machine-readable output. Dates are displayed in the class's time zone. The `rubrics import --dry-run` flag now validates against the live rubric and reports exactly what would change, rather than just printing the parsed file.
+
+Cross-class authorization is now enforced on all commands — previously, a token scoped to one class could read or mutate any other class on the deployment.
+
+### August 3, 2026
+
+#### Accessibility improvements (WCAG 2.1 AA)
+
+Student-facing pages now meet WCAG 2.1 AA for the criteria audited ([#862](https://github.com/pawtograder/platform/pull/862)):
+
+- **Keyboard navigation** — Desktop nav submenus are now operable with a keyboard (the trigger was previously an unfocusable div). The Alt+K skip-link shortcut now correctly focuses the first skip link. Gradebook group headers and What-If editing are keyboard-operable with `aria-expanded` and focus return on Escape.
+- **Reflow at 320px / 400% zoom** — Discussion and office-hours pages no longer clip content behind a fixed-height overflow-hidden shell at narrow widths. Nav, dashboard cards, and submission action rows wrap instead of overflow.
+- **Semantic headings** — Submission results, autograder output, and grade ledger pages now use a correct heading hierarchy. Survey question titles render as real headings.
+- **Status and error announcements** — Autograder errors use `role="alert"`, pending/manual notices use `role="status"`, and pass/fail marks carry screen-reader text. The realtime connection indicator announces state changes via a debounced live region.
+- **Focus visibility** — Global search input and connection status indicator have visible focus rings.
+
+#### Bug fixes
+
+- **Unique class slug per GitHub org** — Two classes in the same GitHub organization can no longer share a slug. Shared slugs caused team syncs to delete each other's students and broke the `(org, slug) → class` reverse lookups. The constraint uses GitHub's team-name normalization, so `Fall 26` and `fall-26` are treated as the same prefix ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Re-resolve renamed GitHub logins** — When a student renames their GitHub account, the async worker now recovers the current login from the stored account ID and retries the invitation once, rather than burning all retries and tripping the shared circuit breaker for the entire org ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Student preview on unreleased assignments** — The student preview in the test assignment panel now stays open on unreleased assignments ([#883](https://github.com/pawtograder/platform/pull/883))
+
 ## July 2026
 
 ### July 7, 2026
