@@ -4,6 +4,49 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 6, 2026
+
+#### Bug fixes
+- **Fixed long-idle tabs crashing when a row is no longer visible** — Tabs that had been open for a long time no longer crash when a virtualized row scrolls out of view ([#902](https://github.com/pawtograder/platform/pull/902))
+
+### August 4, 2026
+
+#### CLI
+- **CLI published to npm as `@pawtograder/cli`** — The Pawtograder CLI is now available as a standalone npm package. Run `npx @pawtograder/cli --help` or install globally with `npm install -g @pawtograder/cli`. No repository checkout required ([#885](https://github.com/pawtograder/platform/pull/885), [#889](https://github.com/pawtograder/platform/pull/889))
+- **New CLI commands** — Six previously stubbed commands are now fully implemented ([#885](https://github.com/pawtograder/platform/pull/885)):
+  - `submissions list` — Roster with active submission, autograder score, and per-student total score
+  - `reviews list` — Review assignments with rubric parts and completion state
+  - `reviews assign` — Create review assignments balanced round-robin across graders, with `--by-part`, `--file` manifest, and `--dry-run` support
+  - `discussions list` — Discussion topics with thread, question, and unanswered counts
+  - `help-requests list` — Office-hours help queue with status filtering and pagination
+  - `help-requests close` — Close or resolve a help request with resolution status and notes
+- **`--json` flag on all list commands** — Every `list` command now accepts `--json` for machine-readable output that can be piped to `jq`
+- **Improved rubric import** — `rubrics import --dry-run` now validates against the live rubric and reports exactly what would change (insertions, updates, deletions, point changes) rather than just printing the parsed file. Added `--strip-ids` to `rubrics export` for creating portable templates
+- **Cross-class authorization** — CLI commands now correctly scope data access to the authorized class; previously, a token for one class could read data from any class on the deployment
+- **Self-hosted deployment support** — `pawtograder login --url https://api.your-school.edu` now accepts an API gateway origin and normalizes it to the correct endpoint automatically
+
+### August 3, 2026
+
+#### Accessibility
+- **WCAG 2.1 AA compliance for student-facing pages** — Comprehensive accessibility improvements across student-facing routes, including ([#862](https://github.com/pawtograder/platform/pull/862)):
+  - Semantic heading hierarchy on submission results, grade view, and survey pages
+  - Keyboard-operable navigation submenus (previously required a mouse)
+  - Keyboard-operable gradebook group headers and What-If editor with focus return on close
+  - Submission tab bar uses valid link-in-button composition (`Button asChild`)
+  - Discussion and office-hours layouts reflow correctly at 320px / 400% zoom (WCAG 1.4.10)
+  - Grader/workflow errors use `role="alert"` live regions; status notices use `role="status"`
+  - Pass/fail marks and AI-assisted check icons carry screen-reader text
+  - Realtime connection status dot is focusable with a visible focus ring and announces state changes via a debounced live region
+  - Alt+K skip-link shortcut now correctly focuses the first skip link
+- **E2E accessibility regression suite** — New Playwright specs cover keyboard navigation, 320px reflow, heading hierarchy, focus order, and axe assertions across all major student-facing pages
+
+#### Bug fixes
+- **Unique class slug per GitHub org** — Two classes in the same GitHub organization can no longer share a slug (case-insensitive, GitHub-normalized). Duplicate slugs caused team syncs to delete each other's students and broke org-confirmation webhooks ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Automatic re-resolution of renamed GitHub logins** — When a student renames their GitHub account, the CLI and async worker now automatically look up the current login from the stored account ID and retry the invitation, rather than failing permanently or tripping the shared circuit breaker ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Fixed student preview on unreleased assignments** — The student preview panel now stays open on unreleased assignments ([#883](https://github.com/pawtograder/platform/pull/883))
+
 ## July 2026
 
 ### July 7, 2026
