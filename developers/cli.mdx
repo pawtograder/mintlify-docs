@@ -14,7 +14,26 @@ The CLI is in beta. Commands and options may change in future releases.
 
 ## Installation
 
-The CLI ships inside the platform repository and runs via npm scripts. Run it from the repository root:
+### Install from npm (recommended)
+
+The CLI is published to npm as `@pawtograder/cli`. Run it without installing:
+
+```bash
+npx @pawtograder/cli <command> [options]
+```
+
+Or install globally to get the `pawtograder` command:
+
+```bash
+npm install -g @pawtograder/cli
+pawtograder <command> [options]
+```
+
+Requires Node.js 20 or later.
+
+### Run from the repository
+
+The CLI also ships inside the platform repository and runs via npm scripts. Run it from the repository root:
 
 ```bash
 npm run cli -- <command> [options]
@@ -28,7 +47,7 @@ npm run cli:repos -- <subcommand> [options]
 
 ### Prerequisites
 
-- Node.js 18 or later
+- Node.js 20 or later
 - SSH access to GitHub (for repository operations)
 - A Pawtograder API token with CLI access
 
