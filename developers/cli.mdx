@@ -65,7 +65,7 @@ Before using the CLI, authenticate with an API token.
 ### Logging in
 
 ```bash
-npm run cli -- login
+pawtograder login
 ```
 
 You'll be prompted to enter your API token. The token is stored securely in `~/.pawtograder/credentials.json`.
@@ -73,25 +73,29 @@ You'll be prompted to enter your API token. The token is stored securely in `~/.
 You can also provide the token directly:
 
 ```bash
-npm run cli -- login --token mcp_your_token_here
+pawtograder login --token mcp_your_token_here
 ```
 
-For custom deployments, specify the API URL:
+For self-hosted deployments, point `--url` at your deployment's **API gateway origin** (not the web host):
 
 ```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
+pawtograder login --url https://api.your-school.edu
 ```
+
+<Note>
+When using the in-repo `npm run cli` entry point, substitute `npm run cli --` for `pawtograder` in all examples below.
+</Note>
 
 ### Checking authentication
 
 ```bash
-npm run cli -- whoami
+pawtograder whoami
 ```
 
 ### Logging out
 
 ```bash
-npm run cli -- logout
+pawtograder logout
 ```
 
 ## Commands
