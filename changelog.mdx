@@ -4,6 +4,25 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 6, 2026
+
+#### Assignment improvements
+- **Suggested due dates for mastery/standards-graded courses** — A new **Suggested due dates** course feature flag (under **Course Settings → Feature flags**) changes how due dates are displayed for courses that use a mastery or standards-based grading model. When enabled, the suggested due date is shown as the primary "Due" date for students, with the hard deadline displayed beneath it as the close of the resubmission window. Staff see a **Suggested Due Date** column on the Manage Assignments list and in the per-assignment grading dashboard. Assignments with no suggested due date are unaffected by the flag ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Fixed assignment creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the stored time. For example, creating a 9:00 AM assignment for a New York course from a Denver browser previously stored 11:00 AM; this is now fixed ([#896](https://github.com/pawtograder/platform/pull/896))
+
+### August 4, 2026
+
+#### CLI 0.2.0 — published to npm
+- **`@pawtograder/cli` is now on npm** — Install with `npm install -g @pawtograder/cli` or run without installing via `npx @pawtograder/cli`. No repository checkout required ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New commands: `discussions list`** — Lists discussion topics with thread, question, and unanswered-question counts ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New commands: `submissions list`** — Lists the assignment roster with active submission IDs, autograder scores, total scores, and grader assignments. Supports `--include-non-submitters` ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New commands: `help-requests list` and `help-requests close`** — Lists office-hours help requests with filtering by status (`open`, `in_progress`, `resolved`, `closed`, `active`) and queue. `close` sets a terminal status with optional resolution notes ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New commands: `reviews list` and `reviews assign`** — Lists review assignments with completion state and scores. `reviews assign` creates review assignments balanced round-robin across graders, honoring grading conflicts and never assigning someone their own submission. Supports `--by-part`, `--dry-run`, and explicit `--file` manifests ([#885](https://github.com/pawtograder/platform/pull/885))
+- **`--json` on all list commands** — Every `list` command now accepts `--json` to emit the raw API response for piping into `jq` or other tools ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Improved `rubrics import --dry-run`** — The dry run now validates against the live rubric on the server and reports a detailed plan of insertions, updates, deletions, and point changes before any data is written ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ## July 2026
 
 ### July 7, 2026
