@@ -462,7 +462,7 @@ Repository commands require SSH access to GitHub. Ensure your SSH keys are confi
 ### List repositories
 
 ```bash
-npm run cli:repos -- list --class <class-id-or-slug> --assignment <assignment-id-or-slug>
+pawtograder repos list --class <class-id-or-slug> --assignment <assignment-id-or-slug>
 ```
 
 ### Sync grade workflow
@@ -470,7 +470,7 @@ npm run cli:repos -- list --class <class-id-or-slug> --assignment <assignment-id
 Synchronize `.github/workflows/grade.yml` from the handout repository to all student repositories:
 
 ```bash
-npm run cli:repos -- sync-grade-workflow \
+pawtograder repos sync-grade-workflow \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --workdir /tmp/pawtograder-repos \
@@ -495,7 +495,7 @@ This command:
 Copy files from source assignment repositories to target assignment repositories after the source due date. This is useful for sequential assignments where students build on previous work:
 
 ```bash
-npm run cli:repos -- copy-after-source-due \
+pawtograder repos copy-after-source-due \
   --class cs3500-spring-2026 \
   --source-assignment hw1 \
   --target-assignment hw2 \
