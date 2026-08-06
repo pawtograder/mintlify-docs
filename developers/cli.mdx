@@ -376,26 +376,80 @@ You can use `content_file` instead of `content_base64` to reference an external 
 List office hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025
+```
+
+Filter by status (`open`, `in_progress`, `resolved`, `closed`, or `active` for open and in-progress combined):
+
+```bash
+pawtograder help-requests list --class cs3500-fall-2025 --status active
+```
+
+Close or resolve a help request:
+
+```bash
+pawtograder help-requests close --id <id> --status resolved --resolution-status staff_helped
 ```
 
 ### Discussions
 
-List discussion board threads:
+List discussion board topics with thread, question, and unanswered-question counts:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
 
-List peer and grading review assignments:
+List review assignments with completion state and scores:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
 ```
+
+Filter by status (`pending`, `completed`, or `all`) or by assignee:
+
+```bash
+pawtograder reviews list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --status pending
+```
+
+#### Assign reviews
+
+Create review assignments balanced round-robin across graders, honoring grading conflicts and never assigning someone their own submission:
+
+```bash
+# Preview the allocation
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
+
+# Create assignments
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15
+```
+
+A bare `--due-date` (for example `2026-09-15`) means end of that day in the class's time zone. Append a time (`2026-09-15T17:00`) for a specific time.
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--by-part` | Create one assignment per rubric part instead of one per submission |
+| `--grader <id>` | Restrict the pool to specific grader profile IDs (repeatable) |
+| `--include-non-submitters` | Also assign placeholder stubs for students who did not submit |
+| `--file <manifest.json>` | Supply explicit `{assignee_profile_id, submission_id, rubric_part_id}` triples instead of round-robin |
+| `--dry-run` | Show the plan without writing anything |
+
+Re-running is safe: existing assignments are reused rather than duplicated.
 
 ## Repository operations
 
