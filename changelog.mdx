@@ -4,6 +4,37 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 6, 2026
+
+#### Assignments
+
+- **Suggested due date emphasis** — For mastery/standards-graded courses, a new **Suggested due dates** course feature flag (under **Course Settings → Feature flags**) lets you present the assignment's suggested due date as the primary deadline. When enabled, students see the suggested date as "Due" and the hard deadline is shown as "Resubmit until". Staff see a **Suggested Due Date** column on the Manage Assignments list and in the per-assignment grading dashboard. Assignments with no suggested due date are unaffected. Late tokens and submission enforcement always apply to the hard due date ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Fixed assignment-creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the stored times. Dates entered in the assignment form are now always interpreted in the course's configured timezone ([#896](https://github.com/pawtograder/platform/pull/896))
+
+### August 4, 2026
+
+#### CLI
+
+- **CLI published to npm** — The Pawtograder CLI is now available as `@pawtograder/cli` on npm. Run `npx @pawtograder/cli --help` or install globally with `npm install -g @pawtograder/cli`. No repository checkout required ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New CLI commands** — Six previously stubbed commands are now fully implemented ([#885](https://github.com/pawtograder/platform/pull/885)):
+  - `submissions list` — roster with active submission, autograder score, and total score
+  - `reviews list` — review assignments with rubric parts and completion state
+  - `reviews assign` — create review assignments balanced round-robin across graders, with `--by-part`, `--file` manifest, and `--dry-run` support
+  - `discussions list` — discussion topics with thread, question, and unanswered counts
+  - `help-requests list` — office-hours help queue with status and queue filters
+  - `help-requests close` — close or resolve a help request with resolution status and notes
+- **`--json` flag on all list commands** — Every `list` command now accepts `--json` to emit the raw API response for piping into `jq`
+- **Improved table formatting** — Column-aligned tables replace tab-separated output, so columns line up correctly regardless of cell width
+
+### August 3, 2026
+
+#### Bug fixes
+
+- **Fixed unique class slug enforcement per GitHub org** — Two classes in the same GitHub organization can no longer share a slug. The slug names GitHub teams and repos, so a shared slug caused team syncs to delete each other's students. A database constraint now prevents this and reports the conflicting class by name ([#888](https://github.com/pawtograder/platform/pull/888))
+- **Fixed renamed GitHub logins breaking team sync** — When a student renames their GitHub account, Pawtograder now automatically re-resolves their current login from the stored account ID and retries the team invitation. Previously, a renamed login would burn all retry attempts and block other students' syncs during a class import ([#888](https://github.com/pawtograder/platform/pull/888))
+
 ## July 2026
 
 ### July 7, 2026
