@@ -4,6 +4,24 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 7, 2026
+
+#### Assignments
+- **Repo-only assignments (no autograder)** — You can now create repository-backed assignments without an autograder. Uncheck **Enable autograder (GitHub Actions)** when creating an assignment to get a handout repository without `grade.yml`, so no GitHub Actions run and students never see a failing check. Every push to the student repository creates a submission for hand-grading — no `#submit` tag needed. The autograder can also be toggled on or off on existing assignments from the Autograder configuration page ([#895](https://github.com/pawtograder/platform/pull/895))
+- **Suggested due dates** — A new **Suggested due dates** course feature flag (under Course Settings → Feature flags) lets mastery/standards-graded courses present the suggested due date as the primary deadline. When enabled, students see the suggested date as "Due" and the hard deadline as "Resubmit until \<date\>". Staff see a Suggested Due Date column on Manage Assignments and in the per-assignment grading dashboard. Assignments with no suggested due date are unaffected ([#896](https://github.com/pawtograder/platform/pull/896))
+
+#### Bug fixes
+- **Fixed assignment creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the stored times ([#896](https://github.com/pawtograder/platform/pull/896))
+
+### August 4, 2026
+
+#### CLI
+- **CLI published to npm** — The Pawtograder CLI is now available as [`@pawtograder/cli`](https://www.npmjs.com/package/@pawtograder/cli). Install with `npm install -g @pawtograder/cli` or run with `npx @pawtograder/cli`. No repository checkout required ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New CLI commands** — Six previously stubbed commands are now fully implemented: `submissions list`, `reviews list`, `reviews assign`, `discussions list`, `help-requests list`, and `help-requests close`. All list commands support `--json` for machine-readable output. `reviews assign` balances submissions round-robin across graders, honoring conflicts and supporting `--by-part`, `--file`, and `--dry-run` ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Improved rubric import** — `rubrics import --dry-run` now validates against the live rubric and reports exactly what would change (insertions, deletions, point changes, reparenting). Use `--strip-ids` on export to create a template for a new assignment ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ## July 2026
 
 ### July 7, 2026
