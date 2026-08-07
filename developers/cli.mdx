@@ -70,10 +70,10 @@ You can also provide the token directly:
 npm run cli -- login --token mcp_your_token_here
 ```
 
-For custom deployments, specify the API URL:
+For self-hosted deployments, point `--url` at the **API gateway origin** (not the web host):
 
 ```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
+pawtograder login --url https://api.your-school.edu
 ```
 
 ### Checking authentication
