@@ -82,7 +82,31 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
-## Course Display Settings
+## Feature flags
+
+Feature flags let you opt in to optional behaviors that are off by default. They are configured under **Course Settings → Feature flags**.
+
+### Suggested due dates
+
+For mastery or standards-graded courses where the suggested due date is the date students are expected to submit by, and the hard due date is the end of the resubmission window.
+
+When this flag is enabled:
+
+- **Students** see the suggested due date as the primary "Due" date (larger, semibold). The hard deadline is shown beneath it as "Resubmit until \<date\>".
+- **Staff** see a **Suggested Due Date** column on the Manage Assignments list and in the per-assignment grading dashboard header.
+- Assignments with no suggested due date are unaffected — enabling the flag is a no-op for them.
+
+To set a suggested due date on an assignment, edit the assignment and fill in the **Suggested due date** field. The field is always visible regardless of whether the flag is on, so you can set dates before opting in.
+
+<Note>
+Late tokens extend the hard deadline (the resubmission cutoff), not the suggested due date. When this flag is on, the late-token button is labeled "Extend Resubmission Deadline" to reflect this.
+</Note>
+
+### Gradebook What-If
+
+Allows students to simulate grade changes in the gradebook using hypothetical scores. See [Gradebook](/staff/gradebook) for details.
+
+## Course display settings
 
 Additional course-wide settings may include:
 
