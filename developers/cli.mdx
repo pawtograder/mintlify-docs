@@ -14,21 +14,34 @@ The CLI is in beta. Commands and options may change in future releases.
 
 ## Installation
 
-The CLI ships inside the platform repository and runs via npm scripts. Run it from the repository root:
+The CLI is published to npm as [`@pawtograder/cli`](https://www.npmjs.com/package/@pawtograder/cli):
+
+```bash
+npm install -g @pawtograder/cli
+pawtograder --help
+```
+
+Or run without installing:
+
+```bash
+npx @pawtograder/cli --help
+```
+
+For development, run from the repository root:
 
 ```bash
 npm run cli -- <command> [options]
 ```
 
-For repository commands, use the shortcut:
+Build and smoke-test the published bundle locally:
 
 ```bash
-npm run cli:repos -- <subcommand> [options]
+npm run cli:build
 ```
 
 ### Prerequisites
 
-- Node.js 18 or later
+- Node.js 20 or later
 - SSH access to GitHub (for repository operations)
 - A Pawtograder API token with CLI access
 
@@ -57,10 +70,10 @@ You can also provide the token directly:
 npm run cli -- login --token mcp_your_token_here
 ```
 
-For custom deployments, specify the API URL:
+For self-hosted deployments, point `--url` at the **API gateway origin** (not the web host):
 
 ```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
+pawtograder login --url https://api.your-school.edu
 ```
 
 ### Checking authentication
@@ -268,9 +281,15 @@ npm run cli -- flashcards copy \
 List submissions for an assignment:
 
 ```bash
-npm run cli -- submissions list \
+pawtograder submissions list \
   --class cs3500-fall-2025 \
   --assignment hw1
+
+# Include students who have not submitted
+pawtograder submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --include-non-submitters
 ```
 
 #### Import or sync comments
@@ -347,7 +366,13 @@ You can use `content_file` instead of `content_base64` to reference an external 
 List office hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025
+
+# Filter by status (open, in_progress, resolved, closed, active, all)
+pawtograder help-requests list --class cs3500-fall-2025 --status active
+
+# Close a request
+pawtograder help-requests close --id <id>
 ```
 
 ### Discussions
@@ -355,17 +380,24 @@ npm run cli -- help-requests list --class cs3500-fall-2025
 List discussion board threads:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
 
-List peer and grading review assignments:
+List and assign peer and grading review assignments:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
+
+# Assign grading work (balanced round-robin, dry run first)
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
 ```
 
 ## Repository operations
