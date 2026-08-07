@@ -366,7 +366,13 @@ You can use `content_file` instead of `content_base64` to reference an external 
 List office hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025
+
+# Filter by status (open, in_progress, resolved, closed, active, all)
+pawtograder help-requests list --class cs3500-fall-2025 --status active
+
+# Close a request
+pawtograder help-requests close --id <id>
 ```
 
 ### Discussions
@@ -374,17 +380,24 @@ npm run cli -- help-requests list --class cs3500-fall-2025
 List discussion board threads:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
 
-List peer and grading review assignments:
+List and assign peer and grading review assignments:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
+
+# Assign grading work (balanced round-robin, dry run first)
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
 ```
 
 ## Repository operations
