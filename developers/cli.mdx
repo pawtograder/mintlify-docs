@@ -281,9 +281,15 @@ npm run cli -- flashcards copy \
 List submissions for an assignment:
 
 ```bash
-npm run cli -- submissions list \
+pawtograder submissions list \
   --class cs3500-fall-2025 \
   --assignment hw1
+
+# Include students who have not submitted
+pawtograder submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --include-non-submitters
 ```
 
 #### Import or sync comments
