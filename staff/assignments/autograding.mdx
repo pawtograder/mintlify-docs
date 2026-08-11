@@ -66,6 +66,23 @@ Reference it from the top of your YAML to get IDE autocomplete:
   </Card>
 </CardGroup>
 
+## Repo-only assignments (no autograder)
+
+If you want students to have a GitHub repository but do not need automated grading — for example, a project where you grade entirely by hand — you can create a **repo-only** assignment by unchecking **Enable autograder (GitHub Actions)** in the **Autograder** section of the assignment form.
+
+With the autograder disabled:
+
+- The handout repository is created **without** `.github/workflows/grade.yml`, so no GitHub Actions run and students never see a failing check.
+- **Every push** to the student repository creates a submission for you to grade by hand — students do not need to include `#submit` in their commit message.
+- A solution repository is still created for your reference solution and grading notes.
+- Autograder scores show as **N/A** in the submission history.
+
+You can toggle the autograder on or off after the assignment is created from the **Autograder** page. Turning it off removes `grade.yml` from the handout (preserving any customizations as `grade.yml.disabled`); turning it back on restores it. Existing student repositories are queued to sync the change automatically.
+
+<Note>
+If you fork from a prior assignment, both assignments share the same handout repository and must have the same autograder setting. The form warns you if they disagree.
+</Note>
+
 ## The `grade.yml` Workflow
 
 The handout repository ships with a `.github/workflows/grade.yml` that is
