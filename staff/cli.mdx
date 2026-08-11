@@ -4,29 +4,25 @@ description: "Use the Pawtograder command-line interface to automate course mana
 icon: "terminal"
 ---
 
-# Command Line Interface (Beta)
+# Command Line Interface
 
 The Pawtograder CLI is a command-line tool for instructors and site administrators to automate course management tasks. It provides programmatic access to Pawtograder's core functionality, enabling bulk operations, scripting, and integration with other tools.
 
-<Warning>
-The CLI is currently in beta. Commands and options may change in future releases.
-</Warning>
-
 ## Installation
 
-The CLI is included in the Pawtograder platform repository. To use it:
+Install the CLI from npm:
 
 ```bash
-# Clone the repository
-git clone https://github.com/pawtograder/platform.git
-cd platform
-
-# Install dependencies
-npm install
-
-# Run the CLI
-npm run cli -- <command> [options]
+npm install -g @pawtograder/cli
 ```
+
+Or run it without installing:
+
+```bash
+npx @pawtograder/cli --help
+```
+
+Requires Node.js 20 or later.
 
 ## Authentication
 
