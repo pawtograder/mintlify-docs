@@ -286,12 +286,30 @@ npm run cli -- flashcards copy \
 
 ### Submissions
 
-List submissions for an assignment:
+List submissions for an assignment, with autograder and total scores:
 
 ```bash
-npm run cli -- submissions list \
+pawtograder submissions list \
   --class cs3500-fall-2025 \
   --assignment hw1
+```
+
+Include students who have not submitted:
+
+```bash
+pawtograder submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --include-non-submitters
+```
+
+Add `--json` to any list command for machine-readable output:
+
+```bash
+pawtograder submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --json | jq '.submissions[] | select(.autograder_score == null)'
 ```
 
 #### Import or sync comments
