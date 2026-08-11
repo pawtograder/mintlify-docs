@@ -368,26 +368,83 @@ You can use `content_file` instead of `content_base64` to reference an external 
 List office hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025
+```
+
+Filter by status (`open`, `in_progress`, `resolved`, `closed`, or `active` for open + in-progress):
+
+```bash
+pawtograder help-requests list --class cs3500-fall-2025 --status active
+```
+
+Close or resolve a help request (instructors only):
+
+```bash
+pawtograder help-requests close --id 42 --status resolved \
+  --resolution-status staff_helped \
+  --notes "Helped student debug their loop"
 ```
 
 ### Discussions
 
-List discussion board threads:
+List discussion topics with thread and question counts:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
 
-List peer and grading review assignments:
+List review assignments for an assignment:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
 ```
+
+Filter by status (`pending`, `completed`, or `all`) or by assignee:
+
+```bash
+pawtograder reviews list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --status pending
+```
+
+Create review assignments, balanced round-robin across graders:
+
+```bash
+# Preview the allocation
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
+
+# Create one assignment per rubric part
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --by-part
+
+# Restrict the grader pool
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --grader <profile-id>
+
+# Supply an explicit manifest instead of round-robin
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --file drafts.json
+```
+
+The allocator honors `grading_conflicts` and never assigns someone their own submission. A bare `--due-date` (e.g. `2026-09-15`) means end of that day in the class's time zone. Re-running is safe: existing assignments are reused rather than duplicated.
 
 ## Repository operations
 
