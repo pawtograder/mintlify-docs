@@ -4,6 +4,31 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 11, 2026
+
+#### Reliability improvements
+- **Fail-closed audit** — A broad reliability pass across the platform: rubric saves now block on negative point values instead of silently absolutizing them; the bulk release/unrelease toasts report the actual number of reviews changed (not the selection size) and clarify that self-review and meta-grading rounds are unaffected; the per-student completion check in the review toolbar correctly distinguishes "group still loading" from "group settled and empty"; and several internal queue monitoring and worker reliability improvements ([#922](https://github.com/pawtograder/platform/pull/922))
+- **MCP token revocation is now idempotent** — Revoking an already-revoked API token no longer produces a spurious error. The revoke button is also disabled while a revocation is in flight to prevent double-clicks ([#920](https://github.com/pawtograder/platform/pull/920))
+
+### August 7, 2026
+
+#### Assignment improvements
+- **Repo-only assignments (no autograder)** — You can now create repository-backed assignments without an autograder. Uncheck **Enable autograder (GitHub Actions)** when creating an assignment to get a student repository without `grade.yml`. Every push creates a submission for hand-grading — no `#submit` tag needed. You can also toggle the autograder on or off after creation from the assignment's Autograder page ([#898](https://github.com/pawtograder/platform/pull/898))
+
+### August 6, 2026
+
+#### Assignment improvements
+- **Suggested due dates are now prominent** — A new **Suggested due dates** course feature flag (off by default) makes the suggested due date the primary "Due" date students see, with the hard deadline shown beneath it as the end of the resubmission window. Useful for mastery/standards-graded courses where the suggested date governs when work gets graded and returned. Staff also get a Suggested Due Date column on the Manage Assignments list ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Fixed assignment-creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the entered times. The create page now uses the same timezone-aware date handling as the edit page ([#896](https://github.com/pawtograder/platform/pull/896))
+
+## August 4, 2026
+
+#### CLI
+- **CLI published to npm as `@pawtograder/cli`** — The Pawtograder CLI is now available as `npx @pawtograder/cli` or `npm install -g @pawtograder/cli`. No repository checkout required ([#889](https://github.com/pawtograder/platform/pull/889))
+- **New CLI commands** — `submissions list`, `reviews list`, `reviews assign`, `discussions list`, `help-requests list`, `help-requests close` are now fully implemented. `reviews assign` balances grading work round-robin across active staff, honoring grading conflicts and never assigning someone their own submission. All list commands support `--json` for scripting ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ## July 2026
 
 ### July 7, 2026
