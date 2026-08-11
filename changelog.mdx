@@ -4,6 +4,30 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 11, 2026
+
+#### Bug fixes
+- **Idempotent token revocation** — Revoking an already-revoked API token no longer produces a Sentry error. The operation is now a no-op when the token is already revoked, and the original revocation timestamp is preserved ([#920](https://github.com/pawtograder/platform/pull/920))
+
+### August 7, 2026
+
+#### Assignment improvements
+- **Repo-only assignments (no autograder)** — Assignments can now have a GitHub repository without an autograder. Uncheck **Enable autograder (GitHub Actions)** when creating or editing an assignment to create a handout without `grade.yml`. Every push to the student repository creates a submission for hand-grading — no `#submit` needed. The autograder can be toggled on or off at any time from the assignment's **Autograder** page, which automatically syncs the workflow to all student repositories ([#895](https://github.com/pawtograder/platform/pull/895))
+
+### August 6, 2026
+
+#### Assignment improvements
+- **Suggested due date emphasis** — A new **Suggested due dates** course feature flag (Course Settings → Feature flags) lets mastery and standards-graded courses present the suggested due date as the assignment's primary due date. When enabled, students see the suggested date as "Due" with the hard deadline shown beneath it as the end of the resubmission window. Staff gain a **Suggested Due Date** column on the Manage Assignments list and a field on the per-assignment grading dashboard ([#893](https://github.com/pawtograder/platform/pull/893), [#894](https://github.com/pawtograder/platform/pull/894))
+- **Fixed assignment-creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the entered times. Dates are now correctly anchored to the course's configured timezone ([#890](https://github.com/pawtograder/platform/pull/890))
+
+### August 4, 2026
+
+#### CLI
+- **CLI published to npm** — The Pawtograder CLI is now available as `@pawtograder/cli` on npm. Install with `npm install -g @pawtograder/cli` or run without installing via `npx @pawtograder/cli`. Previously the CLI required a checkout of the platform repository ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New CLI commands** — The following commands are now fully implemented: `submissions list`, `reviews list`, `reviews assign` (balanced round-robin grading allocation with `--by-part`, `--file`, and `--dry-run`), `discussions list`, `help-requests list`, and `help-requests close`. All list commands support `--json` for machine-readable output ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ## July 2026
 
 ### July 7, 2026
