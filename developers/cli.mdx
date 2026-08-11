@@ -217,24 +217,35 @@ npm run cli -- rubrics list \
 Export a rubric to YAML:
 
 ```bash
-npm run cli -- rubrics export \
+pawtograder rubrics export \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --type grading \
   --output hw1-rubric.yml
 ```
 
+Add `--strip-ids` to export a template without database IDs, so importing it into another assignment creates all rows fresh:
+
+```bash
+pawtograder rubrics export \
+  --assignment hw1 \
+  --class cs3500-spring-2026 \
+  --type grading \
+  --strip-ids \
+  --output hw1-rubric-template.yml
+```
+
 Import a rubric from YAML:
 
 ```bash
-npm run cli -- rubrics import \
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml \
   --type grading
 ```
 
-Use `--dry-run` to preview the import without making changes.
+Use `--dry-run` to validate the import and preview what would change without making any modifications. The dry run runs against the live rubric, so it catches enum errors, reference resolution failures, and structural changes (point changes, row deletions) that a local file check cannot.
 
 ### Surveys
 
