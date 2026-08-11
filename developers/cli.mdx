@@ -14,7 +14,26 @@ The CLI is in beta. Commands and options may change in future releases.
 
 ## Installation
 
-The CLI ships inside the platform repository and runs via npm scripts. Run it from the repository root:
+### npm (recommended)
+
+The CLI is published to npm as [`@pawtograder/cli`](https://www.npmjs.com/package/@pawtograder/cli). Run it without installing:
+
+```bash
+npx @pawtograder/cli --help
+```
+
+Or install globally to get the `pawtograder` command:
+
+```bash
+npm install -g @pawtograder/cli
+pawtograder --help
+```
+
+Requires Node.js 20 or later.
+
+### From source
+
+The CLI also ships inside the platform repository. Run it from the repository root:
 
 ```bash
 npm run cli -- <command> [options]
@@ -28,7 +47,7 @@ npm run cli:repos -- <subcommand> [options]
 
 ### Prerequisites
 
-- Node.js 18 or later
+- Node.js 20 or later
 - SSH access to GitHub (for repository operations)
 - A Pawtograder API token with CLI access
 
@@ -57,11 +76,13 @@ You can also provide the token directly:
 npm run cli -- login --token mcp_your_token_here
 ```
 
-For custom deployments, specify the API URL:
+For custom deployments, point `--url` at your deployment's **API gateway origin** (not the web host):
 
 ```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
+pawtograder login --url https://api.your-school.edu
 ```
+
+The web host serves the application; the CLI talks to the `cli` Edge Function behind the API origin. Passing the web host produces an HTML response and the CLI will tell you so.
 
 ### Checking authentication
 
@@ -196,24 +217,35 @@ npm run cli -- rubrics list \
 Export a rubric to YAML:
 
 ```bash
-npm run cli -- rubrics export \
+pawtograder rubrics export \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --type grading \
   --output hw1-rubric.yml
 ```
 
+Add `--strip-ids` to export a template without database IDs, so importing it into another assignment creates all rows fresh:
+
+```bash
+pawtograder rubrics export \
+  --assignment hw1 \
+  --class cs3500-spring-2026 \
+  --type grading \
+  --strip-ids \
+  --output hw1-rubric-template.yml
+```
+
 Import a rubric from YAML:
 
 ```bash
-npm run cli -- rubrics import \
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml \
   --type grading
 ```
 
-Use `--dry-run` to preview the import without making changes.
+Use `--dry-run` to validate the import and preview what would change without making any modifications. The dry run runs against the live rubric, so it catches enum errors, reference resolution failures, and structural changes (point changes, row deletions) that a local file check cannot.
 
 ### Surveys
 
@@ -265,12 +297,30 @@ npm run cli -- flashcards copy \
 
 ### Submissions
 
-List submissions for an assignment:
+List submissions for an assignment, with autograder and total scores:
 
 ```bash
-npm run cli -- submissions list \
+pawtograder submissions list \
   --class cs3500-fall-2025 \
   --assignment hw1
+```
+
+Include students who have not submitted:
+
+```bash
+pawtograder submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --include-non-submitters
+```
+
+Add `--json` to any list command for machine-readable output:
+
+```bash
+pawtograder submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --json | jq '.submissions[] | select(.autograder_score == null)'
 ```
 
 #### Import or sync comments
@@ -347,26 +397,83 @@ You can use `content_file` instead of `content_base64` to reference an external 
 List office hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025
+```
+
+Filter by status (`open`, `in_progress`, `resolved`, `closed`, or `active` for open + in-progress):
+
+```bash
+pawtograder help-requests list --class cs3500-fall-2025 --status active
+```
+
+Close or resolve a help request (instructors only):
+
+```bash
+pawtograder help-requests close --id 42 --status resolved \
+  --resolution-status staff_helped \
+  --notes "Helped student debug their loop"
 ```
 
 ### Discussions
 
-List discussion board threads:
+List discussion topics with thread and question counts:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
 
-List peer and grading review assignments:
+List review assignments for an assignment:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
 ```
+
+Filter by status (`pending`, `completed`, or `all`) or by assignee:
+
+```bash
+pawtograder reviews list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --status pending
+```
+
+Create review assignments, balanced round-robin across graders:
+
+```bash
+# Preview the allocation
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
+
+# Create one assignment per rubric part
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --by-part
+
+# Restrict the grader pool
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --grader <profile-id>
+
+# Supply an explicit manifest instead of round-robin
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --file drafts.json
+```
+
+The allocator honors `grading_conflicts` and never assigns someone their own submission. A bare `--due-date` (e.g. `2026-09-15`) means end of that day in the class's time zone. Re-running is safe: existing assignments are reused rather than duplicated.
 
 ## Repository operations
 

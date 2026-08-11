@@ -23,6 +23,7 @@ zone or what other users see.
 
 - **Release Date** — when the assignment becomes visible to students
   and student repositories are created.
+- **Suggested Due Date** — an optional advisory target date. See [Suggested due dates](#suggested-due-dates) below.
 - **Due Date** — the default submission deadline. Per-student or
   per-group overrides are configured under
   [Extensions](/staff/assignments/extensions).
@@ -33,6 +34,21 @@ For lab-section-specific due dates, set **Minutes due after lab
 meeting** or **Hours due after programming assignment** on the group
 configuration; Pawtograder computes a per-section due date from the
 section's meeting time.
+
+## Suggested due dates
+
+The **Suggested Due Date** field lets you set an advisory target date that is earlier than the hard **Due Date**. This is useful for mastery or standards-graded courses where students are expected to submit by a target date so their work can be graded and returned with time to resubmit, while the hard deadline remains the enforced cutoff.
+
+By default, the suggested date is not shown to students. To display it, enable the **Suggested due dates** feature flag under **Course Settings → Feature flags**.
+
+When the flag is on:
+
+- Students see the suggested date as the primary **Due** date on the assignment list and dashboard.
+- The hard deadline is shown beneath it as **Resubmit until**.
+- The **Manage Assignments** table gains a **Suggested Due Date** column so staff can see both dates at a glance.
+- The assignment grading dashboard header also shows the suggested date.
+
+Assignments with no suggested date are unaffected by the flag. Submission enforcement (late tokens, the autograder deadline check) always uses the hard **Due Date** — the suggested date is display-only.
 
 ## Points possible and score capping
 

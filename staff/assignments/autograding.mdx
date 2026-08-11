@@ -713,6 +713,33 @@ tasks.withType(Checkstyle) {
 }
 ```
 
+## Repo-Only Assignments (No Autograder)
+
+You can create a repository-backed assignment without an autograder. In this mode, Pawtograder creates handout and student repositories as usual, but no `grade.yml` workflow is included — so no GitHub Actions run and students never see a failing check. Every push to the student repository creates a submission for you to grade by hand; students do not need to include `#submit` in their commit message.
+
+This is useful for assignments where you want students to work in a GitHub repository but grading is entirely manual (design documents, written reports, code reviews, etc.).
+
+### Enabling repo-only mode
+
+When creating an assignment, expand the **Repository** section and uncheck **Enable autograder (GitHub Actions)**. The checkbox is on by default for repository-backed assignments and is unavailable for no-repository and pull-request modes.
+
+You can also toggle the autograder on or off for an existing assignment from **Manage → Assignments → [Assignment] → Autograder**. Disabling the autograder parks the `grade.yml` workflow as `grade.yml.disabled` in the handout repository (preserving any customizations) and queues a sync to existing student repositories. Re-enabling it restores the workflow from the parked copy, or from the class handout template if no parked copy exists.
+
+<Note>
+When you toggle the autograder on an assignment whose handout is shared with another assignment (for example, a fork-from-prior-assignment checkpoint), both assignments must have the same autograder setting. Pawtograder will update all in-class assignments sharing the handout and notify you of any that were changed.
+</Note>
+
+### Submission behavior
+
+- Every push to the student repository creates a submission, regardless of the commit message.
+- The submission history shows **N/A** in the autograder score column instead of a score or "In Progress."
+- Submission limits (the per-24-hour cap) are not enforced and the submission-limit banner is hidden, since there are no runner minutes to conserve.
+- Empty submission detection still works if `submissionFiles` is configured in a `pawtograder.yml` in the grader repository.
+
+### Handout syncs
+
+When you push to the handout repository, Pawtograder syncs the changes to student repositories as usual. Pawtograder identifies instructor-driven sync pushes and does not create a new submission for them.
+
 ## Empty Submission Detection
 
 Pawtograder automatically flags submissions whose collected files are
