@@ -4,29 +4,26 @@ description: "Use the Pawtograder command-line interface to automate course mana
 icon: "terminal"
 ---
 
-# Command Line Interface (Beta)
+# Command Line Interface
 
 The Pawtograder CLI is a command-line tool for instructors and site administrators to automate course management tasks. It provides programmatic access to Pawtograder's core functionality, enabling bulk operations, scripting, and integration with other tools.
 
-<Warning>
-The CLI is currently in beta. Commands and options may change in future releases.
-</Warning>
-
 ## Installation
 
-The CLI is included in the Pawtograder platform repository. To use it:
+Install the CLI globally from npm:
 
 ```bash
-# Clone the repository
-git clone https://github.com/pawtograder/platform.git
-cd platform
-
-# Install dependencies
-npm install
-
-# Run the CLI
-npm run cli -- <command> [options]
+npm install -g @pawtograder/cli
+pawtograder --help
 ```
+
+Or run it without installing:
+
+```bash
+npx @pawtograder/cli --help
+```
+
+Requires Node.js 20 or later.
 
 ## Authentication
 
@@ -34,34 +31,34 @@ Before using the CLI, you must authenticate with an API token.
 
 ### Creating an API Token
 
-1. Log in to Pawtograder
-2. Navigate to your account settings
-3. Go to the "API Tokens" section
-4. Click "Create New Token"
-5. Give your token a descriptive name and select appropriate scopes
-6. Copy the generated token (you won't be able to see it again)
+1. Log in to Pawtograder.
+2. Navigate to **Settings → API Tokens**.
+3. Create a new token with type **CLI** or **MCP + CLI**.
+4. Copy the token — it starts with `mcp_`.
 
 ### Logging In
 
 ```bash
 # Interactive login (prompts for token)
-npm run cli -- login
+pawtograder login
 
 # Login with token directly
-npm run cli -- login --token YOUR_TOKEN_HERE
+pawtograder login --token mcp_YOUR_TOKEN_HERE
 
-# Login to a custom instance
-npm run cli -- login --token YOUR_TOKEN_HERE --url https://your-instance.com/functions/v1/cli
+# Login to a self-hosted instance
+pawtograder login --url https://api.your-school.edu
 ```
+
+Point `--url` at your deployment's **API gateway origin** (e.g. `https://api.your-school.edu`), not the web host.
 
 ### Managing Authentication
 
 ```bash
 # Check current user
-npm run cli -- whoami
+pawtograder whoami
 
 # Log out
-npm run cli -- logout
+pawtograder logout
 ```
 
 ## Available Commands
