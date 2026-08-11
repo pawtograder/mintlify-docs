@@ -350,7 +350,13 @@ You can use `content_file` instead of `content_base64` to reference an external 
 List office hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025 --status active
+```
+
+Close a help request:
+
+```bash
+pawtograder help-requests close --id <id>
 ```
 
 ### Discussions
@@ -358,7 +364,7 @@ npm run cli -- help-requests list --class cs3500-fall-2025
 List discussion board threads:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
@@ -366,10 +372,22 @@ npm run cli -- discussions list --class cs3500-fall-2025
 List peer and grading review assignments:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
 ```
+
+Create review assignments (balanced round-robin across graders):
+
+```bash
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
+```
+
+`reviews assign` balances work across active graders and instructors, honors `grading_conflicts`, and never assigns someone their own submission. Pass `--by-part` to fan out per rubric part, or `--file <manifest.json>` for explicit assignments. A bare `--due-date` is interpreted as end of day in the class's time zone.
 
 ## Repository operations
 
