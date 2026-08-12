@@ -680,7 +680,7 @@ If using the npm package, run `npm install -g @pawtograder/cli`. If running from
 
 For large operations (copying many assignments, importing large artifacts):
 
-1. Set a longer timeout: `PAWTOGRADER_HTTP_TIMEOUT_MS=600000 npm run cli -- ...`
+1. Set a longer timeout: `PAWTOGRADER_HTTP_TIMEOUT_MS=600000 pawtograder ...`
 2. Use smaller batch sizes (for example, `--batch-size 1` for artifact imports).
 3. Use `--dry-run` first to validate before running the full operation.
 
