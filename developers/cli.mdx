@@ -471,7 +471,7 @@ Repository commands require SSH access to GitHub. Ensure your SSH keys are confi
 ### List repositories
 
 ```bash
-npm run cli:repos -- list --class <class-id-or-slug> --assignment <assignment-id-or-slug>
+pawtograder repos list --class <class-id-or-slug> --assignment <assignment-id-or-slug>
 ```
 
 ### Sync grade workflow
@@ -479,7 +479,7 @@ npm run cli:repos -- list --class <class-id-or-slug> --assignment <assignment-id
 Synchronize `.github/workflows/grade.yml` from the handout repository to all student repositories:
 
 ```bash
-npm run cli:repos -- sync-grade-workflow \
+pawtograder repos sync-grade-workflow \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --workdir /tmp/pawtograder-repos \
@@ -504,7 +504,7 @@ This command:
 Copy files from source assignment repositories to target assignment repositories after the source due date. This is useful for sequential assignments where students build on previous work:
 
 ```bash
-npm run cli:repos -- copy-after-source-due \
+pawtograder repos copy-after-source-due \
   --class cs3500-spring-2026 \
   --source-assignment hw1 \
   --target-assignment hw2 \
@@ -532,6 +532,7 @@ Most commands support these options:
 
 - `--dry-run` – Preview changes without making them
 - `--help` – Show command-specific help
+- `--json` – Emit the raw JSON response instead of a formatted table (list commands)
 - `--class` or `-c` – Specify a class by ID, slug, or name
 - `--assignment` or `-a` – Specify an assignment by ID or slug
 
@@ -540,12 +541,12 @@ Most commands support these options:
 | Variable | Description |
 |----------|-------------|
 | `PAWTOGRADER_HTTP_TIMEOUT_MS` | HTTP request timeout in milliseconds. Set to `600000` (10 minutes) for large operations. |
-| `DEBUG` | Set to `1` to enable verbose HTTP logging. |
+| `PAWTOGRADER_VERBOSE` | Set to `1` to log each request and its timing to stderr. |
+| `DEBUG` | Set to `1` to enable verbose HTTP logging and stack traces on unexpected errors. |
 
 ```bash
 export PAWTOGRADER_HTTP_TIMEOUT_MS=600000
-export DEBUG=1
-npm run cli -- <command>
+pawtograder <command>
 ```
 
 ## API token scopes
