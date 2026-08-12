@@ -643,7 +643,7 @@ pawtograder repos copy-after-source-due \
 
 If you see "Not logged in" or "Authentication failed":
 
-1. Run `npm run cli -- login` to re-authenticate.
+1. Run `pawtograder login` to re-authenticate.
 2. Verify your token is valid in the web UI (**User Menu → API Tokens**).
 3. Ensure your token has the correct scopes (`cli:read` or `cli:write`).
 
@@ -653,15 +653,13 @@ Common HTTP errors:
 - **403 Forbidden** – Token lacks required scopes.
 - **504 Gateway Timeout** – Operation took too long. Increase the timeout or use smaller batches.
 
-### Command not found
-
-Run the CLI from the platform repository root and make sure dependencies are installed with `npm install`.
+If the CLI reports "API returned an HTML page", you are pointing at the web host instead of the API gateway. Use `pawtograder login --url https://api.<hostname>`.
 
 ### Timeout errors
 
 For large operations (copying many assignments, importing large artifacts):
 
-1. Set a longer timeout: `PAWTOGRADER_HTTP_TIMEOUT_MS=600000 npm run cli -- ...`
+1. Set a longer timeout: `PAWTOGRADER_HTTP_TIMEOUT_MS=600000 pawtograder ...`
 2. Use smaller batch sizes (for example, `--batch-size 1` for artifact imports).
 3. Use `--dry-run` first to validate before running the full operation.
 
@@ -689,12 +687,12 @@ The CLI automatically retries git operations that fail due to connection resets.
 For detailed help on any command:
 
 ```bash
-npm run cli -- <command> --help
+pawtograder <command> --help
 ```
 
 For example:
 
 ```bash
-npm run cli -- assignments --help
-npm run cli -- assignments copy --help
+pawtograder assignments --help
+pawtograder assignments copy --help
 ```
