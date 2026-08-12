@@ -81,18 +81,20 @@ pawtograder logout
 
 ## Commands
 
+Add `--json` to any list command to emit the raw JSON response instead of a formatted table — useful for piping into `jq` or other tools.
+
 ### Classes
 
 List all classes you have access to:
 
 ```bash
-npm run cli -- classes list
+pawtograder classes list
 ```
 
 Show details for a specific class:
 
 ```bash
-npm run cli -- classes show <class-id-or-slug>
+pawtograder classes show <class-id-or-slug>
 ```
 
 The identifier can be a class ID, slug, or name.
