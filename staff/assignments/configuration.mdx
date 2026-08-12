@@ -88,6 +88,19 @@ anonymized grading.
 push-timing analytics for the assignment's student repositories. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
+## Autograder
+
+When a repository mode is selected, the **Autograder** section controls whether student pushes are graded automatically by GitHub Actions.
+
+- **Enable autograder (GitHub Actions)** (default: on) — the handout and student repositories include `.github/workflows/grade.yml`. Students submit by pushing a commit with `#submit` in the message, which triggers the grading workflow.
+- **Disabled** — the handout is created *without* `grade.yml`, so no GitHub Actions run and students never see a failing check. Every push to the student repository creates a submission for hand-grading — no `#submit` tag needed. A solution repository is still created for your reference solution and grading notes.
+
+The autograder can be toggled on or off at any time from the assignment's **Autograder** configuration page. When toggled, the handout's workflow file is added or removed and existing student repositories are queued to sync the change.
+
+<Note>
+The autograder is unavailable for no-repository modes (`none`, `no_submission`) and pull-request submission mode, since those modes have no student repository for a GitHub Actions workflow to run in.
+</Note>
+
 ## Handout URL
 
 If you maintain the handout outside Pawtograder's GitHub flow, set the
