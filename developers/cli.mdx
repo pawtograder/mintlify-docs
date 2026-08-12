@@ -512,6 +512,7 @@ The CLI:
 Most commands support these options:
 
 - `--dry-run` – Preview changes without making them
+- `--json` – Emit the raw JSON response instead of a formatted table
 - `--help` – Show command-specific help
 - `--class` or `-c` – Specify a class by ID, slug, or name
 - `--assignment` or `-a` – Specify an assignment by ID or slug
@@ -521,12 +522,14 @@ Most commands support these options:
 | Variable | Description |
 |----------|-------------|
 | `PAWTOGRADER_HTTP_TIMEOUT_MS` | HTTP request timeout in milliseconds. Set to `600000` (10 minutes) for large operations. |
-| `DEBUG` | Set to `1` to enable verbose HTTP logging. |
+| `PAWTOGRADER_VERBOSE=1` | Log each request and its timing to stderr. |
+| `DEBUG` | Set to `1` to enable verbose HTTP logging and stack traces on unexpected errors. |
+
+The CLI does not read `.env` files when installed globally.
 
 ```bash
 export PAWTOGRADER_HTTP_TIMEOUT_MS=600000
-export DEBUG=1
-npm run cli -- <command>
+pawtograder <command>
 ```
 
 ## API token scopes
