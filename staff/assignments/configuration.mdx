@@ -96,6 +96,36 @@ anonymized grading.
 push-timing analytics for the assignment's student repositories. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
+## Autograder
+
+When a repository-based assignment is created, the autograder is enabled
+by default. You can disable it to create a **repository-only** assignment
+— one where students push code but grading is done entirely by hand.
+
+**With the autograder disabled:**
+
+- The handout repository is created without `.github/workflows/grade.yml`,
+  so no GitHub Actions run and students never see a failing check.
+- Every push to the student repository creates a submission automatically
+  — no `#submit` commit message is required.
+- A solution repository is still created for your reference solution and
+  grading notes.
+- Submission scores show "N/A" instead of an autograder result.
+
+**Toggling the autograder on an existing assignment:**
+
+You can enable or disable the autograder from the **Autograder** tab of
+the assignment management page. Toggling adds or removes `grade.yml` from
+the handout repository and queues a sync to existing student repositories.
+Until each student repository syncs, it still has (or still lacks) the
+workflow file.
+
+<Note>
+Assignments that share a handout repository must have the same autograder
+setting. If you need one assignment to be autograded and another to be
+hand-graded, give each its own handout repository.
+</Note>
+
 ## Handout URL
 
 If you maintain the handout outside Pawtograder's GitHub flow, set the
