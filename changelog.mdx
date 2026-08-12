@@ -23,6 +23,15 @@ icon: "clock-rotate-left"
 #### Assignment features
 - **Repository-only assignments (no autograder)** — Instructors can now create repository-based assignments without an autograder. When the autograder is disabled, the handout is created without `grade.yml` so no GitHub Actions run and students never see a failing check. Every push to the student repository creates a submission automatically — no `#submit` commit message required. A solution repository is still created for reference solutions and grading notes. The autograder can be toggled on or off at any time from the assignment's Autograder page ([#895](https://github.com/pawtograder/platform/pull/895), [#898](https://github.com/pawtograder/platform/pull/898))
 
+### August 4, 2026
+
+#### CLI improvements
+- **CLI published to npm** — The Pawtograder CLI is now available as `@pawtograder/cli` on npm. Install it with `npm install -g @pawtograder/cli` or run it directly with `npx @pawtograder/cli`. No repository checkout required ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New CLI commands** — Six previously stubbed commands are now fully implemented: `discussions list`, `submissions list`, `help-requests list`, `help-requests close`, `reviews list`, and `reviews assign`. The `reviews assign` command allocates grading work round-robin across active graders and instructors, honoring grading conflicts and never assigning someone their own submission ([#885](https://github.com/pawtograder/platform/pull/885))
+- **`--json` flag on all list commands** — Every list command now accepts `--json` to emit the raw JSON response for piping into `jq` or other tools ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Improved rubric import** — `rubrics import --dry-run` now runs server-side validation and shows a detailed plan of what would change, including point changes, structural removals, and affected submission reviews. Added `--strip-ids` to `rubrics export` for creating templates ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Cross-class authorization fix** — Fixed a security issue where CLI tokens could access data from classes other than the one they were authorized for ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ### August 6, 2026
 
 #### Assignment features
