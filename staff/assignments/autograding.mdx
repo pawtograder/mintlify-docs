@@ -16,6 +16,15 @@ artifacts back to Pawtograder. This page is the reference for the
 `pawtograder.yml` config that drives that flow.
 
 <Note>
+The autograder is optional. If you want a repository-based assignment without
+GitHub Actions grading — for example, a project you grade entirely by hand —
+uncheck **Enable autograder (GitHub Actions)** when creating the assignment.
+The handout is created without `grade.yml`, so no Actions run and every push
+creates a submission for hand-grading. See
+[Assignment Configuration](/staff/assignments/configuration) for details.
+</Note>
+
+<Note>
 The `pawtograder.yml` schema is published at
 `https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json`.
 Reference it from the top of your YAML to get IDE autocomplete:
