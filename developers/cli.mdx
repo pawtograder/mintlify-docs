@@ -369,29 +369,80 @@ You can use `content_file` instead of `content_base64` to reference an external 
 
 ### Help requests
 
-List office hours help requests:
+List office-hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025
+
+# Filter by status ('active' means open or in_progress)
+pawtograder help-requests list \
+  --class cs3500-fall-2025 \
+  --status active
+```
+
+Close a help request:
+
+```bash
+pawtograder help-requests close --id <id>
+
+# With resolution details
+pawtograder help-requests close \
+  --id <id> \
+  --status resolved \
+  --resolution-status staff_helped \
+  --notes "Helped student debug null pointer"
 ```
 
 ### Discussions
 
-List discussion board threads:
+List discussion topics with thread and question counts:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
 
-List peer and grading review assignments:
+List review assignments:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
 ```
+
+Assign grading work (balanced round-robin across active graders and instructors, honoring `grading_conflicts` and never assigning someone their own submission):
+
+```bash
+# Preview
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
+
+# Apply
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15
+
+# One assignment per rubric part
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --by-part
+
+# From an explicit manifest
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --file drafts.json
+```
+
+A bare `--due-date` (e.g. `2026-09-15`) means end of that day in the class's time zone. Re-running is safe: existing assignments are reused rather than duplicated.
 
 ## Repository operations
 
