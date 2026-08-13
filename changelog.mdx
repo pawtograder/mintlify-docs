@@ -4,6 +4,44 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 13, 2026
+
+#### Bug fixes
+- **Fixed "View as student" preview scoping** — The test-assignment student preview is now correctly scoped to its own assignment, preventing it from showing data from other assignments ([#892](https://github.com/pawtograder/platform/pull/892))
+- **Discord role sync reliability** — Non-retriable Discord role sync failures no longer cause infinite retries, and syncs are now scoped to active classes only ([#924](https://github.com/pawtograder/platform/pull/924))
+
+### August 12, 2026
+
+#### Performance improvements
+- **Faster bulk submission processing** — Raised throughput for bulk submission operations and linked Sentry events to their GitHub Actions run for easier debugging ([#925](https://github.com/pawtograder/platform/pull/925))
+
+### August 11, 2026
+
+#### Bug fixes
+- **MCP token revocation is now idempotent** — Revoking an already-revoked API token no longer produces a spurious error. Double-clicking the Revoke button is also prevented during the in-flight request ([#920](https://github.com/pawtograder/platform/pull/920))
+
+### August 7, 2026
+
+#### New features
+- **Repo-only assignments (no autograder)** — Assignments can now be created with a GitHub repository but without an autograder. When the autograder is disabled, the handout is created without `grade.yml` so no GitHub Actions run. Every push to the student repository creates a submission for hand-grading — no `#submit` tag required. A solution repository is still created for reference and grading notes. Toggle the autograder on or off at any time from the assignment's Autograder page ([#895](https://github.com/pawtograder/platform/pull/895))
+
+### August 6, 2026
+
+#### New features
+- **Suggested due date emphasis (course flag)** — A new **Suggested due dates** course feature flag (under **Course Settings → Feature flags**) lets mastery/standards-graded courses present the suggested due date as the primary deadline. When enabled, students see the suggested date as "Due" and the hard deadline is shown as the end of the resubmission window. Staff also get a **Suggested Due Date** column on the Manage Assignments list and in the per-assignment grading dashboard. Assignments with no suggested date are unaffected ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Assignment creation timezone fix** — Creating an assignment from a browser in a different timezone than the course no longer shifts the entered times. Dates are now correctly anchored to the course's configured timezone ([#896](https://github.com/pawtograder/platform/pull/896))
+
+### August 4, 2026
+
+#### CLI
+- **CLI published to npm** — The Pawtograder CLI is now available as `@pawtograder/cli` on npm. Install it globally with `npm install -g @pawtograder/cli` or run it without installing via `npx @pawtograder/cli`. No repository checkout required ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New CLI commands** — Six previously stubbed commands are now fully implemented: `discussions list`, `submissions list`, `help-requests list`, `help-requests close`, `reviews list`, and `reviews assign`. All list commands support `--json` for machine-readable output ([#885](https://github.com/pawtograder/platform/pull/885))
+- **`reviews assign` command** — Automatically distributes review assignments across graders using a balanced round-robin algorithm. Honors grading conflicts and never assigns someone their own submission. Supports `--by-part`, `--file` for explicit manifests, and `--dry-run` ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Improved rubric import** — `rubrics import --dry-run` now validates against the live rubric and reports exactly what would change, including point changes, row removals, and grading-mode changes. Use `--strip-ids` to export a rubric as a template for a new assignment ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Cross-class authorization fixes** — CLI commands now correctly scope all operations to the authorized class. Previously, a token for one class could read data from other classes ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ## July 2026
 
 ### July 7, 2026
