@@ -637,9 +637,10 @@ pawtograder repos copy-after-source-due \
 
 If you see "Not logged in" or "Authentication failed":
 
-1. Run `npm run cli -- login` to re-authenticate.
-2. Verify your token is valid in the web UI (**User Menu → API Tokens**).
+1. Run `pawtograder login` to re-authenticate.
+2. Verify your token is valid in the web UI (**Settings → API Tokens**).
 3. Ensure your token has the correct scopes (`cli:read` or `cli:write`).
+4. For self-hosted deployments, ensure `--url` points at the API gateway origin (e.g. `https://api.your-school.edu`), not the web host. Passing the web host produces an HTML response and the CLI will tell you so.
 
 Common HTTP errors:
 
@@ -649,7 +650,9 @@ Common HTTP errors:
 
 ### Command not found
 
-Run the CLI from the platform repository root and make sure dependencies are installed with `npm install`.
+If using the npm package, ensure it is installed: `npm install -g @pawtograder/cli`.
+
+If running from the repository, run from the platform repository root and make sure dependencies are installed with `npm install`.
 
 ### Timeout errors
 
