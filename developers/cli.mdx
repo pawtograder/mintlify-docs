@@ -14,7 +14,26 @@ The CLI is in beta. Commands and options may change in future releases.
 
 ## Installation
 
-The CLI ships inside the platform repository and runs via npm scripts. Run it from the repository root:
+### npm (recommended)
+
+The CLI is published to npm as `@pawtograder/cli`:
+
+```bash
+npm install -g @pawtograder/cli
+pawtograder --help
+```
+
+Or run without installing:
+
+```bash
+npx @pawtograder/cli --help
+```
+
+Requires Node.js 20 or later.
+
+### From the platform repository
+
+The CLI source lives in `cli/` and is shared with the unit tests. Run it from the repository root:
 
 ```bash
 npm run cli -- <command> [options]
@@ -26,9 +45,15 @@ For repository commands, use the shortcut:
 npm run cli:repos -- <subcommand> [options]
 ```
 
+To build and smoke-test the published bundle locally:
+
+```bash
+npm run cli:build
+```
+
 ### Prerequisites
 
-- Node.js 18 or later
+- Node.js 20 or later
 - SSH access to GitHub (for repository operations)
 - A Pawtograder API token with CLI access
 
@@ -39,40 +64,40 @@ Before using the CLI, authenticate with an API token.
 ### Creating an API token
 
 1. Log in to the Pawtograder web app.
-2. Navigate to **User Menu → API Tokens**.
-3. Create a new token with type **"CLI"** or **"MCP + CLI"**.
+2. Navigate to **Settings → API Tokens**.
+3. Create a new token with `cli:read` for read commands, or `cli:write` for commands that change data.
 4. Copy the token. It starts with `mcp_`.
 
 ### Logging in
 
 ```bash
-npm run cli -- login
+pawtograder login
 ```
 
-You'll be prompted to enter your API token. The token is stored securely in `~/.pawtograder/credentials.json`.
+You are prompted to enter your API token. The token is stored in `~/.pawtograder/credentials.json`.
 
 You can also provide the token directly:
 
 ```bash
-npm run cli -- login --token mcp_your_token_here
+pawtograder login --token mcp_your_token_here
 ```
 
-For custom deployments, specify the API URL:
+For self-hosted deployments, point `--url` at your deployment's **API gateway origin** (not the web host):
 
 ```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
+pawtograder login --url https://api.your-school.edu
 ```
 
 ### Checking authentication
 
 ```bash
-npm run cli -- whoami
+pawtograder whoami
 ```
 
 ### Logging out
 
 ```bash
-npm run cli -- logout
+pawtograder logout
 ```
 
 ## Commands
@@ -82,13 +107,13 @@ npm run cli -- logout
 List all classes you have access to:
 
 ```bash
-npm run cli -- classes list
+pawtograder classes list
 ```
 
 Show details for a specific class:
 
 ```bash
-npm run cli -- classes show <class-id-or-slug>
+pawtograder classes show <class-id-or-slug>
 ```
 
 The identifier can be a class ID, slug, or name.
@@ -98,13 +123,13 @@ The identifier can be a class ID, slug, or name.
 List assignments for a class:
 
 ```bash
-npm run cli -- assignments list --class <class-id-or-slug>
+pawtograder assignments list --class <class-id-or-slug>
 ```
 
 Show assignment details:
 
 ```bash
-npm run cli -- assignments show <assignment-id-or-slug> --class <class-id-or-slug>
+pawtograder assignments show <assignment-id-or-slug> --class <class-id-or-slug>
 ```
 
 #### Copy assignments
@@ -113,21 +138,21 @@ Copy assignments between classes. Supports single-assignment copy, full-course c
 
 ```bash
 # Copy a single assignment
-npm run cli -- assignments copy \
+pawtograder assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --assignment hw1 \
   --workdir /tmp/pawtograder-repos
 
 # Copy all assignments
-npm run cli -- assignments copy \
+pawtograder assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all \
   --workdir /tmp/pawtograder-repos
 
 # Copy with a schedule CSV (custom due dates)
-npm run cli -- assignments copy \
+pawtograder assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --schedule schedule.csv \
@@ -176,7 +201,7 @@ project-01,2026-10-01T23:59:00
 #### Delete an assignment
 
 ```bash
-npm run cli -- assignments delete <assignment-id-or-slug> --class <class-id-or-slug>
+pawtograder assignments delete <assignment-id-or-slug> --class <class-id-or-slug>
 ```
 
 Add `--force` to skip the confirmation prompt.
@@ -188,7 +213,7 @@ Import and export rubrics in YAML format.
 List rubrics for an assignment:
 
 ```bash
-npm run cli -- rubrics list \
+pawtograder rubrics list \
   --assignment <assignment-id-or-slug> \
   --class <class-id-or-slug>
 ```
@@ -196,7 +221,7 @@ npm run cli -- rubrics list \
 Export a rubric to YAML:
 
 ```bash
-npm run cli -- rubrics export \
+pawtograder rubrics export \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --type grading \
@@ -206,14 +231,14 @@ npm run cli -- rubrics export \
 Import a rubric from YAML:
 
 ```bash
-npm run cli -- rubrics import \
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml \
   --type grading
 ```
 
-Use `--dry-run` to preview the import without making changes.
+Use `--dry-run` to preview the import without making changes. The dry run validates the YAML against the live rubric and reports what would change.
 
 ### Surveys
 
@@ -221,29 +246,23 @@ Copy surveys between classes:
 
 ```bash
 # Copy a single survey
-npm run cli -- surveys copy \
+pawtograder surveys copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --survey "Midterm Feedback"
 
 # Copy all surveys
-npm run cli -- surveys copy \
+pawtograder surveys copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all
 
 # Link copied survey to a target assignment
-npm run cli -- surveys copy \
+pawtograder surveys copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --survey "HW1 Reflection" \
   --target-assignment hw1
-```
-
-List surveys for a class:
-
-```bash
-npm run cli -- surveys list --class cs3500-fall-2025
 ```
 
 ### Flashcards
@@ -251,13 +270,13 @@ npm run cli -- surveys list --class cs3500-fall-2025
 List flashcard decks:
 
 ```bash
-npm run cli -- flashcards list --class <class-id-or-slug>
+pawtograder flashcards list --class <class-id-or-slug>
 ```
 
 Copy flashcard decks between classes:
 
 ```bash
-npm run cli -- flashcards copy \
+pawtograder flashcards copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all
@@ -265,12 +284,18 @@ npm run cli -- flashcards copy \
 
 ### Submissions
 
-List submissions for an assignment:
+List submissions for an assignment (roster with active submission, autograder and total scores):
 
 ```bash
-npm run cli -- submissions list \
+pawtograder submissions list \
   --class cs3500-fall-2025 \
   --assignment hw1
+
+# Include students who have not submitted
+pawtograder submissions list \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --include-non-submitters
 ```
 
 #### Import or sync comments
@@ -279,14 +304,14 @@ Batch import submission comments from autograder results:
 
 ```bash
 # Add-only import
-npm run cli -- submissions comments import \
+pawtograder submissions comments import \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --file batch-results.json \
   --author-profile-id <uuid>
 
 # Sync (insert new + soft-delete missing)
-npm run cli -- submissions comments sync \
+pawtograder submissions comments sync \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --file batch-results.json \
@@ -300,7 +325,7 @@ Use `--rubric-part-id` instead of `--author-profile-id` to attribute comments to
 Upload submission artifact blobs from a manifest:
 
 ```bash
-npm run cli -- submissions artifacts import \
+pawtograder submissions artifacts import \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --file manifest.json \
@@ -344,28 +369,88 @@ You can use `content_file` instead of `content_base64` to reference an external 
 
 ### Help requests
 
-List office hours help requests:
+List office-hours help requests:
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-fall-2025
+
+# Filter by status ('active' means open or in_progress)
+pawtograder help-requests list \
+  --class cs3500-fall-2025 \
+  --status active
+```
+
+Close a help request:
+
+```bash
+pawtograder help-requests close --id <id>
+
+# With resolution details
+pawtograder help-requests close \
+  --id <id> \
+  --status resolved \
+  --resolution-status staff_helped \
+  --notes "Helped student debug null pointer"
 ```
 
 ### Discussions
 
-List discussion board threads:
+List discussion topics with thread and question counts:
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder discussions list --class cs3500-fall-2025
 ```
 
 ### Reviews
 
-List peer and grading review assignments:
+List review assignments:
 
 ```bash
-npm run cli -- reviews list \
+pawtograder reviews list \
   --class cs3500-fall-2025 \
   --assignment hw1
+```
+
+Assign grading work (balanced round-robin across active graders and instructors, honoring `grading_conflicts` and never assigning someone their own submission):
+
+```bash
+# Preview
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --dry-run
+
+# Apply
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15
+
+# One assignment per rubric part
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --by-part
+
+# From an explicit manifest
+pawtograder reviews assign \
+  --class cs3500-fall-2025 \
+  --assignment hw1 \
+  --due-date 2026-09-15 \
+  --file drafts.json
+```
+
+A bare `--due-date` (e.g. `2026-09-15`) means end of that day in the class's time zone. Re-running is safe: existing assignments are reused rather than duplicated.
+
+## JSON output
+
+Every `list` command accepts `--json` to emit the raw API response instead of a formatted table, so output can be piped into `jq`:
+
+```bash
+pawtograder submissions list -c cs3500-fall-2025 -a hw1 --json \
+  | jq '.submissions[] | select(.total_score == null)'
 ```
 
 ## Repository operations
@@ -379,7 +464,7 @@ Repository commands require SSH access to GitHub. Ensure your SSH keys are confi
 ### List repositories
 
 ```bash
-npm run cli:repos -- list --class <class-id-or-slug> --assignment <assignment-id-or-slug>
+pawtograder repos list --class <class-id-or-slug> --assignment <assignment-id-or-slug>
 ```
 
 ### Sync grade workflow
@@ -387,7 +472,7 @@ npm run cli:repos -- list --class <class-id-or-slug> --assignment <assignment-id
 Synchronize `.github/workflows/grade.yml` from the handout repository to all student repositories:
 
 ```bash
-npm run cli:repos -- sync-grade-workflow \
+pawtograder repos sync-grade-workflow \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --workdir /tmp/pawtograder-repos \
@@ -412,7 +497,7 @@ This command:
 Copy files from source assignment repositories to target assignment repositories after the source due date. This is useful for sequential assignments where students build on previous work:
 
 ```bash
-npm run cli:repos -- copy-after-source-due \
+pawtograder repos copy-after-source-due \
   --class cs3500-spring-2026 \
   --source-assignment hw1 \
   --target-assignment hw2 \
@@ -439,6 +524,7 @@ The CLI:
 Most commands support these options:
 
 - `--dry-run` – Preview changes without making them
+- `--json` – Emit the raw JSON response instead of a formatted table
 - `--help` – Show command-specific help
 - `--class` or `-c` – Specify a class by ID, slug, or name
 - `--assignment` or `-a` – Specify an assignment by ID or slug
@@ -448,12 +534,13 @@ Most commands support these options:
 | Variable | Description |
 |----------|-------------|
 | `PAWTOGRADER_HTTP_TIMEOUT_MS` | HTTP request timeout in milliseconds. Set to `600000` (10 minutes) for large operations. |
-| `DEBUG` | Set to `1` to enable verbose HTTP logging. |
+| `PAWTOGRADER_VERBOSE=1` | Log each request and its timing to stderr. |
+| `DEBUG` | Set to `1` to enable verbose HTTP logging plus stack traces on unexpected errors. |
 
 ```bash
 export PAWTOGRADER_HTTP_TIMEOUT_MS=600000
 export DEBUG=1
-npm run cli -- <command>
+pawtograder <command>
 ```
 
 ## API token scopes
@@ -463,7 +550,7 @@ CLI tokens require specific scopes:
 - `cli:read` – Read-only operations (list, show, export)
 - `cli:write` – Write operations (copy, import, delete)
 
-Create tokens with appropriate scopes in the web UI under **User Menu → API Tokens**.
+Create tokens with appropriate scopes in the web UI under **Settings → API Tokens**.
 
 ## Common workflows
 
@@ -473,20 +560,20 @@ Copy an entire course to a new semester:
 
 ```bash
 # 1. Copy all assignments with new dates
-npm run cli -- assignments copy \
+pawtograder assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --schedule spring-2026-schedule.csv \
   --workdir ./repos
 
 # 2. Copy surveys
-npm run cli -- surveys copy \
+pawtograder surveys copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all
 
 # 3. Copy flashcards
-npm run cli -- flashcards copy \
+pawtograder flashcards copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all
@@ -496,7 +583,7 @@ npm run cli -- flashcards copy \
 
 ```bash
 # 1. Export the current rubric
-npm run cli -- rubrics export \
+pawtograder rubrics export \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --output hw1-rubric.yml
@@ -504,14 +591,14 @@ npm run cli -- rubrics export \
 # 2. Edit hw1-rubric.yml locally
 
 # 3. Preview changes
-npm run cli -- rubrics import \
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml \
   --dry-run
 
 # 4. Apply changes
-npm run cli -- rubrics import \
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml
@@ -521,14 +608,14 @@ npm run cli -- rubrics import \
 
 ```bash
 # Update grade workflows across all student repos
-npm run cli:repos -- sync-grade-workflow \
+pawtograder repos sync-grade-workflow \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --workdir ./repos \
   --dry-run
 
 # Copy starter code from hw1 to hw2 after hw1 due date
-npm run cli:repos -- copy-after-source-due \
+pawtograder repos copy-after-source-due \
   --class cs3500-spring-2026 \
   --source-assignment hw1 \
   --target-assignment hw2 \
@@ -550,9 +637,10 @@ npm run cli:repos -- copy-after-source-due \
 
 If you see "Not logged in" or "Authentication failed":
 
-1. Run `npm run cli -- login` to re-authenticate.
-2. Verify your token is valid in the web UI (**User Menu → API Tokens**).
+1. Run `pawtograder login` to re-authenticate.
+2. Verify your token is valid in the web UI (**Settings → API Tokens**).
 3. Ensure your token has the correct scopes (`cli:read` or `cli:write`).
+4. For self-hosted deployments, ensure `--url` points at the API gateway origin (e.g. `https://api.your-school.edu`), not the web host. Passing the web host produces an HTML response and the CLI will tell you so.
 
 Common HTTP errors:
 
@@ -562,7 +650,9 @@ Common HTTP errors:
 
 ### Command not found
 
-Run the CLI from the platform repository root and make sure dependencies are installed with `npm install`.
+If using the npm package, ensure it is installed: `npm install -g @pawtograder/cli`.
+
+If running from the repository, run from the platform repository root and make sure dependencies are installed with `npm install`.
 
 ### Timeout errors
 
@@ -596,12 +686,12 @@ The CLI automatically retries git operations that fail due to connection resets.
 For detailed help on any command:
 
 ```bash
-npm run cli -- <command> --help
+pawtograder <command> --help
 ```
 
 For example:
 
 ```bash
-npm run cli -- assignments --help
-npm run cli -- assignments copy --help
+pawtograder assignments --help
+pawtograder reviews assign --help
 ```
