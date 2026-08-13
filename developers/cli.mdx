@@ -4,17 +4,29 @@ description: "Command-line tools for managing courses, assignments, rubrics, and
 icon: "terminal"
 ---
 
-# Pawtograder CLI (Beta)
+# Pawtograder CLI
 
 The Pawtograder CLI provides command-line tools for instructors and site administrators to manage courses, copy assignments between semesters, import rubrics and submission data, and perform bulk repository operations.
 
-<Warning>
-The CLI is in beta. Commands and options may change in future releases.
-</Warning>
-
 ## Installation
 
-The CLI ships inside the platform repository and runs via npm scripts. Run it from the repository root:
+Install the CLI globally from npm:
+
+```bash
+npm install -g @pawtograder/cli
+```
+
+Or run it without installing:
+
+```bash
+npx @pawtograder/cli <command> [options]
+```
+
+Requires Node.js 20 or later.
+
+### Running from the platform repository
+
+If you have a checkout of the platform repository, you can also run the CLI directly:
 
 ```bash
 npm run cli -- <command> [options]
@@ -28,7 +40,7 @@ npm run cli:repos -- <subcommand> [options]
 
 ### Prerequisites
 
-- Node.js 18 or later
+- Node.js 20 or later
 - SSH access to GitHub (for repository operations)
 - A Pawtograder API token with CLI access
 
@@ -39,40 +51,40 @@ Before using the CLI, authenticate with an API token.
 ### Creating an API token
 
 1. Log in to the Pawtograder web app.
-2. Navigate to **User Menu → API Tokens**.
-3. Create a new token with type **"CLI"** or **"MCP + CLI"**.
+2. Navigate to **Settings → API Tokens**.
+3. Create a new token with the `cli:read` scope for read commands, or `cli:write` for commands that change data.
 4. Copy the token. It starts with `mcp_`.
 
 ### Logging in
 
 ```bash
-npm run cli -- login
+pawtograder login
 ```
 
 You'll be prompted to enter your API token. The token is stored securely in `~/.pawtograder/credentials.json`.
 
-You can also provide the token directly:
+You can also provide the token directly (useful for CI):
 
 ```bash
-npm run cli -- login --token mcp_your_token_here
+pawtograder login --token mcp_your_token_here
 ```
 
-For custom deployments, specify the API URL:
+For self-hosted deployments, point `--url` at the **API gateway origin**, not the web host:
 
 ```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
+pawtograder login --url https://api.your-school.edu
 ```
 
 ### Checking authentication
 
 ```bash
-npm run cli -- whoami
+pawtograder whoami
 ```
 
 ### Logging out
 
 ```bash
-npm run cli -- logout
+pawtograder logout
 ```
 
 ## Commands
