@@ -14,7 +14,26 @@ The CLI is in beta. Commands and options may change in future releases.
 
 ## Installation
 
-The CLI ships inside the platform repository and runs via npm scripts. Run it from the repository root:
+### npm (recommended)
+
+The CLI is published to npm as `@pawtograder/cli`:
+
+```bash
+npm install -g @pawtograder/cli
+pawtograder --help
+```
+
+Or run without installing:
+
+```bash
+npx @pawtograder/cli --help
+```
+
+Requires Node.js 20 or later.
+
+### From the platform repository
+
+The CLI source lives in `cli/` and is shared with the unit tests. Run it from the repository root:
 
 ```bash
 npm run cli -- <command> [options]
@@ -26,9 +45,15 @@ For repository commands, use the shortcut:
 npm run cli:repos -- <subcommand> [options]
 ```
 
+To build and smoke-test the published bundle locally:
+
+```bash
+npm run cli:build
+```
+
 ### Prerequisites
 
-- Node.js 18 or later
+- Node.js 20 or later
 - SSH access to GitHub (for repository operations)
 - A Pawtograder API token with CLI access
 
@@ -39,40 +64,40 @@ Before using the CLI, authenticate with an API token.
 ### Creating an API token
 
 1. Log in to the Pawtograder web app.
-2. Navigate to **User Menu → API Tokens**.
-3. Create a new token with type **"CLI"** or **"MCP + CLI"**.
+2. Navigate to **Settings → API Tokens**.
+3. Create a new token with `cli:read` for read commands, or `cli:write` for commands that change data.
 4. Copy the token. It starts with `mcp_`.
 
 ### Logging in
 
 ```bash
-npm run cli -- login
+pawtograder login
 ```
 
-You'll be prompted to enter your API token. The token is stored securely in `~/.pawtograder/credentials.json`.
+You are prompted to enter your API token. The token is stored in `~/.pawtograder/credentials.json`.
 
 You can also provide the token directly:
 
 ```bash
-npm run cli -- login --token mcp_your_token_here
+pawtograder login --token mcp_your_token_here
 ```
 
-For custom deployments, specify the API URL:
+For self-hosted deployments, point `--url` at your deployment's **API gateway origin** (not the web host):
 
 ```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
+pawtograder login --url https://api.your-school.edu
 ```
 
 ### Checking authentication
 
 ```bash
-npm run cli -- whoami
+pawtograder whoami
 ```
 
 ### Logging out
 
 ```bash
-npm run cli -- logout
+pawtograder logout
 ```
 
 ## Commands
