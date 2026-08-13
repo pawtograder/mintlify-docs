@@ -12,6 +12,20 @@ does. Group-specific settings are covered in
 [Groups](/staff/assignments/groups); the extension and late-token
 workflow is in [Extensions](/staff/assignments/extensions).
 
+## Repository and autograder mode
+
+When creating an assignment, the **Repository Configuration** section controls whether student repositories are created and whether the autograder runs.
+
+- **No repository** (`none` / `no_submission`) — no GitHub repository is created. Students submit via file upload or the assignment has no submission at all.
+- **Repository with autograder** (default) — a handout repository is created for each student, and `.github/workflows/grade.yml` is included so every `#submit` push triggers the autograder.
+- **Repository without autograder** — uncheck **Enable autograder (GitHub Actions)** to create a handout repository without `grade.yml`. No Actions run; every push to the student repository creates a submission for hand-grading automatically (no `#submit` tag required). A solution repository is still created for your reference solution and grading notes.
+
+You can toggle the autograder on or off after creation from the assignment's **Autograder** page. Toggling adds or removes `grade.yml` from the handout repository and queues existing student repositories to sync the change.
+
+<Note>
+If the handout is shared with another assignment (for example, via **Fork from prior assignment**), both assignments must have the same autograder setting. Pawtograder enforces this and will warn you if they disagree.
+</Note>
+
 ## Dates and time zone
 
 All dates are displayed in the course's configured time zone (set
