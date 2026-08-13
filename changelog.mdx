@@ -4,6 +4,38 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 13, 2026
+
+#### Discord improvements
+- **Discord membership tracking and visibility** — The enrollment roster now shows a **Discord Status** column (In server / Not in server / Cannot invite / Not linked / Not checked yet) for courses with a Discord server configured. Instructors see alerts above the roster and on the Discord settings page listing students who have not joined and, separately, students the bot cannot invite due to a permission problem. Each alert includes a **Retry Discord for this course** button that re-queues membership checks and re-creates any missing Discord roles ([#924](https://github.com/pawtograder/platform/pull/924))
+- **Student Discord invite panel** — Students can now see and use their pending Discord server invitation directly from their course dashboard, alongside the existing GitHub org invitation. The panel only appears when the course has enabled the **Student Discord invitations** feature flag and a Discord server is configured ([#924](https://github.com/pawtograder/platform/pull/924))
+- **Student Discord invitations feature flag** — A new **Student Discord invitations** course feature flag controls whether students are shown an invitation to join the course's Discord server. Off by default; enable it under **Course Settings → Feature flags** ([#924](https://github.com/pawtograder/platform/pull/924))
+- **Stopped retrying permanent Discord failures** — The hourly Discord role sync no longer retries operations that can never succeed (user not in server, bot lacks channel-list permission). These outcomes are now recorded once in the new membership status table and surfaced to instructors instead of accumulating in the dead-letter queue ([#924](https://github.com/pawtograder/platform/pull/924))
+- **Scoped Discord sync to active classes** — The hourly batch role sync now only runs for classes that are not archived and whose end date is within the last 30 days, eliminating unnecessary work for ended courses ([#924](https://github.com/pawtograder/platform/pull/924))
+
+### August 7, 2026
+
+#### Assignment improvements
+- **Repo-only assignments with no autograder** — Assignments can now be created with a GitHub repository but no autograder. Use the **No submission** or **None** repo mode when you want students to have a repository for reference or collaboration without automated grading ([#895](https://github.com/pawtograder/platform/pull/895))
+
+### August 6, 2026
+
+#### Assignment improvements
+- **Suggested due date emphasis** — A new **Suggested due dates** course feature flag makes the suggested due date the primary deadline shown to students, with the hard deadline displayed as the end of the resubmission window. Useful for mastery/standards-graded courses where students are expected to submit by the suggested date to receive timely feedback. Enable it under **Course Settings → Feature flags** ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Suggested due date visible to staff** — The **Manage Assignments** table now shows a **Suggested Due Date** column when the suggested due dates feature flag is enabled. The per-assignment grading dashboard header also shows the suggested date ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Fixed assignment creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the entered times. For example, a 9:00 AM deadline entered by an instructor in Denver for a New York course now correctly stores 9:00 AM Eastern ([#896](https://github.com/pawtograder/platform/pull/896))
+
+### August 4, 2026
+
+#### CLI improvements
+- **CLI published to npm** — The Pawtograder CLI is now available as `@pawtograder/cli` on npm. Run `npx @pawtograder/cli --help` without a checkout, or install globally with `npm install -g @pawtograder/cli` ([#885](https://github.com/pawtograder/platform/pull/885))
+- **New CLI commands** — Six previously stubbed commands are now fully implemented: `submissions list`, `reviews list`, `reviews assign`, `discussions list`, `help-requests list`, and `help-requests close`. All list commands support `--json` for machine-readable output ([#885](https://github.com/pawtograder/platform/pull/885))
+- **`reviews assign` command** — Automatically distributes review assignments across graders and instructors using a balanced round-robin algorithm. Honors grading conflicts and never assigns someone their own submission. Supports `--by-part`, `--grader`, `--file` (explicit manifest), and `--dry-run` ([#885](https://github.com/pawtograder/platform/pull/885))
+- **Improved rubric import** — `rubrics import --dry-run` now validates the YAML against the live rubric and reports exactly what would change (insertions, deletions, point changes, reparenting) before writing anything. Added `--strip-ids` to export a rubric as a template for use in a different assignment ([#885](https://github.com/pawtograder/platform/pull/885))
+- **CLI cross-class authorization fix** — Fixed a security issue where CLI tokens could read or mutate data in classes other than the one they were issued for ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ## July 2026
 
 ### July 7, 2026
