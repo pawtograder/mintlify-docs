@@ -560,20 +560,20 @@ Copy an entire course to a new semester:
 
 ```bash
 # 1. Copy all assignments with new dates
-npm run cli -- assignments copy \
+pawtograder assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --schedule spring-2026-schedule.csv \
   --workdir ./repos
 
 # 2. Copy surveys
-npm run cli -- surveys copy \
+pawtograder surveys copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all
 
 # 3. Copy flashcards
-npm run cli -- flashcards copy \
+pawtograder flashcards copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --all
@@ -583,7 +583,7 @@ npm run cli -- flashcards copy \
 
 ```bash
 # 1. Export the current rubric
-npm run cli -- rubrics export \
+pawtograder rubrics export \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --output hw1-rubric.yml
@@ -591,14 +591,14 @@ npm run cli -- rubrics export \
 # 2. Edit hw1-rubric.yml locally
 
 # 3. Preview changes
-npm run cli -- rubrics import \
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml \
   --dry-run
 
 # 4. Apply changes
-npm run cli -- rubrics import \
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml
@@ -608,14 +608,14 @@ npm run cli -- rubrics import \
 
 ```bash
 # Update grade workflows across all student repos
-npm run cli:repos -- sync-grade-workflow \
+pawtograder repos sync-grade-workflow \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --workdir ./repos \
   --dry-run
 
 # Copy starter code from hw1 to hw2 after hw1 due date
-npm run cli:repos -- copy-after-source-due \
+pawtograder repos copy-after-source-due \
   --class cs3500-spring-2026 \
   --source-assignment hw1 \
   --target-assignment hw2 \
