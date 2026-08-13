@@ -89,18 +89,21 @@ pawtograder logout
 
 ## Commands
 
+All commands follow the pattern `pawtograder <group> <action> [options]`. Add `--help` to any group or action for its full option list. All `list` commands accept `--json` to emit the raw JSON response for piping into `jq` or other tools.
+
 ### Classes
 
-List all classes you have access to:
+List all classes your token can see:
 
 ```bash
-npm run cli -- classes list
+pawtograder classes list
+pawtograder classes list --json | jq '.classes[] | .name'
 ```
 
 Show details for a specific class:
 
 ```bash
-npm run cli -- classes show <class-id-or-slug>
+pawtograder classes show <class-id-or-slug>
 ```
 
 The identifier can be a class ID, slug, or name.
@@ -110,13 +113,13 @@ The identifier can be a class ID, slug, or name.
 List assignments for a class:
 
 ```bash
-npm run cli -- assignments list --class <class-id-or-slug>
+pawtograder assignments list --class <class-id-or-slug>
 ```
 
 Show assignment details:
 
 ```bash
-npm run cli -- assignments show <assignment-id-or-slug> --class <class-id-or-slug>
+pawtograder assignments show <assignment-id-or-slug> --class <class-id-or-slug>
 ```
 
 #### Copy assignments
