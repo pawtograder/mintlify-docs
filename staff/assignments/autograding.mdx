@@ -66,6 +66,33 @@ Reference it from the top of your YAML to get IDE autocomplete:
   </Card>
 </CardGroup>
 
+## Repo-only assignments (no autograder)
+
+You can create a repository-backed assignment without an autograder. In this mode, Pawtograder creates a handout and student repositories as usual, but no `grade.yml` workflow is included — so no GitHub Actions run and students never see a failing check. Every push to the student repository is recorded as a submission for you to grade by hand; students do not need to include `#submit` in their commit message.
+
+A solution repository is still created for your reference solution and grading notes.
+
+### Enabling or disabling the autograder
+
+When creating an assignment, the **Repository Configuration** section includes an **Autograder** checkbox. It is on by default. Uncheck it to create a repo-only assignment.
+
+You can also toggle the autograder on an existing assignment from **Manage → Assignments → [Assignment] → Autograder**. Toggling updates the handout repository (adding or removing `grade.yml`) and queues a sync to existing student repositories so they receive the change.
+
+<Note>
+Disabling the autograder parks the existing `grade.yml` as `grade.yml.disabled` in the handout repository rather than deleting it, so any customizations you made to the workflow are preserved. Re-enabling restores the parked copy, or falls back to the class handout template if no parked copy exists.
+</Note>
+
+<Warning>
+If the handout is shared with another assignment (for example, via **Fork from prior assignment**), both assignments must have the same autograder setting. Pawtograder will refuse to toggle one while the other disagrees.
+</Warning>
+
+### Submission behavior
+
+- Every push to the student repository's default branch creates a submission, regardless of the commit message.
+- Handout-sync pushes (instructor-driven updates) are automatically excluded and do not create submissions.
+- The submission history page shows **N/A** for the autograder score column on repo-only assignments.
+- The submission limit banner is hidden, since there are no runner minutes to conserve.
+
 ## The `grade.yml` Workflow
 
 The handout repository ships with a `.github/workflows/grade.yml` that is
