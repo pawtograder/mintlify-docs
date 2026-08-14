@@ -4,6 +4,26 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 13, 2026
+
+#### Bug fixes
+- **Fixed student preview scoped to assignment** — The "View as student" preview on the assignment page is now correctly scoped to the current assignment, preventing it from showing a different assignment's content ([#892](https://github.com/pawtograder/platform/pull/892))
+
+### August 7, 2026
+
+#### New features
+- **Repo-only assignments (no autograder)** — You can now create repository-backed assignments without an autograder. Uncheck **Enable autograder (GitHub Actions)** when creating an assignment to get a handout and student repositories without `grade.yml`. Every push to the student repository is recorded as a submission for hand-grading — no `#submit` needed. The autograder can also be toggled on or off on existing assignments from the Autograder page; toggling updates the handout and queues a sync to existing student repositories. See [Configuring Autograders](/staff/assignments/autograding) ([#895](https://github.com/pawtograder/platform/pull/895))
+
+### August 6, 2026
+
+#### New features
+- **Suggested due dates course flag** — A new **Suggested due dates** feature flag (under **Course Settings → Feature flags**) lets mastery/standards-graded courses present the suggested due date as the primary deadline. When enabled, students see the suggested date as **Due** and the hard deadline as **Resubmit until**. Staff gain a **Suggested Due Date** column on the Manage Assignments table and in the per-assignment grading dashboard. See [Course Settings](/staff/course-settings) ([#896](https://github.com/pawtograder/platform/pull/896))
+
+#### Bug fixes
+- **Fixed assignment creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the entered times. Dates are now correctly anchored to the course timezone ([#896](https://github.com/pawtograder/platform/pull/896))
+
 ## July 2026
 
 ### July 7, 2026
