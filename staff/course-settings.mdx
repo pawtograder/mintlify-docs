@@ -82,7 +82,31 @@ Graders can self-input their conflicts under **Course Settings** → **Grading C
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
 
-## Course Display Settings
+## Feature flags
+
+Feature flags let you opt individual courses into optional behaviors. Toggle them under **Course Settings → Feature flags**.
+
+| Flag | What it does |
+|---|---|
+| **Gradebook What-If** | Lets students simulate grade changes in the gradebook. |
+| **Suggested due dates** | For mastery/standards-graded courses. When enabled, the assignment's *suggested due date* is shown to students as the primary "Due" date, and the hard deadline is relabeled as the end of the resubmission window. Staff also see a **Suggested Due Date** column on the Manage Assignments list. Assignments with no suggested due date are unaffected. |
+
+### Suggested due dates
+
+In a mastery or standards-graded course, the suggested due date is the date that governs whether a student's work gets graded and returned in time to resubmit. The hard due date is when submissions close entirely.
+
+Without the flag, the suggested date appears as a small secondary line below the hard deadline — easy to overlook. With the flag on, the hierarchy flips:
+
+- **Students** see the suggested date as the primary "Due" date (larger, semibold), with the hard deadline shown beneath it as "Resubmit until …".
+- **Staff** see a **Suggested Due Date** column on the Manage Assignments list and in the per-assignment grading dashboard header.
+
+The flag is off by default. Assignments with no suggested due date render identically whether the flag is on or off.
+
+<Note>
+Late tokens always extend the hard deadline, not the suggested date. When the flag is on, the late-token button is labeled "Extend Resubmission Deadline" to make this clear.
+</Note>
+
+## Course display settings
 
 Additional course-wide settings may include:
 
