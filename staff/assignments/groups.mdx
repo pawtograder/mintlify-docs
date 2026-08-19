@@ -39,6 +39,14 @@ Publishing creates or updates memberships in the database, creates
 GitHub repositories for any new groups, and queues permission-sync
 jobs.
 
+### Group name requirements
+
+Group names must consist only of letters, numbers, hyphens, or underscores and be 36 characters or fewer. For assignments that provision GitHub repositories, names must also contain at least one letter or number (so the name can form a valid repository name component), and two groups in the same assignment cannot have names that normalize to the same GitHub repository name — for example, `Team-One` and `Team--One` would collide and are rejected.
+
+<Note>
+Names with spaces (for example, `Brand New Team`) are accepted by the instructor-side bulk import and copy-from-assignment flows, which sanitize the name automatically when deriving the repository name.
+</Note>
+
 <Note>
 Students are not notified about group assignments until the assignment
 is released, so you can prepare and adjust groups in advance.
