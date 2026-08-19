@@ -4,6 +4,35 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 19, 2026
+
+#### GitHub reliability
+- **Bounded repository-creation retries** — Repository creation now uses exponential backoff (15 minutes doubling to an 8-hour cap) with an 8-attempt ceiling. After exhausting automatic retries, the repository is parked with a clear error message and an instructor **Retry** button. Previously, stuck repositories were re-enqueued indefinitely every 15 minutes with no limit ([#933](https://github.com/pawtograder/platform/pull/933))
+- **Deduplicated repository creation by identity** — Repository creation now deduplicates by student or group identity rather than by derived name, preventing duplicate enqueues when a group name or GitHub login changes after repositories are created ([#933](https://github.com/pawtograder/platform/pull/933))
+- **Improved group name validation** — Group names that cannot form a valid GitHub repository name (separator-only names like `---`, or names that normalize to the same value as a sibling group like `Team-One` and `Team--One`) are now rejected at creation time with a clear error message. The validation is repository-mode-aware: assignments that do not provision repositories accept any valid name ([#933](https://github.com/pawtograder/platform/pull/933))
+
+### August 13, 2026
+
+#### Bug fixes
+- **Fixed student preview scoped to its assignment** — The "View as student" preview on the assignment page is now correctly scoped to that assignment. Previously, the preview could show a different assignment's state ([#892](https://github.com/pawtograder/platform/pull/892))
+
+### August 7, 2026
+
+#### Assignment features
+- **Repo-only assignments without an autograder** — Assignments can now be configured with `repo_mode: none` or `no_submission` to provision GitHub repositories (or manual submission rows) without running an autograder. Useful for paper assignments, in-class exercises, or any workflow where you want a repository but no automated grading ([#895](https://github.com/pawtograder/platform/pull/895))
+
+#### Suggested due dates
+- **Suggested due date emphasis** — A new **Suggested due dates** course feature flag (under **Course Settings → Feature flags**) lets mastery/standards-graded courses display the suggested due date as the primary "Due" date for students, with the hard deadline shown beneath it as the resubmission window. Staff also see a **Suggested Due Date** column on the Manage Assignments list and in the per-assignment grading dashboard header ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Fixed assignment-creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the entered times. Dates are now correctly anchored to the course's configured timezone ([#896](https://github.com/pawtograder/platform/pull/896))
+
+#### CLI
+- **CLI 0.2.0 published to npm** — The Pawtograder CLI is now available as `@pawtograder/cli` on npm. Install with `npm install -g @pawtograder/cli`. This release includes all six command groups (`rubrics`, `submissions`, `reviews`, `repos`, `assessment`, `help-requests`) that were stubbed in 0.1.0 ([#889](https://github.com/pawtograder/platform/pull/889))
+
+#### Bug fixes
+- **MCP token revocation is now idempotent** — Revoking an already-revoked MCP API token no longer produces a spurious error. Double-clicking the Revoke button is safe ([#920](https://github.com/pawtograder/platform/pull/920))
+
 ## July 2026
 
 ### July 7, 2026
