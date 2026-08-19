@@ -4,6 +4,36 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 19, 2026
+
+#### Bug fixes
+- **Fixed edge function out-of-memory crash** — Bounded the demuxer's eszip cache to prevent the production OOM that caused edge function restarts under load ([#934](https://github.com/pawtograder/platform/pull/934))
+- **Fixed GitHub repository creation retries** — Bounded repo-creation retries and deduplicated repositories by identity to prevent duplicate repos from being created on transient failures ([#933](https://github.com/pawtograder/platform/pull/933))
+
+### August 13, 2026
+
+#### Bug fixes
+- **Fixed "View as student" assignment preview** — The test-assignment student preview is now scoped to its own assignment, preventing it from showing submissions from other assignments ([#892](https://github.com/pawtograder/platform/pull/892))
+- **Fixed Discord role sync** — Stopped retrying non-retriable role sync failures and scoped Discord sync to active classes only ([#924](https://github.com/pawtograder/platform/pull/924))
+
+### August 11, 2026
+
+#### Bug fixes
+- **Fixed MCP token revocation** — Revoking an already-revoked MCP API token no longer produces a spurious error. The revoke button is now disabled and shows a spinner while a revocation is in flight, preventing double-clicks from triggering a second request ([#920](https://github.com/pawtograder/platform/pull/920))
+
+### August 7, 2026
+
+#### Assignment improvements
+- **Repository-only assignments (no autograder)** — Assignments can now have a GitHub repository without an autograder. When you uncheck **Enable autograder (GitHub Actions)** in the assignment form, the handout is created without `grade.yml` so no Actions workflow runs and students never see a failing check. Every push to the student repository creates a submission for hand-grading — no `#submit` commit message needed. A solution repository is still created for your reference solution and grading notes. The autograder can be toggled on or off later from the assignment's Autograder page ([#895](https://github.com/pawtograder/platform/pull/895))
+
+### August 6, 2026
+
+#### Assignment improvements
+- **Suggested due date emphasis** — For mastery/standards-graded courses, a new **Suggested due dates** course feature flag (under **Course Settings → Feature flags**) makes the suggested due date the primary deadline students see. With the flag on, the suggested date is shown as "Due" in larger, semibold text, and the hard deadline is demoted to "Resubmit until". Assignments with no suggested due date are unaffected. Staff also gain a **Suggested Due Date** column on the Manage Assignments list and in the per-assignment grading dashboard header ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Fixed assignment creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the stored times. Dates entered in the assignment form are now always interpreted in the course's configured timezone ([#896](https://github.com/pawtograder/platform/pull/896))
+
 ## July 2026
 
 ### July 7, 2026
