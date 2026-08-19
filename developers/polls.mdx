@@ -61,7 +61,7 @@ CREATE TABLE live_polls (
 
 - `question`: Stores SurveyJS-formatted JSON containing the poll structure
 - `is_live`: Controls whether the poll is active (accepting responses)
-- `deactivates_at`: Auto-deactivation timestamp (1 hour from when poll goes live)
+- `deactivates_at`: Intended auto-deactivation timestamp (1 hour from when poll goes live). Written but never read — see [Auto-Deactivation](#auto-deactivation-not-currently-wired-up).
 - `require_login`: Whether anonymous responses are allowed
 - `created_by`: Instructor/grader who created the poll (auto-set via trigger)
 
@@ -148,9 +148,9 @@ The constraint `UNIQUE (live_poll_id, public_profile_id)` enforces one response 
 | `broadcast_live_poll_change` | live_polls | Broadcasts changes to realtime channels |
 | `broadcast_live_poll_response_change` | live_poll_responses | Broadcasts new responses to staff channel |
 
-### Auto-Deactivation
+### Auto-Deactivation (not currently wired up)
 
-Polls automatically close after 1 hour via a scheduled function:
+The `set_poll_deactivates_at` trigger stamps `deactivates_at` one hour ahead whenever a poll goes live, and a function exists to act on it:
 
 ```sql
 CREATE OR REPLACE FUNCTION public.deactivate_expired_polls()
@@ -163,10 +163,11 @@ BEGIN
       AND deactivates_at <= NOW();
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Runs every hour via pg_cron
-SELECT cron.schedule('deactivate-expired-polls', '0 * * * *', 'SELECT deactivate_expired_polls()');
 ```
+
+<Warning>
+Nothing calls this function. It is never scheduled with `pg_cron` and has no caller anywhere in the codebase, so **polls do not currently close on their own** — `deactivates_at` is written and then never read. A poll stays live until someone closes it explicitly. Scheduling it (`SELECT cron.schedule('deactivate-expired-polls', '0 * * * *', 'SELECT deactivate_expired_polls()')`) would be the change needed to make the one-hour expiry real.
+</Warning>
 
 ## Row-Level Security (RLS)
 

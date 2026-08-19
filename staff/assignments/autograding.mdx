@@ -17,11 +17,11 @@ artifacts back to Pawtograder. This page is the reference for the
 
 <Note>
 The `pawtograder.yml` schema is published at
-`https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json`.
+`https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json`.
 Reference it from the top of your YAML to get IDE autocomplete:
 
 ```yaml
-# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json
 ```
 </Note>
 
@@ -29,7 +29,7 @@ Reference it from the top of your YAML to get IDE autocomplete:
 
 <CardGroup cols={2}>
   <Card title="grade.yml Workflow" icon="file-code" href="#the-gradeyml-workflow">
-    The workflow file students run, plus action inputs and outputs.
+    The workflow file students run, what counts as a submission, plus action inputs and outputs.
   </Card>
   <Card title="pawtograder.yml Configuration" icon="gear" href="#the-pawtograderyml-configuration">
     Top-level reference for `build`, `gradedParts`, `submissionFiles`, and friends.
@@ -102,7 +102,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
       - name: Collect Submission and Run Grader
-        uses: pawtograder/assignment-action@v3
+        uses: pawtograder/assignment-action@v4
         with:
           grading_server: 'https://api.pawtograder.com'
           action_ref: '${{ github.action_ref }}'
@@ -117,6 +117,20 @@ The student's code is checked out into `submission/`. The action downloads
 the grader into a sibling `grader/` directory. Both you and the student can
 view the run output (including the action's job summary table) under the
 Actions tab of the student repo.
+
+### What Counts as a Submission
+
+The `on:` block above is what decides when a student submits. It is the workflow's own configuration, not something Pawtograder imposes, so editing it changes the submission rule for the assignment.
+
+With the `push:` trigger in place — the default the handout ships with — **every push to `main` is a submission**. The grading job runs against the last commit of the push, so a student who pushes three commits at once produces one submission, for the third. Students do not need to write anything special in the commit message.
+
+<Warning>
+Keep `workflow_dispatch:` no matter what else you change. It is how Pawtograder starts a run on demand, and removing it breaks both the `#submit` path below and the per-commit trigger button in the Commit History dialog.
+</Warning>
+
+Delete the `push:` block if you would rather students submit deliberately. Pawtograder then dispatches the workflow only when the head commit message of a push contains `#submit`, matched case-sensitively — so `#Submit` and `#SUBMIT` do not count. Warn students if you do this, because nothing in the interface tells them the marker is required. You can also narrow the trigger rather than remove it, by adding branches or restricting paths; the rule is the same either way, in that whatever the `on:` block matches is what becomes a submission.
+
+Assignments configured without an autograder have no `grade.yml` at all. There, every push to the default branch is collected as a submission for hand grading, and neither trigger applies.
 
 ### Action Inputs
 
@@ -305,7 +319,7 @@ There are two kinds of unit, and they can be mixed freely within a part.
 - `hideFeedbot: true` — suppresses Feedbot hints for this unit only.
 
 <Warning>
-The old documentation claimed partial credit was enabled by default. It is not — `allow_partial_credit` defaults to `false`, meaning by default a unit is all-or-nothing.
+`allow_partial_credit` defaults to `false`, so unless you set it a unit is all-or-nothing: a student who passes four of five matched tests earns zero for that unit, not 80%.
 </Warning>
 
 #### Mutation Test Units
@@ -506,7 +520,7 @@ documented above.
 ### Java with Gradle and JUnit
 
 ```yaml
-# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json
 grader: 'overlay'
 build:
   preset: 'java-gradle'
@@ -544,7 +558,7 @@ submissionFiles:
 ### Python with Custom Scripts
 
 ```yaml
-# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json
 grader: 'overlay'
 build:
   preset: 'python-script'
@@ -603,7 +617,7 @@ strength. The Gradle plugin used is
 [`info.solidsoft.pitest`](https://github.com/szpak/gradle-pitest-plugin).
 
 ```yaml
-# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v3/pawtograder.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json
 grader: 'overlay'
 build:
   preset: 'java-gradle'

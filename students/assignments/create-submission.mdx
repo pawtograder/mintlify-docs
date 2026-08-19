@@ -10,9 +10,33 @@ Once an assignment has been released by your instructor, you'll see it in the **
 
 Your instructor may have provided starter code in that repository. Use this repository to complete the assignment.
 
+## What Counts as a Submission
+
+On an assignment with an autograder, **every push to your repository's default branch is a submission**. The last commit in the push is the one that gets graded, so if you push three commits at once, only the third is submitted. You do not have to do anything special to your commit message.
+
+Your instructor can change this. The grading workflow lives in your own repository at `.github/workflows/grade.yml`, and its `on:` block decides what triggers a run. If your instructor removed the `push:` trigger, a push alone does nothing and a grading run starts only when the **head commit message** of your push contains `#submit` — that is, the last commit in the push. A marker on an earlier commit in the same push does not count. The match is case-sensitive, so `#Submit` and `#SUBMIT` do not count either. If you pushed work and no grading run appeared, open `grade.yml` and check whether `push:` is still listed there.
+
+On an assignment with no autograder there is no workflow at all, and `#submit` never applies. Each push to your default branch up to your deadline is recorded as a submission for the course staff to grade by hand.
+
+<Warning>
+A push after your deadline does not become a gradeable submission. It is not dropped silently either: the submission that appears is fileless and cannot be graded, and it carries an error reading "Your submission at commit ... was not recorded: it was pushed after the deadline for this assignment". Where late tokens are offered, that message also says why none covered the push.
+</Warning>
+
+### Submission Limits
+
+Your instructor can cap how many submissions you make in a rolling window. New assignments start out capped at 5 submissions per 24 hours, but your instructor may change that. When a cap is in effect, the assignment page shows a "Submission Limit for this assignment" notice telling you how many submissions you have used and how many remain.
+
+Going over the cap is not silent: your GitHub Actions run fails with a message beginning "Submission limit reached" that tells you when you can submit again. Submissions that score zero do not count against the window.
+
+### Ungraded Submissions
+
+Your instructor may also allow `#NOT-GRADED` submissions. Where the assignment permits it, a commit whose message contains `#NOT-GRADED` — matched case-insensitively, unlike `#submit` — still creates a submission, but that submission can never become your active submission.
+
+Where the assignment does not permit it, a `#NOT-GRADED` push after your due date is rejected with "This assignment does not allow NOT-GRADED submissions. Please contact your instructor if you need an extension."
+
 ## Viewing Submission Results
 
-You'll see a list of all the submissions you've made for the assignment. The flag icon indicates your *active* submission, which is the one that will eventually be graded.
+You'll see a list of all the submissions you've made for the assignment. The flag icon indicates your *active* submission, which is the one that will eventually be graded. To make an earlier submission the active one, open that submission's page and press **Activate**. You can re-pick your active submission as often as you like until your final due date passes, extensions included; after that, only the course staff can change it.
 
 The **Total Score** column shows:
 
@@ -21,7 +45,7 @@ The **Total Score** column shows:
 
 This lets you see your final grade as soon as it's available, rather than waiting to check the gradebook separately.
 
-Every time you push changes to your repository, Pawtograder automatically runs your autograder. The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results.
+The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results.
 
 <Frame>
   <img src="/images/students/assignments/create-submission-1754510547128.png" alt="Submission page showing autograder results and grading rubric preview" />
@@ -55,7 +79,11 @@ Pawtograder provides rich previews for different file types in your submission:
 Markdown files are automatically rendered with formatting, making it easy to review documentation or README files in your submission.
 </Tip>
 
-You can submit binary files up to 15 MB per file, including images, PDFs, and other document types.
+Any single file over 50 MB is rejected with an error naming the file and its size. Two whole-submission ceilings apply as well: the submission is rejected if the repository zip exceeds 120 MB, or if it unzips to more than 300 MB. A submission can therefore be too large even when every file in it is under the per-file limit.
+
+<Note>
+Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Give binary artifacts a conventional file extension — a binary with an unusual extension or none at all is stored as text, which corrupts it.
+</Note>
 
 ## Assignment Leaderboard
 

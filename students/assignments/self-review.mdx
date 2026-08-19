@@ -37,17 +37,55 @@ This rubric has two checks:
 - List external resources used (submission-level check)
 - Wrote a test for part 1 of the assignment (file-level check)
 
+### Turning on rubric descriptions
+
+By default the rubric sidebar shows you only the *name* of each part, criteria, and check. Your instructor may have written a longer description explaining what a check is actually asking for, and those descriptions are hidden until you ask for them.
+
+Turn on the **Show rubric descriptions** switch at the top of the rubric sidebar, just above the first rubric's name, to see them. If a check's wording is not clear, this is the first thing to try — the detail is usually there.
+
+<Tip>
+The switch is off by default for students and is not remembered between visits. If you reload the page or come back later, turn it on again.
+</Tip>
+
+### Submission-level checks
+
 **Submission-level checks** show up as checkboxes or radio buttons in the "Self-Review Rubric" section. Select the relevant option, and enter a comment as required. The menu icon at the top of your entered comment can be used to edit it or delete it.
 
 <Frame>
   <img src="/images/students/assignments/self-review-1754512253225.png" alt="Submission-level check with comment field" />
 </Frame>
 
-**File-level checks** are applied as annotations directly on the file. Use the "Files" tab and file list to navigate to the correct file and line of code where you want to apply the check. Right-click on the line of code, and select the check that you want to apply.
+### File-level checks
+
+**File-level checks** are applied as annotations directly on the file. Use the "Files" tab and file list to navigate to the correct file, then apply the check to the line (or lines) of code it refers to.
+
+Code is shown in the **new editor view**, which is on by default. There is a "New editor view" switch above the code if you ever want the plain text view instead; the plain view is easier to read with a screen reader, and applying checks there works a little differently (see below).
+
+There are two ways to apply a check in the new editor view.
+
+**Right-click the line.** Put your cursor on the line you want to annotate — or select several lines to annotate a range — and right-click. Alongside the editor's own items (Go to Definition, Copy, and so on), the menu has:
+
+- **Apply rubric check…** at the top, which opens the search box described below.
+- **Add Comment…**, for leaving a plain comment that is not tied to any rubric check.
+- **One entry per rubric criteria**, each ending in a `▸`. Clicking a criteria opens a short list of that criteria's checks; pick the one you want from there. Checks are always one level down, so you will not apply anything by clicking a criteria name by accident.
 
 <Frame>
-  <img src="/images/students/assignments/self-review-1754512357531.gif" alt="Animated demonstration of applying a file-level check annotation" />
+  <img src="/images/students/assignments/self-review-mouse-2026-08-19-000092.gif" alt="Applying a rubric check from the right-click menu in the new editor view, from the criteria submenu through the comment dialog to the finished annotation" />
 </Frame>
+
+**Or press `Cmd` + `.` (`Ctrl` + `.` on Windows and Linux).** This opens a search box for the line your cursor is on. Start typing part of a check or criteria name to filter the list, move through it with the up and down arrow keys and press Enter, or just press the number key shown next to a check to select it. Each check lists its criteria underneath, and says so when a comment is required.
+
+<Frame>
+  <img src="/images/students/assignments/self-review-kbd-2026-08-19-000093.gif" alt="The quick-apply search box opened with Cmd and period, a check picked from the list, and the comment dialog that follows" />
+</Frame>
+
+Either way, what happens next depends on the check. If the check requires a comment, a dialog opens headed "Add \<check name\> on line \<n\>" with the criteria and the points it is worth; write your comment and press **Add Check**. If no comment is required, the check is applied immediately.
+
+Once a check is applied, a speech-bubble marker appears in the margin to the left of the line number and the annotation is shown inline under the line, listing the criteria and check it came from. Click the marker to collapse or re-expand it, or use **Hide all comments** at the top of the file to collapse every annotation at once. The file list also picks up a count of the annotations on each file, and the rubric sidebar updates, so a required check stops being outlined in red once you have satisfied it.
+
+<Note>
+If you have switched to the plain text view, click the line you want to annotate to put the focus on it and then press `Cmd` + `.` (`Ctrl` + `.`) to open the same search box. The buttons for applying checks by mouse only appear on lines that already have a comment on them, so on a clean line the keyboard shortcut is the way in.
+</Note>
 
 ## Submitting a Self-Review
 

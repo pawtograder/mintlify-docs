@@ -134,13 +134,13 @@ The gradebook expression system uses **MathJS** as its foundation, enhanced with
 Expressions follow standard mathematical notation with variables, operators, and functions:
 
 ```javascript
-// Basic arithmetic
+# Basic arithmetic
 hw_average = (hw1 + hw2 + hw3) / 3
 
-// Boolean logic and conditionals
+# Boolean logic and conditionals
 passing = grade >= 60 ? 1 : 0
 
-// Multi-line expressions (last line is the result)
+# Multi-line expressions (last line is the result)
 midterm_weight = 0.3
 final_weight = 0.7
 weighted_score = midterm * midterm_weight + final * final_weight
@@ -160,14 +160,14 @@ Retrieves gradebook column data with glob pattern matching. Returns objects with
 - `is_droppable`: `boolean` - Whether this item can be dropped in calculations
 
 ```javascript
-// Single column
+# Single column
 homework1 = gradebook_columns("hw-01")
 
-// Multiple columns with glob patterns
+# Multiple columns with glob patterns
 all_homeworks = gradebook_columns("hw-*")
 skill_assessments = gradebook_columns("skill-*")
 
-// Access score property
+# Access score property
 hw_score = gradebook_columns("hw-01").score
 ```
 
@@ -178,10 +178,10 @@ hw_score = gradebook_columns("hw-01").score
 Counts array elements matching a condition using lambda syntax:
 
 ```javascript
-// Count skill assessments scoring exactly 2
+# Count skill assessments scoring exactly 2
 meets_expectations = countif(gradebook_columns("skill-*"), f(x) = x.score == 2)
 
-// Count passing grades
+# Count passing grades
 passing_count = countif(gradebook_columns("exam-*"), f(x) = x.score >= 70)
 ```
 
@@ -198,10 +198,10 @@ total_points = sum(gradebook_columns("hw-*"))
 Calculates weighted (default) or unweighted averages. The function gracefully handles undefined values and missing grades:
 
 ```javascript
-// Weighted average (accounts for different max scores)
+# Weighted average (accounts for different max scores)
 hw_average = mean(gradebook_columns("hw-*"))
 
-// Unweighted average
+# Unweighted average
 hw_simple_avg = mean(gradebook_columns("hw-*"), false)
 ```
 
@@ -233,7 +233,7 @@ The mean calculation now tolerates undefined values in the input array, automati
 Removes the lowest scoring droppable items:
 
 ```javascript
-// Drop 2 lowest homework scores
+# Drop 2 lowest homework scores
 best_homeworks = drop_lowest(gradebook_columns("hw-*"), 2)
 hw_final = mean(best_homeworks)
 ```
@@ -265,14 +265,14 @@ Normal comparison functions like `==`, `>=`, `<=`, etc. are available, and can a
 #### Simple Counting Example
 
 ```javascript
-// Count skills meeting expectations (score = 2)
+# Count skills meeting expectations (score = 2)
 countif(gradebook_columns("skill-*"), f(x) = x.score == 2)
 ```
 
 #### Complex Grade Calculation
 
 ```javascript
-// Multi-criteria grading with modifiers
+# Multi-criteria grading with modifiers
 CriteriaA = gradebook_columns("meets-expectations") >= 10 and 
             gradebook_columns("does-not-meet-expectations") == 0 and 
             gradebook_columns("average.hw") >= 85

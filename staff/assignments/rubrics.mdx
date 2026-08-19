@@ -17,7 +17,7 @@ Rubrics can only be edited by instructors. When editing a rubric, you will be pr
 - **Rubric**: Named collection of parts used for a specific review round (self-review, grading-review, meta-grading-review). The grading review is the main review that students will see.
 - **Part**: Logical section within a rubric (e.g., Code Quality, Functionality). Contains criteria. Parts can be configured for individual grading or assign-to-student modes for group submissions.
 - **Criteria**: A scoring rule block with:
-  - `is_additive`: If true, checks add points up to `total_points`. If false, checks deduct points from `total_points`.
+  - `is_additive` and `is_deduction_only`: together these pick one of three scoring modes (see [How Points Are Computed](#how-points-are-computed)). Both keys may be present; `is_deduction_only: true` selects "Penalty only" whatever `is_additive` says, and `is_additive` is read only when `is_deduction_only` is `false` or absent. The editor writes one mode at a time.
   - `total_points`: Max points for this criteria. It is not possible for a grader to assign more points to nested checks, even if you allow them to select that many points.
   - `min_checks_per_submission` / `max_checks_per_submission`: How many checks must/can be applied for the criteria.
   - One or more checks.
@@ -48,9 +48,20 @@ This allows graders to provide feedback on documentation, reports, and other non
 
 ### How Points Are Computed
 
-- Per criteria:
-  - If `is_additive = true`: criteria score = sum(applied check points) up to `total_points`.
-  - If `is_additive = false`: criteria score = `total_points - sum(applied deduction points)` (floored at 0).
+Each criteria uses one of three scoring modes. The rubric editor names them "Award per check", "Deduct from total", and "Penalty only"; in YAML they are two booleans. `is_deduction_only: true` wins outright — `is_additive` is consulted only when `is_deduction_only` is `false` or omitted.
+
+| Mode in the editor | YAML | Criteria score |
+|---|---|---|
+| Award per check | `is_additive: true` | sum(applied check points), capped at `total_points` |
+| Deduct from total | `is_additive: false` | `total_points - sum(applied deduction points)`, floored at 0 |
+| Penalty only | `is_deduction_only: true` | `-sum(applied check points)`, with the penalty capped at `total_points` — starts at zero and only ever subtracts |
+
+<Note>
+"Penalty only" is the mode that is easy to miss. Unlike "Deduct from total" it does not begin from `total_points`, so a criteria with no checks applied contributes 0 rather than full marks, and its best possible contribution is 0. Here `total_points` acts as a floor on the penalty rather than a starting balance. Use this mode for penalties that should not inflate the rubric's maximum, such as a late or academic-integrity deduction.
+</Note>
+
+Both booleans are optional in YAML and default to `false`, which yields "Deduct from total". If you want "Award per check" you must say `is_additive: true` explicitly.
+
 - The rubric total is the sum across criteria.
 - Scores automatically recalculate when rubric check scores change, ensuring submission grade totals stay synchronized with the latest rubric configuration.
 
