@@ -12,6 +12,19 @@ does. Group-specific settings are covered in
 [Groups](/staff/assignments/groups); the extension and late-token
 workflow is in [Extensions](/staff/assignments/extensions).
 
+## Autograder
+
+The **Enable autograder (GitHub Actions)** checkbox controls whether student repositories include the grading workflow (`grade.yml`).
+
+- **Enabled (default)** — the handout and student repositories include `grade.yml`. A push with `#submit` in the commit message triggers the autograder and records a graded submission.
+- **Disabled** — the handout is created without `grade.yml`, so no GitHub Actions workflow runs and students never see a failing check. Every push to the student repository creates a submission for hand-grading — no `#submit` commit message is needed. A solution repository is still created for your reference solution and grading notes.
+
+The autograder can be toggled on or off after creation from **Manage → Assignments → [Assignment] → Autograder**. Toggling adds or removes `grade.yml` from the handout and queues existing student repositories to sync the change.
+
+<Note>
+The autograder is unavailable for assignments with no repository (`repo_mode: none` or `no_submission`) and for pull-request submission mode, since those submission paths do not use GitHub Actions.
+</Note>
+
 ## Dates and time zone
 
 All dates are displayed in the course's configured time zone (set
@@ -26,6 +39,7 @@ zone or what other users see.
 - **Due Date** — the default submission deadline. Per-student or
   per-group overrides are configured under
   [Extensions](/staff/assignments/extensions).
+- **Suggested Due Date** — an optional advisory date. When the **Suggested due dates** course feature flag is enabled (see [Course Settings](/staff/course-settings)), this date is shown to students as the assignment's primary "Due" date, and the hard Due Date is demoted to "Resubmit until". Useful for mastery/standards-graded courses where students are expected to submit by the suggested date to receive feedback in time to resubmit. Assignments with no suggested due date are unaffected by the flag. The field is always visible in the assignment form so you can set it before enabling the flag.
 - **Regrade Request Deadline** — the cut-off for students opening
   regrade requests after grades are released.
 
