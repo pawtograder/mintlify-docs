@@ -4,6 +4,35 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
+## August 2026
+
+### August 19, 2026
+
+#### Bug fixes
+- **Fixed unbounded GitHub repository creation retries** — Repository creation now uses exponential backoff (15 minutes, doubling to an 8-hour cap) with an 8-attempt ceiling. After 8 failed attempts the repository is parked with a clear error and an instructor **Retry** button. Previously, stuck repositories were re-enqueued every 15 minutes indefinitely, saturating the GitHub worker. Repositories in ended or archived classes are no longer retried unless an instructor explicitly clicks Retry ([#933](https://github.com/pawtograder/platform/pull/933))
+- **Fixed group repository name divergence** — Group repository names are now sanitized consistently between the web app, CLI, and database. Previously, a group named `Team 1` could produce a different repository name depending on which code path created it, causing the reconciler to re-enqueue creation forever. Group names that cannot produce a valid GitHub repository name (e.g. `---`) are now rejected at creation time with a clear error ([#933](https://github.com/pawtograder/platform/pull/933))
+
+### August 11, 2026
+
+#### Bug fixes
+- **Fixed MCP/CLI token revocation** — Revoking an already-revoked API token no longer produces a spurious error. The revoke operation is now idempotent: revoking a token that was already revoked succeeds silently ([#920](https://github.com/pawtograder/platform/pull/920))
+
+### August 7, 2026
+
+#### Assignment features
+- **Repo-only assignments with no autograder** — Assignments can now be configured with `repo_mode: none` or `repo_mode: no_submission` to provision a GitHub repository without running an autograder. This is useful for assignments graded entirely by hand or submitted outside Pawtograder ([#895](https://github.com/pawtograder/platform/pull/895))
+
+### August 6, 2026
+
+#### Assignment features
+- **Suggested due date emphasis** — For mastery/standards-graded courses, a new **Suggested due dates** course feature flag (under **Course Settings → Feature flags**) promotes the suggested due date as the primary deadline students see. With the flag on, the suggested date is shown as "Due" and the hard deadline is shown as "Resubmit until". Assignments without a suggested due date are unaffected. Staff also gain a **Suggested Due Date** column on the Manage Assignments list ([#896](https://github.com/pawtograder/platform/pull/896))
+- **Fixed assignment creation timezone shift** — Creating an assignment from a browser in a different timezone than the course no longer shifts the stored dates. A 9:00 AM deadline for a New York course now saves as 9:00 AM Eastern regardless of where the instructor is located ([#896](https://github.com/pawtograder/platform/pull/896))
+
+#### CLI
+- **CLI published to npm** — The Pawtograder CLI is now available as `@pawtograder/cli` on npm. Install it globally with `npm install -g @pawtograder/cli` or run it without installing via `npx @pawtograder/cli`. Previously the CLI required a checkout of the platform repository ([#885](https://github.com/pawtograder/platform/pull/885), [#889](https://github.com/pawtograder/platform/pull/889))
+- **New CLI commands** — The following commands are now fully implemented: `discussions list`, `submissions list`, `help-requests list`, `help-requests close`, `reviews list`, and `reviews assign`. All list commands support `--json` for machine-readable output ([#885](https://github.com/pawtograder/platform/pull/885))
+- **`reviews assign`** — Distributes review assignments across graders and instructors using a balanced round-robin, honoring grading conflicts and never assigning someone their own submission. Supports `--by-part`, `--file` for explicit manifests, and `--dry-run` ([#885](https://github.com/pawtograder/platform/pull/885))
+
 ## July 2026
 
 ### July 7, 2026
