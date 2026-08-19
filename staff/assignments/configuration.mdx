@@ -12,6 +12,21 @@ does. Group-specific settings are covered in
 [Groups](/staff/assignments/groups); the extension and late-token
 workflow is in [Extensions](/staff/assignments/extensions).
 
+## Autograder
+
+By default, every repository-backed assignment includes a GitHub Actions grading workflow (`grade.yml`) in the handout. You can disable the autograder to create a **repo-only** assignment — students get a GitHub repository but no Actions workflow runs.
+
+When the autograder is disabled:
+- The handout is created without `grade.yml`, so no GitHub Actions run and students never see a failing check.
+- Every push to the student repository creates a submission for hand-grading — no `#submit` commit message is needed.
+- A solution repository is still created for your reference solution and grading notes.
+
+Toggle the autograder on or off from the assignment's **Autograder** page. When re-enabling, the workflow is restored from the parked copy (or from the class handout template if none exists). Existing student repositories are queued to sync the change.
+
+<Note>
+Assignments that submit by pull request cannot have an autograder — pull-request submissions are ingested directly and never produce GitHub Actions results.
+</Note>
+
 ## Dates and time zone
 
 All dates are displayed in the course's configured time zone (set
