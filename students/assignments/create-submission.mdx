@@ -14,7 +14,7 @@ Your instructor may have provided starter code in that repository. Use this repo
 
 On an assignment with an autograder, **every push to your repository's default branch is a submission**. The last commit in the push is the one that gets graded, so if you push three commits at once, only the third is submitted. You do not have to do anything special to your commit message.
 
-Your instructor can change this. The grading workflow lives in your own repository at `.github/workflows/grade.yml`, and its `on:` block decides what triggers a run. If your instructor removed the `push:` trigger, a push alone does nothing and a grading run starts only when the message of the commit you push contains `#submit` — matched case-sensitively, so `#Submit` and `#SUBMIT` do not count. If you pushed work and no grading run appeared, open `grade.yml` and check whether `push:` is still listed there.
+Your instructor can change this. The grading workflow lives in your own repository at `.github/workflows/grade.yml`, and its `on:` block decides what triggers a run. If your instructor removed the `push:` trigger, a push alone does nothing and a grading run starts only when the **head commit message** of your push contains `#submit` — that is, the last commit in the push. A marker on an earlier commit in the same push does not count. The match is case-sensitive, so `#Submit` and `#SUBMIT` do not count either. If you pushed work and no grading run appeared, open `grade.yml` and check whether `push:` is still listed there.
 
 On an assignment with no autograder there is no workflow at all, and `#submit` never applies. Each push to your default branch up to your deadline is recorded as a submission for the course staff to grade by hand.
 

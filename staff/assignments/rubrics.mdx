@@ -17,7 +17,7 @@ Rubrics can only be edited by instructors. When editing a rubric, you will be pr
 - **Rubric**: Named collection of parts used for a specific review round (self-review, grading-review, meta-grading-review). The grading review is the main review that students will see.
 - **Part**: Logical section within a rubric (e.g., Code Quality, Functionality). Contains criteria. Parts can be configured for individual grading or assign-to-student modes for group submissions.
 - **Criteria**: A scoring rule block with:
-  - `is_additive` and `is_deduction_only`: together these pick one of three scoring modes (see [How Points Are Computed](#how-points-are-computed)). They are mutually exclusive — `is_deduction_only` wins when set, and the editor writes only one mode at a time.
+  - `is_additive` and `is_deduction_only`: together these pick one of three scoring modes (see [How Points Are Computed](#how-points-are-computed)). Both keys may be present; `is_deduction_only: true` selects "Penalty only" whatever `is_additive` says, and `is_additive` is read only when `is_deduction_only` is `false` or absent. The editor writes one mode at a time.
   - `total_points`: Max points for this criteria. It is not possible for a grader to assign more points to nested checks, even if you allow them to select that many points.
   - `min_checks_per_submission` / `max_checks_per_submission`: How many checks must/can be applied for the criteria.
   - One or more checks.
@@ -48,7 +48,7 @@ This allows graders to provide feedback on documentation, reports, and other non
 
 ### How Points Are Computed
 
-Each criteria uses one of three scoring modes. The rubric editor names them "Award per check", "Deduct from total", and "Penalty only"; in YAML they are two booleans, and `is_deduction_only` takes precedence over `is_additive` when both are set.
+Each criteria uses one of three scoring modes. The rubric editor names them "Award per check", "Deduct from total", and "Penalty only"; in YAML they are two booleans. `is_deduction_only: true` wins outright — `is_additive` is consulted only when `is_deduction_only` is `false` or omitted.
 
 | Mode in the editor | YAML | Criteria score |
 |---|---|---|

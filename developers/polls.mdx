@@ -61,7 +61,7 @@ CREATE TABLE live_polls (
 
 - `question`: Stores SurveyJS-formatted JSON containing the poll structure
 - `is_live`: Controls whether the poll is active (accepting responses)
-- `deactivates_at`: Auto-deactivation timestamp (1 hour from when poll goes live)
+- `deactivates_at`: Intended auto-deactivation timestamp (1 hour from when poll goes live). Written but never read — see [Auto-Deactivation](#auto-deactivation-not-currently-wired-up).
 - `require_login`: Whether anonymous responses are allowed
 - `created_by`: Instructor/grader who created the poll (auto-set via trigger)
 
