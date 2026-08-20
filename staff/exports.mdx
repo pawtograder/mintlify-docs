@@ -1,97 +1,305 @@
 ---
 title: "Exporting Course Data"
-description: "Reference for the CSV exports available to course staff"
+description: "Reference for every download available to course staff, and what each file contains"
 icon: "file-export"
 ---
 
 # Exporting Course Data
 
-Pawtograder exposes several CSV exports for course staff. Each is reached
-by an **Export to CSV** button on the corresponding management page.
-Exports apply current filters where applicable, are UTF-8 encoded (with
-BOM where the file is meant to be opened in Excel), and use formula-safe
-quoting.
+Pawtograder has no single "export this course" button. Instead, individual pages
+offer their own download, and each one is generated in your browser and saved to
+your downloads folder. **No export emails anything to anyone** — the only staff
+surface that sends mail is **Course Settings → Emailer**, which is a composer,
+not an export.
 
-## Enrollment Roster
+The button labels are not consistent between pages. Depending on where you are,
+the same action is called **Export to CSV**, **Export CSV**, **Export as CSV**,
+**Export All to CSV**, **Export Grades**, **Download Gradebook**, or **Download
+All Submissions**. Each section below gives the label as it actually reads.
 
-**Where**: Manage course → Enrollments → **Export to CSV**.
+## Every export at a glance
 
-Exports every row currently visible in the enrollments table (the export
-honors active filters). Columns:
+| Where | Button | File |
+|---|---|---|
+| **Course Settings → Enrollments** | **Export to CSV** | `enrollments-<course_id>-<date>.csv` |
+| **Course Settings → Lab Sections** | **Export to CSV** | `lab-roster-<section>-<date>.csv` |
+| **Gradebook** (instructor only) | **Download Gradebook** → **Download CSV** | `gradebook.csv` |
+| **Surveys** → a survey → responses | **Export to CSV** | `survey-responses-<title>-<date>.csv` |
+| **Course Settings → Discussion Engagement** | **Export CSV** | `discussion-engagement-<course_id>-<date>.csv` |
+| Assignment → **Manage Groups**, "Groups" table | **Export as CSV** | `assignment_groups_<date>.csv` |
+| Assignment → **Manage Groups**, "Students" table | **Export as CSV** | `students_export_<date>.csv` |
+| Assignment home (instructor only) | **Export Grades** → **CSV** / **JSON** | `grades_<assignment_id>.csv` / `.json` |
+| Assignment home (instructor only) | **Download All Submissions** | `assignment_<assignment_id>_submissions.zip` |
+| Assignment home → **Rubric breakdown** | **Export CSV** | `rubric-report-assignment-<id>-<view>.csv` |
+| Assignment → **Grading Assignments** | **Export CSV** | `grading-review-assignments-<id>.csv` or `self-review-assignments-<id>.csv` |
+| Assignment → **Security Audit** (instructor only) | **Export All to CSV** | `security_audit_<slug>_<date>.csv` |
+| **Office Hours → Settings → Time Tracking** | **Export to CSV** | `work-sessions-<course_id>-<date>.csv` |
+| **Course Settings → Flashcard Decks** → deck → student analytics | **Export CSV** (once per table) | `student_deck_analytics_<deck_id>.csv`, `student_card_analytics_<deck_id>.csv` |
+| A submission → repository analytics | **Export CSV** | `repo-analytics-<repo>-<date>.csv` |
+| A submission (instructor only) | **Export All Metadata** (icon button) | `submission_export_<assignment>_<student>_<date>.md` |
+
+<Warning>
+Graders cannot reach the gradebook export. The **Download Gradebook** control is
+instructor-only, and graders have no **Gradebook** navigation entry at all. The
+assignment grades export, the submissions ZIP, the security audit export, and
+the submission metadata export are also instructor-only.
+</Warning>
+
+## Enrollment roster
+
+**Course Settings → Enrollments → Export to CSV.**
+
+Columns, in order:
 
 | Column | Notes |
 |---|---|
-| Status | `Enrolled`, `Dropped`, or the invitation status. |
-| Name | Profile name, or invitation name. |
-| Email | Account email, or invitation email. |
+| Status | `Enrolled`, `Dropped`, or the invitation status. `Dropped` wins over the invitation status. |
+| Name | Profile name, invitation name, or `N/A`. |
+| Email | Account email, invitation email, or `N/A`. |
 | Role | `student`, `grader`, `instructor`. |
 | Class Section | Section name, or `Not assigned`. |
 | Lab Section | Lab section name, or `Not assigned`. |
-| GitHub Username | Empty for pending invitations. |
-| GitHub Org Status | `Joined` / `Not joined`. |
-| SIS User ID | SIS identifier if linked. |
-| SIS Linked | `Yes` / `No`. |
-| SIS Sync Opt Out | `Yes` / `No`. |
-| Tags | Semicolon-separated tag names, or `No tags`. |
+| GitHub Username | `N/A` for pending invitations. |
+| GitHub Org Status | `Joined`, `Not joined`, or `N/A` for pending invitations. |
+| Discord Status | Only present when the course has a Discord server configured. |
+| SIS User ID | The SIS identifier, or `N/A`. |
+| SIS Linked | `Yes`, `No`, or `N/A` for pending invitations. |
+| SIS Sync Opt Out | `Yes`, `No`, or `N/A` for pending invitations. |
+| Tags | Semicolon-separated tag names, `No tags`, or `N/A (Pending)` for invitations. |
 
-Filename: `enrollments-<course_id>-<YYYY-MM-DD>.csv`.
+<Warning>
+This export **ignores the filters you have applied to the table**. Whatever the
+table is showing, the file contains the entire roster, including dropped students
+and pending invitations. Filter the resulting file in your spreadsheet instead.
+</Warning>
 
-## Lab Roster
+## Lab roster
 
-**Where**: Manage course → Lab Roster → select a lab section → **Export to CSV**.
+**Course Settings → Lab Sections → select a lab section → Export to CSV.**
 
-Exports the students assigned to the selected lab section, plus columns
-for each lab assignment configured on the course (attendance / completion
-per lab). Base columns:
+Exports the active students assigned to the **one section you have selected** —
+there is no all-sections export, and dropped students and staff are excluded. The
+button is disabled when the selected section has no students.
 
-- Lab Section
-- Name
-- Email
-- GitHub Username
+Base columns are `Lab Section`, `Name`, `Email`, `GitHub Username`, with missing
+values written as `N/A`.
 
-Filename: `lab-roster-<section>-<YYYY-MM-DD>.csv`.
+After those come three columns for **each lab assignment currently shown in the
+table**:
 
-## Assignment Groups
+- `<title> - NumSubmissions`
+- `<title> - Score`
+- `<title> - Review Graded` (`Yes`, `No`, or empty)
 
-**Where**: Manage course → Assignments → *assignment* → Groups → **Export as CSV**.
+<Note>
+The table shows only the **two most recently released** lab assignments until you
+expand it, and unreleased labs never appear. Expand the table first if you want
+every released lab in the file.
+</Note>
 
-Exports group composition for a single assignment. Rows are sorted by
-group name; students who are not in any group are emitted with the group
-name `(Ungrouped)`.
+## Gradebook
+
+**Gradebook → Download Gradebook → Download CSV.** Instructor only.
+
+One row per student, one column per gradebook column. Identity columns come
+first: `Name`, `Email`, `SID`, `Course Section`, `Lab Section`, `Tags`.
+
+The export always covers every student on the roster and always skips dropped
+students; table filters and column visibility do not affect it.
+
+The popover has one checkbox, **Use render expressions in CSV** (off by default).
+When it is on, any column with a render expression exports the *rendered* string
+**instead of** the raw score — it substitutes the value rather than adding a
+second column. Either way you get exactly one value per column.
+
+<Note>
+`Tags` are space-separated here, but semicolon-separated in the enrollments
+export. The gradebook file also starts with a UTF-8 byte order mark so Excel
+opens it as UTF-8.
+</Note>
+
+## Survey responses
+
+**Surveys → open a survey → its responses view → Export to CSV.**
+
+Headers are exactly `Student Name`, `Submitted At`, then one column per survey
+question, using the question titles. There is no email, SIS ID, or status column.
+
+`Submitted At` is formatted in the course time zone as `MMM d, yyyy, h:mm a`, or
+`—` for a response that was never submitted.
+
+Unlike the enrollments export, this one **does** honor the filters on the page:
+it writes the filtered set of responses, and the button is disabled when the
+filters match nothing.
+
+## Discussion engagement
+
+**Course Settings → Discussion Engagement → Export CSV.** Requires the Discussion
+feature flag.
+
+Headers are exactly `Name`, `Karma`, `Posts`, `Replies`, `Likes Received`, `Likes
+Given`, `Total Activity`. `Total Activity` is derived as posts plus replies.
+There is no thread-watch metric.
+
+## Assignment groups and group membership
+
+**Manage Assignments → an assignment → Manage Groups.** This page has two
+separate **Export as CSV** buttons.
+
+The button above the **Groups** table writes `assignment_groups_<date>.csv`:
 
 | Column | Format |
 |---|---|
 | GroupName | Group name, or `(Ungrouped)`. |
-| StudentNames | Comma-separated list of `Name <email>` per member, sorted. |
-| MentorName | Assigned mentor/grader as `Name <email>`, or empty if none. |
+| StudentNames | Comma-separated `Name <email>` per member, sorted by label. |
+| MentorName | Assigned mentor as `Name <email>`, or empty. |
 
-Filename: `assignment_groups_<YYYY-MM-DD>.csv`.
+Rows are sorted by group name, and ungrouped students are appended at the end as
+one `(Ungrouped)` row each, sorted by student name.
 
-## Gradebook
+<Note>
+`MentorName` is resolved against the course's graders and instructors. If a group
+is mentored by someone outside that list the cell is silently blank, which looks
+identical to "no mentor".
+</Note>
 
-**Where**: Manage course → Gradebook → **Export**.
+The button above the **Students** table writes `students_export_<date>.csv` with
+`Student` (as `Name <email>`), `Group` (the group name or `no group`), and
+`Status` — one of `OK`, `Not in a group`, `Group too small (min: N)`, or
+`Group too large (max: N)`.
 
-Exports the full gradebook (all students, all columns). A toggle in the
-export dialog controls whether render expressions (formulas) are
-exported alongside their computed values. The file is UTF-8 with BOM so
-Excel opens it correctly.
+## Assignment grades
 
-Filename: `gradebook.csv`.
+**Manage Assignments → an assignment → Export Grades.** Instructor only. The
+popover offers **CSV** and **JSON** of the same data, with five include
+checkboxes:
 
-## Survey Responses
+- **Include Score Breakdown** — adds the autograder score and the score tweak
+- **Include Rubric Checks** — adds one column (CSV) or a nested list (JSON) per rubric check
+- **Include Autograder Test Results** — adds one column per test, or nested test objects in JSON
+- **Include Repo Metadata** — GitHub username, commit link, and SHA
+- **Include Submission Metadata** — submission ID, submission date, grader, and checker
 
-**Where**: Manage course → Surveys → *survey* → Responses → **Export**.
+With everything unchecked you get `student_name`, `canvas_user_id`,
+`student_email`, `group_name`, and `total_score` (the graded total with the tweak
+already applied). One row per student's active submission.
 
-Exports the responses to a single survey. Columns are one per survey
-question plus identification columns. UTF-8 with BOM.
+<Warning>
+The `group_name` column is always empty in both the CSV and the JSON — the export
+emits the field but never populates it. Use the **Manage Groups** export if you
+need group membership.
+</Warning>
 
-Filename: `<survey_title>_responses_<timestamp>.csv`.
+## Bulk submission download
 
-## Discussion Engagement
+**Manage Assignments → an assignment → Download All Submissions.** Instructor
+only. Builds `assignment_<assignment_id>_submissions.zip` in your browser, with
+one folder per student named `<name>_<profile-id-prefix>`.
 
-**Where**: Manage course → Discussion Engagement → **Export CSV**.
+Students with no active submission get a folder containing
+`NO_ACTIVE_SUBMISSION.txt`; a submission with no recorded files gets
+`NO_FILES.txt`. For group assignments the same files are written into each
+member's folder.
 
-Exports the per-student engagement metrics shown on the page (posts,
-replies, watches, etc.) for the current course.
+Building the ZIP can take a while for a large class — the button reads
+**Preparing ZIP...** while it works.
 
-Filename: `discussion-engagement-<course_id>-<YYYY-MM-DD>.csv`.
+## Rubric report
+
+**Manage Assignments → an assignment → expand Rubric breakdown → Export CSV.**
+
+Exports how often each rubric check was applied across the cohort currently
+selected by the filters, in the shape of whichever view is active. The view name
+is part of the filename: `bars`, `options`, `table`, or `section`. The button is
+disabled when the cohort is empty.
+
+## Grading and self-review assignments
+
+**Manage Assignments → an assignment → Grading Assignments → Export CSV.**
+
+Columns: `Assignee`, `Assignee Email`, `Submission (Student/Group)`, `Student
+Names`, `Student Email(s)`, `Rubric`, `Due Date`, `Status`, `Rubric Part`,
+`Extensions`.
+
+The filename depends on which table you exported from:
+`grading-review-assignments-<assignment_id>.csv` or
+`self-review-assignments-<assignment_id>.csv`.
+
+## Security audit
+
+**Manage Assignments → an assignment → Security Audit → Export All to CSV.**
+Instructor only, and only after a code search has returned hits.
+
+One row per match, with `Student Name`, `Student Email`, `Class Section`, `Lab
+Section`, `Submission ID`, `Submission #`, `Score` (as `score/max`, or
+`Not graded`), `File Name`, `Line Number`, `GitHub Link`, `Matched Content`, and
+`Search Term`.
+
+## TA time tracking
+
+**Office Hours → Settings → Time Tracking → Export to CSV.**
+
+Columns: `TA`, `Student`, `Date`, `Help Request ID`, `Duration`, `Queue Depth`,
+`Wait Context`, `Notes`, `Started At`, `Ended At`. A session still in progress
+exports `Active` as its `Ended At`.
+
+This export honors the table's filters but not its pagination, so you get every
+filtered row rather than the current page.
+
+## Flashcard analytics
+
+**Course Settings → Flashcard Decks → a deck → its student analytics page.** There
+are two **Export CSV** buttons, one above each table: per-student totals
+(`student_deck_analytics_<deck_id>.csv`) and per-card statistics
+(`student_card_analytics_<deck_id>.csv`). Both write exactly the columns of the
+table they sit above.
+
+## Repository analytics
+
+Open a submission and go to its repository analytics view, then **Export CSV**.
+Exports the commit, pull request, and issue activity listed on the page, and is
+disabled when there is nothing to export.
+
+## Submission metadata
+
+On a submission page, instructors get an icon button labelled **Export All
+Metadata** (tooltip: "Export all submission history, grader results, and diffs to
+markdown"). It writes a Markdown file, not a CSV, covering the full submission
+history, grader results, and diffs for that student or group.
+
+## Copying student emails
+
+Not a file download, but often what people want: on **Test Insights → Common
+Errors**, expanding an error group and clicking **Show Student Emails** lists the
+affected students' emails with a **Copy All** button that puts them on your
+clipboard as a comma-separated list.
+
+## Imports
+
+Two pages accept a CSV back:
+
+- **Course Settings → Enrollments → Import from CSV** — bulk-invites or
+  reactivates students from a roster file.
+- **Gradebook → Import Columns** — creates or updates gradebook columns from a
+  CSV of scores.
+
+## Spreadsheet gotchas
+
+Not every export is hardened the same way, which matters if you open these files
+in Excel or Google Sheets.
+
+<Warning>
+Five exports neutralize cells that a spreadsheet would read as a formula, by
+prefixing them with an apostrophe: the gradebook, both assignment-groups exports,
+survey responses, discussion engagement, and repository analytics. The others —
+including the enrollments roster, the lab roster, assignment grades, the security
+audit, and the TA time tracking export — do not. A student name, tag, or matched
+line that starts with `=`, `+`, `-`, or `@` can be evaluated as a formula when you
+open those files.
+</Warning>
+
+Only the gradebook, the two assignment-groups exports, and repository analytics
+start with a UTF-8 byte order mark, which is what makes Excel read accented
+characters and emoji correctly on a double-click. For everything else, if names
+or comments come out garbled, use your spreadsheet's import flow and choose UTF-8
+encoding instead of opening the file directly.
