@@ -57,16 +57,20 @@ Click a student or group name to open the grading interface for that submission.
 
 ## Viewing files and artifacts
 
-The grading interface supports a range of file types in both the **Files** and **Artifacts** tabs.
+The grading interface renders submission files and grader-published artifacts as follows:
 
-| Format | Rendering |
+| Content | Rendering |
 | --- | --- |
-| Source code | Syntax highlighting, line numbers |
-| Plain text (`.txt`, `.log`, `.csv`) | Inline view with line numbers and copy support |
-| Markdown (`.md`) | Full formatting: headers, lists, code blocks, links, tables |
-| HTML | Sandboxed iframe with CSS preserved |
-| PDF | Browser PDF viewer with page navigation and zoom |
-| Other binary | Download link |
+| Source code | Syntax highlighting with line numbers |
+| Plain text (`.txt`, `.log`, `.csv`) | Rendered as source, with line numbers |
+| Markdown (`.md`) | Rendered formatting: headers, lists, code blocks, links, tables |
+| Images | Inline preview |
+| Any other binary file | File metadata and a **Download** link |
+| Zip artifact declared as `display: "html_site"` | Sandboxed iframe |
+
+There is no in-browser PDF viewer and no rendering of HTML files from the repository. A PDF or a
+`.html` file in the submission is a binary or source file like any other, so you get the download
+link or the source view.
 
 Artifacts are files configured by the instructor in the autograder settings (for example, `reports/*.md` or `output.txt`). They typically contain test output, generated reports, coverage data, or other deliverables that provide context for grading.
 
@@ -155,41 +159,27 @@ Once an instructor **releases** the review to the student, only instructors can 
 
 ## Bulk operations
 
-### Mark All Grading Complete
+### Finalize grading
 
-Use **Mark All Grading Complete** on the assignment's **All Submissions** tab to mark every eligible submission review complete in one step:
+Use **Finalize grading** on the assignment's **Dashboard** tab to mark every eligible submission review complete in one step:
 
-1. Click **Mark All Grading Complete**.
+1. Click **Finalize grading**.
 2. A popover summarizes:
-   - How many incomplete reviews can be marked complete
-   - How many reviews have missing required checks (these will be skipped)
+   - How many of the incomplete submissions can be finalized
+   - How many have missing required rubric checks (these are skipped)
 3. Click the checkmark to confirm.
 
-Pawtograder only marks a review complete if all required rubric checks and any criteria min/max requirements are satisfied. Reviews with missing requirements are automatically skipped to prevent validation errors.
+Pawtograder only completes a review if all required rubric checks are applied and every criterion's minimum and maximum check counts are satisfied. Reviews with missing requirements are skipped. The button is not scoped to a row selection: it always acts on every eligible review in the assignment.
 
 Use the **Grading Complete** column filter on the submissions table to focus on only complete or only incomplete submissions.
 
-### Bulk Complete Reviews
-
-For finer-grained bulk completion, use the **Bulk Complete** action on the **Grading Progress** page:
-
-1. Filter incomplete reviews by grader, due date, rubric part, or completion status.
-2. Select the reviews you want to complete using the checkboxes.
-3. Click **Bulk Complete**.
-4. Optionally choose to preserve existing grades, apply default scores, or excuse from grading.
-5. Optionally add a note explaining the bulk action.
-6. Click **Confirm Bulk Complete**.
-
-Common use cases:
-
-- Completing reviews for graders who finished their work but forgot to click **Complete Review**
-- Excusing students who dropped the course
-- Closing out a grading period at the end of the semester
-- Marking placeholder reviews complete
-
 <Warning>
-Bulk completion marks reviews as complete but does not automatically release them to students. Use the release controls separately to make grades visible to students.
+Finalizing marks reviews complete but does not release them to students. Use the release controls separately to make grades visible.
 </Warning>
+
+### Grading progress
+
+There is no second, finer-grained bulk-completion flow. The **Grading Progress Dashboard** tab on the Grading Assignments page is read-only: it reports each TA's pending and completed counts, a completion percentage, and a status badge. Its one action, **Generate Reminder Email**, builds a reminder listing outstanding work and copies it to your clipboard for you to send yourself. See [Grading Status](/staff/assignments/grading-status).
 
 ### Reassigning grading work
 
@@ -199,11 +189,7 @@ Instructors can reassign a submission or rubric part to a different grader at an
 - Workload needs to be rebalanced across graders
 - A specific grader's expertise is needed for certain submissions
 
-To reassign:
-
-1. Open the assignment's grading management page.
-2. Select the submissions or rubric parts to reassign.
-3. Choose the new grader from the dropdown.
+There are two entry points, both on the assignment's **Grading Assignments** page. Click the edit icon on a row of the **All Assignments** table to change a single review's assignee, or follow the **Reassign Grading by Grader** link to redistribute one grader's whole remaining queue. See [Assigning Grading Tasks](/staff/assignments/grading-assignments).
 
 Existing grading work (scores, comments, annotations) is preserved. The new grader sees the work in their pending list, and the review's `completed_at` timestamp is reset so the new assignment shows up correctly — even if the grader already completed a different rubric part on the same submission.
 

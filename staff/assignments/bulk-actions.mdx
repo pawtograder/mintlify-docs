@@ -8,8 +8,8 @@ icon: "check-double"
 
 Pawtograder exposes several bulk operations across an assignment's
 submissions so instructors don't have to click through one submission
-at a time. All of them live on either the assignment's **All
-Submissions** tab or the **Grading Assignments** page.
+at a time. All of them live on either the **Submissions** table on the
+assignment's **Dashboard** tab or the **Grading Assignments** page.
 
 ## Selecting rows
 
@@ -21,28 +21,33 @@ column:
   matches the current filters.
 - Click **None** to clear the selection.
 
-The Release / Unrelease / Complete buttons show the count of selected
+The **Release** and **Unrelease** buttons show the count of selected
 rows (e.g. "Release 12 selected submissions") and become active only
-when at least one selectable row is checked. Rows for students who
+when at least one selectable row is checked. Row selection does not
+drive any completion action; see **Finalize grading** below. Rows for students who
 haven't submitted yet are not selectable. The selection clears
 automatically after a successful action or when you change column
 filters.
 
-## Mark All Grading Complete
+## Finalize grading
 
-The **Mark All Grading Complete** button on the **All Submissions** tab
-marks every eligible incomplete review complete in one step.
+The **Finalize grading** button on the assignment's **Dashboard** tab
+marks every eligible incomplete review complete in one step. It is
+intentionally not scoped to your row selection: it always acts on every
+eligible review in the assignment.
 
 A review is **eligible** when:
 
 - All required rubric checks have been applied.
-- All criteria min/max check requirements are satisfied.
-- The submission's student is still active in the course.
+- Every criterion's minimum and maximum check counts are satisfied.
+- The submission is a student's active submission and that student has
+  not dropped the course.
 - The review is not already complete.
 
-Clicking the button opens a popover that summarizes how many reviews
-will be marked complete and how many will be skipped because of missing
-required checks. Confirm to apply.
+Clicking the button opens a popover reporting how many of the
+incomplete submissions can be finalized, and how many have missing
+required rubric checks. Those are skipped. Confirm with the checkmark
+to apply.
 
 <Note>
 Completing a review does not release it to the student. Use **Release**
@@ -52,22 +57,14 @@ Completing a review does not release it to the student. Use **Release**
 Use the **Grading Complete** column filter on the submissions table to
 focus on only complete or only incomplete reviews.
 
-## Bulk Complete (Grading Progress page)
+## Grading Progress dashboard
 
-For finer-grained control than "complete all eligible", use the **Bulk
-Complete** action on the **Grading Progress** page:
-
-1. Filter incomplete reviews by grader, due date, rubric part, or
-   completion status.
-2. Select the reviews you want to complete using the checkboxes.
-3. Click **Bulk Complete**.
-4. Optionally choose to preserve existing grades, apply default scores,
-   or excuse from grading.
-5. Optionally add a note explaining the bulk action.
-6. Click **Confirm Bulk Complete**.
-
-Common uses: closing out the end of a grading period, excusing students
-who dropped, or completing placeholder reviews.
+There is no second, finer-grained bulk-completion flow. The **Grading
+Progress Dashboard** tab on the Grading Assignments page is read-only.
+It reports each TA's pending and completed counts, and its one action,
+**Generate Reminder Email**, copies a reminder message to your
+clipboard for you to send yourself. See
+[Grading Status](/staff/assignments/grading-status).
 
 ## Bulk Release and Unrelease
 
@@ -82,23 +79,29 @@ gradebook history. Don't unrelease without a plan to re-release — the
 student may have already seen the previous grade.
 </Warning>
 
-## Bulk Reassign Graders
+## Reassign Grading by Grader
 
-From the **Grading Assignments** page:
+Reassignment is grader-centric rather than submission-centric: you pick
+the grader whose remaining work needs redistributing, not a set of
+submissions. From the **Grading Assignments** page, follow the
+**Reassign Grading by Grader** link, then:
 
-1. Select the submissions or rubric parts to reassign.
-2. Click **Bulk Reassign**.
-3. Choose the new grader(s).
-4. Optionally update the review due date or add a note.
-5. Preview the change and confirm.
+1. Select the grader whose remaining work you want to reassign.
+2. Choose the rubric.
+3. Set how many of that grader's incomplete submissions to reassign.
+4. Choose the target role (**Instructors**, **Graders**, or
+   **Instructors and graders**), optionally filter those staff by tag,
+   and optionally name specific assignees.
+5. Choose a load-balancing strategy: **Balance based on new
+   assignments** or **Balance based on all assignments**.
+6. Set the review due date.
+7. Click **Prepare Reassignments**, adjust the draft in the
+   drag-and-drop preview, then click **Reassign**.
 
-Existing scores, comments, and annotations are preserved and visible to
-the new grader. If the new grader had already completed a different
-rubric part on one of the reassigned submissions, the system clears the
-`completed_at` timestamp so the new work appears in their pending list.
-Conflict-of-interest rules are still enforced. See
+Each new grader inherits the same rubric parts the original grader was
+assigned, and declared grading conflicts are still respected. See
 [Assigning Grading Tasks](/staff/assignments/grading-assignments) for
-the per-row reassignment flow and the underlying assignment algorithm.
+editing a single review assignment and for the bulk-assign algorithm.
 
 ## Bulk Review Due Date Updates
 

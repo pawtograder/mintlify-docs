@@ -6,22 +6,43 @@ icon: "clipboard-check"
 
 # Grading Status
 
-The Grading Status view shows how far along handgrading is for an
-assignment: how many submissions have been graded, who's assigned to
-what, where the bottlenecks are, and which reviews are still pending
-release. There is a per-assignment view (on the assignment's management
-page) and a course-wide view (in the course navigation). Both are
-available to instructors and head TAs.
+Grading progress for an assignment is reported on two surfaces. The
+assignment's **Dashboard** tab carries an assignment-level grading
+panel, and the **Grading Progress Dashboard** tab on the **Grading
+Assignments** page breaks the same work down per TA. Both are available
+to instructors and graders. There is no course-wide grading status
+view.
 
-## What it shows
+## Assignment-level grading panel
 
-- **Submissions**: total, graded, in-progress, pending.
-- **Progress bar**: percentage of reviews complete.
-- **Grader workload**: per-grader assigned / completed / pending counts,
-  with overdue reviews flagged.
-- **Average time per submission** for each grader.
-- **Due dates** for grading tasks; the course-wide view also shows each
-  assignment's release status and due date.
+On the assignment's **Dashboard** tab, the grading panel reports:
+
+- **Graded** and **Released**, each as a count out of the total number
+  of submissions.
+- **Not submitted**, shown when at least one enrolled student has no
+  active submission.
+
+The panel also carries the assignment-wide grading actions:
+**Finalize grading**, plus **Release all** and **Unrelease all** for
+instructors. See [Bulk Actions](/staff/assignments/bulk-actions).
+
+## Per-TA Grading Progress Dashboard
+
+The **Grading Progress Dashboard** tab has one row per TA, with these
+columns:
+
+- **TA Name**
+- **Pending** and **Completed** review-assignment counts
+- **Submissions with Comments**
+- **Completion %**, with a progress bar
+- **Status**: **Complete**, **Overdue**, **In Progress**, or
+  **No Assignments**
+
+One checkbox, **Show TAs with no assignments**, controls whether staff
+with nothing assigned appear. The table has no row links, no sorting
+controls, and no other filters. The same dashboard is also served at
+the assignment's `/grading-progress` route, which is not linked from
+the assignment navigation.
 
 ## Review states
 
@@ -40,25 +61,17 @@ performed by an instructor; see [Handgrading](/staff/assignments/handgrading).
 
 ## Actions
 
-From a row in the dashboard you can:
+The Grading Progress Dashboard has exactly one action:
+**Generate Reminder Email**. Pick a deadline, which defaults to the
+assignment due date plus seven days, and Pawtograder builds a reminder
+listing each TA's outstanding work and copies it to your clipboard. It
+does not send anything, so paste it into your own mail client.
 
-- Click an assignment or submission to jump to the grading interface.
-- Click a grader to see only their assignments and reassign work.
-- Send a reminder to graders with pending work.
-- Adjust review due dates — bulk or per student. See
-  [Assigning Grading Tasks](/staff/assignments/grading-assignments).
-
-For bulk completion, release, and unrelease across all selected
-submissions, see [Bulk Actions](/staff/assignments/bulk-actions).
-
-## Filtering
-
-Filter the view to focus on what matters:
-
-- Pending grading tasks only.
-- A specific grader, section, or instructor group.
-- By assignment due date or grading deadline.
-- Sort by progress (least to most complete).
+Reassigning work and editing review due dates happen on the parent
+**Manage Review Assignments** page, not here. See
+[Assigning Grading Tasks](/staff/assignments/grading-assignments). For
+release and unrelease across selected submissions, see
+[Bulk Actions](/staff/assignments/bulk-actions).
 
 ## Best practices
 
@@ -67,5 +80,6 @@ Filter the view to focus on what matters:
   surfaces overloaded graders.
 - Check the dashboard a few times during each grading window so
   bottlenecks don't slip past the release deadline.
-- Spot-check a sample of each grader's work — the dashboard makes
-  outliers (very fast or very slow grading) easy to find.
+- Spot-check a sample of each grader's work. The
+  **Submissions with Comments** column shows how often a grader left
+  feedback, which makes light-touch grading easy to spot.
