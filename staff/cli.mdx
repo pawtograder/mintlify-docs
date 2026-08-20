@@ -323,13 +323,10 @@ npm run cli -- rubrics import \
 
 ## Error handling
 
-The CLI provides detailed error messages and exit codes:
+The CLI prints an error message and exits with one of two codes:
 
 - `0`: Success
-- `1`: General error
-- `2`: Authentication error
-- `3`: Not found error
-- `4`: Validation error
+- `1`: Any error, including authentication, not-found, and validation failures
 
 Use `--help` with any command to see detailed usage information:
 
