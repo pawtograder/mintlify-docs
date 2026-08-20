@@ -1,0 +1,7 @@
+# Local audit working material (findings reports + doc lint).
+# Deliberately untracked: it enumerates unfixed platform bugs and this repo is public.
+docs-audit/
+
+# Mintlify CLI
+.mintlify/
+node_modules/
