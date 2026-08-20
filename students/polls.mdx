@@ -8,34 +8,41 @@ icon: "square-poll-vertical"
 
 Polls are a quick and easy way to answer questions during class. Your instructor may use polls to check understanding, gather feedback, or spark discussion.
 
+<Warning>
+There is one poll link per course, not one per poll, and it always serves whichever poll your instructor opened most recently. If two polls are open at the same time, you have no way to reach the older one.
+</Warning>
+
 ## Answering Polls
 
-There are two ways to respond to a poll:
+There are two ways to reach the current poll. Both land on the same page.
 
 ### Via QR Code or Link
 
-Your instructor may display a QR code or share a link during class:
+Your instructor's poll screen shows **Answer at:** followed by a URL, along with a QR code for that same URL:
 
-1. **Scan the QR code** with your phone camera, or **click the link** provided by your instructor
-2. The poll question and answer options will appear
+1. **Scan the QR code** with your phone camera, or open the URL your instructor displays
+2. The poll question and answer options appear
 3. Select your answer(s) from the options displayed
-4. Click **Submit** to send your response
+4. Click **Complete** to send your response
 
 If the poll does not require login, you can respond immediately without signing in.
 
 ### Via the Polls Page
 
-You can also access polls directly from Pawtograder:
+You can also access polls from inside Pawtograder:
 
-1. Navigate to your course in Pawtograder
-2. Go to the **Polls** section in the navigation
-3. Live polls from your class will be displayed
-4. Click **Answer Poll** to open the poll
-5. Select your answer(s) and submit
+1. Open your course and choose **Polls** from the course menu — it appears only if your instructor has enabled polls for the course
+2. The **Live Polls** page lists every poll that is currently open, one row per poll
+3. Click **Answer Poll**. The poll opens in a new browser tab
+4. Select your answer(s) and submit
 
 <Frame>
   <img src="/images/students/student-polling.png" alt="Polls page showing available live polls" />
 </Frame>
+
+<Note>
+Every **Answer Poll** button opens the same page, and that page serves the newest open poll. If more than one poll is listed, clicking an older row still opens the newest one.
+</Note>
 
 ## Login Requirements
 
@@ -43,16 +50,16 @@ Polls can be configured by your instructor to require login or allow anonymous r
 
 | Mode | How It Works |
 |------|--------------|
-| **Login not required** | Scan the QR code or use the link to answer immediately without signing in. Your response is anonymous. |
-| **Login required** | You must sign in to Pawtograder before answering. Your response is associated with your student account. |
+| **Login not required** | Scan the QR code or use the link to answer immediately without signing in. Your response is recorded with no profile attached. |
+| **Login required** | You must sign in to Pawtograder before answering. Your response is associated with your course profile, and you can only answer once. |
 
 <Note>
-If a poll requires login and you're not signed in, you'll be prompted to log in before you can submit your response.
+If a poll requires login and you're not signed in, you'll see a **Login Required** screen with a **Sign In** button that returns you to the poll after you authenticate.
 </Note>
 
 ## Poll Types
 
-You may encounter two types of polls:
+Your instructor builds the question, so what you see depends on what they authored. The poll builder offers two types:
 
 ### Single Choice
 
@@ -66,46 +73,52 @@ You may encounter two types of polls:
 - Uses checkbox selection
 - Choose all options that apply to the question
 
+An instructor can also hand-write the question definition directly, so you may occasionally see a question type that isn't a simple list of choices.
+
+<Note>
+Answering is required by default. If you leave a question blank, the poll will not submit until you pick something.
+</Note>
+
 ## Submitting Your Response
 
 1. Review your selected answer(s)
-2. Click the **Complete** or **Submit** button
-3. You'll see a confirmation that your response was recorded
+2. Click **Complete**
+3. A **Thank You!** screen confirms that your response was submitted
 
-<Info>
-Once submitted, your response cannot be changed. Make sure you've selected the answer you want before submitting.
-</Info>
+Whether you can answer again depends on the poll's login setting:
+
+- **Login required**: your first response is final. A second attempt shows "You have already submitted a response. Polls with login require you to submit only once."
+- **Login not required**: the confirmation screen invites you to refresh the page to answer again
 
 ## Poll Availability
 
-- Polls are only available when your instructor has made them **live**
-- A poll stays open until your instructor closes it — polls do not close on their own, even long-running ones
-- If a poll is closed, you won't be able to submit a response
+- Polls are only available while your instructor has them open — they use **Start Poll** and **Stop Poll** on their poll screen
+- Once your instructor closes a poll, it disappears: it drops off the **Live Polls** list, and the poll page reports that no poll is available
 
 ## Troubleshooting
 
-### "No active polls" message
+### "No Live Polls Available"
 
-- Your instructor may not have any polls open right now
+- Your instructor doesn't have any polls open right now
 - Wait for your instructor to start a new poll
-- The page will update automatically when a poll becomes available
+- The **Live Polls** page updates on its own when a poll opens, so you don't need to reload it
+
+### "No Live Poll Available"
+
+- The poll tab does not refresh itself. Reload it to pick up the poll your instructor just opened
+- If reloading doesn't help, your instructor hasn't started a poll yet
 
 ### QR code not scanning
 
 - Make sure your camera is focused on the QR code
 - Try moving closer or adjusting the angle
-- Use the direct URL instead (ask your instructor to display it)
+- Use the URL shown next to **Answer at:** on your instructor's screen instead
 
 ### Login prompt appears
 
 - The poll requires authentication
 - Sign in with your Pawtograder credentials
-- After signing in, you'll be redirected to the poll
-
-### "Poll is closed" error
-
-- The poll is no longer accepting responses
-- Your instructor closed it — this is the only way a poll closes
+- After signing in, you'll be redirected back to the poll
 
 ## Tips for Students
 
