@@ -85,15 +85,20 @@ includes the student's late tokens and manual extensions, so an extension
 granted before the deadline carries the self-review deadline with it. No
 manual action is required.
 
+An extension granted *after* the self-review already exists also moves it:
+inserting a due-date exception fires a trigger that adds the same interval
+to the student's `review_assignments` rows for that assignment. Note it
+shifts them whether or not the review has already been completed.
+
 <Warning>
 Two cases do not follow that rule:
 
 - If the assignment sets **Release self-evaluation at**, the self-review
   is released and its deadline computed from that wall-clock time,
   ignoring per-student due-date exceptions entirely.
-- Adding an exception *after* a self-review has already been created does
-  not move it. Only a change to the assignment's own due date shifts
-  self-reviews that already exist, and only those not yet completed.
+- An exception of zero or negative length does not shift anything. The
+  trigger returns early unless the extension adds time, so gifted tokens
+  and corrective adjustments leave self-review deadlines where they are.
 </Warning>
 
 ## Bulk review-due-date updates

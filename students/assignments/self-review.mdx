@@ -6,15 +6,17 @@ icon: "clipboard-check"
 
 # Completing a Self-Review
 
-Some assignments may have a "Self-Review" component, where students complete their own review of their assignment before final grading.
+Some assignments may have a "Self-Review" component, where students complete their own review of their assignment before final grading. A self-review is the only review you ever perform in Pawtograder. There is no peer review, so you are never asked to review another student's submission.
 
-If a self-review is required for an assignment, you will see a clear message indicating when it is due, both on the assignment page and on your submission page.
+Before the self-review opens, the assignment page carries a **Self Review Notice** box explaining that "There is a self review scheduled on this assignment which will release immediately after your deadline passes and will be due *N* hours later." Once it opens, that box becomes **Self Review Now Due**, with "Due by *date*" and a **Complete Self Review** button that takes you into your submission.
 
-The deadline for completing the self-review is configured by your instructor, and is relative to the due date of the assignment. Instructors can configure Pawtograder so that the self-review can not be completed until the coding part of the assignment is due, or might also allow you to finalize your submission early, allowing you to complete the self-review before the coding part is due.
+The deadline for completing the self-review is configured by your instructor as a number of hours after the assignment's own deadline. By default the self-review only opens once your deadline has passed; where your instructor allows it, a **Finalize Submission Early** button lets you close your submission early and start the self-review before the assignment is due. See [Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions) for what finalizing early costs you.
 
 <Note>
-If the assignment due date is extended—whether through late tokens or an instructor-granted extension—your self-review deadline automatically adjusts to maintain the same relative offset from your new due date. This ensures you have the appropriate amount of time to complete your self-review even when deadlines change.
+If your due date moves — a late token, an instructor-granted extension, or a change to the assignment's own due date — your self-review deadline shifts by the same amount, so your window stays the same length. A self-review you have already completed is left alone.
 </Note>
+
+Your instructor can instead pin the self-review to a fixed release time for the whole class. Where they have, it opens at that time for everyone and is due the configured number of hours after it, rather than following your own deadline.
 
 <Frame>
   <img src="/images/students/assignments/self-review-1754511511817.png" alt="Assignment page showing self-review deadline" />
@@ -89,11 +91,9 @@ If you have switched to the plain text view, click the line you want to annotate
 
 ## Submitting a Self-Review
 
-Your self-review is not complete until you click "Complete Review Assignment" at the top of the page. This button will not allow you to continue until all required checks are complete.
+Your self-review is not complete until you click **Complete Review Assignment**, which sits both in the toolbar at the top of the submission and below the rubric in the sidebar. The toolbar says the same thing: "Your Self-Review Rubric review is required on this submission by *date*. When you are done, click 'Complete Review Assignment'."
 
-<Note>
-You cannot request regrades on self-review rubric items. Self-review is for your own reflection and assessment of your work.
-</Note>
+That button opens a popover rather than finishing the review outright. If anything required is outstanding, the popover lists **Missing Required Checks** and **Incomplete Required Criteria** by name, with each criteria entry saying how many checks it needs and how many you have applied, and tells you that "You must complete all required checks and criteria before marking this review assignment as complete." Once nothing is missing, the popover offers **Mark Review Assignment as Complete**; press that to finish.
 
 <Frame>
   <img src="/images/students/assignments/self-review-1754512446399.png" alt="Complete Review Assignment button" />
