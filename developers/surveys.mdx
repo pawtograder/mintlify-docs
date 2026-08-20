@@ -6,25 +6,33 @@ icon: "clipboard-list"
 
 # Surveys - Developer Guide
 
-This guide covers the technical architecture, database schema, and implementation details of the Survey feature in Pawtograder.
+This guide covers the schema, row-level security, RPCs, triggers, and serialization behind the Survey feature. Every claim below is cited to a file and line in `pawtograder/platform`. For the instructor and student view of the same feature, see [Surveys](/staff/surveys) and [Taking surveys](/students/surveys).
 
 ## Overview
 
-The survey system allows instructors to create custom surveys, collect student responses, and analyze feedback. It uses [SurveyJS](https://surveyjs.io/) for the question builder and renderer.
+A survey is one row in `surveys` whose `json` column holds a full SurveyJS definition. Instructors author it either as raw JSON or through an in-house visual builder, students answer it with the SurveyJS runtime, and staff read the results through a set of `SECURITY DEFINER` RPCs.
+
+Three facts govern most of what follows:
+
+- **Survey deletion is a soft delete** through `soft_delete_survey`, and no restore path exists. See [Soft deletion](#soft-deletion).
+- **`due_date` is not enforced anywhere.** See [Due dates are advisory](#due-dates-are-advisory).
+- **The visual builder understands five question types and rewrites everything else as `text`.** See [Builder round-trip loses question types](#builder-round-trip-loses-question-types). This one destroys data, and the default template in the create form trips it.
 
 ## Architecture
 
-### Tech Stack
+### Tech stack
 
 | Layer | Technology |
 |-------|------------|
 | Frontend | Next.js 15, React 18, Chakra UI |
-| Survey Engine | SurveyJS (survey-core, survey-react-ui, survey-creator-react) |
-| Backend | Supabase (PostgreSQL + Row Level Security) |
-| State Management | React Hook Form, Refine |
-| Date Handling | date-fns, date-fns-tz |
+| Survey runtime | SurveyJS (`survey-core`, `survey-react-ui`), wrapped by `components/Survey.tsx` |
+| Question authoring | In-house builder in `components/survey/`, not `survey-creator-react` |
+| Backend | Supabase (PostgreSQL with row-level security) |
+| Forms | `@refinedev/react-hook-form` over `react-hook-form` |
+| Charts | Recharts, in `components/survey/analytics/` |
+| Dates | `date-fns`, `date-fns-tz`, `@date-fns/tz` |
 
-### Key Dependencies
+### Key dependencies
 
 ```json
 {
@@ -35,295 +43,362 @@ The survey system allows instructors to create custom surveys, collect student r
 }
 ```
 
-## Database Schema
+<Note>
+`survey-creator-core` and `survey-creator-react` are installed but no survey code imports them. The visual builder is hand-written: `components/survey/SurveyBuilder.tsx` renders Chakra controls over its own data model (`SurveyBuilderDataTypes.ts`) and serializes to SurveyJS JSON through `serde.ts`. That is why its type coverage is narrower than SurveyJS's, and why the round-trip loses information.
+</Note>
 
-### Tables
+## Database schema
 
-#### `surveys`
+The base tables come from `supabase/migrations/20251213200333_surveys_polls.sql`. Five `surveys` columns were added later; each is cited individually below.
 
-Main table storing survey definitions.
+### `surveys`
+
+Current logical schema, not a single statement you will find in one migration:
 
 ```sql
-CREATE TABLE surveys (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    survey_id UUID NOT NULL DEFAULT gen_random_uuid(),  -- Logical ID for versioning
-    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
-    created_by UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    title TEXT NOT NULL,
-    description TEXT,
-    json JSONB NOT NULL DEFAULT '[]'::jsonb,  -- SurveyJS JSON configuration
-    status survey_status NOT NULL DEFAULT 'draft',
-    allow_response_editing BOOLEAN NOT NULL DEFAULT FALSE,
-    due_date TIMESTAMPTZ DEFAULT NULL,
-    available_at TIMESTAMPTZ DEFAULT NULL,  -- When survey becomes visible
-    assignment_id BIGINT REFERENCES assignments(id) ON DELETE SET NULL,  -- Optional link to assignment
-    assigned_to_all BOOLEAN NOT NULL DEFAULT TRUE,
-    validation_errors TEXT DEFAULT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    deleted_at TIMESTAMPTZ DEFAULT NULL,  -- Soft delete
-    version INTEGER NOT NULL DEFAULT 1,
-    type survey_type NOT NULL DEFAULT 'assign_all',
-    series_id UUID REFERENCES survey_series(id) ON DELETE SET NULL,  -- Optional series link
-    series_ordinal INTEGER DEFAULT NULL,  -- Position in series (Week 1, 2, etc.)
-    analytics_config JSONB DEFAULT NULL  -- Per-question analytics configuration
+create table "public"."surveys" (
+    "id" uuid not null default gen_random_uuid(),
+    "survey_id" uuid not null default gen_random_uuid(),   -- logical id, see note below
+    "class_id" bigint not null,
+    "created_by" uuid not null,
+    "title" text not null,
+    "description" text,
+    "json" jsonb not null default '[]'::jsonb,
+    "status" survey_status not null default 'draft'::survey_status,
+    "allow_response_editing" boolean not null default false,
+    "due_date" timestamp with time zone,
+    "validation_errors" text,
+    "created_at" timestamp with time zone not null default now(),
+    "updated_at" timestamp with time zone not null default now(),
+    "deleted_at" timestamp with time zone,
+    "version" integer not null default 1,
+    "type" survey_type not null default 'assign_all'::survey_type,
+    "assigned_to_all" boolean not null default true
+);
+
+-- Added by 20260222000000_survey_assignment_grading.sql
+alter table "public"."surveys" add column "assignment_id" bigint;        -- :12
+alter table "public"."surveys" add column "available_at" timestamptz;    -- :28
+
+-- Added by 20260222000002_survey_analytics_enhanced.sql
+alter table public.surveys add column if not exists series_id uuid       -- :85
+  references public.survey_series(id) on delete set null;
+alter table public.surveys add column if not exists series_ordinal integer;                -- :87
+alter table public.surveys add column if not exists analytics_config jsonb default '{}'::jsonb;  -- :94
+```
+
+Original 17 columns at `20251213200333_surveys_polls.sql:342-360`.
+
+Constraints that will reject an otherwise plausible insert:
+
+- `chk_survey_type_assigned_to_all_consistency` (`20251213200333:469`) requires `type = 'assign_all'` with `assigned_to_all = true`, or `type IN ('specific','peer')` with `assigned_to_all = false`. No other combination is storable.
+- `assignment_id` is not a plain FK to `assignments(id)`. It is half of a **composite** FK, `(assignment_id, class_id) REFERENCES assignments(id, class_id) ON DELETE SET NULL` (`20260222000000:18-19`), backed by a unique constraint added to `assignments` in the same migration (`:15-16`). A survey cannot point at an assignment in another class.
+- `created_by` references `profiles(id)` (`20251213200333:477`) and is written with the author's **private** profile id (`app/course/[course_id]/manage/surveys/new/page.tsx:333`). Polls use the public one. Do not carry an id across.
+
+<Warning>
+`survey_id` and `version` are versioning scaffolding that nothing exercises. `version` is hard-coded to `1` on insert (`app/course/[course_id]/manage/surveys/new/page.tsx:331`) and no code path ever increments it. Editing a survey updates the existing row in place (`app/course/[course_id]/manage/surveys/[survey_id]/edit/page.tsx:375`), so there is exactly one row per logical `survey_id` and the two ids are always in one-to-one correspondence. Anything you write that joins on `survey_id` expecting several versions will find one. `soft_delete_survey` and the responses page both loop over "all versions" (`20251213200333:778-790`, `responses/page.tsx:54`); those loops are correct but currently degenerate.
+</Warning>
+
+### `survey_series`
+
+```sql
+CREATE TABLE IF NOT EXISTS public.survey_series (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  class_id bigint NOT NULL REFERENCES public.classes(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  description text,
+  created_at timestamptz DEFAULT now() NOT NULL,
+  created_by uuid REFERENCES public.profiles(id),
+  CONSTRAINT survey_series_unique_name UNIQUE (class_id, name)
 );
 ```
 
-#### `survey_series`
+`20260222000002_survey_analytics_enhanced.sql:74-82`. There is no `updated_at` column, `created_by` has no `ON DELETE` action, and series names are unique per class.
 
-Stores survey series for trend analysis.
+### `survey_responses`
 
 ```sql
-CREATE TABLE survey_series (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
-    name TEXT NOT NULL,
-    description TEXT,
-    created_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+create table "public"."survey_responses" (
+    "id" uuid not null default gen_random_uuid(),
+    "survey_id" uuid not null,
+    "profile_id" uuid not null,
+    "response" jsonb not null default '{}'::jsonb,
+    "submitted_at" timestamp with time zone,
+    "is_submitted" boolean not null default false,
+    "created_at" timestamp with time zone not null default now(),
+    "updated_at" timestamp with time zone not null default now(),
+    "deleted_at" timestamp with time zone
 );
 ```
 
-#### `assignment_groups`
+`20251213200333_surveys_polls.sql:311-321`, with `UNIQUE (survey_id, profile_id)` at `:401` and `:459`. `survey_id` here is the **physical** `surveys.id`, not the logical one, and it cascades on delete (`:455`).
 
-Updated to include mentor assignments.
+`profile_id` is the respondent's private profile id (`app/course/[course_id]/surveys/[survey_id]/page.tsx:158`).
 
-```sql
-ALTER TABLE assignment_groups
-ADD COLUMN mentor_profile_id UUID REFERENCES profiles(id) ON DELETE SET NULL;
-```
-
-#### `survey_responses`
-
-Stores individual student responses.
+### `survey_assignments`
 
 ```sql
-CREATE TABLE survey_responses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    survey_id UUID NOT NULL REFERENCES surveys(id) ON DELETE CASCADE,
-    profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    response JSONB NOT NULL DEFAULT '{}'::jsonb,  -- Keyed by question name
-    submitted_at TIMESTAMPTZ DEFAULT NULL,
-    is_submitted BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    deleted_at TIMESTAMPTZ DEFAULT NULL,
-    CONSTRAINT survey_responses_unique_per_profile UNIQUE (survey_id, profile_id)
+create table "public"."survey_assignments" (
+    "id" uuid not null default gen_random_uuid(),
+    "survey_id" uuid not null,
+    "profile_id" uuid not null,
+    "created_at" timestamp with time zone not null default now(),
+    "class_id" bigint not null
 );
 ```
 
-#### `survey_assignments`
+`20251213200333_surveys_polls.sql:300-306`, with `UNIQUE (survey_id, profile_id)` at `:397` and `:449`.
 
-Maps surveys to specific students (when not assigned to all).
+<Warning>
+`class_id` is `NOT NULL` with no default. A direct insert that omits it fails. Use `create_survey_assignments`, which fills it from the survey's class (`20251213200333:663-664`).
+</Warning>
+
+### `survey_templates`
 
 ```sql
-CREATE TABLE survey_assignments (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    survey_id UUID NOT NULL REFERENCES surveys(id) ON DELETE CASCADE,
-    profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT survey_assignments_unique_per_profile UNIQUE (survey_id, profile_id)
+create table "public"."survey_templates" (
+    "id" uuid not null default gen_random_uuid(),
+    "title" text not null,
+    "description" text not null default ''::text,
+    "template" jsonb not null default '{}'::jsonb,
+    "created_at" timestamp with time zone not null default now(),
+    "updated_at" timestamp with time zone not null default now(),
+    "created_by" uuid not null,
+    "version" integer not null default 1,
+    "scope" template_scope not null default 'course'::template_scope,
+    "class_id" bigint not null
 );
 ```
 
-#### `survey_templates`
+`20251213200333_surveys_polls.sql:326-337`. A `global` template still carries a `class_id`; scope only widens who can read it (see [`survey_templates` policies](#survey_templates-policies)).
 
-Reusable survey templates.
-
-```sql
-CREATE TABLE survey_templates (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    title TEXT NOT NULL,
-    description TEXT NOT NULL DEFAULT '',
-    template JSONB NOT NULL DEFAULT '{}'::jsonb,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    created_by UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    version INTEGER NOT NULL DEFAULT 1,
-    scope template_scope NOT NULL DEFAULT 'course',  -- 'global' | 'course'
-    class_id BIGINT NOT NULL REFERENCES classes(id) ON DELETE CASCADE
-);
-```
-
-### Enum Types
+### Enum types
 
 ```sql
-CREATE TYPE survey_status AS ENUM ('draft', 'published', 'closed');
-CREATE TYPE template_scope AS ENUM ('global', 'course');
-CREATE TYPE survey_type AS ENUM ('assign_all', 'specific', 'peer');
+create type "public"."survey_status" as enum ('draft', 'published', 'closed');
+create type "public"."survey_type" as enum ('assign_all', 'specific', 'peer');
+create type "public"."template_scope" as enum ('global', 'course');
 ```
 
-### Database Triggers
+`20251213200333_surveys_polls.sql:1`, `:3`, `:5`.
 
-| Trigger | Table | Purpose |
-|---------|-------|---------|
-| `update_surveys_updated_at` | surveys | Auto-update `updated_at` on changes |
-| `update_survey_responses_updated_at` | survey_responses | Auto-update `updated_at` on changes |
-| `update_survey_templates_updated_at` | survey_templates | Auto-update `updated_at` on changes |
-| `set_survey_submitted_at_trigger` | survey_responses | Auto-set `submitted_at` when `is_submitted` flips to true |
+### Triggers
 
-### RPC Functions
+| Trigger | Table | Timing | Function | Effect |
+|---|---|---|---|---|
+| `set_survey_submitted_at_trigger` | `survey_responses` | BEFORE INSERT/UPDATE | `set_survey_submitted_at()` (`:736`) | Stamps `submitted_at` when `is_submitted` first becomes true |
+| `update_survey_responses_updated_at` | `survey_responses` | BEFORE UPDATE | `update_updated_at_survey_column()` (`:834`) | Sets `updated_at` |
+| `update_survey_templates_updated_at` | `survey_templates` | BEFORE UPDATE | same | Sets `updated_at` |
+| `update_surveys_updated_at` | `surveys` | BEFORE UPDATE | same | Sets `updated_at` |
+| `sync_survey_type_on_insert_trigger` | `surveys` | BEFORE INSERT | `sync_survey_type_on_insert()` (`:794`) | Rewrites `type` and `assigned_to_all` into agreement |
+| `sync_survey_type_trigger` | `surveys` | BEFORE UPDATE | `sync_survey_type_with_assigned_to_all()` (`:813`) | Same, driven by whichever of the two you changed |
+| `broadcast_surveys_realtime` | `surveys` | AFTER INSERT/UPDATE/DELETE | `broadcast_survey_change()` (`:1355`) | Broadcasts to `class:{class_id}:staff` |
+| `broadcast_survey_responses_realtime` | `survey_responses` | AFTER INSERT/UPDATE/DELETE | `broadcast_survey_response_change()` (`:1414`) | Broadcasts to the staff channel |
+| `broadcast_survey_assignments_realtime` | `survey_assignments` | AFTER INSERT/UPDATE/DELETE | `broadcast_survey_assignment_change()` (`:1482`) | Broadcasts to the staff channel |
 
-#### `soft_delete_survey(p_survey_id UUID, p_survey_logical_id UUID)`
+The first six are declared at `20251213200333_surveys_polls.sql:1335-1345`; the three broadcast triggers at `:1405-1408`, `:1473-1476`, and `:1541-1544`.
 
-Atomically soft-deletes a survey and all its responses.
+<Note>
+The two `sync_survey_type` triggers make `type` and `assigned_to_all` a single logical field with two spellings. On insert, `assigned_to_all = true` forces `type = 'assign_all'`, and `assigned_to_all` is then recomputed from `type` unconditionally (`:794-811`). On update, whichever column you changed wins and the other is derived (`:813-831`). Writing both to a contradictory pair does not raise. These are `BEFORE` triggers, so they rewrite the row before `chk_survey_type_assigned_to_all_consistency` is evaluated, and the pair that reaches the constraint is always consistent.
+</Note>
+
+All three broadcasts go to the staff channel only. Students receive no realtime survey traffic and need a reload to see a survey publish.
+
+## RPC functions
+
+`SECURITY DEFINER` functions carry the authorization checks that client-side code cannot.
+
+### `soft_delete_survey(p_survey_id uuid, p_survey_logical_id uuid)`
 
 ```sql
--- Usage
-SELECT soft_delete_survey('physical-uuid', 'logical-uuid');
+SELECT soft_delete_survey(p_survey_id := '<surveys.id>', p_survey_logical_id := '<surveys.survey_id>');
 ```
 
-#### `create_survey_assignments(p_survey_id UUID, p_profile_ids UUID[])`
+`20251213200333_surveys_polls.sql:751-792`. It requires both ids to identify the same row (`:761-766`), raises `Survey not found` otherwise, and raises `Permission denied: instructor access required` unless `authorizeforclassinstructor` passes (`:773-775`). It then stamps `deleted_at` on every response belonging to any row sharing the logical id, and on every such `surveys` row (`:778-790`). Called from `SurveysTable.tsx:271`.
 
-Bulk creates survey assignments for specific students.
+### `create_survey_assignments(p_survey_id uuid, p_profile_ids uuid[])`
 
 ```sql
--- Usage
-SELECT create_survey_assignments('survey-uuid', ARRAY['profile-1', 'profile-2']);
+SELECT create_survey_assignments('<surveys.id>', ARRAY['<profile-1>', '<profile-2>']::uuid[]);
 ```
 
-#### `get_survey_status_for_assignment(p_assignment_id BIGINT, p_profile_id UUID)`
+`20251213200333_surveys_polls.sql:637-668`. Instructor-only (`:655-657`). It is a **replace, not an append**: it deletes every existing assignment for the survey before inserting (`:659-660`), then fills `class_id` from the survey. `tests/e2e/surveys.test.tsx:250` asserts a student cannot call it.
 
-Returns survey completion status for a student on a specific assignment.
+### `get_survey_status_for_assignment(p_assignment_id bigint, p_profile_id uuid)`
+
+`20260222000000_survey_assignment_grading.sql:73`, redefined at `20260222000001_fix_survey_assignment_grading.sql:5`. Returns one row per survey linked to the assignment with that student's completion state. Called from `components/ui/survey-status-banner.tsx:29`.
+
+### `get_survey_responses_with_full_context(p_survey_id uuid, p_class_id bigint)`
+
+`20260222000002_survey_analytics_enhanced.sql:9`. This is the RPC the analytics UI actually uses, from `hooks/useSurveyAnalytics.ts:341` and `:607`. It returns responses joined with group membership, mentor, and section context.
+
+<Warning>
+Two sibling RPCs exist and have **no callers**: `get_survey_responses_with_group_context(p_survey_id uuid, p_class_id bigint)` (`20260222000000:112`) and `get_survey_series_trend_data(p_series_id uuid, p_class_id bigint)` (`20260222000002:135`). They are typed in `SupabaseTypes.d.ts` and are callable, but nothing reads them. Note the parameter order on the group-context one: survey first, class second. Calling it positionally with the class id first fails on type mismatch.
+</Warning>
+
+### Due dates are advisory
+
+`can_respond_to_survey` never reads `due_date`. The migration that hardened the write path says so explicitly, at `20260817120000_tighten_survey_and_poll_rls.sql:27-32`:
+
+> `due_date` is deliberately NOT enforced here. It has never been enforced anywhere - not in RLS, not in the client, which only renders it (`app/course/[course_id]/surveys/page.tsx`) - so surveys have always accepted late responses and instructors have `submitted_at` to judge them by. Enforcing it in this migration would silently start rejecting late submissions, which is a course-policy decision, not a security fix. To adopt it later, add `AND (s.due_date IS NULL OR s.due_date > now())` to `can_respond_to_survey`.
+
+The one place `due_date` is checked is publish time in the client, which refuses to move a survey to `published` with a past due date and saves it as a draft instead (`app/course/[course_id]/manage/surveys/[survey_id]/edit/page.tsx:310-325`). That is a form validation, not a control: it does not stop a response.
+
+### Soft deletion
+
+Deletion is `deleted_at`, never a `DELETE`. There is no `DELETE` policy on `surveys` at all, so a hard delete through PostgREST is impossible, and there is no restore UI anywhere in `app/`. Recovering a survey means clearing `deleted_at` by hand:
 
 ```sql
--- Usage
-SELECT * FROM get_survey_status_for_assignment(123, 'profile-uuid');
+-- Restore a soft-deleted survey and its responses. No UI does this.
+UPDATE surveys SET deleted_at = NULL WHERE survey_id = '<logical-id>';
+UPDATE survey_responses SET deleted_at = NULL
+  WHERE survey_id IN (SELECT id FROM surveys WHERE survey_id = '<logical-id>');
 ```
 
-Returns surveys linked to the assignment with completion status for the specified student.
+## Row-level security
 
-#### `get_survey_responses_with_group_context(p_class_id BIGINT, p_survey_id UUID)`
+### `surveys` policies
 
-Aggregates survey responses with group and mentor information for analytics.
+| Policy | Command | Predicate | Source |
+|---|---|---|---|
+| `surveys_select_staff` | SELECT | `authorizeforclassgrader(class_id) AND deleted_at IS NULL` | `20251213200333:1297-1302` |
+| `surveys_select_students` | SELECT | Class member, not deleted, `status IN ('published','closed')`, `available_at` passed, and assigned | `20260222000000:48-67` |
+| `surveys_insert_instructors` | INSERT | `authorizeforclassinstructor(class_id)` | `20251213200333:1289-1294` |
+| `surveys_update_instructors` | UPDATE | `authorizeforclassinstructor(class_id)` | `20251213200333:1316-1322` |
+
+`surveys_select_students` was replaced in `20260222000000_survey_assignment_grading.sql:46-67` to add the `available_at IS NULL OR available_at <= now()` leg. There is no DELETE policy.
+
+### `survey_responses` policies
+
+`20260817120000_tighten_survey_and_poll_rls.sql` replaced both write policies. The originals tested only that `profile_id` was one of the caller's own profiles and never joined `surveys`, so a student could write to a draft, closed, soft-deleted, or unassigned survey directly through PostgREST (`20260817120000:8-15`).
+
+| Policy | Command | Predicate | Source |
+|---|---|---|---|
+| `survey_responses_select_owner` | SELECT | `profile_id` is one of the caller's profiles | `20251213200333:1220-1227` |
+| `survey_responses_select_staff` | SELECT | Caller is instructor or grader in the survey's class | `20251213200333:1230-1238` |
+| `survey_responses_insert_owner` | INSERT | `can_respond_to_survey(survey_id, profile_id)` | `20260817120000:125-130` |
+| `survey_responses_update_owner` | UPDATE | `can_respond_to_survey(...) AND (NOT is_submitted OR survey_allows_response_editing(survey_id))`, with the same `can_respond_to_survey` in `WITH CHECK` | `20260817120000:134-145` |
+
+Staff have no UPDATE and no DELETE policy on `survey_responses` (`20260817120000:36-37`).
 
 ```sql
--- Usage
-SELECT * FROM get_survey_responses_with_group_context(456, 'survey-uuid');
+CREATE OR REPLACE FUNCTION public.can_respond_to_survey(p_survey_id uuid, p_profile_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.surveys s
+    JOIN public.user_privileges up
+      ON up.class_id = s.class_id
+     AND up.user_id = auth.uid()
+     AND (up.private_profile_id = p_profile_id OR up.public_profile_id = p_profile_id)
+    WHERE s.id = p_survey_id
+      AND s.deleted_at IS NULL
+      AND s.status = 'published'::survey_status
+      AND (s.available_at IS NULL OR s.available_at <= now())
+      AND (
+        s.assigned_to_all
+        OR EXISTS (
+          SELECT 1
+          FROM public.survey_assignments sa
+          WHERE sa.survey_id = s.id
+            AND (sa.profile_id = up.private_profile_id OR sa.profile_id = up.public_profile_id)
+        )
+      )
+  );
+$$;
 ```
 
-Returns response data joined with group membership, mentor assignments, and section information.
+`20260817120000:74-102`. It mirrors `surveys_select_students` with one deliberate difference: `status` is tightened from "published or closed" to `published` only, because a closed survey stays readable but must stop accepting writes (`:20-21`).
 
-## Row Level Security (RLS)
+`survey_allows_response_editing(p_survey_id uuid)` (`:107-118`) is the server-side counterpart to the `isReadOnly` guard on the student page.
 
-### Survey Policies
+<Note>
+The student write path is an upsert, so both policies have to pass: the autosave inserts the draft row and submit updates it in place (`20260817120000:34-37`). If you tighten one, tighten both, or submission breaks with an opaque PostgREST error.
+</Note>
 
-| Policy | Role | Access |
-|--------|------|--------|
-| `surveys_select_staff` | Instructors, Graders | Read all active surveys in their classes |
-| `surveys_select_students` | Students | Read published/closed surveys they're assigned to |
-| `surveys_insert_instructors` | Instructors | Create surveys |
-| `surveys_update_instructors` | Instructors | Update surveys |
+### `survey_assignments` policies
 
-### Response Policies
+Instructors get SELECT, INSERT, UPDATE, and DELETE, all on `authorizeforclassinstructor(class_id)` (`20251213200333:1151-1172`, `:1201-1207`). Graders get SELECT on `authorizeforclassgrader(class_id)` (`:1193-1198`). A student gets SELECT on their own rows through `survey_assignments_select_assignee` (`:1175-1182`).
 
-| Policy | Role | Access |
-|--------|------|--------|
-| `survey_responses_select_owner` | Owner | Read own responses |
-| `survey_responses_select_staff` | Staff | Read all responses for surveys in their classes |
-| `survey_responses_insert_owner` | Owner | Create responses |
-| `survey_responses_update_owner` | Owner | Update own responses |
+`survey_assignments_select_class_member`, which granted SELECT on the whole table to any class member, was **dropped** by `20260817120000:149`. Its header explains why: responses were protected but the roster of who was assigned what was not, including `survey_id` values for drafts that `surveys_select_students` deliberately withholds (`:39-49`).
 
-## TypeScript Types
+### `survey_templates` policies
+
+| Policy | Command | Predicate | Source |
+|---|---|---|---|
+| `survey_templates_select` | SELECT | `authorizeforclassgrader(class_id) OR (scope = 'global' AND authorizeforanyclassstaff())` | `20251213200333:1272-1277` |
+| `survey_templates_insert` | INSERT | `authorizeforclassinstructor(class_id)` | `20251213200333:1264-1269` |
+| `survey_templates_update` | UPDATE | `authorizeforclassinstructor(class_id)` | `20251213200333:1280-1286` |
+| `survey_templates_delete` | DELETE | `created_by` matches the caller's private profile in `user_roles` | `20251213200333:1254-1261` |
+
+Delete is the odd one: it is scoped to the author, not to the class. An instructor cannot delete a colleague's template.
+
+### `survey_series` policies
+
+`survey_series_select_graders` (SELECT for instructors and graders in the class) and `survey_series_manage_instructors` (`FOR ALL`, instructors only), both inlining `user_privileges` rather than calling the helpers, at `20260222000002:101-129`.
+
+### Writing a new policy
+
+Survey and poll policies use the project's authorization helpers rather than hand-rolled `user_privileges` joins. Prefer:
+
+```sql
+-- Let graders soft-delete responses in their own classes.
+CREATE POLICY survey_responses_update_staff ON public.survey_responses
+  FOR UPDATE TO authenticated
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.surveys s
+      WHERE s.id = survey_responses.survey_id
+        AND authorizeforclassgrader(s.class_id)
+    )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.surveys s
+      WHERE s.id = survey_responses.survey_id
+        AND authorizeforclassgrader(s.class_id)
+    )
+  );
+```
+
+The helpers are `authorizeforclass(class__id bigint)`, `authorizeforclassgrader(class__id bigint)`, `authorizeforclassinstructor(class__id bigint)`, `authorizeforanyclassstaff()`, and `authorizeforprofile(profile_id uuid)` (`20250916200614_tweak-gradebook-recalc-frequency.sql:262`, `:278`, `:292`; `20250813234857_office-hours-and-notifications.sql:1331`).
+
+## SurveyJS integration
+
+### The renderer
+
+`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries four non-obvious behaviors, three of them accessibility fixes for issue #881.
 
 ```typescript
-// types/survey.ts
-import type { Tables } from "@/utils/supabase/SupabaseTypes";
+// components/Survey.tsx:41-71
+const surveyJsonKey = useMemo(() => JSON.stringify(surveyJson ?? null), [surveyJson]);
 
-export type Survey = Tables<"surveys">;
-export type SurveyResponse = Tables<"survey_responses">;
-export type SurveyAssignee = Tables<"survey_assignments">;
-
-export type SurveyWithResponse = Survey & {
-  response_status: "not_started" | "in_progress" | "completed";
-  submitted_at?: string | null;
-  is_submitted?: boolean;
-};
-
-export type SurveyWithCounts = Survey & {
-  response_count: number;
-  submitted_count: number;
-  assigned_student_count: number;
-};
-
-export type SurveyResponseWithProfile = SurveyResponse & {
-  profiles: {
-    id: string;
-    name: string | null;
-    sis_user_id?: string | null;
-  };
-};
-```
-
-## File Structure
-
-```text
-app/course/[course_id]/
-├── surveys/                          # Student-facing
-│   ├── page.tsx                      # Survey list
-│   └── [survey_id]/
-│       ├── page.tsx                  # Take survey
-│       └── submit.ts                 # Save/load response utilities
-└── manage/surveys/                   # Instructor-facing
-    ├── page.tsx                      # Dashboard
-    ├── SurveysTable.tsx              # Survey list table
-    ├── SurveysHeader.tsx             # Page header
-    ├── EmptySurveysState.tsx         # Empty state
-    ├── new/
-    │   ├── page.tsx                  # Create survey page
-    │   └── form.tsx                  # Survey form component
-    ├── preview/
-    │   └── page.tsx                  # Preview survey
-    └── [survey_id]/
-        ├── edit/
-        │   └── page.tsx              # Edit survey
-        └── responses/
-            ├── page.tsx              # Response dashboard
-            ├── SurveyResponsesView.tsx  # Response table
-            └── [response_id]/
-                └── page.tsx          # Individual response
-
-components/survey/
-├── SurveyBuilder.tsx                 # Visual survey builder
-├── SurveyBuilderModal.tsx            # Builder modal wrapper
-├── SurveyBuilderDataTypes.ts         # Builder type definitions
-├── SurveyFilterButtons.tsx           # Filter UI component
-├── SurveyTemplateLibraryModal.tsx    # Template management
-├── factories.ts                      # Builder factory functions
-├── helpers.ts                        # Builder helper functions
-└── serde.ts                          # Serialization/deserialization
-
-components/
-├── Survey.tsx                        # SurveyJS renderer
-└── survey-preview-modal.tsx          # Preview modal
-```
-
-## SurveyJS Integration
-
-### Rendering Surveys
-
-```tsx
-import { Model } from "survey-core";
-import { Survey } from "survey-react-ui";
-
-function SurveyComponent({ surveyJson, initialData, onComplete }) {
-  const survey = new Model(surveyJson);
-
-  if (initialData) {
-    survey.data = initialData;
-  }
-
-  survey.onComplete.add((sender) => {
-    onComplete(sender.data);
+const survey = useMemo(() => {
+  const model = new Model(JSON.parse(surveyJsonKey));
+  model.questionTitleLocation = "top";
+  model.focusFirstQuestionAutomatic = false;
+  model.textUpdateMode = "onTyping";
+  model.onGetTitleTagName.add((_sender, options) => {
+    if ((options.element as { isQuestion?: boolean }).isQuestion) {
+      options.tagName = "h2";
+    }
   });
-
-  return <Survey model={survey} />;
-}
+  return model;
+}, [surveyJsonKey]);
 ```
 
-### Survey JSON Structure
+- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor (`:33-41`).
+- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync (`:53-61`).
+- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing (`:62-64`).
+
+The theme is applied in an effect from the Chakra color mode (`:73-79`).
+
+### Survey JSON structure
 
 ```json
 {
@@ -331,20 +406,13 @@ function SurveyComponent({ surveyJson, initialData, onComplete }) {
     {
       "name": "page1",
       "elements": [
+        { "type": "text", "name": "question1", "title": "Name" },
         {
-          "type": "text",
-          "name": "question1",
-          "title": "What is your name?",
-          "isRequired": true
-        },
-        {
-          "type": "radiogroup",
-          "name": "satisfaction",
-          "title": "How satisfied are you?",
-          "choices": [
-            { "value": "1", "text": "Very Unsatisfied" },
-            { "value": "5", "text": "Very Satisfied" }
-          ]
+          "type": "rating",
+          "name": "satisfaction-numeric",
+          "title": "How satisfied are you with the course?",
+          "description": "Numeric rating scale",
+          "rateValues": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         }
       ]
     }
@@ -352,75 +420,133 @@ function SurveyComponent({ surveyJson, initialData, onComplete }) {
 }
 ```
 
-### Supported Question Types
+That is the create form's default template verbatim (`app/course/[course_id]/manage/surveys/new/form.tsx:69-84`). Responses are keyed by question `name`.
 
-| Type | SurveyJS Type | Description |
-|------|---------------|-------------|
-| Short Text | `text` | Single-line text input |
-| Long Text | `comment` | Multi-line textarea |
-| Single Choice | `radiogroup` | Radio button selection |
-| Multiple Choice | `checkbox` | Checkbox selection |
-| Yes/No | `boolean` | Binary toggle |
+### Builder round-trip loses question types
 
-## Response Handling
-
-### Saving Responses
+The builder's data model has exactly five element types:
 
 ```typescript
-// app/course/[course_id]/surveys/[survey_id]/submit.ts
-export async function saveResponse(
-  surveyId: string,
-  profileId: string,
-  responseData: Record<string, unknown>,
-  isSubmitted: boolean
-) {
-  const supabase = createClient();
+// components/survey/SurveyBuilderDataTypes.ts:19
+export type ElementType = "text" | "comment" | "checkbox" | "radiogroup" | "boolean";
+```
 
-  const { data, error } = await supabase
-    .from("survey_responses")
-    .upsert(
-      {
-        survey_id: surveyId,
-        profile_id: profileId,
-        response: responseData,
-        is_submitted: isSubmitted
-      },
-      { onConflict: "survey_id,profile_id" }
-    )
-    .select()
-    .single();
+| Builder control | SurveyJS `type` | Added at |
+|---|---|---|
+| Short text | `text` | `SurveyBuilder.tsx:663` |
+| Long text | `comment` | `SurveyBuilder.tsx:670` |
+| Single choice | `radiogroup` | `SurveyBuilder.tsx:677` |
+| Multiple choice | `checkbox` | `SurveyBuilder.tsx:684` |
+| Yes/No | `boolean` | `SurveyBuilder.tsx:691` |
 
-  return { data, error };
+Import goes through `importElement` in `serde.ts`, whose `default:` branch coerces any unrecognized type into a text element (`serde.ts:275-298`):
+
+```typescript
+default: {
+  const base = makeElement("text", elem?.name as string | undefined);
+  return {
+    ...base,
+    name: isNonEmptyString(elem?.name) ? elem.name : base.name,
+    title: (elem?.title as string | undefined) ?? base.title,
+    // ... description, isRequired, validators
+    inputType: "text",
+    config: restWithoutKeys(elem, [
+      "id", "type", "name", "title", "description", "isRequired", "validators", "inputType"
+    ])
+  };
 }
 ```
 
-### Auto-save on Value Change
+`type` is in the excluded-keys list, so it is not even preserved in `config`. Export then writes `type: "text"` from the `text` case (`serde.ts:43-52`).
 
-When `allow_response_editing` is enabled, responses are auto-saved:
+<Warning>
+This is unrecoverable data loss on write, not a display limitation. Open a survey containing a `rating`, `dropdown`, `matrix`, `ranking`, or `nouislider` question in the visual builder and save, and every one of them comes back as a single-line `text` input. The original `type` is dropped, and only the leftover keys survive in `config` (`rateValues` and friends), spread back onto a `text` element where they do nothing.
 
-```tsx
-const handleValueChanged = async (surveyModel: Model) => {
-  if (!survey.allow_response_editing) return;
+The create form's own default template contains a `rating` question (`new/form.tsx:76`), and the seeded course templates are built almost entirely from `rating` (`scripts/DatabaseSeedingUtils.ts:308` onward). The edit page reuses the same form (`[survey_id]/edit/page.tsx:9`), so this reaches existing surveys with existing responses. Edit those surveys as raw JSON.
+</Warning>
 
-  await saveResponse(
-    survey.id,
-    profileId,
-    surveyModel.data,
-    false  // Not submitted yet
-  );
-};
-```
+The builder is opened from a modal on the create/edit form (`new/form.tsx:996-1002`). The conversion runs on mount, not on edit: `SurveyBuilder`'s serialize effect fires immediately and writes the re-serialized JSON into the modal's draft buffer (`SurveyBuilder.tsx:116-121`, `SurveyBuilderModal.tsx:87`), so clicking **Use This Survey** without touching a single control already writes the lossy form back to the form field (`SurveyBuilderModal.tsx:24-27`). **Cancel** discards the draft and is safe.
 
-## CSV Export
+### Analytics question coverage
 
-The export functionality includes security protections against CSV injection:
+The analytics panel filters to five SurveyJS types, and they are not the builder's five:
 
 ```typescript
-function escapeCSVValue(value: unknown): string {
-  const stringValue = String(value);
-  const trimmed = stringValue.trimStart();
+// components/survey/SurveyAnalytics.tsx:82
+allQuestions.filter((q) => ["rating", "nouislider", "text", "radiogroup", "checkbox"].includes(q.type))
+```
 
-  // Prevent CSV formula injection (OWASP CWE-1236)
+`comment` and `boolean` questions never reach analytics, and `rating` and `nouislider` are two of the types the builder destroys. A per-question `analytics_config.questions[name].includeInAnalytics` flag narrows the set further when present (`:85-89`).
+
+## Response handling
+
+There is no `submit.ts`. The whole student write path is inline in `app/course/[course_id]/surveys/[survey_id]/page.tsx`.
+
+```typescript
+// app/course/[course_id]/surveys/[survey_id]/page.tsx:143-179
+const saveResponseToDb = useCallback(
+  async (responseData: ResponseData, isSubmitted: boolean) => {
+    if (!surveyId || !private_profile_id) return;
+    // Never downgrade a submitted response back to a draft.
+    if (!isSubmitted && hasSubmittedRef.current) return;
+
+    const upsertData = {
+      survey_id: surveyId,
+      profile_id: private_profile_id,
+      response: responseData,
+      is_submitted: isSubmitted,
+      ...(isSubmitted ? { submitted_at: new Date().toISOString() } : {})
+    };
+
+    const { data, error } = await controller.client
+      .from("survey_responses")
+      .upsert(upsertData, { onConflict: "survey_id,profile_id" })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+  [surveyId, private_profile_id, controller.client]
+);
+```
+
+Note that the client sets `submitted_at` explicitly even though `set_survey_submitted_at_trigger` would also set it.
+
+### Autosave
+
+Autosave is gated on `allow_response_editing` and returns early when the flag is off:
+
+```typescript
+// app/course/[course_id]/surveys/[survey_id]/page.tsx:236-260
+const handleValueChanged = useCallback((surveyModel: Model) => {
+  if (!private_profile_id || !surveyId || !allowResponseEditing) return;
+  if (isSubmittingRef.current || hasSubmittedRef.current) return;
+  // debounced by AUTOSAVE_DEBOUNCE_MS, trailing edge only
+}, [private_profile_id, surveyId, allowResponseEditing, saveResponseToDb]);
+```
+
+With the flag off, nothing is persisted until the student clicks Complete. That is the behavior the user-facing pages describe, and it is enforced here rather than in RLS: `can_respond_to_survey` would accept the draft insert either way.
+
+Submit and autosave race by construction, since SurveyJS fires a final `onValueChanged` on blur. `handleSurveyComplete` cancels any pending autosave timer, awaits any in-flight one, and only then writes, so the submit is guaranteed to be the last write (`:196-207`). `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense (`:147`). Preserve both if you touch this.
+
+Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode (`:313-314`).
+
+## CSV export
+
+The live export is inline in `SurveyResponsesView.tsx`, and it escapes for formula injection:
+
+```typescript
+// app/course/[course_id]/manage/surveys/[survey_id]/responses/SurveyResponsesView.tsx:97-118
+function escapeCSVValue(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  const stringValue = String(value);
+
+  // Prevent CSV/Excel formula injection (OWASP/CWE-1236)
+  const trimmed = stringValue.trimStart();
   if (["=", "+", "-", "@"].includes(trimmed[0] ?? "")) {
     return `"'${stringValue.replace(/"/g, '""')}"`;
   }
@@ -433,90 +559,174 @@ function escapeCSVValue(value: unknown): string {
 }
 ```
 
+Applied to both the header row and every cell (`:299`, `:302`).
+
+<Warning>
+A second, unused exporter sits next to it. `responses/export.ts:56-114` builds the same CSV but escapes only commas, quotes, and newlines: it has **no** formula-injection guard (`:99-108`). Nothing imports it. Do not resurrect it without porting `escapeCSVValue`.
+</Warning>
+
+## React hooks
+
+Survey hooks live in `hooks/useCourseController.tsx` unless noted.
+
+```typescript
+const surveys = useSurveys();                                  // :2664, staff, bare array
+const survey = useSurvey(surveyId);                            // :2682
+const { surveys, isLoading } = usePublishedSurveys();          // :2691, status published and not deleted
+const { responses, isLoading } = useSurveyResponses(surveyId); // :2714
+const series = useSurveySeries();                              // :556
+const inSeries = useSurveysInSeries(seriesId);                 // :569
+// hooks/useSurveyAnalytics.ts wraps get_survey_responses_with_full_context
+```
+
+<Warning>
+`useSurveyResponses` builds a `TableController` filtered to `is_submitted = true` and `deleted_at IS NULL` (`hooks/useCourseController.tsx:2727-2737`). In-progress drafts are invisible to it, so a response count taken from this hook is a *submitted* count. It also returns a `SurveyResponseWithProfile` declared locally at `:2706-2708` whose `profiles` shape differs from the same-named export in `types/survey.ts:11`: no `sis_user_id`. Import the right one.
+</Warning>
+
+## File layout
+
+```text
+app/course/[course_id]/
+├── surveys/                                    # Student-facing
+│   ├── page.tsx                                # Survey list
+│   └── [survey_id]/page.tsx                    # Take survey; upsert and autosave live here
+└── manage/surveys/                             # Staff-facing
+    ├── page.tsx
+    ├── ManageSurveysBody.tsx
+    ├── SurveysTable.tsx                        # Calls soft_delete_survey
+    ├── SurveysHeader.tsx
+    ├── EmptySurveysState.tsx
+    ├── new/
+    │   ├── page.tsx                            # Create and update writes
+    │   └── form.tsx                            # Shared by create and edit
+    ├── preview/page.tsx
+    ├── series/page.tsx
+    └── [survey_id]/
+        ├── edit/page.tsx                       # Reuses new/form.tsx
+        └── responses/
+            ├── page.tsx
+            ├── SurveyResponsesView.tsx         # Table, filters, live CSV export
+            ├── export.ts                       # Unused, unsafe duplicate
+            └── [response_id]/page.tsx
+
+components/survey/
+├── SurveyBuilder.tsx                           # Visual builder
+├── SurveyBuilderModal.tsx
+├── SurveyBuilderDataTypes.ts                   # Five element types
+├── factories.ts                                # makeElement, makePage, defaults
+├── helpers.ts
+├── serde.ts                                    # toJSON / fromJSON, the lossy branch
+├── SurveyFilterButtons.tsx
+├── SurveyTemplateLibraryModal.tsx
+├── SurveyAnalytics.tsx
+├── AnalyticsConfigEditor.tsx
+├── SeriesManagementModal.tsx
+├── SurveySeriesList.tsx
+├── SurveyDataTypes.ts
+└── analytics/                                  # Recharts components and utils
+
+components/
+├── Survey.tsx                                  # The SurveyJS wrapper; use this one
+├── survey-preview-modal.tsx
+└── ui/survey-status-banner.tsx
+```
+
+## TypeScript types
+
+```typescript
+// types/survey.ts
+type DbSurvey = Tables<"surveys">;
+type DbSurveyResponse = Tables<"survey_responses">;
+type DbSurveyAssignee = Tables<"survey_assignments">;
+
+export type ResponseData = DbSurveyResponse["response"];
+export type SurveyResponse = DbSurveyResponse;
+export type Survey = DbSurvey;
+export type SurveyAssignee = DbSurveyAssignee;
+
+export type SurveyResponseWithProfile = SurveyResponse & {
+  profiles: { id: string; name: string | null; sis_user_id?: string | null };
+};
+
+export type SurveyWithResponse = Survey & {
+  response_status: "not_started" | "in_progress" | "completed";
+  submitted_at?: string | null;
+  is_submitted?: boolean;
+};
+
+export type SurveyWithCounts = Survey & {
+  response_count: number;
+  assigned_student_count: number;
+};
+
+export type SurveyWithAssignees = Survey & { assignees: SurveyAssignee[] };
+```
+
+`types/survey.ts:1-36`. `SurveyWithCounts` has two count fields, not three; there is no `submitted_count`.
+
 ## Testing
 
-### E2E Tests
-
-Survey E2E tests are located at `tests/e2e/surveys.test.tsx`.
+Two runners cover surveys. Playwright's `testDir` is `tests/e2e` (`playwright.config.ts:15`); Jest's `testMatch` is `tests/unit/**/*.test.ts(x)` (`jest.config.js:12`), so `npm test` never runs the E2E specs and `npx playwright test` never runs the unit ones.
 
 ```bash
-# Run survey tests
-npx playwright test surveys
+# Playwright: tests/e2e
+npx playwright test surveys                    # surveys.test.tsx
+npx playwright test survey-assignment-grading  # survey-assignment-grading.test.tsx
+npx playwright test survey-taking              # a11y-tasks/survey-taking__survey-complete.spec.ts
+
+# Jest: tests/unit
+npx jest survey-analytics-format
+npx jest survey-component-a11y
 ```
 
-### Manual Testing
+`tests/e2e/surveys.test.tsx` is the main suite. Worth reading before you change behavior: draft and closed surveys staying invisible to students (`:133`, `:148`), assignment-scoped visibility (`:163`, `:195`), students being rejected by `create_survey_assignments` (`:250`), in-progress answers surviving a re-render (`:589`), the WCAG 1.3.2 reading order this page's renderer notes exist for (`:646`), and multi-page multi-question builder coverage (`:865`). `tests/fixtures/teamCollaborationSurvey.ts` holds a reusable survey definition.
 
-1. Create a test class with `npm run seed`
-2. Log in as an instructor
-3. Navigate to Surveys to test CRUD operations
-4. Log in as a student to test survey taking
+The a11y spec under `tests/e2e/a11y-tasks/` is generated. Regenerate with `npm run a11y:generate-specs` rather than editing it.
 
-## Common Development Tasks
+## Common development tasks
 
-### Adding a New Question Type
+### Add a question type to the visual builder
 
-1. Update `SurveyBuilderDataTypes.ts`:
-   ```typescript
-   export type ElementType = "text" | "comment" | "radiogroup" | "checkbox" | "boolean" | "newtype";
-   ```
+Five files, in this order:
 
-2. Update the builder UI in `SurveyBuilder.tsx`
+1. Add the type to `ElementType` and a matching element interface to the `BuilderElement` union (`components/survey/SurveyBuilderDataTypes.ts:17-19`).
+2. Add a `makeElement` overload and its defaults (`components/survey/factories.ts:55-60`).
+3. Add an `exportElement` case, or export falls through to the `default:` branch (`components/survey/serde.ts:41-105`).
+4. Add an `importElement` case, or import silently becomes a `text` element (`components/survey/serde.ts:171-299`).
+5. Add the "add question" button and its editing controls (`components/survey/SurveyBuilder.tsx:663-696`).
 
-3. Add rendering support in `Survey.tsx` (usually automatic via SurveyJS)
+Rendering needs nothing: SurveyJS handles any type it knows. Add the type to `SurveyAnalytics.tsx:82` if it should be charted.
 
-### Modifying the Database Schema
+### Change the schema
 
-1. Create a new migration:
-   ```bash
-   npx supabase migration new your_migration_name
-   ```
-
-2. Write your SQL in `supabase/migrations/[timestamp]_your_migration_name.sql`
-
-3. Apply locally:
-   ```bash
-   npx supabase db reset
-   ```
-
-4. Regenerate types:
-   ```bash
-   npm run client-local
-   ```
-
-### Adding RLS Policies
-
-```sql
--- Example: Allow graders to delete responses
-CREATE POLICY survey_responses_delete_staff ON survey_responses
-  FOR DELETE
-  USING (
-    EXISTS (
-      SELECT 1 FROM surveys s
-      JOIN user_privileges up ON up.class_id = s.class_id
-      WHERE s.id = survey_responses.survey_id
-        AND up.user_id = auth.uid()
-        AND up.role IN ('instructor', 'grader')
-    )
-  );
+```bash
+npx supabase migration new your_migration_name
+# edit supabase/migrations/<timestamp>_your_migration_name.sql
+npx supabase db reset
+npm run client-local          # regenerate utils/supabase/SupabaseTypes.d.ts
 ```
+
+`npm run client-local` also copies the generated types to `supabase/functions/_shared/` (`package.json:28`). See [Local setup](/developers/local-setup) for the fresh-volume caveat on `supabase start`.
 
 ## Troubleshooting
 
-### Survey not appearing for students
+### Survey not visible to students
 
-1. Check survey status is `published`
-2. Verify `deleted_at` is NULL
-3. If using specific assignments, confirm student is in `survey_assignments`
-4. Check RLS policies are not blocking access
+1. `status` must be `published`. `surveys_select_students` also admits `closed`, but a closed survey cannot be answered.
+2. `deleted_at` must be `NULL`.
+3. `available_at` must be `NULL` or in the past (`20260222000000:57`).
+4. If `assigned_to_all` is false, the student needs a `survey_assignments` row. Remember `create_survey_assignments` replaces the whole set.
+5. There is no student realtime channel for surveys. A student with the list already open needs a reload.
 
 ### Response not saving
 
-1. Verify the student's `profile_id` matches their class enrollment
-2. Check for unique constraint violations (duplicate responses)
-3. Verify `is_submitted` trigger is working
+1. Walk the legs of `can_respond_to_survey` against the `surveys` row: not deleted, `status = 'published'`, `available_at` passed, and either `assigned_to_all` or a matching `survey_assignments` row. The function reads `auth.uid()`, so calling it from psql as a superuser returns `false` and tells you nothing.
+2. `profile_id` must be the student's **private** profile id.
+3. If the response is already submitted, `survey_responses_update_owner` requires `allow_response_editing` on the survey.
+4. Do not look for a due-date rejection. `due_date` gates nothing on this path.
 
-### Visual Builder not updating JSON
+### Visual builder is not round-tripping
 
-1. Check browser console for JavaScript errors
-2. Verify `onChange` callback is properly wired
-3. Check for JSON serialization issues in `serde.ts`
+1. Check the question types first. Anything outside the builder's five comes back as `text`, and that is the designed behavior of `serde.ts`'s `default:` branch, not a bug in your wiring.
+2. `SurveyBuilder` only accepts a parent `value` update that differs from what it last emitted (`SurveyBuilder.tsx:103-114`). A prop change identical to its own last output is ignored on purpose.
+3. Check the browser console for a `JSON.parse` failure in `safeFromJSON` (`SurveyBuilder.tsx:61-72`).

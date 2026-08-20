@@ -6,70 +6,101 @@ icon: "square-poll-vertical"
 
 # Polls - Developer Guide
 
-This guide covers the technical architecture, database schema, and implementation details of the Live Polls feature in Pawtograder.
+This guide covers the schema, row-level security, triggers, and data flow behind the Live Polls feature. Every claim below is cited to a file and line in `pawtograder/platform`. For the instructor and student view of the same feature, see [Creating polls](/staff/polls/creating-polls) and [Answering polls](/students/polls).
 
 ## Overview
 
-The polling system enables instructors to create quick, real-time polls during class. It uses [SurveyJS](https://surveyjs.io/) for rendering poll questions and Supabase realtime for instant result updates.
+A poll is one row in `live_polls` whose `question` column holds a SurveyJS element list. Students render it with SurveyJS on a standalone page, staff watch answers arrive over a Supabase realtime broadcast channel, and Recharts draws the bars.
+
+Two design decisions shape everything else on this page:
+
+- The poll link is scoped to the **course**, not the poll. `/poll/<course_id>` resolves whichever poll is newest and live at request time (`app/poll/[course_id]/page.tsx:38-45`).
+- Only two SurveyJS question types are charted. Everything else stores and collects fine but has no reader (`app/course/[course_id]/manage/polls/[poll_id]/responses/PollResponsesDynamicViewer.tsx:31-40`).
 
 ## Architecture
 
-### Tech Stack
+### Tech stack
 
 | Layer | Technology |
 |-------|------------|
 | Frontend | Next.js 15, React 18, Chakra UI |
-| Poll Engine | SurveyJS (survey-core, survey-react-ui) |
-| Backend | Supabase (PostgreSQL + Row Level Security) |
-| Real-Time | Supabase Realtime (broadcast channels) |
-| Charts | Recharts |
-| QR Codes | qrcode (SVG generation) |
+| Poll engine | SurveyJS (`survey-core`, `survey-react-ui`) |
+| Backend | Supabase (PostgreSQL with row-level security) |
+| Real time | Supabase Realtime broadcast, via `lib/ClassRealTimeController.ts` |
+| Charts | Recharts (`PollBarChart.tsx:5`) |
+| QR codes | `nayuki-qr-code-generator`, rendered to an inline SVG data URL (`hooks/usePollQrCode.tsx:3`, `:36-41`) |
 
-### Key Dependencies
+### Key dependencies
+
+From `package.json`:
 
 ```json
 {
   "survey-core": "^2.3.11",
   "survey-react-ui": "^2.3.11",
-  "recharts": "^2.15.0",
-  "qrcode": "^1.5.4"
+  "recharts": "^2.15.3",
+  "nayuki-qr-code-generator": "^1.8.0"
 }
 ```
 
-## Database Schema
+<Note>
+There is no `qrcode` package. `usePollQrCode` calls `qrcodegen.QrCode.encodeText` directly, builds the SVG string itself, and returns it as a `data:image/svg+xml` URL (`hooks/usePollQrCode.tsx:6-21`, `:28-52`). It memoizes nothing and regenerates on every render.
+</Note>
 
-### Tables
+## Database schema
 
-#### `live_polls`
+Both poll tables were created in `supabase/migrations/20251213200333_surveys_polls.sql`.
 
-Main table storing poll definitions.
+### `live_polls`
 
 ```sql
-CREATE TABLE live_polls (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    class_id BIGINT NOT NULL REFERENCES classes(id),
-    created_by UUID NOT NULL REFERENCES user_roles(public_profile_id),
-    question JSONB NOT NULL DEFAULT '[]'::jsonb,  -- SurveyJS JSON configuration
-    is_live BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    deactivates_at TIMESTAMPTZ DEFAULT NULL,      -- Auto-close timestamp
-    require_login BOOLEAN NOT NULL DEFAULT FALSE
+create table "public"."live_polls" (
+    "id" uuid not null default gen_random_uuid(),
+    "class_id" bigint not null,
+    "created_by" uuid not null,
+    "question" jsonb not null default '[]'::jsonb,
+    "is_live" boolean not null default false,
+    "created_at" timestamp with time zone not null default now(),
+    "deactivates_at" timestamp with time zone,
+    "require_login" boolean not null default false
 );
 ```
 
-**Key Fields:**
+`20251213200333_surveys_polls.sql:286-295`. Foreign keys: `class_id` to `classes(id)` and `created_by` to `user_roles(public_profile_id)`, both `ON DELETE CASCADE` (`:429-435`).
 
-- `question`: Stores SurveyJS-formatted JSON containing the poll structure
-- `is_live`: Controls whether the poll is active (accepting responses)
-- `deactivates_at`: Intended auto-deactivation timestamp (1 hour from when poll goes live). Written but never read — see [Auto-Deactivation](#auto-deactivation-not-currently-wired-up).
-- `require_login`: Whether anonymous responses are allowed
-- `created_by`: Instructor/grader who created the poll (auto-set via trigger)
+Field notes:
+
+- `question` holds the SurveyJS element list. See [Question JSON](#question-json).
+- `is_live` is the only flag any read path consults. It gates the anonymous `SELECT` policy (`20260817120000_tighten_survey_and_poll_rls.sql:160`), the student hook (`hooks/useCourseController.tsx:2482`), and the public page's query (`app/poll/[course_id]/page.tsx:42`).
+- `deactivates_at` is written on every open and cleared on every close, and then never read. See [Expiry is not wired up](#expiry-is-not-wired-up).
+- `require_login` decides whether responses must carry a profile id. It is enforced only inside `can_access_poll_response`.
+- `created_by` has no default and no trigger. The client must supply its own `public_profile_id` (`app/course/[course_id]/manage/polls/new/page.tsx:196`), and the insert policy checks it with `authorizeforprofile(created_by)` (`20251213200333_surveys_polls.sql:1131`).
 
 <Note>
-While the schema default is `'[]'::jsonb` (empty array), the application always stores **objects** in SurveyJS format with an `elements` property, never plain arrays. All poll creation code provides explicit values, so the default is not used in practice.
+`created_by` for a poll is a **public** profile id. Surveys use the private one (`app/course/[course_id]/manage/surveys/new/page.tsx:333`). Do not copy an id from one feature to the other.
 </Note>
 
-**Actual stored format:**
+### `live_poll_responses`
+
+```sql
+create table "public"."live_poll_responses" (
+    "id" uuid not null default gen_random_uuid(),
+    "live_poll_id" uuid not null,
+    "public_profile_id" uuid,
+    "response" jsonb not null default '{}'::jsonb,
+    "submitted_at" timestamp with time zone,
+    "is_submitted" boolean not null default false,
+    "created_at" timestamp with time zone not null default now()
+);
+```
+
+`20251213200333_surveys_polls.sql:273-281`, with `UNIQUE (live_poll_id, public_profile_id)` at `:391` and `:427`. `live_poll_id` cascades on delete (`:419`), which is what makes a poll deletion take its responses with it.
+
+`submitted_at` is stamped by a trigger the first time `is_submitted` flips to true (`:700-711`).
+
+### Question JSON
+
+The schema default is `'[]'::jsonb`, but no code path stores an array. Every writer stores an object with an `elements` key, and the create form rejects anything else:
 
 ```json
 {
@@ -83,142 +114,249 @@ While the schema default is `'[]'::jsonb` (empty array), the application always 
 }
 ```
 
-**Display format (UI only):**
+That is the form's starting template verbatim (`app/course/[course_id]/manage/polls/new/page.tsx:21-27`). Its validator requires a non-null object, a non-empty `elements` array, and `type` plus `title` on `elements[0]` (`:72-99`). Nothing validates elements after the first.
 
-When rendered in the poll interface, this is wrapped in a `pages` structure for SurveyJS display:
+At render time the standalone page names any unnamed element `poll_question_<index>`, defaults `isRequired` to true, and wraps the list in a single SurveyJS page (`app/poll/[course_id]/page.tsx:108-125`). So responses come back keyed by position:
 
 ```json
-{
-  "pages": [{
-    "elements": [...]
-  }]
-}
+{ "poll_question_0": "Dynamic Programming" }
 ```
 
-#### `live_poll_responses`
+A `checkbox` question yields an array at the same key.
 
-Stores individual student responses.
+### Charted question types
 
-```sql
-CREATE TABLE live_poll_responses (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    live_poll_id UUID NOT NULL REFERENCES live_polls(id),
-    public_profile_id UUID REFERENCES user_roles(public_profile_id),
-    response JSONB NOT NULL DEFAULT '{}'::jsonb,  -- Keyed by question name
-    submitted_at TIMESTAMPTZ DEFAULT NULL,
-    is_submitted BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT live_poll_responses_unique_per_profile UNIQUE (live_poll_id, public_profile_id)
-);
-```
+`PollBuilder` offers exactly two types, mapped from internal names to SurveyJS names in `QUESTION_TYPE_REGISTRY` (`components/PollBuilder.tsx:30-41`):
 
-**Key Features:**
+| Builder label | Internal type | SurveyJS `type` |
+|---|---|---|
+| Multiple Choice | `multiple-choice` | `checkbox` |
+| Single Choice | `single-choice` | `radiogroup` |
 
-- Allows anonymous responses (`public_profile_id` can be NULL when `require_login` is false)
-- Unique constraint ensures one response per user per poll
-- Auto-sets `submitted_at` timestamp via trigger
-
-### Anonymous Response Behavior
+You can hand-write any other SurveyJS type into the JSON textarea and it will save, publish, and collect responses. The results viewer will not read it: `parseJsonForType` returns `undefined` for anything but `radiogroup` and `checkbox`, logs `Unsupported poll question type in SurveyJS JSON`, and the panel renders `Unsupported poll question type: <type>` (`PollResponsesDynamicViewer.tsx:27-40`, `:253`).
 
 <Warning>
-The UNIQUE constraint does not prevent duplicate anonymous responses.
+Counting reads only `elements[0]`. `extractChoicesFromPollQuestion` takes the first element's `choices` (`hooks/useCourseController.tsx:2511-2517`) and `extractPollAnswer` takes the first response key beginning with `poll_question_` (`:2534`). A poll with two questions charts only the first, and there is no other reader for the rest.
 </Warning>
 
-The constraint `UNIQUE (live_poll_id, public_profile_id)` enforces one response per authenticated user, but due to PostgreSQL's NULL handling, **anonymous users (where `public_profile_id` is NULL) can submit unlimited responses to the same poll**.
+<Warning>
+Object-form choices break the counts. `extractChoicesFromPollQuestion` labels a choice from `choice.text || choice.label || choice.value` (`hooks/useCourseController.tsx:2521`), but SurveyJS submits the choice's `value`. Given `{"value": "dp", "text": "Dynamic Programming"}`, the counter keys its bucket on `"Dynamic Programming"` and then tries to increment `"dp"`, which `hasOwnProperty` rejects (`:2592`, `:2627`). The bar stays at zero however many students answer. Use plain string choices, or make `value` and `text` identical.
+</Warning>
 
-#### Current Behavior by User Type
+### Triggers
 
-| User Type | Deduplication | Behavior |
-|-----------|--------------|----------|
-| **Authenticated** (`require_login = true`) | Enforced by UNIQUE constraint | One response per user per poll |
-| **Anonymous** (`require_login = false`) | Not enforced | Unlimited responses allowed |
+All five live in `20251213200333_surveys_polls.sql:1325-1333`.
 
-#### Recommendation
+| Trigger | Timing | Function | Effect |
+|---|---|---|---|
+| `broadcast_live_poll_responses_realtime` | AFTER INSERT/UPDATE/DELETE on `live_poll_responses` | `broadcast_live_poll_response_change()` (`:555`) | Broadcasts to the staff channel only |
+| `trg_live_poll_responses_set_submitted_at` | BEFORE INSERT/UPDATE on `live_poll_responses` | `set_live_poll_response_submitted_at()` (`:700`) | Stamps `submitted_at` when `is_submitted` first becomes true |
+| `broadcast_live_polls_realtime` | AFTER INSERT/UPDATE/DELETE on `live_polls` | `broadcast_live_poll_change()` (redefined at `20260817120000:193`) | Broadcasts, with different payloads per audience |
+| `prevent_live_poll_created_by_change_trigger` | BEFORE UPDATE on `live_polls` | `prevent_live_poll_created_by_change()` (`:687`) | Raises `Cannot change created_by of a live poll` |
+| `set_poll_deactivates_at_trigger` | BEFORE UPDATE on `live_polls` | `set_poll_deactivates_at()` (`:714`) | Sets `deactivates_at` to `now() + 1 hour` on open, `NULL` on close |
 
-- **For public/informal polls**: Accept unlimited anonymous responses as a trade-off for accessibility
-- **For critical polls** (grades, official votes): Use `require_login = true`
+<Note>
+`set_poll_deactivates_at_trigger` is BEFORE **UPDATE** only. A poll created already-live gets its `deactivates_at` from the client instead (`app/course/[course_id]/manage/polls/new/page.tsx:187-190`), and `PollsTable` sends the same value again when toggling (`PollsTable.tsx:67-74`) even though the trigger would overwrite it.
+</Note>
 
-### Database Triggers
+Nothing auto-populates `created_by`. The only trigger touching it forbids changing it after insert.
 
-| Trigger | Table | Purpose |
-|---------|-------|---------|
-| `set_live_poll_created_by` | live_polls | Auto-sets `created_by` to authenticated user on INSERT |
-| `set_poll_deactivates_at` | live_polls | Sets `deactivates_at` to 1 hour when `is_live` becomes true |
-| `set_response_submitted_at` | live_poll_responses | Auto-sets `submitted_at` when `is_submitted` flips to true |
-| `broadcast_live_poll_change` | live_polls | Broadcasts changes to realtime channels |
-| `broadcast_live_poll_response_change` | live_poll_responses | Broadcasts new responses to staff channel |
+### Expiry is not wired up
 
-### Auto-Deactivation (not currently wired up)
-
-The `set_poll_deactivates_at` trigger stamps `deactivates_at` one hour ahead whenever a poll goes live, and a function exists to act on it:
+`set_poll_deactivates_at()` stamps `deactivates_at` an hour ahead, an index exists for scanning it (`20251213200333_surveys_polls.sql:371`), and a function exists to act on it:
 
 ```sql
 CREATE OR REPLACE FUNCTION public.deactivate_expired_polls()
-RETURNS void AS $$
+ RETURNS void
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
 BEGIN
-    UPDATE live_polls
-    SET is_live = false
-    WHERE is_live = true
-      AND deactivates_at IS NOT NULL
-      AND deactivates_at <= NOW();
+  -- Deactivate polls where deactivates_at has passed
+  UPDATE live_polls
+  SET is_live = false
+  WHERE is_live = true
+    AND deactivates_at IS NOT NULL
+    AND deactivates_at <= NOW();
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$function$
+```
+
+`20251213200333_surveys_polls.sql:670-685`.
+
+<Warning>
+`deactivate_expired_polls()` has no callers. A repository-wide search for the name finds only its own definition: no `pg_cron` schedule, no edge function, no client call. No read path filters on `deactivates_at` either. **Polls never close on their own.** A poll stays live until a staff member closes it, and the one-hour value is dead metadata. Scheduling the function (`SELECT cron.schedule('deactivate-expired-polls', '*/5 * * * *', 'SELECT deactivate_expired_polls()')`) is the change that would make the documented expiry real.
+</Warning>
+
+## Row-level security
+
+Both tables have RLS enabled (`20251213200333_surveys_polls.sql:284`, `:298`). Policy names do not follow the table name, so grep for the literal string rather than guessing.
+
+### `live_polls`
+
+| Policy | Command | Roles | Predicate | Source |
+|---|---|---|---|---|
+| `live_polls_select_live` | SELECT | `anon`, `authenticated` | `is_live = true` | `20260817120000:155-160` |
+| `live_polls_select_staff` | SELECT | `authenticated` | `authorizeforclassgrader(class_id)` | `20260817120000:162-167` |
+| `live_polls_all_staff_insert` | INSERT | `authenticated` | `authorizeforclassgrader(class_id) AND authorizeforprofile(created_by)` | `20251213200333:1126-1131` |
+| `live_polls_all_staff_update` | UPDATE | `authenticated` | `authorizeforclassgrader(class_id)` | `20251213200333:1134-1140` |
+| `live_polls_all_staff_delete` | DELETE | `authenticated` | `authorizeforclassgrader(class_id)` | `20251213200333:1118-1123` |
+
+The original `live_polls_select` was `TO anon, authenticated USING (true)`, which exposed every column of every poll in every course without authenticating (`20251213200333:1143-1148`). `20260817120000_tighten_survey_and_poll_rls.sql:153` drops it and splits it in two. The migration's header (`:51-70`) records why the staff replacement is scoped to graders rather than class members: permissive policies are ORed, so a class-member predicate would hand enrolled students back the draft and closed rows the change exists to withhold.
+
+<Note>
+A live poll's question remains readable by any unauthenticated visitor who knows the course id. That is inherent to joining by QR code with no token in the URL (`20260817120000:68-70`).
+</Note>
+
+### `live_poll_responses`
+
+| Policy | Command | Roles | Predicate | Source |
+|---|---|---|---|---|
+| `live_polls_responses_all_staff` | ALL | `authenticated` | Poll's `class_id` passes `authorizeforclassgrader` | `20251213200333:1097-1107` |
+| `live_polls_responses_insert` | INSERT | `anon`, `authenticated` | `can_access_poll_response(live_poll_id, public_profile_id)` | `20251213200333:1110-1115` |
+
+There is no student `SELECT` policy on `live_poll_responses`. A student can write a response and never read it back, which is why the public page detects a repeat submission from the unique-violation SQLSTATE rather than by querying (`app/poll/[course_id]/page.tsx:147`).
+
+### `can_access_poll_response`
+
+```sql
+CREATE OR REPLACE FUNCTION public.can_access_poll_response(poll_id uuid, profile_id uuid)
+ RETURNS boolean
+ LANGUAGE sql
+ STABLE SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+  SELECT CASE
+    -- Early exit: if require_login is false, anyone can access (no user_roles query needed)
+    WHEN NOT lp.require_login THEN true
+    -- If require_login is true, user must be authenticated
+    WHEN lp.require_login AND auth.uid() IS NULL THEN false
+    -- If require_login is true and user is authenticated, verify class membership and profile ownership
+    WHEN lp.require_login AND auth.uid() IS NOT NULL THEN
+      authorizeforclass(lp.class_id)
+      AND profile_id IS NOT NULL
+      AND authorizeforprofile(profile_id)
+    ELSE false
+  END
+  FROM public.live_polls lp
+  WHERE lp.id = poll_id;
+$function$
+```
+
+`20251213200333_surveys_polls.sql:611-635`. Three properties matter when you change anything on the write path:
+
+- **It never reads `is_live`.** A page loaded while the poll was open can still submit after it closes. On a `require_login = false` poll, a caller who knows a poll's `id` can insert against a poll that was never live at all.
+- **`require_login = false` returns `true` unconditionally.** Not "true when `profile_id IS NULL`". Any caller may insert with any `public_profile_id`, including another student's, and the row will look attributed.
+- **`require_login = true` is the only branch that checks anything**, and it checks both class membership and profile ownership, so impersonation is blocked there.
+
+### Duplicate responses
+
+`UNIQUE (live_poll_id, public_profile_id)` dedupes authenticated respondents. PostgreSQL treats `NULL` values as distinct in a unique index, so it does not dedupe anonymous ones.
+
+| `require_login` | `public_profile_id` | Deduplication |
+|---|---|---|
+| `true` | Required by `can_access_poll_response` | One row per profile per poll |
+| `false` | Whatever the caller sends, including `NULL` | None. `NULL` rows are unlimited, and a non-`NULL` value is accepted from any caller |
+
+<Warning>
+For a poll whose count has to be defensible, set `require_login = true`. With it off, the combination of the unconditional `true` branch and NULL-tolerant uniqueness means the response set carries no integrity guarantee at all.
+</Warning>
+
+## Real-time synchronization
+
+### Channels
+
+`broadcast_live_poll_change()` sends to two class-wide topics, both constructed inside the trigger (`20260817120000:231`, `:252`). The names match the topics `ClassRealTimeController` subscribes to (`lib/ClassRealTimeController.ts:251`, `:269`).
+
+| Channel | Topic | Subscribers |
+|---|---|---|
+| Staff | `class:{class_id}:staff` | Instructors and graders |
+| Students | `class:{class_id}:students` | Every student in the class, on one shared topic |
+
+There is a per-user topic in the controller (`lib/ClassRealTimeController.ts:285`), but polls do not use it.
+
+### Asymmetric payloads
+
+The broadcast function is `SECURITY DEFINER` and channel membership is the only authorization on that path, so the trigger has to do the filtering that RLS cannot. It computes `row_is_live` and branches (`20260817120000:216`, `:235-247`):
+
+| Change | Staff payload | Student payload |
+|---|---|---|
+| Poll created as draft | Full `INSERT` with `data` | Bare `DELETE` with `row_id`, no `data` |
+| Poll goes live | Full `UPDATE` with `data` | Same full payload |
+| Poll edited while live | Full payload | Same full payload |
+| Poll closed | Full `UPDATE` with `data` | Bare `DELETE` with `row_id`, no `data` |
+| Poll deleted | Full `DELETE` with `data` | Bare `DELETE` with `row_id`, no `data` |
+
+`TableController` copies `data` straight into its cache when present and refetches through RLS when it is absent, so a data-free `DELETE` makes the client drop the row by id and learn nothing else. The migration's comment at `20260817120000:169-191` explains the failure this fixes: before it, any student holding an open session while staff drafted a poll received the question JSON regardless of what the `SELECT` policy said.
+
+Responses broadcast to the staff channel only (`20251213200333:593-598`). Students never receive them.
+
+## React hooks
+
+All four poll hooks live in `hooks/useCourseController.tsx` and read through the course controller's `livePolls` `TableController`.
+
+```typescript
+// Staff. All polls in the course, live and not. Returns the array directly.
+const polls = useLivePolls();                       // :2462-2475
+
+// Students. Filtered to is_live === true.
+const { polls, isLoading } = useActiveLivePolls();   // :2480-2490
+
+// One poll by id, staff-side.
+const poll = useLivePoll(pollId);                    // :2492-2496
+
+// Live per-choice tallies for elements[0].
+const { counts, isLoading } = usePollResponseCounts(pollId, pollQuestion); // :2552-2655
 ```
 
 <Warning>
-Nothing calls this function. It is never scheduled with `pg_cron` and has no caller anywhere in the codebase, so **polls do not currently close on their own** — `deactivates_at` is written and then never read. A poll stays live until someone closes it explicitly. Scheduling it (`SELECT cron.schedule('deactivate-expired-polls', '0 * * * *', 'SELECT deactivate_expired_polls()')`) would be the change needed to make the one-hour expiry real.
+`useLivePolls()` returns a bare array, not `{ data, isLoading }`, and `usePollResponseCounts()` returns `{ counts, isLoading }`, not a bare record. Destructuring either the other way yields `undefined` with no type error at the call site if you have widened the type.
 </Warning>
 
-## Row-Level Security (RLS)
+`usePollResponseCounts` seeds one bucket per choice at zero, fetches existing rows once, then subscribes to `live_poll_responses` INSERTs on the class realtime controller and increments in place (`:2580-2636`). It tracks seen response ids in a ref to avoid double counting a row that arrives during the initial fetch, and skips any answer starting with `other:`. Because it only ever increments, a deleted response does not decrement the chart until the page reloads.
 
-### Poll Policies
+## File layout
 
-| Policy | Role | Access |
-|--------|------|--------|
-| `live_polls_select` | All | Read polls for classes user belongs to |
-| `live_polls_insert_staff` | Instructors, Graders | Create polls in their classes |
-| `live_polls_update_staff` | Instructors, Graders | Update polls (cannot change `created_by`) |
-| `live_polls_delete_staff` | Instructors, Graders | Delete polls in their classes |
+Poll components are co-located with their routes. There is no `components/polls/` directory.
 
-### Response Policies
+```text
+app/course/[course_id]/
+├── polls/                                    # Student-facing
+│   ├── page.tsx
+│   └── StudentPollsTable.tsx
+└── manage/polls/                             # Staff-facing
+    ├── page.tsx                              # Poll list
+    ├── PollsTable.tsx                        # Rows, live toggle, delete
+    ├── PollsHeader.tsx
+    ├── EmptyPollsState.tsx
+    ├── new/page.tsx                          # Create only; there is no edit route
+    └── [poll_id]/responses/
+        ├── page.tsx
+        ├── PollResponsesDynamicViewer.tsx    # Type dispatch, poll URL, fullscreen
+        ├── MultipleChoiceDynamicViewer.tsx
+        ├── PollResponsesHeader.tsx
+        ├── PollBarChart.tsx                  # Recharts
+        └── QrCode.tsx                        # Thumbnail plus modal
 
-| Policy | Role | Access |
-|--------|------|--------|
-| `live_poll_responses_select_staff` | Instructors, Graders | Read all responses for their class polls |
-| `live_poll_responses_insert` | Students/Anonymous | Insert responses (see security function below) |
+app/poll/[course_id]/page.tsx                 # Standalone respond page, anon-capable
 
-### Security Function for Responses
+components/
+├── PollBuilder.tsx                           # QUESTION_TYPE_REGISTRY lives here
+├── PollBuilderModal.tsx
+├── PollPreviewModal.tsx
+└── ui/polls/poll-question-form.tsx
 
-```sql
-CREATE OR REPLACE FUNCTION can_access_poll_response(poll_id UUID, profile_id UUID)
-RETURNS BOOLEAN AS $$
-DECLARE
-    poll_record RECORD;
-BEGIN
-    SELECT require_login, class_id INTO poll_record
-    FROM live_polls WHERE id = poll_id;
+hooks/
+├── useCourseController.tsx                   # Poll hooks and count helpers
+└── usePollQrCode.tsx
 
-    -- Anonymous allowed if require_login is false
-    IF NOT poll_record.require_login AND profile_id IS NULL THEN
-        RETURN TRUE;
-    END IF;
-
-    -- Authenticated user must belong to class and provide their profile
-    IF poll_record.require_login THEN
-        RETURN EXISTS (
-            SELECT 1 FROM user_roles
-            WHERE public_profile_id = profile_id
-              AND class_id = poll_record.class_id
-              AND user_id = auth.uid()
-        );
-    END IF;
-
-    RETURN FALSE;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+types/poll.ts
 ```
 
-## TypeScript Types
+There is no edit route. `PollsTable`'s action menu offers only view responses and delete, and delete is a hard delete via `livePolls.hardDelete` (`PollsTable.tsx:107`), which the `ON DELETE CASCADE` on `live_poll_responses.live_poll_id` extends to the responses.
+
+## TypeScript types
 
 ```typescript
 // types/poll.ts
@@ -236,138 +374,46 @@ export type MultipleChoicePollQuestion = PollQuestion & {
 export type PollResponseData = Record<string, string | string[]>;
 ```
 
-## File Structure
-
-```text
-app/course/[course_id]/
-├── polls/                              # Student-facing
-│   └── page.tsx                        # List of active polls
-├── manage/polls/                       # Instructor-facing
-│   ├── page.tsx                        # Poll management dashboard
-│   ├── new/
-│   │   └── page.tsx                    # Create/edit poll
-│   └── [poll_id]/
-│       └── responses/
-│           └── page.tsx                # Poll analytics dashboard
-
-app/poll/[course_id]/
-└── page.tsx                            # Student poll response page (standalone)
-
-components/polls/
-├── PollBuilder.tsx                     # Visual poll question builder
-├── PollBuilderModal.tsx                # Modal wrapper for builder
-├── PollPreviewModal.tsx                # Preview poll before publishing
-├── PollsTable.tsx                      # Instructor poll management table
-├── PollsHeader.tsx                     # Header with create button
-├── EmptyPollsState.tsx                 # Empty state when no polls
-├── StudentPollsTable.tsx               # Student table of active polls
-├── PollResponsesDynamicViewer.tsx      # Main analytics dashboard
-├── MultipleChoiceDynamicViewer.tsx     # Chart renderer for MC questions
-├── PollResponsesHeader.tsx             # Header with URL, QR, controls
-├── PollBarChart.tsx                    # Recharts bar chart component
-└── QrCode.tsx                          # QR code generator
-
-hooks/
-├── useCourseController.tsx             # Poll-related hooks
-└── usePollQrCode.tsx                   # QR code generation hook
-```
-
-## React Hooks
-
-### `useLivePolls()`
-
-Fetches all polls for a course with real-time updates.
-
-```typescript
-const { data: polls, isLoading } = useLivePolls();
-// Returns: LivePoll[] with real-time subscription
-```
-
-### `useActiveLivePolls()`
-
-Fetches only `is_live=true` polls with loading state.
-
-```typescript
-const { polls, isLoading } = useActiveLivePolls();
-// Used by StudentPollsTable for showing available polls
-```
-
-### `usePollResponseCounts(pollId, pollQuestion)`
-
-Real-time response count tracking per choice.
-
-```typescript
-const counts = usePollResponseCounts(pollId, question);
-// Returns: Record<string, number> mapping choice labels to counts
-```
-
-**Implementation Details:**
-
-- Fetches initial response counts from database
-- Subscribes to ClassRealTimeController for INSERT events
-- Directly increments counts on new responses (instant UI updates)
-- Tracks seen response IDs to avoid double-counting
-- Filters out "other:" responses
-
-## Real-Time Synchronization
-
-### Broadcast Channels
-
-Polls use Supabase realtime broadcast for instant updates:
-
-| Channel | Format | Subscribers |
-|---------|--------|-------------|
-| Staff | `class:{class_id}:staff` | Instructors, graders |
-| Student | `class:{class_id}:user:{profile_id}` | Individual students |
-
-### Real-Time Flow
-
-1. **Instructor creates poll**: INSERT broadcast to staff + all students
-2. **Student submits response**: INSERT broadcast to staff only
-3. **Instructor closes poll**: UPDATE broadcast to staff + all students
-4. **Dashboard receives update**: Hook updates local state, UI re-renders
+<Warning>
+Only `PollResponseData` is used, by `app/poll/[course_id]/page.tsx:13`. `PollQuestion` and `MultipleChoicePollQuestion` are imported nowhere and describe a shape no table holds: stored questions are SurveyJS elements with `type: "checkbox"` or `"radiogroup"` and a `title`, not `type: "multiple-choice"` with a `prompt`, and nothing anywhere persists `correct_choices`. Do not model new code on them. Row types come from `Database["public"]["Tables"]["live_polls"]["Row"]`, which is what the hooks use.
+</Warning>
 
 ## Testing
 
-### E2E Tests
-
-Poll E2E tests are located at `tests/e2e/polls.test.tsx`.
+Poll E2E tests are in `tests/e2e/polls.test.tsx`, 16 active tests in one `test.describe("Polls")` block (`:50`).
 
 ```bash
-# Run poll tests
 npx playwright test polls
 ```
 
-### Test Scenarios
+They cover the student empty state (`:93`), a poll going live without a refresh (`:103`), closed polls staying hidden from students (`:227`), only the newest live poll reaching the student page (`:244`), the staff filter tabs (`:189`), the visual builder writing back JSON (`:173`), the live toggle from both the table (`:311`) and the responses page (`:423`), an anonymous visitor being sent to log in for a `require_login` poll (`:353`), a stored student submission (`:386`), and the public page's empty state (`:460`).
 
-- Student sees empty state with no polls
-- Real-time visibility (student sees poll go live without refresh)
-- Student can answer active polls
-- Instructor sees empty manage state
-- Visual builder updates JSON
-- Filters work (all/live/closed)
-- Response counts update in real-time
-- Poll deletion cascades to responses
+No test asserts on live count updates. The one delete test is `test.skip`ped (`:467`), so nothing covers the cascade either.
 
 ## Troubleshooting
 
-### Poll not appearing for students
+### Poll not visible to students
 
-1. Check `is_live` is `true`
-2. Verify `deactivates_at` has not passed
-3. Confirm student belongs to the same class
-4. Check RLS policies are not blocking access
+1. Check `is_live`. It is the only field any student read path filters on.
+2. Confirm the student is enrolled in `class_id`. `live_polls_select_live` does not check enrollment, but the student page and hook are both scoped to a course.
+3. If more than one poll is live, remember that `/poll/<course_id>` serves only the newest by `created_at` (`app/poll/[course_id]/page.tsx:43-45`). Close the others.
+4. Do not investigate `deactivates_at`. Nothing reads it.
 
-### Real-time updates not working
+### Real-time updates not arriving
 
-1. Verify Supabase realtime is enabled for the tables
-2. Check broadcast triggers are installed
-3. Confirm ClassRealTimeController subscription is active
-4. Check browser console for websocket errors
+1. Confirm the client joined the right topic. Students are on `class:{class_id}:students`, not a per-user topic.
+2. Check whether the poll is live. A student receiving a data-free `DELETE` where you expected an `UPDATE` is the intended behavior for a poll that is not live (`20260817120000:235-247`).
+3. Check that `broadcast_live_polls_realtime` and `broadcast_live_poll_responses_realtime` are installed on the database you are pointed at.
+4. Look for websocket errors in the browser console.
 
-### Response not saving
+### Response not saved
 
-1. Verify the poll's `require_login` setting
-2. If login required, confirm student's profile_id is correct
-3. Check for unique constraint violations (duplicate responses)
-4. Verify RLS policies allow the insert
+1. Check `require_login`. With it true, the caller needs an authenticated session, class membership, and its own `public_profile_id`.
+2. SQLSTATE `23505` means the unique constraint fired: that profile already answered this poll.
+3. Otherwise the insert failed `can_access_poll_response`. It is `SECURITY DEFINER`, so a `NULL` result from a missing `poll_id` reads as a policy denial rather than a not-found error.
+
+### Bars stay at zero while responses arrive
+
+1. Check the choice form. Object-form choices whose `value` differs from their `text` never match a bucket (`hooks/useCourseController.tsx:2521` against `:2592`).
+2. Check which element carries the choices. Only `elements[0]` is counted.
+3. Check the question type. Anything but `radiogroup` or `checkbox` renders the unsupported-type message instead of a chart.
