@@ -6,45 +6,72 @@ icon: "bell"
 
 # Notifications
 
-Pawtograder uses several channels to make sure you don't miss time-sensitive activity — office hours queue updates, replies to discussion posts you're watching, and similar events.
+Pawtograder keeps a notification inbox inside the app, emails you about discussion and course activity, and — while you have an open office hours chat — can alert you in your browser.
 
-## Notification Channels
+## Where notifications appear
 
-- **Browser notifications**: Desktop alerts when a staff member responds to your help request, assigns themselves to help you, sends a chat message, or starts a video call. Also fires for replies to posts you're watching. Requires browser permission.
-- **Title bar updates**: Your browser tab title shows unread counts and your office hours queue position, so you can glance at a background tab.
-- **Sound alerts**: Optional audio cues for important updates.
-- **Favicon badge**: A dot or count on the Pawtograder tab favicon when you have an active help request or unread messages.
+- **In-app inbox**: the inbox icon in the top-right corner of every course page. A blue badge shows your unread count, capped at `9+`. Click the icon for your recent notifications and a **View all** link; a **Mark all as read** button appears once you have more than one unread.
+- **Email**: Pawtograder emails you about discussion posts and replies, office hours activity, regrade request activity, group invitations and membership changes, and being added to a course.
+- **Browser, sound, tab title and favicon**: for new messages in an office hours chat, Pawtograder can show a desktop notification, play a sound, flash the browser tab title, and put an unread count on the tab's favicon. All four fire only while you are *not* actively looking at the page, and they follow your active help request across the whole site — not just the office hours pages.
 
-You can test sound and grant browser permissions from the help drawer (the **Get Help** button in the bottom-right). If browser notifications are blocked at the OS or browser level, Pawtograder shows a warning with instructions for re-enabling them.
+<Note>
+Desktop notifications also need your browser's permission. Grant it from **Notification Settings** below, or from the **Enable** prompt Pawtograder shows inside a help request chat. If your browser has already blocked notifications for the site, Pawtograder says so and you have to re-allow them from the lock icon in your browser's address bar.
+</Note>
 
-<Tip>
-Grant browser notification permission so you receive alerts even when Pawtograder isn't the active tab.
-</Tip>
+## The notifications page
 
-## Watching Discussion Posts
+**View all** in the inbox popover opens the full notifications page. It is not in the course menu, so that link is the only way in. Notifications are grouped into **Regrade Requests**, **Office Hours**, **Discussion Threads**, and **Other**. Each group has its own **Mark all as read** and **Delete all** buttons, alongside a page-wide pair at the top.
 
-By default, you don't receive notifications for new discussion posts. To follow a thread:
+<Warning>
+**Delete all** permanently removes those notifications and cannot be undone.
+</Warning>
 
-- **Watch** a post to be notified of replies and updates
-- Replying to a post automatically watches it
+## Notification Settings
 
-Watching is per-post; see the post page for the watch toggle. Unwatch from the same place when you're no longer interested.
+Click your avatar in the top-right corner to open the user menu, then choose **Notification Settings**.
 
-## What Triggers Notifications
+**Office Hours Chat Notifications** controls the four in-browser channels: **Browser Notifications**, **Sound Notifications** (with a volume slider), **Title Flashing**, and **Favicon Badge**. All are enabled by default, and they save as soon as you flip them. **Test Notification** fires a sample so you can confirm they work.
 
-You'll receive notifications for events including:
+**Email Notification Preferences** has one setting for students, **Discussion Board Notifications**:
 
-- A staff member responds to your office hours request, sends a chat message, or starts a video call
-- Your position in the help queue changes
-- A reply is posted on a discussion thread you're watching
-- A regrade request you submitted receives a response (see [Regrade Requests](/students/assignments/regrade-requests))
-- An email when you're invited to join a group (see [Forming Groups](/students/assignments/form-groups))
+- **Immediate**: an email as soon as a new post or reply arrives
+- **Digest**: one summary email per hour instead
+- **Disabled**: no discussion emails at all
 
-## Permissions and Troubleshooting
+Click **Save Preferences** to apply your email choice.
+
+## Watching posts and following topics
+
+You are only notified about discussion activity you have opted into, and the two kinds of subscription differ:
+
+- **Watch a post** to be notified of every reply to it. Replying to a post watches it automatically.
+- **Follow a topic** to be notified of new posts in that topic — but not of replies to them.
+
+Every discussion email ends with a footer saying which of the two brought you that email, plus one-click links to unfollow that post or that topic, open your notification settings, or disable discussion emails entirely. Opening an unsubscribe link takes effect right away.
+
+## What triggers a notification
+
+- A new message in an office hours help request you are part of
+- A staff member is assigned to your help request, or its status changes
+- A reply on a discussion post you watch, or a new post in a topic you follow
+- Your discussion post is merged into another one as a duplicate
+- A new comment on a regrade request you are involved in, or a change to its status, including escalation (see [Regrade Requests](/students/assignments/regrade-requests))
+- You are invited to a group, added to one, or removed from one, or a group join request is filed or decided (see [Forming Groups](/students/assignments/form-groups)). Group notifications are held back until the assignment is released, so instructors can set groups up in advance.
+- You are added to a course
+
+<Note>
+Creating a help request notifies course staff, not you. Nothing notifies you when your position in the office hours queue changes — the floating help widget shows your position live instead.
+</Note>
+
+## Troubleshooting
 
 If you stop receiving browser notifications:
 
-1. Confirm Pawtograder has browser notification permission (site settings)
-2. Check your OS-level "Do Not Disturb" / Focus settings
-3. Make sure sound is not muted system-wide if you rely on audio cues
+1. Confirm **Browser Notifications** is still on in **Notification Settings**, then use **Test Notification**
+2. Confirm Pawtograder still has notification permission in your browser's site settings
+3. Check your OS-level "Do Not Disturb" or Focus settings
 4. Reload the page after granting permission so Pawtograder picks up the change
+
+<Tip>
+Test from a different tab or window. Browser, sound, title and favicon alerts deliberately stay silent while the Pawtograder tab is the one you are looking at.
+</Tip>

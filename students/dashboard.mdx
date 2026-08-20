@@ -1,37 +1,51 @@
 ---
 title: "Dashboard"
-description: "What you see after logging in: active assignments, upcoming deadlines, and recent activity"
+description: "What you see after logging in: upcoming assignments, surveys to complete, and recent regrade requests"
 icon: "gauge"
 ---
 
 # Dashboard
 
-After you log in and select a course, you land on the course dashboard. It summarizes everything you currently need to act on.
+After you log in and select a course, you land on the course dashboard, headed **Course _name_ Dashboard**. It summarizes what you currently need to act on.
 
-## Assignments
+## Your sections
 
-The assignments section lists every active assignment in the course with:
+If you are assigned to a course section or a lab section, cards near the top show the section name, its meeting times and location, and — for a lab section — the lab leaders. When your course publishes a calendar feed, a schedule summary appears below those cards.
 
-- Assignment name and due date
-- Your current score (once graded and released)
-- Submission status
-- Links to your GitHub repository and your latest submission
+## Upcoming Assignments
 
-Once an assignment has been graded and released, your **total score** appears directly on the dashboard so you can track progress across all assignments at a glance.
+The **Upcoming Assignments** section lists the next five assignments whose deadline has not passed yet, soonest deadline first. The deadline it compares against is your own effective one, so a lab-section offset or an extension counts. Once an assignment's deadline passes it drops off this list, so open **Assignments** in the course menu to see everything.
+
+Each card is titled with the assignment name, which links to the assignment page. Below the title are two rows:
+
+- **Due**: your deadline for the assignment. If your instructor has turned on suggested due dates, this row shows the suggested date instead, with **Resubmit until** and the hard deadline underneath
+- **Most recent submission**: your latest submission number and its autograder score, written as `#3, 18/20`. It reads `No submissions` if you have not submitted yet, `In Progress` while the autograder is still running, and `Error` if the autograder failed
+
+<Note>
+The score on this card is the autograder score, not your released grade. Check the [Gradebook](/students/gradebook) (if your instructor has enabled it) for released totals.
+</Note>
 
 ## Surveys to Complete
 
-If you have pending or in-progress surveys, a "Surveys to complete" banner appears on your dashboard. Each entry shows:
+If your course has surveys enabled and you have any available survey you have not submitted, a **Surveys to complete** banner appears at the top of the dashboard. Each entry shows:
 
-- **Status badge**: Completed (green), Overdue (red), or Pending (yellow)
-- **Due date**: Relative time remaining, or how long ago it became overdue
-- **Quick action**: A "Take Survey" link, or "View Response" once submitted
+- **Status badge**: Overdue (red), In progress (yellow), or Pending (blue)
+- **Due date**: relative time remaining, or how long ago it became overdue
+- **Action button**: **Take survey**, or **Continue** if you have a saved draft
 
-Overdue surveys are listed first.
+Overdue surveys are listed first. Submitted surveys never appear in this banner; find them under **Active Surveys** further down the dashboard. See [Surveys](/students/surveys) for the full flow.
+
+## Recent Regrade Requests
+
+The **Recent Regrade Requests** section shows your five most recent regrade requests, newest first, with the status, assignment, submission number, rubric check, initial and final points, and when the request was created and last updated. A **View all regrade requests →** link below the table is the only way to reach the full regrade requests page. See [Regrade Requests](/students/assignments/regrade-requests).
+
+## Other sections
+
+Depending on what your instructor has enabled, the dashboard can also show a discussion activity summary, an **Active Surveys** list, an office hours status card (shown only when your course has no calendar feed configured), and a panel with your pending Discord invitation for the course.
 
 ## Active Help Requests
 
-If you have an open office hours request, its status appears on the dashboard and follows you around the site. See [Office Hours](/students/office-hours) for the full request flow.
+While you have an open office hours request, a floating widget in the bottom-right corner of your course pages shows its status and your position in the queue — it is part of the site chrome, not of the dashboard body, and it is hidden while you are on the office hours pages themselves. See [Office Hours](/students/office-hours) for the full request flow.
 
 ## What's Next
 
