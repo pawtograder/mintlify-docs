@@ -17,7 +17,7 @@ Rubrics can only be edited by instructors. When editing a rubric, you will be pr
 - **Rubric**: Named collection of parts used for a specific review round (self-review, grading-review, meta-grading-review). The grading review is the main review that students will see.
 - **Part**: Logical section within a rubric (e.g., Code Quality, Functionality). Contains criteria. Parts can be configured for individual grading or assign-to-student modes for group submissions.
 - **Criteria**: A scoring rule block with:
-  - `is_additive` and `is_deduction_only`: together these pick one of three scoring modes (see [How Points Are Computed](#how-points-are-computed)). Both keys may be present; `is_deduction_only: true` selects "Penalty only" whatever `is_additive` says, and `is_additive` is read only when `is_deduction_only` is `false` or absent. The editor writes one mode at a time.
+  - `is_additive` and `is_deduction_only`: together these pick one of three scoring modes (see [How Points Are Computed](#how-points-are-computed)). `is_deduction_only` is required on every criteria by the shipped schema; `is_deduction_only: true` selects "Penalty only" whatever `is_additive` says, and `is_additive` is read only when `is_deduction_only` is `false`. The editor writes one mode at a time.
   - `total_points`: Max points for this criteria. It is not possible for a grader to assign more points to nested checks, even if you allow them to select that many points.
   - `min_checks_per_submission` / `max_checks_per_submission`: How many checks must/can be applied for the criteria.
   - One or more checks.
@@ -60,7 +60,9 @@ Each criteria uses one of three scoring modes. The rubric editor names them "Awa
 "Penalty only" is the mode that is easy to miss. Unlike "Deduct from total" it does not begin from `total_points`, so a criteria with no checks applied contributes 0 rather than full marks, and its best possible contribution is 0. Here `total_points` acts as a floor on the penalty rather than a starting balance. Use this mode for penalties that should not inflate the rubric's maximum, such as a late or academic-integrity deduction.
 </Note>
 
-Both booleans are optional in YAML and default to `false`, which yields "Deduct from total". If you want "Award per check" you must say `is_additive: true` explicitly.
+`is_deduction_only` is **required on every criteria**. The YAML source editor validates your rubric against the shipped `RubricSchema.json` and marks a criteria without the key as an error. While any error marker is present the editor stops re-parsing your YAML, so the live preview freezes until you add it. Set `is_deduction_only: false` for the two modes that are not "Penalty only".
+
+`is_additive` is optional and defaults to `false`, which yields "Deduct from total". If you want "Award per check" you must say `is_additive: true` explicitly.
 
 - The rubric total is the sum across criteria.
 - Scores automatically recalculate when rubric check scores change, ensuring submission grade totals stay synchronized with the latest rubric configuration.
@@ -88,6 +90,7 @@ parts:
       - name: Style and Clarity
         total_points: 10
         is_additive: false
+        is_deduction_only: false
         checks:
           - name: Missing Javadocs
             is_annotation: false
@@ -113,6 +116,7 @@ parts:
       - name: Passing tests (additive)
         total_points: 20
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: Public API works
             is_annotation: false
@@ -127,6 +131,7 @@ parts:
       - name: Style deductions (subtractive)
         total_points: 10
         is_additive: false
+        is_deduction_only: false
         checks:
           - name: Magic numbers
             is_annotation: true
@@ -152,6 +157,7 @@ parts:
       - name: HTTP response quality
         total_points: 10
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: Response completeness
             is_annotation: false
@@ -178,6 +184,7 @@ parts:
       - name: README quality (deductions)
         total_points: 5
         is_additive: false
+        is_deduction_only: false
         checks:
           - name: Missing section
             is_annotation: true
@@ -190,6 +197,7 @@ parts:
       - name: Code comments
         total_points: 5
         is_additive: false
+        is_deduction_only: false
         checks:
           - name: Unclear comment
             is_annotation: true
@@ -208,6 +216,7 @@ parts:
       - name: Submission hygiene
         total_points: 5
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: Compiles
             is_annotation: false
@@ -231,6 +240,7 @@ parts:
       - name: Choose exactly one pattern
         total_points: 5
         is_additive: true
+        is_deduction_only: false
         min_checks_per_submission: 1
         max_checks_per_submission: 1
         checks:
@@ -243,6 +253,7 @@ parts:
       - name: Choose up to two strengths
         total_points: 4
         is_additive: true
+        is_deduction_only: false
         max_checks_per_submission: 2
         checks:
           - name: Test readability
@@ -263,6 +274,7 @@ parts:
       - name: Public notes
         total_points: 0
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: General praise
             is_annotation: false
@@ -271,6 +283,7 @@ parts:
       - name: Internal notes
         total_points: 0
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: For staff only
             is_annotation: false
@@ -279,6 +292,7 @@ parts:
       - name: Released only
         total_points: 0
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: Visible when released
             is_annotation: false
@@ -287,6 +301,7 @@ parts:
       - name: Only if applied
         total_points: 0
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: Shown when applied
             is_annotation: false
@@ -307,15 +322,6 @@ This protection applies when:
 - Using the mobile navigation dropdown
 
 The warning only appears when you have actual unsaved changes in the rubric editor. After successfully saving, the warning clears automatically.
-
-### Keyboard shortcuts
-
-Speed up rubric editing with keyboard shortcuts:
-
-- `Ctrl/Cmd + S`: Save rubric
-- `Ctrl/Cmd + Z`: Undo last change
-- `Ctrl/Cmd + Shift + Z`: Redo
-- `Esc`: Close current dialog
 
 <Tip>
 If you're working on rubrics across multiple tabs, only the currently visible tab will manage the unsaved changes warning to avoid false alerts.
@@ -387,7 +393,7 @@ Editing completed reviews does not automatically notify students. If grades have
 - Optional: `id`, `description`, `data`
 
 **Criteria**
-- Mandatory: `name`, `checks`
+- Mandatory: `name`, `checks`, `is_deduction_only` (schema-required; use `false` unless the criteria is "Penalty only")
 - Optional: `id`, `description`, `data`, `is_additive` (default: `false`), `total_points` (default: `0`), `min_checks_per_submission`, `max_checks_per_submission`
 
 **Check**
@@ -462,6 +468,7 @@ parts:
       - name: Code style
         total_points: 10
         is_additive: false
+        is_deduction_only: false
         checks:
           - name: Style violations
             is_annotation: true
@@ -490,6 +497,7 @@ parts:
       - name: Leadership
         total_points: 5
         is_additive: true
+        is_deduction_only: false
         checks:
           - name: Effective coordination
             is_annotation: false
