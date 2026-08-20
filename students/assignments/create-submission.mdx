@@ -6,7 +6,7 @@ icon: "code-commit"
 
 # Completing an Assignment
 
-Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears at the top of the assignment page. This repository is private, and only you and the course staff can see it.
+Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears in the repository box below the assignment's due date and description. This repository is private, and only you and the course staff can see it.
 
 Your instructor may have provided starter code in that repository. Use this repository to complete the assignment.
 
@@ -18,9 +18,13 @@ Your instructor can change this. The grading workflow lives in your own reposito
 
 On an assignment with no autograder there is no workflow at all, and `#submit` never applies. Each push to your default branch up to your deadline is recorded as a submission for the course staff to grade by hand.
 
+Not every assignment is submitted by pushing. If the assignment has no repository, the assignment page gives you an **Upload submission** control instead, and what you upload is the submission. If it expects nothing to be handed in, the page says "No submission required" and your instructor grades your work directly. If it uses pull-request mode, you choose which of your pull requests counts from the **Choose your submission pull request** table on the assignment page.
+
 <Warning>
 A push after your deadline does not become a gradeable submission. It is not dropped silently either: the submission that appears is fileless and cannot be graded, and it carries an error reading "Your submission at commit ... was not recorded: it was pushed after the deadline for this assignment". Where late tokens are offered, that message also says why none covered the push.
 </Warning>
+
+If your course uses suggested due dates, the assignment page shows **Due** as the suggested date and **Resubmit until** the later, hard deadline. Only the hard deadline is enforced, so a push after the suggested date still counts as a submission.
 
 ### Submission Limits
 
@@ -36,24 +40,25 @@ Where the assignment does not permit it, a `#NOT-GRADED` push after your due dat
 
 ## Viewing Submission Results
 
-You'll see a list of all the submissions you've made for the assignment. The flag icon indicates your *active* submission, which is the one that will eventually be graded. To make an earlier submission the active one, open that submission's page and press **Activate**. You can re-pick your active submission as often as you like until your final due date passes, extensions included; after that, only the course staff can change it.
+You'll see a list of all the submissions you've made for the assignment. The flag icon indicates your *active* submission, which is the one that will eventually be graded. To make an earlier submission the active one, open any submission's page, find that submission's row in the **Submission History** panel, and press **Activate**. You can re-pick your active submission as often as you like until the hard deadline passes, extensions and late tokens included. If your course uses suggested due dates, that is the **Resubmit until** date, not the **Due** date. After it passes, only the course staff can change your active submission.
 
-The **Total Score** column shows:
+The **Submission History** table has five columns: **Submission #**, **Date**, **Commit**, **Auto Grader Score** and **Total Score**.
 
-- **Pending**: Before grading is complete or released (may display a partial score based on autograder results)
-- **Actual score**: Once your instructor has graded and released your results (e.g., "85/100")
+**Auto Grader Score** is the autograder's own result: `score/max` once the run finishes, `In Progress` while it is still running, `Error` if the run failed or the push was rejected, and `N/A` for a submission the autograder never runs on, such as an upload, a pull request, or an entry your instructor made by hand.
 
-This lets you see your final grade as soon as it's available, rather than waiting to check the gradebook separately.
+**Total Score** is your overall grade, and it never shows a partial autograder figure. It reads `Pending` on your active submission until your instructor has completed and released the review, then `total/points possible`. A `#NOT-GRADED` submission reads `Not for grading`, and any other inactive submission reads `—`.
 
-The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results.
+Opening a submission gives you three tabs: **Grade**, which is a self-contained ledger of how the grade was reached, **Autograder Detail**, and **Files**. Pull-request submissions add **Checks** and **Deployments**.
+
+The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results. Where the autograder holds tests back, that summary says so: "Hidden Automated Checks: N points will be awarded by automated tests that are not shown until after grading is complete."
 
 <Frame>
   <img src="/images/students/assignments/create-submission-1754510547128.png" alt="Submission page showing autograder results and grading rubric preview" />
 </Frame>
 
-<Note>
-If you submit an empty repository or a repository with no meaningful content, Pawtograder will detect this and flag it for your instructor's review.
-</Note>
+<Warning>
+Unless your instructor permits empty submissions, a push whose files are identical to the assignment's starter code is rejected rather than held for your instructor's review. On an assignment with an autograder, the run fails with "Empty submissions are not permitted for this assignment. Please commit your changes before submitting." Otherwise the submission still appears in your history, but inactive and with no files, carrying the error "Your submission at commit ... was not recorded: it is identical to the assignment's starter code, and this assignment does not accept empty submissions. Make your changes and push again." Either way, nothing is graded until you change a file and push again.
+</Warning>
 
 ## Viewing Submission Files
 
@@ -87,16 +92,7 @@ Binary files are collected only if they match one of the file patterns your inst
 
 ## Assignment Leaderboard
 
-If your instructor has enabled the leaderboard feature for an assignment, you can view your ranking compared to other students. The leaderboard:
-
-- Shows your ranking compared to other students in the course based on autograder results
-- Updates automatically as new submissions are graded
-- Can be configured by your instructor to be visible or hidden
-- Is designed to be unobtrusive and only appears when enabled for specific assignments
-
-<Note>
-Leaderboards are optional and controlled by your instructor. Not all assignments will have a leaderboard enabled.
-</Note>
+If your instructor has enabled the leaderboard for an assignment, it appears as a panel in the right-hand sidebar of the assignment page, listing the top ten entries. Assignments without it show no panel at all. See [Leaderboards](/students/assignments/leaderboard) for how the ranking works.
 
 ## Error Pins
 
@@ -111,12 +107,15 @@ Error pins appear automatically when the system detects that your error matches 
 
 ## Viewing Artifacts
 
-Some assignments may include artifacts—generated outputs from your code such as reports, visualizations, or analysis results. If your submission includes artifacts and your instructor has configured them, you'll see an **Artifacts** tab where you can view generated outputs.
+Some assignments produce artifacts: generated outputs from your code such as reports, visualizations, or analysis results. When your submission has artifacts, they are listed beneath the file list on the **Files** tab, under an **Artifact** heading. Click one to open it.
 
-Pawtograder supports previewing several artifact formats:
+Pawtograder can preview four artifact formats:
 
+- **PNG images**: Displayed inline
 - **Plaintext files**: Displayed with proper formatting
-- **Markdown files**: Rendered with formatting and syntax highlighting
-- **HTML sites**: Interactive preview of generated websites (from ZIP archives)
+- **Markdown files**: Rendered with formatting
+- **HTML sites**: Interactive preview of a generated website, from a ZIP archive
+
+Anything else reads "No preview available for artifacts of type ...".
 
 When grading your submission, instructors can reference specific artifacts in rubric checks. These artifact references appear as clickable links in the rubric sidebar, making it easy to navigate to the relevant output.
