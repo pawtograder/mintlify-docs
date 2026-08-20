@@ -6,9 +6,9 @@ icon: "gear"
 
 # Assignment Configuration
 
-Per-assignment settings are configured from **Manage → Assignments →
-[Assignment] → Configuration**. This page documents what each field
-does. Group-specific settings are covered in
+Per-assignment settings are configured from **Edit Assignment** in the
+assignment's left-hand nav. This page documents what each field does.
+Group-specific settings are covered in
 [Groups](/staff/assignments/groups); the extension and late-token
 workflow is in [Extensions](/staff/assignments/extensions).
 
@@ -26,8 +26,9 @@ zone or what other users see.
 - **Due Date** — the default submission deadline. Per-student or
   per-group overrides are configured under
   [Extensions](/staff/assignments/extensions).
-- **Regrade Request Deadline** — the cut-off for students opening
-  regrade requests after grades are released.
+- **Regrade Request Deadline** — the deadline after which students
+  cannot submit new regrade requests. Leave it empty for no deadline.
+  This one lives in [Advanced settings](#advanced-settings).
 
 For lab-section-specific due dates, set **Minutes due after lab
 meeting** or **Hours due after programming assignment** on the group
@@ -50,12 +51,21 @@ cap when your rubric or autograder can sum past the assignment max
 
 ## Empty submission policy
 
-- **Permit Empty Submissions** (default: on) — submissions whose
-  collected files are unchanged from the handout are flagged as empty
-  but accepted.
-- **Reject Empty Submissions** — the autograder rejects empty
-  submissions with an error directing the student to commit their
-  changes. Instructors and graders can still submit empty for testing.
+A submission whose collected files are unchanged from the handout is an
+*empty* submission, and Pawtograder rejects them. The assignment's
+`permit_empty_submissions` column defaults to `false`, and every new
+assignment is created with it set to `false`.
+
+<Warning>
+There is no field for this in the assignment form. The column exists and
+the autograder enforces it, but nothing in the UI reads or writes it, so
+every assignment you create rejects empty submissions.
+</Warning>
+
+A rejected submission cannot be graded, and the student is told that it
+matches the assignment's starter code and asked to commit their changes
+before submitting again. Graders and instructors bypass the check, so you
+can still submit an unchanged repository when testing an assignment.
 
 Empty detection compares SHA-256 hashes of the files matching
 `submissionFiles` against every recorded handout version, so it
@@ -63,29 +73,43 @@ respects whatever scope the autograder config defines.
 
 ## Late tokens
 
-- **Max Late Tokens** is the class-wide allotment for the assignment.
-  Students spend tokens to push their own due date back in 24-hour
-  increments, requested before the original due date.
+- **Max late tokens** is the most tokens a student may spend on this
+  assignment; `0` means late tokens are not allowed here. The class-wide
+  allotment students draw from is **Late Tokens Per Student** under
+  **Course Settings → Due Date Extensions**.
+- Each token pushes the student's own due date back 24 hours.
+- **Require students to apply late tokens before the original due date**
+  is checked by default. Uncheck it and a token is applied automatically
+  when a student submits after the deadline.
 - Instructors can gift extra tokens to individual students and grant
   manual extensions; see [Extensions](/staff/assignments/extensions).
 
-## Leaderboard
+## Advanced settings
 
-Toggle **Show Leaderboard** to display a class-wide ranking of
-autograder scores on the assignment page. See
-[Leaderboard](/staff/assignments/leaderboard) for what students see and
-how rankings are computed.
+Four settings sit inside the **Advanced settings** accordion near the
+bottom of the form, and it is collapsed every time the form loads: the
+**Regrade Request Deadline** covered under
+[Dates and time zone](#dates-and-time-zone), plus the three below. Open
+the accordion or you will not see them.
 
-## Grader pseudonymous mode
+### Show autograder leaderboard to students
 
-When enabled, students see grader feedback under a stable pseudonym
+When checked, students see a leaderboard of the top ten autograder scores
+in a sidebar panel on their assignment page. Entries are always
+pseudonymous. See [Leaderboard](/staff/assignments/leaderboard) for what
+students see and how rankings are computed.
+
+### Anonymous grading (show grader pseudonyms to students)
+
+When checked, students see grader feedback under a stable pseudonym
 rather than the grader's real name. Useful when course policy requires
 anonymized grading.
 
-## Repository analytics
+### Enable repository analytics
 
-**Enable Repository Analytics** turns on commit-frequency and
-push-timing analytics for the assignment's student repositories. See
+Collects GitHub repository analytics (commits, PRs, issues, and comments)
+for the assignment's student repositories and shows them to graders and
+instructors on each submission. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
 ## Handout URL
