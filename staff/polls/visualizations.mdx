@@ -1,168 +1,109 @@
 ---
 title: "Poll Visualizations"
-description: "View real-time poll results with bar charts, QR codes, and presentation mode"
+description: "Read live poll results from the bar chart, share the QR code, and project in presentation mode"
 icon: "chart-bar"
 ---
 
 # Poll Visualizations
 
-Pawtograder provides real-time visualizations for poll results, making it easy to share results with your class during a lecture.
+A poll's results page shows one thing: a horizontal bar chart of how many responses each choice received, updating as students answer. This page covers how to read it, how to share the link, and how to project it.
 
-## Response Dashboard
+Open it by clicking a poll's question on **Manage Polls**, or by choosing **View Poll** from the row actions menu.
 
-After creating a poll, you can view results in real-time. The response dashboard includes:
+## The results page
 
 <Frame>
-  <img src="/images/staff/polls/poll-results.png" alt="Polls Results dashboard with bar chart and QR code" />
+  <img src="/images/staff/polls/poll-results.png" alt="Poll results page with a horizontal bar chart, the Answer at link, a QR code, and Stop Poll and Present buttons" />
 </Frame>
 
-### Dashboard Components
+The page has two parts. The header holds, from left to right:
 
-| Component | Description |
-|-----------|-------------|
-| **Header** | Shows poll question, URL, QR code, and controls |
-| **Bar Chart** | Visual representation of response distribution |
-| **Response Count** | Total number of responses received |
-| **Poll URL** | Direct link students can use to respond |
-| **QR Code** | Scannable code for quick mobile access |
+| Element | Purpose |
+|---------|---------|
+| **← Back to Polls** | Returns to **Manage Polls** |
+| **Answer at:** *link* | The URL students use, shown as plain text |
+| QR code thumbnail | Encodes that same URL; click to enlarge |
+| **Start Poll** / **Stop Poll** | One toggle button that opens or closes the poll |
+| **Present** | Enters fullscreen presentation mode |
 
-## Real-Time Updates
-
-The dashboard updates **instantly** as students submit responses:
-
-- No page refresh required
-- Bar lengths animate as new responses come in
-- Response counts update in real-time
-- Works across all connected instructor devices
-
-<Info>
-Real-time updates are powered by Supabase's realtime subscriptions. The dashboard subscribes to response changes and updates the UI immediately when new data arrives.
-</Info>
-
-## Bar Chart Visualization
-
-Both single choice and multiple choice polls display results as a horizontal bar chart:
-
-- **Each answer option** is shown as a separate bar
-- **Bar length** corresponds to the number of responses for that option
-- **Labels** show the option text
-- **Counts** display the number of responses per option
-- **Colors** distinguish between different options
-
-### Reading the Chart
-
-For **Single Choice** polls:
-- The total responses equals the sum of all bars
-- Percentages will total 100%
-
-For **Multiple Choice** polls:
-- Each bar shows how many students selected that option
-- Percentages may exceed 100% (students can select multiple)
-- Total responses shows unique students who responded
-
-## QR Code Access
-
-Each poll has a unique QR code that allows students to quickly access and respond from their mobile devices.
-
-### How QR Codes Work
-
-| Feature | Behavior |
-|---------|----------|
-| **Class-Specific** | The QR code links to your specific course |
-| **Latest Poll** | Always directs to the **newest active poll** |
-| **Click to Enlarge** | Click the QR code to view it in a larger modal |
-
-### Using the QR Code in Class
-
-1. Create and publish a new poll
-2. Navigate to the poll's response dashboard
-3. Click the QR code to enlarge it for projection
-4. Students scan with their phone camera
-5. They're directed to the current poll and can submit their response
+Below the header, a panel shows the question prompt as a heading and the bar chart under it, captioned **Number of Responses**.
 
 <Note>
-If the poll has **Require Login** enabled, students will be prompted to log in before they can submit a response.
+The page URL ends in `/responses`, but it never lists individual responses. There is no response table, no respondent names, no total-responses figure, no percentages, and no CSV export. The chart is the only view of the data.
 </Note>
 
-## Presentation Mode
+## Reading the bar chart
 
-Presentation mode provides a fullscreen display optimized for classroom projection.
+- **One bar per choice**, labeled with the choice text down the left edge
+- **Bar length** is the number of responses for that choice
+- **All bars share one color.** Bar color carries no meaning
+- **Counts** are read off the horizontal axis, which uses whole numbers only. Hovering a bar shows its exact count as **Responses**
 
-### Entering Presentation Mode
+For a Multiple Choice poll, a single student can add to several bars at once, so the bars can sum to more than the number of students who answered. Since the page never shows a total, there is no reliable way to read participation off the chart.
 
-1. Open the poll response dashboard
-2. Click the **Present** button in the header
-3. The chart expands to fill the entire screen
-4. QR code appears in the bottom-right corner for student access
+<Warning>
+A choice with zero responses still renders as a labeled bar of zero length, and an answer that does not exactly match one of your choice labels is not counted at all. If a bar stays empty when you expect responses, check the choice labels in the poll's JSON. See [Poll Types](/staff/polls/poll-types) for the counting rules.
+</Warning>
 
-### Presentation Mode Features
+If the poll's payload cannot be parsed, the panel shows **Unable to display poll** with the parse error. If the question type is anything other than Multiple Choice or Single Choice, it shows `Unsupported poll question type:` followed by the type.
 
-- **Fullscreen Display**: Chart fills the entire screen
-- **Large QR Code**: Easy to scan from anywhere in the classroom
-- **Poll URL**: Displayed at the bottom for manual entry
-- **Real-Time Updates**: Chart continues to update live
-- **Dark Background**: Optimized for projection visibility
+## Live updates
 
-### Exiting Presentation Mode
+New responses appear without a page refresh, and the affected bar grows immediately. Every staff member with the page open sees the same updates.
 
-- Press the **Escape** key
-- Click the **Close** button (if visible)
+<Note>
+Live updates cover new responses only. A deleted or edited response does not decrement a chart that is already open, so reload the page if the underlying data changed some other way.
+</Note>
+
+## The poll link and QR code
+
+The link is `https://<your-pawtograder-host>/poll/<course_id>`, and it is per course rather than per poll.
+
+<Warning>
+Every poll in a course shares this one link, and it always serves the poll opened most recently. Two polls open at once means students can only reach the newer one. Keep one poll open at a time.
+</Warning>
+
+The QR code encodes that same URL:
+
+- Click the thumbnail to open the code large enough to project
+- The code is drawn in the browser and follows your light or dark theme, rendering light-on-dark in dark mode. There is no download button, so project it or screenshot it
+- If the poll has **Require login to respond** checked, students who scan it are sent through sign-in first
+
+## Presentation mode
+
+**Present** puts the chart panel into browser fullscreen. The header stays behind, so **Start Poll**, **Stop Poll**, and **← Back to Polls** are unavailable while presenting.
+
+While presenting:
+
+- The chart and question fill the screen
+- **Answer at:** and a larger QR code sit in the bottom-right corner
+- Responses keep updating live
+- The background follows your current theme, so switch to dark mode before projecting in a dark room
+
+To leave, press **Escape** or click the close button in the top-right corner. Leaving fullscreen by any other means also exits presentation mode.
 
 <Tip>
-Presentation mode is perfect for:
-- Displaying results while students are still responding
-- Revealing final results after closing the poll
-- Facilitating class discussion around the responses
+Enter presentation mode while students are still answering. Watching the bars move is what makes the poll worth projecting, and the same view works for discussing the final split after you stop the poll.
 </Tip>
 
-## Poll Controls
+## Starting and stopping from this page
 
-The response dashboard header includes controls for managing the poll:
+The single toggle button reflects the poll's state:
 
-### Start/Stop Poll
+- **Start Poll** opens a closed poll so students can answer
+- **Stop Poll** closes it, keeping the existing responses and the chart viewable
 
-- **Start Poll**: Makes a closed poll live again
-  - Students can begin submitting responses
-  - Real-time updates activate
+The button is disabled until the poll record finishes loading. The row actions menu on **Manage Polls** does the same job under different labels, **Open Poll** and **Close Poll**.
 
-- **Stop Poll**: Closes an active poll
-  - Stops accepting new responses
-  - Existing responses are preserved
-  - Results remain viewable
+## Tips for projecting
 
-### Poll URL
+- **Test the QR code** from the back of the room before class
+- **Have the URL as a backup**, since it is plain text you can read aloud
+- **Keep choice labels short**, because long labels wrap onto several lines in the narrow axis gutter
+- **Screenshot the chart** if you want a record. Nothing here exports, and deleting the poll deletes its responses
 
-The poll URL is displayed in the header and can be:
-- Copied and shared via chat, email, or LMS
-- Projected for students to type manually
-- Posted on a class website
+## Accessibility
 
-Format: `https://pawtograder.com/poll/{course_id}`
-
-## Tips for Effective Presentation
-
-### Before Projecting
-
-- Test the QR code from different distances
-- Ensure the projector resolution shows the chart clearly
-- Have a backup plan (URL) if QR scanning fails
-
-### During Class
-
-- Allow 30-60 seconds for students to respond
-- Watch the response count to know when most students have answered
-- Use presentation mode when you want all eyes on the results
-
-### Discussing Results
-
-- Point out the most popular answers
-- Ask students to explain their reasoning
-- Use surprising results to spark discussion
-
-## Accessibility Considerations
-
-- Bar charts use distinct colors for each option
-- Option labels are displayed as text alongside bars
-- Response counts are shown numerically
-- QR code has sufficient contrast for scanning
-- Poll URL provides text-based alternative to QR code
+- Every choice is labeled as text beside its bar, not by color
+- Counts are available from the numeric axis and from the per-bar tooltip
+- The **Answer at:** URL is a text alternative to the QR code for students whose camera scanning fails

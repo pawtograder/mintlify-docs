@@ -1,63 +1,73 @@
 ---
 title: "Polls Overview"
-description: "Conduct live in-class polling with real-time results, QR codes, and presentation mode"
+description: "Run live in-class polls with a projected bar chart, a QR code, and presentation mode"
 icon: "square-poll-vertical"
 ---
 
 # Polls Overview
 
-Pawtograder's Polls feature provides a quick and easy way for instructors to conduct live in-class polling. Polls are designed for real-time engagement during lectures, allowing instructors to gauge student understanding, gather quick feedback, or facilitate interactive discussions.
+Polls are for quick, live questions during class. You write one question with a fixed list of choices, open the poll, project the QR code, and watch a bar chart fill in as students answer. Polls are not graded and are not tied to assignments.
 
 ## Key Features
 
-- **Quick Creation**: Create polls in seconds with a simple visual builder
-- **Real-Time Results**: See student responses update instantly as they come in
-- **Multiple Poll Types**: Support for single choice and multiple choice questions
-- **Live Visualizations**: Display results to the class with built-in bar charts
-- **Presentation Mode**: Full-screen display for classroom projection with embedded QR code
-- **Manual Closing**: You decide when a poll stops accepting responses — polls stay live until you close them
-- **Anonymous or Authenticated**: Choose whether students must log in to respond
+- **Fast creation**: Write the question in the visual builder, or paste a JSON payload
+- **Two question types**: Multiple Choice and Single Choice, both offering a fixed list of choices
+- **Live bar chart**: One horizontal bar chart of responses per choice, updating as answers arrive
+- **Presentation mode**: A fullscreen view of that chart for classroom projection, with the QR code in the corner
+- **Manual closing**: A poll stays open until you close it
+- **Anonymous or signed in**: Choose whether students must log in to answer
+
+<Note>
+Polls are a course feature flag. When **Polls** is turned off under **Course Settings** > **Feature flags**, the **Polls** menu entry disappears for students and staff alike, though direct links to poll pages still work.
+</Note>
 
 ## Use Cases
 
-Polls are ideal for:
+Polls work well for:
 
-- **Comprehension Checks**: Quickly assess if students understand a concept before moving on
-- **Discussion Starters**: Gather opinions to spark class discussions
-- **Attendance**: Quick polls at the start of class (use "Require Login" for tracking)
-- **Feedback**: Get instant feedback on pace or clarity of instruction
-- **Concept Voting**: Let students vote on topics to cover or questions to answer
+- **Comprehension checks**: See whether the room follows a concept before you move on
+- **Discussion starters**: Gather opinions and use the split to open a discussion
+- **Feedback**: Ask about pace or clarity mid-lecture
+- **Concept voting**: Let students choose which topic to cover next
+
+<Warning>
+Polls are not an attendance tool. Even with **Require login to respond** turned on, the results page shows only the count per choice. There is no roster, no respondent list, and no export, so you cannot tell from the interface who answered.
+</Warning>
+
+## One poll link per course
+
+Every poll in a course shares one link, `https://<your-pawtograder-host>/poll/<course_id>`, and that link always serves the poll that was opened most recently. The QR code encodes the same link.
+
+Open one poll at a time. If two polls are live at once, students who scan the code reach the newer one and the older poll has no reachable link of its own.
 
 ## Polls vs Surveys
 
 | Feature | Polls | Surveys |
 |---------|-------|---------|
-| Purpose | Quick in-class engagement | Detailed feedback collection |
+| Purpose | Quick in-class questions | Detailed feedback collection |
 | Duration | Open until you close it | Configurable due dates |
-| Question Count | Single question per poll | Multiple questions |
-| Response Editing | One response per poll | Editable until submitted |
-| Real-Time Results | Live updates during class | Aggregated after collection |
-| Best For | Lectures, quick checks | Course evaluations, detailed feedback |
+| Question count | One question per poll | Multiple questions |
+| Repeat responses | One per student when login is required, unlimited when it is not | Editable until submitted |
+| Results | Live bar chart of counts per choice | Per-response table, analytics, and CSV export |
+| Best for | Lectures, quick checks | Course evaluations, detailed feedback |
 
 ## Getting Started
 
-To use Polls, navigate to your course and select "Polls" from the course navigation. From there, you can:
-
-1. **Create new polls** using the visual builder
-2. **Manage existing polls** (open, close, delete)
-3. **View responses** with real-time analytics
-4. **Present results** in fullscreen mode for the classroom
+Choose **Polls** from your course navigation to reach **Manage Polls**, the list of every poll in the course. From there you create polls, open and close them, and open a poll's results page.
 
 <Note>
-Polls are scoped to your class - you can only view and manage polls for courses you are an instructor or grader for.
+Creating, opening, closing, and deleting polls is limited to instructors and graders in that course. Graders have the same poll permissions as instructors.
 </Note>
 
-## Quick Start
+Running your first poll takes eight steps:
 
-1. Go to **Polls** in your course navigation
-2. Click **Create Poll**
-3. Click **Open Visual Builder** to design your question
-4. Choose whether to **Require login**
-5. Click **Publish Poll** to make it live
-6. Share the QR code or link with students
-7. Watch responses come in real-time!
+1. Choose **Polls** in your course navigation, then click **+ Create Poll**
+2. Click **Open Visual Builder**, enter your question prompt, pick **Multiple Choice** or **Single Choice**, and add your choices
+3. Click **Use This Poll** to write the question back into the **Poll Question JSON** field
+4. Optionally click **Preview Poll** to see the student view
+5. Decide whether to check **Require login to respond**
+6. Click **Publish Poll**, which opens the poll immediately, or **Save as Draft** to open it later
+7. Open the poll's results page, project the **Answer at:** link and QR code, and click **Present** for fullscreen
+8. Click **Stop Poll** when you are done collecting responses
+
+See [Creating Polls](/staff/polls/creating-polls) for the full flow and [Poll Visualizations](/staff/polls/visualizations) for what the results page shows.
