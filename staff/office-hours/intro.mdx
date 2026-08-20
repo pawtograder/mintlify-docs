@@ -1,139 +1,258 @@
 ---
 title: "Office Hours Overview"
-description: "Set up and run office-hours queues, work the help queue, and resolve student help requests"
+description: "Run office-hours queues: work a shift, claim and resolve help requests, and configure queues, templates, and moderation"
 icon: "headset"
 ---
 
-Office hours in Pawtograder are a real-time queue system for live help. Students submit help requests into a queue, course staff start working a queue to indicate they're available, claim requests, and chat with students by text or video until the request is resolved.
+# Office Hours Overview
 
-This page is the staff reference. The student-facing view is documented under [Office Hours for Students](/students/office-hours).
+Pawtograder's office hours are a live help queue. Students file help requests, staff go on duty by starting work on a queue, and a staff member claims each request and answers it in chat, on a video call, or in person until it is resolved.
 
-## Queues
+Everything described here lives under **Manage > Office Hours**, which instructors and graders can open and students cannot. The student-facing side is documented in [Office Hours for Students](/students/office-hours).
 
-A course can have any number of help queues. Common patterns include a queue per campus, separate text and video queues, or a queue per assignment during a busy week.
+## The office hours header
 
-Each queue has the following configuration (set in **Manage > Office Hours > Settings > Queue Management**):
+Three items sit at the top of every staff office hours page:
 
-- **Name** and **description** — shown to students when picking where to request help.
-- **Queue type** — `Text Chat`, `Video Call`, or `In Person`. Determines how staff and students communicate.
-- **Active flag** (`is_active`) — see [Active vs inactive queues](#active-vs-inactive-queues) below.
-- **Available flag** (`available`) — when unchecked, the queue stops accepting new requests but remains visible.
-- **Demo flag** (`is_demo`) — demo queues are labelled "DEMO - NOT A REAL QUEUE" in the UI, send no notifications, and do not require active staff to accept requests. Use them for training.
-- **Ordinal** — controls display order. Lower numbers appear first; ties break alphabetically by name.
-- **Max concurrent requests** — optional cap on the number of open requests in the queue at once.
-- **Closing time** — optional timestamp at which the queue automatically closes.
-- **Color** — optional accent color used in queue badges.
+- **Working** is the landing page. Before you go on duty it lists the course's active queues; once you are on duty it lists the requests you are responsible for. A green badge beside it names the queue you are working, or counts them when you are working more than one.
+- **All Requests** browses one queue at a time, resolved requests included.
+- **Settings** is a menu rather than a page. Its entries are the configuration and reporting surfaces listed below.
 
-Queues can be linked to Discord channels and to calendar events. When a calendar event's queue name matches a queue (or is explicitly linked), it appears as the staffed time for that queue on the dashboard.
+A **Search requests...** box sits at the right of the header, next to a red **Stop Working (n)** button that appears only while you are on duty. On a request page, a breadcrumb shows the queue name followed by the request number, and the queue name links back to that queue in All Requests.
 
-### Active vs inactive queues
+| Settings entry | What it does |
+| --- | --- |
+| **Queue Management** | Create, edit, and delete queues, and edit the course's office hours description. |
+| **Assignment Management** | Read-only record of who worked which queue and when, plus force-end and delete. |
+| **Templates** | Prompt structures students fill in when filing a request. |
+| **Moderation** | Warnings and bans against individual students. |
+| **Student Karma** | Private staff notes and a hand-set score per student. |
+| **Student Activity** | Recent office hours activity, moderation, and karma for one student. |
+| **Time Tracking** | Per-TA time on requests, with a CSV export. |
+| **Feedback** | Thumbs-up and thumbs-down ratings students leave when they resolve. Instructors only. |
 
-The **active** flag controls whether a queue participates in the live office-hours experience:
+<Note>
+Graders see seven of the eight entries. **Feedback** is instructor-only, and its underlying data is readable only by instructors and by the student who submitted it, so a grader has no route to it. Deleting a moderation action or a work session is also restricted to instructors.
+</Note>
 
-- **Active queues** appear on the student "Browse Queues" view and on the staff dashboard. Students can submit new requests to them (subject to the `available` flag and staffing).
-- **Inactive queues** are hidden from both students and the staff dashboard, but remain editable under Queue Management.
+## Going on duty
 
-Mark a queue inactive when it isn't currently in use — for example, an assignment-specific queue that's outside its window. You don't need to delete it; toggling `is_active` keeps history intact.
+Open **Working**. Under the **Help Queues** heading, each queue shows its mode, its count of unresolved requests, who is on duty, and a green **Start Working** button. Only queues marked active appear here; the page says so and points you at Queue Management for the rest.
 
-## The staff dashboard
+Starting work creates an active `help_queue_assignments` row tying you to that queue. Other staff see you in the queue's staff-on-duty list, students see the queue as staffed, and the queue becomes selectable in the student **New Request** menu. You can work several queues at once. **Stop Working** on a queue card ends that one assignment; **Stop Working (n)** in the header ends all of them at once.
 
-Open **Manage > Office Hours**. The page has two modes depending on whether you're currently working a queue:
+<Note>
+Starting work always records a concurrent-student limit of `1`. No control anywhere changes that number, and nothing reads it before routing another request to you. Assignment Management displays the value, and that is all it does.
+</Note>
 
-- **Not working any queue** — you see the **TA Dashboard**, listing all active queues with their depth, currently-working staff, and current/upcoming scheduled staff times pulled from the office-hours calendar. Click **Start Working** on a queue to join it.
-- **Working at least one queue** — you see the **Working view**, listing:
-  - **Requests I'm Responsible For** — split into **My Assigned** (requests where `assignee` is you and status is `open` or `in_progress`) and **Unassigned** open requests in queues you're working.
+### Staffing times and the schedule
 
-The header bar provides quick navigation to **Working**, **All Requests**, and **Settings** (Queue Management, Assignment Management, Templates, Moderation, Student Karma, Student Activity, Time Tracking, and — for instructors — Feedback).
+Each queue card lists the staff currently on duty, the end time of the shift in progress with the time remaining, and the start of the next scheduled shift. Those times come from the course's office hours calendar, not from the assignment rows: an event counts toward a queue when it is explicitly linked to the queue, or when the event's queue name matches the queue's name, ignoring case. With nobody on duty the card reads "No staff currently on duty".
 
-### Starting and stopping work
+When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings > Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
-Clicking **Start Working** creates an active `help_queue_assignments` row tying you to that queue. Other staff and students see you listed as currently staffing it. Click **Stop Working** (per queue, or the count button in the header to stop all at once) to end the assignment.
+### Two banners you may see
 
-You can be working multiple queues simultaneously. The header shows a green badge with the queue name (or count) for any queues you're currently working.
+A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
 
-## Resolving requests
+## Working a request
 
-Help requests move through four statuses, defined by the `help_request_status` enum:
+Open a request from the Working view, from All Requests, from search, or from the sidebar on any request page.
+
+### Claiming and releasing
+
+**Start Helping** assigns the request to you and moves it to in progress. Your name and a **Helping** badge appear for the student, along with a timer. That timer counts from the request's last update rather than from the moment you claimed it, so treat it as a rough figure and use Time Tracking for real durations. **Stop** clears the assignee and returns the request to the queue as open.
+
+Assignment is not exclusive. Any instructor or grader in the course can claim, resolve, or reassign any request, whether or not they are working that queue.
+
+### The request view
+
+The header carries the request title, its status, a **Private** badge when the request is private, and how long ago it was filed. Alongside **Start Helping** and **Resolve** you get:
+
+- **Watch** and **Unwatch**, which control whether you receive notifications for this request.
+- **Pop out chat**, which opens the conversation in its own window so you can keep the queue in view.
+- **Get AI help**, which copies a prompt about this request to your clipboard.
+- A Discord link, **Moderation**, and **Karma**, all staff-only.
+- **Start Video Call** when no call is running.
+
+Below the header, a collapsible row labeled with the request's student count expands to the student list, the referenced code, and the work session history. A collapsible sidebar (**Show queue requests**) lists the rest of that queue in three groups: **Working** for requests assigned to you that are still active, **Open** for everything else unresolved, and **Resolved** newest first. Unread-message counts appear only on requests assigned to you.
+
+### Students and referenced code
+
+**Edit student list** adds or removes students on a request, subject to at least one student remaining. Use it to merge two students who came to office hours with the same question into one conversation.
+
+Students can attach a submission, specific files from it, and line numbers, and staff see those references inline. **Edit code references** lets you change them.
+
+<Warning>
+Referencing a submission forces the request private, and clearing the last reference forces it public again. Removing a student's code references from a request that was private for that reason will publish it to the class. The picker also lists your own submissions rather than the student's, so it is more useful for reviewing and removing references than for adding them.
+</Warning>
+
+### Video calls
+
+Only instructors and graders see **Start Video Call**, and it works on any queue whatever the queue's type. Once a call is live, everyone who can see the request gets **Join Video Call** and staff also get **End Call**.
+
+<Warning>
+End the call before you resolve the request. Both **Join Video Call** and **End Call** are disabled once a request is resolved or closed, which leaves the meeting running with no way to shut it down from the interface. The command-line tool refuses to close a request with a live call for the same reason.
+</Warning>
+
+### Work session history
+
+Pawtograder records a work session automatically whenever a request is assigned, and closes it when the request is unassigned, handed to someone else, or resolved. Each session stores the queue depth and the longest wait in the queue at the moment it opened, which is the context you want when reading a long session later.
+
+The panel lists sessions newest first with the TA, duration, queue depth, and start and end times, and totals them when there is more than one. Instructors can delete a session. The edit button is not implemented and reports that the feature is coming.
+
+### Resolving
 
 | Status | Meaning |
 | --- | --- |
-| `open` | Submitted, not yet picked up. Visible in the queue. |
-| `in_progress` | A staff member has claimed it and is helping. |
-| `resolved` | The request is done. Removed from the queue. |
-| `closed` | Closed without resolution (e.g. moderation, abandoned). |
+| `open` | Filed, unclaimed, still in the queue. |
+| `in_progress` | A staff member has claimed it. |
+| `resolved` | Finished. Removed from the open list. |
+| `closed` | Also finished, and treated exactly like `resolved` in every list. |
 
-From an open request, a staff member clicks **Start Helping** to take it. This sets `assignee` to the current staff profile and the status to `in_progress`. The student sees the assignee's name and a "Helping" badge with a running timer (based on `updated_at`).
+Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Office Hours for Students](/students/office-hours)); staff do not get that dialog.
 
-While helping, the assignee can:
+<Note>
+When staff resolve a request, no resolution status or note is recorded, only who resolved it and when. If you want data on how requests actually ended, ask students to resolve their own.
+</Note>
 
-- Send text chat messages. Unsent text remains in the input if the connection drops so messages aren't lost.
-- Click **Start Video Chat** to open a video call with screen sharing. After the staff member starts the call, the student sees a **Join Video Chat** button.
-- Click **Stop** to release the request back to the queue (clears `assignee`, returns status to `open`).
-- Resolve the request when finished.
+Nothing in the web interface sets `closed`. The only route to it is `pawtograder help-requests close`, which is instructor-only and defaults to that status. See [Command Line Interface](/staff/cli).
 
-### Who can resolve
+Once a request is resolved or closed, its chat becomes read-only for everyone and reads "This is a historical chat view. New messages cannot be sent."
 
-Either the assigned staff member or the student can mark a request as resolved.
+## Finding requests
 
-When a **student** resolves their own request, they pick a `help_request_resolution_status`:
+### All Requests
 
-| Value | Label |
+Pick a queue from the list on the left, which shows every queue in the course including inactive ones, with its open count. The pane on the right splits that queue into **Open Requests** and **Resolved Requests** with counts, and offers a search box matching request text and student names, a status filter, and an **Oldest First** and **Newest First** toggle.
+
+Open requests are always ordered oldest first, whatever the toggle says; the toggle reorders the resolved list only. Nothing you or a student does moves a request up the open list.
+
+### Search
+
+The header search box shows a handful of matches as you type. Pressing Enter opens the full **Search Help Requests** page, which matches request text, student names, queue names, and request IDs, and adds status chips with counts and a queue filter. Results put in-progress requests first, then open, then resolved and closed, each group newest first. The query, status, and queue are all in the URL, so a search is worth bookmarking or pasting to a colleague.
+
+## Queue Management
+
+A course can have any number of queues. Common shapes are one per campus, one per lab section, or one per assignment during a busy week.
+
+Each card shows the queue's name, type, demo badge, an **Inactive** chip when it is not active, its description, and whether it is available. From the card you can open its Discord channel, **Edit** it, or **Delete** it after confirming. **Create New Queue** and **Edit Help Queue** offer the same fields:
+
+| Field | Effect |
 | --- | --- |
-| `self_solved` | I solved it myself |
-| `staff_helped` | Staff helped me |
-| `peer_helped` | A peer helped me |
-| `no_time` | No time to wait |
-| `other` | Other (with optional free-text notes) |
+| **Queue Name** | Shown to students everywhere the queue appears. |
+| **Description** | Shown under the queue name; markdown is rendered. |
+| **Queue Type** | `Text Chat`, `Video Call`, or `In Person`. A label only. It picks an icon and a badge color and restricts nothing: video calls and text chat work on every queue. |
+| **Ordinal** | Display order, lowest first, ties broken alphabetically by name. |
+| **Queue is available to students** | The switch that matters. Unchecking it stops new requests. |
+| **Queue is active** | Controls whether the queue appears on the staff dashboard and in the student status card. |
+| **Demo queue** | Marks the queue **DEMO - NOT A REAL QUEUE**, exempts it from the staffing requirement, and suppresses every notification it would otherwise send. Use it for training. |
 
-Students may also optionally provide thumbs-up/thumbs-down feedback with a comment when they resolve.
+Ordinals are kept unique by a database trigger. Moving a queue to a position that is taken shifts the queue already there, and everything after it, one place later, so you never end up with two queues claiming the same slot.
 
-Staff resolve requests directly from the request view; the resolution status will reflect that staff closed the request.
+<Warning>
+Three fields on this form, and one figure on the queue card, are stored and displayed but change nothing.
 
-## Help request templates
+- **Max Concurrent Requests** is recorded and displayed on the queue card. No check anywhere caps or blocks new requests when the count is reached.
+- **Closing Time** is recorded and displayed on the queue card as a "Closes" time. No job, trigger, or client check closes a queue when it arrives, despite the helper text saying the queue "will automatically close". To stop new requests at a set time, uncheck **Queue is available to students** yourself.
+- **Color** is saved and never read. Queue badges take their color from the queue type instead.
+- **Queue Depth** on the card reads a stored column that only seed data and migrations ever write, so it is not the live depth. The live count is the open-request number on the dashboard and the queue cards.
+</Warning>
 
-Instructors and graders can create help request templates under **Settings > Templates**. A template is a pre-filled help request body that prompts students to include specific information (steps tried, what they expected vs. observed, links to discussion posts, etc.).
+### Available, active, and who sees what
 
-Each template has:
+The two flags are not interchangeable, and no single surface checks both.
 
-- **Name** — what the template is called in the picker.
-- **Category** — used to group templates in the picker (defaults to `General`).
-- **Description** — optional short explanation of when to use this template.
-- **Template content** — the body inserted into the student's new request, including any placeholder prompts.
-- **Active flag** — inactive templates are hidden from students but kept for reference.
+| Surface | Filter applied |
+| --- | --- |
+| Staff dashboard (**Working**) | Active queues only |
+| Staff **All Requests** | No filter; every queue is listed |
+| Student office hours page and help drawer | Available queues only |
+| Student office hours status card on the course home page | Available and active |
+| Filing a new request | Available, or a demo queue |
 
-The template list shows a usage count per template, so you can see which prompts students are actually picking up. Use templates to enforce a "have you tried X" checklist before students join the queue.
+An inactive queue that is still available therefore stays listed for students and still accepts requests, while disappearing from your dashboard. Use **available** to close a queue for business, and **active** to tidy your own dashboard.
 
-### Referenced submissions and files
+### Office hours description
 
-Students can attach a submission, specific submission files, and even line numbers to a help request. When a submission or file is attached, the request is automatically marked **private** (visible only to the student and staff) — the system enforces this when refs are added or removed, so private code doesn't accidentally end up on a public request. Staff helping the request see those file references inline in the chat view.
+The **Office Hours Description** field at the top of Queue Management writes one markdown block for the whole course. It renders in the student help drawer and above the new-request form. Its helper text claims it appears at the top of the office hours page, which it does not.
+
+## Templates
+
+A template is a prompt structure that pre-fills the description box on a new request, so students arrive having already answered "what have you tried" and "what is the error". Under **Settings > Templates**, each template has a name, a category, an optional description, the content itself, and an active flag. The category groups your own list on this page; the student picker lists names only.
+
+Templates are grouped by category under **Active Templates** and **Inactive Templates**, and each card offers **Edit**, **Deactivate** or **Activate**, and **Delete**.
+
+<Tip>
+Creating your first active template makes template selection mandatory for students. When exactly one active template exists it is applied automatically and its content is pre-filled; with two or more, students must pick one. Deactivating a template hides it from students without losing it.
+</Tip>
+
+## Assignment Management
+
+**Active Assignments** lists who is on duty right now; **Assignment History** lists past shifts, newest first, capped at 20 rendered with a line telling you the true total. Each card gives the TA, the queue, when the shift started and ended, its duration in minutes, and the concurrent-student limit described above.
+
+There is no way to schedule a shift here. Staff put themselves on duty with **Start Working**, and this page is the record of it plus two corrections: **End Assignment** closes a shift somebody left open, and **Delete** removes the row.
+
+## Time Tracking
+
+**TA Time Tracking** is reachable from the Settings menu and from `/manage/office-hours/time-tracking`, which serves the same page. It reads the work sessions described above, so it covers time spent on individual requests rather than time spent on duty.
+
+The dashboard opens with total time today, total time over the last seven days, average session duration, and session count, all responding to the date range in **Filter by date**. Below that sit a **Time Worked by Day** bar chart, a **TA Performance Summary** giving each TA a total, a session count, an average, and a comparison against the course average, and an **All Work Sessions** table with a filter under every column.
+
+**Export to CSV** downloads the filtered rows, ignoring pagination, as `work-sessions-<course>-<date>.csv`. The file adds start and end timestamps to the visible columns, writing `Active` as the end of a session still running. The **Notes** column is always empty: nothing in the product writes session notes.
+
+## Moderation
+
+**Create Moderation Action** takes a student, an action type of **Warning**, **Temporary Ban**, or **Permanent Ban**, a reason, and a specific help request the action relates to. A duration is required for a temporary ban, and the expiry is computed when you save.
+
+Actions are listed as cards with the type, a **Permanent**, **Active**, or **Expired** badge, the student, the moderator, the reason, the timestamps, and the request number, filtered by **All**, **Active**, or **Expired**. A warning shows the student a banner on office hours pages for seven days and takes nothing away. A ban replaces every student office hours page with a notice giving the reason and the time remaining, and blocks the chat composer.
+
+Instructors can delete a moderation record, and deleting is the only way to lift a ban early. Graders can create actions but not delete them.
+
+<Warning>
+Bans are enforced in the browser, not in the database. The office hours pages a banned student loads are replaced, but the underlying tables carry no ban check, so a determined student working through the API is not blocked. Treat moderation as a course-policy tool, not a security boundary.
+</Warning>
+
+## Student Karma
+
+**Student Karma Management** holds one private note per entry: a student, a score the form limits to the range -20 to +20, and internal notes students never see. The list sorts by score, badges each entry from **Excellent** to **Problematic**, and totals the entries above and below zero. The modal offers guideline bands for the score.
+
+<Warning>
+Karma is display-only. The score is read to sort, badge, and star this page and the Student Activity summary. It does not change queue order, request priority, or whether a student can file a request, and students cannot see it. A database trigger on `student_karma_notes` also reads a column the table does not have, so saving an entry may fail outright.
+</Warning>
+
+Do not confuse this with the discussion karma on student profiles, which is computed from discussion likes. See [Discussion](/staff/discussion).
+
+## Student Activity
+
+Pick a student and the page shows three stacked sections: their karma entry if one exists, their five most recent moderation actions, and their ten most recent office hours events, each labeled as a request created, updated, or resolved, a message sent, or a video joined or left. With no student selected it aggregates recent activity across the roster.
+
+The student picker is the only control. There is no date range and no export; for exportable numbers use Time Tracking.
+
+## Feedback
+
+Instructors get **Help Request Feedback**, which collects the thumbs-up and thumbs-down ratings students leave when they resolve a request, along with any comment. Counters at the top give total, positive, negative, and how many carry a comment. You can search by comment or student name, filter to positive or negative, and open the request each rating came from.
+
+Feedback is not anonymous: each card names the student. Graders cannot see this page or its data.
 
 ## Notifications
 
-The office-hours UI surfaces multi-channel notifications (browser notifications, page-title updates, sound alerts, and a favicon badge) so participants don't have to keep the page focused.
+Two separate mechanisms tell staff about queue activity.
 
-If browser-notification permission isn't granted, a `NotificationPermissionWarning` banner appears on the dashboard with a button to request permission. You can test notifications from your help request page.
+In-app notifications reach every instructor and grader in the course when a request is created, regardless of who is watching it or which queues they work. Demo queues send nothing. Notifications about later events, new messages and status or assignment changes, go only to users watching that request, and picking up a request does not start you watching it.
 
-These notifications behave the same for staff and students. The student-facing details — including the persistent **Get Help** button and the active-request widget — live in [Office Hours for Students](/students/office-hours).
+<Tip>
+Press **Watch** on a request you are helping. Only the student who filed a request is watched automatically, so without it you will not be notified of their replies.
+</Tip>
 
-## AI assistance
+Browser notifications, the sound alert, the flashing tab title, and the favicon badge fire only while the tab is in the background, and only for other people's messages. Configure them from **Notification Settings** in your user menu.
 
-When viewing a help request or a discussion thread, instructors and graders see an **AI Help** button that generates a Model Context Protocol (MCP) context URL. Connect that URL to any MCP-compatible AI client (Claude Desktop, Cursor, etc.) and the assistant can pull in the request, the student's referenced submission, test results, and build output to help you diagnose the issue.
+## AI help
 
-AI assistance is restricted to instructors and graders; student-identifying data is not exposed to the AI. Configuration details, supported clients, and the available MCP tools are documented in [AI Assistance](/staff/ai-assistance).
-
-## Other settings
-
-The **Settings** menu in the Office Hours header also exposes:
-
-- **Assignment Management** — manage staff queue assignments and shift records.
-- **Moderation** — moderation actions taken on disruptive students.
-- **Student Karma** — adjust per-student karma used for request prioritization.
-- **Student Activity** — per-student activity summary across help requests.
-- **Time Tracking** — staff time spent working queues.
-- **Feedback** (instructor-only) — student feedback collected at resolution time, used to monitor quality of help.
+On a request, the **Get AI help** button copies a prompt to your clipboard that names the request, the class, and any referenced submission, and tells an assistant which Pawtograder MCP tools to call for the details. Paste it into an MCP-connected assistant. No model is called from Pawtograder itself, and if you have no API token yet the button opens setup instructions instead. Only instructors and graders see it. See [AI Assistance](/staff/ai-assistance) for the server, the tokens, and the available tools.
 
 ## See also
 
-- [Office Hours for Students](/students/office-hours) — the student-side experience (Get Help button, help drawer, active-request widget).
-- [AI Assistance](/staff/ai-assistance) — setting up and using the MCP server and AI Help button.
-- [Discussion](/staff/discussion) — for asynchronous help that doesn't need a live queue.
+- [Office Hours for Students](/students/office-hours) for the student experience, including the Get Help button, the request form, and resolution.
+- [Command Line Interface](/staff/cli) for listing and closing help requests from a terminal.
+- [Discussion](/staff/discussion) for asynchronous help that does not need a live queue.
