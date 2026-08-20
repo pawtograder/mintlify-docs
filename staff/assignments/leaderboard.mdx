@@ -1,97 +1,61 @@
 ---
 title: "Assignment Leaderboard"
-description: "Enable and configure optional leaderboards for competitive assignments"
+description: "Show students a pseudonymous ranking of the top autograder scores"
 icon: "trophy"
 ---
 
 # Assignment Leaderboard
 
-The assignment leaderboard feature allows you to create competitive assignments where students can see their rankings based on autograder scores. This feature is optional and can be enabled on a per-assignment basis.
+The leaderboard is a single per-assignment checkbox. With it on, students see a
+sidebar panel on the assignment page ranking the top autograder scores in the
+class under pseudonyms. There is nothing else to configure.
 
-## Enabling Leaderboards
+## Enabling the leaderboard
 
-To enable a leaderboard for an assignment:
+1. Open the assignment and choose **Edit Assignment**.
+2. Expand **Advanced settings**, the collapsed section labeled "Regrade
+   deadline, anonymous grading, leaderboard, repository analytics".
+3. Check **Show autograder leaderboard to students**.
+4. Save the assignment.
 
-1. Navigate to the assignment configuration
-2. Find the **Leaderboard** settings section
-3. Toggle the leaderboard feature on
-4. Configure privacy and display settings
+The same checkbox appears when you first create an assignment. Unchecking it
+hides the panel again: the setting only controls whether the panel renders, so
+turning it back on shows the same rankings as before.
 
 <Note>
-Leaderboards are designed to be less cluttering and more optional. Students who don't want to engage with competitive elements can easily ignore them.
+An enabled leaderboard shows nothing at all until at least one submission has
+been autograded — the panel is hidden rather than empty. If you enable it and see
+no panel on a fresh assignment, that is expected.
 </Note>
 
-## Leaderboard Configuration
+## What students see
 
-### Privacy Settings
+- A panel headed **🏆 Leaderboard**, with **Top N by autograder score** beside it.
+- Columns **Rank**, **Student**, and **Score**, showing at most ten rows.
+- 🥇 🥈 🥉 for the first three ranks, plain numbers below that.
+- Scores written as the autograder score over its maximum.
+- Names shown as pseudonyms — the leaderboard is keyed on each student's public
+  profile, so real names never appear.
+- The reader's own row highlighted with a **You** badge. If they rank outside the
+  top ten, their rank is listed under **Your ranking:** below the table instead.
 
-Configure how student information is displayed:
+## How rankings are computed
 
-- **Public with names**: All students see full rankings with real names
-- **Anonymous rankings**: Students see rankings but identities are hidden
-- **Personal view only**: Students only see their own rank and score
+- One entry per student per assignment, taken from that student's **active**
+  submission only.
+- Entries are sorted by autograder score, descending. There is no tie-break:
+  students with equal scores appear in an arbitrary order.
+- On a group assignment, every group member gets their own entry carrying the
+  group's score. There is no single row for the group.
+- Entries update in real time as the autograder finishes a run and as students
+  change which submission is active.
 
-### Display Options
+<Warning>
+A score reaches the leaderboard as soon as the autograder finishes, whether or
+not you have released grades. If you do not want autograder scores visible to the
+class before release, leave the checkbox off.
+</Warning>
 
-Customize what information appears on the leaderboard:
-
-- **Show scores**: Display actual autograder scores
-- **Show submission times**: Include when submissions were made
-- **Rank ties**: How to handle students with identical scores
-
-## Use Cases
-
-Leaderboards work well for:
-
-### Optimization Challenges
-
-Create assignments where students compete to:
-- Write the fastest algorithm
-- Use the least memory
-- Achieve the highest efficiency score
-
-### Performance Competitions
-
-Design problems where:
-- Multiple solutions are correct but vary in quality
-- Students can iteratively improve their submissions
-- Extra credit is awarded to top performers
-
-### Engagement and Motivation
-
-Use leaderboards to:
-- Add a fun, competitive element to assignments
-- Encourage students to optimize their solutions
-- Create friendly competition within the class
-
-## Best Practices
-
-<Tip>
-Make leaderboards optional and low-stakes. They should enhance learning, not create excessive stress or competition.
-</Tip>
-
-### Recommendations
-
-1. **Communicate clearly**: Explain that leaderboards are optional and for fun
-2. **Provide opt-out**: Allow students to hide their names if they prefer
-3. **Balance competition**: Don't make leaderboard rankings worth significant grade points
-4. **Focus on learning**: Emphasize that understanding concepts matters more than rankings
-5. **Monitor engagement**: Ensure leaderboards aren't causing undue stress
-
-## Managing Leaderboards
-
-As an instructor, you can:
-
-- **View full rankings**: See all students and their scores
-- **Export data**: Download leaderboard data for analysis
-- **Disable mid-assignment**: Turn off leaderboards if they're causing issues
-- **Reset rankings**: Clear the leaderboard if needed (e.g., after fixing autograder bugs)
-
-## Technical Details
-
-Leaderboards are calculated based on:
-
-1. **Active submission**: Only the student's currently active submission counts
-2. **Autograder score**: The score from the autograder component
-3. **Tie-breaking**: Earlier submissions rank higher in case of identical scores
-4. **Real-time updates**: Rankings update automatically as new submissions are processed
+There is no staff-side leaderboard page, and no control for exporting or
+resetting the rankings. To see the panel, open the assignment's student-facing
+page.
