@@ -12,17 +12,30 @@ Pawtograder's surveys feature enables instructors to collect structured feedback
 
 Navigate to **Surveys** in the course navigation menu to access the survey management dashboard.
 
+Only instructors can create, edit, publish, close, or delete surveys. Graders can open **View Responses** on a published or closed survey; on a draft row they see the title without a link and a disabled **No Actions Available** menu.
+
+<Note>
+Surveys are controlled by a course feature flag under **Course Settings → Feature flags**. Turning it off hides the **Surveys** menu entry for students and staff, but it does not block direct links to survey pages.
+</Note>
+
 <Frame>
   <img src="/images/staff/surveys/survey-dashboard.png" alt="Survey Dashboard showing all surveys with status, response counts, and actions" />
 </Frame>
 
-The survey dashboard displays all surveys for your course with key information:
+The survey dashboard lists every survey for your course in a table with these columns:
 
-- Survey title and description
-- Status (Draft, Published, or Closed)
-- Response count
-- Created date
-- Quick action buttons (View Responses, Edit, Delete)
+- **Title** — links to the responses page, or to the editor for a draft
+- **Status** — Draft (yellow), Published (green), or Closed (red)
+- **Version** — a `v1`-style badge
+- **Responses** — `n/m responded` against the number of assigned students, or `—` for a draft
+- **Created**
+- **Due date**
+- **Linked assignment**
+- **Actions** — a ⋯ menu whose entries depend on the survey's status
+
+Filter the table with the **All**, **Active**, **Drafts**, and **Closed** buttons above it. **Active** means published.
+
+The survey description is not a column: it is instructor-only metadata to help you find the survey later.
 
 ## Creating a New Survey
 
@@ -31,11 +44,12 @@ The survey dashboard displays all surveys for your course with key information:
 1. Click the **Create New Survey** button in the top-right corner
 2. Enter a survey title (required)
 3. Add an optional description to provide context for students
-4. Open the **Visual Builder** to add questions (see Visual Builder section below)
+4. Click **Open Visual Builder** to add questions (see Visual Builder section below)
 5. Configure survey settings (see Survey Settings section below)
 6. Choose the due date and whether to allow students to edit their responses after submission
-7. Preview the survey if needed, then click **Save Survey**
-8. Choose to **Save as Draft** or **Publish** immediately
+7. Click **Preview as Student** to check the survey if needed
+8. Set **Status** to either "Draft — saved but hidden from students" or "Published — visible to students (subject to the Available at date above)"
+9. Click the submit button at the bottom of the form. Its label follows the status you chose: **Publish Survey** or **Save Draft**
 
 <Frame>
   <img src="/images/staff/surveys/survey-visual-builder.png" alt="Survey Visual Builder interface for designing questions" />
@@ -46,7 +60,7 @@ The survey dashboard displays all surveys for your course with key information:
 Save time by starting with a pre-built survey template:
 
 1. Click the **Create New Survey** button
-2. Click **Load Template**
+2. Click **Browse Templates**
 3. Search or filter templates by:
    - **All Templates** or **My Templates**
    - **Visibility**: Class-Only or Global
@@ -165,19 +179,31 @@ Always preview your survey before publishing to catch any formatting issues or u
 - Due date validation ensures deadline is in the future
 - Editing published surveys is possible but use caution (see Editing Published Surveys below)
 
+#### Closed
+
+Close a published survey from the ⋯ menu on its dashboard row. Closing is the only action that stops responses:
+
+- The database rejects every new or edited response, because the write policy requires the survey to be published
+- The survey disappears from the student Surveys page
+- You and your graders keep full access to the responses and analytics
+
+<Warning>
+There is no reopen action. A closed survey can only have its responses viewed or be deleted, so close a survey only once you are done collecting responses.
+</Warning>
+
 ### Due Date Configuration
 
 1. Click the date/time picker in the survey form
 2. Select a date and time for the survey deadline
 3. The system converts to your configured course time zone (see [Course Settings](/staff/course-settings#time-zone-configuration))
-4. Students see a countdown timer showing time remaining
-5. After the due date passes, students can no longer submit responses
 
-**Due Date Display:**
+The due date is a soft deadline, as the form itself says: "A soft deadline shown to students. After it passes the survey is marked overdue, but students can still respond." Neither the app nor the database rejects a late response, and the submission time is recorded on every response.
 
-- Red "Closed" indicator when past due
-- Orange warning when less than 24 hours remain
-- Days and hours remaining for upcoming deadlines
+<Warning>
+Setting a due date does not stop responses. Use **Close** on the survey's ⋯ menu when you need responses to actually stop.
+</Warning>
+
+Students see the due date on their Surveys page and a Pending, In progress, or Overdue badge on their dashboard. The color-coded countdown is on your response dashboard, not theirs (see Time Remaining below).
 
 <Note>
 You can configure your course's default time zone in **Course Settings**. All dates and times throughout Pawtograder (including survey deadlines) are displayed in the configured course time zone. The default is America/New_York (Eastern Time).
@@ -201,19 +227,21 @@ Use the available date to schedule surveys in advance without manually publishin
 
 ### Response Editing Control
 
-Toggle **Allow Response Editing** to control whether students can modify their submissions after initial submission.
+Toggle **Allow Response Editing** to control whether students can modify their submissions. The form summarizes it as: "When on, changes auto-save. When off, a student's first submission is final."
 
 **Enabled:**
 
-- Students see an edit notification when taking the survey
-- **View Submission** button changes to allow editing
-- Timestamp updates to show last modification time
+- Answers autosave as the student works, so a student can close the page and come back to a partly finished survey
+- After submitting, the student sees a green banner reading "You can edit your response since editing is allowed for this survey." and can submit again
+- Each re-submission updates the recorded submission time
 
 **Disabled:**
 
-- Students cannot change responses after submitting
-- Original submission timestamp preserved
-- Ensures responses reflect immediate reactions
+- Nothing is saved until the student clicks **Complete**, so a student who closes the page loses their answers
+- After submitting, the student sees a yellow banner reading "This survey has been submitted and cannot be edited." and the survey renders read-only
+- The original submission time is preserved
+
+The button on the student's survey list reads **Start Survey**, **Continue Survey**, or **View Submission** based on their own progress, not on this setting.
 
 ### Linking Surveys to Assignments
 
@@ -262,7 +290,7 @@ Use specific student assignment for:
 
 ## Peer Feedback Surveys
 
-Peer feedback surveys allow students to provide constructive feedback about their teammates in group projects. A pre-built **Peer Feedback Survey** template is available in the Template Library.
+Peer feedback surveys allow students to provide constructive feedback about their teammates in group projects. No templates ship with Pawtograder: a fresh course starts with an empty Template Library, and templates appear there only when an instructor saves one or when the instance was populated with the sample library. If your Template Library was seeded, it includes a **Peer Feedback Survey** template.
 
 ### Current Implementation
 
@@ -274,7 +302,7 @@ The current implementation does not include automated peer-to-peer assignment (e
 
 ### Peer Feedback Template Structure
 
-The built-in peer feedback template includes the following questions that can be customized for your course:
+The seeded peer feedback template includes the following questions, which you can customize for your course:
 
 **Rating Questions (1-5 scale):**
 
@@ -297,7 +325,7 @@ The built-in peer feedback template includes the following questions that can be
 ### Using the Peer Feedback Template
 
 1. Click **Create New Survey**
-2. Click **Load Template**
+2. Click **Browse Templates**
 3. Search for "Peer Feedback Survey"
 4. Click **Clone** to use the template
 5. Customize questions as needed for your course context
@@ -345,17 +373,21 @@ Pawtograder provides comprehensive analytics for survey responses, including sta
 
 ### Accessing Analytics
 
-Navigate to **View Responses** on any published survey to access the analytics dashboard. Analytics automatically appear for surveys with quantitative questions (rating scales, checkboxes, etc.).
+Navigate to **View Responses** on any published or closed survey to access the analytics dashboard.
+
+The analytics panel appears only when the survey contains at least one rating, slider, short text, single choice, or checkbox question. A survey built only from Yes / No and long text questions shows no analytics panel at all — and because free-text aggregation lives inside that panel, a comment-only survey shows no free-text aggregation either.
+
+Once you save an Analytics Configuration for a survey, the panel switches to an explicit allow-list: only questions with **Include in Analytics** turned on appear, and that setting defaults to off for each question.
 
 ### Analytics Views
 
-The analytics dashboard includes three main views:
+The analytics dashboard includes three tabs. It opens on **By Group**:
 
 **Overview Tab**
 
 - Course-wide statistics with diverging stacked bar charts for Likert-scale questions
 - Summary cards showing total responses, response rate, and alerts for groups needing attention
-- Filter by section (lab, lecture, or discussion) to compare subgroups
+- Filter by lab section or class section to compare subgroups
 - Compare multiple surveys in a series to track trends over time
 - Free-text response aggregation
 
@@ -366,10 +398,11 @@ The analytics dashboard includes three main views:
 - Identify groups with low response rates or concerning feedback
 - Drill down into individual group responses with member-level detail
 
-**My Groups Tab** (for mentors)
+**My Groups Tab**
 
 - Shows only groups where you are assigned as the mentor
 - Same detailed analytics as the By Group view, focused on your groups
+- The tab is present for every staff viewer; it is simply empty if you mentor no groups
 
 Analytics include:
 
@@ -413,7 +446,7 @@ For surveys linked to group assignments, the **By Group** tab provides team-leve
 
 **Section Filtering:**
 
-- Filter groups by class section using the dropdown
+- Filter groups by lab section or class section using the dropdown
 - "All sections" view shows groups organized by section
 - Selection is persisted for your next visit
 
@@ -448,10 +481,12 @@ When creating or editing a survey:
 
 From the **Manage Series** page, you can:
 
-- View all surveys in each series
-- Reorder surveys using the arrow buttons
-- Edit series name and description
-- Delete a series (surveys will be unlinked but not deleted)
+- Expand a series card to see its surveys, listed as `ordinal. title`
+- Click the pencil icon on a series to open **Edit Survey Series**, where the ↑ and ↓ buttons reorder its surveys
+- Edit the series name and description in that same dialog
+- Click the trash icon to delete a series. The browser asks to confirm: "Delete series ...? Surveys will be unlinked but not deleted."
+
+A series is only a grouping for comparison. There is no recurrence, no auto-generation of the next survey, and no reminder emails: you create and publish each survey in the series yourself.
 
 **Series Comparison:** In the analytics view, select multiple surveys from a series to compare response trends across weeks, helping identify patterns in team collaboration or course satisfaction.
 
@@ -463,7 +498,7 @@ Use survey series for weekly team collaboration surveys or recurring course feed
 
 ### Viewing Response Dashboard
 
-Click **View Responses** on any published survey to see the response dashboard and analytics.
+Click **View Responses** on any published or closed survey to see the response dashboard and analytics.
 
 <Frame>
   <img src="/images/staff/surveys/survey-response-dashboard.png" alt="Survey Response Dashboard with metrics and data table" />
@@ -473,15 +508,17 @@ The dashboard displays three key metrics at the top:
 
 #### Total Responses
 
-Shows the current number of submitted responses.
+Shows the number of responses currently shown. With a filter active it also shows the unfiltered total, as `12 / 30`.
 
 #### Response Rate
 
-Percentage of enrolled students who have submitted responses. Calculated as:
+Percentage of the students assigned the survey who have responded. Calculated as:
 
 ```text
-Response Rate = (Total Responses / Total Enrolled Students) × 100
+Response Rate = (responses shown / students assigned) × 100
 ```
+
+The denominator is the assigned student count: every enabled student in the course when the survey is assigned to all, otherwise the number of students you picked. The numerator is the filtered response set, so active filters move this number.
 
 #### Time Remaining
 
@@ -490,6 +527,8 @@ Dynamic countdown to the due date:
 - **Black**: More than 24 hours remaining (displays days and hours)
 - **Orange**: Less than 24 hours remaining (displays hours and minutes)
 - **Red**: Past due date (displays "Closed")
+
+The card reads "Closed" once the due date passes, but that refers only to the deadline. The survey keeps accepting responses until you close it.
 
 ### Response Data Table
 
@@ -525,7 +564,11 @@ Filter responses submitted within a specific time period:
 
 #### Anonymous Mode
 
-Hide student identifying information for unbiased analysis by removing the student names column.
+Hide student identifying information for unbiased analysis. Anonymous Mode removes both the **Student Name** and **Submitted At** columns from the table.
+
+<Warning>
+Anonymous Mode does not affect the CSV export, which always includes **Student Name** and **Submitted At**.
+</Warning>
 
 #### Question Selection Filter
 
@@ -539,7 +582,7 @@ Display only specific questions of interest:
 
 ### Exporting Response Data
 
-Click **Export to CSV** to download all response data for external analysis.
+Click **Export to CSV** to download response data for external analysis. The export covers the rows left by the date-range filter; the question-selection filter does not narrow it, so every question is always included as a column.
 
 **CSV Format:**
 
@@ -552,16 +595,15 @@ John Smith,"Nov 16, 2025, 10:22 AM",Answer 1,Answer 2,...
 **Features:**
 
 - Properly escaped values for Excel/Google Sheets compatibility
-- Filename includes survey title and export date
-- All question responses included as separate columns
+- Filename includes survey title and export date, as `survey-responses-<title>-<YYYY-MM-DD>.csv`
 
 ### Viewing Individual Responses
 
-Click on any row in the response table to view a student's individual response in detail.
+A per-response detail page exists at `/course/{course_id}/manage/surveys/{survey_id}/responses/{response_id}`. It shows one student's full set of answers in read-only mode, with a **← Back to Responses** button.
 
-- List of full survey responses in read-only mode
-- All questions and answers displayed on the responses page
-- Navigate back to the dashboard with the breadcrumb or back button
+<Warning>
+Nothing links to that page. The rows of the response table are not clickable, and there is no breadcrumb, so the page is reachable only by typing the URL. Read individual answers from the response table or the CSV export instead.
+</Warning>
 
 ## Editing Surveys
 
@@ -569,15 +611,17 @@ Click on any row in the response table to view a student's individual response i
 
 Draft surveys can be edited freely with no restrictions:
 
-1. Click **Edit** button on the survey card
+1. Click the draft's title, or choose **Edit** from its ⋯ menu
 2. Modify title, description, questions, or settings
 3. Save changes and continue working
 4. No student impact since draft surveys are not visible
 
 ### Editing Published Surveys
 
+On a published survey, the ⋯ menu item is labelled **Edit (New Version)**, and the dashboard shows a version badge next to each survey.
+
 <Warning>
-Editing published surveys should be done carefully as it may affect student experience.
+Despite the label, editing does not create a new version: your changes overwrite the existing survey row and the version stays at `v1`. Existing responses keep pointing at the questions you just changed, so edit a published survey carefully.
 </Warning>
 
 **What You Can Safely Edit:**
@@ -593,7 +637,7 @@ Editing published surveys should be done carefully as it may affect student expe
 - Question types (data type mismatch with existing responses)
 - Removing questions (orphans existing response data)
 
-**Best Practice**: If substantial changes are needed, create a new survey version rather than modifying a published survey with responses.
+**Best Practice**: If substantial changes are needed, leave the published survey alone. Save it to the Template Library, clone it into a new survey, and close the original.
 
 ### Validation and Error Handling
 
@@ -609,20 +653,24 @@ If validation fails, an error message explains the issue and you must fix errors
 
 Share your successful survey designs with others or reuse them in future semesters:
 
-1. Open an existing survey (published or draft)
-2. Click **Add to Template Library**
+1. Open a survey in the editor, or fill out the new-survey form
+2. Click **Add to Template Library** at the bottom of the form (the form must be valid)
 3. Choose template scope:
    - **Course Only**: Available only in your course
    - **Global (Shared)**: Available to all instructors across courses
 
 ## Deleting Surveys
 
-To remove a survey from your course:
+Deleting a survey is a soft delete. To remove a survey from your course:
 
-1. Click the actions button and choose **Delete**
-2. Confirm deletion in the dialog box
-3. The survey and all associated response data are permanently deleted
+1. Open the survey's ⋯ menu and choose **Delete**
+2. Your browser asks you to confirm. For a survey that already has responses, the message reads: "This survey has N response(s). Deleting it will hide the survey from view but preserve all response data for record keeping. This action can be undone by restoring the survey." For a draft or a survey with no responses, it just asks "Are you sure you want to delete ...?"
+3. Accept the browser's confirmation to delete the survey
+
+The survey and its responses are marked as deleted rather than erased: every version of the survey and every response attached to it is stamped with a deletion time, which hides them from the dashboard, the responses page, and the student's survey list.
 
 <Warning>
-Deletion is permanent and cannot be undone. Export response data before deleting if you need to retain it.
+Pawtograder has no restore screen today, so recovering a deleted survey takes a database change by an administrator. Export the responses first if you might need them, and prefer **Close** over **Delete** when you only want to stop collecting responses.
 </Warning>
+
+Deleting a survey **series** is a different action: it unlinks the surveys from the series and leaves the surveys themselves in place.
