@@ -1,319 +1,525 @@
 ---
 title: "CLI Interface"
-description: "Command-line tools for managing courses, assignments, rubrics, and student repositories"
+description: "Complete reference for the Pawtograder command-line interface: every command, flag, default, and exit path"
 icon: "terminal"
 ---
 
-# Pawtograder CLI (Beta)
+# Pawtograder CLI
 
-The Pawtograder CLI provides command-line tools for instructors and site administrators to manage courses, copy assignments between semesters, import rubrics and submission data, and perform bulk repository operations.
+The Pawtograder CLI runs course operations from a terminal. It copies assignments between terms, imports and exports rubrics, ingests grading data, performs bulk student-repository maintenance, allocates grading work, and exports course data for analysis. Every command posts to a single `cli` edge function on your deployment and authenticates with an API token.
 
-<Warning>
-The CLI is in beta. Commands and options may change in future releases.
-</Warning>
+This page is the complete reference. If you are course staff looking for the handful of tasks you run most often, start with the [CLI page for course staff](/staff/cli).
 
-## Installation
+<Note>
+The published package is `@pawtograder/cli` version 0.2.0, licensed GPL-3.0-only. Commands and flags may still change.
+</Note>
 
-The CLI ships inside the platform repository and runs via npm scripts. Run it from the repository root:
+## Install
 
-```bash
-npm run cli -- <command> [options]
-```
-
-For repository commands, use the shortcut:
+The CLI is published to npm as `@pawtograder/cli`. The binary is called `pawtograder`.
 
 ```bash
-npm run cli:repos -- <subcommand> [options]
+# Run it without installing
+npx @pawtograder/cli --help
+
+# Or install it globally
+npm install -g @pawtograder/cli
+pawtograder --help
 ```
 
-### Prerequisites
+Node.js 20 or later is required. The `repos` commands and `assignments copy` also need `git` on your `PATH` and working SSH access to the course's GitHub organization; `repos copy-after-source-due` additionally needs `rsync`.
 
-- Node.js 18 or later
-- SSH access to GitHub (for repository operations)
-- A Pawtograder API token with CLI access
+### Running from the platform repository
 
-## Authentication
-
-Before using the CLI, authenticate with an API token.
-
-### Creating an API token
-
-1. Log in to the Pawtograder web app.
-2. Navigate to **User Menu → API Tokens**.
-3. Create a new token with type **"CLI"** or **"MCP + CLI"**.
-4. Copy the token. It starts with `mcp_`.
-
-### Logging in
-
-```bash
-npm run cli -- login
-```
-
-You'll be prompted to enter your API token. The token is stored securely in `~/.pawtograder/credentials.json`.
-
-You can also provide the token directly:
-
-```bash
-npm run cli -- login --token mcp_your_token_here
-```
-
-For custom deployments, specify the API URL:
-
-```bash
-npm run cli -- login --url https://your-instance.com/functions/v1/cli
-```
-
-### Checking authentication
-
-```bash
-npm run cli -- whoami
-```
-
-### Logging out
-
-```bash
-npm run cli -- logout
-```
-
-## Commands
-
-### Classes
-
-List all classes you have access to:
+Inside a checkout of the platform repository, `npm run cli --` runs the same CLI from source:
 
 ```bash
 npm run cli -- classes list
+npm run cli -- repos list --class cs3500-spring-2026 --assignment hw1
 ```
 
-Show details for a specific class:
+`npm run cli:repos --` is a shortcut for `npm run cli -- repos`.
+
+Two differences between the two entry points matter in practice:
+
+- The in-repo entry point loads `.env.local` and `.env`. The published binary does not read `.env` files at all, so a variable that works under `npm run cli` has no effect on an installed `pawtograder`. Export it in your shell instead.
+- A source run reports `0.0.0-dev` for `--version`. That is deliberate, so a run from a working tree is never mistaken for a release.
+
+Examples on this page use `pawtograder`. Substitute `npm run cli --` if you are working from the repository.
+
+## Invocation
+
+Every command is a group plus an action:
 
 ```bash
-npm run cli -- classes show <class-id-or-slug>
+pawtograder <group> <action> [options]
 ```
 
-The identifier can be a class ID, slug, or name.
+Running `pawtograder` alone prints help and `You must specify a command`, then exits 1. A group with no action prints `You must specify an action` the same way.
 
-### Assignments
+### Global flags
 
-List assignments for a class:
+Two flags work everywhere, and only these two:
+
+| Flag | Description |
+|---|---|
+| `-h`, `--help` | Print help for the program, a group, or an action. Exits 0. |
+| `-v`, `--version` | Print the CLI version. Exits 0. |
+
+<Warning>
+The CLI parses arguments in strict mode. A flag that the command you typed does not declare is a hard failure: `Unknown argument: …` and exit 1. There is no set of shared options that works everywhere. `--json`, `--dry-run`, `-c`/`--class` and `-a`/`--assignment` are all declared per command, so check the tables below before scripting a flag onto a command you have not run it on.
+</Warning>
+
+### JSON output
+
+`--json` prints the raw JSON response instead of the formatted table or plan, and silences every progress message, so stdout is pure JSON that you can pipe into `jq`. Error text still goes to stderr.
+
+These eleven commands accept `--json`: `classes list`, `assignments list`, `flashcards list`, `rubrics list`, `rubrics import`, `submissions list`, `help-requests list`, `discussions list`, `reviews list`, `reviews assign`, and `repos list`.
+
+Every other command rejects it, including `classes show`, `assignments show`, `rubrics export`, and all three export commands.
+
+## Authentication
+
+### Create an API token
+
+Open the user menu (your avatar, top right) in the web app and click **API Tokens**. Under **Create New Token**, enter a **Token Name**, choose the **CLI (Command Line)** or **MCP + CLI** token type, and click **Create Token**.
+
+The token is shown once, starts with `mcp_` whichever type you chose, and is valid for 90 days. Token creation requires an instructor or grader role in at least one class.
+
+Scopes come from the token type. A **CLI (Command Line)** token carries `cli:read` and `cli:write`; an **MCP + CLI** token carries those plus `mcp:read` and `mcp:write`. Read commands need `cli:read` and write commands need `cli:write`, so both types work for the whole CLI.
+
+### Log in
 
 ```bash
-npm run cli -- assignments list --class <class-id-or-slug>
+# Prompt for the token (input is not echoed)
+pawtograder login
+
+# Or pass it directly
+pawtograder login --token mcp_your_token_here
+
+# Point at a self-hosted deployment
+pawtograder login --url https://api.example.edu
 ```
 
-Show assignment details:
+| Flag | Default | Description |
+|---|---|---|
+| `-t`, `--token` | prompt | API token. Prompted for on stdin with echo suppressed when omitted. |
+| `--url` | `https://api.pawtograder.com/functions/v1/cli` | API gateway origin, or the full endpoint. |
+
+The CLI checks the token locally before contacting the server. An empty or whitespace-only value gives `No token provided.`, a token that does not start with `mcp_` gives `Invalid token format. Pawtograder API tokens start with 'mcp_'.`, and Ctrl-C at the prompt gives `Login cancelled.` All three exit 1.
+
+On success, the token and API URL are stored in `~/.pawtograder/credentials.json` at mode `0600`, inside a `~/.pawtograder/` directory created at mode `0700`. The file is written first and the token verified second; if verification fails the CLI restores the previous credentials, or deletes the file if there were none. A failed login never clobbers a working session.
+
+### What `--url` must point at
+
+<Warning>
+`--url` takes your deployment's API gateway origin, not the hostname you use for the web app. Pointing it at the web host returns an HTML page, and the CLI says so: `API returned an HTML page (HTTP <status>) from <url>.` / `That URL is serving the web app, not the 'cli' Edge Function.` / `Point --url at your deployment's API gateway origin (usually https://api.<hostname>).`
+</Warning>
+
+The gateway is normally `api.` plus your web hostname. The `/functions/v1/cli` suffix is optional, because the CLI appends it for you. These two commands store an identical endpoint:
 
 ```bash
-npm run cli -- assignments show <assignment-id-or-slug> --class <class-id-or-slug>
+pawtograder login --url https://api.example.edu
+pawtograder login --url https://api.example.edu/functions/v1/cli
 ```
 
-#### Copy assignments
+A bare hostname with no scheme gets `https://` prepended, trailing slashes are stripped, and a value that cannot be parsed as a URL fails with `Invalid API URL: <url>`. If you are unsure of the origin, copy it out of the **API Tokens** dialog, which shows the full endpoint form.
 
-Copy assignments between classes. Supports single-assignment copy, full-course copy, and schedule-driven copy:
+`--url` exists only on `login`. Every other command reads the stored value, so switching deployments means logging in again.
+
+### Check and clear credentials
 
 ```bash
-# Copy a single assignment
-npm run cli -- assignments copy \
+pawtograder whoami
+pawtograder logout
+```
+
+`whoami` prints `Email`, `Name`, `User ID`, and the path to the credentials file. `logout` deletes the credentials file. Neither takes any flag beyond the globals.
+
+<Note>
+`whoami` exits 0 even when it fails. It prints `Not logged in. Run 'pawtograder login' to authenticate.` both when no credentials exist and when the stored token is expired or revoked, so do not use it to detect an expired token. `logout` also always exits 0, including when there was nothing to delete.
+</Note>
+
+### Tokens in CI
+
+`--token` is a flag on `login`, not on individual commands. There is no token environment variable and no way to pass a token to any other command. Run one login step and let the rest of the job read the credentials file:
+
+```bash
+pawtograder login --token "$PAWTOGRADER_TOKEN" --url https://api.example.edu
+pawtograder assignments list --class cs3500-spring-2026 --json
+```
+
+`assignments delete` prompts for confirmation on stdin, so pass `--force` to it in any non-interactive job.
+
+## Environment variables
+
+Every variable is optional and read at runtime.
+
+| Variable | Effect |
+|---|---|
+| `PAWTOGRADER_HTTP_TIMEOUT_MS` | Abort HTTP requests after this many milliseconds. Unset or empty means no timeout at all. A non-numeric or negative value is rejected with an error rather than ignored. |
+| `PAWTOGRADER_VERBOSE=1` | Log each request as `[cli] POST <url> command=<cmd>`, plus HTTP status and elapsed time, to stderr. |
+| `DEBUG` | Any truthy value does what `PAWTOGRADER_VERBOSE` does, and adds stack traces for unexpected errors. |
+
+```bash
+export PAWTOGRADER_HTTP_TIMEOUT_MS=600000
+pawtograder assignments copy --source-class cs3500-fall-2025 --target-class cs3500-spring-2026 --all --workdir ./repos
+```
+
+Remember that the published binary ignores `.env` files. Export these in your shell.
+
+## Exit codes
+
+The CLI exits `0` or `1`. There are no other codes.
+
+- `0`: the command succeeded. A cancelled `assignments delete` confirmation also exits 0, because nothing failed.
+- `1`: any failure, including an unknown or missing flag, a client-side validation failure, an authentication or permission failure, an HTTP error, or an unexpected exception.
+
+<Note>
+`assignments copy`, `repos sync-grade-workflow`, and `repos copy-after-source-due` print their full per-item report and only then exit 1 if anything failed. A non-zero exit from those three means at least one item failed; read the report to see which.
+</Note>
+
+### Error messages
+
+| Situation | What the CLI prints |
+|---|---|
+| No credentials file | `Not logged in. Run 'pawtograder login' to authenticate.` plus a pointer to the API Tokens dialog. |
+| HTTP 401 | `Authentication failed: …` with `Your token may be expired or revoked. Run 'pawtograder login' to re-authenticate.` |
+| HTTP 403 | `Permission denied: …` with `Your token may lack the required scopes (cli:read or cli:write).` |
+| HTTP 504 | A message noting that assignment copies can take minutes, that the operation may have partially completed, and that re-running validates or fixes what exists. |
+| HTTP 500 and above | `Server error: … The operation may have partially completed. Run again to retry.` |
+| HTML response body | The "that URL is serving the web app" message described under `--url`. |
+
+The 403 text names scopes, but a role check can produce the same status. See [Who can run what](#who-can-run-what).
+
+## classes
+
+### classes list
+
+Lists every class you have a staff role in.
+
+```bash
+pawtograder classes list
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--json` | `false` | Emit the raw JSON response instead of a formatted table. |
+
+### classes show
+
+```bash
+pawtograder classes show cs3500-spring-2026
+```
+
+Takes one positional argument, `identifier`, which can be a class ID, slug, or name. It accepts no flags, including no `--json`.
+
+## assignments
+
+Everywhere below, `-c`/`--class` accepts a class ID, slug, or name, and an assignment identifier accepts an assignment ID or slug.
+
+### assignments list
+
+```bash
+pawtograder assignments list --class cs3500-spring-2026
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### assignments show
+
+```bash
+pawtograder assignments show hw1 --class cs3500-spring-2026
+```
+
+Takes a positional `identifier` plus `-c`/`--class` (required). No `--json`.
+
+### assignments copy
+
+Copies assignments from one class to another, including rubrics, autograder configuration, self-review settings, and handout and solution repository content. Repository content is pushed with local SSH git rather than server-side, which is why `--workdir` exists.
+
+```bash
+# One assignment
+pawtograder assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
   --assignment hw1 \
-  --workdir /tmp/pawtograder-repos
+  --workdir ./repos
 
-# Copy all assignments
-npm run cli -- assignments copy \
+# The whole course, with new dates from a CSV
+pawtograder assignments copy \
   --source-class cs3500-fall-2025 \
   --target-class cs3500-spring-2026 \
-  --all \
-  --workdir /tmp/pawtograder-repos
-
-# Copy with a schedule CSV (custom due dates)
-npm run cli -- assignments copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --schedule schedule.csv \
-  --workdir /tmp/pawtograder-repos
+  --schedule spring-2026.csv \
+  --workdir ./repos
 ```
 
-The copy command handles:
+| Flag | Default | Description |
+|---|---|---|
+| `-s`, `--source-class` | required | Source class (ID, slug, or name). |
+| `-t`, `--target-class` | required | Target class (ID, slug, or name). |
+| `-a`, `--assignment` | none | Single assignment to copy (ID or slug). |
+| `--schedule` | none | CSV file with assignment slugs or titles and date overrides. |
+| `--all` | none | Copy all assignments from the source class. |
+| `-w`, `--workdir` | conditional | Local directory for git clones. Required unless `--skip-repos` or `--dry-run` is set. |
+| `--dry-run` | `false` | Show what would be copied without making changes. |
+| `--skip-repos` | `false` | Skip git repository operations. |
+| `--skip-rubrics` | `false` | Skip rubric copying. |
+| `--skip-surveys` | `false` | Skip copying surveys linked to assignments. |
+| `--concurrency` | `4` | Parallel clone and fetch operations for the local repo copy (1 to 8). |
+| `--delay-ms` | `0` | Delay between clone batches, in milliseconds. |
+| `--debug` | `false` | Enable server-side timing logs in the CLI edge function, visible in your Supabase logs. |
 
-- Assignment record creation
-- Rubrics (deep copy)
-- Autograder configuration
-- Self-review settings
-- Handout and solution repository content (via local SSH git)
+Two rules are enforced before anything runs:
 
-`--workdir` is required for repository content copying. The CLI uses local SSH git operations to avoid Supabase timeout limits.
+- Exactly one of `--assignment`, `--schedule`, or `--all` is required. Otherwise: `Must specify exactly one of: --assignment, --schedule, or --all`.
+- `--workdir` is required unless `--skip-repos` or `--dry-run` is set: `--workdir is required unless --skip-repos is set (needed to clone source/target repos locally)`.
 
-**Options:**
+<Note>
+`--debug` turns on timing logs on the server, not locally. For local HTTP logging, set `DEBUG=1`.
+</Note>
 
-| Option | Description |
-|--------|-------------|
-| `--source-class` | Source class (ID, slug, or name) |
-| `--target-class` | Target class (ID, slug, or name) |
-| `--assignment` | Single assignment to copy (ID or slug) |
-| `--schedule` | CSV file with assignment slugs/titles and date overrides |
-| `--all` | Copy all assignments from the source class |
-| `--workdir` | Local directory for git clones (required unless `--skip-repos`) |
-| `--dry-run` | Preview changes without making them |
-| `--skip-repos` | Skip git repository operations |
-| `--skip-rubrics` | Skip rubric copying |
-| `--skip-surveys` | Skip copying surveys linked to assignments |
-| `--concurrency` | Parallel clone/fetch operations (1-8, default 4) |
-| `--delay-ms` | Delay between clone batches in milliseconds |
-| `--debug` | Enable server-side timing logs |
+Re-running a copy is safe. Assignments that already exist in the target are reported as `(existing, validated/fixed)` rather than duplicated, so a timed-out run can simply be repeated.
 
-#### Schedule file format
+#### Schedule CSV format
 
-Create a CSV with assignment slugs and new due dates:
+The CSV is parsed on your machine before any request, and the parsed rows are what gets sent. The header must contain either `assignment_slug` or `assignment_title`. The date columns `release_date`, `due_date`, and `latest_due_date` are all optional.
 
 ```csv
-slug,due_date
-hw-01,2026-09-15T23:59:00
-hw-02,2026-09-22T23:59:00
-project-01,2026-10-01T23:59:00
+assignment_slug,release_date,due_date,latest_due_date
+hw-01,2026-09-08,2026-09-15T23:59:00,2026-09-17T23:59:00
+hw-02,2026-09-15,9/22/26,
+project-01,,2026-10-01T23:59:00,
 ```
 
-#### Delete an assignment
+Dates accept ISO form (`YYYY-MM-DD` or `YYYY-MM-DDTHH:MM:SS`) or US form (`M/D/YY` or `MM/DD/YYYY`). An empty date cell inherits the source assignment's value. A UTF-8 byte order mark, which Excel adds, is stripped. Parse errors name the row, as in `Row 3 release_date: …`.
+
+<Warning>
+A header without `assignment_slug` or `assignment_title` is rejected with `CSV must have either an "assignment_slug" or "assignment_title" column`.
+</Warning>
+
+### assignments delete
+
+Deletes an assignment and everything attached to it: GitHub student, handout, and solution repositories, submissions, groups, exceptions and late tokens, review assignments, gradebook columns, and autograder configuration.
 
 ```bash
-npm run cli -- assignments delete <assignment-id-or-slug> --class <class-id-or-slug>
+pawtograder assignments delete hw1 --class cs3500-spring-2026
 ```
 
-Add `--force` to skip the confirmation prompt.
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-f`, `--force` | `false` | Skip the confirmation prompt. |
 
-### Rubrics
+<Warning>
+Without `--force`, the CLI prompts `Are you sure you want to delete "<title>"? This action cannot be undone. [y/N]`. Only `y` or `yes` proceeds; anything else prints `Deletion cancelled.` and exits 0. The server refuses the delete if any student repository has a commit beyond its initial commit.
+</Warning>
 
-Import and export rubrics in YAML format.
+## surveys
 
-List rubrics for an assignment:
+### surveys copy
 
 ```bash
-npm run cli -- rubrics list \
-  --assignment <assignment-id-or-slug> \
-  --class <class-id-or-slug>
+pawtograder surveys copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all
 ```
 
-Export a rubric to YAML:
+| Flag | Default | Description |
+|---|---|---|
+| `-s`, `--source-class` | required | Source class (ID, slug, or name). |
+| `-t`, `--target-class` | required | Target class (ID, slug, or name). |
+| `--survey` | none | One survey to copy: row ID, logical `survey_id` UUID, or exact title. |
+| `--all` | none | Copy all surveys from the source class, latest version of each. |
+| `--target-assignment` | none | Target-class assignment (ID or slug) to link the copied surveys to. |
+| `--dry-run` | `false` | Show what would be copied without making changes. |
+
+Exactly one of `--survey` or `--all` is required: `Must specify exactly one of: --survey or --all`.
+
+<Note>
+`copy` is the only `surveys` action. There is no `surveys list`.
+</Note>
+
+## flashcards
+
+### flashcards list
 
 ```bash
-npm run cli -- rubrics export \
+pawtograder flashcards list --class cs3500-spring-2026
+```
+
+Takes `-c`/`--class` (required) and `--json` (default `false`).
+
+### flashcards copy
+
+```bash
+pawtograder flashcards copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-s`, `--source-class` | required | Source class (ID, slug, or name). |
+| `-t`, `--target-class` | required | Target class (ID, slug, or name). |
+| `-d`, `--deck` | none | Single deck to copy (ID or name). |
+| `--all` | none | Copy all flashcard decks from the source class. |
+| `--dry-run` | `false` | Show what would be copied without making changes. |
+
+Exactly one of `--deck` or `--all` is required: `Must specify exactly one of: --deck or --all`. Note that the short alias here is `-d`, not `-a`.
+
+## rubrics
+
+Rubrics are imported and exported as YML. All three actions require both `-a`/`--assignment` and `-c`/`--class`.
+
+### rubrics list
+
+```bash
+pawtograder rubrics list --assignment hw1 --class cs3500-spring-2026
+```
+
+Also accepts `--json` (default `false`).
+
+### rubrics export
+
+```bash
+pawtograder rubrics export \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --type grading \
   --output hw1-rubric.yml
 ```
 
-Import a rubric from YAML:
+| Flag | Default | Description |
+|---|---|---|
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-T`, `--type` | `grading` | Which rubric to export: `grading`, `self_review`, or `meta`. |
+| `-o`, `--output` | derived | Output file path. |
+| `--strip-ids` | `false` | Omit database IDs, so importing the file creates every row new. |
+
+The short alias for `--type` is a capital `-T`. With no `-o`, the file is written to the current directory as `<assignment>-<type>-rubric.yml`, using the literal value you passed to `--assignment`, so `-a 123` produces `123-grading-rubric.yml`. Unlike the export commands in [Exporting student data](#exporting-student-data), this file is written with your normal umask rather than mode `0600`.
+
+<Note>
+`--strip-ids` produces a template, not a round-trip file. Import it and you get new rubric rows rather than updates to the existing ones.
+</Note>
+
+### rubrics import
+
+Replaces one rubric on an assignment with the contents of a YML file.
 
 ```bash
-npm run cli -- rubrics import \
+# Validate against the live rubric first
+pawtograder rubrics import \
   --assignment hw1 \
   --class cs3500-spring-2026 \
   --file hw1-rubric.yml \
-  --type grading
+  --dry-run
+
+# Then apply
+pawtograder rubrics import \
+  --assignment hw1 \
+  --class cs3500-spring-2026 \
+  --file hw1-rubric.yml
 ```
 
-Use `--dry-run` to preview the import without making changes.
+| Flag | Default | Description |
+|---|---|---|
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-f`, `--file` | required | YML file to import. |
+| `-T`, `--type` | `grading` | Which rubric to replace: `grading`, `self_review`, or `meta`. |
+| `--dry-run` | `false` | Resolve and validate against the live rubric, and report what would change. |
+| `--verbose` | `false` | Also print the parsed rubric tree. |
+| `--json` | `false` | Emit the raw JSON response instead of a formatted plan. |
 
-### Surveys
+The YML is parsed and validated locally before any request. Client-side failures, all exit 1, are `File not found: <path>`, `Invalid YML: empty or invalid document`, `Invalid YML: missing 'name' field`, `Invalid YML: 'parts' must be an array`, and a check that rejects `NaN` or `Infinity` anywhere in the tree.
 
-Copy surveys between classes:
+`--verbose` here is a local print flag and has nothing to do with the `PAWTOGRADER_VERBOSE` environment variable.
+
+## submissions
+
+`submissions export` is covered in [Exporting student data](#exporting-student-data).
+
+### submissions list
 
 ```bash
-# Copy a single survey
-npm run cli -- surveys copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --survey "Midterm Feedback"
-
-# Copy all surveys
-npm run cli -- surveys copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --all
-
-# Link copied survey to a target assignment
-npm run cli -- surveys copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --survey "HW1 Reflection" \
-  --target-assignment hw1
+pawtograder submissions list --class cs3500-spring-2026 --assignment hw1
 ```
 
-List surveys for a class:
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--limit` | `1000` | Maximum rows to return. |
+| `--include-non-submitters` | `false` | Also list enrolled students who have not submitted. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### submissions comments import and sync
+
+Both actions read a JSON file of comments and write them onto submissions. They take an identical flag set, and the difference is what happens to comments that are absent from the payload:
+
+- `import` only inserts. Nothing is removed.
+- `sync` inserts, then soft-deletes rubric checks that are missing from the payload. This is destructive.
 
 ```bash
-npm run cli -- surveys list --class cs3500-fall-2025
-```
-
-### Flashcards
-
-List flashcard decks:
-
-```bash
-npm run cli -- flashcards list --class <class-id-or-slug>
-```
-
-Copy flashcard decks between classes:
-
-```bash
-npm run cli -- flashcards copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --all
-```
-
-### Submissions
-
-List submissions for an assignment:
-
-```bash
-npm run cli -- submissions list \
-  --class cs3500-fall-2025 \
-  --assignment hw1
-```
-
-#### Import or sync comments
-
-Batch import submission comments from autograder results:
-
-```bash
-# Add-only import
-npm run cli -- submissions comments import \
+# Add-only
+pawtograder submissions comments import \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --file batch-results.json \
-  --author-profile-id <uuid>
+  --author-profile-id 00000000-0000-0000-0000-000000000000
 
-# Sync (insert new + soft-delete missing)
-npm run cli -- submissions comments sync \
+# Insert and soft-delete, attributed via review assignments
+pawtograder submissions comments sync \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --file batch-results.json \
-  --rubric-part-id <id>
+  --rubric-part-id 42
 ```
 
-Use `--rubric-part-id` instead of `--author-profile-id` to attribute comments to review assignment assignees.
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-f`, `--file` | required | JSON file: a `batch-results.json` or a manifest with `file_comments`, `artifact_comments`, `submission_comments`, `violations`, or `partial_credits`. |
+| `--author-profile-id` | none | Profile UUID to record as the comment author. |
+| `--rubric-part-id` | none | Rubric part ID; the assignee from `review_assignments` is used as the author. |
+| `--dry-run` | `false` | Validate and summarize only. |
 
-#### Import artifacts
+<Note>
+Exactly one of `--author-profile-id` or `--rubric-part-id` is required, on both actions. Passing both gives `Use only one of --author-profile-id or --rubric-part-id`; passing neither gives `One of --author-profile-id or --rubric-part-id is required`. Because the rule is enforced in the handler rather than by the parser, `--help` shows both as optional.
+</Note>
 
-Upload submission artifact blobs from a manifest:
+`File not found: <path>` is checked locally before the request. Both file shapes are normalized on your machine, so a legacy `batch-results.json` and a manifest behave the same from here on.
+
+### submissions artifacts import
+
+Uploads artifact blobs, such as coverage reports, onto existing submissions.
 
 ```bash
-npm run cli -- submissions artifacts import \
+pawtograder submissions artifacts import \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --file manifest.json \
   --batch-size 5
 ```
 
-**Options:**
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-f`, `--file` | required | JSON manifest with an `artifacts` array. |
+| `--overwrite` | `false` | Replace an existing artifact with the same name on the submission. |
+| `--dry-run` | `false` | Preview counts only. |
+| `--batch-size` | `5` | Artifacts per API request. Smaller batches mean smaller payloads and less gateway timeout risk. |
 
-- `--overwrite` – Replace existing artifacts with the same name
-- `--dry-run` – Preview counts only
-- `--batch-size <n>` – Artifacts per API request (default 5)
-
-The manifest is a JSON file with this structure:
+The manifest is a JSON object with a non-empty `artifacts` array:
 
 ```json
 {
@@ -321,214 +527,197 @@ The manifest is a JSON file with this structure:
     {
       "submission_id": 123,
       "name": "coverage-report",
-      "data": {
-        "format": "html",
-        "display": "Coverage Report"
-      },
+      "data": { "format": "html", "display": "Coverage Report" },
       "content_base64": "PGh0bWw+Li4uPC9odG1sPg=="
+    },
+    {
+      "submission_id": 124,
+      "name": "coverage-report",
+      "data": { "format": "html", "display": "Coverage Report" },
+      "content_file": "./reports/coverage-124.html"
     }
   ]
 }
 ```
 
-You can use `content_file` instead of `content_base64` to reference an external file:
+Each entry needs either `content_base64` or `content_file`. A relative `content_file` path is resolved against the manifest's own directory and base64-encoded locally. Missing pieces fail before upload with `Manifest must include non-empty artifacts array`, `content_file not found: <path>`, or `Artifact <name> needs content_base64 or content_file`.
 
-```json
-{
-  "submission_id": 123,
-  "name": "coverage-report",
-  "data": { "format": "html", "display": "Coverage Report" },
-  "content_file": "./reports/coverage-123.html"
-}
-```
+<Tip>
+If an artifact import times out, the CLI's own advice is to lower `--batch-size` rather than raise the timeout. It warns when a single batch exceeds roughly 5 MiB of base64 payload.
+</Tip>
 
-### Help requests
+## help-requests
 
-List office hours help requests:
+### help-requests list
 
 ```bash
-npm run cli -- help-requests list --class cs3500-fall-2025
+pawtograder help-requests list --class cs3500-spring-2026 --status active
 ```
 
-### Discussions
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--status` | `all` | Filter by status: `open`, `in_progress`, `resolved`, `closed`, `active`, or `all`. `active` means open or in progress. |
+| `--queue` | none | Restrict to one help queue (ID or name). |
+| `--limit` | `100` | Requests per page, 1 to 1000. |
+| `--offset` | `0` | Skip this many requests. |
+| `--json` | `false` | Emit the raw JSON response. |
 
-List discussion board threads:
+The default `--limit` is 100 here, unlike the 1000 used by `submissions list` and `reviews list`. When a page is truncated, the CLI prints the exact `--offset` to continue with. Columns are `ID`, `Queue`, `Status`, `Student`, `Assignee`, `Created`, and `Request`, with timestamps in the class's time zone.
+
+### help-requests close
+
+Sets a help request to a terminal status. This is the only way to set the `closed` status; nothing in the web interface does it.
 
 ```bash
-npm run cli -- discussions list --class cs3500-fall-2025
+pawtograder help-requests close --id 42 --resolution-status staff_helped --notes "Fixed the failing test"
 ```
 
-### Reviews
+| Flag | Default | Description |
+|---|---|---|
+| `--id` | required | Numeric help request ID, as shown by `help-requests list`. |
+| `--status` | `closed` | Terminal status to set: `closed` or `resolved`. |
+| `--resolution-status` | none | How the request was resolved: `self_solved`, `staff_helped`, `peer_helped`, `no_time`, or `other`. |
+| `--notes` | none | Resolution notes to record on the request. |
+| `--force` | `false` | Close even if the request is already resolved or closed, or has a live video call. |
 
-List peer and grading review assignments:
-
-```bash
-npm run cli -- reviews list \
-  --class cs3500-fall-2025 \
-  --assignment hw1
-```
-
-## Repository operations
-
-Repository commands use local SSH git operations for reliability and performance.
+Output is `Help request <id>: <previous status> -> <new status>`, followed by `Resolution:` and `Notes:` lines when you supplied them.
 
 <Warning>
-Repository commands require SSH access to GitHub. Ensure your SSH keys are configured and you have access to the course organization.
+This command is instructor-only and has no `--dry-run`. It always writes. A grader running it gets `API error: Help request not found: <id>`, because the server deliberately reports a not-found rather than disclosing that the request exists.
 </Warning>
 
-### List repositories
+Four behaviors are worth knowing before you script this:
+
+- The default status is `closed`, so a bare `close --id 42` closes the request and records no resolution status or notes.
+- The resolution system message is only posted when a resolution status is set. Closing without `--resolution-status` produces no message in the request's chat.
+- Closing also records one help-activity row per participating student. If that bookkeeping fails, the request is still closed and the CLI tells you to re-run with `--force` to retry. Participants already recorded are not duplicated, so `--force` doubles as the retry for the activity backfill.
+- Forcing a close on a request with a live video call leaves the call running, and the End Call button is disabled from then on. The CLI warns when this happens.
+
+Without `--force`, a request that already has a terminal status, or that has a live video call, fails with an API error and exit 1.
+
+## discussions
+
+### discussions list
 
 ```bash
-npm run cli:repos -- list --class <class-id-or-slug> --assignment <assignment-id-or-slug>
+pawtograder discussions list --class cs3500-spring-2026
 ```
 
-### Sync grade workflow
+Lists discussion topics with thread and question counts. Takes `-c`/`--class` (required) and `--json` (default `false`). `list` is the only `discussions` action.
 
-Synchronize `.github/workflows/grade.yml` from the handout repository to all student repositories:
+## reviews
+
+### reviews list
 
 ```bash
-npm run cli:repos -- sync-grade-workflow \
+pawtograder reviews list --class cs3500-spring-2026 --assignment hw1 --status pending
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--rubric` | all rounds | Restrict to one rubric: `grading`, `self_review`, `meta`, or a rubric ID. |
+| `--assignee` | none | Filter by assignee profile ID or name substring. |
+| `--status` | `all` | Filter by completion state: `pending`, `completed`, or `all`. |
+| `--limit` | `1000` | Maximum review assignments to return, up to 5000. |
+| `--offset` | `0` | Skip this many review assignments. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+`--rubric` has no default here, so all rounds are listed. On `reviews assign` it defaults to `grading`.
+
+### reviews assign
+
+Creates review assignments, either balanced round-robin across the grader pool or from an explicit manifest.
+
+```bash
+# Deal hw1 grading across all class staff, due end of day September 15
+pawtograder reviews assign \
   --class cs3500-spring-2026 \
   --assignment hw1 \
-  --workdir /tmp/pawtograder-repos \
-  --concurrency 2
-```
-
-This command:
-
-1. Fetches the canonical `.github/workflows/grade.yml` from the handout repository.
-2. Clones all student repositories locally via SSH.
-3. Updates the workflow file in each repository.
-4. Commits and pushes changes.
-
-**Options:**
-
-- `--dry-run` – Preview which repos would be updated
-- `--concurrency <n>` – Parallel git operations (1-8, default 2)
-- `--delay-ms <n>` – Delay between clone batches
-
-### Cross-assignment copy
-
-Copy files from source assignment repositories to target assignment repositories after the source due date. This is useful for sequential assignments where students build on previous work:
-
-```bash
-npm run cli:repos -- copy-after-source-due \
-  --class cs3500-spring-2026 \
-  --source-assignment hw1 \
-  --target-assignment hw2 \
-  --workdir /tmp/pawtograder-repos \
-  --concurrency 2
-```
-
-The CLI:
-
-1. Verifies the source assignment due date has passed.
-2. Clones source and target repositories for each student or group.
-3. Copies files using rsync (excluding `.git`).
-4. Commits and pushes to target repositories.
-
-**Options:**
-
-- `--dry-run` – Preview with `rsync -n` only
-- `--mirror-delete` – Pass `rsync --delete` (still excludes `.git`)
-- `--concurrency <n>` – Parallel operations (1-8, default 2)
-- `--delay-ms <n>` – Delay between batches
-
-## Common options
-
-Most commands support these options:
-
-- `--dry-run` – Preview changes without making them
-- `--help` – Show command-specific help
-- `--class` or `-c` – Specify a class by ID, slug, or name
-- `--assignment` or `-a` – Specify an assignment by ID or slug
-
-## Environment variables
-
-| Variable | Description |
-|----------|-------------|
-| `PAWTOGRADER_HTTP_TIMEOUT_MS` | HTTP request timeout in milliseconds. Set to `600000` (10 minutes) for large operations. |
-| `DEBUG` | Set to `1` to enable verbose HTTP logging. |
-
-```bash
-export PAWTOGRADER_HTTP_TIMEOUT_MS=600000
-export DEBUG=1
-npm run cli -- <command>
-```
-
-## API token scopes
-
-CLI tokens require specific scopes:
-
-- `cli:read` – Read-only operations (list, show, export)
-- `cli:write` – Write operations (copy, import, delete)
-
-Create tokens with appropriate scopes in the web UI under **User Menu → API Tokens**.
-
-## Common workflows
-
-### Semester rollover
-
-Copy an entire course to a new semester:
-
-```bash
-# 1. Copy all assignments with new dates
-npm run cli -- assignments copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --schedule spring-2026-schedule.csv \
-  --workdir ./repos
-
-# 2. Copy surveys
-npm run cli -- surveys copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --all
-
-# 3. Copy flashcards
-npm run cli -- flashcards copy \
-  --source-class cs3500-fall-2025 \
-  --target-class cs3500-spring-2026 \
-  --all
-```
-
-### Bulk rubric updates
-
-```bash
-# 1. Export the current rubric
-npm run cli -- rubrics export \
-  --assignment hw1 \
-  --class cs3500-spring-2026 \
-  --output hw1-rubric.yml
-
-# 2. Edit hw1-rubric.yml locally
-
-# 3. Preview changes
-npm run cli -- rubrics import \
-  --assignment hw1 \
-  --class cs3500-spring-2026 \
-  --file hw1-rubric.yml \
+  --due-date 2026-09-15 \
   --dry-run
-
-# 4. Apply changes
-npm run cli -- rubrics import \
-  --assignment hw1 \
-  --class cs3500-spring-2026 \
-  --file hw1-rubric.yml
 ```
 
-### Repository maintenance
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--due-date` | required | Due date for the created assignments. |
+| `--rubric` | `grading` | Rubric to assign: `grading`, `self_review`, `meta`, or a rubric ID. |
+| `--grader` | all class staff | Restrict the pool to these grader profile IDs. Repeatable. |
+| `--by-part` | `false` | Create one assignment per rubric part instead of one per submission. |
+| `--include-non-submitters` | `false` | Also assign manual placeholder stubs for students who did not submit. |
+| `-f`, `--file` | none | JSON manifest of explicit assignments, instead of round-robin allocation. |
+| `--dry-run` | `false` | Show what would be assigned without writing anything. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+`--grader` takes profile IDs, not emails or names, and is repeated once per grader. Non-submitters are excluded by default, matching the web bulk-assign page.
+
+`--file` conflicts with `--grader`, `--by-part`, and `--include-non-submitters`: `--file supplies explicit assignments; it cannot be combined with --grader, --by-part, or --include-non-submitters`. It works fine alongside `--rubric`, `--due-date`, `--dry-run`, and `--json`. The manifest is a JSON array:
+
+```json
+[
+  { "assignee_profile_id": "00000000-0000-0000-0000-000000000000", "submission_id": 123, "rubric_part_id": 45 }
+]
+```
+
+#### How `--due-date` is interpreted
+
+A string that already ends in `Z` or an offset such as `-05:00` is passed through untouched. Anything else is interpreted by the server in the class's time zone, and a bare date means the end of that day. For a New York course, `--due-date 2026-09-15` is 23:59:59 Eastern, not midnight UTC. Append a time (`2026-09-15T17:00`) for a specific hour.
+
+#### What the allocation guarantees
+
+Re-running is safe. Existing assignments are reused rather than duplicated, already-assigned work is left alone, and an assignment covering the whole rubric counts as covering each of its parts, so `--by-part` will not re-deal work someone already holds.
+
+Allocation honors `grading_conflicts` and never assigns anyone their own submission. That applies to `--file` entries too, which are rejected rather than written.
+
+The report distinguishes new assignments from `retargeted_stale` ones, where an existing assignment was repointed at a newer submission and so is not new load on that grader. It separately reports `skipped_already_assigned`, excluded stubs, excluded dropped students, stale collisions, and any submission left with no eligible grader after conflicts.
+
+## repos
+
+<Warning>
+`repos sync-grade-workflow` and `repos copy-after-source-due` run git on your machine over SSH, not on the server. Both need working GitHub SSH access to the course organization and a writable `--workdir`. `repos copy-after-source-due` also needs `rsync` on your `PATH`. The API is called only for metadata.
+</Warning>
+
+### repos list
 
 ```bash
-# Update grade workflows across all student repos
-npm run cli:repos -- sync-grade-workflow \
+pawtograder repos list --class cs3500-spring-2026 --assignment hw1
+```
+
+Takes `-c`/`--class` (required), `-a`/`--assignment` (required), and `--json` (default `false`).
+
+### repos sync-grade-workflow
+
+Copies `.github/workflows/grade.yml` from the handout repository into every student repository, then commits and pushes.
+
+```bash
+pawtograder repos sync-grade-workflow \
   --class cs3500-spring-2026 \
   --assignment hw1 \
   --workdir ./repos \
   --dry-run
+```
 
-# Copy starter code from hw1 to hw2 after hw1 due date
-npm run cli:repos -- copy-after-source-due \
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-w`, `--workdir` | required | Local directory for git clones. |
+| `--dry-run` | `false` | Preview changes only, with no commit or push. |
+| `--concurrency` | `2` | Parallel clone and fetch operations (1 to 8). |
+| `--delay-ms` | `0` | Delay between clone batches, in milliseconds. |
+
+The `--concurrency` default is 2 here, not the 4 used by `assignments copy`. Per-repository failures are reported and set the exit code to 1 after the run finishes.
+
+### repos copy-after-source-due
+
+Copies each student's source-assignment repository tree into their target-assignment repository, once the source assignment's due date has passed. This suits sequential assignments where students build on earlier work.
+
+```bash
+pawtograder repos copy-after-source-due \
   --class cs3500-spring-2026 \
   --source-assignment hw1 \
   --target-assignment hw2 \
@@ -536,72 +725,291 @@ npm run cli:repos -- copy-after-source-due \
   --dry-run
 ```
 
-## Best practices
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-s`, `--source-assignment` | required | Source assignment ID or slug. |
+| `-t`, `--target-assignment` | required | Target assignment ID or slug. |
+| `-w`, `--workdir` | required | Local directory for git clones. |
+| `--dry-run` | `false` | Preview with `rsync -n` only. |
+| `--mirror-delete` | `false` | Pass `rsync --delete`, which still excludes `.git`. |
+| `--concurrency` | `2` | Parallel clone and fetch operations (1 to 8). |
+| `--delay-ms` | `0` | Delay between clone batches, in milliseconds. |
 
-1. **Use dry-run first.** Preview changes with `--dry-run` before executing.
-2. **Export backups.** Export rubrics before importing new versions.
-3. **Batch size.** For artifact imports, reduce `--batch-size` if requests time out.
-4. **Dedicated workdir.** Use a dedicated directory for `--workdir` to avoid conflicts.
-5. **Concurrency.** Start with the default and adjust based on network performance.
+<Warning>
+`--mirror-delete` deletes files in the target repository that are absent from the source. Run it with `--dry-run` first.
+</Warning>
+
+Per-repository failures are reported and set the exit code to 1 after the run finishes.
+
+## Exporting student data
+
+Three commands write course data to disk: `assessment export`, `submissions export`, and `assessment deanonymize`. All three are gated by the same `--identity` contract, and all three can write student personal data. Read this section before running any of them.
+
+### The `--identity` contract
+
+`assessment export` and `submissions export` both take `--identity`, with three modes:
+
+| Mode | `--salt` | `--i-understand-pii` | What lands on disk |
+|---|---|---|---|
+| `opaque` (default) | ignored; a fresh random salt is generated per run | not needed | 16-character tokens, usable only within this one dump |
+| `hash` | required, at least 16 characters | not needed | 16-character tokens, stable across runs on the same deployment for the same salt |
+| `raw` | not sent | required | Real profile IDs, user IDs, emails, and names |
+
+Validation happens before any network call, and each failure exits 1:
+
+- `--identity raw requires --i-understand-pii to acknowledge that real student data will be written to disk`
+- `--identity hash requires --salt (any string of length >= 16)`
+- `--salt must be at least 16 characters`
+
+Neither token mode can be reversed offline. The server mixes a deployment secret into every token, and the salt is never written into any manifest, so a `hash` dump is not something its recipient can de-anonymize. Only an instructor, running `assessment deanonymize` against the same deployment with the same salt, can map tokens back to students.
+
+<Warning>
+Tokens from the default `opaque` mode can never be mapped back to students. The salt is random per run and `assessment deanonymize` accepts `hash` only. If you export with the default and later need names, your only option is to export again with `--identity hash --salt <a salt you keep>`. Decide which mode you need before the run, not after.
+</Warning>
+
+<Warning>
+`--identity` pseudonymizes who a row is about. It does not sanitize what the row says. Section and lab names, group names, submission file paths, full source file contents, free-text grader comments, gradebook override notes, hint text and student rating comments, autograder test output, and hidden instructor build logs all come out verbatim in every mode. In a small lab section, a section name plus a handful of tokens can re-identify students.
+</Warning>
+
+Repository names and commit SHAs are tokenized in `hash` and `opaque` mode, because a repository name usually embeds a student's GitHub handle and a SHA can be looked up on GitHub. In `raw` mode they are real.
+
+A few identifiers are raw in every mode because they are course metadata rather than student identity: assignment, rubric, and gradebook column IDs and names, and the `discussion_thread_id` and `error_pin_id` on engagement rows. The last two are joinable back to discussion content that identifiable students wrote, so treat them as identifying even in a tokenized dump.
+
+### Who is allowed to run these
+
+<Warning>
+`--i-understand-pii` is an acknowledgement, not an authorization. Any holder of a `cli:read` token with a grader role in the class, which normally includes undergraduate teaching assistants, can run `assessment export` or `submissions export` with `--identity raw` and write real names and emails to disk. Only `assessment deanonymize` is restricted to instructors. If that is not the access boundary your course wants, the control is which roles you grant, not which flags exist.
+</Warning>
+
+### Output locations and file modes
+
+All three commands write into the current working directory by default, under a timestamped name, and `-o`/`--output` overrides that. Directories are created at mode `0700` and files at mode `0600`. Setting those modes is best-effort and a no-op on Windows.
+
+| Command | Default output |
+|---|---|
+| `assessment export` | `./assessment-export-<class>-<YYYYMMDD-HHMMSS>/` |
+| `submissions export` | `./submissions-export-<class>-<YYYYMMDD-HHMMSS>/` |
+| `assessment deanonymize` | `./<class>-roster-<YYYYMMDD-HHMMSS>.csv` |
+
+### Integrity checks and partial output
+
+Both export commands stream NDJSON and verify what they received. Every stream must end with an `{end}` marker and the server's reported counts must match the rows received, or the command aborts with `Stream count mismatch for <field>: server reported X but received Y. The dump is incomplete; do not use it for analysis.` or `Server stream ended without an {end} marker — the dump may be incomplete`. Both exit 1.
+
+These aborts exist so that an incomplete dump is not mistaken for a complete one.
+
+<Warning>
+A failed `assessment export` or `submissions export` leaves the partial output directory on disk. Nothing is cleaned up. Delete the directory before retrying, and never analyze a directory whose run ended in an error.
+</Warning>
+
+Transient stream failures, such as a dropped socket, an HTTP 503 or 504, or an edge-function CPU limit, are retried up to three attempts with exponential backoff. Authentication, validation, and count-mismatch errors are not retried. Retries are safe because tokens derive from the run's salt, so a retried call returns identical data.
+
+`assessment deanonymize` behaves differently: it buffers the whole roster and writes the CSV only after the row count checks out, so a failed run leaves no partial file.
+
+### assessment export
+
+Exports assessment data for a class: subjects, sections, assignments, rubrics, autograder configuration, submissions, scores, tests, hints, engagement, and gradebook cells.
+
+```bash
+# Default: pseudonymized, per-run tokens, everything in the class
+pawtograder assessment export --class cs3500-spring-2026
+
+# Joinable across dumps, two assignment globs, no gradebook
+pawtograder assessment export \
+  --class cs3500-spring-2026 \
+  --identity hash --salt "keep-this-somewhere-safe" \
+  --assignment 'hw-*' --assignment 'project-*' \
+  --skip-gradebook
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--identity` | `opaque` | Subject identifier mode: `raw`, `hash`, or `opaque`. |
+| `--salt` | none | Salt for `--identity hash`. Required there, ignored for `opaque`. |
+| `--i-understand-pii` | `false` | Required to use `--identity raw`. |
+| `-o`, `--output` | timestamped directory | Output directory. |
+| `-a`, `--assignment` | all assignments | Assignment selector: ID, slug, or glob such as `hw-*`. Repeatable. |
+| `--gradebook-column` | all columns | Gradebook column selector: ID, slug, or glob. Repeatable. |
+| `--skip-gradebook` | `false` | Skip gradebook column metadata and private cell export. |
+| `--concurrency` | `4` | Parallel per-assignment streams (1 to 8). |
+| `--all-submissions` | `false` | Include every submission attempt, not just the active one. Needed for hint feedback and autograder history on earlier tries. |
+| `--with-test-output` | `false` | Include `grader_result_tests.output`, truncated. |
+| `--test-output-max-bytes` | `4096` | Per-test output cap when `--with-test-output` is set. |
+| `--with-instructor-build-output` | `false` | Include `grader_result_output` rows whose visibility is hidden, truncated, with grading paths sanitized. |
+| `--instructor-build-output-max-bytes` | `4096` | Per-row cap when `--with-instructor-build-output` is set. |
+| `--instructor-build-output-from-sentinel` | none | Trim each hidden log to start at this substring. Rows without it are omitted. Requires `--with-instructor-build-output`. |
+
+Two combination rules apply: `--skip-gradebook cannot be combined with --gradebook-column`, and `--instructor-build-output-from-sentinel requires --with-instructor-build-output`.
+
+The output tree is:
+
+```text
+<output>/
+  manifest.json          # dump_id, identity_mode, exported_at, class, totals
+  subjects.json
+  sections.json
+  assignments.json
+  gradebook-columns.json
+  assignments/<slug>/
+    manifest.json
+    rubric.json
+    autograder.json
+    groups.json          # only when the assignment has groups
+    submissions.json
+    scores.json
+    tests.json
+    instructor-build-output.json   # only with --with-instructor-build-output
+    hints.json
+    error-pin-engagement.json
+  gradebook/scores.json  # omitted entirely with --skip-gradebook
+```
+
+<Note>
+Omitting `--gradebook-column` exports every column, including instructor-only ones. The default is maximal, not minimal. Use `--skip-gradebook` to leave the gradebook out.
+</Note>
+
+Each run prints a `dump_id`, a fresh UUID that is sent with every request and recorded in `manifest.json`, which is useful when correlating an export with server logs.
+
+An `-a` or `--gradebook-column` selector that matches nothing produces a warning rather than an error, so a mistyped glob quietly exports less than you expected. Read the warnings before you trust the dump.
+
+<Warning>
+`--with-test-output` and `--with-instructor-build-output` are not governed by `--identity`. Test output and hidden build logs are free text that routinely contains file paths, repository names, and student code. The only sanitization applied to hidden build output rewrites path prefixes ahead of `/pawtograder-grading` to `/anonymous`; repository URLs elsewhere in a log, git author names, and handles in stack traces pass through. Turning either flag on widens the identity surface whatever `--identity` says.
+</Warning>
+
+### submissions export
+
+Exports submission metadata and, in JSON format, the source files themselves.
+
+```bash
+# Metadata index only, no source code
+pawtograder submissions export \
+  --class cs3500-spring-2026 \
+  --assignment hw1 \
+  --format csv
+
+# Source files, excluding build output
+pawtograder submissions export \
+  --class cs3500-spring-2026 \
+  --assignment hw1 \
+  --exclude-file 'target/**' \
+  --exclude-file 'node_modules/**'
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | all assignments | Assignment selector: ID, slug, or glob. Repeatable. |
+| `-o`, `--output` | timestamped directory | Output directory. |
+| `--format` | `json` | `json` includes file contents; `csv` is a metadata index only. |
+| `--all-submissions` | `false` | Include every submission attempt, not just the active one. |
+| `--with-binary` | `false` | Include binary file contents as `content_base64` in JSON, or set `binary_omitted=false` in the CSV index. |
+| `--include-file` | all paths | Only export files whose path matches this glob. Repeatable. |
+| `--exclude-file` | none | Skip files whose path matches this glob. Repeatable. |
+| `--concurrency` | `4` | Parallel assignment exports (1 to 8). |
+| `--identity` | `opaque` | Subject identifier mode: `raw`, `hash`, or `opaque`. |
+| `--salt` | none | Salt for `--identity hash`. Required there, ignored for `opaque`. |
+| `--i-understand-pii` | `false` | Required to use `--identity raw`. |
+
+The layout depends on how many assignments matched. Exactly one match writes `<output>/<slug>/`; more than one adds a level, `<output>/assignments/<slug>/`. Script against the root `manifest.json`, which lists the assignments, rather than assuming a depth.
+
+```text
+<output>/
+  manifest.json                    # schema_version, dump_id, identity_mode, class, assignments[], totals
+  [assignments/]<slug>/
+    manifest.json
+    submissions.json + files.json  # --format json
+    submissions.csv  + files.csv   # --format csv
+```
+
+`--format` changes what is on disk, not only its shape. The CSV columns are fixed: `submissions.csv` holds `submission,subject,group,ordinal,sha,is_active,created_at,repository,has_final_review`, and `files.csv` holds `submission,name,is_binary,file_size,mime_type,binary_omitted`. Neither contains source code. If the code is the point of the export, use the default `--format json`.
+
+An `-a` selector matching nothing is a hard error here, `No assignments matched the given selectors`, unlike `assessment export`, which warns and continues.
+
+<Note>
+The root `manifest.json` records `include_files`, `exclude_files`, `all_submissions`, and `with_binary` only when you set them, so it is a faithful record of the flags a dump was produced with.
+</Note>
+
+### assessment deanonymize
+
+Writes a CSV mapping the subject tokens in a `hash` export back to student identifiers.
+
+```bash
+pawtograder assessment deanonymize \
+  --class cs3500-spring-2026 \
+  --salt "keep-this-somewhere-safe" \
+  --i-understand-pii
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--salt` | required | The exact salt from the original `--identity hash` export run. At least 16 characters. |
+| `--i-understand-pii` | required | Acknowledges that real student names, emails, and SIS IDs will be written to disk. |
+| `-o`, `--output` | timestamped CSV | Output CSV file path. |
+
+The CSV header is exactly:
+
+```csv
+subject_token,name,email,sis_user_id,class_section,lab_section
+```
+
+One row is written per active student. The section columns hold section names, whereas an `assessment export` in `hash` mode holds section tokens, so this file is the join key for both.
+
+<Warning>
+This is the highest-risk command in the CLI. Its purpose is to write a roster of real names, emails, and SIS IDs to disk, keyed to the tokens in an otherwise pseudonymized dump. Anyone holding both an export directory and its roster CSV has the full raw dataset. It is instructor-only, whole-class, and has no `--dry-run` and no assignment filter. Before you run it, decide where the CSV will live and when you will delete it.
+</Warning>
+
+<Warning>
+Keep the salt. Nothing records it: `manifest.json` stores the identity mode, dump ID, export timestamp, and class, but never the salt. Without the exact original string the tokens will not line up and the CSV is useless. There is also no `--identity` flag here, because only `hash` exports can be reversed at all.
+</Warning>
+
+Validation before any request: omitting `--i-understand-pii` gives `--i-understand-pii is required — this command writes real student names, emails, and SIS ids to disk`, and a short salt gives `--salt must be at least 16 characters (must match the salt from the original export run)`.
+
+## Who can run what
+
+Issuing any token requires an instructor or grader role in at least one class. Beyond that, every command checks your role in the class you named. Two commands are stricter than the rest:
+
+| Command | Scope | Who can run it |
+|---|---|---|
+| `assessment deanonymize` | `cli:read` | Instructors in that class only |
+| `help-requests close` | `cli:write` | Instructors in that class only |
+| Everything else | `cli:read` for reads, `cli:write` for writes | Instructors or graders in that class |
+
+`admin` is deliberately not a CLI role. A site administrator with no instructor or grader role in a class cannot run CLI commands against it.
 
 ## Troubleshooting
 
-### Authentication errors
+### Unknown argument
 
-If you see "Not logged in" or "Authentication failed":
+The flag does not exist on the command you typed. Strict mode makes this fatal rather than ignoring it. Run `pawtograder <group> <action> --help` and compare, and check the tables above: several flags that look global, including `--json` and `--dry-run`, are per command.
 
-1. Run `npm run cli -- login` to re-authenticate.
-2. Verify your token is valid in the web UI (**User Menu → API Tokens**).
-3. Ensure your token has the correct scopes (`cli:read` or `cli:write`).
+### Authentication and permission failures
 
-Common HTTP errors:
+Run `pawtograder login` again first, since a token lasts 90 days and `whoami` cannot tell you that yours has expired. If a 403 persists after a fresh login, check whether the command is one of the two instructor-only ones listed above rather than assuming a scope problem: the 403 text names scopes, but a role check produces the same status. `help-requests close` is the exception, because a non-instructor gets a not-found error there instead.
 
-- **401 Unauthorized** – Token expired or revoked. Log in again.
-- **403 Forbidden** – Token lacks required scopes.
-- **504 Gateway Timeout** – Operation took too long. Increase the timeout or use smaller batches.
+### Timeouts on long operations
 
-### Command not found
-
-Run the CLI from the platform repository root and make sure dependencies are installed with `npm install`.
-
-### Timeout errors
-
-For large operations (copying many assignments, importing large artifacts):
-
-1. Set a longer timeout: `PAWTOGRADER_HTTP_TIMEOUT_MS=600000 npm run cli -- ...`
-2. Use smaller batch sizes (for example, `--batch-size 1` for artifact imports).
-3. Use `--dry-run` first to validate before running the full operation.
-
-For assignment copy operations, the CLI validates and fixes existing assignments on retry, so you can safely re-run failed commands.
-
-### Repository clone failures
-
-If SSH git operations fail:
-
-1. Verify SSH keys are configured: `ssh -T git@github.com`
-2. Check that you're a member of the course's GitHub organization.
-3. Retry with lower `--concurrency` (try 2 or 1).
-4. Use `--delay-ms 1000` to add delays between batches.
-
-### Connection reset errors
-
-The CLI automatically retries git operations that fail due to connection resets. If failures persist:
-
-1. Check your network connection.
-2. Verify GitHub is accessible.
-3. Reduce `--concurrency` to avoid rate limits.
-
-## Getting help
-
-For detailed help on any command:
+Copying many assignments, importing large artifacts, and exporting a whole class can all outrun a gateway timeout.
 
 ```bash
-npm run cli -- <command> --help
+export PAWTOGRADER_HTTP_TIMEOUT_MS=600000
 ```
 
-For example:
+For artifact imports, lowering `--batch-size` helps more than a longer timeout. For assignment copies, re-running is safe: existing target assignments are validated and fixed rather than duplicated. For exports, the CLI already retries transient stream failures three times on its own.
+
+### Git and SSH failures
+
+`assignments copy` and both `repos` commands run git locally over SSH. Confirm SSH access with `ssh -T git@github.com`, confirm you are a member of the course's GitHub organization, and confirm `--workdir` exists and has room for a clone of every student repository.
+
+If clones fail intermittently, lower `--concurrency` to 2 or 1 and add `--delay-ms 1000` to space out the batches. Connection resets during git operations are retried automatically.
+
+### Getting help
 
 ```bash
-npm run cli -- assignments --help
-npm run cli -- assignments copy --help
+pawtograder --help
+pawtograder assignments --help
+pawtograder assignments copy --help
 ```
+
+Help output wraps at 100 columns and every screen ends with a link to `https://pawtograder.com`.
