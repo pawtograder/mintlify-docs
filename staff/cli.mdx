@@ -169,7 +169,7 @@ Both list commands page. `submissions list` returns up to 1000 rows by default; 
 
 ## Close a help request
 
-`help-requests close` is the only way to set a help request's status to `closed`. Nothing in the web interface does it, and the command is restricted to instructors.
+`help-requests close` is the only way to set a help request's status to `closed`. Nothing in the web interface does it (see [Resolving](/staff/office-hours/help-requests#resolving)), and the command is restricted to instructors.
 
 ```bash
 # Find the request ID
@@ -266,7 +266,7 @@ The CLI exits `0` on success and `1` on any failure, and prints the reason. A fe
 
 - **`Unknown argument`.** The flag does not exist on that command. Flags are per command, so run `pawtograder <group> <action> --help` and compare.
 - **`Not logged in` or an authentication failure.** Tokens last 90 days, and `whoami` cannot tell you yours has expired. Run `pawtograder login` again.
-- **A permission error on `help-requests close` or `assessment deanonymize`.** Both are instructor-only. A grader closing a help request sees a not-found error rather than a permission error.
+- **A permission error on `help-requests close` or `assessment deanonymize`.** Both are instructor-only. A grader [closing a help request](/staff/office-hours/help-requests#resolving) sees a not-found error rather than a permission error.
 - **A non-zero exit after a full report.** Assignment copies and both `repos` commands finish their work, print a per-item report, and then exit 1 if any item failed. Read the report to find which.
 - **Timeouts on long operations.** Set `PAWTOGRADER_HTTP_TIMEOUT_MS=600000` for a ten-minute limit. For artifact imports, a smaller `--batch-size` helps more than a longer timeout.
 - **Git or SSH failures.** Check `ssh -T git@github.com` and your membership in the course's GitHub organization, then retry with `--concurrency 1`.
