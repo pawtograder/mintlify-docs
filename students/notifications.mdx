@@ -1,6 +1,6 @@
 ---
 title: "Notifications"
-description: "How Pawtograder alerts you about office hours updates, replies on watched posts, and other course activity"
+description: "How Pawtograder alerts you about office hours updates, replies on watched posts, and other course activity, and how to subscribe to your course calendar"
 icon: "bell"
 ---
 
@@ -20,7 +20,7 @@ Desktop notifications also need your browser's permission. Grant it from **Notif
 
 ## The notifications page
 
-**View all** in the inbox popover opens the full notifications page. It is not in the course menu, so that link is the only way in. Notifications are grouped into **Regrade Requests**, **Office Hours**, **Discussion Threads**, and **Other**. Each group has its own **Mark all as read** and **Delete all** buttons, alongside a page-wide pair at the top.
+**View all** in the inbox popover opens the full notifications page. It is not in the course menu, so reach it from that link, by pressing `g` then `n`, or by searching for "Notifications" in the global search palette. Notifications are grouped into **Regrade Requests**, **Office Hours**, **Discussion Threads**, and **Other**. Each group has its own **Mark all as read** and **Delete all** buttons, alongside a page-wide pair at the top.
 
 <Warning>
 **Delete all** permanently removes those notifications and cannot be undone.
@@ -62,6 +62,52 @@ Every discussion email ends with a footer saying which of the two brought you th
 <Note>
 Creating a help request notifies course staff, not you. Nothing notifies you when your position in the office hours queue changes — the floating help widget shows your position live instead.
 </Note>
+
+## Subscribing to the course calendar
+
+If your instructor has connected a course calendar, your course dashboard shows a schedule card with **today**, **week**, and **month** views. The calendar icon in the top-right corner of that card, labelled **Subscribe to calendar**, opens a **Subscribe to Calendar** popover that builds a feed URL you can add to Google Calendar, Apple Calendar, or Outlook.
+
+The feed contains:
+
+- Office hours and course events, from the calendars your instructor connected
+- Assignment release dates, as all-day entries titled `Released: <assignment name>`
+- Assignment due dates, as timed entries titled `Due: <assignment name>`
+- Your lab section's meetings, if you pick a lab section. Cancelled meetings are left out.
+- Your class section's meetings, if you pick a class section. Pawtograder generates one entry per meeting day between the course start and end dates from the section's listed meeting times.
+
+Two kinds of assignment are left out: archived assignments, and assignments whose due date is set relative to your lab meeting rather than to a fixed date and time. All times use your course's time zone.
+
+To subscribe:
+
+<Steps>
+<Step title="Open the Subscribe popover">
+  Click the calendar icon in the top-right corner of the schedule card on your course dashboard.
+</Step>
+
+<Step title="Choose your sections">
+  **Class Section** and **Lab Section** come prefilled with the sections you are enrolled in, and each option lists the section's CRN alongside its instructor or lab leader. Both are optional: leave one set to **No class section** or **No lab section** to keep those meetings out of the feed.
+</Step>
+
+<Step title="Choose what to include">
+  **Include office hours** and **Include course events** are both on by default. Clear either one to drop that category.
+</Step>
+
+<Step title="Copy the URL">
+  Click the copy button next to **Subscription URL**. It copies the `webcal:` form of the URL, which most calendar apps recognize as a subscription rather than a one-time import.
+</Step>
+
+<Step title="Add it in your calendar app">
+  Use your calendar app's "add calendar by URL" option and paste the URL.
+</Step>
+</Steps>
+
+<Note>
+The feed does not tell your calendar app how often to check for updates, so the refresh interval is entirely up to the app. On the Pawtograder side, each response is cached for five minutes, and Pawtograder polls your instructor's connected calendars every five minutes. A change your instructor makes reaches the feed within minutes, but it will not reach your calendar until your app next re-fetches.
+</Note>
+
+<Warning>
+The feed URL needs no login, and it is not tied to your account: two students who pick the same sections get an identical calendar. Anyone you share the URL with can read your course's schedule, so treat it as course-internal.
+</Warning>
 
 ## Troubleshooting
 

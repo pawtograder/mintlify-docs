@@ -1,0 +1,40 @@
+---
+title: "Running Office Hours"
+description: "Go on duty with Start Working, read the queue cards and the office hours schedule, and interpret the warning banners"
+icon: "user-clock"
+---
+
+# Running Office Hours
+
+Staff put themselves on duty one queue at a time. Nobody schedules you here: you start working a queue when your shift begins, and stop when it ends.
+
+## Going on duty
+
+<Frame>
+  <img src="/images/staff/office-hours/working-queue-1787281592506.png" alt="Working view with the Working, All Requests, and Settings header links and one queue card showing its mode, open request count, an empty staff-on-duty list, and a Start Working button" />
+</Frame>
+
+Open **Working**. Under the **Help Queues** heading, each queue shows its mode, its count of unresolved requests, who is on duty, and a green **Start Working** button. Only queues marked active appear here; the page says so and points you at Queue Management for the rest. See [Queue Configuration](/staff/office-hours/queue-configuration#available-active-and-who-sees-what) for what the active flag does on each surface.
+
+Starting work creates an active `help_queue_assignments` row tying you to that queue. Other staff see you in the queue's staff-on-duty list, students see the queue as staffed, and the queue becomes selectable in the student **New Request** menu. You can work several queues at once. **Stop Working** on a queue card ends that one assignment; **Stop Working (n)** in the header ends all of them at once.
+
+Once you are on duty, **Working** stops listing queues and lists the requests you are responsible for instead. [Help Requests](/staff/office-hours/help-requests) covers what to do with one.
+
+<Note>
+Starting work always records a concurrent-student limit of `1`. No control anywhere changes that number, and nothing reads it before routing another request to you. Assignment Management displays the value, and that is all it does.
+</Note>
+
+## Staffing times and the schedule
+
+Each queue card lists the staff currently on duty, the end time of the shift in progress with the time remaining, and the start of the next scheduled shift. Those times come from the course's office hours calendar, not from the assignment rows: an event counts toward a queue when it is explicitly linked to the queue, or when the event's queue name matches the queue's name, ignoring case. With nobody on duty the card reads "No staff currently on duty".
+
+When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings > Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
+
+## Two banners you may see
+
+A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
+
+## See also
+
+- [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking) for the record of shifts you have worked and the per-TA time dashboard.
+- [Office Hours Overview](/staff/office-hours/intro) for the header, the Settings menu, and finding any request.

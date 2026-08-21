@@ -1,6 +1,6 @@
 ---
 title: "Office Hours"
-description: "Request live help from course staff through Pawtograder's office hours queue and video chat system"
+description: "How Pawtograder's office hours queues work: the Get Help button, the help drawer, browsing queues, and finding requests like yours"
 icon: "headset"
 ---
 
@@ -9,6 +9,18 @@ icon: "headset"
 Pawtograder's office hours, if enabled by your instructor, let you ask course staff for live help. Your request joins a help queue, and any staff member on duty for that queue can pick it up. Requests are worked oldest first, so nothing you do moves you up the queue.
 
 Requests are public by default. Public requests stay visible to your classmates, so someone with the same question can read the answer instead of asking again. You can mark a request private instead, which limits it to course staff and the students named on it.
+
+<CardGroup cols={3}>
+  <Card title="Submitting a Request" icon="pen-to-square" href="/students/office-hours/submitting-a-request">
+    The new-request form, field by field.
+  </Card>
+  <Card title="During Your Request" icon="comments" href="/students/office-hours/during-a-request">
+    Queue position, chat, video calls, and the floating widget.
+  </Card>
+  <Card title="Resolving and Feedback" icon="circle-check" href="/students/office-hours/resolving-and-feedback">
+    Close your own request and rate the help you got.
+  </Card>
+</CardGroup>
 
 ## Get Help Button
 
@@ -52,105 +64,11 @@ Someone may have asked your question already. The search box in the office hours
 
 You can open a classmate's public request and reply in its chat. You cannot add yourself to it as a participant, and you won't get its notifications unless you press **Watch** on it. The chat becomes read-only once a request is resolved or closed.
 
-## Requesting Help
-
-Press **New Request** in the office hours header. The button is disabled when no queue has staff on duty. With exactly one staffed queue it opens that queue's form directly, and with more than one it opens a menu so you pick the queue first.
-
-The first field, **Help Queue**, is pre-filled from the queue you arrived from, but you can change it — "Select which help queue to submit your request to". If the queue you pick has nobody on duty, the field shows "This queue is not currently staffed. Please select a queue with active staff members." The form also tells you how many requests are already open ahead of you.
-
-### Before You Request Help
-
-When your instructors have marked discussion topics to show in office hours, a **Before you request help...** panel appears above the form listing threads from those topics, pinned ones first. **Show All Related Posts** expands the rest, and **Browse All Discussion Posts** opens the discussion board. The panel is absent when those topics have no posts to show.
-
-### Request Form Fields
-
-<Steps>
-<Step title="Students">
-You are included automatically and cannot be removed. Add classmates here when you're working together and want a single shared request.
-</Step>
-
-<Step title="Template">
-Choosing a template is required whenever your course has any active ones. A template pre-fills the description with prompts such as what you're working on and what you've already tried, which lets staff start helping sooner. When the course has exactly one template, it is applied for you.
-</Step>
-
-<Step title="Help Request Description">
-Required. Answer the template's prompts, and be specific about the task, what you have already tried, and any error messages.
-</Step>
-
-<Step title="Reference Assignment, Submission, and Files">
-Optional. Pick an assignment, then one of your submissions to it, then specific files from that submission. Each file reference takes an optional line number, so staff can open your code at the right place.
-</Step>
-
-<Step title="Privacy">
-Requests are public unless you check **Private**, which limits the request to course staff and the students on it. Referencing a submission forces the request private and locks the checkbox.
-</Step>
-
-<Step title="Location">
-Required, and set to **Remote** by default. Choose **In person** or **Hybrid** when you want to be helped in the room.
-</Step>
-</Steps>
-
-<Note>
-You can hold at most two solo requests in the same queue at once: one private and one public. Group requests are not limited.
-</Note>
-
-<Warning>
-An unstaffed queue does not block you. The form still renders in full and **Submit Request** stays clickable; you only get the "not currently staffed" message on the **Help Queue** field, suggesting you pick a different queue. The form is replaced by a **Queue Closed for New Requests** notice only when your instructor stops the queue from accepting requests, which is a different condition.
-</Warning>
-
-## After Submitting a Request
-
-Your request page shows your position in the queue and whether anyone has picked it up. Until someone does, the assignment status reads "Waiting for a TA/instructor to pick this up". The chat sits below that, and a sidebar beside it lists the other requests in the same queue.
-
-Staff can start a video call from your request. When they do, a green **Video call is active** banner appears in the chat with a **Join Video Call** button. You cannot start a call yourself.
-
-If a message fails to send, for example while the chat is reconnecting, your text stays in the box so you can try again.
-
-### Active Help Request Widget
-
-While you have an open request and you are elsewhere on the site, a widget in the bottom-right corner tracks it, showing the status, your queue position, and any unread messages. Expand the widget to chat without leaving the page, or use its buttons to open the full request or resolve it.
-
-<Frame>
-  <img src="/images/students/office-hours/office-hours-1787283222093.png" alt="Expanded active help request widget floating over a course page: a header row with the request number, the office-hours queue name, an open status badge and buttons to resolve the request, open it in full and minimize the widget, above the chat transcript and a Type a message composer with a Send button" />
-</Frame>
-
-## Help Request Status
-
-Your request has one of four statuses:
-
-- **Open**: waiting for a staff member
-- **In Progress**: a staff member is helping you
-- **Resolved**: the request is finished
-- **Closed**: the request was closed
-
-Queue and search lists label requests with the underlying value (`open`, `in_progress`, `resolved`, `closed`) rather than these display names.
-
-## Notifications
-
-Two separate mechanisms tell you about a help request.
-
-In-app notifications arrive in your notification inbox when a staff member is assigned to a request or its status changes. You watch your own request automatically. Use **Watch** and **Unwatch** in the request header to stop following yours or to start following a classmate's public request.
-
-Chat messages from other people trigger a desktop notification, a sound, a flashing tab title, and an unread count on the tab favicon. These fire only while you are not looking at the page, so nothing interrupts you when the tab is already in front of you.
-
-When you haven't granted browser notification permission, your request page shows a prompt with an **Enable** button. Sound, tab-title flashing, and the favicon badge are on by default; you can turn each off, and send yourself a test notification, from **Notification Preferences** in your user menu. See [Notifications](/students/notifications) for the full set of channels.
-
-## Resolving Your Help Request
-
-Resolve your own request from the **Resolve** button in the request header, or from the check-mark button on the floating widget. Pick the status that fits:
-
-- **I solved it myself**
-- **Staff helped me**
-- **A peer helped me**
-- **No time to wait**
-- **Other**, which asks you for a note
-
-The same dialog offers an optional thumbs-up or thumbs-down with a comment. If you skip it, a **Feedback** button stays on the resolved request so you can leave it later. Instructors can read this feedback and so can you; graders cannot.
-
-<Note>
-Staff can also mark your request resolved. When they do, no resolution status is recorded for it.
-</Note>
-
 ## If You Are Banned from Office Hours
 
 Course staff can ban a student from office hours. While a ban is active, every office hours page is replaced by a notice giving the reason, whether the ban is permanent, and the time remaining when it isn't. You cannot submit requests, use office hours chat, or join video calls until it lifts. A warning issued without a ban appears above the page instead, and you keep full access.
+
+## See also
+
+- [Submitting a Request](/students/office-hours/submitting-a-request) for the form and its rules.
+- [Discussion Board](/students/discussion-board) for asking asynchronously when nobody is on duty.

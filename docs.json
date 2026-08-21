@@ -77,7 +77,15 @@
           {
             "group": "Getting Help",
             "pages": [
-              "students/office-hours",
+              {
+                "group": "Office Hours",
+                "pages": [
+                  "students/office-hours",
+                  "students/office-hours/submitting-a-request",
+                  "students/office-hours/during-a-request",
+                  "students/office-hours/resolving-and-feedback"
+                ]
+              },
               "students/discussion-board"
             ]
           },
@@ -92,6 +100,7 @@
             "group": "Reference",
             "pages": [
               "students/notifications",
+              "students/github-help",
               "changelog"
             ]
           }
@@ -104,8 +113,18 @@
             "group": "Getting Started",
             "pages": [
               "staff/intro",
-              "staff/course-settings",
               "staff/exports"
+            ]
+          },
+          {
+            "group": "Course Settings",
+            "pages": [
+              "staff/course-settings",
+              "staff/feature-flags",
+              "staff/lab-sections",
+              "staff/workflow-runs",
+              "staff/audit-log",
+              "staff/emails"
             ]
           },
           {
@@ -180,7 +199,12 @@
           {
             "group": "Office Hours",
             "pages": [
-              "staff/office-hours/intro"
+              "staff/office-hours/intro",
+              "staff/office-hours/running-office-hours",
+              "staff/office-hours/help-requests",
+              "staff/office-hours/queue-configuration",
+              "staff/office-hours/staffing-and-time-tracking",
+              "staff/office-hours/moderation-and-karma"
             ]
           },
           {
