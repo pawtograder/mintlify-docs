@@ -36,18 +36,18 @@ The assignment must belong to a class with a GitHub organization configured. Onl
 
 Two refresh paths exist:
 
-- **Daily background refresh.** A cron job runs hourly and, during the 2:00 AM UTC hour, enqueues one eligible assignment per minute (staggered to spread GitHub API load). An assignment is eligible if it is released, not archived, has `enable_repo_analytics = true`, and has a due date on or after the current UTC date. Bulk fetches are batched in groups of 20 repositories and dispatched through a low-priority async queue.
-- **Manual refresh.** The **Refresh** button on the dashboard calls the `enqueue_repo_analytics_fetch` RPC for the current repository. The fetch status panel shows the last fetched timestamp and the current state (`idle`, `fetching`, `completed`, `error`).
+- **Daily background refresh.** A cron job runs hourly and, during the 2:00 AM UTC hour, enqueues one eligible assignment per minute (staggered to spread GitHub API load). An assignment is eligible if it is released, not archived, has repository analytics enabled, and has a due date on or after the current UTC date. Bulk fetches are batched in groups of 20 repositories and dispatched through a low-priority async queue.
+- **Manual refresh.** The **Refresh** button on the dashboard queues a fetch for the current repository. The fetch status panel shows the last fetched timestamp and the current state (`idle`, `fetching`, `completed`, `error`).
 
 <Note>
-Manual refreshes are rate-limited to **once per 10 minutes per repository**. If you hit the limit, the RPC returns the time at which the next refresh is allowed.
+Manual refreshes are rate-limited to **once per 10 minutes per repository**. If you hit the limit, you are told when the next refresh is allowed.
 </Note>
 
 ## Linking Rubric Checks to KPI Categories
 
 Rubric checks can declare a `kpi_category` that maps the check to one type of GitHub activity. When a check has a KPI category, the rubric sidebar shows a **View [category]** link that opens the Repo Analytics tab pre-filtered to the matching items.
 
-Valid categories (defined by the `repo_analytics_kpi_category` enum):
+Valid categories:
 
 | `kpi_category` | Filters analytics to |
 | --- | --- |
@@ -70,4 +70,4 @@ Use the type filter buttons (or a rubric check's KPI link) to narrow the items t
 
 ## Access Control
 
-Repo Analytics is staff-only. The underlying tables (`repository_analytics_daily`, `repository_analytics_items`, `repository_analytics_fetch_status`) restrict reads to graders and instructors of the class via RLS; students cannot see the tab on their own or anyone else's submission.
+Repo Analytics is staff-only. Only graders and instructors of the class can open the tab or reach the data behind it; students cannot see it on their own or anyone else's submission.

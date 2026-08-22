@@ -1,418 +1,510 @@
 ---
 title: "Local Setup"
-description: "Set up Pawtograder for local development with Supabase, Docker, and Node.js"
+description: "Set up Pawtograder for local development with Node.js, Docker, and Supabase"
 icon: "laptop-code"
 ---
 
 # Local Development Setup
 
-This guide walks you through setting up Pawtograder for local development.
+There are two ways to run Pawtograder on your machine. Point the frontend at the shared staging backend when you are working on the UI, or run the whole Supabase stack in Docker when you need to change migrations, RLS policies, or edge functions, or to run the Playwright suite. Start with the staging path: it needs no Docker and no database.
 
 ## Prerequisites
 
-Before starting, ensure you have the following installed:
-
 | Requirement | Version | Notes |
 |-------------|---------|-------|
-| Node.js | v22 (recommended) | Use [nvm](https://github.com/nvm-sh/nvm) for version management |
-| Docker | Latest | Required for local Supabase. Can use [Docker desktop](https://www.docker.com/products/docker-desktop/) to quickly setup a docker daemon for development. |
-| Git | Latest | For cloning the repository |
+| Node.js | 22 | Every CI workflow pins Node 22 (`.github/workflows/lint.yml:16`, `deploy.yml:140`, `preview.yml:155`, `publish-cli.yml:64`). The repo has no `.nvmrc` and no `engines` field, so nothing enforces this locally; use [nvm](https://github.com/nvm-sh/nvm) to switch versions. |
+| Docker | Any current release | Needed only for the full local Supabase stack. [Docker Desktop](https://www.docker.com/products/docker-desktop/) is the quickest way to get a daemon. |
+| Git | Any current release | For cloning the repository. |
+| Supabase CLI | `2.105.0` | Pinned as a devDependency (`package.json:238`). Always call it as `npx supabase` so you get the pinned version. |
+| Deno | 2.x | Only for the edge-function scripts (`npm run typecheck:functions`, `npm run test:functions`). CI installs `v2.x` (`.github/workflows/lint.yml:58`). |
+| Nix and direnv | Optional | `flake.nix:18-31` defines a dev shell with `nodejs_24`, `deno`, and the Playwright browsers; `.envrc` activates it. The flake gives you Node 24 while CI runs Node 22, so expect that gap. |
 
-## Quick Start (Staging Backend)
+<Warning>
+Do not use a globally installed Supabase CLI. On older versions, `supabase db reset` fails partway through the storage-policy migrations with `ERROR: must be owner of table objects` (`AGENTS.md:25`). `npx supabase` resolves the pinned `2.105.0` from `node_modules`, and the CLI's own "a new version is available" notice is safe to ignore.
+</Warning>
 
-The fastest way to get started is using our staging environment as a backend. This is ideal for frontend development that doesn't require database changes.
+## Frontend against the staging backend
 
-### Steps
+<Steps>
+<Step title="Clone the repository">
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/pawtograder/platform.git
-   cd platform
-   ```
+```bash
+git clone https://github.com/pawtograder/platform.git
+cd platform
+```
+</Step>
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+<Step title="Install dependencies">
 
-3. **Configure environment**
-   ```bash
-   cp .env.local.staging .env.local
-   ```
+```bash
+npm install
+```
 
-   Edit `.env.local` and fill in your own values if needed.
+The warnings from `amazon-chime-sdk-component-library-react` about Node versions, along with the wall of deprecation notices, are expected (`README.md:35`).
+</Step>
 
-4. **Start the development server**
-   ```bash
-   npm run dev
-   ```
+<Step title="Create .env.local">
 
-5. **Access the application**
+```bash
+cp .env.local.staging .env.local
+```
 
-   Open `https://localhost:3000` in your browser. You'll need to accept the self-signed certificate warning (HTTPS is required for camera/microphone access in the help queue).
+`.env.local.staging` is the only env template tracked in git, and it holds five browser-facing values: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_PAWTOGRADER_WEB_URL`, `NEXT_PUBLIC_ENABLE_SIGNUPS`, and `NEXT_PUBLIC_GITHUB_OAUTH_CLIENT_ID`. Change the web URL so auth redirects come back to your machine instead of the deployed site (`AGENTS.md:30`):
 
-### Creating Test Accounts
+```bash
+NEXT_PUBLIC_PAWTOGRADER_WEB_URL=http://localhost:3000
+```
+</Step>
 
-In the staging environment, you can register with any email without confirmation:
+<Step title="Start the dev server">
 
-- **Student account**: Use any email (e.g., `test@example.com`)
-- **Instructor account**: Include "instructor" in your email (e.g., `testinstructor@example.com`)
+```bash
+npm run dev
+```
+</Step>
 
-New accounts are automatically added to the demo class.
+<Step title="Open the app">
 
-## Full Local Setup (Supabase)
-
-For development requiring database changes, RLS policy modifications, or running E2E tests, you'll need a local Supabase instance.
-
-### Prerequisites
-
-- Docker installed and running
-- Node.js v22 or later
-
-### Setup Steps
-
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-2. **Start Supabase**
-   ```bash
-   npx supabase start
-   ```
-
-   This starts all Supabase services in Docker containers. First run may take several minutes to download images.
-
-3. **Initialize the database**
-   ```bash
-   npx supabase db reset
-   ```
-
-   This applies all migrations and seeds initial data.
-
-4. **Configure environment variables**
-
-   After `supabase start`, you'll see output like:
-
-   ```bash
-   supabase local development setup is running.
-
-   ╭──────────────────────────────────────╮
-   │ 🔧 Development Tools                 │
-   ├─────────┬────────────────────────────┤
-   │ Studio  │ http://127.0.0.1:54323     │
-   │ Mailpit │ http://127.0.0.1:54324     │
-   │ MCP     │ http://127.0.0.1:54321/mcp │
-   ╰─────────┴────────────────────────────╯
-
-   ╭─────────────────────────────────────────────────╮
-   │ 🌐 APIs                                         │
-   ├─────────────┬───────────────────────────────────┤
-   │ Project URL │ http://127.0.0.1:54321            │
-   │ REST        │ http://127.0.0.1:54321/rest/v1    │
-   │ GraphQL     │ http://127.0.0.1:54321/graphql/v1 │
-   ╰─────────────┴───────────────────────────────────╯
-
-   ╭───────────────────────────────────────────────────────────────╮
-   │ ⛁ Database                                                    │
-   ├─────┬─────────────────────────────────────────────────────────┤
-   │ URL │ postgresql://postgres:postgres@127.0.0.1:54322/postgres │
-   ╰─────┴─────────────────────────────────────────────────────────╯
-
-   ╭──────────────────────────────────────────────────────────────╮
-   │ 🔑 Authentication Keys                                       │
-   ├─────────────┬────────────────────────────────────────────────┤
-   │ Publishable │ sb_publishable_...                             │
-   │ Secret      │ sb_secret_...                                  │
-   ╰─────────────┴────────────────────────────────────────────────╯
-   ```
-
-   Update your `.env.local`:
-   ```bash
-   SUPABASE_URL=http://127.0.0.1:54321
-   NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable key from output>
-   SUPABASE_SERVICE_ROLE_KEY=<secret key from output>
-   ENABLE_SIGNUPS=true
-   ```
-
-   <Warning>
-   Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser or commit it to version control. Keep it in server-only code and CI secrets.
-   </Warning>
-
-5. **Start Edge Functions**
-   ```bash
-   npx supabase functions serve
-   ```
-
-6. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-7. **Seed test data (optional)**
-   ```bash
-   npm run seed
-   ```
-
-   This creates a test class with students and assignments. Scroll up in the output to find "Login Credentials" with email/password pairs.
+Open `http://localhost:3000`. `npm run dev` runs `next dev` over plain HTTP (`package.json:13`); there is no TLS on this path and no certificate to accept.
+</Step>
+</Steps>
 
 <Note>
-The build process now runs in GitHub Actions for continuous integration. Local development uses `npm run dev` for hot-reloading without requiring a separate build step.
+Staging ships with the signup UI turned off: `.env.local.staging:27` sets `NEXT_PUBLIC_ENABLE_SIGNUPS=false`, so you cannot create your own account on this path and should ask a maintainer for one (`AGENTS.md:127`). Sign in with email and password rather than GitHub, Discord, or Entra, because staging's redirect allow-list only accepts `https://staging.pawtograder.net` and an OAuth round trip lands on the deployed site instead of your dev server (`.env.local.staging:16-18`). To create accounts yourself, use the full local stack below.
 </Note>
 
-## Local Services
+## Full local Supabase stack
 
-Once Supabase is running, these services are available:
+Use this path for schema changes, RLS policy work, edge functions, and the Playwright end-to-end tests.
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| API | http://127.0.0.1:54321 | Supabase REST API |
-| Studio | http://localhost:54323 | Database management UI |
-| Inbucket | http://localhost:54324 | Email testing interface |
-| MCP Server | http://127.0.0.1:54321/mcp | Model Context Protocol server for AI assistance |
-| Application | https://localhost:3000 | Next.js frontend |
+<Steps>
+<Step title="Install dependencies">
+
+```bash
+npm install
+```
+</Step>
+
+<Step title="Start Supabase from a fresh database">
+
+`npx supabase start` restores the project's previous Docker volume by default, which can leave you on an old schema and produce errors like `column ... does not exist` (`AGENTS.md:20`). Wipe the volume first, then start:
+
+```bash
+npx supabase stop --no-backup
+docker volume ls --filter label=com.supabase.cli.project=pawtograder-platform -q | xargs -r docker volume rm
+npx supabase start
+```
+
+`supabase start` runs every migration in `supabase/migrations/` against the empty database (`AGENTS.md:24`). The first run downloads several container images and takes a few minutes. If you want the seed data as well, follow it with a reset, which reapplies the migrations and then runs `supabase/seed.sql` (`supabase/config.toml:45-50`; pass `--no-seed` to skip the seed step):
+
+```bash
+npx supabase db reset
+```
+
+<Warning>
+`--no-backup` deletes the local database volume and everything in it. Only run it when you are willing to lose your local data.
+</Warning>
+
+To confirm the schema is current, compare the newest row in `supabase_migrations.schema_migrations` against the newest filename under `supabase/migrations/` (`AGENTS.md:27`).
+</Step>
+
+<Step title="Fill in .env.local">
+
+Read the local URLs and keys out of the CLI rather than copying them by hand (`AGENTS.md:28`):
+
+```bash
+npx supabase status -o env
+```
+
+That prints `API_URL`, `ANON_KEY`, `SERVICE_ROLE_KEY`, `DB_URL`, and the rest. Set these in `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<ANON_KEY>
+SUPABASE_SERVICE_ROLE_KEY=<SERVICE_ROLE_KEY>
+NEXT_PUBLIC_PAWTOGRADER_WEB_URL=http://localhost:3000
+ENABLE_SIGNUPS=true
+```
+
+<Warning>
+Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser or commit it to version control. Keep it in server-only code and CI secrets.
+</Warning>
+</Step>
+
+<Step title="Serve the edge functions">
+
+```bash
+npx supabase functions serve --env-file .env.local
+```
+
+Without `--env-file`, the functions start with none of your secrets and fail in ways that look like auth bugs (`AGENTS.md:32`, `:129`). They are served at `http://127.0.0.1:54321/functions/v1/<name>`.
+</Step>
+
+<Step title="Start the dev server">
+
+```bash
+npm run dev
+```
+</Step>
+
+<Step title="Seed test data">
+
+```bash
+npm run seed
+```
+
+See [Seeding test data](#seeding-test-data) for templates and login credentials.
+</Step>
+</Steps>
+
+<Note>
+Local auth does not require email confirmation (`supabase/config.toml:135` sets `enable_confirmations = false`). With `ENABLE_SIGNUPS=true`, registering any address adds you to the seeded "Demo Class" (`supabase/seed.sql:1`) as a student. Include the word `instructor` in the address to get the instructor role instead (`supabase/migrations/20250414005348_emailer.sql:117-121`).
+</Note>
+
+## Local services
+
+| Service | Address | Config |
+|---------|---------|--------|
+| API gateway | `http://127.0.0.1:54321` | `supabase/config.toml:10` |
+| PostgreSQL | `postgresql://postgres:postgres@127.0.0.1:54322/postgres` | `supabase/config.toml:26` |
+| Studio | `http://127.0.0.1:54323` | `supabase/config.toml:62` |
+| Mailpit web UI | `http://127.0.0.1:54324` | `supabase/config.toml:73` |
+| Mailpit SMTP | `127.0.0.1:54325` | `supabase/config.toml:75` |
+| Analytics | `http://127.0.0.1:54327` | `supabase/config.toml:279` |
+| Connection pooler | `127.0.0.1:54329` | `supabase/config.toml:34-36`, disabled by default |
+| Next.js app | `http://localhost:3000` | `npm run dev` |
 
 ### Supabase Studio
 
-Access the Supabase dashboard at `http://localhost:54323` to:
+Open `http://127.0.0.1:54323` to browse and edit tables, manage auth users, test RLS policies, and inspect storage buckets.
 
-- Browse and edit database tables
-- View and manage auth users
-- Test RLS policies
-- Monitor realtime subscriptions
-- Manage storage buckets
+### Email testing
 
-### Email Testing
+Mailpit captures everything the stack tries to send, so you can read magic links, password resets, and notification emails at `http://127.0.0.1:54324`. The config key is still the legacy `[inbucket]` (`supabase/config.toml:70`), but the CLI runs Mailpit and labels it that way.
 
-View captured emails at `http://localhost:54324`. Useful for testing:
+### MCP endpoints
 
-- Authentication flows (magic links, password reset)
-- Notification emails
-- Email verification
+Two different servers carry the "MCP" label locally:
 
-## CI/CD Pipeline
+- `http://127.0.0.1:54321/mcp` belongs to the Supabase CLI itself and appears in the `npx supabase status` output. It exposes your local Postgres to an AI assistant.
+- `http://127.0.0.1:54321/functions/v1/mcp-server` is Pawtograder's own MCP server, implemented as an edge function (`supabase/config.toml:775-779`). It answers only while `npx supabase functions serve` is running. See the [MCP server guide](/developers/mcp-server).
 
-Pawtograder uses GitHub Actions for continuous integration and deployment. The build process was migrated from Coolify to GitHub Actions to improve reliability and reduce test flakiness.
+## Seeding test data
 
-### Build Process
-
-The CI pipeline runs on every push and pull request, executing:
-
-1. **Dependency Installation**: Installs npm packages and system dependencies
-2. **Type Checking**: Validates TypeScript types across the codebase
-3. **Linting**: Runs ESLint to enforce code quality standards
-4. **Unit Tests**: Executes Jest test suites
-5. **E2E Tests**: Runs Playwright tests against a test environment
-6. **Build**: Compiles the Next.js application
-
-### Running CI Checks Locally
-
-Before pushing code, run the same checks that CI will execute:
+`npm run seed` runs `scripts/SeedDB.ts` (`package.json:30`), which creates a class with students, graders, assignments, rubrics, discussions, help requests, and surveys. Pick a size with `--template`; the choices are `micro` (the default), `small`, `large`, `tcrs`, `marketing`, and `custom` (`scripts/SeedDB.ts:583`).
 
 ```bash
-# Run all checks
-npm run lint && npm run typecheck:functions && npm test
-
-# Run E2E tests
-npx playwright test
+npm run seed
+npm run seed -- --template large
+npm run seed -- --template small --students 100
+npm run seed -- --help
 ```
 
-See the [MCP server guide](/developers/mcp-server) for details on the AI assistance endpoint exposed at `http://127.0.0.1:54321/mcp`.
+The run prints a lot of output. Search back for "Login Credentials" to find the seeded accounts (`scripts/DatabaseSeedingUtils.ts:2188`); they all use the password `change-it` unless you set `TEST_PASSWORD` (`scripts/DatabaseSeedingUtils.ts:1475`).
 
-## Development Commands
+Seeding is for manual browser testing only. The E2E tests build their own fixtures and do not need it (`AGENTS.md:62`).
 
-### Daily Development
+## Environment variables
+
+`.env.local` is untracked and is the only file the app, the scripts, and the test helpers read.
+
+### Frontend against staging
+
+Copying `.env.local.staging` gives you everything this path needs:
+
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Staging's API gateway |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser-facing key, public by design |
+| `NEXT_PUBLIC_PAWTOGRADER_WEB_URL` | Where auth redirects come back to; change it to `http://localhost:3000` |
+| `NEXT_PUBLIC_ENABLE_SIGNUPS` | `false` on staging, which hides the signup UI |
+| `NEXT_PUBLIC_GITHUB_OAUTH_CLIENT_ID` | Kept for build parity; no code reads it (`.env.local.staging:29-31`) |
+
+The server-side keys in the next table are not needed here. `utils/supabase/client.ts:8` falls back from `SUPABASE_URL` to `NEXT_PUBLIC_SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` is only read by `createAdminClient`, which the seed scripts and test helpers use.
+
+### Full local stack
+
+| Variable | Required | Read by |
+|----------|----------|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | `utils/supabase/server.ts:10`, `utils/supabase/client.ts:8` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Browser and server clients |
+| `NEXT_PUBLIC_PAWTOGRADER_WEB_URL` | Yes | `app/actions.ts:101`, `:130`, `:170` for password-reset, sign-up, and OAuth callback redirects |
+| `SUPABASE_URL` | For seeding and E2E | `tests/e2e/TestingUtils.ts:512`, `:547` read it without a fallback |
+| `SUPABASE_SERVICE_ROLE_KEY` | For seeding and E2E | `utils/supabase/client.ts:25-27` (`createAdminClient`) |
+| `ENABLE_SIGNUPS` | Optional | `lib/features.ts:14` |
+
+### End-to-end tests
+
+`AGENTS.md:55-63` lists what the edge functions need before the E2E suite will pass:
+
+| Variable | Value | Purpose |
+|----------|-------|---------|
+| `E2E_ENABLE` | `true` | Opens the edge functions' E2E bypass (`supabase/functions/_shared/GitHubWrapper.ts`) |
+| `END_TO_END_SECRET` | `not-a-secret` | Shared secret between the test runner and the edge functions (`tests/e2e/TestingUtils.ts:2160`) |
+| `EDGE_FUNCTION_SECRET` | `some-secret-value` | Must match the `edge-function-secret` vault row created by `supabase/migrations/20250614231720_gradebook.sql:226-229` |
+| `GITHUB_APP_ID` | `1` | The edge runtime initializes a GitHub App client at module load |
+| `GITHUB_PRIVATE_KEY_STRING` | Any valid RSA private key | Same; the E2E bypass means the value is never used against GitHub |
+| `SUPABASE_ANON_KEY` | From `supabase status -o env` | `tests/e2e/TestingUtils.ts:513` falls back to the public form if unset |
+
+### Integration-specific variables
+
+These stay unset for ordinary local work. Set one only when you are working on that integration:
+
+| Variable | Effect when unset | Read by |
+|----------|-------------------|---------|
+| `METRICS_SCRAPE_TOKEN` | `/api/metrics` returns 503 | `app/api/metrics/route.ts:17`, `:32` |
+| `NEXT_PUBLIC_BUGSINK_DSN` | Error reporting is off | `sentry.server.config.ts:4`, `instrumentation-client.ts:36` |
+| `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`, `NEXT_PUBLIC_POSTHOG_UI_HOST` | Product analytics is off | `instrumentation-client.ts:11-14` |
+| `BRAND_NAME`, `BRAND_DESCRIPTION`, `BRAND_TAGLINE`, `BRAND_COLOR_PALETTE` | Default Pawtograder branding | `lib/branding.ts:191-197` |
+
+### Two names for the signup flag
+
+`lib/features.ts:12-25` checks `ENABLE_SIGNUPS` first and falls back to `NEXT_PUBLIC_ENABLE_SIGNUPS`. Only the `NEXT_PUBLIC_` form reaches the browser bundle, which is why the env templates and the image builds use it (`.env.local.staging:27`, `.github/workflows/release-images.yml:227`, `preview.yml:343`) while the E2E lane sets the bare form (`deploy.yml:189`). Either works locally; set one, not both.
+
+<Warning>
+Next.js inlines every `NEXT_PUBLIC_*` value at build time. Editing `NEXT_PUBLIC_PAWTOGRADER_WEB_URL` in `.env.local` does not change an existing `.next` build, and a mismatch between the build, `.env.local`, and the test runner causes silent magic-link and auth-redirect failures (`AGENTS.md:29-31`, `:50`). After changing it, rebuild from a clean output directory:
 
 ```bash
-# Start dev server with hot reload
+export NEXT_PUBLIC_PAWTOGRADER_WEB_URL=http://localhost:3001
+rm -rf .next
+npm run build
+```
+</Warning>
+
+## Development commands
+
+### Daily development
+
+```bash
+# Start the dev server with hot reload on http://localhost:3000
 npm run dev
 
-# Run linting
+# ESLint plus a Prettier check
 npm run lint
 
-# Format code
+# Format everything with Prettier
 npm run format
 
-# Run type checking
+# Type-check the Deno edge functions
 npm run typecheck:functions
 ```
 
-### Database Operations
+<Note>
+`npm run typecheck:functions` only covers `supabase/functions/`, and it ends in an `|| echo` fallback, so it prints problems without failing (`package.json:37`). The Next.js app has no typecheck script; run `npx tsc --noEmit` if you want one.
+</Note>
+
+### Database operations
 
 ```bash
-# Start Supabase services
+# Start and stop the stack
 npx supabase start
-
-# Stop Supabase services
 npx supabase stop
 
-# Reset database (reapply migrations + seed)
+# Reapply every migration and reload seed.sql
 npx supabase db reset
 
-# Create a new migration
-npx supabase migration new migration_name
+# Create an empty migration file
+npx supabase migration new <migration_name>
 
-# Generate TypeScript types from schema
+# Regenerate TypeScript types from the local schema
 npm run client-local
 ```
+
+`npm run client-local` rewrites `utils/supabase/SupabaseTypes.d.ts` and copies it into `supabase/functions/_shared/` (`package.json:28`). It is generated, so never hand-edit it.
 
 ### Testing
 
 ```bash
-# Run unit tests
+# Jest unit tests from tests/unit/
 npm test
-
-# Run unit tests in watch mode
 npm run test:watch
 
-# Run E2E tests with UI
-npx playwright test --ui
+# Playwright against a dev server on port 3000
+npm run test:e2e:local
 
-# Run specific E2E test file
+# Playwright against whatever BASE_URL points at (default http://localhost:3000)
+npx playwright test
+npx playwright test --ui
 npx playwright test surveys
 ```
 
-### Build and Deployment
+<Note>
+For a full Playwright run, use a production build on port 3001 rather than `next dev`. The per-route compile cost of `next dev` causes widespread timeouts across the suite (`AGENTS.md:48`). Build with `NEXT_PUBLIC_PAWTOGRADER_WEB_URL=http://localhost:3001`, serve with `PORT=3001 npm run start`, and run the tests with a matching `BASE_URL` (`AGENTS.md:50-52`). `npm run test:e2e:local` is for iterating on a single test in dev mode.
+</Note>
+
+### Build and run a production bundle
 
 ```bash
-# Build the application for production
+# Build; needs roughly 8 GB, which the script requests via NODE_OPTIONS
 npm run build
 
-# Start production server
+# Serve the build over HTTP on port 3000
 npm start
+
+# Serve the build over HTTPS on port 3443
+npm run start:https
 ```
 
-### Seeding Data
+`npm run start:https` runs `scripts/next-start-https.cjs`, which terminates TLS in Node using a certificate pair you provide. It looks for `localhost-key.pem` and `localhost.pem` under `.certs/`, then `certificates/`, and exits with instructions if it finds neither; it does not generate a certificate for you (`scripts/next-start-https.cjs:6-19`, `:128-159`). Override the port with `PORT` and the paths with `SSL_KEY_PATH` and `SSL_CERT_PATH` (`scripts/next-start-https.cjs:99`, `:106-124`).
+
+### Operator CLI
 
 ```bash
-# Create test class with sample data
-npm run seed
-```
-
-### CLI Operations
-
-```bash
-# Run the Pawtograder CLI (requires login)
+# Run the in-repo CLI against a checkout
 npm run cli -- <command> [options]
 
-# Convenience alias for repo operations
+# Shorthand for the repos command group
 npm run cli:repos -- <command> [options]
-
-# Login with API token
-npm run cli -- login
-
-# List classes
-npm run cli -- classes list
-
-# Copy assignments between classes
-npm run cli -- assignments copy --source-class <slug> --target-class <slug> --all
-
-# Sync grade.yml workflow to student repos
-npm run cli:repos -- sync-grade-workflow --class <id> --assignment <id> --workdir <path>
 ```
 
-The CLI provides commands for classes, assignments, surveys, flashcards, rubrics, submissions, and repository maintenance. Use `--help` on any command for detailed options. Repository operations use local SSH git for student repo writes.
+`npm run cli` runs `cli/index.ts` through `tsx` (`package.json:41-42`); the same source ships to npm as `@pawtograder/cli` (`AGENTS.md:71`). Every command needs a login token, and the full command surface is documented in the [CLI guide](/developers/cli).
 
-## Project Structure
+## Continuous integration
+
+Every push and every pull request triggers `.github/workflows/lint.yml`, which runs three independent jobs:
+
+1. `npm run lint`, which is ESLint plus a Prettier check (`lint.yml:33`)
+2. Helm chart guard-rail render tests, `charts/pawtograder/tests/render-guardrails.sh` (`lint.yml:47`)
+3. Deno unit tests for the gradebook recalculation expressions, `npm run test:functions` (`lint.yml:60`)
+
+The Playwright suite runs in `.github/workflows/deploy.yml`, which stands up its own Supabase stack and a production build on port 3001, then runs `npx playwright test` (`deploy.yml:464`) and a narrow Jest integration pass over `tests/unit/issue` (`deploy.yml:393`). The remaining workflows are event-scoped or dispatch-only: `preview.yml` builds a per-PR preview environment, `release-images.yml` and `publish-cli.yml` publish artifacts on branch and tag pushes, `update-docs.yml` runs on pushes to `staging`, `a11y-vo-smoke.yml` runs only on the `a11y/vo-smoke` branch, and `canvas-e2e.yml`, `playwright-standalone.yml`, `a11y-nvda.yml`, and `a11y-voiceover.yml` are `workflow_dispatch` only.
+
+No workflow runs a TypeScript typecheck, and `npm test` is never run as a whole suite.
+
+### Running the same checks locally
+
+```bash
+npm run format
+npm run lint
+npm run test:functions
+charts/pawtograder/tests/render-guardrails.sh
+```
+
+<Warning>
+Run `npm run format` before every commit. CI rejects unformatted code (`AGENTS.md:42`).
+</Warning>
+
+## Project structure
 
 ```text
 platform/
 ├── app/                    # Next.js app router pages
-│   └── course/[course_id]/ # Course-specific routes
+│   ├── course/[course_id]/ # Student-facing course routes
+│   ├── admin/              # Platform admin dashboard
+│   └── api/                # Route handlers
 ├── components/             # Reusable React components
+├── lib/                    # TableController and realtime controllers
 ├── hooks/                  # Custom React hooks
 ├── types/                  # TypeScript type definitions
 ├── utils/                  # Utility functions
-│   └── supabase/           # Supabase client configuration
+│   └── supabase/           # Supabase clients and generated types
 ├── supabase/
 │   ├── migrations/         # Database migrations
 │   ├── functions/          # Edge Functions (Deno)
-│   ├── seed.sql            # Initial seed data
-│   └── config.toml         # Supabase configuration
+│   ├── seed.sql            # Seed data loaded on db reset
+│   └── config.toml         # Supabase CLI configuration
+├── cli/                    # Operator CLI source
+├── packages/cli/           # Published @pawtograder/cli package
+├── charts/pawtograder/     # Helm chart, the supported deploy target
+├── deploy/                 # Preview-environment TLS assets
+├── tools/a11y-judge/       # Accessibility evaluation tooling
+├── docs/                   # In-repo operator and integration notes
 ├── tests/
-│   └── e2e/                # Playwright E2E tests
+│   ├── e2e/                # Playwright tests
+│   └── unit/               # Jest tests
 ├── public/                 # Static assets
-└── scripts/                # Build and utility scripts
+└── scripts/                # Seeding, build, and maintenance scripts
 ```
-
-## Environment Variables
-
-### Required Variables
-
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase API URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key |
-| `SUPABASE_URL` | Supabase API URL (server-side) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only) |
-
-### Optional Variables
-
-| Variable | Description |
-|----------|-------------|
-| `ENABLE_SIGNUPS` | Enable user registration UI (`true`/`false`) |
-| `END_TO_END_SECRET` | Secret for E2E test authentication |
 
 ## Troubleshooting
 
-### Supabase won't start
+### Supabase will not start
 
-1. Ensure Docker is running
-2. Check for port conflicts (54321, 54323, 54324)
-3. Try stopping and removing containers:
-   ```bash
-   npx supabase stop --no-backup
-   docker system prune
-   npx supabase start
-   ```
+Check that Docker is running, then look for conflicts on the ports in [Local services](#local-services): 54321 through 54325, plus 54327. If the stack is wedged, clear it and start over:
+
+```bash
+npx supabase stop --no-backup
+npx supabase start
+```
+
+<Warning>
+`docker system prune` is sometimes suggested at this point. It removes stopped containers and dangling images across your whole machine, not just this project, so run it only if you know what else is on the daemon.
+</Warning>
+
+### `ERROR: must be owner of table objects`
+
+A CLI older than the pinned `2.105.0` ran the migrations — usually a globally installed `supabase` that your shell resolved ahead of the one in `node_modules`. Find out which binary you are getting, restore the pinned copy, then invoke it through `npx` from here on (`AGENTS.md:25`):
+
+```bash
+# Anything outside node_modules/.bin is the wrong binary
+which supabase
+
+# Restore the pinned copy
+rm -rf node_modules/.bin/supabase
+npm install
+
+# Should report 2.105.0
+npx supabase --version
+```
+
+Reinstalling alone is not enough if you keep typing bare `supabase`: the global binary still wins, and the reset fails the same way.
+
+### `no partition of relation "audit" found for row`
+
+`public.audit` is partitioned by day. The migration creates partitions for the day it runs plus the next seven, and a `pg_cron` job extends the window every night (`supabase/migrations/20251228143943_partitioned_audit_system.sql:40-61` for the initial window, `:83-125` for the function, `:128-146` for the cron job). A database that sat stopped past the end of that window has no partition for today. Create the missing ones:
+
+```bash
+docker exec -i supabase_db_pawtograder-platform \
+  psql -U postgres -d postgres -c "SELECT public.audit_maintain_partitions();"
+```
+
+### `column ... does not exist` or a missing table
+
+The stack restored a stale volume instead of migrating a fresh one. Redo the volume-wiping start sequence from [Full local Supabase stack](#full-local-supabase-stack) (`AGENTS.md:20-24`).
 
 ### Database connection errors
 
-1. Verify Supabase is running: `npx supabase status`
-2. Check `.env.local` has correct URLs and keys
-3. Ensure you ran `npx supabase db reset` after starting
+Confirm the stack is up with `npx supabase status`, then check that `.env.local` carries the URLs and keys that `npx supabase status -o env` reports.
 
 ### TypeScript errors after schema changes
 
-Regenerate types after any database changes:
+Regenerate the types:
 
 ```bash
 npm run client-local
 ```
 
-### HTTPS certificate warnings
+### Edge functions return `WORKER_ERROR`
 
-The dev server uses a self-signed certificate. This is expected:
-- Click "Advanced" → "Proceed to localhost"
-- Or add an exception in your browser settings
+Make sure they are running with your env file, then probe one directly. A healthy function answers with a JSON error about the missing token rather than `WORKER_ERROR` (`AGENTS.md:63`):
 
-### Edge Functions not working
+```bash
+npx supabase functions serve --env-file .env.local
+curl http://127.0.0.1:54321/functions/v1/autograder-create-submission
+```
 
-1. Ensure functions are running: `npx supabase functions serve`
-2. Check the terminal for function errors
-3. Verify function URLs in your requests
+### `Circuit breaker active` in E2E runs
 
-### Hot reload not working
+The GitHub circuit breaker tripped. This means a call reached the real GitHub path instead of the E2E bypass; it does not mean credentials are missing, since dummy values are enough locally. Fix the root cause, then reset the breaker (`AGENTS.md:54`):
 
-1. Check for file system watcher limits (Linux):
-   ```bash
-   echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
-   sudo sysctl -p
-   ```
-2. Restart the dev server
+```bash
+docker exec -i supabase_db_pawtograder-platform psql -U postgres -d postgres \
+  -c "UPDATE public.github_circuit_breakers SET state='closed', open_until=now() WHERE state='open';"
+```
 
-## Cursor Agent Development
+## Agent and AI-assistant configuration
 
-Pawtograder includes a Cursor agent development environment that lets AI assistants help with development tasks. Configuration files live in the `.cursor` directory and cover:
+The repository root carries the guidance that AI coding assistants read:
 
-- Development container settings
-- Code style and formatting rules
-- Project-specific AI assistant guidelines
-
-For Cursor Cloud-specific setup instructions, see the `AGENTS.md` file in the repository root. It covers Docker daemon configuration for cloud environments, Supabase migration workarounds, environment variable setup, pre-commit formatting requirements, and build/test commands.
+- `AGENTS.md` is the operational reference for Cursor Cloud and other agents. It covers Docker daemon setup, the fresh-volume Supabase sequence, seeding, ports, the operator CLI, and the known local failure modes.
+- `CLAUDE.md` points at `AGENTS.md` for commands and adds the architecture map: Supabase client factories, edge functions, realtime controllers, route layout, and the `TableController` pattern.
+- `WRITING.md` holds the prose conventions for everything in the repository.
+- `.claude/` holds Claude Code project settings.
 
 ## Next Steps
 
+- Read the [CLI guide](/developers/cli) for the operator command surface
+- Read the [MCP server guide](/developers/mcp-server) to connect an AI assistant
 - Read the [Surveys Developer Guide](/developers/surveys) for feature-specific documentation
-- Join the development discussion on GitHub Issues
+- Read the [Monitoring guide](/developers/monitoring) for metrics and dashboards

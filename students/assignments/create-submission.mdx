@@ -1,22 +1,32 @@
 ---
-title: "Completing an Assignment"
-description: "Learn how to view your GitHub repository, submit code, and check autograder results in Pawtograder"
+title: "Submitting Your Work"
+description: "Clone your assignment repository, push to main, and read your autograder results in Pawtograder"
 icon: "code-commit"
 ---
 
-# Completing an Assignment
+import InstructorDiscretion from '/snippets/instructor-discretion.mdx';
 
-Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears at the top of the assignment page. This repository is private, and only you and the course staff can see it.
+# Submitting Your Work
+
+<InstructorDiscretion />
+
+## The Short Version
+
+Your instructor set up a starter repository for you. Clone it, do the work, commit, and push to `main`. **Every push is a submission**, and the autograder runs on it. That is all you have to do — you do not need to write anything special in your commit message.
+
+If you push three commits at once, the last one is the one that gets graded.
+
+## Your Assignment Repository
+
+Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears in the repository box below the assignment's due date and description. This repository is private, and only you and the course staff can see it.
 
 Your instructor may have provided starter code in that repository. Use this repository to complete the assignment.
 
 ## What Counts as a Submission
 
-On an assignment with an autograder, **every push to your repository's default branch is a submission**. The last commit in the push is the one that gets graded, so if you push three commits at once, only the third is submitted. You do not have to do anything special to your commit message.
+On an assignment with an autograder, **every push is a submission**. The branches that count are the ones listed in the grading workflow in your own repository, at `.github/workflows/grade.yml`; as that workflow ships, the branch is `main`. The last commit in the push is the one that gets graded, so if you push three commits at once, only the third is submitted.
 
-Your instructor can change this. The grading workflow lives in your own repository at `.github/workflows/grade.yml`, and its `on:` block decides what triggers a run. If your instructor removed the `push:` trigger, a push alone does nothing and a grading run starts only when the **head commit message** of your push contains `#submit` — that is, the last commit in the push. A marker on an earlier commit in the same push does not count. The match is case-sensitive, so `#Submit` and `#SUBMIT` do not count either. If you pushed work and no grading run appeared, open `grade.yml` and check whether `push:` is still listed there.
-
-On an assignment with no autograder there is no workflow at all, and `#submit` never applies. Each push to your default branch up to your deadline is recorded as a submission for the course staff to grade by hand.
+On an assignment with no autograder there is no workflow at all. Each push to your default branch up to your deadline is recorded as a submission for the course staff to grade by hand.
 
 <Warning>
 A push after your deadline does not become a gradeable submission. It is not dropped silently either: the submission that appears is fileless and cannot be graded, and it carries an error reading "Your submission at commit ... was not recorded: it was pushed after the deadline for this assignment". Where late tokens are offered, that message also says why none covered the push.
@@ -24,36 +34,66 @@ A push after your deadline does not become a gradeable submission. It is not dro
 
 ### Submission Limits
 
-Your instructor can cap how many submissions you make in a rolling window. New assignments start out capped at 5 submissions per 24 hours, but your instructor may change that. When a cap is in effect, the assignment page shows a "Submission Limit for this assignment" notice telling you how many submissions you have used and how many remain.
+Pawtograder limits how many autograded submissions you can make in a rolling window, and it does this on **every** assignment. A new assignment starts out at 5 submissions per 24 hours. Your instructor can raise that, lower it, shorten or lengthen the window, or remove the limit entirely.
 
-Going over the cap is not silent: your GitHub Actions run fails with a message beginning "Submission limit reached" that tells you when you can submit again. Submissions that score zero do not count against the window.
+The window is a rolling lookback from right now, not a calendar day: if you used your fifth submission at 3pm yesterday, you get one back at 3pm today.
+
+What counts against the limit:
+
+- A submission whose autograder run finished with a score above zero **counts**.
+- A submission whose autograder run finished with a score of exactly zero does **not** count.
+- A submission whose autograder run has not finished yet **does** count, right up until it finishes and turns out to have scored zero.
+- A `#NOT-GRADED` submission **counts**, even though it can never be graded.
+- On a group assignment, the whole group shares one quota.
+
+Going over the limit is not silent: your GitHub Actions run fails with a message beginning "Submission limit reached" that tells you when you can submit again.
+
+<Note>
+When the window is an hour or longer, the assignment page also shows a "Submission Limit for this assignment" notice telling you how many submissions you have used and how many remain. On the shortest window your instructor can choose — 10 minutes — that notice does not appear, but the limit is still enforced.
+</Note>
 
 ### Ungraded Submissions
 
-Your instructor may also allow `#NOT-GRADED` submissions. Where the assignment permits it, a commit whose message contains `#NOT-GRADED` — matched case-insensitively, unlike `#submit` — still creates a submission, but that submission can never become your active submission.
+Most assignments let you keep pushing after your deadline as long as the commit message contains `#NOT-GRADED` — matched case-insensitively, unlike `#submit`. That is what the marker is for. The push still runs the autograder, so you still get feedback, but the submission can never become your active submission and so can never be the one that is graded.
 
-Where the assignment does not permit it, a `#NOT-GRADED` push after your due date is rejected with "This assignment does not allow NOT-GRADED submissions. Please contact your instructor if you need an extension."
+Some courses switch this off. If yours has, a `#NOT-GRADED` push after your due date is rejected with "This assignment does not allow NOT-GRADED submissions. Please contact your instructor if you need an extension."
+
+## If You Pushed and Nothing Happened
+
+- **No grading run appeared at all.** Open `.github/workflows/grade.yml` in your repository and look at its `on:` block. If `push:` is not listed there, grading on your assignment starts only when the **head commit** of your push — the last one — has `#submit` in its message, spelled exactly that way in lower case. A marker on an earlier commit in the same push does not count, and neither does `#Submit` or `#SUBMIT`. Some instructors set an assignment up this way so that you submit on purpose rather than on every save.
+- **Your push was rejected by GitHub.** Force-pushes to your default branch are blocked on most assignments, so a `git push --force` after a rebase or an amended commit will fail. Make a normal commit and push that instead.
+- **You cannot clone or push the repository at all.** That is a GitHub access problem rather than an assignment setting. See [GitHub Help](/students/github-help#if-your-repositories-are-missing), which separates "the repository opens in my browser but I cannot clone it" from "the repository is not there".
+- **You are over the submission limit.** See [Submission Limits](#submission-limits).
 
 ## Viewing Submission Results
 
-You'll see a list of all the submissions you've made for the assignment. The flag icon indicates your *active* submission, which is the one that will eventually be graded. To make an earlier submission the active one, open that submission's page and press **Activate**. You can re-pick your active submission as often as you like until your final due date passes, extensions included; after that, only the course staff can change it.
+You'll see a list of all the submissions you've made for the assignment. The flag icon indicates your *active* submission, which is the one that will eventually be graded. To make an earlier submission the active one, open any submission's page, find that submission's row in the **Submission History** panel, and press **Activate**. You can re-pick your active submission as often as you like until the hard deadline passes, extensions and late tokens included. After it passes, only the course staff can change your active submission.
 
-The **Total Score** column shows:
+The **Submission History** table has five columns: **Submission #**, **Date**, **Commit**, **Auto Grader Score** and **Total Score**.
 
-- **Pending**: Before grading is complete or released (may display a partial score based on autograder results)
-- **Actual score**: Once your instructor has graded and released your results (e.g., "85/100")
+<Frame>
+  <img src="/images/students/assignments/create-submission-1787283222088.png" alt="Submission History table with the columns Submission #, Date, Commit, Auto Grader Score and Total Score; the flagged active submission 3 shows 43/45 and Pending, while submissions 2 and 1 show 38/45 and 33/45 with an em dash for Total Score" />
+</Frame>
 
-This lets you see your final grade as soon as it's available, rather than waiting to check the gradebook separately.
+**Auto Grader Score** is the autograder's own result: `score/max` once the run finishes, `In Progress` while it is still running, `Error` if the run failed or the push was rejected, and `N/A` for a submission the autograder never runs on, such as an upload, a pull request, or an entry your instructor made by hand.
 
-The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results.
+**Total Score** is your overall grade, and it never shows a partial autograder figure. It reads `Pending` on your active submission until your instructor has completed and released the review, then `total/points possible`. A `#NOT-GRADED` submission reads `Not for grading`, and any other inactive submission reads `—`.
+
+Opening a submission gives you three tabs: **Grade**, which is a self-contained ledger of how the grade was reached, **Autograder Detail**, and **Files**. Pull-request submissions add **Checks** and **Deployments**.
+
+<Frame>
+  <img src="/images/students/assignments/create-submission-1787283222089.png" alt="Submission page header reading Brandy Koch - Submission #3 with the commit and submitted time beneath it, Ask For Help and Submission History buttons on the right, and the Grade, Autograder Detail and Files tabs below with Autograder Detail selected" />
+</Frame>
+
+The submission page may show a preview of the grading rubric (if enabled by your instructor) and a summary of the autograder results. Where the autograder holds tests back, that summary says so: "Hidden Automated Checks: N points will be awarded by automated tests that are not shown until after grading is complete."
 
 <Frame>
   <img src="/images/students/assignments/create-submission-1754510547128.png" alt="Submission page showing autograder results and grading rubric preview" />
 </Frame>
 
-<Note>
-If you submit an empty repository or a repository with no meaningful content, Pawtograder will detect this and flag it for your instructor's review.
-</Note>
+<Warning>
+If the files you pushed are identical to the assignment's starter code, that push is not recorded as work to be graded — there is nothing new in it yet. You will see one of two messages. The grading run may fail with "Empty submissions are not permitted for this assignment. Please commit your changes before submitting." Or the submission may appear in your history, inactive and with no files, carrying the error "Your submission at commit ... was not recorded: it is identical to the assignment's starter code, and this assignment does not accept empty submissions. Make your changes and push again." In both cases the fix is the same: edit at least one of the files the assignment asks you to submit, commit, and push again.
+</Warning>
 
 ## Viewing Submission Files
 
@@ -63,7 +103,7 @@ The **Files** tab shows the files that your instructor configured for the submis
   <img src="/images/students/assignments/create-submission-1754510607368.png" alt="Files tab displaying submitted code files" />
 </Frame>
 
-These pages also have a link to the specific GitHub commit that was used to create the submission, and a link to download that complete repository as a zip file. The file viewer uses efficient signed URLs for previewing images and binary files, ensuring smooth performance even when viewing multiple large files.
+These pages also have a link to the specific GitHub commit that was used to create the submission, and a link to download that complete repository as a zip file.
 
 ### File Previews
 
@@ -87,36 +127,39 @@ Binary files are collected only if they match one of the file patterns your inst
 
 ## Assignment Leaderboard
 
-If your instructor has enabled the leaderboard feature for an assignment, you can view your ranking compared to other students. The leaderboard:
-
-- Shows your ranking compared to other students in the course based on autograder results
-- Updates automatically as new submissions are graded
-- Can be configured by your instructor to be visible or hidden
-- Is designed to be unobtrusive and only appears when enabled for specific assignments
-
-<Note>
-Leaderboards are optional and controlled by your instructor. Not all assignments will have a leaderboard enabled.
-</Note>
+If your instructor has enabled the leaderboard for an assignment, it appears as a panel in the right-hand sidebar of the assignment page, listing the top ten entries. Assignments without it show no panel at all. See [Leaderboards](/students/assignments/leaderboard) for how the ranking works.
 
 ## Error Pins
 
-When your submission encounters an error during autograding, Pawtograder may display "Error Pins": suggested discussion board posts that are relevant to your specific error. This feature helps you:
+Some courses attach a discussion board post to a particular autograder result, so that a student who runs into a problem the staff have already explained is pointed straight at the thread explaining it. Course staff call these *error pins*. If your course uses them and one of them matches your submission, the thread appears in your autograder results as a link, under the line "Looking for troubleshooting help? Check out these related discussion posts that we have auto-matched to the errors in this submission". Click it to open the thread. If your course has not set any up, nothing extra appears; there is no empty panel for it.
 
-- **Find solutions faster**: See if other students encountered the same error and found solutions
-- **Access instructor guidance**: View posts where instructors explained how to fix common errors
-- **Reduce wait times**: Get help without needing to join the office hours queue
-- **Learn from peers**: Understand different approaches to solving the same problem
+The match is made against the autograder results for the submission you are looking at: the name of a check, the output of a check, the autograder's output, the lint output, or a score landing inside some range. A staff member chose which of those to attach the thread to, so the post you are shown is one a person picked for that situation rather than a search over the text of your error, and there is nothing you have to do to ask for it. It follows that a link can show up next to a check that passed, and that a submission with no autograder run has none.
 
-Error pins appear automatically when the system detects that your error matches discussion posts that instructors have pinned or marked as relevant. Click on any suggested post to read the full discussion and potential solutions.
+A thread attached to one check appears beside that check; a thread attached to the run as a whole appears above the list of checks. On the **Grade** tab, a passing check keeps its detail collapsed, so if a link is attached to one you will need to expand that row to see it. If your build failed outright, matched threads are collected instead under a heading reading **Troubleshooting Help**, next to the build error.
 
 ## Viewing Artifacts
 
-Some assignments may include artifacts—generated outputs from your code such as reports, visualizations, or analysis results. If your submission includes artifacts and your instructor has configured them, you'll see an **Artifacts** tab where you can view generated outputs.
+Some assignments produce artifacts: generated outputs from your code such as reports, visualizations, or analysis results. When your submission has artifacts, they are listed beneath the file list on the **Files** tab, under an **Artifact** heading. Click one to open it.
 
-Pawtograder supports previewing several artifact formats:
+Pawtograder can preview four artifact formats:
 
+- **PNG images**: Displayed inline
 - **Plaintext files**: Displayed with proper formatting
-- **Markdown files**: Rendered with formatting and syntax highlighting
-- **HTML sites**: Interactive preview of generated websites (from ZIP archives)
+- **Markdown files**: Rendered with formatting
+- **HTML sites**: Interactive preview of a generated website, from a ZIP archive
+
+Anything else reads "No preview available for artifacts of type ...".
 
 When grading your submission, instructors can reference specific artifacts in rubric checks. These artifact references appear as clickable links in the rubric sidebar, making it easy to navigate to the relevant output.
+
+## Assignments That Are Not Submitted by Pushing
+
+A few assignments do not use a repository at all. You can tell which kind you have from the assignment page itself:
+
+- An **Upload submission** control where the repository box would be. What you upload is the submission.
+- A **No submission required** notice. There is nothing to hand in; your instructor grades your work directly — a presentation or an oral exam, for example. Your grade appears on the assignment page once it is released.
+- A **Choose your submission pull request** table. Your submission is a pull request rather than a push, and you pick which one counts. Pushes to this kind of repository are ignored entirely, even with `#submit` in the commit message.
+
+## If Your Course Uses Suggested Due Dates
+
+Some courses — usually ones using mastery or standards-based grading — show two dates on the assignment page: a **Due** date to work toward, and a later **Resubmit until** date. Only the later one is enforced, so a push after the suggested date still counts as a submission, and it is the later date that decides how long you can keep re-picking your active submission. Late tokens and extensions move the later date, never the suggested one.

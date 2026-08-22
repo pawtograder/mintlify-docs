@@ -1,31 +1,46 @@
 ---
 title: "Assignment Leaderboard"
-description: "How the per-assignment leaderboard appears, and what other students can see"
+description: "How the leaderboard panel ranks autograder scores, and what other students see"
 icon: "trophy"
 ---
 
 # Assignment Leaderboard
 
-Some assignments have a **Leaderboard** tab. If you don't see one, it isn't enabled for that assignment.
+If your instructor has enabled the leaderboard for an assignment, a **🏆
+Leaderboard** panel appears in the right-hand sidebar of the assignment page.
+Assignments without it show no panel, and neither does an assignment where
+nothing has been autograded yet.
 
 ## What you see
 
-The leaderboard lists ranked entries based on the autograder score of each student's (or group's) active submission. Your own row is highlighted so you can quickly find it in a long list.
+The panel is headed **Top N by autograder score** and has three columns: **Rank**,
+**Student**, and **Score**. It lists at most ten entries. The first three ranks
+are shown as 🥇 🥈 🥉 rather than numbers, and each score is written as the
+autograder score over its maximum.
 
-Ties are broken by submission time: earlier submissions rank higher.
+Your own row is highlighted and badged **You**. If you rank outside the top ten,
+your rank appears under **Your ranking:** below the table instead.
 
-Rankings update as new submissions come in.
+## How the ranking works
 
-## Identity and visibility
+Entries are ranked by the autograder score of your **active** submission, highest
+first. Only your active submission counts, so switching which submission is
+active changes your entry.
 
-What others see about you on the leaderboard depends on your instructor's configuration:
+There is no tie-break. If several students have the same score, the order they
+appear in is arbitrary and can change.
 
-- **Public**: real names are shown
-- **Anonymized**: pseudonyms are shown instead of names
-- **Personal-only**: you see only your own rank and score
+On a group assignment, every member of the group gets their own entry, all
+carrying the group's score. There is no single entry for the group.
 
-You can always see your own rank, regardless of mode.
+Entries update as soon as the autograder finishes a run.
+
+## What others see about you
+
+Entries always use pseudonyms, never real names. Everyone in the class, including
+you, sees the same pseudonymous list.
 
 <Note>
-Your leaderboard position does not affect your grade. It's a view of submission scores; nothing more.
+Your leaderboard position does not affect your grade. It is a view of autograder
+scores, nothing more.
 </Note>

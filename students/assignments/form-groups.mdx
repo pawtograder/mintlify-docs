@@ -4,7 +4,13 @@ description: "Create, join, and manage group assignments in Pawtograder using th
 icon: "users"
 ---
 
+import InstructorDiscretion from '/snippets/instructor-discretion.mdx';
+
 # Forming Groups
+
+<InstructorDiscretion />
+
+Most assignments are individual. This page applies only if your assignment page says the assignment is a group or group-optional one.
 
 ## Overview
 
@@ -13,11 +19,13 @@ Pawtograder supports two kinds of group assignments:
 - **Group optional**: students can choose to work alone, or form a group.
 - **Group required**: students must form a group.
 
-When forming groups, instructors can choose to allow students to form groups themselves, or to form groups for them. This page provides instructions for students to form groups themselves.
+The assignment page says which kind you are looking at, and how big the group has to be: "This is a group assignment." with "You must be part of a group with *N* members to submit this assignment", or "This is a group-optional assignment." with "You can submit this assignment individually or as part of a group with *N* members." The size is written as a single number, "at most *N*", "at least *N*", a range, or "any amount of", depending on what your instructor set.
 
-Pawtograder uses an invitation system for group formation: students can create new groups, invite other students to join, and accept or reject invitations. Pawtograder automatically sends invitation emails to students who are invited to join a group.
+The page also tells you who does the forming. If you see **Create a new group** and **Join a group** buttons, you form your own group, and the rest of this page is for you. If instead there are no buttons and the page reads "Your instructor will assign you to a group. Please wait for your group assignment." — or, on a group-optional assignment, "Your instructor may assign you to a group, or you may submit individually — please follow instructor instructions." — your instructor forms the groups, and there is nothing for you to do here.
 
-If group submissions are permitted, you will see a clear button to create a new group on the assignment page. If group submissions are optional, and you already have an individual submission, joining a group will automatically deactivate any existing submission or repository.
+Pawtograder uses an invitation system for group formation: students can create new groups, invite other students to join, and accept or reject invitations. Invitations and join requests also go out by email.
+
+If group submissions are optional and you already have an individual submission for the assignment, joining a group deactivates that submission. Your individual repository is not deleted; repository permissions are re-synced so that you can work in the group's repository.
 
 <Frame>
   <img src="/images/students/assignments/form-groups-1754511006230.png" alt="Assignment page showing the create a new group button" />
@@ -25,7 +33,7 @@ If group submissions are permitted, you will see a clear button to create a new 
 
 ### Creating a New Group
 
-Click "Create a new group" to create a new group. Pick a good name: other students will use this name to find your group, and instructors will use this name to identify the group. The name must consist only of alphanumeric, hyphens, or underscores, and be less than 36 characters.
+Click **Create a new group** to open the **Create a new group** dialog. Pick a good name: other students will use this name to find your group, and instructors will use this name to identify the group. The name must consist only of alphanumeric characters, hyphens, or underscores, and be at most 36 characters long.
 
 Optionally, you can invite other students to join your group right as you create it. They will be notified by email, and can accept or reject the invitation.
 
@@ -35,11 +43,15 @@ After creating the group, you can still invite more students to it later.
   <img src="/images/students/assignments/form-groups-1754511113372.png" alt="Create group form with name field and invitation options" />
 </Frame>
 
-### Managing Group Invitations
+### Managing Your Group
 
-Once you're in a group, you'll see a list of all the students in the group. You can invite more students to join the group or view the status of pending invitations by clicking **Invite other students**.
+Once you're in a group, the assignment page reads "You are in group *name*" and lists everyone in it. Click **Invite other students** to send more invitations or to see the invitations that are still outstanding.
 
-If your instructor has assigned a mentor to your group, you'll see the mentor's name displayed in the group details. Mentors are assigned by instructors and may be responsible for grading your group's submissions.
+If another student asks to join your group, their request appears in the group details under **Approve or decline join requests**, and any member of the group can **Approve** or **Reject** it.
+
+**Leave group** removes you from the group. Confirming it warns you that you will no longer be able to submit as part of that group, that a submission you have already made as a group will no longer be associated with your account, and that your groupmates and the instructor are notified of your departure.
+
+If your instructor has assigned a mentor to your group, the group details show **Group mentor:** and the mentor's name. Instructors can hand grading out by group mentor, so your mentor may be the person who grades your group's submissions.
 
 <Frame>
   <img src="/images/students/assignments/form-groups-1754511236996.png" alt="Group management view showing members and pending invitations" />
@@ -47,24 +59,32 @@ If your instructor has assigned a mentor to your group, you'll see the mentor's 
 
 ### Joining a Group
 
-To join a group or accept an invitation, click "Join a group" on the assignment page.
+To join a group or accept an invitation, click **Join a group** on the assignment page. The dialog is titled **Find a group to join**, and it opens by listing the three ways in: by accepting an invitation from another student, by sending a request to join a group and having it approved, or by creating your own group.
 
 <Frame>
   <img src="/images/students/assignments/form-groups-1754511323362.png" alt="Join a group button on the assignment page" />
 </Frame>
 
-You can see any groups that you have been invited to and accept or decline the invitation. You can also select any other group that you would like to join to send a request (which must be approved by any existing group member).
+Invitations you have received are listed first, each with **Accept** and **Decline**. Accepting adds you to the group straight away. There is no approval step, because someone in that group already invited you.
+
+Under **Select a group to request to join** you can pick any other group and press **Request to Join Group**. That sends a request, which a member of the group has to approve before you are added. Groups that already have the maximum number of members cannot be selected. You can request several groups at once, in which case you are added to the first one that accepts.
+
+Requests you have already sent appear under **Prior Join Requests**, with the group's current member count and the request's status. A request that is still pending has a **Withdraw** button, though the group may already have been notified that you asked to join.
 
 <Frame>
   <img src="/images/students/assignments/form-groups-1754511351258.png" alt="Group invitation and request interface" />
 </Frame>
 
+## Group Formation Deadline
+
+Your instructor can set a deadline for forming groups. Once it passes, the **Create a new group** and **Join a group** buttons are replaced by "The group formation deadline has passed. You will not be able to join a group for this assignment."
+
+<Warning>
+The deadline is enforced on the server, and it closes every group action, not just joining: after it passes you cannot create a group, join one, approve someone else's request, or **leave** the group you are in. If you need to change groups after the deadline, ask your instructor.
+</Warning>
+
 ## Group Notifications
 
-Students receive notifications about group activities at appropriate times:
+You are notified when you're invited to a group, when someone joins or leaves your group, and when someone requests to join it. Each of those also has an email version, so whether you get an email depends on your notification preferences.
 
-- **Invitation emails**: When you're invited to join a group, you'll receive an email notification
-- **Assignment release**: Group notifications are only sent after an assignment is released to students
-- **No premature notifications**: You won't receive notifications about groups for unreleased assignments, even if instructors are setting up groups in advance
-
-This ensures you only receive relevant notifications about assignments you can currently access.
+Group notifications are suppressed for assignments that have not been released yet. Instructors often set groups up in advance, and you won't hear about any of it until the assignment is released to you.

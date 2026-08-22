@@ -6,7 +6,7 @@ icon: "comments"
 
 # Discussion Board
 
-Pawtograder's discussion board allows students and staff to discuss course content and ask questions. It is **not** intended to be a replacement for office hours, although you can format a post as a question that needs an answer (as opposed to a "note" that does not need an answer).
+Pawtograder's discussion board, if enabled by your instructor, allows students and staff to discuss course content and ask questions. It is **not** intended to be a replacement for office hours, although you can format a post as a question that needs an answer (as opposed to a "note" that does not need an answer).
 
 Posts are formatted as Markdown and support code blocks, drag-and-drop attachments, and image uploads. You can drag image files directly into the editor to upload and embed them in your post.
 
@@ -20,9 +20,12 @@ The discussion board features a feed-based layout with helpful sidebar widgets:
 
 ### Feed Navigation
 
-- **My Feed**: Your personalized view of posts, showing content from topics you follow and posts you've interacted with
-- **Browse Topics**: Explore all discussion topics organized by category
-- **Followed topics**: Filter to show only posts from categories you're following
+The header has two views:
+
+- **My Feed**: the topics you follow plus the individual posts you follow. Until you follow something, it reads "Your feed is empty. Follow a topic (Browse Topics) or follow a post to see it here."
+- **Browse Topics**: every topic in the course, each with a post count and an unread count. Click the star on a topic to follow or unfollow it.
+
+The header also holds a **Search posts** box that lists matching posts as you type.
 
 ### Pinned Posts
 
@@ -37,10 +40,6 @@ Pinned posts stay visible in the sidebar for quick access, regardless of how man
 ### Top Posts This Week
 
 The sidebar also shows **Top Posts This Week**, highlighting the most engaging discussions based on community activity.
-
-### Leaderboard
-
-If enabled by your instructor, the sidebar displays a **Leaderboard** showing top contributors based on karma points. The leaderboard encourages positive participation and recognizes students who actively help their peers.
 
 ### Active Help Request Widget
 
@@ -75,14 +74,14 @@ Students can edit their own posts, and staff can edit any post.
 
 ## Creating a New Post
 
-Click the **+ New Post** button in the top right to create a new discussion thread. When creating a post:
+Click the **New Post** button in the top right to create a new discussion thread. The form asks for, in this order:
 
-1. **Select a topic**: Choose a category to help organize your post
-2. **Choose visibility**: Share with the entire class or staff only
-3. **Select identity**: Post with your real name or pseudonym
-4. **Mark as question or note**: Questions indicate you need an answer; notes are for sharing information
-5. **Add content**: Write your post using Markdown formatting
-6. **Add images**: Drag and drop image files directly into the editor, paste from your clipboard, or click the image button in the toolbar to select files. Images are automatically uploaded and embedded using standard Markdown syntax.
+1. **Topic**: the category your post belongs to, listed under General Topics and Assignment Topics
+2. **Post Type**: **Question** if you need an answer, **Note** if you don't
+3. **Post Visibility**: **Entire Class**, or **Staff only** if you need to share private assignment details
+4. **Post Anonymity**: **Post with your name**, or **Use your pseudonym** (course staff always see your real name)
+5. **Subject**: a one-line title for the thread. This field is required
+6. The body of the post, written in Markdown. Drag image files into the editor or paste them from your clipboard, and they are uploaded and embedded for you
 
 The system prevents accidental double-posting by disabling the submit button (and all inputs) after you click it. Wait for the page to navigate to your new thread before creating another post. If you need to make changes after submitting, you can edit your post using the edit button.
 
@@ -100,25 +99,15 @@ Each post displays helpful metadata:
 - **Replies**: Number of responses, with "(X new)" indicators for unread replies
 - **Likes**: Community engagement—click the heart to show appreciation
 - **Answered badge**: Indicates questions that have been resolved
-- **Karma score**: Points earned for helpful contributions (if enabled by your instructor)
 
 Replies are threaded, allowing for organized conversations. Use the Markdown editor to format your responses with code blocks, links, images, and more. HTML tags in Markdown content are automatically escaped for security, so they display as text rather than being rendered.
 
 ## Karma System
 
-Pawtograder includes an optional karma system to recognize helpful contributions to the discussion board. If your instructor has enabled the karma system, you can earn points by:
+Your karma is the number of likes your posts and replies have received. Each like adds a point, removing a like takes it back away, and karma never falls below zero. Nothing else changes it.
 
-- **Creating helpful posts**: Posts that receive likes from other students or staff
-- **Providing good answers**: Answers that are marked as helpful or accepted by the original poster
-- **Receiving instructor endorsements**: When instructors endorse your contributions
-- **Engaging constructively**: Participating in discussions in meaningful ways
-
-Your karma score appears next to your name on posts and replies, on your profile page, and in the course leaderboard (if enabled). Karma helps recognize students who actively contribute to the learning community and encourages quality peer-to-peer learning.
+A karma badge sits next to your name on the thread you opened and on every reply you write. Its icon tracks your total: a green sprout at 0, a heart from 1 to 10, a blue star from 11 to 49, and a gold trophy at 50 and above. Hover the badge to see the count, which reads "N likes received".
 
 <Tip>
 Focus on providing thoughtful, helpful responses rather than maximizing karma. Quality contributions naturally earn recognition from your peers.
 </Tip>
-
-<Note>
-The karma system and leaderboard are optional features that instructors can enable or disable. If you don't see karma points or a leaderboard, your instructor has chosen not to use these features.
-</Note>

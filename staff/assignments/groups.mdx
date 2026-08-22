@@ -8,41 +8,69 @@ icon: "users"
 
 Pawtograder supports group assignments where two or more students share
 a single repository, submit together, and (by default) receive the same
-grade. Instructors manage groups from the assignment's **Groups** page.
+grade. Instructors manage groups from the assignment's **Manage Groups**
+page.
 
-## Group assignment types
+## Submission type
 
-Set the type when creating the assignment:
+Set **Submission type** when creating the assignment:
 
-- **Group optional** — students can submit alone or form a group.
-- **Group required** — students must be in a group to submit.
+- **Individual Submissions Only** — no groups.
+- **Group Submissions Only** — students must be in a group to submit.
+- **Individual or Group Submissions** — the group-optional case;
+  students can submit alone or form a group.
 
-Group settings also include a minimum and maximum group size and a
-group-formation deadline (after which the student-side group UI is
-locked).
+Group settings also include **Minimum group size**, **Maximum group
+size**, and an optional group-formation deadline, after which students
+can no longer change groups.
 
 ## Forming groups
 
-Three formation methods are available:
+**Group formation method** has two options:
 
-- **Student-formed** — students create and join groups themselves via
-  the invitation flow described in
+- **Students can form groups** — students create and join groups
+  themselves via the invitation flow described in
   [Forming Groups](/students/assignments/form-groups).
-- **Instructor-assigned** — staff assign students from the Groups page.
-- **Copy from another assignment** — reuse the group composition (and
-  optionally mentor assignments) from a previous assignment.
+- **Instructor only** — staff assign students from **Manage Groups**.
 
-Use the Groups page to create groups manually, add or remove members,
+Use **Manage Groups** to create groups manually, add or remove members,
 rename or delete groups, and move students between groups. Changes are
-staged locally and applied atomically when you click **Publish**.
-Publishing creates or updates memberships in the database, creates
-GitHub repositories for any new groups, and queues permission-sync
-jobs.
+staged locally and applied in one operation when you click **Publish
+Changes**. Publishing creates or updates memberships, creates GitHub
+repositories for any new groups, and queues permission-sync jobs. If
+individual items fail, the rest still go through: the failed moves and
+groups stay staged for you to retry, and you get a "Published with
+errors" toast.
 
 <Note>
-Students are not notified about group assignments until the assignment
-is released, so you can prepare and adjust groups in advance.
+Adding or removing a member notifies the group's other members, including
+when the change comes from publishing. That notification is suppressed
+while the assignment is unreleased, so you can prepare and adjust groups
+in advance.
 </Note>
+
+## Copying groups from a prior assignment
+
+**Copy Groups from Prior Assignment** on **Manage Groups** reuses the
+group names, memberships, and mentors from another assignment. Mentors
+are copied unconditionally; there is no opt-out.
+
+The button is disabled until the course has another assignment whose
+submission type allows groups. On a course with only one group assignment
+there is no source to copy from, so the control appears greyed out rather
+than missing.
+
+<Warning>
+This is not staged. The dialog says so in bold: "This action is not
+staged. It runs as soon as you click overwrite and does not wait for the
+page's Publish Changes button." The confirm button is **Overwrite Groups
+Now**, and clicking it immediately overwrites the assignment's current
+groups and memberships.
+
+Existing groups that become empty are removed when they have no
+submission history. Groups with submission history are preserved, so
+graded work stays intact.
+</Warning>
 
 ## Group mentors
 
@@ -56,7 +84,7 @@ Mentors are:
 - Available as an auto-assign target via the
   [**Assign to group mentors**](/staff/assignments/grading-assignments#assignment-modes)
   bulk grading mode.
-- Preserved when copying groups between assignments.
+- Copied along with the groups when you copy from a prior assignment.
 - Included in the CSV export below.
 
 ## Individual grading
@@ -69,7 +97,7 @@ which member a part applies to. The full schema and grading flow are in
 
 ## Exporting groups to CSV
 
-Click **Export to CSV** on the Groups page to download:
+Click **Export as CSV** on **Manage Groups** to download:
 
 | Column | Contents |
 |---|---|

@@ -6,6 +6,10 @@ icon: "table"
 
 # Gradebook
 
+<Frame>
+  <img src="/images/staff/gradebook-grid-1787282079132.png" alt="Gradebook grid with one row per student, Class Section and Lab Section columns, two assignment columns showing Max 100, a Skill #12 column marked with a lock icon, calculated skills columns, and a footer with Download Gradebook, Import Columns, and Add Column" />
+</Frame>
+
 ## Column Semantics
 
 In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources.
@@ -16,27 +20,31 @@ Columns can be:
 - **Imported from CSV files** to bulk-load grades from external systems (with full metadata tracking of the import source and date)
 - **Linked to programming assignments** through the assignment reference system
 
-When linked to assignments, columns automatically pull grades from the autograder system, creating a seamless connection between student code submissions and gradebook entries.
+Creating an assignment automatically creates a matching gradebook column, so grades flow from submission reviews into the gradebook without any setup. The column is named after the assignment, gets the slug `assignment-<assignment-slug>`, takes its maximum score from the assignment's total points, starts unreleased, and gets the score expression `assignments("<assignment-slug>")`. You cannot edit that expression from the column editor.
 
-**Expressions:** The most sophisticated column type uses **mathematical expressions** that reference other columns or assignments, creating a powerful dependency system for calculated grades. Using MathJS syntax, instructors can create complex formulas like `(gradebook_columns("homework-*") + assignments("project-*")) / 2` to automatically compute weighted averages, drop lowest scores, or apply curve adjustments. Score expressions can define functions and have access to the full MathJS library of math and utility functions. Any grade that is automatically calculated can also be manually overridden by the instructor on a case-by-case basis.
+**Expressions:** The most flexible column type uses **score expressions** that reference other columns or assignments, building a dependency graph for calculated grades. Using MathJS syntax, you can write formulas like `(mean(gradebook_columns("homework-*")) + mean(gradebook_columns("project-*"))) / 2` to compute weighted averages, drop lowest scores, or apply curve adjustments. Score expressions can define functions and use MathJS's math and utility functions, except that `import`, `createUnit`, `reviver`, and `resolve` are blocked and the arithmetic and comparison operators are replaced with gradebook-aware versions. Any grade that is automatically calculated can also be manually overridden on a case-by-case basis.
 
 ## Student Visibility of Grades
 
 The **"released"** status in the gradebook determines whether students can see a particular column and its grades. For imported or manually-entered columns, instructors have direct control over this visibility — they can release columns to make them visible to students or unrelease them to hide grades during grading periods or for sensitive assessments. This setting is at the column level only (you can't release or unrelease individual grades).
 
-For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks will show the student the average of all homeworks they have released.
+For columns that are automatically calculated by Pawtograder (via an expression), students always see the current calculation *based only on what they can see*. For example, a column defined as the average of all homeworks shows each student the average of the homework columns you have released to them.
 
-### Instructor-Only Columns
+### Staff-Only Columns
 
-When creating or editing a calculated column, you can mark it as **"Staff-only"** (instructor-only). These columns are completely hidden from students until you release them. While unreleased, students cannot see the column definition or their grades.
+When creating or editing a column, you can check **Staff-only column (hidden from students until you release it)**. These columns are hidden from students until you release them. While unreleased, students cannot see the column definition or their grades.
 
-When you release an instructor-only column:
+When you release a staff-only column, Pawtograder does two things in a single transaction: it copies the current private scores into the students' public rows, and it clears the staff-only flag so the column behaves like a normal column from then on.
 
-1. Pawtograder creates a frozen snapshot of the current private scores for students
-2. The instructor-only flag is cleared, making the column behave like a normal column going forward
-3. Subsequent edits propagate to students via standard sync; unreleasing the column clears the public score but the column remains visible
+<Warning>
+Releasing a staff-only column cannot be undone. Pawtograder asks you to confirm first. Because the release clears the staff-only flag, a calculated column loses its **Release Column** and **Unrelease Column** menu items afterwards: those items only appear for manually-entered columns and for staff-only columns.
+</Warning>
 
-This feature is useful for internal grading calculations, curve adjustments, bonus calculations, or draft grade formulas you want to finalize before sharing with students.
+Release is blocked while any cell in the column is still recalculating. If you try, you get a "Column is recalculating" error and nothing changes; wait and retry.
+
+Unreleasing a column clears the students' public score, but only for manually-entered columns and for columns still marked staff-only. Unreleasing a released calculated column does not clear anything.
+
+Staff-only columns are useful for internal grading calculations, curve adjustments, bonus calculations, or draft grade formulas you want to finalize before sharing with students.
 
 ### Automatic Recalculation of Dependent Columns
 
@@ -48,53 +56,77 @@ When you release or unrelease a gradebook column, Pawtograder automatically enqu
 
 You can reorder gradebook columns to organize them logically:
 
-- **Drag and drop**: Click and drag the grip icon (⋮⋮) in any column header to reorder columns
-- **Move left/right**: Use the column menu (⋮) and select **Move Left** or **Move Right** to shift a column one position
-- **Auto-layout**: Click the auto-layout button (grid icon) to automatically organize columns by their slug prefixes
+- **Drag and drop**: Click and drag the grip handle in any column header to reorder columns
+- **Move left/right**: Open the column menu (the chevron in the column header) and select **Move Left** or **Move Right** to shift a column one position
+- **Auto-layout**: Click the **Auto-layout columns** button (grid icon) in the toolbar. Auto-layout first sorts every column by slug using a natural alphanumeric sort, so `lab-2` comes before `lab-10`. It then makes a second pass that moves each calculated column after the columns it depends on, so dependencies always appear to the left of the columns that use them.
 
 Column reordering is saved immediately and affects the display for all instructors and the export order in CSV files.
 
+### The Column Menu
+
+The chevron in each column header opens a menu with:
+
+- **Show Filter** / **Hide Filter**: toggle the per-column filter input
+- **Sort Ascending**, **Sort Descending**, **Clear Sort**
+- **Edit Column**: open the column editor (name, maximum score, score expression, render expression, and staff-only)
+- **Move Left**, **Move Right**
+- **Release Column**, **Unrelease Column**: shown only for manually-entered columns and for staff-only columns
+- **Convert Missing to 0**: shown only for manually-entered columns and for columns whose score expression starts with `assignments(`
+- **Delete Column**
+
+Column and section filter dropdowns carry **Select all** and **Select none** buttons for faster multi-select filtering.
+
 ## Manual Grade Entry
 
-You can manually enter or edit grades directly in the gradebook by clicking on any cell. The gradebook supports both whole numbers and decimal values, allowing you to enter precise grades like `8.5` or `92.75`. This is particularly useful for assignments with partial credit or weighted scoring systems. The system validates that scores don't exceed the maximum score for the column.
+You can manually enter or edit grades directly in the gradebook by clicking on any cell. The gradebook accepts both whole numbers and decimal values, so you can enter grades like `8.5` or `92.75`. This is useful for assignments with partial credit or weighted scoring.
 
-When you override a calculated grade or manually adjust a grade, you can add a note explaining the reason for the override. These notes are visible in the gradebook interface and help maintain transparency about grade adjustments.
+<Warning>
+Pawtograder does not check entered scores against the column's maximum score. A score above the maximum is accepted and stored as-is.
+</Warning>
+
+The cell editor also carries three per-grade flags:
+
+- **Droppable**: this grade is eligible to be dropped by `drop_lowest`
+- **Excused**: the student is excused from this item
+- **Missing**: the grade has not been entered (see below)
+
+For a calculated or imported column, the editor switches to override mode. It shows the current calculated value, an override field, and a **Note** field where you can record why you overrode it. Overrides persist through recalculation and re-import. For calculated columns, both other staff **and the student** see that the score was overridden from the calculated value; for imported columns, staff see the override but students do not. A **Reset** button next to **Override** clears the override and restores the calculated value.
+
+### Missing Grades
+
+**Missing** is a distinct state from a score of 0. A missing grade does not count as a zero: a calculated column that depends on one is marked "not final" rather than silently computing a lower score.
+
+When you have finished grading an item and want the missing entries to count as zeros, open the column menu and choose **Convert Missing to 0**. This sets `score = 0`, clears the missing flag, and stamps the note `Missing value converted to 0` on every affected grade in the column. It cannot be undone, and it is only offered for manually-entered columns and for columns whose score expression starts with `assignments(`.
 
 ## Gradebook Recalculation
 
 When gradebook columns use expressions that reference other columns, Pawtograder automatically recalculates affected grades when dependencies change. This recalculation process runs asynchronously in the background to maintain performance for large courses.
 
-- When a grade changes, the system enqueues a recalculation job for affected gradebook rows
-- Edge functions process these jobs asynchronously to update calculated columns
-- The system tracks row versions to ensure updates are applied correctly and prevent race conditions
-- If a row is already being recalculated, new updates are queued without incrementing the version, allowing the current worker to complete successfully
-- When rubric check scores change, submission grade totals automatically recalculate to reflect the updated scores
+- When a grade changes, the system enqueues a recalculation job for each affected gradebook row and marks that row dirty and recalculating.
+- Each enqueue also bumps a per-row version counter, which invalidates any worker already computing that row.
+- A background worker takes each job, computes the row, and writes the result back only if nothing has changed in the meantime. A result computed from inputs that have since moved is discarded rather than overwriting the fresher value.
+- Mismatched rows are re-enqueued with an attempt counter and exponential backoff. Past a retry ceiling the row goes to a dead letter queue instead of cycling forever.
 
-This architecture ensures that calculated grades (such as averages and weighted scores) stay up-to-date even during periods of high activity, such as when multiple graders are entering scores simultaneously.
-
-<Note>
-The gradebook recalculation system was recently fixed to address a critical bug where rows could become permanently stuck in the `is_recalculating=true` state. The fix ensures that version numbers are read after upserts complete, preventing version mismatches during batch processing.
-</Note>
+The result is that calculated grades stay current even during heavy activity, such as several graders entering scores at once, without one worker clobbering another's results.
 
 ## "What If" Grade Calculations
 
-The gradebook includes a "What If" mode that allows students and instructors to explore hypothetical grade scenarios by temporarily adjusting scores. This feature helps answer questions like "What grade do I need on the final exam to get an A?" or "How will my grade change if I skip this assignment?"
+What-If is a **student-facing** mode that lets students explore hypothetical grade scenarios by temporarily adjusting their own scores. It answers questions like "What grade do I need on the final exam to get an A?" or "How will my grade change if I skip this assignment?"
 
-When a student enters "what if" mode:
+When a student uses What-If:
 
-- They can edit any editable grade cell to enter hypothetical scores
-- Calculated columns automatically update to reflect the hypothetical scenario
-- All changes are temporary and client-side only — no actual grades are modified
-- Modified cells are visually highlighted to distinguish them from actual grades
-- Students can reset to actual grades at any time
+- They can click any grade card that is not itself calculated from other gradebook columns and type a hypothetical score. Columns that depend on other columns are read-only, since those are the ones What-If recomputes.
+- Calculated columns update immediately to reflect the hypothetical scenario.
+- All changes are temporary and client-side only. No actual grades are modified.
+- Simulated cards are highlighted with an info background so they stand out from real grades.
+- To undo a simulation, clear the input for that grade. There is no bulk reset control.
+- A grade that has a staff override is never replaced by a simulation.
 
-This feature is useful for:
+You enable What-If for students under [**Course Settings → Feature flags**](/staff/feature-flags) ("Student gradebook What-If"). It is off by default. When disabled, the student gradebook is view-only and shows a banner saying so.
 
-- Students planning how to allocate study time across remaining assignments
-- Instructors modeling the impact of curve adjustments or extra credit
-- Advisors helping students understand grade requirements for specific outcomes
-
-Instructors can enable the "What-If" feature for students via **Course Settings → Feature flags**. When disabled, the student gradebook is view-only. The What-If feature does not apply to the staff preview in the instructor gradebook.
+<Note>
+What-If does not apply to the staff gradebook. The instructor view renders the same student grade components read-only, so there is no staff-side scenario modeling.
+</Note>
 
 ## Importing Grades
 
@@ -118,16 +150,17 @@ When creating or editing a column with a score expression, Pawtograder provides 
   - **Hover documentation**: Hover over any sub-expression to see its current evaluated value for the selected student.
   - **Student picker**: Select a student to test the expression against their actual gradebook data.
   - **Per-line evaluation**: See the intermediate value of each statement in your expression, displayed as inline annotations (e.g. `= 42`) next to each line.
-  - **Score preview**: View both the raw numeric result and the rendered form (if a render expression is set).
-  - **Incomplete values panel**: See which dependencies are missing or not released for the selected student.
-- **Save blocking**: The Save button is disabled until the expression parses correctly and all dependency slugs resolve.
-- **Gradebook table filters**: The gradebook table now includes **Select all / Select none** toolbar buttons in column and section filter dropdowns for faster multi-select filtering.
+  - **Result badges**: A **Score** badge shows the numeric result, and a **Rendered** badge shows the rendered form when a render expression is set.
+  - **Incomplete dependencies**: A panel listing which dependency slugs are **Missing** and which are **Not released** for the selected student.
+- **Save blocking**: The **Save** button is disabled while the expression fails to parse, references an unknown column slug, or would create a cycle. An evaluation error for the selected student does not block saving.
 
 The Expression Builder helps you write and debug complex expressions before saving them, ensuring they work correctly for all students.
 
 ## Expression Syntax
 
-The gradebook expression system uses **MathJS** as its foundation, enhanced with specialized functions for grade calculations. Expressions must return a numeric value that becomes the student's score for that column. The final expression line is the student's score for that column.
+The gradebook expression system is built on **MathJS**, with added functions for grade calculations. The value of the last line is the student's score for that column. If that value is `undefined` or `null`, the score is stored as `null` rather than as `0`.
+
+Comments start with `#`. MathJS has no `//` comment syntax, so a `//` comment is a parse error.
 
 ### Core Syntax
 
@@ -135,35 +168,45 @@ Expressions follow standard mathematical notation with variables, operators, and
 
 ```javascript
 # Basic arithmetic
-hw_average = (hw1 + hw2 + hw3) / 3
+hw_average = mean(gradebook_columns("hw-*"))
 
-# Boolean logic and conditionals
-passing = grade >= 60 ? 1 : 0
+# Conditionals: the comparison yields 1 or 0
+passing = hw_average >= 60 ? 1 : 0
 
 # Multi-line expressions (last line is the result)
 midterm_weight = 0.3
 final_weight = 0.7
-weighted_score = midterm * midterm_weight + final * final_weight
+weighted_score = gradebook_columns("midterm") * midterm_weight + gradebook_columns("final") * final_weight
 weighted_score
 ```
+
+<Note>
+Every gradebook has an optional **expression prefix**. Pawtograder prepends it, followed by a newline, to every score expression and every render expression in that gradebook before evaluating. Use it for shared helper function definitions and constants you do not want to repeat in each column. There is no screen for editing it, so setting one takes a Pawtograder administrator.
+</Note>
 
 ### Data Access Functions
 
 #### `gradebook_columns("slug-pattern")`
 
-Retrieves gradebook column data with glob pattern matching. Returns objects with:
+Retrieves gradebook column data for the student being calculated. With a single slug it returns one object; with a pattern containing `*` it returns an array of objects, one per matching column.
 
-- `score`: `number | null` - The student's score (including overrides)
+The object carries the student's whole grade record for that column, plus computed fields. The ones you will use:
+
+- `score`: `number | null` - The student's score, with any override already applied
 - `max_score`: `number` - The maximum score for the column
-- `is_missing`: `boolean` - Whether the grade is missing/not entered
+- `is_missing`: `boolean` - Whether the grade is missing or not yet entered
 - `is_excused`: `boolean` - Whether the student is excused from this item
-- `is_droppable`: `boolean` - Whether this item can be dropped in calculations
+- `is_droppable`: `boolean` - Whether `drop_lowest` may drop this item
+- `is_private`: `boolean` - Whether this is the staff-visible row or the student-visible row
+- `column_slug`: `string` - The slug of the source column
+- `released`: `boolean` - Whether the column is released to the student
+- `score_override`, `score_override_note`, `is_recalculating`, `incomplete_values`, `id`
 
 ```javascript
 # Single column
 homework1 = gradebook_columns("hw-01")
 
-# Multiple columns with glob patterns
+# Multiple columns with a glob, returning an array
 all_homeworks = gradebook_columns("hw-*")
 skill_assessments = gradebook_columns("skill-*")
 
@@ -171,11 +214,32 @@ skill_assessments = gradebook_columns("skill-*")
 hw_score = gradebook_columns("hw-01").score
 ```
 
+<Warning>
+Only `*` expands a pattern into an array. Dependency validation in the editor uses full glob matching, so a pattern like `hw-0?` resolves and saves without complaint, but at evaluation time it is treated as one literal slug and matches nothing.
+</Warning>
+
+#### `assignments("assignment-slug"[, "review-round"])`
+
+Returns the student's total score for one review round on the assignment, not the assignment's point value. The second argument selects the round and defaults to `"grading-review"`. The valid rounds are `self-review`, `grading-review`, `meta-grading-review`, and `code-walk`.
+
+As with `gradebook_columns`, a slug containing `*` returns an array. Unlike `gradebook_columns`, the values are plain numbers rather than objects, so they work with `sum` but not with `mean` or `drop_lowest`, both of which need a `max_score` per entry.
+
+```javascript
+# Grading-review total for one assignment
+assignments("project-1")
+
+# Self-review total for the same assignment
+assignments("project-1", "self-review")
+
+# Sum of grading-review totals across all projects
+sum(assignments("project-*"))
+```
+
 ### Array Processing Functions
 
 #### `countif(array, predicate)`
 
-Counts array elements matching a condition using lambda syntax:
+Counts array elements matching a condition using lambda syntax. Returns `undefined` for an empty array.
 
 ```javascript
 # Count skill assessments scoring exactly 2
@@ -187,15 +251,15 @@ passing_count = countif(gradebook_columns("exam-*"), f(x) = x.score >= 70)
 
 #### `sum(array)`
 
-Sums numeric values or scores from gradebook objects:
+Sums numeric values or the scores of gradebook objects, skipping `null` and `undefined` entries. Returns `undefined` for an empty array. A gradebook object with a `null` score contributes `0`.
 
 ```javascript
 total_points = sum(gradebook_columns("hw-*"))
 ```
 
-#### `mean(array, weighted=true)`
+#### `mean(array, weighted)`
 
-Calculates weighted (default) or unweighted averages. The function gracefully handles undefined values and missing grades:
+Calculates a weighted or unweighted average. `weighted` is a **positional** second argument that defaults to `true`; there are no named arguments in MathJS.
 
 ```javascript
 # Weighted average (accounts for different max scores)
@@ -222,15 +286,17 @@ Unweighted average is defined as:
 return (100 * validValues.reduce((a, b) => a + (b && b.score ? b.score / b.max_score : 0), 0)) / validValues.length;
 ```
 
-In either case, grades that are missing will count as 0 points, *unless* the grade is marked as `excused`, in which case it is excluded from the average. The calculation tolerates undefined values in the input array, ensuring robust grade calculations even when some data is missing.
+Grades marked `is_missing` count as 0 points, *unless* they are **also** marked `is_excused`, in which case they are excluded from the average. Marking a grade excused on its own does not exclude it; the grade must be both missing and excused.
+
+`mean` also silently drops entries it cannot average: `undefined` and `null` array entries, entries whose `max_score` is missing, null, or not greater than zero, and entries whose `score` is `null` while `is_missing` is false. If nothing is left, `mean` returns `undefined`.
 
 <Note>
-The mean calculation now tolerates undefined values in the input array, automatically filtering them out before computing the average. This prevents errors when some gradebook columns have not yet been populated.
+`mean` returns a percentage on a 0-100 scale, not a raw point total. If your column's maximum score is 100, the two happen to coincide; otherwise they do not.
 </Note>
 
 #### `drop_lowest(array, count)`
 
-Removes the lowest scoring droppable items:
+Returns the array with up to `count` of the lowest items removed.
 
 ```javascript
 # Drop 2 lowest homework scores
@@ -238,7 +304,21 @@ best_homeworks = drop_lowest(gradebook_columns("hw-*"), 2)
 hw_final = mean(best_homeworks)
 ```
 
-`drop_lowest` drops the lowest grades (including those that are "missing" or "excused") as long as the "droppable" flag is set on the grade (this is the default).
+Ranking is by **percentage** (`score / max_score`), not by raw score. Given a 10-point quiz scored 6/10 and a 100-point exam scored 70/100, the quiz ranks lower and is dropped first, even though 6 is the smaller number.
+
+Only grades with the **droppable** flag set are eligible to be dropped, which is the default for new grades.
+
+<Warning>
+`drop_lowest` also removes every entry whose `score` is `null` or whose `max_score` is not greater than zero. Those removals happen regardless of the droppable flag and do not count against `count`, so ungraded items disappear from the array before any dropping occurs.
+</Warning>
+
+#### `min(...)` and `max(...)`
+
+`min` and `max` accept any mix of numbers, gradebook objects, and arrays, flatten them, and use each gradebook object's score. Entries that are `null` or `undefined` are skipped. With no usable values left, both return `undefined`.
+
+<Note>
+Several functions return `undefined` rather than `0` when they have nothing to work with: `sum` and `countif` on an empty array, `mean` with no averageable entries, `min` and `max` with no values, and `case_when` with no matching row. If that `undefined` reaches the last line of the expression, the column's score is stored as `null`, and the cell renders as `-`.
+</Note>
 
 ### Conditional Logic
 
@@ -247,18 +327,27 @@ hw_final = mean(best_homeworks)
 Convenience function for multi-condition branching using matrix syntax:
 
 ```javascript
+score = mean(gradebook_columns("hw-*"))
 letter_grade = case_when([
-  score >= 93, 97;  // A
-  score >= 90, 93;  // A-
-  score >= 87, 90;  // B+
-  score >= 83, 87;  // B
-  true, 0           // Default case
+  score >= 93, 97;  # A
+  score >= 90, 93;  # A-
+  score >= 87, 90;  # B+
+  score >= 83, 87;  # B
+  true, 0           # Default case
 ])
 ```
 
+Rows are tested top to bottom and the first matching row's value is returned. If no row matches, `case_when` returns `undefined`, which stores as a `null` score. Include a `true` row as a default.
+
 ### Comparison Functions
 
-Normal comparison functions like `==`, `>=`, `<=`, etc. are available, and can automatically coerce a gradebook value to a score for you (so that you do not need to map each gradebook value to a score to compare it).
+`==`, `!=`, `>`, `>=`, `<`, and `<=` are available and are replaced with gradebook-aware versions.
+
+They return **`1` or `0`**, not `true` or `false`. That is what makes them work inside `case_when` matrices, `and`/`or` chains, and arithmetic.
+
+<Warning>
+Each comparison coerces only its **left** operand from a gradebook object to a score. Write `gradebook_columns("hw-01") >= 85`, not `85 <= gradebook_columns("hw-01")`. The reversed form compares a number against an object and is always `0`.
+</Warning>
 
 ### Complete Examples
 
@@ -310,37 +399,76 @@ final = max(letter + mod, 0)
 final
 ```
 
+## Render Expressions
+
+A **render expression** controls how a column's score is *displayed*. It does not change the stored score. Set it in the **Render Expression** field of the column editor, next to the score expression.
+
+A render expression sees exactly two variables:
+
+- `score`: the stored score, with any override already applied
+- `max_score`: the column's maximum score
+
+With no render expression set, Pawtograder uses `round(score, 2)`. The gradebook's expression prefix is prepended to render expressions too, so helpers defined there are available here. As with score expressions, `import`, `createUnit`, `reviver`, and `resolve` are blocked. If the expression produces multiple statements, only the last one is displayed.
+
+Two states bypass the expression entirely: a grade flagged **Missing** renders as `Missing`, and a grade with no score at all renders as `-`.
+
+### Built-In Display Helpers
+
+| Helper | Result |
+| --- | --- |
+| `letter(score, max_score)` | Letter grade from the percentage |
+| `check(score, max_score)` | `✔️+` at 90%, `✔️` at 80%, `✔️-` at 70%, otherwise `❌` |
+| `checkOrX(score, max_score)` | `✔️` for any percentage above zero, otherwise `❌` |
+| `customLabel(value, breakpoints)` | Your own label table |
+
+`letter` uses fixed breakpoints: 93 A, 90 A-, 87 B+, 83 B, 80 B-, 77 C+, 73 C, 70 C-, 67 D+, 63 D, 60 D-, and F below 60. You cannot change them; use `customLabel` for a different scale.
+
+All three of `letter`, `check`, and `checkOrX` return `(N/A)` when `score` is undefined.
+
+```javascript
+# Show a letter grade instead of a number
+letter(score, max_score)
+
+# Points out of the maximum, one decimal place
+concat(string(round(score, 1)), " / ", string(max_score))
+
+# Your own labels, highest threshold first
+customLabel(100 * score / max_score, [
+  90, "Excellent";
+  80, "Good";
+  0,  "Needs work"
+])
+```
+
+<Warning>
+`customLabel` returns the value from the first row whose threshold the input meets or exceeds, so list thresholds from highest to lowest. If no row matches, it returns the literal string `Error`.
+</Warning>
+
 ## Exporting Grades
 
-You can export gradebook data to CSV format for external analysis or record-keeping. Export buttons display a loading state while the export is being generated, providing clear feedback during the process.
-
-### Export Options
-
-The export feature provides two options:
-
-1. **Standard Export**: Exports raw scores as stored in the gradebook, including any manual overrides
-2. **Export with Rendered Expressions**: For columns defined by expressions, evaluates the expression for each student and exports the calculated numeric result instead of the formula
+You can export gradebook data to CSV for external analysis or record-keeping. The export is built in the browser from data already loaded, so it downloads immediately.
 
 ### How to Export
 
 1. Click the **Download Gradebook** button at the bottom of the gradebook page
-2. Optionally check **Use render expressions in CSV** to apply formatting
+2. Optionally check **Use render expressions in CSV**
 3. Click **Download CSV**
+
+### Export Options
+
+Both options export the same set of students and columns; they differ only in how each cell is formatted.
+
+1. **Default**: every cell is the stored numeric score, with any manual override applied. Score expressions are never exported; only their results.
+2. **Use render expressions in CSV**: for columns that have a render expression, the cell holds the *rendered string* that the gradebook displays, such as `A` or `✔️`, rather than a number. Columns without a render expression still export their numeric score.
+
+<Note>
+The rendered export produces text, not numbers. Pick it when you want a human-readable transcript; leave it unchecked when the file feeds a spreadsheet formula or another grading system.
+</Note>
 
 ### Export Contents
 
-The exported CSV includes:
+The first row is a header: `Name`, `Email`, `SID`, `Course Section`, [`Lab Section`](/staff/lab-sections), `Tags`, then one column per gradebook column, in the gradebook's display order.
 
-- Student names and identifiers
-- All gradebook columns (both manually entered and calculated)
-- Current grade values for each student
-- **Expression-rendered columns** (when enabled): Columns defined by expressions are exported with their calculated values
-- Proper UTF-8 encoding with BOM for Excel compatibility
-- Formula injection protection through proper CSV escaping
+One row follows per enrolled student. Students who have dropped the course are skipped.
 
-### Use Cases for Rendered Expressions
-
-- Share final calculated grades with students or administrators
-- Import computed averages into external grading systems that don't support expression syntax
-- Analyze grade distributions based on complex calculations
-- Create reports with final weighted scores
+The file is written with a UTF-8 byte-order mark so Excel opens it as UTF-8 instead of mangling non-ASCII characters. Every cell is quoted with internal quotes doubled, and any cell starting with `=`, `+`, `@`, or `-` is prefixed with an apostrophe to prevent spreadsheet formula injection.

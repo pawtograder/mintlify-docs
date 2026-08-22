@@ -1,47 +1,176 @@
 ---
 title: "Monitoring and Metrics"
-description: "Prometheus metrics for monitoring system performance and rate limiting"
+description: "Prometheus scrape endpoints, metric families, and Grafana dashboards"
 icon: "chart-line"
 ---
 
 # Monitoring and Metrics
 
-Pawtograder exposes Prometheus metrics for monitoring system performance, queue health, and rate limiting behavior.
+Pawtograder exposes Prometheus metrics from two independent endpoints. Each has its own registry, its own metric-name prefix, and its own bearer token, so you scrape both.
 
-## Metrics Endpoint
+## Scrape endpoints
 
-Metrics are available at the `/metrics` endpoint and can be scraped by Prometheus or compatible monitoring systems.
+| Endpoint | Served by | Prefix | Token |
+| --- | --- | --- | --- |
+| `/api/metrics` | Next.js web app | `web_` | `METRICS_SCRAPE_TOKEN` (required) |
+| `/functions/v1/metrics` | `metrics` edge function | `pawtograder_` | `METRICS_TOKEN` (optional) |
 
-## Rate Limiter Metrics
+### Web app: `/api/metrics`
 
-Pawtograder uses Bottleneck with Upstash Redis for distributed rate limiting. The system exposes detailed metrics about limiter state:
+Set `METRICS_SCRAPE_TOKEN` and send it as `Authorization: Bearer <token>`. The route compares SHA-256 digests of the expected and presented tokens in constant time.
 
-### Limiter Gauges
+- With `METRICS_SCRAPE_TOKEN` unset, the route returns **503** with the body `metrics disabled (METRICS_SCRAPE_TOKEN not set)`. It never serves metrics unauthenticated.
+- A missing or wrong bearer returns **401** with a `WWW-Authenticate: Bearer` header.
+- The route runs on the Node runtime and is marked `force-dynamic`, so the registry snapshot is never cached.
 
-The following gauges are exposed with a `limiter_id` label to track each rate limiter independently:
+```bash Scrape the web app
+curl -s -H "Authorization: Bearer $METRICS_SCRAPE_TOKEN" \
+  https://your-instance.example.edu/api/metrics
+```
 
-#### `pawtograder_limiter_running_weight`
+### Edge function: `/functions/v1/metrics`
 
-Total weight of currently running jobs for this limiter. This represents the active workload being processed.
+The `metrics` edge function is deployed with `verify_jwt = false`, so it does not accept a Supabase JWT. It accepts `GET` only and returns **405** for any other method.
 
-#### `pawtograder_limiter_queued_count`
+Authentication here is **optional**: when `METRICS_TOKEN` is unset the endpoint serves metrics to anyone who can reach it. When the variable is set, a request without a `Bearer` prefix or with the wrong token gets **401**.
 
-Number of jobs waiting in the queue for this limiter. Uses the same logic as Bottleneck's `queued.lua` script to ensure consistency with the rate limiting behavior.
+<Warning>
+`METRICS_TOKEN` and `METRICS_SCRAPE_TOKEN` are different variables with different defaults. Leaving `METRICS_TOKEN` unset publishes queue depths, circuit breaker state, and database table sizes to any client that can reach the functions host.
+</Warning>
 
-#### `pawtograder_limiter_concurrent_clients`
+If the queue RPCs fail, the endpoint returns **500** with the body `# Error generating metrics`. Failures in the vacuum and RAM collectors are non-fatal: they are reported to Sentry and the rest of the response still renders.
 
-Number of clients with active work (running or queued) for this limiter. Helps identify how many distinct clients are competing for rate-limited resources.
+```bash Scrape the edge function
+curl -s -H "Authorization: Bearer $METRICS_TOKEN" \
+  https://your-instance.example.edu/functions/v1/metrics
+```
 
-### Implementation Details
+## `web_` metrics
 
-The metrics system scans Redis for `b_*_settings` keys to discover all active limiters. For each limiter, it evaluates:
+The web app registry starts with `prom-client`'s default process and Node metrics under the `web_` prefix, then adds the application signals below.
 
-- Running weight from the limiter's internal state
-- Queued count using Bottleneck's queue counting logic
-- Active client count based on clients with non-zero running or queued jobs
+| Metric | Type | Labels |
+| --- | --- | --- |
+| `web_http_request_duration_seconds` | histogram | `route`, `method`, `status` |
+| `web_http_in_flight_requests` | gauge | `route` |
+| `web_supabase_rpc_duration_seconds` | histogram | `rpc`, `status` |
+| `web_supabase_rpc_errors_total` | counter | `rpc`, `code` |
+| `web_submission_created_total` | counter | `class_id` |
+| `web_submission_mutated_total` | counter | `class_id`, `action` |
+| `web_grading_action_total` | counter | `class_id`, `kind` |
+| `web_rubric_check_action_total` | counter | `class_id`, `action` |
+| `web_office_hours_event_total` | counter | `class_id`, `event` |
+| `web_realtime_broadcast_total` | counter | `channel_class` |
+| `web_edge_function_invocation_total` | counter | `function`, `status` |
 
-Redis errors during metric collection are non-fatal, allowing Postgres queue metrics to continue scraping successfully.
+The HTTP histogram uses buckets from 5 ms to 30 s, because streaming routes such as the LLM hint and calendar export have a long tail. The Supabase RPC histogram tops out at 10 s.
 
-## Queue Metrics
+### Workflow gauges
 
-In addition to rate limiter metrics, Pawtograder exposes metrics for job queue health and performance (implementation details vary by queue backend).
+These four gauges are the autograder pipeline's success and latency signals. They are read from `workflow_runs` and `workflow_run_error` at scrape time, not incremented in request handlers.
+
+| Metric | Labels | Notes |
+| --- | --- | --- |
+| `web_workflow_runs_recent` | `class_id`, `conclusion`, `window` | `window` is `1h` or `24h` |
+| `web_workflow_queue_seconds` | `class_id`, `quantile` | `0.5`, `0.95`, `0.99` over 1h |
+| `web_workflow_run_seconds` | `class_id`, `quantile` | `0.5`, `0.95` over 1h |
+| `web_workflow_errors_recent` | `class_id`, `name`, `window` | `window` is `1h` |
+
+Two self-monitoring metrics cover the refresh itself: `web_workflow_metrics_refresh_seconds` (histogram) and `web_workflow_metrics_refresh_errors_total` (counter, labelled by `step`: `workflow_runs_1h`, `workflow_runs_24h`, `queue_seconds`, `run_seconds`, `errors_1h`, or `refresh`).
+
+<Warning>
+The workflow refresh only runs on replicas where `METRICS_WORKFLOW_REFRESH_LEADER` is exactly `"true"`. Set it on **one** replica. Every replica that sets it runs the same cluster-wide admin RPCs on every Prometheus poll, multiplying database load by replica count and emitting duplicate global gauges that downstream `sum()` queries overcount. Replicas without the flag still export the process and request metrics from the same registry.
+</Warning>
+
+Each gauge family is reset only after its query succeeds, so a transient RPC failure leaves the last good values in place instead of exporting empty series. Watch `web_workflow_metrics_refresh_errors_total` to tell a genuinely idle pipeline from a stalled refresh.
+
+## `pawtograder_` metrics
+
+### Queue depth and age
+
+| Metric | Queue |
+| --- | --- |
+| `pawtograder_async_queue_size` | GitHub async worker |
+| `pawtograder_async_low_priority_queue_size` | GitHub async worker, low priority (bulk repo analytics) |
+| `pawtograder_async_dlq_size` | GitHub async worker dead letter queue |
+| `pawtograder_gradebook_row_recalculate_queue_size` | Gradebook row recalculation |
+| `pawtograder_gradebook_row_recalculate_dlq_size` | Gradebook row recalculation dead letter queue |
+| `pawtograder_discord_queue_size` | Discord async worker |
+| `pawtograder_discord_dlq_size` | Discord async worker dead letter queue |
+| `pawtograder_notification_emails_queue_size` | Notification emails |
+
+All eight are gauges with no labels, sourced from the `get_async_queue_sizes` RPC.
+
+`pawtograder_queue_oldest_message_seconds{queue}` reports the age of the oldest message per queue, including messages deferred by retry backoff. The `queue` label takes one of: `async_calls`, `async_calls_dlq`, `async_calls_low_priority`, `gradebook_row_recalculate`, `gradebook_row_recalculate_dlq`, `discord_async_calls`, `discord_async_calls_dlq`, `notification_emails`.
+
+<Tip>
+Prefer age over depth for alerting. Depth alone cannot distinguish a healthy busy queue from a stalled one, and depth thresholds need retuning every term.
+</Tip>
+
+### Circuit breakers
+
+`pawtograder_circuit_breaker_open{scope,key,state}` is `1` when a breaker is open and `0` when it is closed, one series per breaker returned by the `get_circuit_breaker_statuses` RPC.
+
+### Rate limiter gauges
+
+Pawtograder rate-limits outbound work with Bottleneck backed by a shared Redis store. The metrics collector connects with the same factory the limiters use: `REDIS_URL` (real Redis over ioredis) if set, otherwise `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`. With neither configured it collects nothing and these three series are absent.
+
+Limiters are discovered by scanning Redis for `b_*_settings` keys. Each discovered limiter emits three gauges labelled with `limiter_id`:
+
+| Metric | Meaning |
+| --- | --- |
+| `pawtograder_bottleneck_running` | Total running job weight for the limiter |
+| `pawtograder_bottleneck_concurrent_clients` | Clients whose running-work score is greater than zero |
+| `pawtograder_bottleneck_queued` | Total queued jobs across valid clients, matching Bottleneck's `queued.lua` |
+
+<Warning>
+Discovery is capped per scrape by `METRICS_MAX_BOTTLENECK_LIMITERS` (default 200, hard maximum 5000). Limiters past the cap are dropped from the response with only a `console.warn`, so a deployment that outgrows the cap silently loses series. Redis errors here are non-fatal: they go to Sentry, and the Postgres-backed queue metrics still render.
+</Warning>
+
+### Database health
+
+`pawtograder_vacuum_alert` is `1` per active alert from the `vacuum_health_check` RPC, labelled `check`, `severity`, and `table_name`. When the RPC fails or exceeds its 3-second timeout, the endpoint emits a single series labelled `check="rpc_failed"`, `severity="error"`, `error_type="rpc_error"` instead of the raw error. When there are no alerts it emits `0` with `check="none"`, `severity="ok"`.
+
+The `database_ram_metrics` RPC produces `pawtograder_db_`-prefixed gauges, with labels taken from each row's `metric_labels`:
+
+- `pawtograder_db_buffer_cache_bytes`: shared buffer cache used by a table or index
+- `pawtograder_db_buffer_cache_total_used_bytes`: total shared buffer cache in use
+- `pawtograder_db_connections`: connections by state
+- `pawtograder_db_table_total_bytes`: table size including indexes and TOAST
+- `pawtograder_db_dead_tuples`: dead tuples per table
+
+Finally, `pawtograder_info{version}` is a constant `1` used as a target-presence marker.
+
+## Cluster wiring
+
+The Helm chart ships the scrape configuration, but it is off by default. Set `monitoring.enabled=true` to render `ServiceMonitor` resources for Postgres (via a `postgres_exporter` sidecar), storage, edge functions, GoTrue, Kong, Realtime, Supavisor, and the web app. Scrape interval defaults to `30s` with a `10s` timeout.
+
+The chart deploys no Prometheus or Grafana of its own. It assumes the cluster runs `kube-prometheus-stack`, which auto-discovers `ServiceMonitor` resources in any namespace and picks up dashboards from ConfigMaps labelled `grafana_dashboard: "1"`.
+
+<Note>
+The web app's `ServiceMonitor` reads `METRICS_SCRAPE_TOKEN` from the JWT secret and injects it as the bearer. The edge functions' `ServiceMonitor` marks `METRICS_TOKEN` as `optional: true`, so a deployment that intentionally leaves edge metrics unauthenticated still gets scraped instead of having the whole `ServiceMonitor` rejected.
+</Note>
+
+Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that adds Pawtograder-specific series on top of the exporter defaults, including `pawtograder_replication_*`, `pawtograder_wal_archiving_*`, `pawtograder_db_connections_*`, `pawtograder_classes_*`, `pawtograder_active_submissions_active_count`, `pawtograder_help_queue_depth_*`, and `pawtograder_table_sizes_*`.
+
+### Dashboards and alerts
+
+Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are individually toggleable through `monitoring.dashboards.*`: `stack-overview`, `postgres-deep-dive`, `realtime-fanout`, `edge-functions`, `app-business`, `rate-limiting`, `edge-soak`, and `queues-and-workers`. Each exposes a `datasource` template variable rather than a hardcoded datasource UID, so they import cleanly into any Prometheus-compatible Grafana.
+
+Alert rules live in `charts/pawtograder/templates/prometheus-rules.yaml`, grouped as `pawtograder.backup`, `pawtograder.walg`, `pawtograder.replication`, `pawtograder.postgres`, `pawtograder.app`, `pawtograder.edgefunctions`, `pawtograder.secrets`, and `pawtograder.certs`. Routing is in `alertmanager-config.yaml`.
+
+## Error tracking and product analytics
+
+Errors do not go to Sentry's hosted service. All three Sentry initializations point at `NEXT_PUBLIC_BUGSINK_DSN`, a self-hosted [Bugsink](https://www.bugsink.com/) instance, with `integrations: []` because Bugsink supports no integrations. Server and edge configs are registered from `instrumentation.ts`, which also re-exports `Sentry.captureRequestError` as `onRequestError`. Edge functions initialize separately through `npm:@sentry/deno`.
+
+The browser client adds `tunnel: "/api/tunnel"` to route events through the app's own origin, disables session replay, and drops React hydration mismatch errors (minified codes #418, #423, #425) in `beforeSend`, since those are usually caused by extensions rewriting the DOM before hydration.
+
+PostHog is initialized in the same client entry point when `NEXT_PUBLIC_POSTHOG_KEY` is set, with `persistence: "localStorage"` and `cross_subdomain_cookie: false`.
+
+<Warning>
+Do not switch PostHog back to a cookie persistence mode. Its default domain probe keeps the broadest domain the browser accepts, which on a `*.northeastern.edu` host resolves to `.northeastern.edu`. That sent the cookie to the API host, where an oversized `Cookie` header made the ingress return 400 for the Realtime WebSocket handshake.
+</Warning>
+
+<Note>
+There is no distributed tracing. Every Sentry configuration sets `tracesSampleRate: 0`, so latency questions have to be answered from the Prometheus histograms above.
+</Note>

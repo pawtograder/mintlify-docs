@@ -1,0 +1,103 @@
+---
+title: "Help Requests"
+description: "Claim, help, and resolve a single help request: the request view, code references, video calls, work sessions, feedback, and notifications"
+icon: "hand"
+---
+
+# Help Requests
+
+A help request is one student question, or one group's question, from the moment it is filed until it is resolved. Open a request from the Working view, from All Requests, from search, or from the sidebar on any request page.
+
+## Claiming and releasing
+
+**Start Helping** assigns the request to you and moves it to in progress. Your name and a **Helping** badge appear for the student, along with a timer. That timer counts from the request's last update rather than from the moment you claimed it, so treat it as a rough figure and use [Time Tracking](/staff/office-hours/staffing-and-time-tracking#time-tracking) for real durations. **Stop** clears the assignee and returns the request to the queue as open.
+
+Assignment is not exclusive. Any instructor or grader in the course can claim, resolve, or reassign any request, whether or not they are working that queue.
+
+## The request view
+
+<Frame>
+  <img src="/images/staff/office-hours/help-request-1787313949503.png" alt="A staff view of an open, unassigned help request for three students: Start Helping, Resolve, Start Video Call and Watch in the header, the expanded student list, the Referenced Code panel and a work session panel reading no work sessions recorded yet, and the chat with two instructor messages and one student message badged OP" />
+</Frame>
+
+The header carries the request title, its status, a **Private** badge when the request is private, and how long ago it was filed. Alongside **Start Helping** and **Resolve** you get:
+
+- **Watch** and **Unwatch**, which control whether you receive notifications for this request.
+- **Pop out chat**, which opens the conversation in its own window so you can keep the queue in view.
+- **Get AI help**, which copies a prompt about this request to your clipboard.
+- A Discord link, **Moderation**, and **Karma**, all staff-only. See [Moderation and Karma](/staff/office-hours/moderation-and-karma).
+- **Start Video Call** when no call is running.
+
+Below the header, a collapsible row labeled with the request's student count expands to the student list, the referenced code, and the work session history. A collapsible sidebar (**Show queue requests**) lists the rest of that queue in three groups: **Working** for requests assigned to you that are still active, **Open** for everything else unresolved, and **Resolved** newest first. Unread-message counts appear only on requests assigned to you.
+
+## Students and referenced code
+
+**Edit student list** adds or removes students on a request, subject to at least one student remaining. Use it to merge two students who came to office hours with the same question into one conversation.
+
+Students can attach a submission, specific files from it, and line numbers, and staff see those references inline. **Edit code references** lets you change them.
+
+<Warning>
+Referencing a submission forces the request private, and clearing the last reference forces it public again. Removing a student's code references from a request that was private for that reason will publish it to the class, so leave at least one reference in place if the conversation should stay private. The picker also lists your own submissions rather than the student's, so it is more useful for reviewing and removing references than for adding them. This is a known issue with an open report against Pawtograder, and a fix is on the way.
+</Warning>
+
+## Video calls
+
+Only instructors and graders see **Start Video Call**, and it works on any queue whatever the queue's type. Once a call is live, everyone who can see the request gets **Join Video Call** and staff also get **End Call**.
+
+<Warning>
+End the call before you resolve the request. Both **Join Video Call** and **End Call** are disabled once a request is resolved or closed, which leaves the meeting running with no way to shut it down from the interface. The command-line tool refuses to close a request with a live call for the same reason.
+</Warning>
+
+## Work session history
+
+Pawtograder records a work session automatically whenever a request is assigned, and closes it when the request is unassigned, handed to someone else, or resolved. Each session stores the queue depth and the longest wait in the queue at the moment it opened, which is the context you want when reading a long session later.
+
+The panel lists sessions newest first with the TA, duration, queue depth, and start and end times, and totals them when there is more than one. Instructors can delete a session. The edit button reports that editing is coming soon.
+
+The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
+
+## Resolving
+
+| Status | Meaning |
+| --- | --- |
+| `open` | Filed, unclaimed, still in the queue. |
+| `in_progress` | A staff member has claimed it. |
+| `resolved` | Finished. Removed from the open list. |
+| `closed` | Also finished, and treated exactly like `resolved` in every list. |
+
+Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Resolving and Feedback](/students/office-hours/resolving-and-feedback)); staff do not get that dialog.
+
+<Note>
+When staff resolve a request, no resolution status or note is recorded, only who resolved it and when. If you want data on how requests actually ended, ask students to resolve their own.
+</Note>
+
+Nothing in the web interface sets `closed`. The only route to it is `pawtograder help-requests close`, which is instructor-only and defaults to that status. See [Command Line Interface](/staff/cli).
+
+Once a request is resolved or closed, its chat becomes read-only for everyone and reads "This is a historical chat view. New messages cannot be sent."
+
+## Student feedback
+
+Instructors get **Help Request Feedback** under **Settings → Feedback**, which collects the thumbs-up and thumbs-down ratings students leave when they resolve a request, along with any comment. Counters at the top give total, positive, negative, and how many carry a comment. You can search by comment or student name, filter to positive or negative, and open the request each rating came from.
+
+Feedback is not anonymous: each card names the student. Graders cannot see this page or its data.
+
+## Notifications
+
+Two separate mechanisms tell staff about queue activity.
+
+In-app notifications reach every instructor and grader in the course when a request is created, regardless of who is watching it or which queues they work. Demo queues send nothing. Notifications about later events, new messages and status or assignment changes, go only to users watching that request, and picking up a request does not start you watching it.
+
+<Tip>
+Press **Watch** on a request you are helping. Only the student who filed a request is watched automatically, so without it you will not be notified of their replies.
+</Tip>
+
+Browser notifications, the sound alert, the flashing tab title, and the favicon badge fire only while the tab is in the background, and only for other people's messages. Configure them from **Notification Settings** in your user menu.
+
+## AI help
+
+On a request, the **Get AI help** button copies a prompt to your clipboard that names the request, the class, and any referenced submission, and tells an assistant which Pawtograder MCP tools to call for the details. Paste it into an MCP-connected assistant. No model is called from Pawtograder itself, and if you have no API token yet the button opens setup instructions instead. Only instructors and graders see it. See [AI Assistance](/staff/ai-assistance) for the server, the tokens, and the available tools.
+
+## See also
+
+- [Office Hours Overview](/staff/office-hours/intro) for All Requests and the search page.
+- [Office Hours for Students](/students/office-hours) for what the student sees on the other side of the same request.

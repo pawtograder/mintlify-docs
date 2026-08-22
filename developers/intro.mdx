@@ -1,24 +1,26 @@
 ---
 title: "Developer Guide"
-description: "Technical documentation for contributing to Pawtograder including architecture, local setup, and feature implementation"
+description: "Orientation for contributing to Pawtograder: the tech stack, where code lives, and the access-control model you have to work with"
 icon: "code"
 ---
 
 # Welcome to Pawtograder - Developer Guide
 
-This guide will help you understand and contribute to the Pawtograder project. Learn about the architecture, development setup, and how to extend the system.
+Pawtograder is a Next.js app on top of Supabase. Nearly everything a contributor needs to understand up front is about one thing: access control is enforced in Postgres, not in the application, so a feature is only as correct as its row-level security policies.
+
+Start with [Local setup](/developers/local-setup) to get a stack running, then read the [access-control model](#access-control) below before you write a query.
 
 ## Getting Started
 
 <CardGroup cols={2}>
   <Card title="Local Setup" icon="laptop-code" href="/developers/local-setup">
-    Set up your development environment and run Pawtograder locally.
+    Run Pawtograder against staging or a full local Supabase stack, plus the environment variables, CI checks, and project structure.
   </Card>
   <Card title="CLI Interface" icon="terminal" href="/developers/cli">
-    Command-line tools for managing courses, assignments, and repositories.
+    Complete reference for the operator CLI: course and assignment management, repository maintenance, grading allocation, and student-data exports.
   </Card>
-  <Card title="MCP Server & AI Assistance" icon="brain-circuit" href="/developers/mcp-server">
-    Model Context Protocol server for AI-powered student support.
+  <Card title="MCP Server" icon="brain-circuit" href="/developers/mcp-server">
+    The Model Context Protocol edge function: endpoint, wire protocol, token and RLS model, and the 16 read-only tools.
   </Card>
   <Card title="Surveys" icon="clipboard-list" href="/developers/surveys">
     Database schema, API, and implementation details for the survey system.
@@ -26,59 +28,94 @@ This guide will help you understand and contribute to the Pawtograder project. L
   <Card title="Polls" icon="square-poll-vertical" href="/developers/polls">
     Real-time polling system architecture, database schema, and hooks.
   </Card>
+  <Card title="Monitoring and Metrics" icon="chart-line" href="/developers/monitoring">
+    Prometheus scrape endpoints, metric families, and the Grafana dashboards in the repository.
+  </Card>
 </CardGroup>
 
-## Tech Stack
-
-Pawtograder is built with modern web technologies:
+## Tech stack
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 15, React 18, TypeScript |
-| UI Framework | Chakra UI |
-| Backend | Supabase (PostgreSQL, Auth, Storage, Edge Functions) |
-| State Management | React Hook Form, Refine, TanStack Query |
-| Testing | Jest, Playwright |
+| Framework | Next.js 15 App Router, React 18, TypeScript 5 |
+| UI | Chakra UI v3 |
+| Backend | Supabase: Postgres, Auth, Storage, Realtime, and Deno edge functions |
+| Data access | Postgres RPCs on the server; `TableController` and the realtime controllers in `lib/` on the client |
+| Forms and queries | React Hook Form, Refine, TanStack Query |
+| Testing | Jest for unit tests, Playwright for end-to-end, `deno test` for edge functions |
+| Deploy target | Helm chart in `charts/pawtograder/` |
 
-## Repository Structure
+Versions come from `package.json`. For the directory-by-directory layout, see [Project structure](/developers/local-setup#project-structure); the one entry worth calling out here is `lib/`, which holds the data-access layer described below.
 
-```text
-platform/
-├── app/                    # Next.js app router pages
-├── components/             # Reusable React components
-├── hooks/                  # Custom React hooks
-├── types/                  # TypeScript type definitions
-├── utils/                  # Utility functions
-├── supabase/               # Database migrations and Edge Functions
-├── tests/                  # Test files
-└── scripts/                # Build and utility scripts
-```
+## Access control
 
-## Key Concepts
+### Row-level security
 
-### Row-Level Security (RLS)
+Access control lives in Postgres. Tables carry RLS policies that decide what each user can read and write based on their role in a class, and both the web app and the edge functions query as the signed-in user so those policies apply. Policies live in the migrations under `supabase/migrations/`, and most of their logic sits in SQL helpers such as `authorizeforclassinstructor` and `authorizeforclassgrader`.
 
-Pawtograder uses Supabase's Row Level Security to enforce access control at the database level. Each table has policies that determine what data users can read, create, update, or delete based on their role.
+Two consequences for anything you build:
 
-### User Roles
+- A missing policy fails closed and looks like a bug in your feature. If a query returns nothing, check the policy before the code.
+- A privileged path is not privileged because the UI hides it. Anything reachable with a service-role client bypasses RLS entirely, which is why the [MCP server](/developers/mcp-server#authorization) confines its service-role use to the authentication layer.
+
+### User roles
+
+`user_roles.role` is an `app_role`, and that enum has four values (`utils/supabase/SupabaseTypes.d.ts:13949`, `:14155`):
 
 | Role | Description |
 |------|-------------|
-| `student` | Can view course content, submit assignments, respond to surveys |
-| `grader` | Student permissions plus grading access |
-| `instructor` | Full course management access |
+| `student` | View course content, submit assignments, respond to surveys and polls |
+| `grader` | Student permissions plus grading access in that class |
+| `instructor` | Full management access to that class |
+| `admin` | Platform-wide administration through the `app/admin/` dashboard: classes, GitHub organizations, LTI platforms and contexts, SIS sync, and notifications |
+
+`student`, `grader`, and `instructor` are per class, so the same user can be an instructor in one course and a student in another. `admin` is not scoped that way in practice: the dashboard gate accepts any `admin` row for the user and ignores its `class_id` (`app/admin/layout.tsx:41-50`).
+
+<Warning>
+Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
+</Warning>
 
 ### Profiles
 
-Users have both public and private profiles per course:
+Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
 
-- **Public Profile**: Visible to other course members (name, avatar)
-- **Private Profile**: Internal identifier for submissions and responses
+| | Private profile | Public profile |
+|---|---|---|
+| `is_private_profile` | `true` | `false` |
+| `name` | The user's real or preferred name | A generated `adjective-noun-number` pseudonym |
+| `avatar_url` | Their real avatar | A DiceBear identicon seeded from the pseudonym |
+
+Both are created together at enrollment (`supabase/functions/_shared/EnrollmentUtils.ts:152-158` and `:176-183`). Only the private profile's name is user-editable, as the **preferred name** in the user menu (`app/course/[course_id]/UserMenu.tsx:425-438`).
+
+Which profile a row references is what decides whether the record is attributable, so pick deliberately when you add a column:
+
+- **Always private.** Submissions (`supabase/migrations/20250330003141_remote_schema.sql:2412-2413`), gradebook rows (`supabase/migrations/20250614231720_gradebook.sql:197`), and help requests.
+- **Chosen per post.** A discussion thread or chat message stores the public profile when the author opts into anonymity and the private profile otherwise (`app/course/[course_id]/discussion/new/page.tsx:97`, `components/ui/message-input.tsx:129`). Reads therefore have to match against both ids. Graders' rubric and line comments switch to the public profile when the assignment has `grader_pseudonymous_mode` on (`hooks/useAssignment.tsx:73-76`).
+- **Always public.** Poll responses (`app/poll/[course_id]/page.tsx:82-98`).
+
+`is_private_profile` also serves as a discriminator for "one row per enrolled person" when you need a roster without joining `user_roles` (`hooks/useCourseController.tsx:133`).
+
+<Warning>
+`create_class_with_admin` gives the creating admin their real name on **both** profiles rather than generating a pseudonym (`supabase/migrations/20250820185937_admin_portal_system.sql:81-100`). Do not treat a public profile name as guaranteed to be anonymous.
+</Warning>
+
+## Data access
+
+Prefer a Postgres RPC over a Next.js server action or an edge function for data operations. Edge functions are for integrations that need an external API, such as GitHub, Discord, or AWS Chime, not for general data access.
+
+Components do not query Supabase directly. `TableController` (`lib/TableController.ts`) caches and loads data scoped to a context such as a course, assignment, submission, or discussion thread, and the realtime controllers in `lib/` extend it for live updates. Components consume all of it through the hooks in `hooks/`.
+
+`utils/supabase/SupabaseTypes.d.ts` is generated and copied into `supabase/functions/_shared/`. Regenerate it with `npm run client-local` after a schema change; do not hand-edit it.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests: `npm test` and `npx playwright test`
-5. Submit a pull request
+1. Fork the repository and create a feature branch.
+2. Make your changes. Regenerate types with `npm run client-local` if you touched the schema.
+3. Run `npm run format` before committing. CI rejects unformatted code (`AGENTS.md:42`).
+4. Run the checks CI runs: `npm run lint`, `charts/pawtograder/tests/render-guardrails.sh`, and `npm run test:functions` (`lint.yml:33`, `:47`, `:60`).
+5. Run the tests your change affects: `npm test` for Jest, `npx playwright test` for end-to-end.
+6. Open a pull request.
+
+<Note>
+No workflow runs a standalone TypeScript typecheck, and the full Jest suite is not part of CI. See [Continuous integration](/developers/local-setup#continuous-integration) for what each workflow actually runs.
+</Note>

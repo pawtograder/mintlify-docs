@@ -1,162 +1,193 @@
 ---
 title: "Creating Polls"
-description: "Step-by-step guide to creating, publishing, and managing polls for classroom engagement"
+description: "Write, publish, open, close, and delete polls for classroom engagement"
 icon: "plus"
 ---
 
 # Creating Polls
 
-Creating a poll in Pawtograder is designed to be quick and straightforward, allowing you to set up a poll in just a few seconds during class.
+A poll is a single question with a fixed list of choices, stored as a JSON payload. You can write that payload in a visual builder or type it by hand, then publish it live or save it as a draft.
 
 ## Creating a New Poll
 
-1. Navigate to the "Polls" section in your course
-2. Click the "Create Poll" button
+1. Choose **Polls** in your course navigation to open **Manage Polls**
+2. Click **+ Create Poll**
 
 <Frame>
-  <img src="/images/staff/polls/poll-create.png" alt="Polls Creation Page with Create Poll button" />
+  <img src="/images/staff/polls/poll-manage.png" alt="Manage Polls page with no polls yet and a Create Poll button" />
 </Frame>
 
-3. Click the **Open Visual Builder** button to design your question
+The **Create Poll** page opens with the **Poll Question JSON** field prefilled with a sample question.
 
 <Frame>
-  <img src="/images/staff/polls/poll-builder.png" alt="Polls Visual Builder interface" />
+  <img src="/images/staff/polls/poll-create.png" alt="Create Poll page showing the Poll Question JSON field and its buttons" />
 </Frame>
 
-4. Select the poll type (see [Poll Types](/staff/polls/poll-types) for options)
-5. Enter your question prompt
-6. Add answer options (click "Add Choice" to add more)
-7. Click **Use This Poll** button to apply your question
-8. Optionally, click **Preview Poll** to see how students will see it
-9. Configure **Require login to respond** based on your needs
-10. Click **Publish Poll** to make it live immediately
+3. Click **Open Visual Builder** to compose the question instead of editing JSON
+
+<Frame>
+  <img src="/images/staff/polls/poll-builder.png" alt="Visual Poll Builder with a question prompt, question type, choices, and JSON preview" />
+</Frame>
+
+4. Enter your **Question Prompt**
+5. Pick a **Question Type**, either **Multiple Choice** or **Single Choice** (see [Poll Types](/staff/polls/poll-types))
+6. Fill in the **Choices**, clicking **Add Choice** for each additional option
+7. Click **Use This Poll** to write the builder's JSON into the **Poll Question JSON** field
+8. Optionally click **Preview Poll** to see the question as students will see it
+9. Decide whether to check **Require login to respond**
+10. Click **Publish Poll** to open the poll immediately, or **Save as Draft** to store it closed
+
+## The Poll Question JSON field
+
+**Poll Question JSON** is the only place a poll question is stored. Everything else on the page is a helper that writes into it.
+
+```json
+{
+  "elements": [{
+    "type": "checkbox",
+    "title": "Which topic should we review next?",
+    "choices": ["Recursion", "Dynamic Programming", "Graphs"]
+  }]
+}
+```
+
+That is the sample the page starts with, and **Load Sample Template** restores it at any time. `checkbox` is Multiple Choice. Use `radiogroup` for Single Choice.
+
+**Validate JSON** checks the payload without saving. It reports one of:
+
+| Result | Message |
+|--------|---------|
+| Valid | "Your poll question JSON looks good." |
+| Empty field | "Please enter a JSON payload for your poll question." |
+| Not an object with `elements` | "Question must be an object with an 'elements' array containing at least one element." |
+| First element incomplete | "The first element in 'elements' must have 'type' and 'title' fields." |
+| Unparseable | The parser's own error message |
+
+The same checks run when you publish or save a draft, so an invalid payload blocks both. **Preview Poll** validates first and refuses to open if validation fails.
+
+<Note>
+The preview renders your payload with the real SurveyJS runtime, so it will display question types the results page cannot chart. See [Poll Types](/staff/polls/poll-types) for which types are chartable.
+</Note>
 
 ## Using the Visual Builder
 
-The visual builder provides an intuitive interface for creating poll questions:
+**Open Visual Builder** opens the **Visual Poll Builder** dialog. A live **JSON Preview** at the bottom shows exactly what it will emit.
 
-### Question Prompt
+<Warning>
+**Use This Poll** overwrites the entire **Poll Question JSON** field. Anything you hand-wrote there is replaced, and the builder always emits a single question. Click **Cancel** to leave the field untouched.
+</Warning>
 
-Enter the question you want to ask students. Keep it concise so students can read and respond quickly.
+A few builder behaviors are worth knowing:
 
-### Poll Type Selection
-
-Choose between:
-- **Single Choice**: Students select exactly one answer
-- **Multiple Choice**: Students can select multiple answers
-
-### Answer Options
-
-- Click **Add Choice** to add answer options
-- Each option has a text field for the choice label
-- Minimum of 2 options required
-- Remove options by clicking the delete icon
-
-### Applying Changes
-
-After configuring your question, click **Use This Poll** to apply it. The JSON configuration will be updated automatically.
+- The builder starts with one empty choice row, and it will not let you delete the last row. Two or more choices is sensible, but nothing enforces a minimum.
+- Blank choice labels are dropped. If you leave every label blank, the emitted question gets a single choice literally named `Choice 1`.
+- The **Remove choice** button appears on a row only when more than one choice exists.
 
 ## Poll Settings
 
-When creating a poll, you can configure the following:
-
 | Setting | Description |
 |---------|-------------|
-| **Question Prompt** | The question displayed to students |
-| **Question Type** | Single choice or multiple choice |
-| **Choices** | The available response options |
-| **Require Login** | Whether students must be logged in to respond |
+| **Poll Question JSON** | The question payload: prompt, type, and choices |
+| **Require login to respond** | Whether students must be signed in to answer |
 
-### Require Login
+That is the complete set. There is no title, description, tag, scheduled open time, or response limit.
 
-This setting controls who can respond to your poll:
+### Require login to respond
 
 | Setting | Behavior |
 |---------|----------|
-| **Enabled** | Students must log in to Pawtograder to respond. Their identity is recorded. |
-| **Disabled** | Anyone with the poll link/QR code can respond anonymously. |
+| **Checked** | Students must sign in. The response is attached to their course profile, and a second submission is rejected. |
+| **Unchecked** | Anyone with the link or QR code can answer without signing in. |
+
+<Warning>
+When login is not required, responses are stored with no profile attached, and nothing stops one device from answering repeatedly. The student confirmation screen even invites it, offering to refresh the page to answer again. Treat anonymous poll counts as indicative, not as a headcount.
+</Warning>
 
 <Tip>
-Enable **Require Login** if you want to:
-- Track which students participated
-- Ensure only enrolled students respond
-- Use polls for attendance
+Check **Require login to respond** when you want responses limited to one per enrolled student. Leave it unchecked for low-stakes comprehension checks, where removing the sign-in step raises participation.
 
-Disable it for:
-- Quick anonymous feedback
-- Low-stakes comprehension checks
-- Maximizing response rate (no login friction)
+Either way, the results page shows only counts per choice, so neither setting lets you see who answered.
 </Tip>
+
+## Publishing versus saving a draft
+
+**Publish Poll** opens the poll immediately and returns you to **Manage Polls**. **Save as Draft** stores the poll closed and leaves you on the form with your entries still filled in.
+
+<Note>
+A draft is indistinguishable from a finished poll in the list: it carries the red **Closed** badge and appears under the **Closed** filter. To open a draft later, use **Open Poll** in its row actions menu.
+</Note>
+
+<Warning>
+A poll cannot be edited after it is created, and a draft is no exception. There is no edit page and no edit action in the row menu, so fixing a typo means deleting the poll and creating a new one. Because the form stays filled in after **Save as Draft**, keep in mind that changing it and saving again writes a second poll rather than updating the draft, and clicking **Publish Poll** afterwards publishes a new poll and leaves the draft in the list.
+</Warning>
 
 ## Closing a Poll
 
-A poll stays live until you close it. Close it from the poll management view or the response dashboard when you are done collecting responses.
+A poll stays open until you close it. Close it from the row actions menu on **Manage Polls** with **Close Poll**, or from the poll's results page with **Stop Poll**. The two controls do the same thing.
 
 <Warning>
-Polls do not close on their own. Publishing a poll stamps an internal one-hour expiry timestamp, but nothing acts on it, so a poll left open stays open — including after class ends. Close polls you are finished with, especially ones used for attendance.
+Polls do not close on their own. Publishing or opening a poll stamps an internal one-hour expiry timestamp, but nothing ever acts on it, so a poll left open stays open long after class ends. Close the polls you are finished with.
 </Warning>
 
 ## Managing Polls
 
-### Viewing All Polls
+### Viewing all polls
 
-The polls management page shows all your polls with filtering options:
+**Manage Polls** lists every poll in the course with **Question**, **Status**, **Created**, and **Actions** columns. Three filter buttons narrow the list:
 
 <Frame>
-  <img src="/images/staff/polls/poll-manage.png" alt="Polls Management Page with filter options" />
+  <img src="/images/staff/polls/poll-delete.png" alt="Manage Polls list with All, Live, and Closed filters and a row actions menu open" />
 </Frame>
 
-- **All**: Shows all polls (live and closed)
-- **Live**: Shows only currently active polls
-- **Closed**: Shows only closed polls
+- **All**: every poll
+- **Live**: open polls only
+- **Closed**: closed polls and drafts
 
-### Opening and Closing Polls
+**Status** shows a green **Live** or a red **Closed** badge. **Question** shows the question prompt, or the word "Poll" if the payload has no title, and links to that poll's results page.
 
-From the poll management view:
-- **Open Poll**: Makes a closed poll live again
-- **Close Poll**: Closes a poll, so it stops accepting responses
+### Row actions
 
-### Viewing Responses
+The **Poll actions** button (⋯) in the **Actions** column opens a menu with three items:
 
-Click on a poll to view its responses and analytics. See [Poll Visualizations](/staff/polls/visualizations) for details on the analytics dashboard.
+- **Open Poll** on a closed poll, or **Close Poll** on a live one
+- **View Poll**, which opens the results page
+- **Delete Poll**
+
+### Viewing results
+
+Click a poll's question, or choose **View Poll**, to open its results page. See [Poll Visualizations](/staff/polls/visualizations) for what that page shows.
 
 ## Deleting a Poll
 
-To delete a poll:
-
-1. Click the **Delete** button on the poll row
-2. Confirm your choice in the dialog
-
-<Frame>
-  <img src="/images/staff/polls/poll-delete.png" alt="Delete poll confirmation dialog" />
-</Frame>
+1. Click the **Poll actions** button (⋯) on the poll's row
+2. Choose **Delete Poll**
+3. Accept the browser confirmation: "Are you sure you want to delete this poll? This action cannot be undone."
 
 <Warning>
-**Deleting a poll permanently removes all student responses.** This action cannot be undone. If you just want to stop collecting responses, close the poll instead.
+Deleting a poll permanently removes the poll and every response to it. Unlike surveys, poll deletion is not reversible and leaves nothing behind. If you only want to stop collecting responses, close the poll instead.
 </Warning>
 
 ## Best Practices
 
-### Before Class
+### Before class
 
-- **Prepare questions in advance**: Have your poll questions ready to minimize setup time
-- **Test the workflow**: Create a test poll to familiarize yourself with the interface
-- **Plan your timing**: Know when during the lecture you'll use each poll
+- **Write the questions ahead of time**: Save them as drafts and open each one when you reach it
+- **Preview once**: Use **Preview Poll** to confirm the question reads the way you expect
+- **Keep one poll open at a time**: The course poll link always serves the newest live poll, so an older open poll becomes unreachable
 
-### Question Design
+### Question design
 
-- **Keep questions concise**: Students should be able to read and respond in under 30 seconds
-- **Limit answer options**: 3-5 options is typically ideal for quick responses
-- **Use clear language**: Avoid ambiguous wording that could confuse students
+- **Keep the prompt short**: Students should read and answer in under 30 seconds
+- **Use three to five choices**: Long choice lists wrap onto several lines in the bar chart's axis gutter
+- **Avoid ambiguous wording**: You cannot edit a published poll, so a confusing prompt means starting over
 
-### During Class
+### During class
 
-- **Display the QR code**: Project the QR code for easy mobile access
-- **Give adequate time**: Allow 30-60 seconds for students to respond
-- **Discuss results**: Use poll results to guide class discussion
+- **Project the QR code**: Click it on the results page to enlarge it, or use **Present** for fullscreen
+- **Give students 30 to 60 seconds**: Watch the bars grow to judge when the room has answered
+- **Discuss the split**: The chart is most useful as a discussion prompt, not as a score
 
-### After Class
+### After class
 
-- **Close polls promptly**: If you're done collecting responses, close the poll
-- **Review participation**: Check response counts to gauge engagement
-- **Iterate**: Adjust your question style based on what gets the best responses
+- **Close the poll**: Nothing closes it for you
+- **Screenshot anything you want to keep**: There is no poll export, and deleting the poll deletes its responses

@@ -31,6 +31,9 @@ Reference it from the top of your YAML to get IDE autocomplete:
   <Card title="grade.yml Workflow" icon="file-code" href="#the-gradeyml-workflow">
     The workflow file students run, what counts as a submission, plus action inputs and outputs.
   </Card>
+  <Card title="Submission Limits" icon="gauge" href="#submission-limits">
+    The 5-per-24-hours cap every assignment starts with, and what counts against it.
+  </Card>
   <Card title="pawtograder.yml Configuration" icon="gear" href="#the-pawtograderyml-configuration">
     Top-level reference for `build`, `gradedParts`, `submissionFiles`, and friends.
   </Card>
@@ -44,7 +47,7 @@ Reference it from the top of your YAML to get IDE autocomplete:
     Working `pawtograder.yml` files for Java, Python, and mutation testing.
   </Card>
   <Card title="Empty Submission Detection" icon="circle-check" href="#empty-submission-detection">
-    How Pawtograder flags submissions that haven't been changed from the starter.
+    How Pawtograder rejects submissions that haven't been changed from the starter.
   </Card>
   <Card title="Submission Viewer" icon="folder-open" href="#submission-viewer">
     How files and grader artifacts render in the UI.
@@ -113,6 +116,22 @@ jobs:
 The `id-token: write` permission is required so the action can request an OIDC token. Without it, the action will fail with an "Unable to get OIDC token" error.
 </Warning>
 
+<Note>
+**Runner label and action version.** `runs-on: ubuntu-latest` and
+`pawtograder/assignment-action@v4` are the portable defaults: they work on any
+GitHub-hosted runner and on any Pawtograder deployment. Both `v4` and `v3` of the action
+are live and maintained, so a course template pinned at `@v3` is current, not stale.
+
+A self-hosting deployment normally substitutes its own self-hosted runner label here. The
+Khoury deployment, for example, ships handouts with `runs-on: khoury-course-runners`, and
+offers a resource-class ladder — `khoury-course-runners` (1 CPU, 1.5 GB RAM),
+`khoury-course-runners-md` (2 CPU, 3 GB), and `khoury-course-runners-lg` (4 CPU, 6 GB).
+Larger classes limit concurrency, so pick the smallest one that can run your build.
+
+Follow whatever your own course template pins for both the runner label and the action
+version. Do not edit a working template to match the example above.
+</Note>
+
 The student's code is checked out into `submission/`. The action downloads
 the grader into a sibling `grader/` directory. Both you and the student can
 view the run output (including the action's job summary table) under the
@@ -122,7 +141,9 @@ Actions tab of the student repo.
 
 The `on:` block above is what decides when a student submits. It is the workflow's own configuration, not something Pawtograder imposes, so editing it changes the submission rule for the assignment.
 
-With the `push:` trigger in place — the default the handout ships with — **every push to `main` is a submission**. The grading job runs against the last commit of the push, so a student who pushes three commits at once produces one submission, for the third. Students do not need to write anything special in the commit message.
+With the `push:` trigger in place, **every push to `main` is a submission**. The grading job runs against the last commit of the push, so a student who pushes three commits at once produces one submission, for the third. Students do not need to write anything special in the commit message.
+
+That trigger is what the handout template ships with. `pawtograder/template-assignment-handout` declares both `workflow_dispatch:` and `push: branches: [main]`, and its own comment names the `push:` block as the switch: "To change the behavior of submitting on every push (vs just when commit has message submit or when the submission is manually requested), change this". So unless you or a previous instructor edited `grade.yml`, every push is a submission on your assignment.
 
 <Warning>
 Keep `workflow_dispatch:` no matter what else you change. It is how Pawtograder starts a run on demand, and removing it breaks both the `#submit` path below and the per-commit trigger button in the Commit History dialog.
@@ -130,7 +151,22 @@ Keep `workflow_dispatch:` no matter what else you change. It is how Pawtograder 
 
 Delete the `push:` block if you would rather students submit deliberately. Pawtograder then dispatches the workflow only when the head commit message of a push contains `#submit`, matched case-sensitively — so `#Submit` and `#SUBMIT` do not count. Warn students if you do this, because nothing in the interface tells them the marker is required. You can also narrow the trigger rather than remove it, by adding branches or restricting paths; the rule is the same either way, in that whatever the `on:` block matches is what becomes a submission.
 
-Assignments configured without an autograder have no `grade.yml` at all. There, every push to the default branch is collected as a submission for hand grading, and neither trigger applies.
+Assignments configured without an autograder have no `grade.yml` at all. There, every push to the default branch is collected as a submission for hand grading, and neither trigger applies. Pushes to other branches are recorded in the commit history but are not submissions. See [Configuration → Autograder](/staff/assignments/configuration#autograder).
+
+### Students Must Not Edit `grade.yml`
+
+Pawtograder records a hash of the handout's `grade.yml`. When a submission arrives, it hashes the copy in the student's repository and compares the two. On a mismatch the submission is **rejected**, and the student is told:
+
+> Your `.github/workflows/grade.yml` file does not match the expected contents for this assignment (it may have been edited, or your copy may differ from the handout). Restore the file from your repository's initial commit, then commit and push.
+
+The same message is recorded as a public error you can see under
+[Workflow Runs → Grading Errors](/staff/workflow-runs#the-grading-errors-tab). The handout template's own opening comment warns students that tampering could expose the instructor solution and that instructors will be notified.
+
+Three carve-outs: the comparison also accepts a whitespace-stripped hash, so reindenting alone does not trip it; `#NOT-GRADED` submissions skip the check; and graders and instructors are allowed through with a recorded warning rather than a rejection.
+
+<Warning>
+The hash is tied to a specific handout repository. If you re-point an assignment at a different handout, Pawtograder has to re-derive the hash — and if that step fails, the save succeeds while every student submission starts failing with a workflow sha mismatch. The toast says so and tells you the fix: **save this assignment again to retry**. If students report the mismatch error right after you changed a handout, that is the cause.
+</Warning>
 
 ### Action Inputs
 
@@ -149,15 +185,62 @@ Assignments configured without an autograder have no `grade.yml` at all. There, 
 | `score` | The numeric score reported by the grader. |
 | `status` | A human-readable status message. |
 
+## Submission Limits
+
+Autograded submissions are rate-limited, and **not as an opt-in**: every assignment is created with a limit of **5 submissions per rolling 24 hours**. The limit is applied automatically to every new assignment, and nothing on the assignment creation form mentions it. An instructor who has never opened this page still has a limit in force.
+
+### Where to change it
+
+On the **Configure Autograder** page, not on
+[Edit Assignment](/staff/assignments/configuration):
+
+- **Maximum number of submissions per student (count)** — a whole number, or blank for no limit.
+- **Maximum number of submissions per student (time period)** — the dropdown offers exactly *No limit*, *10 minutes*, *1 hour*, *24 hours*, and *48 hours*.
+
+Leaving **either** field empty means no limit at all — so choosing *No limit* in the period dropdown removes the limit even if a count is still filled in. Clear the count field rather than typing `0`: a `0` also disables enforcement, but it reads as a deliberate zero to the next person who opens the page.
+
+### What counts against the quota
+
+- The window is a **rolling** lookback from the moment of the push, not a calendar day.
+- A submission whose autograder run **has not finished yet does count** — the exclusion is only for a *finished* run that scored zero. Students who resubmit while a run is still queued are spending quota.
+- `#NOT-GRADED` submissions **do** count. There is no exclusion for them.
+- On a group assignment the quota is **shared by the whole group**.
+- Regrade re-runs and staff-triggered submissions are exempt.
+
+### The count students see can disagree with the limit
+
+The remaining-submissions count on the student's assignment page is calculated
+separately from the limit that actually blocks a push. The two normally agree, but on
+group assignments they can drift apart, so treat the student-facing number as
+approximate when you are fielding a question about it.
+
+### What the student sees
+
+Two different strings, for the same setting:
+
+- The GitHub Actions run fails with `Submission limit reached (max N submissions per 1 day). Please wait until MM/dd/yyyy HH:mm to submit again.`
+- The banner on the assignment page describes the same 86400 seconds as "per 24 hours", and adds that submissions scoring zero do not count.
+
+<Warning>
+Two things to know before you rely on the banner:
+
+- It is only rendered when the assignment has an autograder, which is correct — submission limits throttle autograder runs.
+- It **disappears entirely for any period under an hour**, because the period is converted to whole hours and 10 minutes rounds to zero. The limit is still enforced. If you pick the *10 minutes* option, students get no on-page warning at all and only find out when a push fails, so say so in your own course materials.
+</Warning>
+
+A throttled push also writes a public error row visible under
+[Workflow Runs → Grading Errors](/staff/workflow-runs#the-grading-errors-tab). It has no submission attached, so it does not appear on any student submission page.
+
 ## The `pawtograder.yml` Configuration
 
 `pawtograder.yml` lives at the root of the grader/solution repo. There is
-currently exactly one grader type (`grader: overlay`) and it has three
-required top-level sections:
+currently exactly one grader type (`grader: overlay`). The schema requires
+three top-level sections, and Pawtograder itself requires a fourth:
 
+- `grader` — the grader type. `overlay` is the only accepted value.
 - `build` — how to build, lint, and test the project.
-- `gradedParts` — what tests are worth what points, organized into parts.
 - `submissionFiles` — which files from the student repo are collected and overlaid onto the grader.
+- `gradedParts` — what tests are worth what points, organized into parts. The schema does not list this as required, but the platform does: the **Configure Autograder** page refuses to load a config without it and reports "Invalid pawtograder.yml structure: Missing required field: gradedParts", and the in-app config editor blocks saving one. Treat it as required.
 
 Optional top-level fields:
 
@@ -189,7 +272,7 @@ build:
 ```
 
 - `policy: ignore` — lint errors are reported in the grading summary but tests still run.
-- `policy: fail` — if the linter finds errors, the rest of grading is skipped and the student receives a zero. The submission does not count against any per-assignment submission cap if you have configured one.
+- `policy: fail` — if the linter finds errors, the rest of grading is skipped and the student receives a zero. A finished run that scored zero does not count against the assignment's [submission limit](#submission-limits) — and every assignment has one, so this exemption matters.
 
 #### `student_tests`
 
@@ -327,24 +410,33 @@ There are two kinds of unit, and they can be mixed freely within a part.
 ```yaml
 - name: 'Detect bugs in BoxSet'
   locations:
-    - 'box.SimpleBoxSet'        # whole class
-    - 'box.SimpleBoxSet:10-50'  # line range within a class
-    - 'MathMutator'              # name of a Pitest mutator
+    - 'box.SimpleBoxSet'   # whole class
+    - 'MathMutator'        # name of a Pitest mutator
   breakPoints:
-    - minimumMutantsDetected: 5
-      pointsToAward: 5
     - minimumMutantsDetected: 10
       pointsToAward: 10
+    - minimumMutantsDetected: 5
+      pointsToAward: 5
 ```
 
-- `locations` is an array of strings. Each entry can be a class name (the unit counts mutants whose location starts with that class), a class with a line range (`ClassName:startLine:endLine` or, accepted equivalently, `ClassName-startLine-endLine`), or the name of a Pitest mutator (matched against the mutator field of each mutant).
+- `locations` is an array of strings. A class name counts every mutant whose location starts with that class. Any entry that does not match a class is then matched as a substring against each mutant's name, which under `java-gradle` is the Pitest mutator name, so `MathMutator` selects every math mutant regardless of class.
 - Scoring uses **either** `breakPoints` **or** `linearScoring`, not both:
-  - `breakPoints` — array of `{ minimumMutantsDetected, pointsToAward }`. The unit picks the first (highest-numbered) breakpoint whose threshold the student met. Order them descending; the unit's max score is taken from the first entry.
-  - `linearScoring: { total_faults, points }` — awards `(detected / total_faults) * points`.
+  - `breakPoints` — array of `{ minimumMutantsDetected, pointsToAward }`, ordered from the **highest** `minimumMutantsDetected` to the lowest. The unit awards the points of the first entry in list order whose threshold the student met, and it reports the unit's maximum score as the first entry's `pointsToAward`.
+  - `linearScoring: { total_faults, points }` — awards `(detected / total_faults) * points`, rounded to two decimal places.
 - `hideFeedbot: true` — same meaning as on regular units.
 
+<Warning>
+List `breakPoints` in descending order. Order is not sorted for you: with `minimumMutantsDetected: 5` listed before `minimumMutantsDetected: 10`, a student who detects 10 mutants is awarded the 5-mutant entry's points, and the unit's maximum score is reported as that entry's points too.
+</Warning>
+
+<Note>
+Line-range locations (`ClassName-startLine-endLine`) only match mutants whose reported location has the form `Class:startLine:endLine`. The `java-gradle` preset reports Pitest locations as `Class:lineNumber`, with no end line, so a line range never matches anything under Pitest. Restrict a mutation unit to part of a class only if you supply your own `python-script` mutation runner that emits three-part locations; otherwise use whole-class locations.
+</Note>
+
 If `mutantAdvice` is configured at the top level, mutants the student
-**didn't** detect can show a personalized hint:
+**didn't** detect can show a personalized hint. Advice is matched by
+`targetClass`: the action splits each surviving mutant's name on spaces and
+compares the last word to the `targetClass` of every `mutantAdvice` entry.
 
 ```yaml
 mutantAdvice:
@@ -354,6 +446,10 @@ mutantAdvice:
     prompt: 'What happens at the boundary when the set is exactly at capacity?'
 maxMutantHints: 5
 ```
+
+<Warning>
+`mutantAdvice` only fires when your mutation runner names each mutant `"<sourceClass> <targetClass>"`. The `java-gradle` preset names mutants after the Pitest mutator alone, which contains no space, so the action never derives a `targetClass` and no advice is ever shown. Mutant hints therefore require a `python-script` mutation runner.
+</Warning>
 
 `maxMutantHints` caps the total number of `mutantAdvice` hints shown
 across all mutation units in a single submission. Like
@@ -466,16 +562,21 @@ feedbot:
   account: default
   prompt: chain_of_thought    # or: checklist, or any free-form string
   rate_limit:
-    cooldown: 5               # seconds between requests for the same student
-    assignment_total: 100     # cap per assignment (default: server-side)
-    class_total: 5000         # cap per class (default: server-side)
+    cooldown: 5               # minutes since the last request on this assignment
+    assignment_total: 100     # cap per assignment (omit for no cap)
+    class_total: 5000         # cap per class (omit for no cap)
 ```
 
 - `enabled` is required for Feedbot to run at all.
 - `provider`, `model`, `account`, and `spec_url` are all required when `enabled: true`. If any are missing, Feedbot is disabled for the run and a warning is written to the visible output.
 - `spec_url` should point to a markdown file with the assignment spec. The action fetches it at grading time with a 10-second timeout; if the fetch fails, Feedbot is disabled for that run and the failure is logged.
 - `prompt` selects the response strategy. The two built-ins are `chain_of_thought` (default) and `checklist`. Any other string is used as a free-form custom strategy instruction; the embedded assignment spec and the underlying role/rules are not changed.
+- `rate_limit` is optional, and so is each field inside it, but the fields do not all default the same way. `assignment_total` and `class_total` are lifetime counts of Feedbot responses for the assignment and for the class, with no time window, and each is enforced only if you give it a number: omit one, or set it to `0`, and that cap does not apply. `cooldown` is the exception — omit it and you still get a five-minute cooldown, and `cooldown: 0` is the only way to run with none.
 - `account` selects which set of provider credentials the server uses — for example, `account: cs2100` will look up `OPENROUTER_API_KEY_cs2100` (falling back to `OPENROUTER_API_KEY`) when Feedbot dispatches the call.
+
+<Warning>
+`cooldown` is in **minutes**, not seconds, and it is assignment-wide rather than per-student. The server measures the elapsed time since the most recent Feedbot request on the assignment by any student, and until that window passes every student gets "Rate limit: Please wait N more minute(s) before requesting Feedbot feedback for this assignment." The five-minute cooldown is what you get by doing nothing: the action fills it in whenever Feedbot is enabled, even if you omit `rate_limit` entirely. Write `cooldown: 0` if you want students to be able to ask back to back.
+</Warning>
 
 Supported providers and the environment variables the server uses to
 look up credentials (where `{account}` is the value of the `account`
@@ -660,10 +761,10 @@ gradedParts:
         locations:
           - 'box.SimpleBoxSet'
         breakPoints:
-          - minimumMutantsDetected: 5
-            pointsToAward: 5
           - minimumMutantsDetected: 10
             pointsToAward: 10
+          - minimumMutantsDetected: 5
+            pointsToAward: 5
 submissionFiles:
   files:
     - 'src/main/java/box/BoxSet.java'
@@ -729,15 +830,36 @@ tasks.withType(Checkstyle) {
 
 ## Empty Submission Detection
 
-Pawtograder automatically flags submissions whose collected files are
-identical to (or essentially unchanged from) the starter code. These show
-up in the grading interface so you can quickly find students who pushed
-without making any actual changes — for example, students who set up the
-repository but never started the assignment.
+Pawtograder can compare the files it collects from a submission against
+the starter code in the handout, and where it can, it **rejects** a
+submission whose collected files are identical. Two separate things decide
+what happens: whether the assignment gives the check anything to compare,
+and how the submission arrived.
 
-Empty submission detection looks only at the files that match
-`submissionFiles`, so it respects whatever scope you defined for the
-assignment.
+### When the check applies
+
+The comparison covers exactly the files matching `submissionFiles` in the
+autograder configuration, so:
+
+- **An assignment that declares `submissionFiles`** has empty submission detection in force. Nothing in the assignment editor turns that rejection off.
+- **An assignment that declares no `submissionFiles`** gives the check nothing to compare, so it does not apply and every push is accepted. Repo-only assignments carry no autograder configuration and therefore never see empty submission detection.
+
+Because the check follows `submissionFiles`, it also respects whatever
+scope your autograder configuration defines: an edit confined to a file no
+pattern matches does not register as a change.
+
+### What a rejection looks like
+
+On an assignment where the check applies, what the student sees depends on
+how the submission arrived:
+
+- **Submissions graded by GitHub Actions.** The submission is discarded and the run fails with "Empty submissions are not permitted for this assignment. Please commit your changes before submitting."
+- **Submissions Pawtograder collects directly from a push.** The submission stays in the student's history, inactive and with no files, and carries a student-visible error explaining that the commit was not recorded because it is identical to the starter code. The assignment page labels that submission "Error".
+
+Either way the submission cannot be graded, and the student has to change
+a submitted file and push again. Staff-triggered submissions are exempt
+from the check, so you can still submit an unchanged repository while
+testing an assignment.
 
 ## Submission Viewer
 
@@ -786,6 +908,9 @@ old SHA and promote.
 Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
 
+See [Workflow Runs](/staff/workflow-runs) for the status of the run a rerun
+dispatches.
+
 ## Test Insights and Bulk Regrading
 
 The **Test Insights** view groups identical test failures across the whole
@@ -823,7 +948,7 @@ When the action runs in the student repo, it:
 
 <Steps>
 <Step title="Authenticates with the grading server">
-GitHub issues an OIDC token to the workflow. The action sends that token to the `autograder-create-submission` edge function. The grading server verifies the token (so it knows which repo and commit the request came from), runs security checks, registers a new submission, and returns a one-time download URL for the matching grader repository tarball.
+GitHub issues an OIDC token to the workflow. The action sends that token to the grading server, which verifies it (so it knows which repo and commit the request came from), runs security checks, registers a new submission, and returns a one-time download URL for the matching grader repository tarball.
 </Step>
 <Step title="Downloads the grader and reads pawtograder.yml">
 The action extracts the grader tarball alongside the student's checkout and reads `pawtograder.yml` from the grader repo. The config selects an "overlay" grader and a build preset (`java-gradle`, `python-script`, or `none`).
@@ -841,7 +966,7 @@ If `student_tests` is configured, the action resets the grader's solution files,
 Scores are computed for every `gradedUnit`, summed into `gradedPart` scores, and then dependency rules are applied — units or parts whose dependencies aren't satisfied are replaced with a message instead of their actual results.
 </Step>
 <Step title="Submits feedback and uploads artifacts">
-The action calls `autograder-submit-feedback` with the tests, lint output, and logs. If the grader emitted any `artifacts`, they are uploaded to Supabase storage via the signed URLs returned by the server. A summary table is also written to the GitHub Actions job summary.
+The action submits the tests, lint output, and logs back to the grading server. If the grader emitted any `artifacts`, they are uploaded to Pawtograder's file storage via the signed URLs returned by the server. A summary table is also written to the GitHub Actions job summary.
 </Step>
 </Steps>
 

@@ -12,26 +12,34 @@ Pawtograder's surveys feature allows you to provide feedback on courses, assignm
 
 Navigate to the **Surveys** tab in the main navigation menu to see all surveys assigned to your course. You'll also see incomplete surveys highlighted on your dashboard.
 
+<Note>
+If there is no **Surveys** tab, your instructor has turned the Surveys feature off for the course. A survey also stays hidden until its available date passes, and instructors can assign a survey to a subset of students rather than the whole course.
+</Note>
+
 <Frame>
   <img src="/images/students/survey-092501.png" alt="Surveys page showing available surveys with status and due dates" />
 </Frame>
 
 ### Dashboard Survey Notifications
 
-Your student dashboard displays a "Surveys to complete" banner when you have pending or in-progress surveys. Each survey shows:
+Your student dashboard displays a **Surveys to complete** banner listing every available survey you have not submitted yet. Each row shows:
 
-- **Status badge**: Completed (green), Overdue (red), or Pending (yellow)
-- **Due date**: Time remaining or overdue notice
-- **Quick action button**: "Take Survey" or "View Response" if you've already submitted
+- **Status badge**: Overdue (red), In progress (yellow), or Pending (blue)
+- **Due date**: Relative text, such as "Due in 2 days" or "Was due 3 hours ago"
+- **Action button**: **Take survey**, or **Continue** if you have a saved draft
 
-Overdue surveys are listed first to help you prioritize.
+Overdue surveys are listed first to help you prioritize. Once you submit, the survey drops off this banner; find it again under **Active Surveys** further down the dashboard, or on the Surveys page.
+
+<Frame>
+  <img src="/images/students/surveys/surveys-1787283222097.png" alt="Dashboard Surveys to complete banner with two rows, Week 1 Team Collaboration Survey due in 10 days and Course Experience Survey due in 18 days, each carrying a Pending badge and a Take survey button" />
+</Frame>
 
 ### Survey Cards
 
 Each survey card displays:
 
 - **Survey title and description**: What the survey is about
-- **Due date and time**: When the survey must be completed (shown in your course timezone)
+- **Due date and time**: When your instructor asked you to complete it (shown in your course time zone)
 - **Current status**: Your progress on the survey (Not Started, In Progress, or Completed)
 - **Submission timestamp**: When you submitted (if completed)
 
@@ -47,11 +55,13 @@ Use the filter buttons at the top of the surveys page to find specific surveys:
 
 ## Understanding Survey Status
 
-Your progress on each survey is shown with a colored badge:
+On the Surveys page, your progress on each survey is shown with a badge — **Not Started**, **In Progress** (red), or **Completed** — and the action button matches it: **Start Survey**, **Continue Survey**, or **View Submission**.
 
-- **Not Started** (red): You haven't opened this survey yet
-- **In Progress** (red): You've started but not submitted the survey
-- **Completed** (green): You've successfully submitted your responses
+The dashboard's **Active Surveys** card uses a longer set with its own colors: **Not started** (blue), **In progress** (yellow), **Submitted (editable)** (green), and **Submitted (locked)** (gray), with buttons **Start**, **Continue**, **Edit**, and **View**. The banner above it uses a third set: **Overdue** (red), **In progress** (yellow), **Pending** (blue), with **Take survey** or **Continue**.
+
+<Note>
+The same survey can be labelled three different ways depending on where you see it, and the colors differ too — a survey in progress shows red on the Surveys page and yellow on the dashboard. The status is the same either way; only the styling changes.
+</Note>
 
 ## Taking a Survey
 
@@ -63,31 +73,32 @@ Your progress on each survey is shown with a colored badge:
 4. Complete all required questions (marked with a red asterisk *)
 5. Click **Complete** to submit your responses
 
+<Frame>
+  <img src="/images/students/surveys/surveys-1787283222098.png" alt="An open, unanswered Course Experience Survey: two required questions marked with a red asterisk, each answered on a 1-to-5 scale with labelled endpoints, then two optional free-text comment boxes, and a Complete button at the bottom" />
+</Frame>
+
 ### Continuing an In-Progress Survey
 
-If you started a survey but didn't finish:
+If you started a survey but didn't finish, your saved answers are still there:
 
-1. Find the survey with "In Progress" status
+1. Find the survey with **In Progress** status
 2. Click **Continue Survey**
-3. Your previous answers will be saved
-4. Complete any remaining questions and submit
+3. Your earlier answers are already filled in, so you pick up where you left off
+4. Complete any remaining questions and click **Complete** to submit
+
+You can also reach the same draft from your dashboard, where the survey appears in the **Surveys to complete** banner and the **Active Surveys** card with a **Continue** button.
 
 <Tip>
-If the survey allows editing, your responses are automatically saved as you answer questions. You can safely close the browser and return later without losing your work.
+If the survey allows editing, your answers are saved automatically as you answer questions, so you can close the browser and return later without losing your work. If it does not allow editing, nothing is saved until you click **Complete** — finish that survey in one sitting.
 </Tip>
 
 ## Survey Due Dates
 
-Each survey has a deadline set by your instructor:
+Each survey shows a due date set by your instructor. The due date is a soft deadline: after it passes the survey is flagged as overdue, but it still accepts responses. Late submissions are not blocked.
 
-- **Active surveys**: Show the due date and time
-- **Overdue surveys**: Cannot be submitted after the deadline passes
-
-Make sure to complete surveys before their due date to ensure your responses are recorded.
-
-<Warning>
-You cannot submit a survey after the due date has passed. Plan ahead and complete surveys before the deadline.
-</Warning>
+<Note>
+Your submission time is recorded and visible to your instructor, so submit by the due date whenever you can. A survey stops accepting responses only when your instructor closes it, which also removes it from your Surveys page.
+</Note>
 
 ## Editing Your Responses
 
@@ -132,6 +143,7 @@ Surveys may include different types of questions:
 | **Single Choice** | Select one option from the list |
 | **Checkboxes** | Select one or more options that apply |
 | **Yes / No** | Choose between two options |
+| **Rating** | Pick a value on a numeric scale, such as 1-5 |
 
 ## Tips for Completing Surveys
 

@@ -6,79 +6,81 @@ icon: "chart-line"
 
 # Gradebook
 
-The gradebook shows your released grades and lets you explore hypothetical scenarios with What-If calculations. Your instructor controls which grades are visible by releasing individual gradebook columns; unreleased columns do not appear here at all.
+The gradebook shows the grades your instructor has released and, when the feature is turned on, lets you explore hypothetical scenarios with What-If calculations. Your instructor releases grades one column at a time, so the page fills in over the term.
 
 ## Viewing Your Grades
 
-Open the **Gradebook** page from the course menu. Grades are organized by category. Use **Expand All** / **Collapse All** to show or hide grouped columns at once.
+Open the **Gradebook** page from the course menu — it appears only if your instructor has enabled the gradebook for the course. The page is a list of grade cards, grouped by the first part of each column's slug: columns whose slugs start with `homework-` land in a **Homework** group, and `assignment-lab-*` columns land in a **Lab** group. Only columns that sit next to each other in your instructor's column order are grouped together, so the same prefix can appear as two separate groups.
 
 Each grade card shows:
 
-- **Column name** (e.g., "Homework 1", "Final Grade")
-- **Your score** out of the maximum points
-- **Percentage earned**
-- **Status indicators** for missing, excused, incomplete, or calculated values
-- **Magic wand icon** when a What-If simulation is active
-- **View Submission** link, if the column is linked to an assignment
+- **Column name**
+- **Your score**, followed by `/` and the maximum points when the column has a maximum
+- **A rendered value**, when your instructor configured one — a letter grade or a checkmark, for example. It appears *before* the number, which is then wrapped in parentheses: `A (95/100)`
+- **A status word** in place of a number when there isn't one yet: `N/A`, `Not Submitted`, `Submitted`, `Missing`, `Excused`, or `In Progress`
+- **The column description**, if your instructor wrote one. This is usually the best explanation of what the column measures
+- **View Submission**, when the column is tied to an assignment you have a submission for
+- **A pencil icon**, when an instructor has overridden a released value. Hover it to read the instructor's note, if they left one
 
-For calculated columns (those using expressions), the displayed value reflects only the grades that have been released to you. For example, a "Homework Average" column will average only the released homework assignments.
+The gradebook is a list of cards, not a spreadsheet grid:
+
+<Frame>
+  <img src="/images/students/gradebook/gradebook-1787283222092.png" alt="Gradebook grade cards: released Lab 1 and Assignment 1 cards each showing a score out of 100 with a View Submission link, a collapsed 12 Skills group showing one representative card, and calculated cards whose Incomplete Values notice is expanded to list the twelve skill columns that are not graded yet" />
+</Frame>
+
+<Note>
+`In Progress` means the column exists but your grade has not been released to you yet. You can see the column, its maximum score, and its description before release. Only columns your instructor marks staff-only are hidden from you entirely until they are released.
+</Note>
+
+For calculated columns (those using expressions), the displayed value reflects only the grades that have been released to you. A "Homework Average" column averages only the released homework assignments.
 
 ### Expand and Collapse Groups
 
-When related columns are grouped together (e.g., "Homework 1", "Homework 2", "Homework 3"), the gradebook can collapse them to show only the most recent or relevant column per group. Use **Expand All** to see every individual column.
+Groups with more than one column start **collapsed**. A collapsed group shows a header like `4 Homeworks...` plus one representative card: the last column in the group once any grade in it exists, otherwise the first. Click the header to expand the group and see every column in it.
+
+**Expand All** and **Collapse All** appear at the top of the page whenever at least one group has more than one column.
 
 ## Understanding Incomplete Values
 
-Some calculated grades show warnings about incomplete or unreleased dependencies:
+A calculated grade that can't be fully computed yet carries a collapsed **Incomplete Values** notice. Expand it to see which grades it is still waiting on:
 
-- **Missing dependencies**: Grades that feed into the calculation haven't been entered yet
-- **Unreleased dependencies**: Grades that feed into the calculation haven't been released
+- **Missing** — columns that feed the calculation and have no grade
+- **Not graded** — columns that feed the calculation and have not been released to you
 
-These warnings explain why a calculated grade might be lower than expected, or why it might change once more grades are released.
+This is why a calculated grade can look lower than you expect, and why it will change as more grades are released.
 
 ## What-If Simulations
 
 <Note>
-What-If must be enabled by your instructor. If it's disabled, the gradebook is view-only and a notice appears at the top of the page.
+What-If is off unless your instructor turns it on. When it's off, the gradebook is view-only and the page says "Grade simulations (What If) are not enabled for this course. You can still view released grades below."
 </Note>
 
-What-If mode lets you plug in hypothetical scores to see how they would change your calculated grades and overall course grade — useful for understanding the impact of upcoming work or for planning where to focus.
+What-If lets you type hypothetical scores and watch your calculated grades change — useful for seeing how much an upcoming assignment is worth to you, or where to focus.
 
 ### Using What-If Mode
 
 <Steps>
-<Step title="Click a grade card">
-Tap any released, editable grade card to open it for simulation.
+<Step title="Open a grade card for editing">
+Click anywhere on an editable card, or use the wand button on it. Editable cards show a wand button whenever What-If is on.
 </Step>
-<Step title="Enter a hypothetical score">
-Type the score you want to test in the input field.
+<Step title="Type a hypothetical score">
+Every keystroke applies immediately — calculated columns that depend on this one recompute as you type. There is nothing to confirm.
 </Step>
-<Step title="Press Enter">
-The simulated score is applied and shown with a magic wand icon.
-</Step>
-<Step title="Check dependent columns">
-Any calculated columns that depend on the grade you changed update automatically.
+<Step title="Close the editor">
+Press **Enter** or **Escape**, or click elsewhere. Your simulated value stays in place, and the card is tinted and marked with a blue wand icon.
 </Step>
 </Steps>
 
 ### Clearing Simulations
 
-To return to your actual grade for a card:
-
-1. Click the grade card with the simulation
-2. Clear the input field
-3. Press Enter
-
-Dependent calculated columns automatically revert to their actual values.
+Reopen the card and delete everything in the input. The card returns to your real grade and every dependent calculated column recomputes. There is no reset-everything control — you clear one card at a time.
 
 ### Limitations
 
-- You can only simulate grades for **manual columns** and **assignment-linked grades**
-- **Calculated columns** (averages, weighted totals, final grades) are read-only — they update automatically based on your simulations
-- **Released columns only**: you can't simulate unreleased columns
-- **Columns with instructor overrides** can't be simulated
-- What-If values are **local to your browser** and not saved between sessions
-- Simulations are not visible to your instructor and don't affect your actual grades
+- You can simulate any column that is **not calculated from other gradebook columns**. Columns that do depend on other columns are read-only, since those are the ones What-If recomputes for you
+- If an instructor has overridden a column, the override wins: you can still open the editor, but your simulated value won't be displayed for that column
+- What-If values live only in the page you're looking at. Reloading or navigating away discards them
+- Simulations are never saved, are not visible to your instructor, and don't change your real grades
 
 <Note>
 What-If is a planning tool. It does not change your real grades or notify anyone.
