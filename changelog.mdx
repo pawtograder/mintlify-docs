@@ -4,175 +4,212 @@ description: "Recent updates and improvements to the Pawtograder platform"
 icon: "clock-rotate-left"
 ---
 
-## July 2026
+This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
-### July 7, 2026
+## August 2026
 
-#### Grading improvements
-- **Grade students without a submission** — Every enrolled student now appears on the assignment roster, even without an active submission. Instructors and graders can click **Grade anyway** on any non-submitter row to create an empty stub submission and navigate directly to the grading page. If the student later submits, the stub is automatically superseded. The grading progress panel shows a separate **Not submitted: N** count so non-submitters don't skew completion percentages ([#855](https://github.com/pawtograder/platform/pull/855))
-- **Bulk assign grading for all students** — The **Bulk Assign Grading** form now includes an **Assign grading for all students** toggle. When enabled, empty stub submissions are created for non-submitters (respecting section, lab, and tag filters) before grading assignments are drafted, ensuring every enrolled student can be assigned a grader regardless of submission status ([#855](https://github.com/pawtograder/platform/pull/855))
+### August 19, 2026
+
+#### Surveys
+- **Stricter rules on survey responses** — Responses are now accepted only for published surveys that are available, not deleted, and assigned to you, and only from members of the course. Editing a submitted response is refused when the survey does not allow response editing. Late responses are still accepted, as before
+
+### August 12, 2026
 
 #### Bug fixes
-- **Fixed non-submitter roster scoping** — Corrected a bug where students who had submitted any other assignment in the course were incorrectly excluded from the non-submitter list for assignments they hadn't submitted to, causing the **Grade anyway** button to not appear for them ([#859](https://github.com/pawtograder/platform/pull/859))
-- **Fixed bulk assign assignee display** — Grader names in the bulk assign selector now fall back to the profile ID when a name is not yet loaded, preventing blank or broken entries in the assignee list ([#856](https://github.com/pawtograder/platform/pull/856))
+- **Preview as student stays on its own assignment** — On the **Test Assignment** page, **Preview as student** no longer shows submissions from other assignments ([#918](https://github.com/pawtograder/platform/pull/918))
+- **Discord role sync scoped to active courses** — Role synchronization now runs only for active courses and stops retrying failures that cannot succeed ([#924](https://github.com/pawtograder/platform/pull/924))
+- **Long-idle tabs no longer crash** — Returning to a Pawtograder tab left open for a long time no longer errors out when you come back to it ([#902](https://github.com/pawtograder/platform/pull/902))
+
+### August 11, 2026
+
+#### Grading and gradebook
+- **Safeguards on scores and completion** — Rubric point values are rejected if they are negative, grading completion is computed from each student's own reviews rather than an assignment-wide summary, and an out-of-date gradebook recalculation can no longer overwrite newer grades ([#922](https://github.com/pawtograder/platform/pull/922))
+
+### August 6, 2026
+
+#### Assignments
+- **Repo-only assignments with no autograder** — An assignment can now be configured with no autograder at all. Every push to the default branch is collected as a submission for hand grading, and pushes to other branches are recorded in the commit history without becoming submissions ([#898](https://github.com/pawtograder/platform/pull/898))
+- **Suggested due dates shown prominently** — When the **Suggested due dates** course flag is on, an assignment's advisory date is now surfaced clearly to students. Also fixed a timezone shift that could move dates by a day when creating an assignment ([#896](https://github.com/pawtograder/platform/pull/896))
+
+### August 4, 2026
+
+#### Command line
+- **Pawtograder CLI published to npm** — The `pawtograder` command-line tool is now installable from npm, with the previously stubbed command groups implemented. See [CLI](/staff/cli) ([#885](https://github.com/pawtograder/platform/pull/885))
+
+### August 3, 2026
+
+#### Accessibility
+- **Major accessibility work on student pages** — Student-facing pages were reworked for keyboard operation, focus handling, labelling, and contrast, measured against WCAG 2.1 AA, and an automated accessibility suite now runs against them on every change. This closed out the large structural barriers; a punchlist of smaller items remains open, so the student pages are not yet fully AA conformant ([#862](https://github.com/pawtograder/platform/pull/862))
+
+#### Bug fixes
+- **Preview as student on unreleased assignments** — The student preview on the **Test Assignment** page no longer closes itself when the assignment has not been released ([#887](https://github.com/pawtograder/platform/pull/887))
+- **Renamed GitHub accounts re-linked** — Students and staff who rename their GitHub account are now re-matched automatically, and a course URL must be unique within its GitHub organization ([#888](https://github.com/pawtograder/platform/pull/888))
+
+## July 2026
+
+### July 17, 2026
+
+#### Grading
+- **Graded non-submitters flagged in the roster** — The grader roster now marks students who have been graded without ever submitting, so a stub submission created for grading is not mistaken for real work ([#865](https://github.com/pawtograder/platform/pull/865))
+
+### July 16, 2026
+
+#### Assignments
+- **Unreleased assignments hidden from students** — Assignments that have not been released no longer appear on the student dashboard ([#866](https://github.com/pawtograder/platform/pull/866))
+
+#### GitHub
+- **Membership and repositories heal themselves** — GitHub organization membership and team assignment are reconciled the first time a student logs in, and a student repository that failed to be created is retried instead of needing staff intervention. Template repositories can also be set per deployment ([#866](https://github.com/pawtograder/platform/pull/866), [#861](https://github.com/pawtograder/platform/pull/861))
+
+### July 6, 2026
+
+#### Grading
+- **Grade students without a submission** — Every enrolled student appears on the assignment roster. Students with no active submission show **Not submitted** and a **Grade anyway** button that creates an empty submission and opens it for grading; the progress panel counts them separately. **Bulk Assign Grading** gained an **Assign grading for all students** toggle that does the same in bulk. See [Grading assignments](/staff/assignments/grading-assignments#grade-anyway) ([#855](https://github.com/pawtograder/platform/pull/855))
+
+#### Bug fixes
+- **Non-submitter roster scoped per assignment** — Students who had submitted some other assignment in the course are no longer left off the non-submitter list for an assignment they skipped ([#859](https://github.com/pawtograder/platform/pull/859))
+- **Grader names in bulk assign** — The assignee selector no longer shows blank entries while names are still loading ([#856](https://github.com/pawtograder/platform/pull/856))
+
+## June 2026
+
+### June 30, 2026
+
+#### Integrations
+- **LMS (LTI) Sync** — Courses can connect to Canvas or another LTI 1.3 platform to pull the roster and push assignment grades back to the LMS gradebook. Site admins register platforms, and each course maps its LTI contexts to Pawtograder sections from **Course Settings → LMS (LTI) Sync** ([#789](https://github.com/pawtograder/platform/pull/789))
+
+### June 23, 2026
+
+#### Grading
+- **Release checks that grading is finished** — Releasing grades now verifies that the reviews it covers are complete, and judges completeness according to each reviewer's role ([#844](https://github.com/pawtograder/platform/pull/844))
+
+#### Administration
+- **Class creation requires a GitHub organization** — The admin **Create Class** form now offers a required dropdown of configured GitHub organizations and accepts a list of instructor email addresses to invite. Admins can also run team synchronization for courses they do not teach ([#846](https://github.com/pawtograder/platform/pull/846), [#834](https://github.com/pawtograder/platform/pull/834))
+
+### June 22, 2026
+
+#### Groups
+- **Group management tidied up** — Copying groups from another assignment is now done from the assignment's group management page, and students receive write access to their group's repository however they join the group, including by invitation and by staff assignment ([#839](https://github.com/pawtograder/platform/pull/839), [#850](https://github.com/pawtograder/platform/pull/850))
+
+#### Branding
+- **Per-deployment branding** — A Pawtograder deployment can set its own product name, logo, favicon, and accent color, so an institution running its own instance sees its own branding on the login and course pages ([#840](https://github.com/pawtograder/platform/pull/840))
+
+### June 19, 2026
+
+#### GitHub
+- **GitHub organization defaults and an in-browser file editor** — Site admins can set default template repositories per GitHub organization from the **GitHub Orgs** dashboard, admins can enter a course as an instructor, and `pawtograder.yml` and workflow files can be edited in the browser with schema validation that blocks an invalid save ([#831](https://github.com/pawtograder/platform/pull/831))
+
+### June 18, 2026
+
+#### Assignments
+- **Per-assignment repository configuration** — Assignment setup now covers how students get and hand in code in one place: a repository per student, a fork of the student's own repository from an earlier assignment, or no repository at all with students uploading their submission files directly. Assignments can also require a pull request, with settings for the upstream base branch, how the submission pull request is identified, and whether an open pull request is itself a graded condition. Pull-request assignments add **Checks** and **Deployments** tabs to the submission view, and instructors can create a submission on a student's behalf. See [Assignment configuration](/staff/assignments/configuration) ([#781](https://github.com/pawtograder/platform/pull/781))
+
+### June 14, 2026
+
+#### Assignments
+- **Preview a test submission as a student** — On the **Test Assignment** page, **Preview as student** shows your own test submission under student rules, so you can check what students will see before releasing ([#835](https://github.com/pawtograder/platform/pull/835))
+
+### June 8, 2026
+
+#### Grades
+- **Correct grades on the dashboard and in rollups** — The student dashboard shows the grade for the active submission, hand-grading totals roll up correctly, and a review score is never displayed below zero ([#824](https://github.com/pawtograder/platform/pull/824), [#812](https://github.com/pawtograder/platform/pull/812))
+
+### June 5, 2026
+
+#### Submissions
+- **New submission file viewer** — The submission **Files** view now uses the same code editor as the rest of the platform in read-only mode, with syntax highlighting and steadier handling of large files and long grading sessions ([#565](https://github.com/pawtograder/platform/pull/565), [#820](https://github.com/pawtograder/platform/pull/820))
+
+### June 4, 2026
+
+#### Reporting
+- **Assignment dashboard and rubric report** — Each assignment has a dashboard summarizing submissions, scores, and grading progress, and instructors can build a rubric report that shows how often each rubric check was applied, filtered by section, lab, or cohort. See [Assignment dashboard](/staff/assignments/assignment-dashboard) and [Rubric report](/staff/exports#rubric-report) ([#806](https://github.com/pawtograder/platform/pull/806))
+
+#### Bug fixes
+- **Lab sections can be deleted** — Deleting a lab section now removes it instead of leaving it in place ([#811](https://github.com/pawtograder/platform/pull/811))
+- **No more error page without a course role** — Opening a course you have no role in sends you back to your course list instead of showing an error ([#830](https://github.com/pawtograder/platform/pull/830))
+
+## May 2026
+
+### May 30, 2026
+
+#### Assignments
+- **Advisory suggested due date** — An assignment can carry an optional suggested date on or before the real due date, as guidance for students working through a multi-part assignment. It is advisory only and enforces nothing ([#791](https://github.com/pawtograder/platform/pull/791))
+
+#### Exports
+- **Assessment export and hint feedback in exports** — The CLI's `assessment export` writes a whole term of course data — assignments, rubrics, submissions, scores, tests, hints, engagement, and gradebook cells — with optional pseudonymization of who each row is about. Student feedback on autograder hints is now included in exports. See [CLI](/staff/cli) ([#746](https://github.com/pawtograder/platform/pull/746), [#780](https://github.com/pawtograder/platform/pull/780))
+
+#### Bug fixes
+- **Group repositories preserved** — Dissolving an empty group no longer removes a repository that already has submissions ([#800](https://github.com/pawtograder/platform/pull/800))
+
+### May 29, 2026
+
+#### Instructor tools
+- **View as student** — A **View as student** button on the course home page lets an instructor pick any enrolled student and see that student's whole course, read only. Nothing you open in this mode is recorded against the student. See [Staff overview](/staff/intro) ([#779](https://github.com/pawtograder/platform/pull/779))
+
+### May 23, 2026
+
+#### Grading
+- **Confirm review and advance** — The rubric sidebar has a confirm button that records the review as complete and moves you to the next submission in your queue ([#695](https://github.com/pawtograder/platform/pull/695))
+
+### May 21, 2026
+
+#### Regrade requests
+- **Course-wide regrade request management** — Instructors get a course-level regrade requests dashboard, students can request a regrade on a specific rubric check from the grade breakdown, and requests that no longer match a mark on the submission can now be found and resolved instead of sitting unnoticed ([#733](https://github.com/pawtograder/platform/pull/733), [#772](https://github.com/pawtograder/platform/pull/772))
+
+#### Enrollment
+- **Invitations no longer expire on their own** — Bulk invitations stay valid until they are accepted or withdrawn, and duplicate profiles for the same person are merged. A person invited as an instructor to two courses is now added to both ([#777](https://github.com/pawtograder/platform/pull/777), [#747](https://github.com/pawtograder/platform/pull/747))
+
+### May 20, 2026
+
+#### Rubrics
+- **Rubric editor with a visual tree** — The rubric editor gained a drag-and-drop outline of parts, criteria, and checks alongside the YAML view, and YAML rubrics can reuse shared definitions by reference. Copying and pasting rubric YAML saves correctly, and a preview no longer drops checks that share an identifier ([#766](https://github.com/pawtograder/platform/pull/766), [#775](https://github.com/pawtograder/platform/pull/775), [#773](https://github.com/pawtograder/platform/pull/773))
+
+### May 19, 2026
+
+#### Instructor tools
+- **Commit history, on-demand grading, and GitHub diagnostics** — Instructors can open a student repository's commit list, start a grading run on any commit from it, and use a diagnostics page that reports the state of a course's GitHub organization, repositories, and permissions ([#764](https://github.com/pawtograder/platform/pull/764), [#750](https://github.com/pawtograder/platform/pull/750))
+- **Faster instructor pages** — Large instructor tables stream in and render only the rows in view, so pages with thousands of rows stay responsive. Batch group updates and large assignment deletions were also moved off the request path ([#708](https://github.com/pawtograder/platform/pull/708), [#765](https://github.com/pawtograder/platform/pull/765))
+
+#### Bug fixes
+- **Handout sync, gradebook refresh, and live updates** — Handouts sync files over 5 MB and propagate deletions to the repositories they sync to, gradebook cells recalculate when a student's active submission changes, the submission history panel updates as reviews change, and the code viewer follows the Pawtograder theme rather than your operating system's ([#749](https://github.com/pawtograder/platform/pull/749), [#783](https://github.com/pawtograder/platform/pull/783), [#763](https://github.com/pawtograder/platform/pull/763), [#769](https://github.com/pawtograder/platform/pull/769), [#770](https://github.com/pawtograder/platform/pull/770))
+
+### May 18, 2026
+
+#### Discussion
+- **Mark a thread as duplicate** — Staff can mark a discussion thread as a duplicate of another, pointing readers at the answered thread ([#727](https://github.com/pawtograder/platform/pull/727))
+
+### May 17, 2026
+
+#### Accessibility
+- **Accessibility and usability pass** — A broad round of fixes to labelling, focus handling, contrast, and keyboard operation across the platform, plus a **Keyboard shortcuts** entry in the support menu that lists the shortcuts available on the page you are on ([#753](https://github.com/pawtograder/platform/pull/753), [#744](https://github.com/pawtograder/platform/pull/744))
+
+### May 16, 2026
+
+#### Security
+- **Hardened chat attachments and page content policy** — Attachments in office-hours help request chats are sanitized before display, and the platform now sends a strict content security policy ([#752](https://github.com/pawtograder/platform/pull/752))
+
+### May 15, 2026
+
+#### Assignments
+- **Automatic late tokens** — A course can let students push after the deadline and have a late token spent for them. Where it is enabled, the assignment page says so, and submitting late applies a token if the student has one left. See [Late tokens and extensions](/students/assignments/late-tokens-and-extensions) ([#692](https://github.com/pawtograder/platform/pull/692))
 
 ## April 2026
 
-### April 29, 2026
+### April 28, 2026
 
-#### Gradebook enhancements
-- **Improved Expression Builder editor** - The full-screen Expression Builder now uses a Monaco-based editor with syntax highlighting, autocomplete for built-in functions and column slugs, and hover tooltips showing intermediate values for any sub-expression. Per-line result annotations are displayed inline next to each statement ([#735](https://github.com/pawtograder/platform/pull/735))
-- **Gradebook table select-all/none filters** - Column and section filter dropdowns in the gradebook table now include **Select all** and **Select none** toolbar buttons for faster multi-select filtering ([#735](https://github.com/pawtograder/platform/pull/735))
+#### Gradebook
+- **Expression Builder editor** — The full-screen Expression Builder now has syntax highlighting, autocomplete for built-in functions and column names, hover tooltips showing the value of any sub-expression, and per-line results shown inline. Column and section filter dropdowns gained **Select all** and **Select none** buttons. See [Gradebook](/staff/gradebook) ([#735](https://github.com/pawtograder/platform/pull/735))
 
-#### Autograding fixes
-- **Fail loudly when no files match submissionFiles patterns** - If no repository files match the configured `submissionFiles` glob patterns, the submission is now immediately rejected with a descriptive 400 error listing the unmatched patterns and guiding instructors to check `pawtograder.yml` ([#739](https://github.com/pawtograder/platform/pull/739))
+#### Autograding
+- **Clear error when no files match** — If no repository files match an assignment's configured submission file patterns, the submission is rejected with a message naming the patterns that matched nothing, instead of grading an empty submission ([#739](https://github.com/pawtograder/platform/pull/739))
 
-### April 24, 2026
+#### Performance
+- **Faster discussion and submission pages** — Long discussion threads and submission pages load noticeably faster ([#740](https://github.com/pawtograder/platform/pull/740))
 
-#### Grading improvements
-- **Clear TA messaging when grading feedback is released** - When a TA attempts to add or change marks on a released submission review, Pawtograder now shows a clear warning explaining the restriction and directing them to ask an instructor to unrelease the review ([#724](https://github.com/pawtograder/platform/pull/724))
-- **Group mentor column in instructor assignment table** - The instructor submissions table now shows a **Group mentor** column (with multi-select filter) when the assignment has groups with assigned mentors ([#731](https://github.com/pawtograder/platform/pull/731))
+### April 23, 2026
 
-#### Bug fixes
-- **Fixed individual score display on group assignments** - Student views now correctly show individual scores on group assignments ([#729](https://github.com/pawtograder/platform/pull/729))
-
-### April 22, 2026
-
-#### Grading improvements
-- **Bulk release/unrelease selected submissions** - The instructor assignment submissions table now supports row selection with checkboxes. Use **All in view** to select all filtered submissions, then click **Release** or **Unrelease** to act on only the selected rows ([#730](https://github.com/pawtograder/platform/pull/730))
-
-#### CI improvements
-- **Shared npm cache across workflows** - GitHub Actions workflows now share npm cache for faster builds ([#728](https://github.com/pawtograder/platform/pull/728))
-
-### April 21, 2026
-
-#### Gradebook fixes
-- **Fixed gradebook updates for individual grading on group assignments** - Gradebook now correctly updates when grades are changed after release for individual grading on group assignments ([#725](https://github.com/pawtograder/platform/pull/725))
-
-### April 19, 2026
-
-#### Discussion improvements
-- **Fixed discussion browse view** - Resolved post list height and nested scroll issues in the discussion browse view ([#723](https://github.com/pawtograder/platform/pull/723))
-
-#### Gradebook enhancements
-- **Expression validation and full-screen Expression Builder** - Added live validation for gradebook expressions with a full-screen Expression Builder featuring student picker, per-line evaluation, and rendered score previews ([#717](https://github.com/pawtograder/platform/pull/717))
-
-### April 18, 2026
-
-#### Discussion fixes
-- **Prevented accidental double posts** - Fixed issue where users could accidentally create duplicate forum threads ([#721](https://github.com/pawtograder/platform/pull/721))
-
-#### Performance improvements
-- **Build time optimization** - Improved build performance and reduced build times ([#633](https://github.com/pawtograder/platform/pull/633))
-
-### April 17, 2026
-
-#### CLI features
-- **Beta CLI interface** - Added comprehensive CLI for managing courses, assignments, rubrics, surveys, and repositories with local git operations ([#597](https://github.com/pawtograder/platform/pull/597))
-
-#### Grading improvements
-- **Comment edits after review completion** - Graders can now edit comments after completing a review, as long as the review hasn't been released to students ([#715](https://github.com/pawtograder/platform/pull/715))
-- **Instructor bulk and per-row review due date edits** - Instructors can now edit review due dates in bulk or per-row for both self-review and grading assignments ([#706](https://github.com/pawtograder/platform/pull/706))
+#### Grading
+- **Bulk release and unrelease** — The instructor submissions table supports row selection with checkboxes and an **All in view** option, so **Release** and **Unrelease** act on exactly the rows you picked ([#730](https://github.com/pawtograder/platform/pull/730))
+- **Group mentor column** — The instructor submissions table shows a **Group mentor** column, with a multi-select filter, when the assignment's groups have mentors ([#731](https://github.com/pawtograder/platform/pull/731))
+- **Clear message when feedback is released** — A grader who tries to change marks on a released review now sees an explanation and is directed to ask an instructor to unrelease it ([#724](https://github.com/pawtograder/platform/pull/724))
 
 #### Bug fixes
-- **Fixed repository sync for assignment groups** - Repository sync now correctly triggers when assignment groups or membership changes ([#716](https://github.com/pawtograder/platform/pull/716))
-- **Fixed assignments dashboard duplicate rows** - Resolved issue causing duplicate rows in the student assignments dashboard ([#719](https://github.com/pawtograder/platform/pull/719))
-- **Renamed "Import Column" to "Import Columns"** - Updated button text for clarity ([#718](https://github.com/pawtograder/platform/pull/718))
-
-### April 16, 2026
-
-#### Gradebook enhancements
-- **Overhauled "What if" calculations** - Redesigned the What-If feature with improved calculation accuracy and a new feature flag for instructors to enable/disable student access ([#626](https://github.com/pawtograder/platform/pull/626))
-
-### April 14, 2026
-
-#### Gradebook features
-- **Instructor-only columns** - Added support for staff-only gradebook columns that are hidden from students until released, with frozen snapshot behavior ([#682](https://github.com/pawtograder/platform/pull/682))
-
-#### Bug fixes
-- **Unified grade.yml workflow SHA mismatch error message** - Improved error messaging for workflow file mismatches ([#713](https://github.com/pawtograder/platform/pull/713))
-- **Fixed finalize_submission_early granting free extensions** - Resolved issue where early finalization incorrectly granted extensions when late tokens were active ([#712](https://github.com/pawtograder/platform/pull/712))
-
-### April 13, 2026
-
-#### Student management
-- **Student overview enhancements** - Added lecture section, email, and assignment groups to student overview ([#707](https://github.com/pawtograder/platform/pull/707))
-
-### April 10, 2026
-
-#### Infrastructure
-- **CI/build process migration** - Migrated the build process from Coolify to GitHub Actions to reduce test flakiness and improve deployment reliability.
-
-#### Office hours
-- **Active queues only for TAs** - Office hours dashboard now shows only active queues for TAs, matching student visibility. Inactive queues remain visible in Queue Management, with an empty state and hint when all queues are inactive.
-
-#### Grading fixes
-- **Regrade decimal points handling** - Fixed regrade score calculations to handle decimal points correctly.
-- **Tweak notes for group grading** - Added tweak notes functionality for per-student adjustments in split-rubric group grading scenarios.
-
-#### Gradebook fixes
-- **Free text responses filtered by section** - Instructors now only see free text responses from their assigned sections.
-- **Total score on student dashboard** - Student assignments dashboard now shows the total score when graded.
-- **Export with rendered expressions** - Added option to export the gradebook with columns rendered by expression, allowing instructors to export calculated values.
-
-#### Self-review
-- **Deadline adjustment on due date extensions** - Self-review deadlines now properly adjust when the assignment due date is extended.
-
-#### Testing and reliability
-- **Magic links on E2E failure** - Test failures now print magic links for easier debugging.
-- **Improved error filtering** - Reduced noise in error logs to focus on actionable issues.
-
-### April 7, 2026
-
-#### Gradebook improvements
-- **Fixed gradebook column reordering** - Resolved issue where Move Left/Right buttons weren't working correctly for gradebook columns ([#668](https://github.com/pawtograder/platform/pull/668))
-- **Performance improvements** - Added better suspense boundaries to improve loading performance, especially on the gradebook page ([#678](https://github.com/pawtograder/platform/pull/678))
-
-### April 6, 2026
-
-#### Admin features
-- **Default time zone for admin view** - Added a default time zone setting for the admin interface ([#677](https://github.com/pawtograder/platform/pull/677))
-
-### April 5, 2026
-
-#### Bug fixes
-- **Grade override notes now visible** - Fixed issue where grade override notes weren't displaying in the UI ([#670](https://github.com/pawtograder/platform/pull/670))
-- **Self-review regrade prevention** - Students can no longer request regrades on self-review rubric items ([#673](https://github.com/pawtograder/platform/pull/673))
-- **Survey analytics fix** - Fixed survey analytics not showing for series surveys when comparison view is disabled ([#675](https://github.com/pawtograder/platform/pull/675))
-
-## March 2026
-
-### March 29, 2026
-
-#### Group management
-- **Enhanced group export** - Group CSV exports now include student and mentor emails in `Name <email>` format. Student exports also use this format for consistency ([#666](https://github.com/pawtograder/platform/pull/666))
-- **Test Assignment GitHub repo fix** - Fixed "Test Assignment" GitHub repository functionality for groups-only assignments ([#665](https://github.com/pawtograder/platform/pull/665))
-
-#### Time zone support
-- **Configurable time zones** - Added comprehensive time zone support across the platform, allowing courses to set their preferred time zone for all date/time displays ([#494](https://github.com/pawtograder/platform/pull/494))
-
-### March 28, 2026
-
-#### Late tokens
-- **Fixed gifted late token display** - Students who receive gifted late tokens now see the correct remaining token count. Previously, students who used all initial tokens but received gifts saw "You have no remaining late tokens" even when they had capacity ([#661](https://github.com/pawtograder/platform/pull/661))
-
-#### Content rendering
-- **HTML tag escaping** - HTML tags in markdown content are now escaped instead of stripped, preserving the original content intent ([#658](https://github.com/pawtograder/platform/pull/658))
-
-#### Grading improvements
-- **Auto-recalculate submission totals** - Submission grade totals now automatically recalculate when rubric check scores change ([#662](https://github.com/pawtograder/platform/pull/662))
-- **Better error messages** - Improved student-facing error messages to be more descriptive and actionable ([#660](https://github.com/pawtograder/platform/pull/660))
-- **Decimal scores in gradebook** - Gradebook number inputs now accept decimal scores ([#659](https://github.com/pawtograder/platform/pull/659))
-
-### March 27, 2026
-
-#### Performance and stability
-- **Memory leak fix** - Eliminated blob URL memory leaks in the submission file viewer that could cause browser crashes when viewing multiple large files ([#654](https://github.com/pawtograder/platform/pull/654))
-- **Group due date fix** - Fixed due date adjustment dialog for group assignments to correctly create instructor exceptions with assignment_group_id instead of student_id ([#657](https://github.com/pawtograder/platform/pull/657))
-- **Gradebook recalculation fix** - Fixed version-drift bug in gradebook recalculation pipeline that could cause scores to not converge ([#656](https://github.com/pawtograder/platform/pull/656))
-- **Special character filename handling** - Binary files with Unicode characters (for example, macOS screenshot names with special spaces) now upload successfully thanks to improved filename sanitization ([#650](https://github.com/pawtograder/platform/pull/650))
-
-#### New features
-- **Assignment repository analytics** - Added analytics for assignment repositories, providing insights into student repository activity ([#637](https://github.com/pawtograder/platform/pull/637))
-- **Group individual grading** - Introduced support for grading individual students within group assignments ([#638](https://github.com/pawtograder/platform/pull/638))
-- **Survey display improvements** - Enhanced survey display and results analysis interface ([#652](https://github.com/pawtograder/platform/pull/652))
+- **Individual scores on group assignments** — Student views show the individual score on group assignments, and the gradebook updates when those grades change after release ([#729](https://github.com/pawtograder/platform/pull/729), [#725](https://github.com/pawtograder/platform/pull/725))
