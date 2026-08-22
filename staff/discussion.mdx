@@ -172,16 +172,25 @@ work rather than retroactively to everything.
 For what a student sees, see
 [Submitting Your Work → Error Pins](/students/assignments/create-submission#error-pins).
 
-### Creating Effective Error Pins
+### Writing Pins That Work
 
-To maximize the effectiveness of error pins:
+- **Let the rules do the matching, not the post.** Nothing compares the wording of
+  your thread to a student's output, so pasting an error message into the post
+  achieves nothing on its own. What decides whether a student sees the thread is
+  the rule you write against the autograder result — a check's name, its output, or
+  a score range.
+- **Start from a real failure.** Open a submission that hit the problem, find the
+  check or output that identifies it, and write the rule against that. Guessing at
+  a `contains` string usually matches either nothing or almost everything.
+- **Preview before saving.** The match count tells you which of those two you have.
+- **Write the thread for someone stuck.** A student arrives at it mid-problem with
+  no other context, so lead with the fix.
+- **Revisit as the assignment runs.** New failure modes appear once a cohort is
+  working; a pin added late applies to later submissions rather than retroactively.
 
-1. **Pin posts about common errors**: When you notice students frequently encountering the same error, create and pin a discussion post explaining the solution
-2. **Use clear error messages**: Include the actual error message text in your post so the system can match it
-3. **Provide step-by-step solutions**: Make pinned posts comprehensive so students can resolve issues independently
-4. **Update regularly**: As new common errors emerge, create new pinned posts to address them
-
-Error pins integrate with the [test insights dashboard](/staff/assignments/test-insights) to help you identify which errors are most common and deserve dedicated discussion posts.
+[Test Insights](/staff/assignments/test-insights) is the fastest way to find which
+failures are common enough to be worth a pin, and you can start a pin directly from
+it.
 
 ## Active Help Request Integration
 
