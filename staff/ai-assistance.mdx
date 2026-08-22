@@ -124,6 +124,16 @@ is also why `Authorization:${PAWTOGRADER_TOKEN}` has no space after the colon.
 `npx` fetches `mcp-remote` on first use, so there is nothing to install
 beforehand beyond Node.js.
 
+<Warning>
+Written this way, `npx -y mcp-remote` resolves to whatever version of that
+package is newest at the moment your client launches it, and that code runs
+locally with a token that can read your course's data. If your institution
+reviews the third-party code it runs, pin the version instead — replace
+`mcp-remote` with `mcp-remote@<version>` in `args`, and review the release
+notes before you move the pin. `mcp-remote` is a community project, not a
+Pawtograder one.
+</Warning>
+
 Claude Desktop reads its configuration from
 `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS and
 `%APPDATA%\Claude\claude_desktop_config.json` on Windows.
