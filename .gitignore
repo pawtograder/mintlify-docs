@@ -5,3 +5,9 @@ docs-audit/
 # Mintlify CLI
 .mintlify/
 node_modules/
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+.DS_Store

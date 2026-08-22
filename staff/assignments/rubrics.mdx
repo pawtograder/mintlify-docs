@@ -48,13 +48,13 @@ This allows graders to provide feedback on documentation, reports, and other non
 
 ### How Points Are Computed
 
-Each criteria uses one of three scoring modes. The rubric editor names them "Award per check", "Deduct from total", and "Penalty only"; in YAML they are two booleans. `is_deduction_only: true` wins outright — `is_additive` is consulted only when `is_deduction_only` is `false` or omitted.
+Each criteria uses one of three scoring modes. The rubric editor names them "Award per check", "Deduct from total", and "Penalty only"; in YAML they are two booleans. `is_deduction_only: true` wins outright — `is_additive` is consulted only when `is_deduction_only` is `false`. Both keys appear in the YAML column below because `is_deduction_only` is required on every criteria; copying a mode without it gives you a rubric the editor rejects.
 
 | Mode in the editor | YAML | Criteria score |
 |---|---|---|
-| Award per check | `is_additive: true` | sum(applied check points), capped at `total_points` |
-| Deduct from total | `is_additive: false` | `total_points - sum(applied deduction points)`, floored at 0 |
-| Penalty only | `is_deduction_only: true` | `-sum(applied check points)`, with the penalty capped at `total_points` — starts at zero and only ever subtracts |
+| Award per check | `is_additive: true`, `is_deduction_only: false` | sum(applied check points), capped at `total_points` |
+| Deduct from total | `is_additive: false`, `is_deduction_only: false` | `total_points - sum(applied deduction points)`, floored at 0 |
+| Penalty only | `is_deduction_only: true` (`is_additive` is ignored) | `-sum(applied check points)`, with the penalty capped at `total_points` — starts at zero and only ever subtracts |
 
 <Note>
 "Penalty only" is the mode that is easy to miss. Unlike "Deduct from total" it does not begin from `total_points`, so a criteria with no checks applied contributes 0 rather than full marks, and its best possible contribution is 0. Here `total_points` acts as a floor on the penalty rather than a starting balance. Use this mode for penalties that should not inflate the rubric's maximum, such as a late or academic-integrity deduction.
@@ -78,7 +78,7 @@ Each criteria uses one of three scoring modes. The rubric editor names them "Awa
 
 ## YAML Schema Quick Reference
 
-These examples conform to `public/RubricSchema.json`.
+These examples conform to the rubric schema the YAML editor validates against, and each one can be pasted in as it stands.
 
 ### Minimal Rubric
 
@@ -203,6 +203,8 @@ parts:
             is_annotation: true
             annotation_target: file
             file: src/Main.java
+            is_required: false
+            is_comment_required: false
             points: 1
 ```
 
@@ -246,9 +248,13 @@ parts:
         checks:
           - name: Builder pattern used
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 5
           - name: Strategy pattern used
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 5
       - name: Choose up to two strengths
         total_points: 4
@@ -258,9 +264,13 @@ parts:
         checks:
           - name: Test readability
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 2
           - name: Modular design
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 2
 ```
 
@@ -278,6 +288,8 @@ parts:
         checks:
           - name: General praise
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 0
             student_visibility: always
       - name: Internal notes
@@ -287,6 +299,8 @@ parts:
         checks:
           - name: For staff only
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 0
             student_visibility: never
       - name: Released only
@@ -296,6 +310,8 @@ parts:
         checks:
           - name: Visible when released
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 0
             student_visibility: if_released
       - name: Only if applied
@@ -305,6 +321,8 @@ parts:
         checks:
           - name: Shown when applied
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 0
             student_visibility: if_applied
 ```
@@ -473,6 +491,8 @@ parts:
           - name: Style violations
             is_annotation: true
             annotation_target: file
+            is_required: false
+            is_comment_required: false
             points: 1
 ```
 
@@ -501,6 +521,8 @@ parts:
         checks:
           - name: Effective coordination
             is_annotation: false
+            is_required: false
+            is_comment_required: false
             points: 5
 ```
 

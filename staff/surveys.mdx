@@ -267,7 +267,7 @@ Control which students can access and respond to your survey:
 **Assign to all students** (default)
 
 - All enrolled students in the course can see and respond to the survey
-- Response rate is calculated based on total enrolled students
+- Response rate is calculated against every student whose enrollment is still active; a student marked **Dropped** is not counted
 - Best for course-wide feedback or evaluations
 
 **Assign to specific students**
@@ -518,7 +518,7 @@ Percentage of the students assigned the survey who have responded. Calculated as
 Response Rate = (responses shown / students assigned) × 100
 ```
 
-The denominator is the assigned student count: every enabled student in the course when the survey is assigned to all, otherwise the number of students you picked. The numerator is the filtered response set, so active filters move this number.
+The denominator is the assigned student count: every student in the course whose enrollment is still active when the survey is assigned to all, otherwise the number of students you picked. A student marked **Dropped** is left out of that count. The numerator is the filtered response set, so active filters move this number.
 
 #### Time Remaining
 

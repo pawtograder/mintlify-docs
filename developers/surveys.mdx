@@ -344,7 +344,7 @@ Delete is the odd one: it is scoped to the author, not to the class. An instruct
 
 ### Writing a new policy
 
-Survey and poll policies use the project's authorization helpers rather than hand-rolled `user_privileges` joins. Prefer:
+Reach for the project's authorization helpers rather than a hand-rolled `user_privileges` join. Existing definitions go both ways — `live_polls_select_staff` calls `authorizeforclassgrader` (`20260817120000:162-167`), while `can_respond_to_survey` above and the `survey_series` policies inline the join — so follow the helpers in anything new:
 
 ```sql
 -- Let graders soft-delete responses in their own classes.

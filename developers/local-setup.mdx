@@ -434,12 +434,21 @@ npx supabase start
 
 ### `ERROR: must be owner of table objects`
 
-You are on an older Supabase CLI than the pinned `2.105.0`. Reinstall the pinned binary and start again (`AGENTS.md:25`):
+A CLI older than the pinned `2.105.0` ran the migrations — usually a globally installed `supabase` that your shell resolved ahead of the one in `node_modules`. Find out which binary you are getting, restore the pinned copy, then invoke it through `npx` from here on (`AGENTS.md:25`):
 
 ```bash
+# Anything outside node_modules/.bin is the wrong binary
+which supabase
+
+# Restore the pinned copy
 rm -rf node_modules/.bin/supabase
 npm install
+
+# Should report 2.105.0
+npx supabase --version
 ```
+
+Reinstalling alone is not enough if you keep typing bare `supabase`: the global binary still wins, and the reset fails the same way.
 
 ### `no partition of relation "audit" found for row`
 

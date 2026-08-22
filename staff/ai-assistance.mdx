@@ -70,11 +70,15 @@ whichever type you chose, and is valid for **90 days**.
 
 <Step title="Configure your assistant">
 Scroll to **How to Use** in the same dialog. Under **MCP Client Configuration
-(Claude Desktop)** is the exact JSON block for your deployment, with the server
-URL already filled in. Copy it from there rather than typing it out, then paste
+(Claude Desktop)** is a JSON block for your deployment with the server URL
+already filled in. Copy the URL from there rather than typing it out.
+
+Pawtograder's MCP server accepts one form of credential: a bearer
+`Authorization` header carrying your token, sent on every request. A client that
+lets you set headers on a remote MCP server takes the block as printed, with
 your token in place of `mcp_YOUR_TOKEN_HERE`:
 
-```json claude_desktop_config.json
+```json
 {
   "mcpServers": {
     "pawtograder": {
@@ -86,6 +90,39 @@ your token in place of `mcp_YOUR_TOKEN_HERE`:
   }
 }
 ```
+
+Claude Desktop is not such a client, despite the label on the block. Its
+configuration file describes servers it launches on your machine, and its
+support for remote servers lives in **Settings → Connectors**, which takes a URL
+and then runs whatever sign-in flow the server offers. Pawtograder's offers
+none — only the token you just created. So point Claude Desktop at a small local
+bridge, `mcp-remote`, and let it carry the header:
+
+```json claude_desktop_config.json
+{
+  "mcpServers": {
+    "pawtograder": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://api.<your-pawtograder-host>/functions/v1/mcp-server",
+        "--header",
+        "Authorization:${PAWTOGRADER_TOKEN}"
+      ],
+      "env": {
+        "PAWTOGRADER_TOKEN": "Bearer mcp_YOUR_TOKEN_HERE"
+      }
+    }
+  }
+}
+```
+
+The token goes in `env` rather than straight into `args` because some clients,
+Claude Desktop on Windows among them, mangle a space inside an argument — which
+is also why `Authorization:${PAWTOGRADER_TOKEN}` has no space after the colon.
+`npx` fetches `mcp-remote` on first use, so there is nothing to install
+beforehand beyond Node.js.
 
 Claude Desktop reads its configuration from
 `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS and
@@ -107,11 +144,10 @@ connection fails. Always copy the URL out of the **API Tokens** dialog.
 
 <Note>
 If you click an **AI** button before you have a token, Pawtograder opens a dialog
-titled **Set Up AI Help with Claude Desktop** instead of copying anything. Its
-steps are older than the block described above: it tells you to install an
-`mcp-proxy` package and configure a `command`/`args` server, and it calls the
-token screen "Settings → API Tokens". Use the **API Tokens** dialog and its
-`url`-based configuration instead.
+titled **Set Up AI Help with Claude Desktop** instead of copying anything. Do not
+follow its steps: it has you install an `@anthropic-ai/mcp-proxy` package that is
+not published, and it calls the token screen "Settings → API Tokens". Use the
+**API Tokens** dialog and the configuration above instead.
 </Note>
 
 ## Where the AI buttons are
@@ -249,6 +285,9 @@ specification, and cut anything that hands over the solution.
   the web address.
 - Confirm the token has not expired; tokens last 90 days.
 - Restart the assistant completely after editing its configuration.
+- If you are going through the `mcp-remote` bridge, run the same `npx` command in
+  a terminal. It will tell you whether Node.js is missing or the server rejected
+  the header.
 
 ### "Access denied" or "Invalid or expired API token"
 
@@ -261,7 +300,8 @@ specification, and cut anything that hands over the solution.
 
 ### The assistant cannot see any course data
 
-- Check that the `Authorization` header value starts with `Bearer mcp_`.
+- Check that the `Authorization` header value starts with `Bearer mcp_`, keeping
+  the `Bearer ` prefix if you moved the value into an environment variable.
 - Check that you are asking about the right class ID; every tool call is scoped
   to one class, and you only reach classes where you are staff.
 - Remember that the copied prompt carries no student content. If the assistant is

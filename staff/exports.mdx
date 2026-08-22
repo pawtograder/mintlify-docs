@@ -289,13 +289,14 @@ Not every export is hardened the same way, which matters if you open these files
 in Excel or Google Sheets.
 
 <Warning>
-Five exports neutralize cells that a spreadsheet would read as a formula, by
+Seven exports neutralize cells that a spreadsheet would read as a formula, by
 prefixing them with an apostrophe: the gradebook, both assignment-groups exports,
-survey responses, discussion engagement, and repository analytics. The others —
-including the enrollments roster, the lab roster, assignment grades, the security
-audit, and the TA time tracking export — do not. A student name, tag, or matched
-line that starts with `=`, `+`, `-`, or `@` can be evaluated as a formula when you
-open those files.
+survey responses, discussion engagement, the grading and self-review assignments
+export, and repository analytics. The others — including the enrollments roster,
+the lab roster, assignment grades, the rubric report, the security audit, the
+flashcard analytics exports, and the TA time tracking export — do not. A student
+name, tag, or matched line that starts with `=`, `+`, `-`, or `@` can be evaluated
+as a formula when you open those files.
 </Warning>
 
 Only the gradebook, the two assignment-groups exports, and repository analytics
