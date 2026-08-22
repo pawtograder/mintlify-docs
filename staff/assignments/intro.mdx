@@ -6,13 +6,22 @@ icon: "code"
 
 # Assignments Overview
 
-Each Pawtograder assignment is backed by a **handout** repository (starter
+Most Pawtograder assignments are backed by a **handout** repository (starter
 code) and, optionally, a **grader** repository (instructor tests and the
 `pawtograder.yml` config). When you release an assignment, Pawtograder
 creates a private student repository from the handout for every student
 (or group). The autograder runs on every push and reports results back
 to Pawtograder, where you can handgrade against rubrics, release results,
-and respond to regrade requests.
+and respond to regrade requests. That is the default configuration and
+what the student documentation describes.
+
+It is not the only one. An assignment can also be configured with no
+autograder, with student forks of a visible handout, with a fork of the
+student's own repository from a prior assignment, with pull-request
+submission, with direct file upload, or with no artifact at all. Each of
+those changes what a student sees and what counts as a submission — see
+[Configuration → Student repositories](/staff/assignments/configuration#student-repositories)
+and [Configuration → Submission mode](/staff/assignments/configuration#submission-mode).
 
 ## First-time setup checklist
 
@@ -21,14 +30,28 @@ and respond to regrade requests.
 From **Manage → Assignments**, click **New Assignment**. Pick a title and
 slug, then fill in:
 
-- **Release Date** and **Due Date** (in the course time zone).
-- **Points Possible** — the maximum the rubric can sum to.
-- **Group configuration** — individual, group-optional, or group-required.
-- **Max Late Tokens** and whether to **Permit Empty Submissions**.
-- **Show Leaderboard** if you want a public ranking.
+- **Release date** and **Due date** (in the course time zone).
+- **Points possible** — the maximum the rubric can sum to.
+- **Max late tokens** — `0` by default, which means no late tokens on
+  this assignment.
+- **Submission type** — *Individual Submissions Only*, *Group Submissions
+  Only*, or *Individual or Group Submissions*. Required, with the
+  individual option preselected.
+- **Repository configuration** — how student repositories are created.
+  Defaults to a staff-only template repo that each student gets a fresh
+  private copy of. The other four options change what a student sees on
+  the assignment page.
+- **Enable autograder (GitHub Actions)** — checked by default. Uncheck it
+  for a repo-only assignment you grade by hand.
+- **Submission mode** — `push` by default. Pull-request mode is only
+  offered for the two fork-based repository configurations.
+- **Show Leaderboard** if you want a public ranking (in **Advanced
+  settings**, which is collapsed).
 
-See [Configuration](/staff/assignments/configuration) for the full field
-reference.
+Set the repository configuration and submission mode before the release
+date; changing them once students have repositories is not a clean
+operation. See [Configuration](/staff/assignments/configuration) for the
+full field reference.
 </Step>
 
 <Step title="Set up the grader repo">
@@ -47,8 +70,8 @@ See [Rubrics](/staff/assignments/rubrics).
 <Step title="Release and monitor">
 Releasing the assignment creates student repositories and notifies
 students. Use the [Assignment Dashboard](/staff/assignments/assignment-dashboard)
-for overall progress, the [Grading Status](/staff/assignments/grading-status)
-view for handgrading progress, and [Test Insights](/staff/assignments/test-insights)
+for overall progress, the [Grading Progress Dashboard](/staff/assignments/grading-status)
+tab under **Grading Assignments** for handgrading progress, and [Test Insights](/staff/assignments/test-insights)
 for systemic autograder failures.
 </Step>
 </Steps>
@@ -61,17 +84,19 @@ section:
 
 | Page | Docs |
 |---|---|
-| Configuration | [Configuration](/staff/assignments/configuration) |
-| Repositories (and permissions audit) | [Repository Permissions](/staff/assignments/repository-permissions), [Repository Analytics](/staff/assignments/repository-analytics) |
-| Groups | [Groups](/staff/assignments/groups) |
-| Due Date Exceptions | [Extensions](/staff/assignments/extensions) |
-| Rubric | [Rubrics](/staff/assignments/rubrics) |
-| Autograder & Test Insights | [Configuring Autograders](/staff/assignments/autograding), [Test Insights](/staff/assignments/test-insights) |
-| Grading Assignments | [Assigning Grading Tasks](/staff/assignments/grading-assignments) |
-| Grading Status | [Grading Status](/staff/assignments/grading-status) |
+| Edit Assignment | [Configuration](/staff/assignments/configuration) |
+| Repository Status (and permissions audit) | [Repository Permissions](/staff/assignments/repository-permissions), [Repository Analytics](/staff/assignments/repository-analytics) |
+| Manage Groups | [Groups](/staff/assignments/groups) |
+| Manage Due Date Exceptions | [Extensions](/staff/assignments/extensions) |
+| Configure Rubric | [Rubrics](/staff/assignments/rubrics) |
+| Configure Autograder, Test Insights | [Configuring Autograders](/staff/assignments/autograding), [Test Insights](/staff/assignments/test-insights) |
+| Grading Assignments, including its **Grading Progress Dashboard** tab | [Assigning Grading Tasks](/staff/assignments/grading-assignments), [Grading Status](/staff/assignments/grading-status) |
 | Assignment Home, **Dashboard** tab (handgrading and bulk actions) | [Handgrading](/staff/assignments/handgrading), [Bulk Actions](/staff/assignments/bulk-actions) |
-| Security | [Security Dashboard](/staff/assignments/security-dashboard) |
-| Leaderboard | [Leaderboard](/staff/assignments/leaderboard) |
+| Security Audit | [Security Dashboard](/staff/assignments/security-dashboard) |
+
+The leaderboard is not a management page. It is the **Show Leaderboard**
+checkbox under **Advanced settings** on the Edit Assignment form; see
+[Leaderboard](/staff/assignments/leaderboard).
 
 ## GitHub permissions
 

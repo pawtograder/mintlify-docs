@@ -101,8 +101,8 @@ servers, offering the tools listed below.
 <Warning>
 The MCP server lives on your deployment's **API** host, not the host you use the
 web app on — typically `api.` plus your Pawtograder hostname. A URL built from
-the web address serves the app, not the edge function, and the connection will
-fail. Always copy the URL out of the **API Tokens** dialog.
+the web address reaches the web app instead of the MCP server, and the
+connection fails. Always copy the URL out of the **API Tokens** dialog.
 </Warning>
 
 <Note>
@@ -192,11 +192,11 @@ yourself if it needs the written specification.
 - **Staff only.** Token creation and every tool call require an instructor or
   grader role, checked on the server, and the API Tokens menu is hidden while you
   preview the course as a student.
-- **Same visibility as the web app.** Tool handlers query the database as you,
-  under the same row-level security policies the app uses. There is no
-  service-role escalation in the tool handlers.
-- **No account data.** The `users` table is never queried by a tool handler, and
-  the `is_private_profile` flag is never returned.
+- **Same visibility as the web app.** The assistant reads your course as you,
+  with your own permissions: it sees exactly what you can see in the web app and
+  nothing more. No tool has elevated access.
+- **No account data.** No tool returns platform account records or a student's
+  profile-privacy setting.
 - **Revocable.** Tokens are long-lived signed tokens; revocation is checked on
   every request, so a revoked token stops working immediately.
 - **Auditable.** Each token records a last-used timestamp.

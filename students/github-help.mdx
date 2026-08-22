@@ -8,6 +8,8 @@ icon: "github"
 
 Pawtograder creates a GitHub repository for each of your assignments inside your course's GitHub organization. When that goes wrong, almost every symptom traces back to one of four causes: you have not joined the course organization yet, you are signed in to GitHub as a different account than the one Pawtograder has on file, your GitHub username changed, or the assignment has not been released yet. This page walks through each one.
 
+A fifth symptom looks the same but is not an access problem at all: a rejected `git push --force`. Most assignments block force-pushes to your default branch, so a force-push after a rebase or an amended commit fails even when your access is perfectly fine. See [If You Pushed and Nothing Happened](/students/assignments/create-submission#if-you-pushed-and-nothing-happened).
+
 Your starting point is the **GitHub Access Troubleshooting** page, which shows you exactly which GitHub account Pawtograder thinks you are and which repositories that account should be able to open.
 
 ## Opening the GitHub Access Troubleshooting page
@@ -45,6 +47,8 @@ Work through these in order, because each step rules out a different cause.
   Click one of the repository links on the page.
 
   If the repository opens in your browser but you cannot clone, fetch, or push it from your computer, the problem is between your computer and GitHub, not between Pawtograder and GitHub. Bring that result to your course staff: it saves them from re-checking the Pawtograder side.
+
+  If you can clone and fetch and only your *push* is rejected, your access is fine and this is not the page you need. See [If You Pushed and Nothing Happened](/students/assignments/create-submission#if-you-pushed-and-nothing-happened).
 </Step>
 
 <Step title="Re-sync your GitHub account">

@@ -4,7 +4,11 @@ description: "Ask staff to reconsider a rubric check on your graded submission"
 icon: "scale-balanced"
 ---
 
+import InstructorDiscretion from '/snippets/instructor-discretion.mdx';
+
 # Regrade Requests
+
+<InstructorDiscretion />
 
 If you believe a rubric check on your graded submission was applied incorrectly — either it was marked when it shouldn't have been, or it wasn't applied when you think it should have been — you can open a **regrade request** on that specific check.
 
@@ -16,7 +20,9 @@ Regrade requests are only available for rubric items graded by course staff. You
 
 ## When You Can Request a Regrade
 
-Regrade requests are available once your submission has been graded and the grade has been released to you. Your instructor may also set a **regrade request deadline** — after that date, you can no longer open new regrade requests. While the deadline is still ahead of you, the dialog shows it before you commit: "Regrade requests must be submitted by *date*". Once it has passed, the button is replaced by a disabled **Regrade deadline passed** button and the line "The deadline was *date*".
+Regrade requests are available once your submission has been graded and the grade has been released to you. Most assignments have no deadline for them at all, so a released grade stays open to a request indefinitely.
+
+Some courses set a **regrade request deadline**. If yours does, the dialog shows it to you before you commit: "Regrade requests must be submitted by *date*". Once it has passed, the button is replaced by a disabled **Regrade deadline passed** button and the line "The deadline was *date*", and you can no longer open new requests on that assignment.
 
 ## Opening a Regrade Request
 
@@ -52,7 +58,9 @@ A regrade request moves through these states:
 | **Pending** | Submitted; awaiting grader review |
 | **Resolved** | The grader has made a decision and (optionally) adjusted your score |
 | **Escalated** | You've escalated the resolved request to an instructor |
-| **Closed** | The instructor has made a final decision |
+| **Closed** | An instructor has made a final decision |
+
+Those are the states, not a fixed path through them. The usual route is Draft → Pending → Resolved, and Escalated → Closed if you escalate. But an instructor can also close a **Pending** request outright, without the grader resolving it first.
 
 Once a request is **Closed**, it is final.
 

@@ -17,7 +17,7 @@ Actions are listed as cards with the type, a **Permanent**, **Active**, or **Exp
 Instructors can delete a moderation record, and deleting is the only way to lift a ban early. Graders can create actions but not delete them.
 
 <Warning>
-Bans are enforced in the browser, not in the database. The office hours pages a banned student loads are replaced, but the underlying tables carry no ban check, so a determined student working through the API is not blocked. Treat moderation as a course-policy tool, not a security boundary.
+A ban is an interface-level deterrent, not a hard access control. It takes away the office hours pages and the chat composer, but it does not revoke the student's access to the course, and a determined student is not shut out by it. Treat moderation as a course-policy tool, and do not rely on a ban to keep someone out.
 </Warning>
 
 ## Student Karma
@@ -29,7 +29,7 @@ Bans are enforced in the browser, not in the database. The office hours pages a 
 </Frame>
 
 <Warning>
-Karma is display-only. The score is read to sort, badge, and star this page and the Student Activity summary. It does not change queue order, request priority, or whether a student can file a request, and students cannot see it. A database trigger on `student_karma_notes` also reads a column the table does not have, so saving an entry may fail outright.
+Karma is display-only. The score is read to sort, badge, and star this page and the Student Activity summary. It does not change queue order, request priority, or whether a student can file a request, and students cannot see it. Saving an entry may also fail outright: this is a known platform fault, there is nothing you can configure around it, and if the dialog errors your entry was not recorded.
 </Warning>
 
 Do not confuse this with the discussion karma on student profiles, which is computed from discussion likes. See [Discussion](/staff/discussion).

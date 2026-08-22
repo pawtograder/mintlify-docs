@@ -183,7 +183,7 @@ Always preview your survey before publishing to catch any formatting issues or u
 
 Close a published survey from the ⋯ menu on its dashboard row. Closing is the only action that stops responses:
 
-- The database rejects every new or edited response, because the write policy requires the survey to be published
+- Every new or edited response is rejected while the survey is not published, including from a student who still has the form open
 - The survey disappears from the student Surveys page
 - You and your graders keep full access to the responses and analytics
 
@@ -197,7 +197,7 @@ There is no reopen action. A closed survey can only have its responses viewed or
 2. Select a date and time for the survey deadline
 3. The system converts to your configured course time zone (see [Course Settings](/staff/course-settings#course-time-zone))
 
-The due date is a soft deadline, as the form itself says: "A soft deadline shown to students. After it passes the survey is marked overdue, but students can still respond." Neither the app nor the database rejects a late response, and the submission time is recorded on every response.
+The due date is a soft deadline, as the form itself says: "A soft deadline shown to students. After it passes the survey is marked overdue, but students can still respond." Nothing rejects a late response, and the submission time is recorded on every response.
 
 <Warning>
 Setting a due date does not stop responses. Use **Close** on the survey's ⋯ menu when you need responses to actually stop.
@@ -621,7 +621,7 @@ Draft surveys can be edited freely with no restrictions:
 On a published survey, the ⋯ menu item is labelled **Edit (New Version)**, and the dashboard shows a version badge next to each survey.
 
 <Warning>
-Despite the label, editing does not create a new version: your changes overwrite the existing survey row and the version stays at `v1`. Existing responses keep pointing at the questions you just changed, so edit a published survey carefully.
+Despite the label, editing does not create a new version: your changes overwrite the existing survey and the version stays at `v1`. Existing responses keep pointing at the questions you just changed, so edit a published survey carefully.
 </Warning>
 
 **What You Can Safely Edit:**
@@ -670,7 +670,7 @@ Deleting a survey is a soft delete. To remove a survey from your course:
 The survey and its responses are marked as deleted rather than erased: every version of the survey and every response attached to it is stamped with a deletion time, which hides them from the dashboard, the responses page, and the student's survey list.
 
 <Warning>
-Pawtograder has no restore screen today, so recovering a deleted survey takes a database change by an administrator. Export the responses first if you might need them, and prefer **Close** over **Delete** when you only want to stop collecting responses.
+Pawtograder has no restore screen today, so nothing in the interface can undo a delete no matter what the confirmation dialog says: recovering a deleted survey takes a Pawtograder administrator. Export the responses first if you might need them, and prefer **Close** over **Delete** when you only want to stop collecting responses.
 </Warning>
 
 Deleting a survey **series** is a different action: it unlinks the surveys from the series and leaves the surveys themselves in place.

@@ -4,19 +4,25 @@ description: "Complete required self-review rubrics for your assignments before 
 icon: "clipboard-check"
 ---
 
+import InstructorDiscretion from '/snippets/instructor-discretion.mdx';
+
 # Completing a Self-Review
 
-Some assignments may have a "Self-Review" component, where students complete their own review of their assignment before final grading. A self-review is the only review you ever perform in Pawtograder. There is no peer review, so you are never asked to review another student's submission.
+<InstructorDiscretion />
 
-Before the self-review opens, the assignment page carries a **Self Review Notice** box explaining that "There is a self review scheduled on this assignment which will release immediately after your deadline passes and will be due *N* hours later." Once it opens, that box becomes **Self Review Now Due**, with "Due by *date*" and a **Complete Self Review** button that takes you into your submission.
+Some courses use self-reviews; most do not. If your assignment has one, the assignment page carries a **Self Review Notice** box. A self-review is the review you will normally be asked to do: before final grading, you assess your own work against a rubric your instructor wrote. Pawtograder has no peer-review feature, so you are not asked to review a classmate's submission.
+
+Your course may also assign you other kinds of review on your own submission — a code walk, for instance. Mechanically those work the same way as a self-review: you get a review assignment with its own deadline, you apply rubric checks, and you press **Complete Review Assignment** when you are done, so the rest of this page applies to them too.
+
+Before the self-review opens, that box explains that "There is a self review scheduled on this assignment which will release immediately after your deadline passes and will be due *N* hours later." Once it opens, that box becomes **Self Review Now Due**, with "Due by *date*" and a **Complete Self Review** button that takes you into your submission.
 
 The deadline for completing the self-review is configured by your instructor as a number of hours after the assignment's own deadline. By default the self-review only opens once your deadline has passed; where your instructor allows it, a **Finalize Submission Early** button lets you close your submission early and start the self-review before the assignment is due. See [Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions) for what finalizing early costs you.
 
 <Note>
-If your due date moves — a late token, an instructor-granted extension, or a change to the assignment's own due date — your self-review deadline shifts by the same amount, so your window stays the same length. A self-review you have already completed is left alone.
+If your due date moves — a late token, an instructor-granted extension, or a change to the assignment's own due date — your self-review deadline shifts by the same amount, so your window stays the same length. If your deadline changes after you have already finished the self-review, the deadline on record still moves; the work you already did is not affected.
 </Note>
 
-Your instructor can instead pin the self-review to a fixed release time for the whole class. Where they have, it opens at that time for everyone and is due the configured number of hours after it, rather than following your own deadline.
+Some courses instead pin the self-review to a fixed release time for the whole class, so that it opens at the same moment for everyone and is due the configured number of hours after that, rather than following your own deadline. If yours does, take the date in the toolbar on your submission — "Your Self-Review Rubric review is required on this submission by *date*" — as the one that counts. The boxes on the assignment page work out their date from your own deadline plus the offset, so in a fixed-release course they can show you a date that is not your real deadline. If the two disagree, ask your course staff which applies.
 
 <Frame>
   <img src="/images/students/assignments/self-review-1754511511817.png" alt="Assignment page showing self-review deadline" />

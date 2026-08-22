@@ -4,6 +4,8 @@ description: "Late tokens, manual due-date extensions, gifted tokens, and self-r
 icon: "clock-rotate-left"
 ---
 
+import CommonVsUncommon from "/snippets/common-vs-uncommon.mdx";
+
 # Extensions
 
 Pawtograder provides three mechanisms for letting a student submit past
@@ -16,7 +18,15 @@ Exceptions** page; gifted tokens are granted at the course level, from
 For the per-assignment token cap, see
 [Configuration → Late tokens](/staff/assignments/configuration#late-tokens).
 
+<CommonVsUncommon />
+
 ## Late tokens
+
+Late tokens are **off by default at the platform level**. Both the
+per-assignment maximum and the class-wide allotment start at zero, so a
+student can only spend a token once you have raised both above zero.
+Granting late tokens is a course policy choice, not a default you
+inherit.
 
 When the assignment allows late tokens, each enrolled student can spend
 one token per 24 hours of extension on their own due date.
@@ -27,10 +37,26 @@ one token per 24 hours of extension on their own due date.
   automatically when a student submits after the deadline.
 - Every spent token is recorded as a due-date exception and appears in
   the **Extension History** table on **Manage Due Date Exceptions**.
-- Group assignments treat tokens at the group level — one token covers
-  the whole group's deadline.
 - Students see "You have N late tokens remaining" in the due-date widget
   on the assignment page.
+
+### Late tokens on group assignments
+
+A group extension records **one** due-date exception, against the group,
+and it moves the deadline once for the whole group. But the token
+cost is not shared: **every member of the group is charged a token.**
+Every balance calculation attributes a group exception to all of that
+group's members, and the instructor roster view fans the charge out the
+same way. The in-product dialog says so too — "all group members will have
+a token deducted."
+
+The corollary is that **only the acting student's balance is checked.** A
+teammate with zero tokens left does not block the group, and will simply go
+further into deficit against the class allowance. The student-facing
+[Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions)
+page describes the same behavior; if you expected group extensions to cost
+one token total, budget your **Late Tokens Per Student** allotment
+accordingly.
 
 ## Granting a manual extension
 
@@ -47,9 +73,9 @@ extension. Confirm with **Add Due Date Exception**.
 
 <Warning>
 The **Notes** field is not private. Its helper text reads "Visible to the
-student and the staff", and the database policy on due-date exceptions
-lets a student read their own exception rows, note included. Write only
-what you would say to the student directly.
+student and the staff", and students can indeed read the notes on their
+own due-date exceptions. Write only what you would say to the student
+directly.
 </Warning>
 
 For group assignments, the exception applies to every member of the
@@ -70,10 +96,16 @@ specific new deadline. The gift stacks on top of the class-wide **Late
 Tokens Per Student** allotment.
 
 <Note>
-A gift is stored as a due-date exception with a *negative*
-`tokens_consumed` and zero hours and minutes, so it raises the student's
-allotment without moving any deadline. That is why gifts show up in the
-same exception tables as extensions.
+Gifting is instructor-only. A grader who tries it is refused with
+"Unauthorized: Only instructors can gift tokens", so graders cannot gift
+even though they can see the Due Date Extensions tables.
+</Note>
+
+<Note>
+A gift is recorded as a due-date exception that *returns* tokens instead
+of spending them, with zero hours and zero minutes, so it raises the
+student's allotment without moving any deadline. That is why gifts show up
+in the same exception tables as extensions.
 </Note>
 
 ## Self-review deadlines and extensions
@@ -86,9 +118,22 @@ granted before the deadline carries the self-review deadline with it. No
 manual action is required.
 
 An extension granted *after* the self-review already exists also moves it:
-inserting a due-date exception fires a trigger that adds the same interval
-to the student's `review_assignments` rows for that assignment. Note it
-shifts them whether or not the review has already been completed.
+granting the exception shifts that student's review assignments for the
+assignment by the same interval. Note it shifts them whether or not the
+review has already been completed.
+
+<Note>
+The two ways a self-review deadline moves do not behave the same way, and
+it is worth knowing which one you are using.
+
+- **Granting a due-date exception** (a late token, a manual extension)
+  shifts the student's review assignments **even if the review is already
+  complete**, and **regardless of review round** — so it moves that
+  student's *grading*-round review assignments for the assignment too, not
+  only the self-review.
+- **Editing the assignment's own due date** shifts only *self-review*
+  review assignments, and only ones that are **not yet completed**.
+</Note>
 
 <Warning>
 Two cases do not follow that rule:
@@ -96,15 +141,30 @@ Two cases do not follow that rule:
 - If the assignment sets **Release self-evaluation at**, the self-review
   is released and its deadline computed from that wall-clock time,
   ignoring per-student due-date exceptions entirely.
-- An exception of zero or negative length does not shift anything. The
-  trigger returns early unless the extension adds time, so gifted tokens
-  and corrective adjustments leave self-review deadlines where they are.
+- An exception of zero or negative length does not shift anything. Only
+  an extension that adds time moves a self-review deadline, so gifted
+  tokens and corrective adjustments leave them where they are.
+</Warning>
+
+<Warning>
+A self-review deadline moves **when an extension is first granted**, and
+each further extension moves it again by its own length. Editing or
+deleting an extension afterwards does not move it back: the shift that was
+already applied stays applied, while the student's assignment deadline is
+recomputed from whatever extensions remain. So the moment anyone edits or
+deletes an exception, the two drift apart, and a review deadline can end
+up earlier or later than the extension history implies. If you have edited
+extensions on an assignment with self-reviews, reset the review deadlines
+in bulk rather than trying to reason the drift back by hand — see below.
 </Warning>
 
 ## Bulk review-due-date updates
 
 The **Grading Assignments** page lets you adjust *grading* and
 *self-review* review due dates in bulk for a section, a rubric, or a
-set of selected rows. See
+set of selected rows. This is the way out of the drift described above:
+it sets review due dates to an absolute value rather than adding to
+whatever is there, one rubric per call, optionally limited to reviews that
+are not yet complete. See
 [Bulk Actions](/staff/assignments/bulk-actions#bulk-review-due-date-updates)
 for the procedure.

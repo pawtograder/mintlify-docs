@@ -105,7 +105,7 @@ Flipping a switch rewrites one entry in the course's feature list and touches no
 Two specifics worth knowing:
 
 - **Gradebook.** The `gradebook` flag is read only by the navigation bar, the search palette, and the keyboard shortcuts. Turning it off hides the links; it does not stop grade calculation, imports, or releases.
-- **What-If.** Simulations are never written to the database. Turning `gradebook-what-if` off costs students nothing they had saved, because there was nothing saved.
+- **What-If.** Simulations are never saved. Turning `gradebook-what-if` off costs students nothing they had saved, because there was nothing saved.
 
 The one flag whose off state has a lasting consequence is `discord-student-join`, described above: invitations not created while it was off are not created later on their own.
 

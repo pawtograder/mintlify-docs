@@ -4,7 +4,13 @@ description: "Create, join, and manage group assignments in Pawtograder using th
 icon: "users"
 ---
 
+import InstructorDiscretion from '/snippets/instructor-discretion.mdx';
+
 # Forming Groups
+
+<InstructorDiscretion />
+
+Most assignments are individual. This page applies only if your assignment page says the assignment is a group or group-optional one.
 
 ## Overview
 
@@ -15,7 +21,7 @@ Pawtograder supports two kinds of group assignments:
 
 The assignment page says which kind you are looking at, and how big the group has to be: "This is a group assignment." with "You must be part of a group with *N* members to submit this assignment", or "This is a group-optional assignment." with "You can submit this assignment individually or as part of a group with *N* members." The size is written as a single number, "at most *N*", "at least *N*", a range, or "any amount of", depending on what your instructor set.
 
-Your instructor also chooses whether students form their own groups. Where they do, you'll see **Create a new group** and **Join a group** buttons on the assignment page. Where the instructor forms groups instead, there are no buttons, and the page instead reads "Your instructor will assign you to a group. Please wait for your group assignment.", or, on a group-optional assignment, "Your instructor may assign you to a group, or you may submit individually — please follow instructor instructions." This page covers the case where you form your own group.
+The page also tells you who does the forming. If you see **Create a new group** and **Join a group** buttons, you form your own group, and the rest of this page is for you. If instead there are no buttons and the page reads "Your instructor will assign you to a group. Please wait for your group assignment." — or, on a group-optional assignment, "Your instructor may assign you to a group, or you may submit individually — please follow instructor instructions." — your instructor forms the groups, and there is nothing for you to do here.
 
 Pawtograder uses an invitation system for group formation: students can create new groups, invite other students to join, and accept or reject invitations. Invitations and join requests also go out by email.
 

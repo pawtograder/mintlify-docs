@@ -4,29 +4,38 @@ description: "Extend an assignment deadline with late tokens, or receive an inst
 icon: "clock"
 ---
 
+import InstructorDiscretion from '/snippets/instructor-discretion.mdx';
+
 # Late Tokens and Extensions
+
+<InstructorDiscretion />
 
 There are two ways your assignment deadline can move past its original date:
 
 - **Late tokens**: you choose to spend a token to extend a deadline.
 - **Instructor-granted extensions**: staff manually add time to your deadline, separately from tokens.
 
+Pawtograder ships with late tokens switched off, so whether you have any at all is a decision your instructor made for your course. Most courses do grant them. Your assignment page tells you which is true for you: if you can spend a token, there is an **Extend Due Date** button next to the due date.
+
 ## Late Tokens
 
 Pawtograder supports late submission policies based on "late tokens." Your instructor decides how many late tokens each student in the course gets, and caps how many of them can be spent on any one assignment. Each token extends your deadline by 24 hours, and the extended deadline is then treated as your deadline. Pawtograder applies no automatic late penalty on top.
 
-Whether you have to spend a token *before* the deadline depends on the assignment:
-
-- **Tokens must be applied beforehand.** This is the default. The dialog says so: "Tokens are not automatically applied - to use them, you must use this form to apply them BEFORE the due date passes." Once your deadline has passed, the control is replaced by "(Firm date: You have passed the due date)".
-- **Tokens are applied automatically when you submit late.** Where your instructor turned that requirement off, the dialog reads "Tokens can be applied before the due date using this form, or will be automatically applied when you submit after it", and after the deadline the assignment page reads "(Deadline passed: submitting will auto-apply a late token if you have one remaining)". A late push spends however many whole days of tokens it takes to cover how late it is, so a push 30 hours late costs two tokens. If your balance can't cover it, the push is rejected and no token is spent.
+Normally you have to spend a token **before** the deadline passes. The dialog says so: "Tokens are not automatically applied - to use them, you must use this form to apply them BEFORE the due date passes." Once your deadline has passed, the control is replaced by "(Firm date: You have passed the due date)".
 
 <Warning>
 Spending a token is immediate and irreversible: "Once you consume a late token, it is consumed immediately. You will not be able to undo this action."
 </Warning>
 
+### If Your Course Applies Tokens Automatically
+
+Some courses let you push late and have tokens spent for you. If yours does, the dialog reads "Tokens can be applied before the due date using this form, or will be automatically applied when you submit after it", and once the deadline has passed the assignment page reads "(Deadline passed: submitting will auto-apply a late token if you have one remaining)".
+
+A late push then costs however many whole days of tokens it takes to cover how late it is, and the extension you receive is that same whole number of days — not the number of hours you were actually late. A push 30 hours late costs two tokens and moves your deadline by 48 hours. If your balance can't cover it, the push is rejected and no token is spent.
+
 ### Applying Late Tokens
 
-On each assignment page where late tokens can be applied, you'll see an **Extend Due Date** button next to your due date. If your course uses suggested due dates, that button reads **Extend Resubmission Deadline** instead: a token can only ever move the hard deadline you resubmit until, never the suggested date shown as **Due**.
+On each assignment page where late tokens can be applied, you'll see an **Extend Due Date** button next to your due date. In a course that uses [suggested due dates](/students/assignments/create-submission#if-your-course-uses-suggested-due-dates), that button reads **Extend Resubmission Deadline** instead, because the later date is the one a token can move.
 
 <Frame>
   <img src="/images/students/assignments/late-tokens-1754513689169.png" alt="Assignment page showing Extend Due Date button" />
@@ -52,7 +61,7 @@ Where you can't extend a deadline, the button is replaced by a short message say
 
 - **(No late submissions allowed)**: your course grants no late tokens at all.
 - **(You have no remaining late tokens)**: you have spent your whole course allowance.
-- **(You may not extend the due date for this assignment any further)**: you have reached your instructor's per-assignment cap.
+- **(You may not extend the due date for this assignment any further)**: you have reached your instructor's per-assignment cap. You will also see this message — rather than "No late submissions allowed" — on an assignment your instructor set to accept no tokens at all, even in a course that grants them.
 - **(Firm date: You have passed the due date)**: the deadline has passed on an assignment whose tokens had to be applied beforehand.
 - **(You may not extend the due date for this assignment as you finalized early)**: see below.
 
@@ -70,7 +79,7 @@ Finalizing early permanently gives up your ability to extend that assignment. Th
 
 ### Gifted Late Tokens
 
-Instructors can gift additional late tokens to individual students beyond the class-wide allocation. Your balance is your course allowance, less the tokens you have spent, plus any your instructor has granted you. So gifted tokens:
+Instructors can gift additional late tokens to individual students beyond the class-wide allocation. The **Extend Due Date** dialog is the place to read your balance: it states how many tokens you have remaining, and that figure already accounts for anything your instructor has gifted you. So gifted tokens:
 
 - Are added to your available token balance automatically
 - Work exactly like your original tokens — each extends a deadline by 24 hours

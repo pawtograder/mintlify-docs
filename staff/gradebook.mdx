@@ -104,7 +104,7 @@ When gradebook columns use expressions that reference other columns, Pawtograder
 
 - When a grade changes, the system enqueues a recalculation job for each affected gradebook row and marks that row dirty and recalculating.
 - Each enqueue also bumps a per-row version counter, which invalidates any worker already computing that row.
-- An edge function drains the queue and writes results back. If the row's version moved while the worker was computing, the write is reported as a version mismatch and discarded rather than overwriting fresher data.
+- A background worker takes each job, computes the row, and writes the result back only if nothing has changed in the meantime. A result computed from inputs that have since moved is discarded rather than overwriting the fresher value.
 - Mismatched rows are re-enqueued with an attempt counter and exponential backoff. Past a retry ceiling the row goes to a dead letter queue instead of cycling forever.
 
 The result is that calculated grades stay current even during heavy activity, such as several graders entering scores at once, without one worker clobbering another's results.
@@ -181,7 +181,7 @@ weighted_score
 ```
 
 <Note>
-Every gradebook has an optional **expression prefix** (`gradebooks.expression_prefix`). Pawtograder prepends it, followed by a newline, to every score expression and every render expression in that gradebook before evaluating. Use it for shared helper function definitions and constants you do not want to repeat in each column. There is no UI for editing it; it is set directly on the `gradebooks` row.
+Every gradebook has an optional **expression prefix**. Pawtograder prepends it, followed by a newline, to every score expression and every render expression in that gradebook before evaluating. Use it for shared helper function definitions and constants you do not want to repeat in each column. There is no screen for editing it, so setting one takes a Pawtograder administrator.
 </Note>
 
 ### Data Access Functions
@@ -190,7 +190,7 @@ Every gradebook has an optional **expression prefix** (`gradebooks.expression_pr
 
 Retrieves gradebook column data for the student being calculated. With a single slug it returns one object; with a pattern containing `*` it returns an array of objects, one per matching column.
 
-The object is the student's whole `gradebook_column_students` row plus computed fields. The ones you will use:
+The object carries the student's whole grade record for that column, plus computed fields. The ones you will use:
 
 - `score`: `number | null` - The student's score, with any override already applied
 - `max_score`: `number` - The maximum score for the column
