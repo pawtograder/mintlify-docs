@@ -10,10 +10,6 @@ Pawtograder exposes a Model Context Protocol (MCP) server as a Supabase Edge Fun
 
 This page covers the endpoint, the wire protocol, the two authorization layers, the 16 tools, and how to add another. For instructor-facing setup, such as connecting Claude Desktop and creating a token, see [AI assistance for helping students](/staff/ai-assistance).
 
-<Note>
-The tool inventory, protocol handling, and handshake below were read from the edge function source. The HTTP status codes in [Transport](#transport) were observed against a running deployment.
-</Note>
-
 ## Endpoint
 
 | Deployment | URL |
@@ -237,7 +233,7 @@ Read data through `context.supabase`, the per-user client from layer 2, so RLS a
 
 **Expanding an existing tool.** Prefer composing existing queries over loosening RLS. If a new field needs privileged access, add a view with its own RLS policy rather than a service-role query inside the handler.
 
-**Write tools.** `mcp:write` already exists in `VALID_SCOPES` and is already in every MCP token, so a mutating tool sets `requiredScope: "mcp:write"` and needs no new scope. Existing tokens will already carry it, which is worth weighing before you ship the first one.
+**Write tools.** `mcp:write` already exists in `VALID_SCOPES` and is already in every MCP token, so a mutating tool sets `requiredScope: "mcp:write"` and needs no new scope. Every MCP token already issued carries it.
 
 **Changing a tool signature.** Regenerate shared types with `npm run client-local` if the schema changed, and update the staff-facing tool list in [`staff/ai-assistance.mdx`](/staff/ai-assistance).
 

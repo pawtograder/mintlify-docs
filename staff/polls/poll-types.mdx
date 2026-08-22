@@ -106,10 +106,10 @@ Multiple Choice stores an array of strings:
 
 ## Hand-writing other question types
 
-The **Poll Question JSON** field is a raw [SurveyJS](https://surveyjs.io/) payload, and save-time validation only checks that `elements` is a non-empty array whose first element has a `type` and a `title`. Any SurveyJS type therefore saves successfully, and **Preview Poll** renders it with the real SurveyJS runtime, so it looks like it works.
+The **Poll Question JSON** field is a raw [SurveyJS](https://surveyjs.io/) payload, and save-time validation only checks that `elements` is a non-empty array whose first element has a `type` and a `title`. Any SurveyJS type therefore saves successfully, and **Preview Poll** renders it with the real SurveyJS runtime.
 
 <Warning>
-The results page charts only `checkbox` and `radiogroup`. Any other question type saves, publishes, and collects responses, but the results page replaces the chart with `Unsupported poll question type: <type>` and there is no other way to read those responses in the interface. Free-text, rating, and matrix polls are effectively write-only.
+The results page charts only `checkbox` and `radiogroup`. Any other question type saves, publishes, and collects responses, but the results page replaces the chart with `Unsupported poll question type: <type>`, and there is no other way to read those responses in the interface. Stick to single-choice and multiple-choice questions when you need to see the results. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
-Multi-question polls have the same problem from a different direction. The visual builder is single-question only and always emits one element, and the results page reads `elements[0]` alone, so extra elements are collected but never charted.
+Multi-question polls are limited in the same way. The visual builder is single-question only, and the results page charts the first question, so answers to later questions are collected but not displayed.

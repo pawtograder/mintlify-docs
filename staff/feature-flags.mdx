@@ -86,17 +86,17 @@ While it is on, students see their invitation to the course's Discord server on 
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
 
-## A hidden menu entry is not a closed door
+## Feature flags control navigation, not access
 
-Turning a module off removes its navigation entries. With one exception, it does not block the URL. Anyone who has the address, a bookmark, or a link in an old announcement can still open the discussion board, the flashcard decks, the office hours queues, the gradebook, the surveys pages, the polls pages, and the staff management screens behind all of them. The feature flags page says as much: staff may need direct URLs when a menu entry is hidden.
+Feature flags are a curation tool. They decide which modules your course puts in front of students and staff, and when — so you can hold Surveys or Flashcards back until the week they matter, retire Polls once you have stopped using them, and keep the course menu down to what the course is actually doing. Staff pages behave the same way, which is deliberate: a module you are not running should not clutter anyone's menu.
 
-The exception is **Course Settings → Discussion Engagement**, which redirects to the course home page when the `discussion` flag is explicitly off.
+What a flag does not do is grant or withhold permission. Turning a module off is a statement about what the course shows, not a lock on the module's content. Nothing is deleted or sealed away, which is what makes a flag safe to flip back and forth across a term, and it is also why a flag is the wrong tool when the requirement is that nobody may read something. The one flag that does more than curate navigation is `discussion`: with it explicitly off, **Course Settings → Discussion Engagement** sends you back to the course home page.
 
 <Warning>
-Do not treat a feature flag as an access control. If you need students kept out of a module's content, unpublish or delete the content itself. The flag governs discoverability, not permission.
+When you genuinely need material withheld — an assignment still being written, a survey you are not ready to run, a deck nobody should see yet — act on the material, not the menu. Unpublish it, hold it behind its release date, or delete it. Those are the controls that decide who may read something; a flag decides who can find it.
 </Warning>
 
-One related gap: the staff search palette entry for **Manage office hours** is not flag-gated, so it stays in the palette after you turn `office-hours` off, even though the nav entry is gone.
+The staff search palette is gated alongside the menu, with one exception: its **Manage office hours** entry stays in the palette after you turn `office-hours` off, even though the nav entry is gone. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
 ## What happens to data you turn off
 

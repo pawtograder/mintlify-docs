@@ -37,7 +37,7 @@ Below the header, a collapsible row labeled with the request's student count exp
 Students can attach a submission, specific files from it, and line numbers, and staff see those references inline. **Edit code references** lets you change them.
 
 <Warning>
-Referencing a submission forces the request private, and clearing the last reference forces it public again. Removing a student's code references from a request that was private for that reason will publish it to the class. The picker also lists your own submissions rather than the student's, so it is more useful for reviewing and removing references than for adding them.
+Referencing a submission forces the request private, and clearing the last reference forces it public again. Removing a student's code references from a request that was private for that reason will publish it to the class, so leave at least one reference in place if the conversation should stay private. The picker also lists your own submissions rather than the student's, so it is more useful for reviewing and removing references than for adding them. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 ## Video calls
@@ -52,7 +52,7 @@ End the call before you resolve the request. Both **Join Video Call** and **End 
 
 Pawtograder records a work session automatically whenever a request is assigned, and closes it when the request is unassigned, handed to someone else, or resolved. Each session stores the queue depth and the longest wait in the queue at the moment it opened, which is the context you want when reading a long session later.
 
-The panel lists sessions newest first with the TA, duration, queue depth, and start and end times, and totals them when there is more than one. Instructors can delete a session. The edit button is not implemented and reports that the feature is coming.
+The panel lists sessions newest first with the TA, duration, queue depth, and start and end times, and totals them when there is more than one. Instructors can delete a session. The edit button reports that editing is coming soon.
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 

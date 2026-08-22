@@ -29,7 +29,7 @@ The page has two parts. The header holds, from left to right:
 Below the header, a panel shows the question prompt as a heading and the bar chart under it, captioned **Number of Responses**.
 
 <Note>
-The page URL ends in `/responses`, but it never lists individual responses. There is no response table, no respondent names, no total-responses figure, no percentages, and no CSV export. The chart is the only view of the data.
+The chart is the only view of the data. There is no response table, no respondent names, no total-responses figure, no percentages, and no CSV export.
 </Note>
 
 ## Reading the bar chart
@@ -60,7 +60,7 @@ Live updates cover new responses only. A deleted or edited response does not dec
 The link is `https://<your-pawtograder-host>/poll/<course_id>`, and it is per course rather than per poll.
 
 <Warning>
-Every poll in a course shares this one link, and it always serves the poll opened most recently. Two polls open at once means students can only reach the newer one. Keep one poll open at a time.
+Every poll in a course shares this one link, and it always opens the poll that was opened most recently. With two polls open at once, students reach only the newer one, so keep one poll open at a time. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 The QR code encodes that same URL:

@@ -62,10 +62,10 @@ and run time turns orange above two minutes and red above ten.
 <Warning>
 `Errors` is not the number of runs that failed. It counts the grading-error
 records described under [The Grading Errors tab](#the-grading-errors-tab) that
-were created during the period, and it never reads a run's conclusion. `Error
-Rate` divides that error count by the number of runs in the same window, so it is
-a ratio between two separately counted things rather than the share of runs that
-failed.
+were created during the period, independently of whether any individual run
+succeeded or failed. `Error Rate` divides that error count by the number of runs
+in the same window, so it is a ratio between two separately counted things rather
+than the share of runs that failed.
 </Warning>
 
 <Note>
@@ -181,9 +181,9 @@ handout's copy to student repositories in bulk.
 ## Who can see it
 
 The Course Settings entry is instructor-only, so graders do not see **Workflow
-Runs** in their menu. The underlying data is not uniformly gated, though: the
-`workflow_runs` table is readable by instructors only, while grading errors and
-the statistics behind the Overview are readable by graders too. A grader who opens
+Runs** in their menu. Access behind that menu is not uniform, though: the list of
+individual runs is visible to instructors only, while grading errors and the
+statistics behind the Overview are visible to graders as well. A grader who opens
 the URL directly gets an Overview and a Grading Errors tab that work, and a
 Workflow Runs tab with nothing in it. See
 [Course Settings](/staff/course-settings#what-graders-see) for the rest of the

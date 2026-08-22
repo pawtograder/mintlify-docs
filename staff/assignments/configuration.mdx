@@ -193,13 +193,13 @@ by this checkbox — see
 [What Counts as a Submission](/staff/assignments/autograding#what-counts-as-a-submission).
 
 <Warning>
-The form's helper text for this checkbox currently says that with the
-autograder enabled, "a push with `#submit` in the commit message runs it."
-The `grade.yml` that the handout template actually ships has a `push:`
-trigger on `main`, so **every push is a submission and no marker is
-needed**. The in-product copy is being corrected; the shipped template is
-the authority. If you have edited your course's `grade.yml`, its `on:`
-block is the authority for your assignment.
+The form's helper text for this checkbox says that with the autograder
+enabled, "a push with `#submit` in the commit message runs it." The
+`grade.yml` that the handout template ships has a `push:` trigger on
+`main`, so **every push is a submission and no marker is needed**. Your
+assignment's own `grade.yml` is the authority: read its `on:` block — the
+template's, or your own if you or a previous instructor edited it — and
+tell students which rule applies to them.
 </Warning>
 
 With it off you get a "repo only" assignment: no `grade.yml` is installed,
@@ -346,13 +346,15 @@ see.
 ### Empty submission policy
 
 A submission whose collected files are unchanged from the handout is an
-*empty* submission, and Pawtograder rejects them. Every assignment is
-created with that rejection in force.
+*empty* submission, and Pawtograder rejects them. Every assignment that
+declares submission files in its autograder configuration is created with
+that rejection in force.
 
 <Warning>
-There is no field for this in the assignment form. The setting exists and
-the autograder enforces it, but nothing in the interface reads or writes
-it, so every assignment you create rejects empty submissions.
+There is no field for this in the assignment form. The rejection is
+enforced by the autograder, but nothing in the interface reads or writes
+it, so you cannot turn it off for an assignment that has submission files
+to compare.
 </Warning>
 
 A rejected submission cannot be graded, and the student is told that it
@@ -360,9 +362,12 @@ matches the assignment's starter code and asked to commit their changes
 before submitting again. Graders and instructors bypass the check, so you
 can still submit an unchanged repository when testing an assignment.
 
-Empty detection compares SHA-256 hashes of the files matching
-`submissionFiles` against every recorded handout version, so it
-respects whatever scope the autograder config defines.
+The comparison covers the files matching `submissionFiles`, so it respects
+whatever scope the autograder configuration defines. An assignment that
+declares no submission files — a repo-only assignment, for instance — has
+nothing to compare and never rejects a push as empty. See
+[Empty submission detection](/staff/assignments/autograding#empty-submission-detection)
+for what students see in each case.
 
 ### Handout URL
 

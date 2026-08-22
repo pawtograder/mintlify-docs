@@ -599,11 +599,7 @@ John Smith,"Nov 16, 2025, 10:22 AM",Answer 1,Answer 2,...
 
 ### Viewing Individual Responses
 
-A per-response detail page exists at `/course/{course_id}/manage/surveys/{survey_id}/responses/{response_id}`. It shows one student's full set of answers in read-only mode, with a **← Back to Responses** button.
-
-<Warning>
-Nothing links to that page. The rows of the response table are not clickable, and there is no breadcrumb, so the page is reachable only by typing the URL. Read individual answers from the response table or the CSV export instead.
-</Warning>
+Read one student's answers from the response table, or from the CSV export if you want them alongside everyone else's.
 
 ## Editing Surveys
 
@@ -621,7 +617,7 @@ Draft surveys can be edited freely with no restrictions:
 On a published survey, the ⋯ menu item is labelled **Edit (New Version)**, and the dashboard shows a version badge next to each survey.
 
 <Warning>
-Despite the label, editing does not create a new version: your changes overwrite the existing survey and the version stays at `v1`. Existing responses keep pointing at the questions you just changed, so edit a published survey carefully.
+Editing a published survey overwrites it rather than creating a second version. Responses already collected keep pointing at the questions you just changed, so edit a published survey carefully — and prefer creating a new survey when the wording change would make old and new answers mean different things. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 **What You Can Safely Edit:**

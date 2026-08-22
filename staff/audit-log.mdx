@@ -16,19 +16,15 @@ the log covers, turn it off for your course, or edit or delete an entry once it
 exists.
 
 <Warning>
-**The page currently shows an empty table, even when the log is full.** Verified
-against a running course: the table renders with all its headers, reports
-`0 Rows` and `Page 1 of 0`, and shows no error — even though more than five
-thousand changes had been recorded for that same course. It reads as empty
-rather than failing, so nothing on screen tells you anything is wrong.
+**The page shows no rows, even when changes have been recorded.** The table
+renders with all its headers, reports a count of `0 Rows`, and shows no error,
+so nothing on screen tells you the rows are missing.
 
-This is a known platform fault, not a course misconfiguration. No setting of
-yours caused it and none will clear it; the fix has to come from a Pawtograder
-administrator, and until it does, they are also the only route to your course's
-audit history.
+This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
-The important consequence is that an empty audit log is **not** evidence that
-nothing happened in your course. Right now it is evidence of nothing at all.
+The consequence to carry away is that an empty audit log is **not** evidence
+that nothing happened in your course. If you are working through a grade dispute
+or an academic integrity case, do not treat this page as a clean record.
 </Warning>
 
 <Frame>
@@ -44,18 +40,19 @@ Every recorded change produces one row, carrying:
 - **What** kind of course record changed — an assignment, a rubric check, a
   gradebook column — shown in the **Table** column.
 - **The change itself** — the full record before and after, as JSON.
-- **The IP address** the change came from, taken from the first address in the
-  request's `x-forwarded-for` header.
+- **The IP address** the change came from.
 
-The page's own description lists ten resources: assignments, assignment due date
-exceptions, assignment groups, discussion threads, rubric checks, rubric
-criteria, rubric parts, submissions, submission reviews, and submission comments
-(both global comments and line annotations).
+The log covers changes to:
 
-That list is incomplete. The log also records changes to gradebook columns,
-gradebook cell values, profiles, student tags, lab sections, lab section
-meetings, and assignment group membership. So the log covers more than the page
-advertises.
+- Assignments, assignment due date exceptions, assignment groups, and assignment
+  group membership
+- Rubric parts, rubric criteria, and rubric checks
+- Submissions, submission reviews, and submission comments (both global comments
+  and line annotations)
+- Gradebook columns and gradebook cell values
+- Discussion threads
+- Profiles and student tags
+- Lab sections and lab section meetings
 
 ## What does not get recorded
 
@@ -89,11 +86,12 @@ the name of the account that performed the change, looked up in your roster. To
 find who edited a particular student's grade, filter on the **Table** and
 **Resource ID** columns and read **Student Name** as "actor".
 
-When a change came from a background job rather than a signed-in person — the
-autograder writing a submission, a gradebook recalculation — there is no signed-in
-user to record, and the column is blank. In practice that is most rows: every one
-of the five thousand rows inspected on a live course had no recorded actor, so
-this column would render blank throughout even once the log becomes readable.
+This is a known issue with an open report against Pawtograder, and a fix is on the way.
+
+When a change comes from a background job rather than a signed-in person — the
+autograder writing a submission, a gradebook recalculation — there is no account
+to name, so the column is blank. Expect that for a good share of the rows in a
+busy course.
 </Warning>
 
 ## Reading the table
@@ -158,8 +156,7 @@ else, so do not treat the audit log as the long-term record of your course.
 
 The **Audit Log** menu entry appears for instructors only; graders do not see
 it. Staff pages admit both instructors and graders, so a grader who types the
-URL reaches the page — but while the fault above is open, neither role can read
-a single entry, and that is the access limit that actually applies today.
+URL reaches the page.
 
 ## Related
 

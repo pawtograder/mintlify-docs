@@ -96,7 +96,7 @@ Constraints that will reject an otherwise plausible insert:
 - `created_by` references `profiles(id)` (`20251213200333:477`) and is written with the author's **private** profile id (`app/course/[course_id]/manage/surveys/new/page.tsx:333`). Polls use the public one. Do not carry an id across.
 
 <Warning>
-`survey_id` and `version` are versioning scaffolding that nothing exercises. `version` is hard-coded to `1` on insert (`app/course/[course_id]/manage/surveys/new/page.tsx:331`) and no code path ever increments it. Editing a survey updates the existing row in place (`app/course/[course_id]/manage/surveys/[survey_id]/edit/page.tsx:375`), so there is exactly one row per logical `survey_id` and the two ids are always in one-to-one correspondence. Anything you write that joins on `survey_id` expecting several versions will find one. `soft_delete_survey` and the responses page both loop over "all versions" (`20251213200333:778-790`, `responses/page.tsx:54`); those loops are correct but currently degenerate.
+`survey_id` and `version` are versioning scaffolding that nothing exercises. `version` is hard-coded to `1` on insert (`app/course/[course_id]/manage/surveys/new/page.tsx:331`) and no code path ever increments it. Editing a survey updates the existing row in place (`app/course/[course_id]/manage/surveys/[survey_id]/edit/page.tsx:375`), so there is exactly one row per logical `survey_id` and the two ids are always in one-to-one correspondence. Anything you write that joins on `survey_id` expecting several versions will find one. `soft_delete_survey` and the responses page both loop over "all versions" (`20251213200333:778-790`, `responses/page.tsx:54`); those loops are correct but degenerate.
 </Warning>
 
 ### `survey_series`
@@ -238,9 +238,7 @@ Two sibling RPCs exist and have **no callers**: `get_survey_responses_with_group
 
 ### Due dates are advisory
 
-`can_respond_to_survey` never reads `due_date`. The migration that hardened the write path says so explicitly, at `20260817120000_tighten_survey_and_poll_rls.sql:27-32`:
-
-> `due_date` is deliberately NOT enforced here. It has never been enforced anywhere - not in RLS, not in the client, which only renders it (`app/course/[course_id]/surveys/page.tsx`) - so surveys have always accepted late responses and instructors have `submitted_at` to judge them by. Enforcing it in this migration would silently start rejecting late submissions, which is a course-policy decision, not a security fix. To adopt it later, add `AND (s.due_date IS NULL OR s.due_date > now())` to `can_respond_to_survey`.
+`can_respond_to_survey` never reads `due_date` (`20260817120000_tighten_survey_and_poll_rls.sql:27-32`). Nothing else enforces it either — not RLS, not the client, which only renders it (`app/course/[course_id]/surveys/page.tsx`). Surveys accept late responses, and `submitted_at` is what records how late.
 
 The one place `due_date` is checked is publish time in the client, which refuses to move a survey to `published` with a past due date and saves it as a draft instead (`app/course/[course_id]/manage/surveys/[survey_id]/edit/page.tsx:310-325`). That is a form validation, not a control: it does not stop a response.
 

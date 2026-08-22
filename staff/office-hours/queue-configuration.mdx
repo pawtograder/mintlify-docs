@@ -35,12 +35,12 @@ Each card shows the queue's name, type, demo badge, an **Inactive** chip when it
 Ordinals are kept unique for you. Moving a queue to a position that is taken shifts the queue already there, and everything after it, one place later, so you never end up with two queues claiming the same slot.
 
 <Warning>
-Three fields on this form, and one figure on the queue card, are stored and displayed but change nothing.
+Three fields on this form, and one figure on the queue card, are saved and displayed, but they do not change how the queue behaves. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
-- **Max Concurrent Requests** is recorded and displayed on the queue card. No check anywhere caps or blocks new requests when the count is reached.
-- **Closing Time** is recorded and displayed on the queue card as a "Closes" time. Nothing closes the queue when that time arrives, despite the helper text promising the queue "will automatically close": the queue keeps taking requests until you intervene. To stop new requests at a set time, be there and uncheck **Queue is available to students** yourself.
-- **Color** is saved and never read. Queue badges take their color from the queue type instead.
-- **Queue Depth** on the card is a stored figure that nothing keeps current, so it is not the live depth and should not be read as one. The live count is the open-request number on the dashboard and the queue cards.
+- **Max Concurrent Requests** is recorded and displayed on the queue card, but the queue keeps accepting requests past that number.
+- **Closing Time** is recorded and displayed on the queue card as a "Closes" time, and the queue keeps taking requests past it. To stop new requests at a set time, uncheck **Queue is available to students** yourself when you want the queue closed.
+- **Color** is saved but is not what the interface displays. Queue badges take their color from the queue type instead.
+- **Queue Depth** on the card is a stored figure rather than a live count, so read it as a starting value rather than the current one. For the live count, use the open-request number on the dashboard and the queue cards.
 </Warning>
 
 ### Available, active, and who sees what

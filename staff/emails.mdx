@@ -19,7 +19,7 @@ page.
 
 The page has three parts, top to bottom: a composer, a **Preview and send**
 section that appears once you have drafted something, and a **History** section
-that does not work (see [History](#history-is-empty) below).
+(see [History](#history) below).
 
 ## Composing a message
 
@@ -167,15 +167,15 @@ sample. The preview cards are the only proof-read you get.
 
 The send is queued, not immediate:
 
-1. Pawtograder writes one batch record and one message record per recipient, then
-   shows the toast **Successfully created emails** with a count. That toast
-   confirms the records were written — not that any mail was delivered.
-2. Each message record creates an in-app notification for its recipient. In the
+1. Pawtograder creates one message per recipient, then shows the toast
+   **Successfully created emails** with a count. That toast confirms the messages
+   were created — not that any mail was delivered.
+2. Each message also creates an in-app notification for its recipient. In the
    recipient's notification list it appears as your subject line followed by
    *Check your email for details*. See [Notifications](/students/notifications)
    for what students see.
-3. Each notification is put on a queue. A background worker, poked once a minute,
-   picks up as many as 100 at a time and hands them to the mail server.
+3. Each notification is queued for delivery. Queued messages are picked up about
+   once a minute, as many as 100 at a time, and handed to the mail server.
 4. The delivered subject is your course name, a dash, and then your subject line.
    The body is your text as written. The message comes **From** Pawtograder's
    configured sender address, with **Reply-To** set to the address from the
@@ -187,32 +187,33 @@ in batches rather than all at once.
 ## Partial failure and delivery status
 
 <Warning>
-Pawtograder does not track delivery. The stored batch and message records have no
-status, no sent timestamp, and no error field, and nothing writes back to them
-after the mail server has been contacted. There is no place in the product — this
-page included — that will tell you whether a message reached anyone.
+Pawtograder does not report delivery status. Nothing in the product — this page
+included — will tell you whether a message reached a particular recipient, and a
+message that fails at the mail server is not tried again.
+
+This is a known issue with an open report against Pawtograder, and a fix is on the way.
+
+Before a send that matters, Cc yourself on a small one and check that it arrives.
+That is the only confirmation available from inside the course.
 </Warning>
 
-When one message in a send fails, the rest continue. The failure is reported to
-the platform's error tracker, and the queued item is discarded rather than
-retried, so a message that fails at the mail server is not attempted again and
-you are not told.
+When one message in a send fails, the rest still go out.
 
-Some recipients are skipped silently:
+Two kinds of recipient are skipped, with nothing in the send to tell you so:
 
 - Anyone whose enrollment in the course has been disabled.
 - Any address on Pawtograder's internal test domain.
 
 <Note>
-A deployment can have email switched off entirely. When it is, your send still
-creates the in-app notifications and the queued items are discarded without any
-mail going out. Nothing in the course UI distinguishes this from a successful
-send. If you are unsure whether your deployment sends mail, Cc yourself on a
-small send and check whether it arrives.
+A deployment can have email switched off entirely. Your send still creates the
+in-app notifications, but no mail goes out, and the course looks the same as it
+does on a deployment that sends. The Cc check above is how you tell the
+difference.
 </Note>
 
-If the write in step 1 fails, you get an error toast — and the drafts are cleared
-anyway. There is no recovery; you have to rebuild the send from the composer.
+If Pawtograder cannot create the messages, you get an error toast and your drafts
+are cleared along with them, so the send has to be rebuilt in the composer. For a
+long message, write it somewhere else and paste it in.
 
 ## What students can do about it
 
@@ -221,20 +222,23 @@ changed it. Replies land in your normal inbox; there is no reply thread in
 Pawtograder, and the recipient's in-app notification is a stub that points them
 at their email.
 
-**Opting out is not possible.** A student's notification preferences cover
-discussion posts and office hours activity only. Course email sent from this page
-is not checked against any preference, and it carries no unsubscribe footer, so
-every selected recipient gets it.
+**Students cannot opt out.** A student's notification preferences cover
+discussion posts and office hours activity; email from this page is treated as
+required course communication, so it is not checked against those preferences and
+carries no unsubscribe footer. Every recipient you select receives it, which is
+worth keeping in mind when you pick a wide audience.
 
-## History is empty
+## History
 
 A **History** heading sits below the composer, and it is meant to list your past
-sends as expandable cards. It never shows anything.
+sends as expandable cards.
 
 <Warning>
-The **History** section is inert — a known platform fault, not a sign that your
-sends failed. It stays empty on a course that has sent hundreds of messages as
-much as on a brand-new one.
+The **History** section shows no sends, on a course that has sent hundreds of
+messages as much as on a brand-new one. An empty History is not a sign that your
+sends failed.
+
+This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
 Past sends *are* retained. They are simply not reachable from this page, or
 anywhere else in the app. If you need a record of what you sent, Cc yourself

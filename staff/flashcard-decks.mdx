@@ -27,10 +27,11 @@ removes the **Flashcards** entry from the student course menu, and leaves
 [Feature flags](/staff/feature-flags) for what each flag hides.
 
 <Warning>
-The flag hides the student menu entry; it does not close the student route. A
-student with the address or an old bookmark can still reach the deck list while
-the flag is off. If a deck must not be seen, delete it rather than relying on the
-flag.
+The flag decides whether students see Flashcards in their menu; it is not an
+access control, and turning it off is not a way to withhold a deck. If a deck
+must not be seen, delete it.
+[Feature flags](/staff/feature-flags#feature-flags-control-navigation-not-access)
+covers the same boundary for every module.
 </Warning>
 
 ## Decks are visible to students the moment you create them
@@ -153,12 +154,11 @@ An `id` that matches nothing in this deck — usually a copy/paste from another
 deck — is treated as a new card, and the save warns you that it did so.
 
 <Warning>
-This editor loads only the **first ten cards** of the deck. On a longer deck you
-are looking at a truncated view: the rest of the cards are not shown, are not
-included in the YAML, and are left with stale positions after you save, so the
-deck's card order can come back scrambled. Cards past the tenth are not deleted.
-For decks larger than ten cards, use **Add Flashcard** and the per-card **Edit**
-buttons instead.
+This editor shows only the **first ten cards** of the deck. On a longer deck you
+are editing a partial view, and saving from it can leave the deck's card order
+scrambled — no cards are lost, but the sequence students see may change. For
+decks larger than ten cards, use **Add Flashcard** and the per-card **Edit**
+buttons instead. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 ## Analytics
@@ -241,10 +241,10 @@ student who has barely started the deck shows zero in *both* count columns. Read
 **Avg. 'Got It' Time (s)**, and **Avg. 'Keep Trying' Time (s)**.
 
 <Note>
-The **Card** column of the Detailed View can only name the deck's first ten
-cards. Rows for cards past the tenth fall back to a numeric placeholder such as
-"Card 412" instead of the card's title. Sorting and filtering on that column
-still work; the label is what is missing.
+The **Card** column of the Detailed View names only the deck's first ten cards.
+Rows beyond that show a numeric placeholder such as "Card 412" rather than the
+card's title. Sorting, filtering, and the export still work, so the data is all
+there — it is the label that is missing. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
 Both exports write exactly the columns of the table they sit above. See

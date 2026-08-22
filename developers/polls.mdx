@@ -186,7 +186,7 @@ $function$
 `20251213200333_surveys_polls.sql:670-685`.
 
 <Warning>
-`deactivate_expired_polls()` has no callers. A repository-wide search for the name finds only its own definition: no `pg_cron` schedule, no edge function, no client call. No read path filters on `deactivates_at` either. **Polls never close on their own.** A poll stays live until a staff member closes it, and the one-hour value is dead metadata. Scheduling the function (`SELECT cron.schedule('deactivate-expired-polls', '*/5 * * * *', 'SELECT deactivate_expired_polls()')`) is the change that would make the documented expiry real.
+`deactivate_expired_polls()` has no callers: no `pg_cron` schedule, no edge function, no client call. No read path filters on `deactivates_at` either. **Polls never close on their own.** A poll stays live until a staff member closes it, and the one-hour value is dead metadata.
 </Warning>
 
 ## Row-level security

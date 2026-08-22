@@ -185,7 +185,7 @@ Mailpit captures everything the stack tries to send, so you can read magic links
 
 ### MCP endpoints
 
-Two different servers carry the "MCP" label locally, and mixing them up wastes time:
+Two different servers carry the "MCP" label locally:
 
 - `http://127.0.0.1:54321/mcp` belongs to the Supabase CLI itself and appears in the `npx supabase status` output. It exposes your local Postgres to an AI assistant.
 - `http://127.0.0.1:54321/functions/v1/mcp-server` is Pawtograder's own MCP server, implemented as an edge function (`supabase/config.toml:775-779`). It answers only while `npx supabase functions serve` is running. See the [MCP server guide](/developers/mcp-server).
@@ -497,7 +497,7 @@ docker exec -i supabase_db_pawtograder-platform psql -U postgres -d postgres \
 
 The repository root carries the guidance that AI coding assistants read:
 
-- `AGENTS.md` is the operational reference for Cursor Cloud and other agents. It covers Docker daemon setup, the fresh-volume Supabase sequence, seeding, ports, the operator CLI, and the known local failure modes, and most of this page traces back to it.
+- `AGENTS.md` is the operational reference for Cursor Cloud and other agents. It covers Docker daemon setup, the fresh-volume Supabase sequence, seeding, ports, the operator CLI, and the known local failure modes.
 - `CLAUDE.md` points at `AGENTS.md` for commands and adds the architecture map: Supabase client factories, edge functions, realtime controllers, route layout, and the `TableController` pattern.
 - `WRITING.md` holds the prose conventions for everything in the repository.
 - `.claude/` holds Claude Code project settings.

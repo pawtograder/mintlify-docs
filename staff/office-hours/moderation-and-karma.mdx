@@ -17,7 +17,7 @@ Actions are listed as cards with the type, a **Permanent**, **Active**, or **Exp
 Instructors can delete a moderation record, and deleting is the only way to lift a ban early. Graders can create actions but not delete them.
 
 <Warning>
-A ban is an interface-level deterrent, not a hard access control. It takes away the office hours pages and the chat composer, but it does not revoke the student's access to the course, and a determined student is not shut out by it. Treat moderation as a course-policy tool, and do not rely on a ban to keep someone out.
+A ban covers office hours and nothing else. It replaces the student's office hours pages with the ban notice and takes away the chat composer; their enrollment, assignments, grades, and the rest of the course are untouched. Because a ban is applied in the interface rather than at the account level, treat moderation as a course-policy tool rather than a security boundary: do not rely on a ban to keep one student away from another, and escalate anything that needs a hard guarantee through your institution's channels. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 ## Student Karma
@@ -29,7 +29,9 @@ A ban is an interface-level deterrent, not a hard access control. It takes away 
 </Frame>
 
 <Warning>
-Karma is display-only. The score is read to sort, badge, and star this page and the Student Activity summary. It does not change queue order, request priority, or whether a student can file a request, and students cannot see it. Saving an entry may also fail outright: this is a known platform fault, there is nothing you can configure around it, and if the dialog errors your entry was not recorded.
+Karma is display-only. The score is read to sort, badge, and star this page and the Student Activity summary. It does not change queue order, request priority, or whether a student can file a request, and students cannot see it.
+
+Saving an entry can fail. If the dialog reports an error, the entry was not saved. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 Do not confuse this with the discussion karma on student profiles, which is computed from discussion likes. See [Discussion](/staff/discussion).

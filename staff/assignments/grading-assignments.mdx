@@ -160,7 +160,7 @@ Each new grader inherits the same rubric parts the original grader was assigned.
 ### How reassignment works
 
 - When a submission is reassigned, it appears in the new grader's pending work list immediately.
-- If the new grader had already completed a different rubric part for the same submission, the system clears the `completed_at` timestamp so the new work appears as pending.
+- Even if the new grader had already marked a different rubric part of the same submission complete, the reassigned part still arrives as pending rather than being treated as already done.
 - Any existing grading work (comments, rubric checks) is preserved and remains visible to the new grader, who can continue or modify it.
 - Reassignments respect conflict-of-interest rules.
 - Graders are not notified automatically. Use **Generate Reminder Email** on the Grading Progress Dashboard to tell them.

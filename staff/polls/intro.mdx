@@ -38,7 +38,7 @@ Polls are not an attendance tool. Even with **Require login to respond** turned 
 
 Every poll in a course shares one link, `https://<your-pawtograder-host>/poll/<course_id>`, and that link always serves the poll that was opened most recently. The QR code encodes the same link.
 
-Open one poll at a time. If two polls are live at once, students who scan the code reach the newer one and the older poll has no reachable link of its own.
+Open one poll at a time. If two polls are live at once, students who scan the code reach the newer one, and the older poll has no link of its own to hand out. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
 ## Polls vs Surveys
 
@@ -47,7 +47,7 @@ Open one poll at a time. If two polls are live at once, students who scan the co
 | Purpose | Quick in-class questions | Detailed feedback collection |
 | Duration | Open until you close it | Configurable due dates |
 | Question count | One question per poll | Multiple questions |
-| Repeat responses | One per student when login is required, unlimited when it is not | One response per student, editable until submitted — and after submitting, in [surveys that let students edit their responses](/staff/surveys#response-editing-control) |
+| Repeat responses | One per student when login is required, unlimited when it is not | One response per student. Editable before submitting, and after submitting only if [response editing](/staff/surveys#response-editing-control) is on |
 | Results | Live bar chart of counts per choice | Per-response table, analytics, and CSV export |
 | Best for | Lectures, quick checks | Course evaluations, detailed feedback |
 

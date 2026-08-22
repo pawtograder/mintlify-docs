@@ -92,7 +92,7 @@ The submission page may show a preview of the grading rubric (if enabled by your
 </Frame>
 
 <Warning>
-Unless your instructor permits empty submissions, a push whose files are identical to the assignment's starter code is rejected rather than held for your instructor's review. On an assignment with an autograder, the run fails with "Empty submissions are not permitted for this assignment. Please commit your changes before submitting." Otherwise the submission still appears in your history, but inactive and with no files, carrying the error "Your submission at commit ... was not recorded: it is identical to the assignment's starter code, and this assignment does not accept empty submissions. Make your changes and push again." Either way, nothing is graded until you change a file and push again.
+If the files you pushed are identical to the assignment's starter code, that push is not recorded as work to be graded — there is nothing new in it yet. You will see one of two messages. The grading run may fail with "Empty submissions are not permitted for this assignment. Please commit your changes before submitting." Or the submission may appear in your history, inactive and with no files, carrying the error "Your submission at commit ... was not recorded: it is identical to the assignment's starter code, and this assignment does not accept empty submissions. Make your changes and push again." In both cases the fix is the same: edit at least one of the files the assignment asks you to submit, commit, and push again.
 </Warning>
 
 ## Viewing Submission Files

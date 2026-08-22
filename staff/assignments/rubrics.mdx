@@ -541,6 +541,6 @@ The grading interface displays a "Scores by student" breakdown showing shared, i
 ### Important Notes
 
 - A part cannot be both `is_individual_grading` and `is_assign_to_student` (mutually exclusive)
-- Individual grading parts require `target_student_profile_id` on all rubric-linked comments
+- Individual grading parts require every rubric-linked comment to name the student it applies to
 - Assign-to-student parts are skipped in completion validation when not assigned to any student
 - Students only see their own individual scores, not their teammates' scores

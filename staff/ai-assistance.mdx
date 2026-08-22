@@ -91,12 +91,12 @@ your token in place of `mcp_YOUR_TOKEN_HERE`:
 }
 ```
 
-Claude Desktop is not such a client, despite the label on the block. Its
-configuration file describes servers it launches on your machine, and its
-support for remote servers lives in **Settings → Connectors**, which takes a URL
-and then runs whatever sign-in flow the server offers. Pawtograder's offers
-none — only the token you just created. So point Claude Desktop at a small local
-bridge, `mcp-remote`, and let it carry the header:
+Claude Desktop is not such a client. Its configuration file describes servers it
+launches on your machine, and its support for remote servers lives in
+**Settings → Connectors**, which takes a URL and then runs whatever sign-in flow
+the server offers.
+Pawtograder's offers none — only the token you just created. So point Claude
+Desktop at a small local bridge, `mcp-remote`, and let it carry the header:
 
 ```json claude_desktop_config.json
 {
@@ -144,10 +144,9 @@ connection fails. Always copy the URL out of the **API Tokens** dialog.
 
 <Note>
 If you click an **AI** button before you have a token, Pawtograder opens a dialog
-titled **Set Up AI Help with Claude Desktop** instead of copying anything. Do not
-follow its steps: it has you install an `@anthropic-ai/mcp-proxy` package that is
-not published, and it calls the token screen "Settings → API Tokens". Use the
-**API Tokens** dialog and the configuration above instead.
+titled **Set Up AI Help with Claude Desktop** instead of copying anything. Close
+it and follow the **API Tokens** dialog and the configuration above instead,
+which is the supported route. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
 ## Where the AI buttons are
@@ -211,16 +210,16 @@ The server exposes 16 read-only tools. See
 - `search_discussion_threads` — related threads
 
 <Warning>
-The prompts reference a `search_submissions` tool that the server does not
-implement. If your assistant reports that tool as unavailable, that is why —
-everything else in the tool list is real.
+Some of the built-in prompts name a `search_submissions` tool that is not part of
+the tool list above. If your assistant reports that tool as unavailable, that is
+why; every other tool listed is available. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 <Note>
-`get_assignment` returns the assignment's handout URL, but there is no field in
-the assignment forms for setting it, so it is empty in practice unless an
-administrator populates it directly. Point your assistant at the handout
-yourself if it needs the written specification.
+`get_assignment` returns the assignment's handout URL, but the assignment forms
+have no field for setting it, so it comes back empty unless an administrator
+populates it directly. Point your assistant at the handout yourself if it needs
+the written specification. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
 ## Privacy and access control

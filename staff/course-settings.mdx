@@ -15,13 +15,6 @@ index — find the entry you want below, then follow the link for the details.
   <img src="/images/staff/course-settings-menu-1787281367482.png" alt="Course navigation with the Course Settings menu open, listing Discord, Enrollments, LMS (LTI) Sync, Feature flags, GitHub Templates, Lab Sections, Flashcard Decks, Discussion Topics, Discussion Engagement, Grading Conflicts, Due Date Extensions, Audit Log, Emailer, and Workflow Runs" />
 </Frame>
 
-<Note>
-There is no page at `/course/<course_id>/manage/course/`. The navigation bar uses
-that path only to decide when to underline **Course Settings** as the active
-section, so typing it into your browser gives you a 404. Nothing in the interface
-links there, so open the menu instead.
-</Note>
-
 ## The 14 entries
 
 Routes are relative to `/course/<course_id>/`.
@@ -38,7 +31,7 @@ Routes are relative to `/course/<course_id>/`.
 | **Discussion Topics** | `manage/discussion-topics` | Manages the topics students use to categorize discussion posts. | Not yet documented; [Discussion Board](/staff/discussion) covers how topics appear on the board |
 | **Discussion Engagement** | `manage/discussion-engagement` | Tracks student participation and karma on the discussion board, with an export. | [Discussion Board](/staff/discussion) |
 | **Grading Conflicts** | `manage/course/grading-conflicts` | Records conflicts of interest so staff are not assigned submissions they should not grade. | [Grading Assignments](/staff/assignments/grading-assignments) |
-| **Due Date Extensions** | `manage/course/due-date-extensions` | Sets the class-wide late token allotment and grants per-student extensions and gifted tokens. | [Extensions](/staff/assignments/extensions) |
+| **Due Date Extensions** | `manage/course/due-date-extensions` | Three tabs: **Assignment Exceptions** (the class-wide late token allotment, every due-date exception in the course, and **Gift Tokens**), **Student Extensions** (a student-wide extension across the course's assignments), and **Roster Tokens** (each student's token balance). Extensions for one assignment are usually granted from that assignment's own **Manage Due Date Exceptions** page. | [Extensions](/staff/assignments/extensions) |
 | **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
 | **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
@@ -89,13 +82,17 @@ sees.
 ## Class late token policy
 
 The class-wide late token allotment lives under **Course Settings → Due Date
-Extensions**, in the **Class Late Token Settings** card. Set **Late Tokens Per
-Student**, described in the form as "Number of late tokens each student receives
-for the entire class".
+Extensions → Assignment Exceptions**, in the **Class Late Token Settings** card.
+Set **Late Tokens Per Student**, described in the form as "Number of late tokens
+each student receives for the entire class".
 
 How many of those tokens a student may spend on a single assignment is set per
 assignment, as **Max late tokens** on the assignment form. Each token extends the
 deadline by 24 hours.
+
+The same entry's **Student Extensions** tab is where you grant one student a
+blanket extension across the course's assignments — see
+[Extensions → Granting a student-wide extension](/staff/assignments/extensions#granting-a-student-wide-extension).
 
 See [Extensions](/staff/assignments/extensions) for the rest of the late token
 and extension settings, including gifted tokens, and

@@ -158,9 +158,9 @@ Rows are sorted by group name, and ungrouped students are appended at the end as
 one `(Ungrouped)` row each, sorted by student name.
 
 <Note>
-`MentorName` is resolved against the course's graders and instructors. If a group
-is mentored by someone outside that list the cell is silently blank, which looks
-identical to "no mentor".
+`MentorName` is resolved against the course's graders and instructors. A group
+whose mentor is not one of them exports an empty cell, the same as a group with
+no mentor at all.
 </Note>
 
 The button above the **Students** table writes `students_export_<date>.csv` with
@@ -185,9 +185,8 @@ With everything unchecked you get `student_name`, `canvas_user_id`,
 already applied). One row per student's active submission.
 
 <Warning>
-The `group_name` column is always empty in both the CSV and the JSON — the export
-emits the field but never populates it. Use the **Manage Groups** export if you
-need group membership.
+The `group_name` column comes through empty in both the CSV and the JSON. Use the
+**Manage Groups** export if you need group membership. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Warning>
 
 ## Bulk submission download

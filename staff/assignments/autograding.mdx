@@ -830,20 +830,36 @@ tasks.withType(Checkstyle) {
 
 ## Empty Submission Detection
 
-Pawtograder compares the files it collects from a submission against the
-starter code in the handout, and by default it **rejects** a submission
-whose collected files are identical. Nothing in the assignment editor
-turns that rejection off, so it is the behavior on every assignment.
+Pawtograder can compare the files it collects from a submission against
+the starter code in the handout, and where it can, it **rejects** a
+submission whose collected files are identical. Two separate things decide
+what happens: whether the assignment gives the check anything to compare,
+and how the submission arrived.
 
-What the student sees depends on how the submission arrived:
+### When the check applies
 
-- On the GitHub Actions path, the submission is deleted and the run fails with "Empty submissions are not permitted for this assignment. Please commit your changes before submitting." Staff-triggered submissions are exempt from the check.
-- On the push-direct path, an inactive, fileless submission is kept on purpose and carries a student-visible error explaining that the commit was not recorded because it is identical to the starter code. The assignment page labels that submission "Error".
+The comparison covers exactly the files matching `submissionFiles` in the
+autograder configuration, so:
 
-Empty submission detection looks only at the files that match
-`submissionFiles`. An assignment that declares no `submissionFiles` has no
-comparable handout hash, so the check is skipped and every push is
-accepted; repo-only assignments never get empty detection.
+- **An assignment that declares `submissionFiles`** has empty submission detection in force. Nothing in the assignment editor turns that rejection off.
+- **An assignment that declares no `submissionFiles`** gives the check nothing to compare, so it does not apply and every push is accepted. Repo-only assignments carry no autograder configuration and therefore never see empty submission detection.
+
+Because the check follows `submissionFiles`, it also respects whatever
+scope your autograder configuration defines: an edit confined to a file no
+pattern matches does not register as a change.
+
+### What a rejection looks like
+
+On an assignment where the check applies, what the student sees depends on
+how the submission arrived:
+
+- **Submissions graded by GitHub Actions.** The submission is discarded and the run fails with "Empty submissions are not permitted for this assignment. Please commit your changes before submitting."
+- **Submissions Pawtograder collects directly from a push.** The submission stays in the student's history, inactive and with no files, and carries a student-visible error explaining that the commit was not recorded because it is identical to the starter code. The assignment page labels that submission "Error".
+
+Either way the submission cannot be graded, and the student has to change
+a submitted file and push again. Staff-triggered submissions are exempt
+from the check, so you can still submit an unchanged repository while
+testing an assignment.
 
 ## Submission Viewer
 

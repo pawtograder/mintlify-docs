@@ -16,12 +16,12 @@ Staff put themselves on duty one queue at a time. Nobody schedules you here: you
 
 Open **Working**. Under the **Help Queues** heading, each queue shows its mode, its count of unresolved requests, who is on duty, and a green **Start Working** button. Only queues marked active appear here; the page says so and points you at Queue Management for the rest. See [Queue Configuration](/staff/office-hours/queue-configuration#available-active-and-who-sees-what) for what the active flag does on each surface.
 
-Starting work creates an active `help_queue_assignments` row tying you to that queue. Other staff see you in the queue's staff-on-duty list, students see the queue as staffed, and the queue becomes selectable in the student **New Request** menu. You can work several queues at once. **Stop Working** on a queue card ends that one assignment; **Stop Working (n)** in the header ends all of them at once.
+Starting work puts you on duty for that queue. Other staff see you in the queue's staff-on-duty list, students see the queue as staffed, and the queue becomes selectable in the student **New Request** menu. You can work several queues at once. **Stop Working** on a queue card ends that one assignment; **Stop Working (n)** in the header ends all of them at once.
 
 Once you are on duty, **Working** stops listing queues and lists the requests you are responsible for instead. [Help Requests](/staff/office-hours/help-requests) covers what to do with one.
 
 <Note>
-Starting work always records a concurrent-student limit of `1`. No control anywhere changes that number, and nothing reads it before routing another request to you. Assignment Management displays the value, and that is all it does.
+Starting work always records a concurrent-student limit of `1`. There is no control for changing it, and it does not limit how many requests can be routed to you at once. Assignment Management displays the value. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
 ## Staffing times and the schedule
