@@ -99,48 +99,78 @@ Consider using karma as part of your participation grade to encourage students t
 
 ## Error Pins
 
-Error pins automatically surface relevant discussion posts to students when they encounter errors in their assignment submissions. When a student's autograder run produces an error, the system:
+An error pin attaches one discussion thread to autograder results that match rules
+**you write**. Where a pin matches, the student sees a link to the thread in their
+autograder results, so a student hitting a problem the staff have already explained is
+pointed at the explanation instead of asking again.
 
-- Matches the error message against discussion board posts
-- Displays relevant pinned posts and discussions to the student
-- Helps students find solutions without joining the office hours queue
-- Reduces repetitive questions by surfacing existing answers
+Two things about this are easy to get wrong. The matching is not a text search: nothing
+compares a student's error message to the wording of your posts, so a pin fires only
+where your own rules say it should. And nothing restricts a pin to failures — a rule on
+a check's name or a score range will match a submission where that check passed. Nothing
+exists until you create it; a course with no pins shows students no extra panel.
 
-### Creating Error Pins
+This is also unrelated to the thumbtack that pins a thread to the top of the discussion
+board. The two features share only the word.
 
-You can create error pins in two scopes:
+<Warning>
+Do not pin an instructors-only thread. Students matched by the pin are shown the thread's
+subject line and a link, even though opening it is refused. The subject alone can give
+away more than you intend.
+</Warning>
 
-- **Assignment-specific**: Matches only submissions for a specific assignment
-- **Class-level**: Matches submissions across all assignments in the class
+### Creating an Error Pin
 
-To create an error pin:
+The control is an icon button labelled **Manage Error Pins** on the thread itself, not a
+class-wide screen.
 
-1. Navigate to a discussion thread that addresses a common error
-2. Click **Create Error Pin** in the thread actions
-3. Choose between assignment-specific or class-level
-4. Define matching rules based on:
-   - Test names and output
-   - Build/lint errors
-   - Score ranges
-   - Error messages
-5. Preview matches to see which submissions would be linked
-6. Save the pin
+<Steps>
+<Step title="Open the thread">
+Go to the discussion thread that explains the problem. Only graders and instructors see
+the button.
+</Step>
+<Step title="Choose the scope">
+Pick a single assignment, or **All Assignments (Class-Level)** to match across the whole
+course.
+</Step>
+<Step title="Write the rules">
+Each rule targets one part of the autograder result: a check's name, its part, or its
+output; output a student cannot see; the autograder's own output; the lint output;
+whether linting failed; or a check score or overall score falling inside a range. Each
+rule matches by *contains*, *equals*, *regex*, or *range*, and rules on check fields can
+be narrowed to particular checks by a name pattern.
+</Step>
+<Step title="Preview">
+Preview reports how many submissions the rules currently match, with a sample. Use it —
+a `contains` rule on a common word matches far more than you expect.
+</Step>
+<Step title="Save">
+Save the pin. It applies to matching submissions going forward.
+</Step>
+</Steps>
 
 ### Rule Logic
 
-Error pins support two rule evaluation modes:
+- **AND logic** — every rule must match before the thread is linked.
+- **OR logic** — any single rule matching is enough.
 
-- **AND logic**: All rules must match for a submission to be linked
-- **OR logic**: Any rule matching will link the submission
+### Managing Pins on a Thread
 
-### Managing Error Pins
+The same **Manage Error Pins** button lists the pins already on that thread, each with
+its scope, whether it is enabled, and how many submissions it has matched. From there you
+can create another, edit the rules, enable or disable one without deleting it, or delete
+it. There is no screen that lists every pin in the course, so a pin is only findable from
+the thread it belongs to — worth keeping in mind before you scatter them across many
+threads.
 
-View and manage all error pins for your class in the Error Pins management interface. You can:
+<Note>
+A pin created after a submission has already been evaluated may not reach that
+submission. If you add a pin partway through an assignment, expect it to apply to later
+work rather than retroactively to everything.
+</Note>
 
-- Enable or disable pins
-- View match counts
-- Edit pin rules
-- Delete pins
+For what a student sees, see
+[Submitting Your Work → Error Pins](/students/assignments/create-submission#error-pins).
 
 ### Creating Effective Error Pins
 

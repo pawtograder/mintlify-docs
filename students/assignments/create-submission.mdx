@@ -131,14 +131,11 @@ If your instructor has enabled the leaderboard for an assignment, it appears as 
 
 ## Error Pins
 
-When your submission encounters an error during autograding, Pawtograder may display "Error Pins": suggested discussion board posts that are relevant to your specific error. This feature helps you:
+Some courses attach a discussion board post to a particular autograder result, so that a student who runs into a problem the staff have already explained is pointed straight at the thread explaining it. Course staff call these *error pins*. If your course uses them and one of them matches your submission, the thread appears in your autograder results as a link, under the line "Looking for troubleshooting help? Check out these related discussion posts that we have auto-matched to the errors in this submission". Click it to open the thread. If your course has not set any up, nothing extra appears; there is no empty panel for it.
 
-- **Find solutions faster**: See if other students encountered the same error and found solutions
-- **Access instructor guidance**: View posts where instructors explained how to fix common errors
-- **Reduce wait times**: Get help without needing to join the office hours queue
-- **Learn from peers**: Understand different approaches to solving the same problem
+The match is made against the autograder results for the submission you are looking at: the name of a check, the output of a check, the autograder's output, the lint output, or a score landing inside some range. A staff member chose which of those to attach the thread to, so the post you are shown is one a person picked for that situation rather than a search over the text of your error, and there is nothing you have to do to ask for it. It follows that a link can show up next to a check that passed, and that a submission with no autograder run has none.
 
-Error pins appear automatically when the system detects that your error matches discussion posts that instructors have pinned or marked as relevant. Click on any suggested post to read the full discussion and potential solutions.
+A thread attached to one check appears beside that check; a thread attached to the run as a whole appears above the list of checks. On the **Grade** tab, a passing check keeps its detail collapsed, so if a link is attached to one you will need to expand that row to see it. If your build failed outright, matched threads are collected instead under a heading reading **Troubleshooting Help**, next to the build error.
 
 ## Viewing Artifacts
 

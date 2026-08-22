@@ -92,6 +92,7 @@
           {
             "group": "Participation",
             "pages": [
+              "students/flashcards",
               "students/polls",
               "students/surveys"
             ]
@@ -122,6 +123,7 @@
               "staff/course-settings",
               "staff/feature-flags",
               "staff/lab-sections",
+              "staff/flashcard-decks",
               "staff/workflow-runs",
               "staff/audit-log",
               "staff/emails"

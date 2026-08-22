@@ -1,0 +1,314 @@
+---
+title: "Flashcard Decks"
+description: "Author practice decks card by card or from YAML, and read the per-deck, per-card, and per-student analytics"
+icon: "layer-group"
+---
+
+# Flashcard Decks
+
+A flashcard deck is a named set of question/answer cards students can practice
+against. Students work through a deck one card at a time and sort each card into
+a mastered pile or back into the practice pile. There is no scheduling, no
+scoring, and no gradebook connection: the value of the feature to you is the
+practice data it records, which is reported per deck, per card, and per student.
+
+Open **Course Settings → Flashcard Decks** in the course navigation bar
+(`manage/course/flashcard-decks`).
+
+## Who can manage decks
+
+Instructors and graders both get the **Flashcard Decks** entry, and both can
+create decks, add and edit cards, delete decks, and read every analytics view.
+Nothing on these pages is instructor-only.
+
+The `flashcards` feature flag governs the student side only. Turning it off
+removes the **Flashcards** entry from the student course menu, and leaves
+**Course Settings → Flashcard Decks** exactly where it was. See
+[Feature flags](/staff/feature-flags) for what each flag hides.
+
+<Warning>
+The flag hides the student menu entry; it does not close the student route. A
+student with the address or an old bookmark can still reach the deck list while
+the flag is off. If a deck must not be seen, delete it rather than relying on the
+flag.
+</Warning>
+
+## Decks are visible to students the moment you create them
+
+There is no draft state, no release date, and no publish step. A deck appears in
+the student deck list as soon as you click **Create Deck**, and every card in it
+is readable from that instant.
+
+That has one practical consequence worth planning around: if you create the deck
+first and add cards afterwards, students see an empty deck in the meantime, which
+opens to "No Cards Available". Author the cards in the create dialog — see
+[Creating a deck](#creating-a-deck) — if you would rather the deck arrive
+complete.
+
+## The deck table
+
+The landing page lists the course's decks in a sortable, filterable table:
+
+| Column | Contents |
+| --- | --- |
+| **Deck Name** | Links to the deck's own page |
+| **Description** | The deck's description, rendered as formatted text and clipped to two lines. Reads "No description" when there is none |
+| **Created By** | The staff member who created the deck |
+| **Created** | Creation date and time |
+| **Last Updated** | Date and time of the last edit, or `-` if the deck has not been edited |
+| **Actions** | A delete button |
+
+Click any header to sort by it, and type in the box under a header to filter on
+that column. The table starts sorted newest-first, shows 20 rows per page, and
+offers 10, 20, 30, 40, or 50 rows through the **Show:** selector at the bottom.
+
+Two buttons sit in the top-right corner: **Create New Deck**, and
+**View Analytics**, which opens the
+[course-wide deck analytics](#course-wide-deck-analytics).
+
+## Creating a deck
+
+**Create New Deck** opens a dialog with three fields:
+
+- **Deck Name** is required, and must be between 2 and 100 characters.
+- **Description** is optional and capped at 500 characters. It is rendered as
+  formatted text everywhere it appears, including on the student's deck card.
+- **Flashcard Configuration (YAML)** is optional, and holds the deck's cards.
+  **Load Sample Template** fills the editor with a worked two-card example.
+
+Leave the YAML empty to create the deck with no cards and add them one at a time
+afterwards.
+
+### The card YAML
+
+The editor expects a single `cards` list. Each entry needs a `title`, a `prompt`,
+and an `answer`:
+
+```yaml
+cards:
+  - title: "Big-O of binary search"
+    prompt: |
+      What is the worst-case time complexity of binary search
+      on a sorted array of n elements?
+    answer: |
+      **O(log n)** — each comparison halves the remaining range.
+  - title: "Recursion"
+    prompt: |
+      Name the two parts every recursive method needs.
+    answer: |
+      - A **base case** that stops the recursion
+      - A **recursive case** that calls itself on a smaller input
+```
+
+All three keys are required on every card and none may be blank. If one is
+missing, the save is rejected with a **YAML Error** naming the position of the
+offending card ("Card 3 is missing required fields"), and neither the deck nor
+any of its cards is created.
+
+`prompt` and `answer` are rendered as formatted text on the card faces, so the
+block style shown above (`|`) is the useful one — it preserves the line breaks
+that lists and code blocks need. Card order follows the order of the list.
+
+<Tip>
+Titles show up on their own in three places students and staff both see: the
+label above the question, the tiles in the student's mastered pile, and the
+**Card** column of the analytics tables. A title like "Card 4" makes every one of
+those unreadable. Write titles that identify the card.
+</Tip>
+
+## Editing a deck
+
+Click a deck's name to open it. The page is headed **Edit Flashcard Deck** with a
+card-count badge and the deck's creation and last-updated timestamps, then the
+deck's name and description, then every card in order — numbered `#1`, `#2`, and
+so on — with its title, prompt, and answer rendered as they will appear to
+students.
+
+A sidebar on the left holds three entries: **Deck Home**, **Analytics**, and
+**Student Analytics**.
+
+### Adding and editing single cards
+
+**Add Flashcard** opens a dialog with **Title**, **Prompt**, and **Answer**, all
+three required. **Edit** on any card opens the same three fields filled in; the
+**Update Flashcard** button stays disabled until you change something.
+
+Editing a card's text leaves student progress alone — a student who had already
+marked that card **Got It!** still has it in their mastered pile, now with the
+new wording. Deleting a card is the destructive option: it also discards every
+student's mastery record for that card, and it cannot be undone.
+
+### Editing the whole deck as YAML
+
+**Edit Deck (YAML)** in the top-right corner reopens the deck's cards as YAML.
+Each existing card comes back carrying an `id`, and on save:
+
+- cards whose `id` you left in place are updated,
+- cards you added without an `id` are created,
+- cards you removed from the YAML are deleted from the deck, along with student
+  progress on them,
+- and card order follows the order of the list.
+
+An `id` that matches nothing in this deck — usually a copy/paste from another
+deck — is treated as a new card, and the save warns you that it did so.
+
+<Warning>
+This editor loads only the **first ten cards** of the deck. On a longer deck you
+are looking at a truncated view: the rest of the cards are not shown, are not
+included in the YAML, and are left with stale positions after you save, so the
+deck's card order can come back scrambled. Cards past the tenth are not deleted.
+For decks larger than ten cards, use **Add Flashcard** and the per-card **Edit**
+buttons instead.
+</Warning>
+
+## Analytics
+
+There are three analytics views. All of them count *actions students took*, not
+correctness — a card has no right answer to check against, so every number below
+is a tally of button presses, page views, or elapsed time.
+
+<Note>
+Opening a deck through **View as student** records nothing, against either the
+student or you. It also starts you on a full practice pile with nothing mastered,
+because it shows you a fresh deck rather than that student's progress.
+</Note>
+
+### Course-wide deck analytics
+
+**View Analytics** on the deck table gives two bar charts covering every deck in
+the course:
+
+- **Deck Views** — how many times a student opened each deck. This counts
+  openings, not students, so one student returning ten times reads the same as ten
+  students arriving once.
+- **Deck Progress Resets** — how many times a student emptied their mastered pile
+  for that deck, using either **Reset Progress** or **Start Over**.
+
+### Aggregated card analytics
+
+The **Analytics** entry in a deck's sidebar is headed **Aggregated Card
+Analytics**, and gives six bar charts, each showing the deck's top ten cards on
+one metric, highest first, summed across all students:
+
+| Chart | What it ranks |
+| --- | --- |
+| **Prompt Views** | How often the question side was shown |
+| **Returned to Deck** | How often a mastered card was put back into the practice pile |
+| **Avg. Time on Answer (s)** | Average seconds between the question appearing and the student flipping the card |
+| **Avg. Time for "Got It" (s)** | Average seconds between the answer appearing and **Got It!** |
+| **Avg. Time for "Keep Trying" (s)** | Average seconds between the answer appearing and **Keep Trying** |
+| **% Got It** | **Got It!** presses as a share of all **Got It!** and **Keep Trying** presses on that card |
+
+<Note>
+Every chart is ranked highest-first, including **% Got It** — so that one shows
+the ten cards students got most easily, which is rarely the question you are
+asking. To find the cards students struggle with, read **Avg. Time for "Keep
+Trying"** and **Returned to Deck**, or sort the per-card table on
+[Student Analytics](#student-analytics) by **'Keep Trying' Count**.
+</Note>
+
+### Student analytics
+
+**Student Analytics** in a deck's sidebar has two tabs. Both are sortable, carry a
+filter box under every column, paginate at 20 rows with a 10/20/50/100 selector,
+and have their own **Export CSV** button. Both read "No student interaction data
+available for this deck." until at least one student has opened it, and a student
+who has not opened the deck has no row at all.
+
+**Aggregated View** — one row per student:
+
+| Column | Contents |
+| --- | --- |
+| **Student** | The student's name |
+| **Cards Mastered** | Cards currently in that student's mastered pile |
+| **Cards Not Mastered** | Cards the student mastered and then put back |
+| **Total Prompt Views** | Question views across the whole deck |
+| **Total Answer Views** | Answer views across the whole deck |
+| **Total 'Returned to Deck'** | Single cards moved back out of the mastered pile |
+
+<Warning>
+**Cards Not Mastered** is not "cards the student has not reached yet". It counts
+only cards that were mastered at some point and then returned to the practice
+pile — including everything returned in bulk by **Reset Progress**. A student who
+has never pressed **Got It!** on a card contributes nothing to this column, so a
+student who has barely started the deck shows zero in *both* count columns. Read
+**Cards Mastered** against the deck's card count for coverage.
+</Warning>
+
+**Detailed View** — one row per student per card, with the student's name, the
+**Card** title, and then **Prompt Views**, **Answer Views**, **'Got It' Count**,
+**'Keep Trying' Count**, **Returned to Deck**, **Avg. Answer Time (s)**,
+**Avg. 'Got It' Time (s)**, and **Avg. 'Keep Trying' Time (s)**.
+
+<Note>
+The **Card** column of the Detailed View can only name the deck's first ten
+cards. Rows for cards past the tenth fall back to a numeric placeholder such as
+"Card 412" instead of the card's title. Sorting and filtering on that column
+still work; the label is what is missing.
+</Note>
+
+Both exports write exactly the columns of the table they sit above. See
+[Exports](/staff/exports#flashcard-analytics) for the file names.
+
+## Reusing decks in a new term
+
+Decks are copied between courses from the command line, not the interface:
+
+```bash
+# Preview first — nothing is written
+pawtograder flashcards copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all --dry-run
+
+# Then copy for real
+pawtograder flashcards copy \
+  --source-class cs3500-fall-2025 \
+  --target-class cs3500-spring-2026 \
+  --all
+```
+
+The copy brings each deck's name, description, and every card, in order. It does
+not bring student progress or any recorded activity — the new course's decks
+start with clean analytics. Use `--deck <id or name>` in place of `--all` for a
+single deck; a name that matches more than one deck is rejected, and you are
+asked for the deck's id instead. You need access to both courses.
+
+`pawtograder flashcards list --class <course>` prints the decks in a course with
+their card counts. See [Command line tools](/staff/cli) for installation and
+authentication, and the [CLI reference](/developers/cli#flashcards) for every
+flag.
+
+## Deleting decks and cards
+
+The delete button in the deck table's **Actions** column asks to confirm ("This
+action cannot be undone") and then removes the deck, every card in it, and all
+student progress and recorded activity for it. There is no soft delete and no
+restore.
+
+Deleting a single card, from the card's own delete button or by removing it from
+the YAML editor, discards every student's mastery record for that card, and
+cannot be undone.
+
+<Warning>
+Deletion is the only way to take a deck away from students, and it takes the
+analytics with it. If you want the practice data but not the deck in front of
+students, export the two student analytics tables to CSV first.
+</Warning>
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Flashcards (student view)" icon="clone" href="/students/flashcards">
+    What students see and do in a deck, and what the two piles mean to them.
+  </Card>
+  <Card title="Feature flags" icon="sliders" href="/staff/feature-flags">
+    The `flashcards` flag, what it hides, and what it does not.
+  </Card>
+  <Card title="Exports" icon="file-export" href="/staff/exports">
+    Every CSV in the course, including the two flashcard analytics tables.
+  </Card>
+  <Card title="Command line tools" icon="terminal" href="/staff/cli">
+    Copying decks, surveys, and assignments into a new term.
+  </Card>
+</CardGroup>
