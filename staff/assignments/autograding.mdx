@@ -8,7 +8,11 @@ icon: "robot"
 
 Pawtograder's autograder is a GitHub Action,
 [`pawtograder/assignment-action`](https://github.com/pawtograder/assignment-action),
-that runs inside each student repository on every push. It overlays the
+that runs inside each student repository on every push.
+
+<Note>
+If you want a GitHub repository for students without running an autograder — for example, a writing assignment or a project where you grade by hand — uncheck **Enable autograder (GitHub Actions)** when creating the assignment. The handout is created without `grade.yml`, so no Actions workflow runs and every push creates a submission for hand-grading automatically. See [Assignment Configuration](/staff/assignments/configuration) for details.
+</Note> It overlays the
 student's submission onto your grader repo, runs the linter, build, and
 instructor test suite (and optionally the student's own tests with
 mutation/coverage analysis), then reports per-test results, scores, and
