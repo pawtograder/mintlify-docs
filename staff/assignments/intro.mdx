@@ -10,9 +10,14 @@ Each Pawtograder assignment is backed by a **handout** repository (starter
 code) and, optionally, a **grader** repository (instructor tests and the
 `pawtograder.yml` config). When you release an assignment, Pawtograder
 creates a private student repository from the handout for every student
-(or group). The autograder runs on every push and reports results back
-to Pawtograder, where you can handgrade against rubrics, release results,
-and respond to regrade requests.
+(or group). By default, the autograder runs on every push and reports
+results back to Pawtograder, where you can handgrade against rubrics,
+release results, and respond to regrade requests.
+
+You can also create **repo-only** assignments by disabling the autograder.
+In this mode, every push to the student repository creates a submission for
+hand-grading — no `#submit` commit message is needed, and no GitHub Actions
+workflow runs. See [Configuration](/staff/assignments/configuration) for details.
 
 ## First-time setup checklist
 
