@@ -1,0 +1,101 @@
+---
+title: "Discord Integration"
+description: "Connect your course to a Discord server so help requests and regrade requests post automatically to Discord channels, and students receive role-based access"
+icon: "discord"
+---
+
+# Discord Integration
+
+Pawtograder can connect your course to a Discord server to:
+
+- Post help requests and regrade requests to Discord channels automatically
+- Assign students and staff their course roles in the server
+- Invite students to the server when the **Student Discord invitations** feature flag is on
+
+The integration is configured from **Course Settings → Discord**.
+
+## Prerequisites
+
+Before connecting a server you need a Discord application with a bot. If your Pawtograder deployment is already configured with one (ask your administrator), skip to [Connecting a server](#connecting-a-server).
+
+## Connecting a server
+
+1. Open **Course Settings → Discord** in the course navigation bar.
+2. In the **Discord Server** panel, click **Add Pawtograder to your Discord server**.
+3. Discord's consent screen opens. Pick the server you want to connect. You must have **Manage Server** permission on the server you choose — Discord only lists servers you can add a bot to, and that permission is what authorizes the course to use it.
+4. Click **Authorize**. Discord returns you to Pawtograder, which confirms the bot is in the server and records the connection.
+
+<Note>
+One unarchived course per server. If the server you pick is already connected to another active course, the connection is refused and the panel tells you which course holds it.
+</Note>
+
+After connecting, the **Discord Server** panel shows the server name, who connected it, and when. It also runs a health check and reports any problems the bot needs fixed before it can work.
+
+## Health check
+
+A bot can be installed and still fail every operation. The panel checks four things and tells you exactly what to fix:
+
+| Status | What it means | How to fix it |
+| --- | --- | --- |
+| **Not connected** | No server is linked, or the bot was removed after connecting | Click **Add Pawtograder to your Discord server** |
+| **Missing permissions** | The bot is in the server but lacks one or more required permissions | Click **Re-authorize the bot with the required permissions** — the panel names each missing permission |
+| **Role hierarchy problem** | The bot's role sits at or below a course role, so Discord refuses to assign it | In Discord, open **Server Settings → Roles** and drag the **Pawtograder** role above the course roles (Student, Grader, Instructor) |
+| **Channel permission problem** | A channel override blocks the bot from posting or creating invites | Open **Edit Channel → Permissions** on the named channel, add the **Pawtograder** role, and allow the listed permissions |
+| **Connected and working** | Everything is in order | Nothing to do |
+
+<Warning>
+Discord reports a role-hierarchy failure with the same error code as a missing permission (`50013`), so the two are indistinguishable from the error alone. The panel shows both the bot's role position and the highest course role position so you can tell them apart.
+</Warning>
+
+Pawtograder requests exactly six permissions and no others: **View Channels**, **Manage Roles**, **Manage Channels**, **Create Invite**, **Send Messages**, and **Read Message History**. Administrator is deliberately not requested.
+
+## Channel organization
+
+By default, Pawtograder creates channels at the top level of the server. To group them under a category:
+
+1. In Discord, enable **Developer Mode** under **Settings → Advanced**.
+2. Right-click the category you want to use and select **Copy Channel ID**.
+3. Back in Pawtograder, open the **Channel Organization** section and paste the ID into **Channel Category ID (Optional)**.
+4. Click **Save**.
+
+<Note>
+The channel category ID is cleared automatically if the course moves to a different server, because the ID belongs to the original server.
+</Note>
+
+## Moving to a different server
+
+To connect a different server, click **Connect a different Discord server** in the **Discord Server** panel. Discord's consent screen opens with the server picker, so you can choose a new server. After you authorize, Pawtograder forgets the roles, channels, and tracked messages it created in the old server and starts creating them in the new one. The originals are left in the old server for an administrator to delete, and nobody is removed from it.
+
+## Disconnecting
+
+To remove the connection entirely, click **Disconnect Discord** in the **Discord Server** panel and confirm. Pawtograder forgets the roles and channels it created; those still exist in Discord and can be deleted by a server administrator. Nobody is removed from the server.
+
+## Student invitations
+
+Students are not added to the server automatically. To invite them:
+
+1. Turn on the **Student Discord invitations** feature flag under **Course Settings → Feature flags**.
+2. Students who have linked their Discord account (via **Connect Discord** on their dashboard) receive an invitation the next time the sync runs.
+
+Students who have not linked a Discord account see a **Connect Discord** prompt on their dashboard when the flag is on and a server is connected.
+
+See [Feature flags](/staff/feature-flags#student-discord-invitations) for what happens when you turn the flag back off.
+
+## Linking your own Discord account
+
+Staff members can link their Discord account to receive notifications about help requests and regrade requests in Discord. On the **Course Settings → Discord** page, click **Connect Discord** and authorize through Discord's OAuth screen.
+
+## Calendar integration
+
+The **Calendar Integration** section on the same page lets you paste an ICS URL for office hours or course events. Pawtograder re-syncs the calendar every five minutes and posts updates to the configured Discord channels.
+
+## Troubleshooting
+
+**The bot is in the server but roles are not being assigned.**
+Check the health panel. The most common cause is the role hierarchy: Discord refuses to assign a role at or above the bot's own highest role and reports it as `50013 Missing Permissions` — the same code as not holding Manage Roles at all. Drag the **Pawtograder** role above the course roles in **Server Settings → Roles** and click **Re-check**.
+
+**Students are not receiving invitations.**
+Confirm the **Student Discord invitations** flag is on and that the students have linked their Discord accounts. Students with no linked account have no invite row — every step that creates an invite requires a Discord user ID, and linking is the only thing that sets it.
+
+**The panel says "Could not check the Discord bot installation."**
+This means Pawtograder could not reach Discord to run the check, not that the bot is missing. Try again in a moment.
