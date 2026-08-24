@@ -1,92 +1,110 @@
 ---
 title: "Course Settings"
-description: "Configure course-wide settings including time zones, late tokens, and grading policies"
+description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
 # Course Settings
 
-Course settings allow instructors to configure global preferences that apply across all course features.
+**Course Settings** is a menu, not a page. Its trigger is a button with no link:
+clicking it opens the menu and the address in your browser does not change. Every
+course-wide setting lives on one of the menu's 14 entries, so this page is an
+index — find the entry you want below, then follow the link for the details.
 
-## Time Zone Configuration
+<Frame>
+  <img src="/images/staff/course-settings-menu-1787281367482.png" alt="Course navigation with the Course Settings menu open, listing Discord, Enrollments, LMS (LTI) Sync, Feature flags, GitHub Templates, Lab Sections, Flashcard Decks, Discussion Topics, Discussion Engagement, Grading Conflicts, Due Date Extensions, Audit Log, Emailer, and Workflow Runs" />
+</Frame>
 
-Pawtograder supports configurable time zones for displaying dates and times throughout the platform. This ensures that all deadlines, timestamps, and schedules are shown in the appropriate time zone for your course.
+## The 14 entries
 
-### Setting Your Course Time Zone
+Routes are relative to `/course/<course_id>/`.
 
-1. Navigate to **Course Settings** in the course navigation menu
-2. Find the **Time Zone** setting
-3. Select your preferred time zone from the dropdown menu
-4. Click **Save** to apply the changes
-
-Once set, dates and times throughout Pawtograder default to this time zone for all users in the course. Individual viewers may switch their display to their browser's local time zone via the time-zone toggle in the user menu (Pawtograder prompts on first visit when the two differ). The preference is stored per-browser in `localStorage`; it does not change the course's configured time zone or affect other users.
-
-### Default Time Zone
-
-If no time zone is configured, Pawtograder defaults to **America/New_York** (Eastern Time).
-
-### Where Time Zones Apply
-
-The configured time zone affects:
-
-- **Assignment due dates**: Deadlines shown to students and staff
-- **Survey deadlines**: When surveys close for responses
-- **Poll deactivation times**: Automatic poll closing times
-- **Office hours schedules**: Queue availability times
-- **Gradebook timestamps**: When grades were entered or updated
-- **Discussion board posts**: Post and reply timestamps
-- **Self-review deadlines**: When self-reviews are due
-- **Submission timestamps**: When students submit work
-- **Export files**: Timestamps in the configured time zone
-
-### Time Zone Display
-
-When a time zone is configured:
-
-- Dates and times default to the course's configured time zone for all users; each viewer may opt to display them in their browser's local time zone instead (per-browser preference, stored in `localStorage`)
-- Countdown timers automatically calculate based on the configured time zone
-- Date pickers use the configured time zone for deadline selection
-- Export files include timestamps in the configured time zone
-
-### Admin View Default Time Zone
-
-For system administrators viewing courses across multiple time zones, a default time zone can be configured for the admin view to ensure consistent time display when managing multiple courses.
+| Entry | Route | What it does | Documentation |
+| --- | --- | --- | --- |
+| **Discord** | `manage/discord` | Connects the course to a Discord server, so help requests and regrade requests post automatically to Discord channels. Also holds the **Calendar Integration** section, which auto-syncs every 5 minutes. | Not yet documented |
+| **Enrollments** | `manage/course/enrollments` | The course roster table, plus a panel of university Student Information System (SIS) section links. | Not yet documented |
+| **LMS (LTI) Sync** | `manage/course/lti` | Syncs rosters from your LMS and pushes assignment grades back over LTI 1.3. | Not yet documented |
+| **Feature flags** | `manage/course/feature-flags` | Turns course features on or off. Navigation, dashboards, and student tools follow these flags. | [Feature flags](/staff/feature-flags) |
+| **GitHub Templates** | `manage/course/github` | Overrides the handout and solution (grader) template repositories used when creating new assignment repos. Blank fields inherit your GitHub org's default, then the Pawtograder default. | Not yet documented |
+| **Lab Sections** | `manage/course/lab-roster` | Shows which students are in each lab section, with a CSV export. Instructors get a **Manage lab sections** button that opens the lab section editor at `manage/course/lab-sections`. | [Lab sections](/staff/lab-sections) |
+| **Flashcard Decks** | `manage/course/flashcard-decks` | Creates and manages flashcard decks for student practice, with per-deck, per-card, and per-student analytics. | [Flashcard decks](/staff/flashcard-decks) |
+| **Discussion Topics** | `manage/discussion-topics` | Manages the topics students use to categorize discussion posts. | Not yet documented; [Discussion Board](/staff/discussion) covers how topics appear on the board |
+| **Discussion Engagement** | `manage/discussion-engagement` | Tracks student participation and karma on the discussion board, with an export. | [Discussion Board](/staff/discussion) |
+| **Grading Conflicts** | `manage/course/grading-conflicts` | Records conflicts of interest so staff are not assigned submissions they should not grade. | [Grading Assignments](/staff/assignments/grading-assignments) |
+| **Due Date Extensions** | `manage/course/due-date-extensions` | Three tabs: **Assignment Exceptions** (the class-wide late token allotment, every due-date exception in the course, and **Gift Tokens**), **Student Extensions** (a student-wide extension across the course's assignments), and **Roster Tokens** (each student's token balance). Extensions for one assignment are usually granted from that assignment's own **Manage Due Date Exceptions** page. | [Extensions](/staff/assignments/extensions) |
+| **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
+| **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
+| **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
 
 <Note>
-The time zone setting is course-wide and applies to all students and staff in the course. Individual users cannot override this setting.
+Two entries do not match the route they open, which matters if you are reading
+URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, and
+**Emailer** opens `manage/course/emails`.
 </Note>
 
-<Tip>
-Set your time zone to match your institution's location or the primary location where your course is taught. This ensures that due dates and times are intuitive for your students.
-</Tip>
+**Discussion Topics** and **Discussion Engagement** appear only when the
+`discussion` feature flag is on for your course. Turn it on under
+**Course Settings → Feature flags**.
 
-## Late Token Policy
+### What graders see
 
-Configure the class-wide late token policy that determines how many late tokens students receive and how they can be used for assignment extensions.
+A grader's menu is a subset of an instructor's. Graders see five entries:
+**Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
+and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
+**Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
+Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
+instructor-only.
 
-### Configuring Late Tokens
+On **Grading Conflicts**, a grader sees only their own conflicts and is told to
+contact an instructor about anyone else's. Instructors see the whole class.
 
-1. Navigate to **Course Settings**
-2. Find the **Late Tokens** section
-3. Set the number of late tokens available to each student
-4. Configure how many tokens can be used per assignment (set per-assignment)
-5. Define the extension period for each token (typically 24 hours)
+## Course time zone
 
-See [Extensions](/staff/assignments/extensions) for more details on late token configuration, and the [Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions) documentation for how students use late tokens.
+Each course has its own time zone, and every date and time rendered inside the
+course uses it: due dates, deadlines, countdowns, date pickers, and timestamps.
 
-## Grading Conflicts
+The course time zone is **not editable from the course interface**. There is no
+time zone field on any Course Settings entry. If your course needs a different
+time zone, ask a Pawtograder administrator to change it. When a course has no
+time zone configured, Pawtograder falls back to `America/New_York`.
 
-Course staff can declare conflicts of interest to ensure they don't grade assignments where conflicts exist.
+Each viewer can switch their own display to their browser's local time zone
+through **Time Zone Settings** in the user menu, and Pawtograder offers the
+choice automatically on your first visit if the two time zones differ. The
+preference is stored per browser in `localStorage`.
 
-Graders can self-input their conflicts under **Course Settings** → **Grading Conflicts**, and instructors can review and enter conflicts for all graders in the class.
+<Note>
+Switching your display to your browser's local time zone affects only your own
+browser. It does not change the course's configured time zone or what anyone else
+sees.
+</Note>
 
-See [Grading Assignments](/staff/assignments/grading-assignments) for more details on managing grading conflicts.
+## Class late token policy
 
-## Course Display Settings
+The class-wide late token allotment lives under **Course Settings → Due Date
+Extensions → Assignment Exceptions**, in the **Class Late Token Settings** card.
+Set **Late Tokens Per Student**, described in the form as "Number of late tokens
+each student receives for the entire class".
 
-Additional course-wide settings may include:
+How many of those tokens a student may spend on a single assignment is set per
+assignment, as **Max late tokens** on the assignment form. Each token extends the
+deadline by 24 hours.
 
-- Course name and description
-- Enrollment synchronization preferences
-- GitHub organization settings
-- Email notification preferences
+The same entry's **Student Extensions** tab is where you grant one student a
+blanket extension across the course's assignments — see
+[Extensions → Granting a student-wide extension](/staff/assignments/extensions#granting-a-student-wide-extension).
+
+See [Extensions](/staff/assignments/extensions) for the rest of the late token
+and extension settings, including gifted tokens, and
+[Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions)
+for how students spend them.
+
+## Grading conflicts
+
+Course staff declare conflicts of interest so that they are not asked to grade
+submissions where a conflict exists. Add one with **Add Conflict** under
+**Course Settings → Grading Conflicts**. Graders can enter their own conflicts;
+instructors can review and enter conflicts for everyone in the class.
+
+See [Grading Assignments](/staff/assignments/grading-assignments) for how
+conflicts affect grader assignment.

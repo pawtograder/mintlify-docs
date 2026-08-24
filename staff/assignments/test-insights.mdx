@@ -4,54 +4,72 @@ description: "Aggregate autograder failures across the class to find systemic is
 icon: "chart-line"
 ---
 
-Test Insights aggregates autograder results across every active submission in an assignment so you can spot a flaky test, an ambiguous spec, or an off-by-one in your reference solution without clicking through individual submissions. From any error group you can view affected students, copy their emails, pin the error globally, or launch a bulk regrade against a chosen grader version.
+Test Insights aggregates autograder results across every active submission in an assignment so you can spot a flaky test, an ambiguous spec, or an off-by-one in your reference solution without clicking through individual submissions. From any error group you can view the affected submissions, copy the students' emails, link the error to a discussion thread, or launch a bulk regrade against a chosen grader version.
 
-Open an assignment's management page and select the **Test Insights** tab.
+Open an assignment's management page and select **Test Insights** in the left sidebar. The page is open to instructors and graders. On assignments with no repository the sidebar entry is present but disabled, with the tooltip "Not applicable for assignments without a repository".
 
-## Overview
+The page has two tabs, **Performance Overview** (the default) and **Common Errors**. The Common Errors tab carries a parenthesized group count when there is at least one group, so it reads **Common Errors (3)** rather than plain **Common Errors**.
 
-The overview tab summarizes how the class is doing against the autograder:
+<Note>
+Every figure on this page is computed over the assignment's *active* submissions, whoever they belong to — including your own staff [test submission](/staff/assignments/testing). Allow for that when reading class-wide counts.
+</Note>
+
+## Performance Overview
+
+The first tab summarizes how the class is doing against the autograder:
 
 - **Total Submissions** and how many have graded results.
 - **Tests Analyzed** — the number of distinct test cases in the suite.
 - **Avg Pass Rate** across all tests.
 - **Hardest Test** — the test with the lowest pass rate.
-- **Overall Score Distribution** — a bar chart bucketing students by score.
-- **Test Performance Overview** — a sortable table of every test with difficulty badge, pass rate, average score, total attempts, passing count, and failing count.
-- **Submissions to Full Marks** — for tests where students can converge on full credit, the count of students with and without full marks and the average/median number of submissions it took.
+- **Overall Score Distribution** — a bar chart bucketing students into `100%`, `90-99%`, `80-89%`, `70-79%`, `60-69%`, `50-59%`, `1-49%`, and `0%`.
+- **Test Performance Overview** — a table of every test with a difficulty badge (**Easy** at 80% pass rate and above, **Medium** from 60%, **Hard** from 40%, **Very Hard** below that), pass rate, average score, total attempts, passing count, and failing count. Rows are ordered hardest first; there is no column sorting.
+- **Submissions to Full Marks** — four assignment-level figures derived from the autograder's overall score: **Students with Full Marks**, **Students Without Full Marks**, **Avg Submissions to Full Marks**, and **Median Submissions**. The last two render `N/A` when nobody has full marks.
 
-## Common Errors Explorer
+<Note>
+**Avg Submissions to Full Marks** and **Median Submissions** count the submission number of each student's *active* submission, not the first submission that earned full marks. A student who kept pushing after reaching full credit inflates the figure, so read both as upper bounds.
+</Note>
 
-The explorer groups failing test results by normalized output, so the same `AssertionError: expected 5 but was 4` from 30 different students appears as a single row instead of 30.
+## Common Errors
 
-Each group shows the test name and part, an error signature, the number of affected submissions, and the average score on that test. Expanding a group reveals sample error outputs and a button to load and copy the email addresses of every affected student.
+This tab groups failing test results by normalized output, so the same `AssertionError: expected 5 but was 4` from 30 different students appears as a single row instead of 30. Normalizing replaces the parts that vary between runs — hex addresses become `<hex>`, ISO timestamps become `<timestamp>`, `at line 42` becomes `at line <N>`, and runs of five or more digits become `<num>` — so stack traces and pointer values do not split one misconception into thirty groups.
+
+Only failing results with non-empty output are considered, and only groups meeting the minimum occurrence count are returned, at most 50 of them. When there are more, the result line reads "showing top 50 of N".
+
+Each group shows the test name and part, an error signature (the first 100 characters of one sample output), the number of affected submissions, and the average score on that test. Expanding a group reveals up to three distinct sample outputs and a **Show Student Emails** button that loads the email addresses of every affected student with a **Copy All** button beside them.
 
 ### Filtering and sorting
 
-Use the filter panel above the list to narrow results:
+Use the **Filter Errors** panel above the list to narrow results:
 
-- **Test Name** and **Test Part** — restrict to a specific test.
-- **Min Occurrences** — hide error patterns affecting fewer than N submissions (default 2).
-- **Search Output** — substring search across test name, signature, and sample outputs.
-- **Sort By** — occurrence count, average score, or test name, ascending or descending.
+- **Test Name** — restrict to one test, or **All Tests**.
+- **Test Part** — restrict to one part, or **All Parts**. Only shown when the suite reports parts.
+- **Min Occurrences** — hide error patterns affecting fewer than this many submissions. Defaults to 2, so a one-off failure is never a group.
+- **Search Output** — substring search across test name, error signature, and sample outputs.
+- **Sort By** — **Occurrence Count**, **Average Score**, or **Test Name**.
+- **Direction** — **Descending** or **Ascending**.
+
+Test Name, Test Part, and Min Occurrences are applied when the data is fetched; Search Output, Sort By, and Direction are applied in the browser to what came back.
 
 ### Actions on an error group
 
 Each expanded group exposes four actions:
 
-- **AI Analyze** — copies a pre-built prompt to your clipboard with context about the error and affected submissions. Paste it into the AI assistant of your choice to get analysis or draft a discussion post.
-- **View Submissions** — opens the autograder page with the affected submissions pre-selected.
+- **AI Analyze** — copies a pre-built prompt to your clipboard with context about the error and affected submissions. Paste it into the AI assistant of your choice to get analysis or draft a discussion post. Nothing is sent to a model from Pawtograder.
+- **View N Submissions** — navigates to the assignment's **Rerun Autograder** page with the affected submissions pre-selected. The button carries the count, and a "Navigating to Rerun Autograder" toast confirms how many were carried over.
 - **Regrade Submissions** — opens the regrade dialog (see below).
-- **Create Error Pin** — links this error pattern to a discussion thread. When a student hits the same error in the future, they see a callout pointing at your explanation. Pins can be scoped to this assignment or made global (class-wide). See [Discussion error pins](/staff/discussion) for details.
+- **Create Error Pin** — links this error pattern to a discussion thread. When a student hits the same error in the future, they see a callout pointing at your explanation. See [Discussion error pins](/staff/discussion) for details.
+
+Pins created here are always scoped to this assignment, and match on two rules: the test name exactly, plus the first 200 characters of the group's first sample output as a substring of the student's output. If the group has no sample output the dialog warns you that matching will fall back to the test name alone. Class-wide pins are created from the discussion side instead.
 
 ## Bulk regrade dialog
 
-The regrade dialog targets every submission in the selected error group. It lets you pick which grader version to run:
+The dialog is titled **Regrade Affected Submissions** and targets every submission in the selected error group. Under **Autograder Version** you pick which grader to run:
 
-- **Select a commit from main branch** — choose from the last 50 commits to the autograder repo's `main` branch (defaults to the latest).
-- **Custom SHA** — enter any valid SHA from the grader repository, including branches or tags.
+- **Select a commit from main branch** — choose from the last 50 commits recorded on the autograder repo's `main` branch. Leaving it on **Latest on main (default)** uses the newest.
+- **Or enter a custom SHA** — any valid SHA from the solution repository. Typing here clears the commit selection, and vice versa.
 
-The dialog also shows the affected student emails (collapsed by default, with a copy-all button) so you can notify students before kicking off the run.
+**Show Affected Student Emails** expands a collapsed list of the affected students with a **Copy All** button, so you can notify them before kicking off the run. The confirm button is labelled **Regrade N Submissions**.
 
 ### Auto-promote
 
@@ -62,18 +80,18 @@ Disable auto-promote when you're not yet sure the new grader version is correct.
 </Tip>
 
 <Warning>
-Regrading is asynchronous and may take several minutes depending on submission count. Track progress on the Workflow Runs page.
+Regrading is asynchronous and may take several minutes depending on submission count. Track progress on the [Workflow Runs](/staff/workflow-runs) page.
 </Warning>
 
 ## Typical workflow
 
 <Steps>
-<Step title="Scan the explorer after the deadline">
-Sort by occurrence count and look for groups affecting many students. A pattern of 10+ failures on the same test usually means either a widespread misconception or a broken test.
+<Step title="Scan Common Errors after the deadline">
+The list already arrives sorted by occurrence count, descending. Look for groups affecting many students: a pattern of 10+ failures on the same test usually means either a widespread misconception or a broken test.
 </Step>
 
 <Step title="Investigate the pattern">
-Expand the group and read the sample outputs. Use **AI Analyze** to get a starting analysis, or check the test source if it looks like a grader bug.
+Expand the group and read the sample outputs. Copy the **AI Analyze** prompt into an assistant for a starting analysis, or check the test source if it looks like a grader bug.
 </Step>
 
 <Step title="Take action">

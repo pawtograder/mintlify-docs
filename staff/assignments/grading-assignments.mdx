@@ -40,26 +40,20 @@ The algorithm offers several distribution modes:
 
 - **By submission**: Submissions are split between graders first. Each grader receives complete submissions with all selected rubric parts.
 - **By rubric part**: Rubric parts are split between graders first. Each submission is graded by multiple graders, each handling different rubric parts — allowing specialization.
-- **Assign to lab leaders**: Each submission is automatically assigned to all lab leaders of the student's lab section. No manual grader selection is needed.
+- **Assign to lab leaders**: Each submission is automatically assigned to all lab leaders of the student's [lab section](/staff/lab-sections). No manual grader selection is needed.
 - **Assign to group mentors**: Each group's submission is automatically assigned to the group's mentor. Submissions without groups or without assigned mentors are skipped. Grading conflicts are still respected.
 
 You can choose which rubric to assign (the "Grading Rubric" is the default, and what is used to calculate the student's grade for the assignment), and optionally choose which rubric parts to assign.
 
 The algorithm will only operate over unassigned grading tasks. To support complex workflows, you can manually assign some subsets at a time (filtering by section or tag).
 
-To select assignees (for "By submission" and "By rubric part" modes), you can filter by role (e.g. graders, instructors, or both), and optionally filter by tag or instructor group. The form will show which graders will be assigned, and you can manually override the selection of graders.
+To select assignees (for "By submission" and "By rubric part" modes), you can filter by role (**Instructors**, **Graders**, or **Instructors and graders**), and optionally filter those staff by tag. The form will show which graders will be assigned, and you can manually override the selection of graders.
 
 You can choose to reuse existing grading assignments (e.g. if you want to assign the same graders to the same submissions as a previous assignment, or even to assign the same graders a different rubric on the same submissions). Selecting this option will override all balancing efforts.
 
 Lastly, you can choose to enforce that graders are **not** assigned to the same submission as they were on a prior assignment or rubric. This feature is useful to assign meta-graders, where the meta-grader is a different grader than the one who graded the submission.
 
 You will be able to preview the assignments before creating them, and can manually tweak them through the drag-and-drop interface.
-
-## Instructor Groups
-
-Instructor groups let you organize course staff into teams for grading assignments. This is useful when you have multiple sections, campuses, or specialized grading teams — for example, to partition grading responsibilities across teaching teams, ensure graders only see submissions assigned to their group, or manage grading workflows independently for different course sections.
-
-To manage instructor groups, navigate to **Course Settings** and select **Instructor Groups**. You can create new groups, add or remove staff members, and view all existing groups. When assigning grading tasks, filter by instructor group to ensure that only staff from specific teams are assigned to grade particular submissions.
 
 ## Assigning Group Mentors
 
@@ -123,19 +117,12 @@ For group assignments, Pawtograder supports individual grading where each group 
 
 ### Enabling individual grading
 
-When creating grading assignments for a group assignment:
+Individual grading is not an option on the grading-assignment flow. It is a property of a **rubric part**, set in the rubric editor or in rubric YAML:
 
-1. Select the option to **Grade group members individually**.
-2. The system creates separate grading tasks for each student in the group.
-3. Each student's grade is recorded independently in the gradebook.
-4. Graders can assign different scores to different group members.
+- **Individual grading** (`is_individual_grading`) grades the part once per group member. The rubric sidebar shows a separate section per student, and checks and comments are scoped to that student.
+- **Assign to student** (`is_assign_to_student`) lets the grader pick which single student the part applies to, or skip it.
 
-### How individual grading works
-
-- **Separate rubric instances**: Each group member gets their own rubric evaluation.
-- **Independent scores**: Students in the same group can receive different grades.
-- **Shared submission**: All group members' grades are based on the same submitted work.
-- **Gradebook integration**: Individual grades appear in the gradebook under each student's name.
+A part can use one mode or the other, not both. See [Rubrics](/staff/assignments/rubrics) for the part-level fields and [Handgrading](/staff/assignments/handgrading) for what graders see.
 
 ### Best practices
 
@@ -152,32 +139,31 @@ Combine individual grading with peer feedback surveys to get student input on gr
 
 After grading tasks have been assigned, instructors can reassign them to different graders when a grader is unable to complete their assigned tasks, when workload needs to be rebalanced, or when a conflict of interest is discovered after assignment.
 
-### Reassigning individual submissions
+### Reassigning a single review
 
-1. Navigate to the assignment's **Grading Assignments** page.
-2. Find the submission or rubric part you want to reassign.
-3. Click **Reassign** next to the grader's name.
-4. Select a new grader from the dropdown.
-5. Optionally update the due date or add a note explaining the reassignment.
-6. Click **Confirm Reassignment**.
+Click the edit icon on the review's row in the **All Assignments** table to change its assignee or due date. See [Editing individual review assignments](#editing-individual-review-assignments) below.
 
-### Bulk reassignment
+### Reassigning one grader's remaining work
 
-1. Navigate to the assignment's **Grading Assignments** page.
-2. Select the submissions you want to reassign using checkboxes.
-3. Click **Bulk Reassign** at the top of the list.
-4. Choose the new grader(s) for the selected submissions.
-5. Optionally update due dates.
-6. Preview the changes before confirming.
-7. Click **Confirm Bulk Reassignment**.
+Reassignment in bulk is grader-centric, not submission-centric. Follow the **Reassign Grading by Grader** link on the **Manage Review Assignments** page, then:
+
+1. Select the grader whose remaining work you want to reassign.
+2. Choose the rubric.
+3. Set how many of that grader's incomplete submissions to reassign. The form tells you how many are incomplete for this rubric.
+4. Choose the target role (**Instructors**, **Graders**, or **Instructors and graders**), optionally filter those staff by tag, and optionally name specific assignees.
+5. Choose a load-balancing strategy: **Balance based on new assignments** or **Balance based on all assignments**.
+6. Set the review due date.
+7. Click **Prepare Reassignments**, adjust the draft in the drag-and-drop preview, then click **Reassign**.
+
+Each new grader inherits the same rubric parts the original grader was assigned.
 
 ### How reassignment works
 
 - When a submission is reassigned, it appears in the new grader's pending work list immediately.
-- If the new grader had already completed a different rubric part for the same submission, the system clears the `completed_at` timestamp so the new work appears as pending.
+- Even if the new grader had already marked a different rubric part of the same submission complete, the reassigned part still arrives as pending rather than being treated as already done.
 - Any existing grading work (comments, rubric checks) is preserved and remains visible to the new grader, who can continue or modify it.
 - Reassignments respect conflict-of-interest rules.
-- The system notifies the new grader of their assignment.
+- Graders are not notified automatically. Use **Generate Reminder Email** on the Grading Progress Dashboard to tell them.
 
 <Note>
 Reassignment preserves all existing grading work. If a grader has already started grading a submission, their work will remain visible to the new grader and can be continued or modified.
@@ -198,8 +184,8 @@ When a student submits a new version of their work after grading has begun, Pawt
 
 ## Bulk Operations on Submissions
 
-For row-selected bulk release, unrelease, mark-complete, and reassign
-operations, plus filtering by group mentor, see
+For row-selected bulk release and unrelease, the assignment-wide
+**Finalize grading** action, and filtering by group mentor, see
 [Bulk Actions](/staff/assignments/bulk-actions).
 
 ## Managing Review Assignments
@@ -285,7 +271,7 @@ The student overview page (accessible from **Manage** → **Students** → selec
 
 - **Email address**: The student's account email.
 - **Lecture section**: If enrolled in a Canvas/SIS section, displays the section name, meeting times, and location.
-- **Lab section**: Shows the lab section name, meeting times, location, and assigned section leaders.
+- **[Lab section](/staff/lab-sections)**: Shows the lab section name, meeting times, location, and assigned section leaders.
 
 ### Assignments table
 

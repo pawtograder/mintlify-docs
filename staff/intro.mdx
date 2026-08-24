@@ -6,66 +6,124 @@ icon: "chalkboard-user"
 
 # Welcome to Pawtograder - Course Staff Guide
 
-This guide will help you set up and manage Pawtograder for your course. Learn how to create assignments, manage submissions, and provide effective feedback to your students.
+This guide helps you set up and run a course in Pawtograder: creating assignments,
+grading submissions, answering questions, and tracking grades.
 
-Pawtograder has these key features for course staff:
+## Finding your way around
 
-- **Instructor Dashboard**: Overview of assignment metrics, grading progress, and student engagement
-- **Assignments**: Distributing and grading programming assignments, with complex rubrics and bulk grading assignments
-- **Discussion Board**: For students and staff to discuss course content and ask questions
-- **Office Hours**: For realtime Q&A by text or video
-- **Polls**: Quick in-class polling for comprehension checks and engagement
-- **Surveys**: Detailed feedback collection with customizable questions
-- **Gradebook**: For tracking student performance and managing grades
-- **Emailer**: For sending emails to students
+The course navigation bar is a single flat row. For an instructor it reads:
 
-## Course Configuration
+**Manage Assignments** · **Discussion** · **Office Hours** · **Gradebook** ·
+**Surveys** · **Polls** · **Course Settings**
 
-### Time Zone Settings
+Everything except **Course Settings** goes straight to a page. **Course Settings**
+is a menu: clicking it opens the menu and the address in your browser does not
+change. Pick one of its entries:
 
-Pawtograder supports configurable time zones for your course. Instructors can set the course time zone in the course settings, which affects how dates and times are displayed throughout the platform, including:
+**Discord**, **Enrollments**, **LMS (LTI) Sync**, **Feature flags**,
+**GitHub Templates**, **Lab Sections**, **Flashcard Decks**, **Discussion
+Topics**, **Discussion Engagement**, **Grading Conflicts**, **Due Date
+Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
 
-- Assignment due dates
-- Survey deadlines
-- Poll schedules
-- Office hours
-- Gradebook timestamps
+<Note>
+Most top-level entries are gated on course feature flags. If your course has
+Discussion, Office Hours, Gradebook, Surveys, or Polls turned off under
+[**Course Settings → Feature flags**](/staff/feature-flags), that entry is missing
+from the nav entirely. The Flashcards flag is student-facing only: turning it off
+takes **Flashcards** out of the student nav and leaves **Course Settings →
+Flashcard Decks** where it is for staff. Instructions elsewhere in this guide
+assume the relevant module is enabled.
+</Note>
 
-The default time zone is America/New_York (Eastern Time), but you can change this to match your course's location or preferred time zone. See [Course Settings](/staff/course-settings#time-zone-configuration) for configuration details.
+### What graders see
 
-## Instructor Dashboard
+Graders get a smaller navigation set than instructors. A grader has **no
+Gradebook entry at all** — neither the staff gradebook nor the student one — and
+does not see these **Course Settings** entries: **Enrollments**, **LMS (LTI)
+Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due
+Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
 
-The instructor dashboard provides a comprehensive overview of your course:
+A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
+**Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
+**Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
 
-- **Assignment metrics**: Track submission rates, grading progress, and completion status
-- **Grading progress**: See incomplete reviews and assignments needing attention
-- **Regrade requests**: Monitor open and resolved regrade requests
-- **Student engagement**: View response rates and participation across assignments
-- **Autograder health**: Track autograder pass rates and common issues
-- **Office hours utilization**: Monitor help request activity and staff workload
+## Key features
 
-The dashboard organizes assignments into three sections:
+- **Assignments**: distribute and grade programming assignments with autograders,
+  rubrics, groups, and bulk grading assignments
+- **Discussion**: a course discussion board for students and staff, with karma and
+  engagement reporting
+- **Office Hours**: realtime help queues, by text chat, video call, or in person
+- **Gradebook**: expression-based grade columns, with an instructor-only export
+- **Surveys**: SurveyJS-based feedback collection with per-survey response reports
+- **Polls**: quick in-class polling for comprehension checks
+- **[Flashcard Decks](/staff/flashcard-decks)**: practice decks with per-student and per-card analytics
+- **[Emailer](/staff/emails)**: compose and send email to course members from
+  **Course Settings → Emailer**
+- **[Workflow Runs](/staff/workflow-runs)** and
+  **[Audit Log](/staff/audit-log)**: autograder run health, and a log of
+  changes to assignments, groups, extensions, rubrics, submissions, reviews,
+  comments, and discussion threads
+- **Discord** and **LMS (LTI) Sync**: optional integrations for chat and for
+  roster/grade sync
 
-- **Upcoming**: Assignments with future due dates
-- **Past due**: Assignments with due dates that have passed
-- **Undated**: Assignments without specified due dates
+## The course home page
 
-Click on any metric to navigate directly to the relevant assignment page or grading interface.
+Opening a course as staff gives you a dashboard with these sections:
+
+- **Assignment Grading Overview**, with summary cards for **Assignments Needing
+  Attention**, **Incomplete Submission Reviews**, **Incomplete Review
+  Assignments**, **Grade Release Status**, and **Open Regrade Requests**
+- Three assignment tables: **Needs attention**, **Upcoming with no blocking
+  work**, and **Complete or stable**
+- **Open Office Hours Requests** — a list of currently open help requests, shown
+  only when Office Hours is enabled
+- **Workflow Runs Summary** — autograder run counts and error counts for **Last
+  Hour**, **Last 24 Hours**, and **Recent Errors**
+
+A **View as student** button in the header shows you the course the way a student
+sees it. See [Instructor Dashboard](/staff/instructor-dashboard) for what each
+card and column means.
+
+## Time zones
+
+Each course has a time zone that all due dates, deadlines, and timestamps are
+interpreted in. It defaults to `America/New_York`, and nothing in the course UI
+or the admin portal can change it — if your course's time zone is wrong, ask your
+Pawtograder administrator to set it directly.
+
+You can choose how times are *displayed* to you: open the user menu and pick
+**Time Zone Settings**, then choose **Course time zone** or **Your local time
+zone**. That preference is saved in your browser only and does not change any
+deadline. The header also shows the current course time zone as a
+**Course Time Zone** button.
 
 <CardGroup cols={2}>
   <Card title="Assignments" icon="code" href="/staff/assignments/intro">
     Create, distribute, and grade programming assignments with autograders and rubrics.
   </Card>
-  <Card title="AI Assistance" icon="robot" href="/staff/ai-assistance">
-    Use AI tools to help diagnose student errors and draft responses for office hours.
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings">
+    Enrollments, feature flags, lab sections, extensions, and the rest of the settings menu.
+  </Card>
+  <Card title="Gradebook" icon="table" href="/staff/gradebook">
+    Track grades with expression-based calculations.
+  </Card>
+  <Card title="Office Hours" icon="headset" href="/staff/office-hours/intro">
+    Run help queues, track TA time, and moderate requests.
+  </Card>
+  <Card title="Discussion" icon="comments" href="/staff/discussion">
+    Moderate the discussion board and review engagement.
   </Card>
   <Card title="Polls" icon="square-poll-vertical" href="/staff/polls/intro">
-    Conduct live in-class polling to check understanding and engage students.
+    Conduct live in-class polling to check understanding.
   </Card>
   <Card title="Surveys" icon="clipboard-list" href="/staff/surveys">
     Collect detailed feedback with customizable survey forms.
   </Card>
-  <Card title="Gradebook" icon="table" href="/staff/gradebook">
-    Track grades with powerful expression-based calculations.
+  <Card title="AI Assistance" icon="robot" href="/staff/ai-assistance">
+    Copy structured prompts into an AI assistant to help diagnose student errors.
+  </Card>
+  <Card title="Exporting Course Data" icon="file-export" href="/staff/exports">
+    Every CSV, JSON, ZIP, and Markdown download available to staff.
   </Card>
 </CardGroup>

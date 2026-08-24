@@ -1,0 +1,166 @@
+---
+title: "Audit Log"
+description: "What the course audit log records, what it leaves out, who can read it, and how long entries survive"
+icon: "scroll"
+---
+
+# Audit Log
+
+**Course Settings → Audit Log** is a read-only table of record-by-record
+changes to your course's data: who changed what, when, and from which IP
+address. The menu entry is instructor-only, and the page lives at
+`/course/<course_id>/manage/course/audit`.
+
+There is nothing to configure. Recording is always on: you cannot choose what
+the log covers, turn it off for your course, or edit or delete an entry once it
+exists.
+
+<Warning>
+**The page shows no rows, even when changes have been recorded.** The table
+renders with all its headers, reports a count of `0 Rows`, and shows no error,
+so nothing on screen tells you the rows are missing.
+
+This is a known issue with an open report against Pawtograder, and a fix is on the way.
+
+The consequence to carry away is that an empty audit log is **not** evidence
+that nothing happened in your course. If you are working through a grade dispute
+or an academic integrity case, do not treat this page as a clean record.
+</Warning>
+
+<Frame>
+  <img src="/images/staff/audit-log-1787313949495.png" alt="The Audit Log page rendering an empty table: the six column headers each with a filter box, pagination reading Page 1 of 0, and a count of 0 Rows, with no error shown" />
+</Frame>
+
+## What gets recorded
+
+Every recorded change produces one row, carrying:
+
+- **When** the change happened.
+- **Who** made it — the account, resolved against your roster for display.
+- **What** kind of course record changed — an assignment, a rubric check, a
+  gradebook column — shown in the **Table** column.
+- **The change itself** — the full record before and after, as JSON.
+- **The IP address** the change came from.
+
+The log covers changes to:
+
+- Assignments, assignment due date exceptions, assignment groups, and assignment
+  group membership
+- Rubric parts, rubric criteria, and rubric checks
+- Submissions, submission reviews, and submission comments (both global comments
+  and line annotations)
+- Gradebook columns and gradebook cell values
+- Discussion threads
+- Profiles and student tags
+- Lab sections and lab section meetings
+
+## What does not get recorded
+
+- **Most deletions.** Insert and update are recorded everywhere, but delete is
+  recorded only for rubric parts, criteria and checks, due date exceptions,
+  assignment group membership, lab section meetings, tags, gradebook columns,
+  and gradebook cell values. Deleting an assignment, a submission, a submission
+  comment, a discussion thread, an assignment group, a profile, or a lab section
+  leaves no audit row.
+- **Reads.** The log records writes. Nobody's viewing of a submission, a grade,
+  or a student's profile is recorded.
+- **Anything outside those record types.** Office hours activity, help requests,
+  polls, surveys, flashcards, enrollment changes, feature flag changes, emails
+  sent from the **Emailer**, and workflow runs are not in the audit log.
+
+## Can you see who changed a grade?
+
+For grades, yes — with a caveat about which column tells you who.
+
+- **Gradebook cell edits and overrides** are recorded, as inserts, updates, and
+  deletes on the gradebook's per-student values.
+- **Gradebook column changes** — adding a column, editing its expression or
+  maximum, releasing it — are recorded.
+- **Rubric-based grading** is recorded through submission reviews and through
+  submission comments and line annotations, which is where applied rubric checks
+  live.
+
+<Warning>
+The column labeled **Student Name** is not the student the row is about. It is
+the name of the account that performed the change, looked up in your roster. To
+find who edited a particular student's grade, filter on the **Table** and
+**Resource ID** columns and read **Student Name** as "actor".
+
+This is a known issue with an open report against Pawtograder, and a fix is on the way.
+
+When a change comes from a background job rather than a signed-in person — the
+autograder writing a submission, a gradebook recalculation — there is no account
+to name, so the column is blank. Expect that for a good share of the rows in a
+busy course.
+</Warning>
+
+## Reading the table
+
+The table has six columns: **Date**, **Student Name**, **IP Address**,
+**Table**, **Resource ID**, and **Change**. Rows are sorted newest-first by
+default; click any header to sort by it.
+
+**Change** shows only the top-level fields whose values differ, as `Was:` and
+`Now:` pairs. A field that gained a value shows just the new value; a field that
+lost one shows `Removed`. Hover a field name for the raw JSON of both sides.
+Fields whose values are themselves objects or arrays are left out of the diff,
+and if neither side of the change is an object the cell reads **Change not
+displayable as object diff**.
+
+**Resource ID** identifies the record *after* the change, so it is empty for
+recorded deletions — a Resource ID filter will never match one.
+
+### Filtering
+
+Every column header has a text box under it. Typing in it filters the rows
+already loaded, in your browser, on a case-insensitive substring match; it never
+goes back for rows it does not already have. The **Date** box matches the date
+as it is rendered, so you are searching the displayed text rather than a date
+range; there is no from/to date picker.
+
+<Note>
+The page loads every audit row for your course before filtering or paginating
+any of them. On a busy course this makes the first load slow. Paging controls at
+the bottom let you show 25, 50 (the default), 100, 200, or 500 rows at a time,
+and the row count under them reflects your active filters.
+</Note>
+
+### There is no export
+
+The audit log has no download or **Export to CSV** control, unlike most other
+staff tables. See [Exporting Course Data](/staff/exports) for what can be
+exported. If you need audit rows in a file, ask a Pawtograder administrator.
+
+## How far back the log goes
+
+**90 days.** Entries are discarded a whole day at a time once they pass 90 days
+old, by a job that runs nightly. Dropped days are gone permanently — there is no
+archive or cold copy inside the product.
+
+The 90-day window is fixed platform-wide. It is not configurable per course or
+per deployment.
+
+<Warning>
+If you need a change history to survive longer than 90 days — for an academic
+integrity case, a grade appeal, or an institutional records requirement — you
+have to arrange it before the ninetieth day, and you cannot do it from this
+page. Ask a Pawtograder administrator: an operator can preserve a specific day's
+entries instead of letting them drop.
+
+The audit log is the only part of your course's data that prunes itself. Its
+90-day window is much shorter than the retention period covering everything
+else, so do not treat the audit log as the long-term record of your course.
+</Warning>
+
+## Who can read it
+
+The **Audit Log** menu entry appears for instructors only; graders do not see
+it. Staff pages admit both instructors and graders, so a grader who types the
+URL reaches the page.
+
+## Related
+
+- [Course Settings](/staff/course-settings) — the rest of the Course Settings menu
+- [Gradebook](/staff/gradebook) — where the recorded grade changes are made
+- [Rubrics](/staff/assignments/rubrics) and [Grading Assignments](/staff/assignments/grading-assignments) — the recorded grading actions
+- [Extensions](/staff/assignments/extensions) — due date exceptions, which are recorded including deletions

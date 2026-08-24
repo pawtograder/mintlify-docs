@@ -1,101 +1,92 @@
 ---
 title: "Testing an Assignment"
-description: "Test assignments end-to-end with staff repositories before releasing to students"
+description: "Create a staff test repository, push to it, and grade your own submission before students see the assignment"
 icon: "flask-vial"
 ---
 
 # Testing an Assignment
 
-Although Pawtograder does *not* provide a feature to "impersonate" a student, it *does* provide a robust feature to allow staff to test an assignment. This feature provisions staff with a repository just like any other student would have, but it does *not* show up in the list of student submissions. You can even mark up the submission with rubric checks to perform a complete end-to-end test of the assignment.
+The **Test Assignment** page gives you a repository of your own for an assignment, provisioned exactly like a student's. You can push to it, watch the autograder run, open the resulting submission in the grading interface, and apply rubric checks — a complete end-to-end rehearsal before students see the assignment.
 
-## Creating a Test Repository
-
-After creating an assignment, you can test it by clicking the "Test Assignment" button, and then clicking "Create Repositories." This works for both individual and group assignments - for group assignments, the system will create a test group repository for you to test the group workflow.
-
-<Frame>
-  <img src="/images/staff/assignments/testing-1756921042053.png" alt="Test Assignment button on the assignment page" />
-</Frame>
-
-After a moment of processing, the page should show a link to your repository. You can then browse that repo, edit things, and commit/push to that repo.
-
-For group-only assignments, the test repository creation process properly handles group configurations, creating the appropriate group repository structure to verify that group permissions and workflows are configured correctly.
-
-<Frame>
-  <img src="/images/staff/assignments/testing-1756921127470.png" alt="Link to view the test repository" />
-</Frame>
-
-## Viewing Test Submissions
-
-After the submission completes, you'll see a link to view it on that "Test Assignment" page. You may need to refresh the page to see the link, which will only appear once the submission is complete.
-
-<Frame>
-  <img src="/images/staff/assignments/testing-1756921180898.png" alt="Link to view the test submission" />
-</Frame>
-
-## Grading Test Submissions
-
-The test submission page will look just like it will when viewing a student's submission. You can navigate between rubrics (if applicable) from the dropdown in the right sidebar. You can also navigate between submissions (from students or even from other staff members) from the dropdown in the top bar.
-
-<Frame>
-  <img src="/images/staff/assignments/testing-1756921280690.png" alt="Test submission grading interface with rubric sidebar" />
-</Frame>
-
-## Repository Analytics
-
-Pawtograder provides analytics for assignment repositories to help you understand student engagement and development patterns. Repository analytics include:
-
-- Commit history and frequency
-- Code contribution metrics
-- Development timeline visualization
-- Activity patterns across the assignment period
-
-These analytics are available for both test repositories and student repositories, allowing you to verify that the assignment workflow is functioning as expected before releasing to students.
+Your test submission stays out of the grading roster. The assignment dashboard's submission table and the **Rerun Autograder** table are both built from enrolled students, so nothing you push can be mistaken for student work. Test Insights is the exception — see [Where test submissions show up](#where-test-submissions-show-up).
 
 <Note>
-Repository analytics are particularly useful for group assignments, where you can track individual contributions and ensure equitable participation among group members.
+Testing an assignment is not the same as looking at the course through a student's eyes. For that, use **View as student** on the course home page: pick any enrolled student and see their whole course, read only. That control is instructor-only. The Test Assignment page's **Preview as student** button is much narrower — it shows *your own* submission under student rules, for one assignment.
 </Note>
 
-## Test Insights and Regrading
+## Create your test repository
 
-After students submit, you can use the **Test Insights** view to analyze common error patterns:
+<Frame>
+  <img src="/images/staff/assignments/test-assignment-1787281244996.png" alt="Test Assignment page with Test Assignment selected in the assignment sidebar, the Create my test repo button, and an empty Submission History table" />
+</Frame>
 
-### Viewing Common Errors
+1. Open the assignment and select **Test Assignment** in the left sidebar.
+2. Click **Create my test repo**. The label changes to **Creating your test repo...** while the request runs.
+3. On success you get a **Test repository created** toast reading "Your test repository for this assignment is ready. Refresh to see it." Reload the page and the button is replaced by a **Repository** box linking to the new repo on GitHub.
 
-The Test Insights page shows:
-- Error patterns grouped by test name and error signature
-- Number of affected submissions
-- Average scores for each error group
-- Sample error outputs
+Three things have to be in place first:
 
-### Regrading Workflow
+- Your Pawtograder account must have a GitHub username linked. Without one the request fails with "User has no Github username linked".
+- The assignment must have a template (handout) repository configured. Without one the request completes but creates nothing.
+- You must be an instructor or grader in the course. Staff test repositories are refused for anyone else.
 
-When you identify an error pattern that needs regrading:
+<Warning>
+**Create my test repo** creates a real repository in your course's GitHub organization, named `<course-slug>-<assignment-slug>-<your-github-username>`. You get one per assignment — the button disappears once a repository exists, and there is no control on this page to delete it. Clean up in GitHub if you need to start over.
+</Warning>
 
-1. Click **Regrade Submissions** on the error group
-2. Choose an autograder version:
-   - Select a recent commit from the main branch
-   - Or enter a custom SHA
-3. Optionally enable **Auto-promote** to make new scores official immediately
-4. View and copy affected student emails if needed
-5. Click **Regrade** to queue the submissions
+On a groups-only assignment you still get an **individual** repository, not a group one. This is deliberate: staff are usually not members of a student group, and without the exception they would get no repository at all. So a test repo exercises the handout, the autograder, and grading, but not group formation or group permissions. (If you *are* a member of an assignment group, the group repository path applies instead.)
 
-The regrade process runs asynchronously. You can monitor progress on the Workflow Runs page.
+## Push a commit and check the submission
 
-### Viewing Affected Submissions
+Commit and push to the test repository the way a student would. The autograder runs on the push, and the resulting submission appears in the **Submission History** table on the Test Assignment page.
 
-Click **View Submissions** on an error group to navigate to the Rerun Autograder page with those submissions pre-selected. This makes it easy to review the affected submissions before deciding whether to regrade.
+That table lists **only your own** submissions, so it is empty until you create the repository and push something — an empty table here does not mean the assignment is broken. The columns are:
 
-## Rerunning the Autograder
+| Column | What it shows |
+| --- | --- |
+| **Submission #** | The submission id, with a flag icon marking the active submission. |
+| **Date** | Submission timestamp in the course time zone. |
+| **Commit** | The 7-character SHA, linked to the commit on GitHub. Reads `Manual` for a placeholder stub and `Upload` for a file upload. |
+| **Auto Grader Score** | `In Progress` until the grader reports back, `Error` if the run failed, otherwise `score/max_score`. |
+| **Total Score** | The review total out of the assignment's total points, once a grading review is complete. Reads `Pending` for the active submission before then, and is blank for superseded submissions. |
+| **Student view** | A **Preview as student** button for that row. |
 
-When testing or debugging grading issues, you can rerun the autograder on any submission:
+The **Commit History** button above the table opens the repository's commit list.
 
-1. **Reuse submission**: The rerun uses the same submission record rather than creating a new one
-2. **Select grader version**: Choose which version of the grader to use for the rerun:
-   - Use the current grader configuration
-   - Select a specific commit from the grader repository history
-   - Enter a manual SHA for precise version control
+## Grade your test submission
 
-This feature is particularly useful for:
-- Testing grader changes without affecting student submissions
-- Debugging grading issues with different grader versions
-- Validating fixes before deploying to production
+Clicking a row opens the submission in the staff grading view — the same interface you use on a student's work, not the student-facing one. Every submission gets a grading review as soon as it lands (provided the assignment has a grading rubric), so you can apply checks, leave annotations, and complete the review on your test submission exactly as you would on a real one.
+
+The submission page has these tabs: **Grade**, **Autograder Detail**, **Files**, plus **Checks** and **Deployments** on pull-request assignments and **Repo Analytics** when the assignment has repository analytics enabled.
+
+Two navigation controls are worth knowing:
+
+- When the assignment has more than one rubric, the grading sidebar shows a **Select active rubric** dropdown listing each one as `Active Rubric: <name>`. With a single rubric the dropdown is hidden.
+- The staff toolbar above the submission has a submission picker ("Select any submission to view..."), grouped into **Students** and **Instructors & Graders**. Use it to jump between your test submission and real ones.
+
+## Preview as student
+
+The Test Assignment page explains the difference in its own words:
+
+> Create your own repository to test the assignment. Opening a submission shows it the way you grade it. *Preview as student* shows the same submission as a student sees it — read only, with their grade-release, rubric-visibility, and hidden-output rules — and covers this assignment only.
+
+Click **Preview as student** on a submission row to enter the preview. An orange banner appears reading "Previewing your own submission as a student — read only, and only for this assignment. Navigate away to return to your staff view.", with an **Exit student view** button.
+
+<Note>
+The preview is your own staff profile wearing a student's view, so pages that depend on a real student enrollment — the student assignments dashboard, for instance — have nothing to show for it. That is why the preview is scoped to the assignment you opened it from and ends as soon as you navigate elsewhere. To see enrollment-keyed pages, use **View as student** from the course home page instead.
+</Note>
+
+## Where test submissions show up
+
+Because a test submission belongs to a staff profile rather than an enrolled student, it is included on some surfaces and excluded from others:
+
+- **Excluded** from the assignment dashboard's submission table and the grade exports built from it. That table enumerates enrolled students, so your test submission cannot leak into student grades.
+- **Excluded** from the **Rerun Autograder** table, which also lists student rows only. You cannot batch-rerun the autograder on your own test submission — push another commit instead.
+- **Included** in **Test Insights**. Its statistics and error grouping count every active submission on the assignment regardless of role, so your test submission contributes to **Total Submissions**, pass rates, and error groups. Discount it when reading class-wide numbers.
+- **Included** on the **Repo Analytics** tab when the assignment has repository analytics enabled — a staff test repository is treated like any other. See [Repository Analytics](/staff/assignments/repository-analytics).
+
+## Iterating on the autograder
+
+When a test run shows the grader is wrong, fix the grader and push to the autograder repository, then push a new commit to your test repository to get a fresh submission graded by the new version.
+
+To apply a corrected grader to work students have already submitted, use the assignment-level **Rerun Autograder** page or the bulk regrade in [Test Insights](/staff/assignments/test-insights). Both act on student submissions and create a new autograder result on the existing submission rather than a new submission.

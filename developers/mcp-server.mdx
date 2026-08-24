@@ -1,156 +1,310 @@
 ---
 title: "MCP Server"
-description: "Architecture, auth model, and extension points for the Pawtograder MCP server"
+description: "Endpoint, wire protocol, authorization model, tool inventory, and extension points for the Pawtograder MCP server"
 icon: "brain-circuit"
 ---
 
 # MCP Server
 
-Pawtograder exposes a Model Context Protocol (MCP) server as a Supabase
-Edge Function. This page covers the implementation: how authentication
-works, what the RLS guarantees are, what tools are available, and how to
-extend the server.
+Pawtograder exposes a Model Context Protocol (MCP) server as a Supabase Edge Function. The request handler and tool registry live in `supabase/functions/mcp-server/index.ts`, authentication in `supabase/functions/_shared/MCPAuth.ts`, and token issuance and revocation in `supabase/functions/mcp-tokens/index.ts`.
 
-For instructor-facing setup (connecting Claude Desktop, creating API
-tokens, using the AI Help button), see
-[AI assistance for helping students](/staff/ai-assistance).
+This page covers the endpoint, the wire protocol, the two authorization layers, the 16 tools, and how to add another. For instructor-facing setup, such as connecting Claude Desktop and creating a token, see [AI assistance for helping students](/staff/ai-assistance).
 
-## Architecture
+## Endpoint
 
-The MCP server is a Supabase Edge Function that speaks streamable HTTP
-MCP. In production it is reachable at:
+| Deployment | URL |
+| --- | --- |
+| Hosted | `<SUPABASE_URL>/functions/v1/mcp-server` |
+| Local | `http://127.0.0.1:54321/functions/v1/mcp-server` |
 
+The function is declared at `supabase/config.toml:775-779` and answers while `npx supabase functions serve` is running.
+
+<Warning>
+`http://127.0.0.1:54321/mcp` is a different server. That URL belongs to the Supabase CLI itself, which exposes your local Postgres to an AI assistant, and it is the one that shows up in `npx supabase status`. Pawtograder's MCP server answers only at `/functions/v1/mcp-server`. See [MCP endpoints](/developers/local-setup#mcp-endpoints).
+</Warning>
+
+## Protocol
+
+`initialize` advertises protocol version `2024-11-05`, and `tools` is the only capability (`index.ts:1862-1876`):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "protocolVersion": "2024-11-05",
+    "serverInfo": { "name": "pawtograder", "version": "0.1.0" },
+    "capabilities": { "tools": {} }
+  }
+}
 ```
-<SUPABASE_URL>/functions/v1/mcp-server
+
+`2024-11-05` is the older MCP revision, even though the handler implements the streamable HTTP transport. It also keeps the legacy HTTP+SSE `endpoint` event for backwards compatibility.
+
+| Method | Result |
+| --- | --- |
+| `initialize` | The handshake above |
+| `tools/list` | `name`, `description`, and `inputSchema` for all 16 tools (`index.ts:1878-1888`) |
+| `tools/call` | The tool's return value, stringified (see below) |
+| `notifications/initialized` | No response body; HTTP 202 |
+| `ping` | `result: {}` |
+| Anything else | JSON-RPC error `-32601`, `Method not found: <method>` (`index.ts:1922-1930`) |
+
+JSON-RPC batch arrays are supported (`index.ts:2156-2197`). Each request in the array that carries an `id` is handled in order and the responses come back as an array. A batch with no id-bearing request returns HTTP 202 and no body, as does a single request sent without an `id`.
+
+### Tool results are stringified JSON in a text block
+
+Every `tools/call` result wraps the handler's return value in one text block (`index.ts:1891-1908`):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [{ "type": "text", "text": "{\n  \"id\": 1234,\n  \"title\": \"Homework 1\"\n}" }]
+  }
+}
 ```
 
-When running Supabase locally, the function is served under the local
-Edge Function URL printed by `npx supabase start` (the Supabase CLI also
-prints a convenience MCP URL at `http://127.0.0.1:54321/mcp`).
+The text is `JSON.stringify(result, null, 2)`. There is no structured content, so a client has to parse `content[0].text` itself. A handler that finds nothing returns `null`, which arrives as the literal four-character string `null` inside that text block rather than as an error.
 
-The function shares types and helpers with the rest of Pawtograder's
-edge functions under `supabase/functions/_shared/`. Database queries go
-through the standard typed Supabase server client, so every query
-respects the same Postgres row-level security policies the rest of the
-app uses.
+Errors thrown inside a tool come back as a JSON-RPC error with code `-32000` and the thrown message, still under HTTP 200 (`index.ts:1932-1944`).
 
-## Authentication
+## Transport
 
-The server accepts long-lived JWTs issued by Pawtograder's API token
-system (Settings → API Tokens) in the `Authorization: Bearer <token>`
-header. Token properties:
+The method and `Accept` checks run before authentication, so several branches answer without a token:
 
-- Issued and signed by Pawtograder; carry the issuing user's identity.
-- Scoped to MCP read access (`mcp:read`).
-- Revocable from the UI; revocation is checked on every request.
-- Tracked with a `last_used_at` timestamp for audit.
+| Request | Response |
+| --- | --- |
+| `OPTIONS` | `200`, body `ok`, CORS headers |
+| `DELETE` (session terminate) | `202`, empty body, no authentication required |
+| `GET` without `Accept: text/event-stream` | `406` `{"error":"Must accept text/event-stream"}`, no authentication required |
+| `GET` with `Accept: text/event-stream` and no token | `401` `{"error":"Missing Authorization header"}` |
+| `GET` with `Accept: text/event-stream` and a valid token | `200` SSE stream |
+| `POST` with no token | `401` JSON-RPC error, code `-32000` |
+| `PUT` and any other method | `405` `{"error":"Method not allowed"}` |
 
-A request that arrives without a valid, non-revoked token is rejected
-with `401`.
+The two verbs use different error envelopes on the same URL. `POST` errors are JSON-RPC shaped, with code `-32000` for a 401 and `-32603` otherwise (`index.ts:2233-2244`). `GET` errors are a plain `{"error": "<message>"}` object (`index.ts:2121-2124`). Advertised CORS headers include `mcp-session-id` and `last-event-id`.
 
-## Authorization and RLS
+`POST` replies with `application/json` unless the client sends `Accept: text/event-stream` *without* also accepting JSON, in which case the responses are framed as SSE events. On `GET`, the server emits the legacy `endpoint` event only when `EDGE_FUNCTIONS_URL` is set; it deliberately refuses to derive that URL from `x-forwarded-*` or `Host`, because those are client-controllable (`index.ts:2018-2044`).
 
-Authorization happens in two layers:
+## API tokens
 
-1. **Role gate** – Before any tool runs, the server checks that the
-   authenticated user has `instructor` or `grader` role in the
-   class targeted by the request. Students cannot use the MCP server,
-   even with a valid token.
-2. **Postgres RLS** – Every database query runs as the authenticated
-   user, so the same RLS policies that govern the web app also govern
-   MCP responses. There is no service-role escalation inside tool
-   handlers.
+The server accepts tokens issued by Pawtograder's own API token system in the `Authorization: Bearer <token>` header.
 
-The server is designed to never leak data that the same user couldn't
-see in the web app:
+| Property | Value | Source |
+| --- | --- | --- |
+| Prefix | `mcp_`, whichever token type you chose | `MCPAuth.ts:33`, `:151` |
+| Signature | HS256, signed with `MCP_JWT_SECRET` | `MCPAuth.ts:65-79`, `:151` |
+| Claims | `sub` (user id), `scopes`, `jti`, `iss: "pawtograder"`, `aud: "mcp"`, `exp`, `iat` | `MCPAuth.ts:141-148` |
+| Lifetime | 90 days by default, 1 to 365 accepted by the endpoint; the dialog always sends 90 | `mcp-tokens/index.ts:42`, `:191`; `components/settings/MCPTokensMenu.tsx:93` |
+| Revocation | Looked up in `revoked_token_ids` on every request | `MCPAuth.ts:203-230` |
+| Audit | `last_used_at` updated on both `GET` and `POST`, without blocking the response | `MCPAuth.ts:424-435` |
 
-- The `users` table is never queried directly from tool handlers.
-- The `is_private_profile` flag is not exposed in any tool response.
-- All access goes through views and tables already guarded by RLS.
+Create a token from the **user menu** on a course page: click your avatar, then **API Tokens**. It is not under Settings, and the whole menu item is hidden while you preview the course as a student (`app/course/[course_id]/UserMenu.tsx:787`). The same dialog issues CLI tokens; see the [CLI reference](/developers/cli#create-an-api-token).
 
-## Available tools
+### Scopes
 
-The full tool list is defined in the edge function source. At time of
-writing it covers:
+`VALID_SCOPES` holds four scopes: `mcp:read`, `mcp:write`, `cli:read`, and `cli:write` (`MCPAuth.ts:36-37`). The dialog maps the three token types onto them (`components/settings/MCPTokensMenu.tsx:17-21`):
 
-**Context**
+| Token type | Scopes issued |
+| --- | --- |
+| MCP (AI Assistants) | `mcp:read`, `mcp:write` |
+| CLI (Command Line) | `cli:read`, `cli:write` |
+| MCP + CLI | all four |
 
-- `get_help_request` — help request plus full chat history
-- `get_discussion_thread` — thread plus replies
-- `get_assignment` — assignment spec, `handout_url`, and rubric
+<Warning>
+An MCP token carries `mcp:write` as well as `mcp:read`. No tool requires it, because all 16 declare `requiredScope: "mcp:read"`, but the scope is in the token. Do not read "read-only tools" as "read-only token" when you reason about what a leaked token could do after a write tool ships.
+</Warning>
 
-**Submissions**
+A CLI-only token is rejected on the first `tools/call` with `403 Missing required scope: mcp:read`, because the scope check runs per tool inside `executeTool` (`index.ts:1738`, `MCPAuth.ts:375-378`).
 
-- `get_submission`, `list_submission_files`, `get_submission_files`
-- `list_submission_tests`, `get_test_output`, `get_submission_build_output`
+## Authorization
 
-**Repositories**
+Authorization happens in two layers, and they answer different questions.
 
-- `list_grader_files`, `get_grader_files`
-- `list_handout_files`, `get_handout_files`
+### Layer 1: is the caller staff anywhere on this deployment?
 
-**Search**
+`authenticateMCPRequest` runs before any tool (`MCPAuth.ts:300-363`), in this order:
 
-- `search_help_requests`, `search_discussion_threads`
-- `get_submissions_for_student`
+1. Reject a missing `Authorization` header, then a header that is not exactly two space-separated parts with a case-insensitive `bearer` first part.
+2. Verify the token signature and required claims with `verifyApiToken`.
+3. Look up `jti` in `revoked_token_ids`.
+4. Query `user_roles` with the **service role** for any non-disabled row where the user holds `instructor` or `grader`. Zero rows gives `403 User must be an instructor or grader in at least one class` (`MCPAuth.ts:351`).
 
-The authoritative list lives next to the handler implementations; treat
-this section as a quick reference, not a contract.
+<Warning>
+Step 4 is not per class. It asks only whether you are an instructor or grader in **at least one** class anywhere on the deployment, and it does not look at the `class_id` the request is about. There is no per-class check before a tool runs: `requireClassAccess` and `hasAccessToClass` exist only in `supabase/functions/mcp-server/auth.ts`, which nothing imports. Per-class scoping comes entirely from layer 2.
+</Warning>
 
-## Assignment handout context
+### Layer 2: Postgres row-level security
 
-Assignments carry an optional `handout_url` column that points to the
-spec students see. Several tools (notably `get_assignment` and the help
-request / thread context tools) include `handout_url` in their response
-so that an AI assistant can fetch the assignment description without
-needing additional credentials.
+Tool handlers never receive a service-role client. `createAuthenticatedSupabaseClient` builds a client from the **anon** key plus a Supabase JWT created for the calling user: ES256, signed with the JWK in `JWT_SECRET`, claims `sub: <userId>`, `role: "authenticated"`, `aud: "authenticated"`, and a **60-second expiry**, cached per user for about 55 seconds (`MCPAuth.ts:237-294`). Every query a tool makes therefore runs as that user under the same RLS policies as the web app, and most handlers also filter on `.eq("class_id", classId)` explicitly.
+
+The service role appears only in the authentication layer: the role probe above, the revocation lookup, and the `last_used_at` update. Nothing inside a tool handler escalates.
+
+Three privacy properties hold on top of RLS:
+
+- No tool handler queries the `users` table.
+- `is_private_profile` is not part of any response type (`supabase/functions/mcp-server/types.ts:6`).
+- Private profile ids are translated to public profiles before a response is built, so what comes back is the public display name (`getPublicProfiles`, `index.ts:465-469`). The response profile type carries only `id`, `name`, `avatar_url`, and `class_id`.
+
+<Note>
+`listGraderFiles` (`index.ts:1070-1076`) and `getGraderFilesFiltered` (`:1113-1124`) query `autograder` by `id` only. They accept `classId` and do not use it, unlike every other assignment handler, so cross-class isolation for the two grader-file tools comes entirely from RLS. The one policy on that table, `instructors rw`, is scoped through the assignment's class with `authorizeforclassinstructor` (`supabase/migrations/20250330003141_remote_schema.sql:2622-2624`), so isolation does hold. It also means a **grader** cannot read `autograder` at all: `list_grader_files` and `get_grader_files` return an empty file list for a grader rather than an error, because the handlers treat a failed lookup as no files.
+</Note>
+
+## Tools
+
+`TOOLS` (`index.ts:90-346`) holds 16 tools. Every one declares `requiredScope: "mcp:read"`; there is no write tool in the registry. `tools/list` maps directly over this object, so it is the authoritative inventory.
+
+<Note>
+Every tool takes `class_id` as an explicit parameter. There is no session, no "current class", and no default: a call that omits `class_id` fails schema validation. An assistant has to learn the class id from the prompt it was given.
+</Note>
+
+### Context
+
+| Tool | Required | Optional |
+| --- | --- | --- |
+| `get_help_request` | `help_request_id`, `class_id` | |
+| `get_discussion_thread` | `thread_id`, `class_id` | `include_replies` (default `true`) |
+| `get_assignment` | `assignment_id`, `class_id` | |
+
+### Submissions
+
+| Tool | Required | Optional |
+| --- | --- | --- |
+| `get_submission` | `submission_id`, `class_id` | `include_test_output`, `include_files` (both default `false`) |
+| `list_submission_files` | `submission_id`, `class_id` | |
+| `get_submission_files` | `submission_id`, `class_id` | `glob_pattern` |
+| `list_submission_tests` | `submission_id`, `class_id` | `only_failed` (default `false`) |
+| `get_test_output` | `submission_id`, `class_id` | `test_id`, `test_name` |
+| `get_submission_build_output` | `submission_id`, `class_id` | `include_lint` (default `true`) |
+| `get_submissions_for_student` | `student_profile_id`, `assignment_id`, `class_id` | `limit` (default `10`), `include_files` (default `false`) |
+
+`student_profile_id` is a string, and it is the student's **public** profile id (`index.ts:287`). Despite the plural name, `get_submissions_for_student` is a fetch by student and assignment, not a search.
+
+Both of `get_test_output`'s selectors are optional, so a call carrying only `submission_id` and `class_id` passes schema validation. Supply `test_id` or `test_name`.
+
+### Repositories
+
+| Tool | Required | Optional |
+| --- | --- | --- |
+| `list_grader_files` | `assignment_id`, `class_id` | |
+| `get_grader_files` | `assignment_id`, `class_id` | `glob_pattern` |
+| `list_handout_files` | `assignment_id`, `class_id` | |
+| `get_handout_files` | `assignment_id`, `class_id` | `glob_pattern` |
+
+These read from GitHub, capped at 100 files with a fetch concurrency of 10 (`index.ts:357-358`).
+
+### Search
+
+| Tool | Required | Optional |
+| --- | --- | --- |
+| `search_help_requests` | `class_id` | `assignment_id`, `status`, `limit` (default `20`) |
+| `search_discussion_threads` | `class_id` | `assignment_id`, `is_question`, `search_query`, `limit` (default `20`) |
+
+## Tools the in-app prompts name but the server does not implement
+
+The AI buttons in the staff UI generate a prompt that tells the assistant which tools to call. Three of those generators name tools that are not in the registry, so the assistant reports an unknown tool:
+
+| Prompt generator | Tool it names | Reality |
+| --- | --- | --- |
+| `components/ai-help/AIHelpButton.tsx:165` | `search_submissions` | No equivalent. Nothing in the registry searches across submissions. |
+| `lib/test-insights/AIHelpTestErrorButton.tsx:44` | `search_submissions` | Same. |
+| `components/ai-help/AIHelpSubmissionErrorButton.tsx:63` | `list_student_submissions` | The real tool is `get_submissions_for_student`. |
+
+`executeTool` throws `Unknown tool: <name>` for a name that is not a key of `TOOLS` (`index.ts:1734`), which is what a client sees for all three. If you are chasing an unknown-tool report, check the prompt generator before the server.
+
+The four repository tools appear in no prompt generator at all, and only `AIHelpButton.tsx` mentions `get_help_request` or `get_discussion_thread`.
+
+## Assignment and handout context
+
+`get_assignment` selects exactly `id`, `title`, `slug`, `description`, `handout_url`, `due_date`, `release_date`, `total_points`, `has_autograder`, and `class_id` (`index.ts:584-593`). It returns **no rubric**: the word `rubric` does not appear anywhere in `mcp-server/index.ts` or `mcp-server/types.ts`. Rubrics are not reachable over MCP at all, so an assistant that needs one has to be given it, or you export it with [`rubrics export`](/developers/cli#rubrics-export).
+
+`handout_url` lets an assistant fetch the written specification without any extra credentials. In `get_help_request`, however, the assignment block stays `null` unless the help request has a `referenced_submission_id`, because the handler derives the assignment from the referenced submission (`index.ts:1385-1405`). A help request with no submission attached carries no assignment context and no handout URL.
 
 ## Extension points
 
-Common reasons to extend the MCP server:
+**Adding a tool** takes two edits, not one:
 
-- **Adding a tool** — Define the tool descriptor (name, parameters,
-  description) and implement the handler. Read data through the
-  authenticated Supabase client so RLS is enforced automatically. Add
-  the tool to the registry so it shows up in `tools/list`.
-- **Expanding context** — When you add fields to existing tools, prefer
-  composing existing queries over loosening RLS. If a new field requires
-  privileged access, surface it through a dedicated view with explicit
-  RLS rather than service-role queries inside the handler.
-- **New auth scopes** — The API token system supports multiple scopes.
-  If a tool needs to mutate state (e.g. posting a draft response), add a
-  new scope rather than overloading `mcp:read`.
+1. Add the descriptor (`name`, `description`, `inputSchema`, `requiredScope`) to `TOOLS` at `index.ts:90`. This alone only makes the tool appear in `tools/list`.
+2. Add a `case` to the `switch` in `executeTool` (`index.ts:1741-1850`). Without it the call reaches `default` and throws `Tool not implemented: <name>`, which reaches the client as JSON-RPC `-32000`.
+
+Read data through `context.supabase`, the per-user client from layer 2, so RLS applies. Take `class_id` as a required parameter and filter on it, matching the rest of the registry.
+
+**Expanding an existing tool.** Prefer composing existing queries over loosening RLS. If a new field needs privileged access, add a view with its own RLS policy rather than a service-role query inside the handler.
+
+**Write tools.** `mcp:write` already exists in `VALID_SCOPES` and is already in every MCP token, so a mutating tool sets `requiredScope: "mcp:write"` and needs no new scope. Every MCP token already issued carries it.
+
+**Changing a tool signature.** Regenerate shared types with `npm run client-local` if the schema changed, and update the staff-facing tool list in [`staff/ai-assistance.mdx`](/staff/ai-assistance).
 
 ## Troubleshooting
 
 ### `401 Unauthorized`
 
-- Token revoked, expired, or malformed.
-- Missing `Authorization: Bearer` header.
+One of four messages, all from `authenticateMCPRequest` (`MCPAuth.ts:300-327`):
+
+| Message | Cause |
+| --- | --- |
+| `Missing Authorization header` | No `Authorization` header on the request |
+| `Invalid Authorization header format` | Not `Bearer <token>`; a `Basic` header lands here |
+| `Invalid or expired API token` | Bad signature, missing claims, or past `exp` (90 days by default) |
+| `API token has been revoked` | `jti` is in `revoked_token_ids` |
 
 ### `403 Forbidden`
 
-- The user is authenticated but not an instructor or grader in the
-  class the request targets.
+Two distinct causes:
 
-### `404` from a tool with no data
+- `User must be an instructor or grader in at least one class`. The token is valid, but the user holds no non-disabled `instructor` or `grader` role in **any** class. This is not about the class you targeted.
+- `Missing required scope: mcp:read`. The token was issued as CLI-only.
 
-- The query succeeded but RLS filtered the result to empty. Verify the
-  user really has access in the web app.
+### `500` naming an environment variable
+
+A message such as `MCP_JWT_SECRET must be set and at least 32 characters` is a deployment fault, not a problem with your token, and no token will work until it is fixed. `MCPConfigError` carries status 500 for exactly this reason (`MCPAuth.ts:413-418`), and `verifyApiToken` resolves the signing key *outside* its `try` block on purpose so a missing key is not reported as the caller's token being invalid (`MCPAuth.ts:165-168`).
+
+| Message | Set |
+| --- | --- |
+| `MCP_JWT_SECRET must be set and at least 32 characters` | `MCP_JWT_SECRET`, 32 characters or more |
+| `JWT_SECRET must be set. Generate with: supabase gen signing-key --algorithm ES256` | `JWT_SECRET` |
+| `JWT_SECRET must be a JWK JSON object for ES256 signing`, `JWK must have a 'kid' field`, `JWK must be an EC key with P-256 curve (ES256)`, `JWK must include private key component 'd'` | `JWT_SECRET` as a full ES256 P-256 private JWK, `kid` included |
+| `Server configuration error: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set` | Both, scoped to the edge runtime |
+
+The same missing `MCP_JWT_SECRET` also breaks token creation, which fails with `HTTP 500 {"error":"MCP_JWT_SECRET must be set and at least 32 characters"}`. Listing tokens keeps working, because `createApiToken` is called only on the create path (`mcp-tokens/index.ts:203`), so the API Tokens dialog looks healthy until you click **Create Token**. That call also precedes the `api_tokens` insert at `:207`, so a failed create leaves no unusable token row behind.
+
+<Tip>
+Check token creation first. If the dialog cannot issue a token, the deployment is misconfigured and nothing about your client is worth debugging yet.
+</Tip>
+
+### `503 Service Unavailable`
+
+`Could not verify token revocation status: <message>`. The `revoked_token_ids` lookup failed, so the request is rejected without deciding whether the token is good (`MCPAuth.ts:227`). It is deliberately not a 401, so a database or permission outage stays visible to monitoring instead of being reported as many revoked tokens.
+
+### A tool returns nothing
+
+The server never returns HTTP 404. A handler that finds no rows returns `null`, and `tools/call` wraps that as an ordinary result whose text is `null` under HTTP 200. Two causes look identical from the client:
+
+- The row does not exist, or `class_id` does not match it.
+- RLS filtered it out because the caller has no role in that class. Layer 1 lets the request through as long as the caller is staff *somewhere*, so a valid token pointed at the wrong class produces empty results rather than a 403.
+
+Confirm in the web app, as that user, that the data is visible at all.
 
 ### Local server not reachable
 
-- Confirm Supabase is running: `npx supabase status`.
-- Confirm the edge function is being served (the Supabase CLI runs
-  edge functions automatically when you start it; if you are using
-  `npx supabase functions serve` manually, make sure `mcp-server` is
-  in the served set).
+- Confirm the stack is up with `npx supabase status`, and that the URL is `/functions/v1/mcp-server` rather than `/mcp`.
+- Confirm `mcp-server` is in the served set if you run `npx supabase functions serve` manually with an explicit function list.
+- Pass your secrets. Functions started without `--env-file` have none of the variables above and fail in ways that look like authentication bugs. See [Local setup](/developers/local-setup#full-local-supabase-stack).
+- Set `EDGE_FUNCTIONS_URL` if a client needs the legacy SSE `endpoint` event. Without it the event is skipped and a warning is logged.
 
-## Contributing
+## Source layout
 
-The MCP server lives under `supabase/functions/mcp-server/` in the
-[platform repo](https://github.com/pawtograder/platform). When changing
-tool signatures, regenerate any shared types (`npm run client-local`)
-and update the staff-facing docs in
-[`staff/ai-assistance.mdx`](/staff/ai-assistance) if the tool list or
-setup flow changes.
+| Path | Contents |
+| --- | --- |
+| `supabase/functions/mcp-server/index.ts` | Request handling, `TOOLS`, `executeTool`, and every tool handler |
+| `supabase/functions/mcp-server/types.ts` | Privacy-safe response types |
+| `supabase/functions/_shared/MCPAuth.ts` | Token creation and verification, revocation, the role gate, per-user client |
+| `supabase/functions/mcp-tokens/index.ts` | Token issuance, listing, and revocation endpoints |
+
+Everything lives in the [platform repo](https://github.com/pawtograder/platform).
+
+<Warning>
+`supabase/functions/mcp-server/auth.ts` implements an OAuth flow plus `requireClassAccess` and `hasAccessToClass`, and nothing imports it. It contradicts the API-token model the server actually uses. Do not read it as documentation of current behavior.
+</Warning>
