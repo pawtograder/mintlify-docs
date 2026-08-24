@@ -30,6 +30,9 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 #### Grading and gradebook
 - **Safeguards on scores and completion** — Rubric point values are rejected if they are negative, grading completion is computed from each student's own reviews rather than an assignment-wide summary, and an out-of-date gradebook recalculation can no longer overwrite newer grades ([#922](https://github.com/pawtograder/platform/pull/922))
 
+#### Bug fixes
+- **Revoking an API token is now idempotent** — Clicking **Revoke** on an already-revoked token no longer produced a spurious error. The Revoke button is also disabled while a revocation is in flight, preventing a double-click from firing a second request ([#920](https://github.com/pawtograder/platform/pull/920))
+
 ### August 6, 2026
 
 #### Assignments
