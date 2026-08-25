@@ -33,6 +33,11 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 - **Discord role sync scoped to active courses** — Role synchronization now runs only for active courses and stops retrying failures that cannot succeed ([#924](https://github.com/pawtograder/platform/pull/924))
 - **Long-idle tabs no longer crash** — Returning to a Pawtograder tab left open for a long time no longer errors out when you come back to it ([#902](https://github.com/pawtograder/platform/pull/902))
 
+### August 11, 2026 (continued)
+
+#### Integrations
+- **MCP token revocation is now idempotent** — Revoking an already-revoked MCP token no longer produces an error. Double-clicking the Revoke button is also prevented while the request is in flight ([#920](https://github.com/pawtograder/platform/pull/920))
+
 ### August 11, 2026
 
 #### Grading and gradebook
