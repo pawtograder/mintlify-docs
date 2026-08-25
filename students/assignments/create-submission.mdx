@@ -122,7 +122,7 @@ Markdown files are automatically rendered with formatting, making it easy to rev
 Any single file over 50 MB is rejected with an error naming the file and its size. Two whole-submission ceilings apply as well: the submission is rejected if the repository zip exceeds 120 MB, or if it unzips to more than 300 MB. A submission can therefore be too large even when every file in it is under the per-file limit.
 
 <Note>
-Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Give binary artifacts a conventional file extension — a binary with an unusual extension or none at all is stored as text, which corrupts it.
+Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Files without a recognized binary extension are classified by their contents: a compiled executable or other file containing binary data is stored correctly regardless of whether it has an extension.
 </Note>
 
 ## Assignment Leaderboard
