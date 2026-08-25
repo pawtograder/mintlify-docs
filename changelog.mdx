@@ -8,6 +8,15 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 25, 2026
+
+#### Discord
+- **Guided Discord server setup** — Connecting a course to a Discord server is now a verified install flow. Instead of pasting a server ID into a text box, instructors click **Add Pawtograder to your Discord server**, complete Discord's own consent screen, and are returned to the settings page with the connection confirmed. The settings page now shows a live status panel that diagnoses exactly what is wrong when the bot is installed but cannot work: missing permissions are named individually with a re-authorize link, role-hierarchy problems show both positions with instructions to fix them, and channel-level permission overrides are reported per channel. Students now see a **Connect Discord** prompt on their dashboard when their course has Discord enabled, so they can link their account and receive their server invitation ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Cache invalidation fixes** — Moving a student between groups now correctly invalidates their previous group identity in the browser cache, and page data is refreshed after writes so navigating back to a page no longer shows stale content ([#939](https://github.com/pawtograder/platform/pull/939), [#943](https://github.com/pawtograder/platform/pull/943))
+
+#### Submissions
+- **Extensionless binaries no longer crash submissions** — A compiled executable committed without a file extension (such as `mystery` next to `mystery.c`) was previously misclassified as text, causing the submission to fail with a database error on every push. Files are now classified by their content as well as their name: any file containing a NUL byte is stored as a binary ([#941](https://github.com/pawtograder/platform/pull/941))
+
 ### August 19, 2026
 
 #### Surveys
