@@ -8,6 +8,28 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 28, 2026
+
+#### Operations
+- **Postgres liveness probes removed** — The `pg_isready` liveness probes on the primary and replica were removed after they killed production twice on 2026-08-27 during a transient NFS stall. The probes had only ~30 seconds of tolerance and fired before the storage issue resolved itself. Readiness probes are kept, so an unresponsive pod is removed from service endpoints without being forcibly restarted. A new `PawtograderPostgresUnavailable` alert (critical, 5-minute window) now pages when the StatefulSet has zero ready replicas, since the liveness probes were the only previous mechanism for detecting a wedged primary ([#946](https://github.com/pawtograder/platform/pull/946))
+- **Database metrics moved to postgres-exporter** — Global database metrics (buffer cache, dead tuples, vacuum health) were moved from the `metrics` edge function to the `postgres_exporter` sidecar. The edge function was being scraped once per functions pod (32 replicas in production), making `database_ram_metrics()` responsible for 77.7% of all database execution time. The exporter is scraped once, reducing the load by 32×. Metric names are preserved; two contracts changed: `pawtograder_db_connections{state}` is replaced by `pawtograder_db_connections_used/max/reserved`, and table sizes moved to `pawtograder_table_sizes_total_bytes{relation}` with a schema-qualified label ([#946](https://github.com/pawtograder/platform/pull/946))
+
+### August 25, 2026
+
+#### Bug fixes
+- **Compiled binaries in submissions no longer crash ingestion** — A student who committed a compiled executable (such as `mystery` next to `mystery.c`) with no file extension caused every subsequent push to fail with a Postgres error. Files are now classified as binary by content (NUL byte detection) in addition to extension, so extensionless binaries are stored in the file bucket rather than crashing the submission ([#941](https://github.com/pawtograder/platform/pull/941))
+- **Group membership cache invalidated correctly** — Moving a student between groups now invalidates the cache for their previous group identity as well as their new one ([#943](https://github.com/pawtograder/platform/pull/943))
+- **Browser cache cleared after writes** — The Next.js Router Cache is now invalidated after data writes, preventing stale data from appearing after updates ([#939](https://github.com/pawtograder/platform/pull/939))
+- **Discord bot reads guild member by snowflake** — The Discord bot now correctly reads a guild member using their snowflake ID rather than `@me`, fixing role sync for all configured servers ([#938](https://github.com/pawtograder/platform/pull/938))
+
+### August 24, 2026
+
+#### Discord
+- **Verified Discord bot install flow** — Connecting a course to a Discord server now uses a secure OAuth authorization-code flow instead of a free-text server ID field. Instructors click **Add Pawtograder to your Discord server**, pick the server on Discord's own consent screen, and are returned to the settings page with the connection confirmed. The new **Discord Server** panel on the settings page reports the bot's installation status, missing permissions by name, role hierarchy problems (the bot's role must sit above the course roles it manages), and channel-level permission overrides that block posting or invites ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Per-guild circuit breaker** — A guild that produces repeated permission errors is now parked by a circuit breaker, preventing one misconfigured server from consuming the shared Discord rate limit for all courses. The breaker escalates from 30 minutes to 6 hours on repeated trips ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Discord membership reconciler** — A background reconciler re-enqueues stale membership work and alerts on courses stuck for more than 12 hours ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Students can link Discord from their dashboard** — Students in courses with the Discord student-join feature enabled now see a **Connect Discord** prompt on their dashboard, unblocking the invite flow. Previously the prompt was staff-only, so students could never receive their server invitation ([#936](https://github.com/pawtograder/platform/pull/936))
+
 ### August 19, 2026
 
 #### Surveys
