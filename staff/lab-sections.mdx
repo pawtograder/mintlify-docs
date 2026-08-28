@@ -193,13 +193,12 @@ Pawtograder computes the deadline per student:
 Late token and extension calculations run on top of this result, so an extension
 is added to the lab-based deadline rather than to the original due date.
 
-<Warning>
-Set an **End Time** on any section you use for lab-based due dates. The preview
-table treats a missing end time as 23:59:59, but the deadline calculation builds
-its timestamp from the end time directly, so a section with no end time matches no
-meeting and its students fall back to the assignment's plain due date. The preview
-will not warn you.
-</Warning>
+<Note>
+A section with no end time recorded — an older section, or one imported from the
+SIS with unparseable meeting times — is treated as ending at 11:59:59 PM on its
+meeting day. The section editor now requires an end time for new and edited
+sections, so this applies only to legacy sections that predate the requirement.
+</Note>
 
 Where the preview finds no qualifying meeting for a section, it prints "No lab
 meeting before due date" in place of a date. See
