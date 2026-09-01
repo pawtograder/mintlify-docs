@@ -179,12 +179,13 @@ in the same exception tables as extensions.
 
 ## Self-review deadlines and extensions
 
-A self-review is created once the student's *final* due date has passed,
-and its deadline is that final due date plus the self-evaluation's
-**Hours due after this assignment** offset. The final due date already
-includes the student's late tokens and manual extensions, so an extension
-granted before the deadline carries the self-review deadline with it. No
-manual action is required.
+A self-review normally follows the student's *final* due date. When
+**Release self-evaluation at** is blank, Pawtograder creates the review once
+that final due date has passed and sets its deadline to the final due date
+plus the self-evaluation's **Hours due after this assignment** offset. The
+final due date already includes the student's late tokens and manual
+extensions, so an extension granted before the review exists carries its
+deadline with it. No manual action is required.
 
 An extension granted *after* the self-review already exists also moves it:
 granting the exception shifts that student's review assignments for the
@@ -204,15 +205,43 @@ it is worth knowing which one you are using.
   review assignments, and only ones that are **not yet completed**.
 </Note>
 
-<Warning>
-Two cases do not follow that rule:
+### Assignments with an explicit self-review release time
 
-- If the assignment sets **Release self-evaluation at**, the self-review
-  is released and its deadline computed from that wall-clock time,
-  ignoring per-student due-date exceptions entirely.
-- An exception of zero or negative length does not shift anything. Only
-  an extension that adds time moves a self-review deadline, so gifted
-  tokens and corrective adjustments leave them where they are.
+Setting **Release self-evaluation at** changes the review's initial
+schedule. If the assignment is due at X, the explicit release time is Y,
+and **Hours due after this assignment** is K, the review is initially
+released at Y and due at Y + K. That initial calculation does not use the
+assignment's due date or any per-student due-date exceptions.
+
+With early submission disabled, the review normally does not exist until
+Y. Changing the assignment's due date from X to X + D before Y therefore
+leaves the initial self-review deadline at Y + K. A due-date exception
+granted before Y has the same result. To change that initial deadline,
+adjust Y or K before the review is created.
+
+<Warning>
+The explicit release remains Y even if an extension moves the assignment's
+due date later than Y. In that case the self-review can be released before
+the extended assignment deadline.
+</Warning>
+
+Once the review assignment exists, Y does not permanently pin its stored
+deadline. Later changes use the same triggers described above:
+
+- A positive due-date exception shifts that student's existing review
+  assignments, regardless of review round or completion status.
+- Editing the assignment's own due date shifts its existing incomplete
+  self-review assignments by the same interval. For example, changing X to
+  X + D after Y moves an incomplete self-review from Y + K to Y + K + D.
+
+Changing K after a review assignment exists does not recalculate that
+row's deadline. Use the bulk review due-date update to set existing rows to
+the intended absolute time.
+
+<Warning>
+An exception of zero or negative length does not shift anything. Only an
+extension that adds time moves an existing review deadline, so gifted
+tokens and corrective adjustments leave it where it is.
 </Warning>
 
 <Warning>
