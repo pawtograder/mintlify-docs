@@ -55,15 +55,14 @@ The web app registry starts with `prom-client`'s default process and Node metric
 | `web_http_in_flight_requests` | gauge | `route` |
 | `web_supabase_rpc_duration_seconds` | histogram | `rpc`, `status` |
 | `web_supabase_rpc_errors_total` | counter | `rpc`, `code` |
-| `web_submission_created_total` | counter | `class_id` |
-| `web_submission_mutated_total` | counter | `class_id`, `action` |
-| `web_grading_action_total` | counter | `class_id`, `kind` |
-| `web_rubric_check_action_total` | counter | `class_id`, `action` |
-| `web_office_hours_event_total` | counter | `class_id`, `event` |
-| `web_realtime_broadcast_total` | counter | `channel_class` |
-| `web_edge_function_invocation_total` | counter | `function`, `status` |
 
 The HTTP histogram uses buckets from 5 ms to 30 s, because streaming routes such as the LLM hint and calendar export have a long tail. The Supabase RPC histogram tops out at 10 s.
+
+The `route` label is the hardcoded parameterized App Router pattern (for example `/api/calendar/[course_id]`), never the request path. The `status` label is bucketed to `2xx`, `4xx`, or `5xx`. The `code` label on RPC errors is a Postgres SQLSTATE, the literal `throw` when the call rejected, or `unknown` — never an error message.
+
+<Note>
+Business metrics (submissions created, grading actions) are produced by `postgres_exporter` rather than the web tier, because submissions are created by the autograder edge function and by the browser talking to PostgREST directly — the web tier never observes them. See `pawtograder_submissions_created_total` and `pawtograder_grading_actions_total` in the `pawtograder_` section below.
+</Note>
 
 ### Workflow gauges
 
