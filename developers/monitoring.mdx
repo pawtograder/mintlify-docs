@@ -151,11 +151,47 @@ The chart deploys no Prometheus or Grafana of its own. It assumes the cluster ru
 The web app's `ServiceMonitor` reads `METRICS_SCRAPE_TOKEN` from the JWT secret and injects it as the bearer. The edge functions' `ServiceMonitor` marks `METRICS_TOKEN` as `optional: true`, so a deployment that intentionally leaves edge metrics unauthenticated still gets scraped instead of having the whole `ServiceMonitor` rejected.
 </Note>
 
-Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that adds Pawtograder-specific series on top of the exporter defaults, including `pawtograder_replication_*`, `pawtograder_wal_archiving_*`, `pawtograder_db_connections_*`, `pawtograder_classes_*`, `pawtograder_active_submissions_active_count`, `pawtograder_help_queue_depth_*`, and `pawtograder_table_sizes_*`.
+Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that adds Pawtograder-specific series on top of the exporter defaults, including `pawtograder_replication_*`, `pawtograder_wal_archiving_*`, `pawtograder_db_connections_*`, `pawtograder_classes_*`, `pawtograder_active_submissions_active_count`, `pawtograder_help_queue_depth_*`, `pawtograder_table_sizes_*`, `pawtograder_submissions_created_total`, and `pawtograder_grading_actions_total`.
+
+### Workflow metrics and the metrics leader
+
+The four `web_workflow_*` gauge families behind the workflow panels on the **App Business** dashboard are DB-derived global aggregates. Exactly one pod in the release may refresh them, or the queries multiply and `sum()` over-counts. There are two ways to arrange that:
+
+| `web.replicas` | Use | Why |
+| --- | --- | --- |
+| 1 | `web.workflowMetricsLeader: true` | Free. No extra pod, no extra memory. The chart refuses this flag above one replica. |
+| > 1 | `web.metricsLeader.enabled: true` | Renders a dedicated 1-replica Deployment (`templates/web-metrics-leader.yaml`, component `metrics-leader`, strategy `Recreate`). |
+
+Setting both is refused. So is `monitoring.enabled: true` with `web.replicas > 1` and neither — that combination ships a dashboard with nine permanently empty panels. Acknowledge it deliberately with `monitoring.allowMissingWorkflowMetrics: true` if you do not want the metrics.
+
+The app throttles the actual DB refresh to `METRICS_WORKFLOW_REFRESH_INTERVAL_SECONDS` (default 300). A failed refresh does not advance the throttle, so a database blip is retried on the next scrape.
+
+### Edge function metrics
+
+Per-function edge metrics are off by default. Enable them with `edgeFunctions.metrics.enabled: true` (chart 0.3.18+). When enabled, the edge demuxer appends its own `pawtograder_edge_*` exposition to the `metrics` function's response on every successful scrape.
+
+The function label domain is closed at image-build time from the eszip bundles and function directories. Anything outside that set records as `function="_unknown"`, so a remote caller cannot grow the label cardinality.
+
+New `pawtograder_edge_*` metrics include:
+
+| Metric | Type | Description |
+| --- | --- | --- |
+| `pawtograder_edge_requests_total` | counter | Requests handled, by function and response status |
+| `pawtograder_edge_function_seconds_total` | counter | Cumulative time-to-headers by function (divide by `requests_total` for mean latency) |
+| `pawtograder_edge_worker_errors_total` | counter | Worker failures by function and kind (`retired_retry`, `cancelled`, `internal`) |
+| `pawtograder_edge_request_duration_seconds` | histogram | Pod-wide latency (no function label — adding it would multiply series ~4× per HPA excursion) |
+| `pawtograder_edge_eszip_cache_bytes` | gauge | Resident eszip bundle bytes in this pod's LRU cache |
+| `pawtograder_edge_eszip_cache_entries` | gauge | Functions currently resident in the eszip cache |
+| `pawtograder_edge_user_workers_active` | gauge | Live user-worker isolates on this pod |
+| `pawtograder_edge_user_workers_retired_total` | counter | User-worker isolates retired by the runtime |
+
+<Warning>
+Latency is **time to headers**, not full response time. `worker.fetch()` resolves when response headers are ready; a streaming body finishes later.
+</Warning>
 
 ### Dashboards and alerts
 
-Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are individually toggleable through `monitoring.dashboards.*`: `stack-overview`, `postgres-deep-dive`, `realtime-fanout`, `edge-functions`, `app-business`, `rate-limiting`, `edge-soak`, and `queues-and-workers`. Each exposes a `datasource` template variable rather than a hardcoded datasource UID, so they import cleanly into any Prometheus-compatible Grafana.
+Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are individually toggleable through `monitoring.dashboards.*`: `stack-overview`, `postgres-deep-dive`, `realtime-fanout`, `edge-functions`, `app-business`, `rate-limiting`, `edge-soak`, and `queues-and-workers`. Each exposes a `datasource` template variable rather than a hardcoded datasource UID, so they import cleanly into any Prometheus-compatible Grafana. All dashboards include a `$namespace` variable so staging, preview, and production environments do not bleed into each other.
 
 Alert rules live in `charts/pawtograder/templates/prometheus-rules.yaml`, grouped as `pawtograder.backup`, `pawtograder.walg`, `pawtograder.replication`, `pawtograder.postgres`, `pawtograder.app`, `pawtograder.edgefunctions`, `pawtograder.secrets`, and `pawtograder.certs`. Routing is in `alertmanager-config.yaml`.
 
