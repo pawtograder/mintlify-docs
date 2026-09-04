@@ -268,7 +268,7 @@ UPDATE survey_responses SET deleted_at = NULL
 
 ### `survey_responses` policies
 
-`20260817120000_tighten_survey_and_poll_rls.sql` replaced both write policies. The originals tested only that `profile_id` was one of the caller's own profiles and never joined `surveys`, so a student could write to a draft, closed, soft-deleted, or unassigned survey directly through PostgREST (`20260817120000:8-15`).
+`20260817120000_tighten_survey_and_poll_rls.sql` replaced both write policies. The originals tested only that `profile_id` was one of the caller's own profiles and never joined `surveys`, so a student could write to a draft, closed, soft-deleted, or unassigned survey directly through PostgREST (`20260817120000:8-15`). `20260825140000_audit_findings_2026_08.sql` further tightened the `survey_assignments` SELECT policy — see below.
 
 | Policy | Command | Predicate | Source |
 |---|---|---|---|
@@ -324,6 +324,10 @@ The student write path is an upsert, so both policies have to pass: the autosave
 Instructors get SELECT, INSERT, UPDATE, and DELETE, all on `authorizeforclassinstructor(class_id)` (`20251213200333:1151-1172`, `:1201-1207`). Graders get SELECT on `authorizeforclassgrader(class_id)` (`:1193-1198`). A student gets SELECT on their own rows through `survey_assignments_select_assignee` (`:1175-1182`).
 
 `survey_assignments_select_class_member`, which granted SELECT on the whole table to any class member, was **dropped** by `20260817120000:149`. Its header explains why: responses were protected but the roster of who was assigned what was not, including `survey_id` values for drafts that `surveys_select_students` deliberately withholds (`:39-49`).
+
+<Note>
+`20260825140000_audit_findings_2026_08.sql` also revoked `TRUNCATE` on `live_poll_responses` and `live_polls` from `anon` and `authenticated`. TRUNCATE is not subject to RLS and was previously grantable by grant alone. The survey tables were not affected by this change.
+</Note>
 
 ### `survey_templates` policies
 
