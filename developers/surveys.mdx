@@ -325,6 +325,10 @@ Instructors get SELECT, INSERT, UPDATE, and DELETE, all on `authorizeforclassins
 
 `survey_assignments_select_class_member`, which granted SELECT on the whole table to any class member, was **dropped** by `20260817120000:149`. Its header explains why: responses were protected but the roster of who was assigned what was not, including `survey_id` values for drafts that `surveys_select_students` deliberately withholds (`:39-49`).
 
+<Note>
+`20260825140000_audit_findings_2026_08.sql` also revoked `TRUNCATE` on `live_poll_responses` and `live_polls` from `anon` and `authenticated`. TRUNCATE is not subject to RLS and was previously grantable by grant alone. The survey tables were not affected by this change.
+</Note>
+
 ### `survey_templates` policies
 
 | Policy | Command | Predicate | Source |
