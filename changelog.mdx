@@ -6,7 +6,36 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 4, 2026
+
+#### Monitoring and metrics
+- **Edge metrics scrape fixed** — A gzip encoding issue that broke the edge-functions metrics scrape endpoint is resolved. The `edge-functions` and `app-business` Grafana dashboards now populate correctly ([#952](https://github.com/pawtograder/platform/pull/952), [#953](https://github.com/pawtograder/platform/pull/953))
+
 ## August 2026
+
+### August 28, 2026
+
+#### Discord
+- **Verified Discord bot install flow** — Connecting a course to a Discord server now uses a proper OAuth authorization flow. Instructors click **Add Pawtograder to your Discord server** and pick the server on Discord's own consent screen; the callback confirms the bot is really in the guild before recording the connection. A new **Discord Server** panel on the Discord settings page reports whether the bot is installed, which permissions are missing, whether the role hierarchy allows role assignment, and whether any tracked channel is inaccessible — with specific remediation steps for each. Courses can also disconnect from a server. One unarchived course per server is enforced ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Per-guild circuit breaker** — The Discord worker now parks a guild that is producing repeated permission errors, preventing one misconfigured server from consuming the shared bot's rate limit for every course on the deployment ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Stale membership reconciler** — A background reconciler re-enqueues membership work that went stale and alerts on classes stuck for over 12 hours ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Bug fixes
+- **Extensions no longer drop assignments from the student dashboard** — A student holding a due-date extension saw their assignment disappear from **Upcoming Assignments** because the dashboard was filtering on the base due date rather than the extended one. The dashboard now uses the same final per-student deadline that submission enforcement uses ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Survey Visual Builder no longer destroys rating questions** — Opening the Visual Builder on a survey that contained `rating` questions and clicking **Use This Survey** rewrote every rating question as short text and corrupted numeric choice values. The builder now preserves rating questions with a dedicated editor, keeps numeric and boolean choice values intact, and passes through question types it has no editor for unchanged ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Private help requests can no longer be accidentally published** — Removing the last code reference from a help request used to clear the `is_private` flag, exposing the entire message thread to the class. Privacy can now only escalate; only course staff can make a private request public ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Audit log now shows rows** — The instructor audit log had been returning zero rows since December 2025 due to a missing row-level security policy on the partitioned audit table. The policy is restored ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Leaderboard no longer readable by unauthenticated callers** — The assignment leaderboard was readable by anyone with the public anon key, returning scores across all classes. It now requires an authenticated, enrolled user ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Discussion karma credited to the correct profile** — Karma earned on anonymous posts was credited to the student's private profile but displayed from their public profile, so pseudonymous karma always showed as zero. Karma is now per-identity and follows a post when staff toggle its anonymity ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Office-hours karma notes no longer abort writes** — A database trigger bug caused every insert, update, and delete on the karma notes table to fail with an error. Office-hours karma has been non-functional since September 2025; it is now restored ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Lab section end time now required** — A lab section with no end time silently disabled the lab-based deadline offset for its students. The lab section form now requires an end time, and sections without one default to end of day ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Follow-up help requests now link to the original** — The **Follow-Up to Previous Request** field was collected by the form but never saved. Follow-up links now persist correctly ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Ask For Help button now opens the help drawer** — The **Ask For Help** button on submission pages had a commented-out click handler and did nothing. It now opens the help drawer for both staff and students ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Discussion anonymity toggle fixed** — The staff control to toggle a discussion thread between named and anonymous had never worked due to a type mismatch in the database function. It is now fixed ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Edge function memory pressure reduced** — The edge function demuxer's eszip cache is now bounded at 256 MiB, resolving out-of-memory crashes that were restarting the edge runtime ([#934](https://github.com/pawtograder/platform/pull/934))
+- **Submission insert trigger no longer rewrites inactive rows** — A trigger was unnecessarily updating inactive submission rows on every new submission, causing extra database load ([#948](https://github.com/pawtograder/platform/pull/948))
 
 ### August 19, 2026
 
