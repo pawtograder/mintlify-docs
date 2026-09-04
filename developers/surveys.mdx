@@ -268,7 +268,7 @@ UPDATE survey_responses SET deleted_at = NULL
 
 ### `survey_responses` policies
 
-`20260817120000_tighten_survey_and_poll_rls.sql` replaced both write policies. The originals tested only that `profile_id` was one of the caller's own profiles and never joined `surveys`, so a student could write to a draft, closed, soft-deleted, or unassigned survey directly through PostgREST (`20260817120000:8-15`).
+`20260817120000_tighten_survey_and_poll_rls.sql` replaced both write policies. The originals tested only that `profile_id` was one of the caller's own profiles and never joined `surveys`, so a student could write to a draft, closed, soft-deleted, or unassigned survey directly through PostgREST (`20260817120000:8-15`). `20260825140000_audit_findings_2026_08.sql` further tightened the `survey_assignments` SELECT policy — see below.
 
 | Policy | Command | Predicate | Source |
 |---|---|---|---|
