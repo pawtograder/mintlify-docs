@@ -140,6 +140,19 @@ The `database_ram_metrics` RPC produces `pawtograder_db_`-prefixed gauges, with 
 
 Finally, `pawtograder_info{version}` is a constant `1` used as a target-presence marker.
 
+### Business metrics
+
+These counters are produced by `postgres_exporter` custom queries rather than the web tier, because the relevant writes go browser → PostgREST directly and the web tier never observes them.
+
+| Metric | Labels | Source |
+| --- | --- | --- |
+| `pawtograder_submissions_created_total` | `class_id` | Trigger-maintained insert counter on `class_metrics_totals`; monotonic even when assignments are deleted |
+| `pawtograder_grading_actions_total` | `class_id`, `kind` | Trigger-maintained event counters; `kind` is `comment`, `rubric_check`, or `release`; monotonic — bulk unrelease and assignment deletion do not decrement |
+
+<Note>
+`pawtograder_grading_actions_total{kind="release"}` counts release *events*, not surviving released rows. A bulk unrelease leaves the counter where it was.
+</Note>
+
 ## Cluster wiring
 
 The Helm chart ships the scrape configuration, but it is off by default. Set `monitoring.enabled=true` to render `ServiceMonitor` resources for Postgres (via a `postgres_exporter` sidecar), storage, edge functions, GoTrue, Kong, Realtime, Supavisor, and the web app. Scrape interval defaults to `30s` with a `10s` timeout.
