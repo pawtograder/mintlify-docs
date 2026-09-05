@@ -16,6 +16,34 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 28, 2026
+
+#### Submissions
+
+- **Extensionless binaries no longer crash submissions** — A compiled executable committed without a file extension (for example, `mystery` next to `mystery.c`) was previously misclassified as text, causing a Postgres error that silently rolled back the entire submission. Files are now classified by content as well as by name: any file containing a NUL byte is stored as a binary, matching the same heuristic git uses ([#941](https://github.com/pawtograder/platform/pull/941))
+
+#### Performance
+
+- **Submission insert trigger skips already-inactive rows** — The trigger that deactivates a student's previous submission when a new one arrives now only updates the one active row rather than rewriting the student's entire submission history. This eliminates statement timeouts that occurred during load testing and reduces unnecessary audit log noise ([#948](https://github.com/pawtograder/platform/pull/948))
+
+### August 25, 2026
+
+#### Bug fixes
+
+- **Group membership cache invalidation covers both sides of a move** — When a student's group membership was moved to a different class or assignment, the cache for the original class was not invalidated, leaving rosters stale for up to an hour. Both the source and destination are now invalidated ([#943](https://github.com/pawtograder/platform/pull/943))
+
+### August 24, 2026
+
+#### Discord
+
+- **Verified Discord bot install flow** — Connecting a course to a Discord server now uses a proper OAuth authorization-code flow. Instructors are sent to Discord's consent screen, and the server is only recorded after the bot's presence is confirmed with the bot token. A per-guild circuit breaker parks a misconfigured server that is generating permission errors, protecting the shared bot token's rate limit. A reconciler re-enqueues stale membership work and alerts on classes stuck for over 12 hours. See [Course Settings](/staff/course-settings) ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Bug fixes
+
+- **Pages and lists update immediately after writes** — Creating, editing, or deleting an assignment, survey, or class now drops the browser's cached copy of the relevant list, so navigating back shows the current state without a hard reload. Previously, the stale list could persist for up to 30 seconds ([#939](https://github.com/pawtograder/platform/pull/939))
+- **Assignment release date gate refreshes on publish** — Publishing or un-publishing an assignment now immediately updates whether enrolled students can open it. Previously the access check could hold a stale release date for up to an hour ([#939](https://github.com/pawtograder/platform/pull/939))
+- **Group membership changes appear immediately** — Adding or removing a student from a group now invalidates the cached group roster and staff roster, so the correct groupmates appear without waiting for the cache to expire ([#939](https://github.com/pawtograder/platform/pull/939))
+
 ### August 19, 2026
 
 #### Surveys
