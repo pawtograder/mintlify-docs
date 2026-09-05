@@ -6,6 +6,14 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 5, 2026
+
+#### Infrastructure
+
+- **Monitoring changes no longer restart the database** — A Helm chart fix (0.3.20) moves the postgres_exporter query definitions into their own template file so that adding a new ServiceMonitor or toggling observability flags does not roll the Postgres primary. Previously, any monitoring change moved the pod's restart annotation and caused a ~60-second crash-loop of auth, storage, and realtime services ([#954](https://github.com/pawtograder/platform/pull/954))
+
 ## August 2026
 
 ### August 19, 2026
