@@ -18,6 +18,11 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ### August 28, 2026
 
+#### Security and bug fixes
+
+- **Eight audit findings fixed** — A security audit identified and resolved eight issues: extensions were hidden from the student dashboard for students with due-date exceptions; the Survey Visual Builder destroyed `rating` questions and corrupted numeric choice values on save; removing the last code reference from a help request accidentally published it to all students; lab sections with no end time silently dropped the lab-based deadline offset; discussion karma was credited to the wrong profile for anonymous posts; the audit log always showed zero rows due to a missing RLS policy; the assignment leaderboard was readable by unauthenticated callers; and the "Ask For Help" button on submission pages did nothing. The discussion anonymity toggle for staff was also fixed — it had never executed due to a type mismatch ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Karma is now per identity** — Discussion karma earned on anonymous posts is credited to the pseudonymous profile the byline renders, and karma follows a post when staff toggle its anonymity. Students with both named and anonymous posts see two separate karma counts rather than one combined total
+
 #### Submissions
 
 - **Extensionless binaries no longer crash submissions** — A compiled executable committed without a file extension (for example, `mystery` next to `mystery.c`) was previously misclassified as text, causing a Postgres error that silently rolled back the entire submission. Files are now classified by content as well as by name: any file containing a NUL byte is stored as a binary, matching the same heuristic git uses ([#941](https://github.com/pawtograder/platform/pull/941))
