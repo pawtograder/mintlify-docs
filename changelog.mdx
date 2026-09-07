@@ -6,7 +6,38 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 7, 2026
+
+#### Bug fixes
+- **Repository provisioning no longer floods error alerts during a release** — When an assignment is released to a large class, the first push to each newly created repository arrives before the readiness flag is written. These expected retries are now reported at a lower severity and grouped separately from genuine failures, so a real provisioning problem is not buried in routine noise ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord discussion stats no longer silently drop author names** — The hourly Discord stats sync was sending all author IDs in a single database query, which exceeded the URL length limit for large batches. Author lookups are now chunked, partial failures are counted as errors in the run summary, and messages with unresolved authors are left for the next run rather than attributed to the wrong person ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
+
+### August 28, 2026
+
+#### Discord
+- **Guided Discord server connection** — Connecting a course to a Discord server is now a verified install flow. Instructors click **Add Pawtograder to your Discord server**, complete Discord's consent screen, and the bot is confirmed present before the connection is recorded. The old free-text server ID field is gone. A new installation status panel on the Discord settings page reports exactly what is wrong when the bot is installed but cannot work: missing permissions are named individually, and the role hierarchy problem (where Discord refuses to assign a role positioned at or above the bot's own) is shown with both positions so the fix is unambiguous. See [Discord](/staff/course-settings) ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Students can now link their Discord account from the course dashboard** — The **Connect to Discord** prompt now appears for students when their course has the Discord student-join feature enabled, not only for staff. Previously the prompt was staff-only, which silently blocked the entire student invite flow ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Per-guild circuit breaker** — If a Discord server generates repeated permission errors, Pawtograder parks that guild's work for a backoff window rather than retrying indefinitely and consuming the shared bot rate limit. A reconciler re-enqueues stale membership work and alerts on classes stuck for more than 12 hours ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Security and data fixes
+- **Extensions now keep assignments visible on the student dashboard** — The upcoming assignments list and the Assignments tab were filtering on the raw due date, so a student holding an extension saw the assignment disappear from their dashboard even though their extended deadline was still in the future. Both surfaces now use the final per-student deadline, which includes lab-section offsets and any extensions ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Survey Visual Builder no longer destroys rating questions or numeric choices** — Opening an existing survey in the Visual Builder and saving it without making any changes could silently rewrite every `rating` question as short text and corrupt numeric Likert choice values (turning `3` into `[object Object]`). Rating is now a first-class editable type in the builder, numeric and boolean choice values are preserved through edits, and question types the builder has no editor for are shown as read-only cards and passed through unchanged ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Removing the last code reference no longer publishes a private help request** — Saving the code-reference panel on a private help request with no references left was clearing the `is_private` flag, exposing the entire message thread to the class. Privacy can now only escalate through the reference panel, and a database trigger prevents non-staff from downgrading a private request to public ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Audit log now shows rows for instructors** — The audit log had row-level security enabled with no policy, which is default-deny. Instructors saw zero rows and no error. The policy is restored ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Leaderboard no longer readable without authentication** — The assignment leaderboard was readable by unauthenticated callers across all classes. The anonymous read leg has been removed ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Discussion karma now credits the profile the byline renders** — Karma earned on anonymous posts was being credited to the student's private (named) profile, so the pseudonymous byline always showed 0. Karma is now per-identity: anonymous posts credit the public profile, named posts credit the private profile. Staff engagement reports still show the whole-student total. Karma also follows a post when staff toggle its anonymity ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Lab section end time is now required** — A lab section with no end time silently disabled the lab-based due date offset for its students, falling back to the plain assignment deadline. The lab section form now requires an end time, and sections imported from the SIS with no parseable meeting time default to end of day ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Follow-up help request links are now saved** — The **Follow-Up to Previous Request** field was collected by the form but never written to the database. Follow-up links now persist and appear in the staff CLI's `help-requests list` output ([#940](https://github.com/pawtograder/platform/pull/940))
+- **"Ask For Help" button now opens the help drawer** — The button on submission pages had an empty click handler since it was introduced. It now opens the same help drawer as the floating widget and the office-hours status card, including for staff and for students who already have an active request ([#940](https://github.com/pawtograder/platform/pull/940))
+
+### August 24, 2026
+
+#### Submissions
+- **Extensionless compiled binaries no longer crash submission ingestion** — A student who committed a compiled executable with no file extension (such as `mystery` next to `mystery.c`) caused every subsequent push to fail with a database error. Files are now classified by content as well as by name: a NUL byte anywhere in the file routes it to storage rather than attempting to store it as text ([#941](https://github.com/pawtograder/platform/pull/941))
 
 ### August 19, 2026
 
