@@ -6,6 +6,18 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 7, 2026
+
+#### GitHub repository provisioning
+- **Tunable async worker concurrency and visibility timeout** — The worker that provisions GitHub repositories now exposes two tunable parameters: `GITHUB_ASYNC_WORKER_DRAIN_CONCURRENCY` (1–8, default 4) and `GITHUB_ASYNC_WORKER_VISIBILITY_TIMEOUT_SECONDS` (60–1800, default 300). Previously hardcoded, these values produced an 88-minute drain for a 58-repository release burst. The Helm chart enforces that both values are coherent — the visibility timeout must cover a full batch, and the isolate lifetime must cover the batch too — and refuses incoherent combinations at render time. Defaults reproduce the previous behavior exactly, so upgrading changes nothing until an operator sets a value ([#956](https://github.com/pawtograder/platform/pull/956))
+- **Step-level timing instrumentation on repository creation** — `createRepo` and `syncRepoPermissions` now emit a single structured log line per operation with per-step wall-clock breakdowns, unaccounted time, poll attempt counts, and slowest-step attribution. This is diagnostic only and does not change any behavior or retry logic ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+- **Provisioning-push retries no longer flood error alerts** — When a student repository push arrives while provisioning is still in flight, the webhook now classifies it as an expected retry (reported at `info` level with its own fingerprint) rather than as an error. Genuine readiness-write failures — where GitHub created the repository but the database was never updated — remain at `error` level and are distinguished by how long ago GitHub created the repository ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord discussion stats no longer silently fail on large batches** — The hourly Discord stats update was putting all author UUIDs in a single database query, which exceeded URL length limits on batches of ~280 or more and fell through to an "Anonymous" fallback while reporting zero errors. Author lookups are now chunked (50 per request), failed chunks are counted as errors in the run summary, and messages with unresolved authors are left for the next run rather than attributed to the wrong name ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
 
 ### August 19, 2026
