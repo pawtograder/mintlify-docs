@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 7, 2026
+
+#### Discord
+- **Verified Discord bot install flow** — Connecting a course to a Discord server is now a guided OAuth flow instead of a free-text server ID field. Click **Add Pawtograder to your Discord server** on the Discord settings page, pick the server on Discord's consent screen, and Pawtograder confirms the bot is in the server before recording the connection. One unarchived course per server is enforced. The settings page now shows a diagnostic panel that names any missing permissions or role-hierarchy problems, with specific remediation steps for each ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Discord server disconnect** — Instructors can disconnect a course from its Discord server from the settings page. Pawtograder forgets the roles and channels it created; those remain in the server for an administrator to delete, and no one is removed ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Students can link Discord accounts** — When the **Let students join this course's Discord server** feature flag is on, students see a **Connect Discord** prompt on their dashboard so they can receive their server invitation ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Bug fixes
+- **Extensions now appear on the student dashboard** — Assignments with a due-date extension were missing from the **Upcoming Assignments** list and showed the wrong deadline. Both are now correct: the list includes extended assignments and shows the extended deadline ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Survey Visual Builder preserves all question types** — Opening an existing survey in the Visual Builder and saving it no longer rewrites rating questions as text or corrupts numeric choice values. Rating questions are now fully editable in the builder, and question types the builder has no editor for (matrix, ranking, dropdown) are preserved read-only and passed through unchanged ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Private help requests stay private** — Removing the last code reference from a help request no longer accidentally made it public. Privacy can now only escalate through the reference editor, not decrease ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Follow-up help requests linked correctly** — The **Follow-Up to Previous Request** field on the new help request form now saves the link. Previously the field was collected but never written ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Ask For Help button works everywhere** — The **Ask For Help** button on submission pages now opens the help drawer for staff and for students who already have an active request, not just for students with no active request ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Lab section end time is now required** — The lab section form requires an end time. Sections with no end time recorded (older sections or SIS-imported ones with unparseable meeting times) are treated as ending at 11:59:59 PM on their meeting day ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Audit log visible to instructors** — The course audit log was showing zero rows for all instructors due to a missing access policy. It now shows the expected entries ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Leaderboard no longer readable without a login** — The assignment leaderboard was readable by anyone with the public API key. It now requires an enrolled course member ([#940](https://github.com/pawtograder/platform/pull/940))
+
+#### Performance
+- **Faster repository provisioning** — The async worker that creates student GitHub repositories now has tunable concurrency and visibility timeout settings, reducing drain time for large assignment releases ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Microsoft sign-in
+- **Microsoft (Entra) sign-in fixed on staging** — The Azure OAuth provider now correctly sets its redirect URI, so Microsoft sign-in works. Tenant pinning is also supported for deployments that need to restrict sign-in to a single directory ([#957](https://github.com/pawtograder/platform/pull/957))
+
 ## August 2026
 
 ### August 19, 2026
