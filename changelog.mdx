@@ -6,6 +6,19 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 8, 2026
+
+#### Bug fixes
+- **Handout repositories created for brand-new courses** — Creating a handout repository for a course with no enrolled students no longer fails. The student GitHub team is now created on demand when the first handout is provisioned, rather than requiring enrollment to happen first ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Bug fixes
+- **Discord discussion stats errors now reported correctly** — The hourly Discord discussion stats update was silently reporting zero errors even when author lookups failed due to URL length limits. Errors are now counted and reported accurately, and author lookups are batched to stay within URL size limits ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Provisioning noise reduced in error monitoring** — Webhook deliveries that arrive while a student repository is still being provisioned are now reported at a lower severity than genuine failures, so a large assignment release no longer floods error monitoring with expected retries ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
 
 ### August 19, 2026
