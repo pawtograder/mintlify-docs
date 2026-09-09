@@ -54,3 +54,9 @@ Pawtograder automatically manages repository permissions when:
 - Individual submissions are activated or deactivated
 
 The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
+
+## Permission sync exemptions
+
+By default, permission sync removes any GitHub account from a repository that is not on the course roster or the staff team. If your organization has accounts that legitimately hold access the roster cannot explain — institutional IT accounts, integration accounts, or faculty carried on repos directly — you can exempt them from removal.
+
+Site admins can configure exemptions per GitHub organization from the **Admin → GitHub Orgs** page. Enter GitHub usernames (comma-separated) in the **Permission sync exemptions** field and save. Exempted accounts are left alone by permission sync across all repositories in that organization.
