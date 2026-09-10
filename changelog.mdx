@@ -6,6 +6,33 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 10, 2026
+
+#### Leaderboard
+- **Leaderboard errors no longer discard a student's grade** — A database constraint on the leaderboard table could reject a score that exceeded the declared maximum (for example, from mutation-testing extra credit), causing the entire grading run to roll back and leaving the student with no grade at all. The constraint has been removed and the leaderboard update is now fault-isolated: if a leaderboard write fails for any reason, a warning is logged and grading continues ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### GitHub
+- **Permission sync no longer stalls on courses with many spurious admins** — GitHub organization permission synchronization was doing redundant work when a course org had dozens of admin accounts that were not Pawtograder users, causing slow syncs. It now skips those accounts efficiently ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Handout creation no longer fails when a course team is missing** — Creating a handout repository no longer returns a 500 error when the course's GitHub team has not been created yet ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Integrations
+- **Microsoft sign-in now works** — The Azure OAuth provider was missing a redirect URI, which prevented Microsoft account sign-in from completing. This is now configured correctly ([#957](https://github.com/pawtograder/platform/pull/957))
+
+#### Discord
+- **Verified Discord bot install flow** — Connecting a course to a Discord server now uses a proper OAuth authorization flow instead of a free-text server ID field. Instructors click **Add Pawtograder to your Discord server**, pick the server on Discord's own consent screen, and are returned to the course settings with the connection confirmed. The new flow verifies the bot is actually in the server before recording the claim, prevents one server from being connected to multiple active courses, and adds a **Disconnect Discord** button. A new installation status panel shows whether the bot has the permissions it needs, diagnoses role-hierarchy problems (where Discord reports a missing permission but the real issue is the bot's role position), and surfaces channel-level permission overrides that block posting or invites. A per-guild circuit breaker parks a guild that is generating permission errors, and a reconciler re-enqueues stale membership work. Students now see a **Connect Discord** prompt on their dashboard when their course has Discord enabled ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Performance
+- **Async worker drain concurrency and visibility timeout are now tunable** — The background job worker's concurrency and message visibility timeout can be configured per deployment, and repository creation is now instrumented ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+- **Webhook and Discord silent failures fixed** — Two failure modes found in production where errors were swallowed silently have been corrected ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
 
 ### August 19, 2026
