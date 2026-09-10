@@ -46,6 +46,21 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 28, 2026
+
+#### Infrastructure
+
+- **Postgres liveness probes removed** — The liveness probes on the Postgres primary and replica killed both pods twice on 2026-08-27 during a transient NFS stall, taking the platform down for ~60 seconds each time. The probes were not wrong — the postmaster genuinely could not fork workers — but the condition was self-resolving and the probes ran out of patience one second before it cleared. Restarting a single-writer Postgres cannot fix external storage, and a restart during crash recovery can trigger a self-worsening loop. Readiness probes are kept (they remove an unready pod from Service endpoints without destroying it). A new `PawtograderPostgresUnavailable` alert fires critical after 5 minutes of zero ready replicas ([#946](https://github.com/pawtograder/platform/pull/946))
+- **Global database metrics moved to the postgres exporter** — The `metrics` edge function was calling `database_ram_metrics()` and `vacuum_health_check()` on every Prometheus scrape. With 32 edge-function replicas and a 30-second scrape interval, this amounted to ~1.07 calls per second — 77.7% of all production database execution time — for data that is identical across every pod. These metrics now come from the postgres exporter sidecar, which is scraped once. The buffer-cache scan runs at most once every 5 minutes ([#946](https://github.com/pawtograder/platform/pull/946))
+- **Edge autoscaling unblocked** — The edge HPA had been pinned at 32 replicas because the eszip bundle cache (512 MB) set a load-independent memory floor that kept utilization above the HPA's dead band regardless of actual traffic. The cache default is now 256 MB, and the memory target is 80% (previously 100%, which created a dead band of 90–110% — too narrow to trigger scaling in either direction) ([#948](https://github.com/pawtograder/platform/pull/948))
+- **Submission insert trigger no longer rewrites already-inactive rows** — The trigger that deactivates a student's previous submission on each new push was updating every prior submission for the assignment, including ones already marked inactive. On a load-test dataset with thousands of submissions per student, a single insert rewrote 1,483 rows and took 284 ms. The trigger now skips already-inactive rows, reducing execution time by ~27× ([#948](https://github.com/pawtograder/platform/pull/948))
+
+### August 25, 2026
+
+#### Bug fixes
+
+- **Eight audit findings fixed** — A security audit identified eight issues that are now resolved: extensions were hidden from the student dashboard for students with due-date extensions; the Survey Visual Builder destroyed `rating` questions and numeric choice values on save; removing the last code reference from a help request accidentally made it public; lab sections with no end time silently disabled their lab-based deadline; discussion karma was credited to the wrong profile for anonymous posts; the audit log always showed zero rows due to a missing RLS policy; the leaderboard was readable by unauthenticated callers; and the "Ask For Help" button on submission pages did nothing. The follow-up field on help requests is also now saved correctly ([#940](https://github.com/pawtograder/platform/pull/940))
+
 ### August 19, 2026
 
 #### Surveys
