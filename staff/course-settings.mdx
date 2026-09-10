@@ -58,6 +58,42 @@ instructor-only.
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+## Discord
+
+**Course Settings → Discord** connects the course to a Discord server so that help requests, regrade requests, and other course activity post automatically to Discord channels.
+
+### Connecting a server
+
+1. Open **Course Settings → Discord**.
+2. Click **Add Pawtograder to your Discord server**.
+3. On Discord's consent screen, pick the server you want to connect. Only servers where you have **Manage Server** permission appear in the list.
+4. After you authorize, Discord returns you to the course settings page. Pawtograder confirms the bot is in the server before recording the connection.
+
+One unarchived course per server — if another active course already holds the server, the connection is refused by name.
+
+### Installation status panel
+
+The **Discord Server** panel on the settings page shows whether the bot is installed and can work in the server. It checks:
+
+- **Server-level permissions** — whether the bot holds all six required permissions (View Channels, Manage Roles, Manage Channels, Create Invite, Send Messages, Read Message History).
+- **Role hierarchy** — whether the bot's role sits above the course's roles. Discord refuses to assign a role at or above the bot's own position and reports it as a missing permission, so the panel shows both positions. The fix is **Server Settings → Roles**: drag **Pawtograder** above the course roles.
+- **Channel permissions** — whether any channel the bot posts to has an overwrite that blocks it.
+- **Invite channels** — whether at least one channel allows the bot to create invites (required for student enrollment).
+
+Press **Re-check** after making changes in Discord to refresh the panel.
+
+### Disconnecting a server
+
+Click **Disconnect Discord** in the installation status panel. Pawtograder forgets the roles and channels it created; those remain in the Discord server for an administrator to delete, and nobody is removed from the server.
+
+### Channel organization
+
+The **Channel Organization** section lets you set an optional **Channel Category ID** so the course's channels are created under a specific category. Enable Developer Mode in Discord (**Settings → Advanced**), then right-click the category and choose **Copy ID**. Leave the field empty to create channels at the top level of the server.
+
+### Calendar integration
+
+The **Calendar Integration** section holds ICS feed URLs for office hours and events. Pawtograder syncs these every five minutes and posts schedule changes to the matching Discord channels.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
