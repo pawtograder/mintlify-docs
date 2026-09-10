@@ -6,6 +6,46 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 10, 2026
+
+#### Discord
+- **Discord channels now have a repair path** — If a course's `#scheduling` or `#operations` channels were never created (for example, because the bot lacked permissions when the server was first connected), the **Re-invite** button on the course roster now re-creates them alongside any missing roles. Previously, dead-lettered channel creation jobs had no recovery path and the channels would stay missing for the rest of the term ([#967](https://github.com/pawtograder/platform/pull/967))
+- **Fewer Discord API rate-limit errors during role sync** — The batch role sync no longer looks up each guild member twice. The redundant second lookup was exhausting Discord's per-route rate-limit bucket and producing spurious 429 errors; the sync now passes the result of its first lookup directly to the role-assignment handler ([#967](https://github.com/pawtograder/platform/pull/967))
+
+#### GitHub
+- **Forking a private handout no longer retries for hours** — When an assignment is configured to fork a private template repository but the GitHub organization does not allow forking private repos, repository creation now fails immediately with a clear message naming the remedy, instead of retrying for up to 32 hours. A generic backstop also parks any other repository whose creation job is dead-lettered, capping retries at one cycle rather than eight ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Handout sync now handles non-ASCII file content correctly** — Files containing accented characters, emoji, or other Unicode content are now read and written as UTF-8. Previously, the sync used a Latin-1 codec that caused patch failures and dead-lettered sync jobs for files with characters outside the ASCII range ([#970](https://github.com/pawtograder/platform/pull/970))
+- **Deleted repositories no longer throttle permission sync for a whole org** — A repository that no longer exists on GitHub is now detected quickly and parked, rather than spending 93 seconds on a retry ladder and then tripping the org-wide circuit breaker. Permission sync for archived assignments is also skipped entirely ([#965](https://github.com/pawtograder/platform/pull/965))
+
+#### Leaderboard
+- **Leaderboard constraint no longer discards student grades** — A database check constraint that rejected scores above the declared maximum (which can legitimately occur with mutation-testing graders) has been removed. Leaderboard updates that fail for any reason now log a warning and continue rather than rolling back the grade that triggered them ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### GitHub
+- **Permission sync skips redundant work on large orgs** — Repository permission sync no longer attempts to remove collaborators whose access comes from a team or org ownership, since those removals have no effect. On a course org where all access is team-based, this eliminated over a minute of wasted API calls per sync. The org member list is also skipped when there are no users to add ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Per-org permission sync exemptions** — Site admins can now configure a list of GitHub usernames that permission sync should never remove from repositories in a given org. This replaces a hardcoded list that applied to every org. The setting is available on the **GitHub Orgs** admin page ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Webhook configuration returns a clear error when the grader repo is missing** — If a solution repository was never created (for example, because an earlier step failed), the autograder configuration page now returns a 400 with an explanation rather than a generic 500 error ([#960](https://github.com/pawtograder/platform/pull/960))
+
+### September 8, 2026
+
+#### GitHub
+- **Handout creation no longer fails for brand-new courses** — Creating a mode-2 handout repository for a course with no enrolled students no longer returns a 500. The students team is now created on demand if it does not yet exist, and the staff team grant is skipped gracefully when the staff team has not been created yet ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Authentication
+- **Microsoft sign-in now works on staging** — The Helm chart now sets the required OAuth redirect URI for the Azure provider. Previously, the missing redirect URI caused every Microsoft sign-in attempt to fail with a 400 error before contacting Microsoft. An optional `url` field is also available to pin sign-in to a specific Entra tenant ([#957](https://github.com/pawtograder/platform/pull/957))
+
+#### Performance
+- **Async worker drain concurrency and visibility timeout are now tunable** — The `github-async-worker` pgmq drain concurrency and visibility timeout can now be configured via Helm values (`edgeFunctions.githubAsyncWorker.drainConcurrency` and `visibilityTimeoutSeconds`). The defaults reproduce the previous hardcoded behaviour. Detailed step-level timing is now emitted for `create_repo` and `sync_repo_permissions` operations to help diagnose future latency issues ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+- **Provisioning-push retries no longer flood error alerts** — When a student push arrives while a repository is still being provisioned, the event is now reported at `info` level with its own fingerprint rather than as an `error`. Genuine readiness failures (where the repository exists but the database was never updated) continue to alert at `error` level ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord discussion stats no longer silently fail on large batches** — Author profile lookups are now fetched in bounded chunks of 50 UUIDs, preventing the URI-too-long error that caused the hourly stats update to report `0 errors` while actually failing to resolve any author names. Messages whose author could not be resolved are now counted as errors and left for the next run rather than attributed to the wrong author ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
 
 ### August 19, 2026
