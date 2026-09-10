@@ -6,6 +6,40 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 10, 2026
+
+#### GitHub
+
+- **Handout sync now handles Unicode and non-ASCII files correctly** — Files containing accented characters, emoji, or other non-ASCII text are now read and written as UTF-8 rather than Latin-1. Previously, a handout file containing characters like `ā` or `é` could cause the sync to fail silently (corrupting patch context) or throw an unretryable error that dead-lettered the sync message and left student repositories out of date ([#970](https://github.com/pawtograder/platform/pull/970))
+- **Disabled-fork assignments fail fast with an actionable message** — When an assignment uses fork-mode repository creation and the source repository cannot be forked (because it is private and the GitHub organization does not allow forking private repositories, or because forking is disabled on the repository itself), the error is now detected before any retry attempts and reported with a clear remedy. Previously, the worker retried for up to 8.5 hours before giving up. Clicking **Retry** after fixing the configuration will provision the repositories immediately ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Deleted repositories no longer stall permission sync for an entire org** — When a repository has been deleted from GitHub outside of Pawtograder, permission sync for that repository now stops retrying immediately and parks the row, rather than spending 93 seconds per attempt and then tripping an org-wide circuit breaker that throttled permission sync for every other course in the organization ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Archived assignments excluded from permission sync and repository creation** — Repository permission sync and repository creation triggered by a student joining a GitHub organization now skip assignments that have been archived. Previously, archived assignments with deleted repositories could cause hundreds of doomed sync jobs to be enqueued, each spending 93 seconds before failing ([#965](https://github.com/pawtograder/platform/pull/965))
+
+#### Leaderboard
+
+- **Leaderboard constraint no longer discards student grades** — A database check constraint on the leaderboard table could reject a grading run when a student's autograder score exceeded the declared maximum (which can happen legitimately with mutation-testing graders or when score and max-score are computed from different sources). The constraint has been removed and the leaderboard update is now isolated from the grading transaction, so a leaderboard problem can never cause a grade to be lost ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### GitHub
+
+- **Permission sync skips futile removals** — Repository permission sync previously attempted to remove collaborators whose access came from a GitHub team or org ownership, which GitHub accepts but silently ignores. On a large course org this wasted over 60 seconds per sync. Removals are now filtered to direct collaborators only, and a new **Permission sync exemptions** field on the GitHub org admin page lets you list accounts that should never be removed ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Handout creation no longer fails for brand-new courses** — Creating a mode-2 handout repository for a course with no enrolled students failed with a 500 error because the student GitHub team did not exist yet. The team is now created automatically during handout setup ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Performance
+
+- **Async worker drain concurrency and visibility timeout are now tunable** — The `github-async-worker` pgmq drain concurrency and visibility timeout can now be configured via Helm values (`edgeFunctions.githubAsyncWorker.drainConcurrency` and `visibilityTimeoutSeconds`). Defaults are unchanged from the previously hardcoded values (4 / 300s). Detailed step-level timing is now emitted for each `create_repo` and `sync_repo_permissions` operation to help diagnose future latency issues ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+
+- **Provisioning-push retries no longer flood error alerts** — When a student push arrives while a repository is still being provisioned, the event is redelivered by EventBridge until provisioning completes. These expected retries are now reported at `info` level with their own Sentry fingerprint, so a genuine readiness-write failure remains visible and is not buried in provisioning noise. A 58-student assignment release previously produced 412 error-level events from this one path ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord discussion stats no longer silently fail on large batches** — The hourly Discord stats sync was putting all author profile UUIDs into a single database query, which exceeded URL length limits on batches of ~280 or more messages. The query now runs in chunks of 50 IDs. A failed chunk is counted as errors in the completion summary rather than silently falling back to "Anonymous" ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Microsoft sign-in now works on deployments using Azure OAuth** — The Helm chart was missing the required `GOTRUE_EXTERNAL_AZURE_REDIRECT_URI` environment variable, causing all Microsoft sign-in attempts to fail with a 400 error even when valid credentials were configured. The redirect URI is now set automatically, defaulting to the API gateway origin ([#957](https://github.com/pawtograder/platform/pull/957))
+
 ## August 2026
 
 ### August 19, 2026
