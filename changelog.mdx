@@ -6,6 +6,44 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 10, 2026
+
+#### GitHub
+
+- **Deleted repositories no longer stall permission sync for an entire org** — A repository deleted outside Pawtograder previously caused its permission-sync job to spend 93 seconds on a retry ladder and then trip the org-wide circuit breaker, pausing syncs for every other course in the organization. The worker now probes whether the repository is genuinely gone before spending those retries, parks the row if it is, and keeps the failure isolated to that one repository ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Archived assignments excluded from permission sync and repo creation** — When a student's GitHub org membership is confirmed, the platform no longer queues permission-sync or repo-creation jobs for assignments that have been archived. Previously, archived assignments with deleted repos produced a stream of 404 errors and could trip the org-wide circuit breaker ([#965](https://github.com/pawtograder/platform/pull/965))
+
+### September 9, 2026
+
+#### Leaderboard
+
+- **Leaderboard constraint no longer discards a student's grade** — A database check constraint on the leaderboard table (`autograder_score <= max_score`) was evaluated inside the same transaction as the autograder's feedback insert. When a grader legitimately produced a score above the declared maximum (for example, via mutation scoring), the constraint violation rolled back the entire grade. The constraint is removed, scores are clamped in a shared upsert function, and any future leaderboard error is logged as a warning rather than aborting grading ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 8, 2026
+
+#### GitHub
+
+- **Handout creation no longer fails for brand-new courses** — Creating the first mode-2 handout repository for a course with no enrolled students previously returned a 500 error because the student GitHub team did not exist yet. The platform now creates the team on demand during handout setup. Staff team grants are skipped gracefully when the staff team has not been created yet, matching the existing degradation behavior for the staff roster ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### GitHub
+
+- **Permission sync performance improvements** — Repository permission sync was spending up to 63 seconds issuing removal requests that GitHub cannot honor (access held through a team or org ownership cannot be revoked via the direct-collaborator endpoint). Removals are now filtered to direct collaborators only. The org member list is also skipped when there are no users to add, saving up to 18 seconds on handout and solution repo creation. Expected sync time for a new handout repo drops from ~95 seconds to ~13 seconds ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Per-org permission sync exemptions** — Site admins can now configure a list of GitHub usernames that permission sync must never remove from repositories in a given org. This replaces a hardcoded list that applied to every org. The setting is available on the **GitHub Orgs** admin page ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Async worker drain concurrency and visibility timeout are now tunable** — The `github-async-worker` pgmq drain concurrency and visibility timeout can be configured via Helm values (`edgeFunctions.githubAsyncWorker.drainConcurrency` and `visibilityTimeoutSeconds`). Defaults reproduce the previous hardcoded behavior. The chart enforces that the visibility timeout and isolate lifetime cover the modeled batch size, and refuses incoherent combinations at render time ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Microsoft sign-in
+
+- **Microsoft (Azure) sign-in now works** — The Helm chart was missing the required `GOTRUE_EXTERNAL_AZURE_REDIRECT_URI` environment variable, causing all Microsoft sign-in attempts to fail with a 400 error before contacting Microsoft. The redirect URI now defaults to the API gateway origin and can be overridden per deployment. An optional `url` field supports tenant pinning ([#957](https://github.com/pawtograder/platform/pull/957))
+
+#### Bug fixes
+
+- **Webhook provisioning retries no longer flood error alerts** — During a large assignment release, every repository's first webhook delivery arrived before provisioning finished, producing one error-level Sentry event per delivery per repository. These expected retries are now reported at `info` level with their own fingerprint, while genuine readiness failures remain at `error` level ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord discussion stats no longer silently fail on large batches** — The hourly Discord stats sync was putting all author UUIDs in a single database filter, which exceeded the URL length limit on batches of ~280 or more messages. The failure was swallowed and the summary reported `0 errors`. Author lookups are now chunked, failed chunks are counted as errors, and messages with unresolved authors are left for the next run rather than attributed to the wrong author ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
 
 ### August 19, 2026
