@@ -6,6 +6,52 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 11, 2026
+
+#### GitHub
+
+- **Permission sync no longer queues work for repositories in another org** — When a student's GitHub org membership was confirmed, the permission sync could enqueue jobs for repository rows belonging to a different organization (left behind by end-to-end test fixtures). Those jobs could never succeed and would open the org-wide circuit breaker for hours. The sync now skips any repository whose org does not match the class's configured GitHub org, using a case-insensitive comparison ([#972](https://github.com/pawtograder/platform/pull/972))
+
+### September 10, 2026
+
+#### GitHub
+
+- **Expired GitHub org invitations are now automatically re-sent** — A GitHub org invitation expires after 7 days with no notification. Previously, a student who let their invitation lapse would silently lose team membership and repository access for the rest of the term, with no automated repair. An hourly reconciler now finds enrollments with lapsed or missing invitations and re-invites them, bounded to the course's active term window. Classes with stuck memberships and no term dates set are surfaced as alerts rather than silently skipped ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Leaving a GitHub org un-confirms the enrollment** — When a student or staff member left a course's GitHub org, their enrollment remained marked as confirmed, so nothing would ever re-invite them. The `member_removed` webhook event now clears the confirmation and immediately enqueues a repair for courses still in session ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Deleted repositories no longer throttle permission sync for the whole org** — A repository that no longer exists on GitHub would spend a 93-second retry ladder on every sync attempt, then escape as a bare error that opened the org-wide circuit breaker. The sync now probes the repository's existence on a 404 and classifies it as missing (parks the row) or inaccessible (stops retrying without touching the row), keeping the failure per-row rather than org-wide. Archived assignments are also excluded from permission sync ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Fork-mode repository creation fails fast when forking is disabled** — When a course's handout repository is private and the GitHub org does not allow forking private repositories, every `create_repo` job would fail with a 403 and retry for hours. The worker now preflights the fork source before attempting creation and surfaces a clear, actionable error message immediately ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Dead-lettered repository creation jobs are parked immediately** — The repository reconciler now detects when a `create_repo` job has been dead-lettered and parks the repository row right away, rather than waiting for the eight-attempt ceiling ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Handout sync now reads and writes files as UTF-8** — Files containing non-ASCII characters (accented letters, characters above U+00FF) were previously decoded with Latin1, causing patch failures and dead-lettered sync messages. The handout sync now correctly handles UTF-8 content, with a byte-preserving fallback for files that are not valid UTF-8 ([#970](https://github.com/pawtograder/platform/pull/970))
+
+#### Discord
+
+- **Discord channels now have a repair path** — If a course's `#scheduling` or `#operations` channels failed to be created when the Discord server was first connected (for example, due to a missing bot permission), pressing the **Retry** button on the course settings page now re-creates them. Previously, those channels could only be recovered by hand ([#967](https://github.com/pawtograder/platform/pull/967))
+- **Discord role sync no longer makes duplicate API calls** — The batch role sync was reading each guild member's status and then immediately re-reading it inside the handler, doubling the Discord API calls and exhausting the per-route rate limit bucket. The enqueuer now passes the membership result to the handler so the second lookup is skipped ([#967](https://github.com/pawtograder/platform/pull/967))
+- **Short Discord rate limits are waited out rather than reported as errors** — A sub-second rate limit from Discord was previously amplified into a 5-second requeue and an error-level Sentry event. Rate limits under one second are now waited out in place and retried once ([#967](https://github.com/pawtograder/platform/pull/967))
+
+#### Leaderboard
+
+- **A leaderboard constraint can no longer discard a student's grade** — A `check_score_bounds` constraint on the leaderboard table was evaluated inside the same database transaction as the autograder's feedback insert. When a grader reported a score above the declared maximum (which is legitimate for extra credit or mutation testing), the constraint violation rolled back the entire grade. The constraint has been removed and the leaderboard upsert now has an exception handler so no future leaderboard problem can abort a grading run ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### GitHub
+
+- **Permission sync skips archived assignments** — The org-join trigger that fires when a student's GitHub membership is confirmed was enqueuing permission syncs for repositories belonging to archived assignments, including assignments whose repos had been deleted. Those syncs would fail and open the org-wide circuit breaker. Both the trigger and the **Fix GitHub** button now skip archived assignments ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Handout creation no longer fails for brand-new courses** — Creating the first mode-2 handout repository for a course with no enrolled students would fail with a 404 because the `<slug>-students` team did not exist yet. The team is now created automatically when needed during handout setup ([#959](https://github.com/pawtograder/platform/pull/959))
+- **Permission sync performance improved for large orgs** — Repository permission sync was issuing removal requests for collaborators whose access came from a team or org ownership, which GitHub accepts but ignores. On a large course org this wasted over 60 seconds per sync. Removals are now filtered to direct collaborators only. The org member list is also skipped when there are no users to add. Per-org permission sync exemptions can now be configured on the GitHub Orgs admin page ([#960](https://github.com/pawtograder/platform/pull/960))
+
+#### Webhook and async worker
+
+- **Repository provisioning pushes no longer flood error alerts** — When a student repository was still being provisioned, every webhook delivery for the initial push was reported as an error-level Sentry event. A 58-student assignment release produced 412 such events over 88 minutes. Pushes that arrive while provisioning is still in flight are now classified separately and reported at `info` level with their own fingerprint, while genuine readiness failures remain visible as errors ([#955](https://github.com/pawtograder/platform/pull/955))
+- **GitHub async worker drain concurrency and visibility timeout are now tunable** — The worker's pgmq read fan-out (`n: 4`) and visibility timeout (`sleep_seconds: 300`) were hardcoded. A 58-message `create_repo` burst on 2026-09-07 took 88 minutes to drain, with 20 of 58 messages re-read because the batch outlived the 300-second timeout. Both values are now configurable via Helm chart values, with render-time validation that enforces the coupling between concurrency, visibility timeout, and isolate lifetime ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Microsoft sign-in
+
+- **Microsoft (Azure) sign-in now works on staging** — The Helm chart was not setting the required `GOTRUE_EXTERNAL_AZURE_REDIRECT_URI` environment variable, causing every Azure sign-in attempt to fail with a 400 error before contacting Microsoft. The redirect URI is now rendered automatically, defaulting to the API gateway origin. An optional `url` field supports tenant pinning for deployments that should restrict sign-in to a single Entra directory ([#957](https://github.com/pawtograder/platform/pull/957))
+
 ## August 2026
 
 ### August 19, 2026
