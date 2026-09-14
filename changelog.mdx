@@ -6,6 +6,63 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 14, 2026
+
+#### GitHub
+
+- **Async worker drains per GitHub org** — Repository provisioning jobs are now processed per GitHub organization in parallel, so a large assignment release in one course no longer blocks provisioning for every other course. Previously a single leaseholder drained all jobs sequentially; now each organization gets its own leaseholder slot, and multiple organizations drain concurrently up to a configurable fleet-wide cap ([#980](https://github.com/pawtograder/platform/pull/980))
+
+### September 11, 2026
+
+#### Bug fixes
+
+- **Permission sync no longer queues work for repos in another org** — The org-join permission sync now skips repository rows whose GitHub org does not match the class's configured org, preventing doomed sync jobs from being enqueued for placeholder or test repositories left over from e2e fixtures ([#972](https://github.com/pawtograder/platform/pull/972))
+- **Kong header buffer raised past the 8 KB default** — Students linking their GitHub account on large deployments could receive a `Request header or cookie too large` error when their session cookie exceeded 8 KB. Kong's client request header buffer is now set to 16 KB, matching the limit already in place for other services ([#974](https://github.com/pawtograder/platform/pull/974))
+
+### September 10, 2026
+
+#### GitHub
+
+- **Expired org invitations are now re-sent automatically** — GitHub org invitations expire after 7 days with no notification. Students who did not accept their invitation in time were silently left outside the org — without team membership or repository access — until they logged in or pressed "Sync GitHub Account." An hourly reconciler now detects lapsed invitations and re-sends them automatically, within the course's term window. Classes with stuck enrollments are alerted in Sentry ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Leaving a GitHub org un-confirms the enrollment** — When a student or staff member leaves a course's GitHub org, their enrollment is now immediately un-confirmed and a repair invitation is queued. Previously `github_org_confirmed` was a one-way latch that was never cleared, so a departed member appeared confirmed forever and no automation would re-invite them ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Disabled fork no longer retries for hours** — When a course's handout repository is private and the GitHub org does not allow forking private repositories, repository creation now fails immediately with an actionable error message instead of retrying for up to 32 hours. The reconciler also now parks any repository whose creation job was dead-lettered, regardless of the reason ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Deleted repository no longer throttles permission sync for a whole org** — A `sync_repo_permissions` job for a repository that no longer exists on GitHub used to spend 93 seconds on the retry ladder and then open the org-wide circuit breaker, pausing permission sync for every other class in the org. The worker now probes the repository directly on a 404 and classifies it as missing or inaccessible before spending the retry budget ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Handout sync reads and writes files as UTF-8** — Handout sync previously used Latin1 encoding, which caused `btoa` to throw on any file containing characters above U+00FF (such as accented letters or non-ASCII identifiers). Affected sync jobs dead-lettered silently. Files are now decoded and re-encoded as UTF-8, with a byte-preserving Latin1 fallback for files that are not valid UTF-8 ([#970](https://github.com/pawtograder/platform/pull/970))
+
+#### Discord
+
+- **Discord channels now have a repair path** — If a course's `#scheduling` or `#operations` Discord channels failed to be created when the bot was first connected (for example, due to missing permissions), pressing the Discord reinvite button now re-creates them. Previously there was no way to recover these channels without manual intervention ([#967](https://github.com/pawtograder/platform/pull/967))
+
+#### Bug fixes
+
+- **Leaderboard constraint no longer discards a student's grade** — A `check_score_bounds` constraint on the leaderboard table could reject a grading run when the autograder awarded more points than the declared maximum (for example, with mutation scoring). The constraint has been removed and the leaderboard upsert now has an exception handler so no future leaderboard problem can abort a grading transaction ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### GitHub
+
+- **Permission sync skips archived assignments** — The org-join permission sync and the "Fix GitHub" button no longer attempt to sync repositories for archived assignments. Previously, archived assignments with deleted repositories would generate doomed sync jobs that opened the org-wide circuit breaker ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Permission sync is 60–80× faster for new handout repos** — Creating a handout repository no longer spends 63 seconds attempting to remove collaborators who hold access through a team or org ownership (which GitHub silently ignores). The sync now fetches only direct collaborators before issuing removals. An org roster read that was unnecessary when no users need to be added is also skipped ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Per-org permission sync exemptions** — Administrators can now configure GitHub usernames that repository permission sync must never remove, on a per-org basis from the GitHub Orgs admin page. This replaces a hardcoded list that applied to every org and required a code deploy to change ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Handout creation no longer 500s for brand-new courses** — Creating the first mode-2 handout repository for a course with no enrolled students failed with a 404 because the `<slug>-students` team did not exist yet. The team is now created automatically during handout setup ([#959](https://github.com/pawtograder/platform/pull/959))
+
+#### Bug fixes
+
+- **Provisioning push noise reduced in error tracking** — During a large assignment release, every repository's first webhook delivery arrived before provisioning was complete and was reported as an error-level Sentry event. These expected retries are now reported at `info` level with their own fingerprint, so a genuine readiness-write failure remains visible ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord discussion stats no longer silently fail on large batches** — The hourly Discord stats update was putting all author UUIDs in a single query filter, which exceeded the URL length limit for batches of ~280 or more messages. The run reported `0 errors` even though no author names were fetched. Author lookups are now chunked, partial failures are counted, and messages with unresolved authors are left for the next run rather than attributed to the wrong author ([#955](https://github.com/pawtograder/platform/pull/955))
+
+### September 7, 2026
+
+#### GitHub
+
+- **Async worker drain concurrency and visibility timeout are now tunable** — The number of repository creation jobs processed concurrently and the pgmq visibility timeout can now be configured per deployment. Defaults reproduce the previous hardcoded values (4 concurrent, 300s timeout), so upgrading changes nothing until an operator sets a value. Render-time validation prevents incoherent combinations that would cause jobs to be re-served while still in flight ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+
+- **Autograder configuration page no longer 500s when the grader repo is missing** — Opening the autograder settings for an assignment whose grader repository was never created returned a generic 500 error. The page now returns a clear 400 with a message explaining that repository creation needs to be retried ([#960](https://github.com/pawtograder/platform/pull/960))
+
 ## August 2026
 
 ### August 19, 2026
