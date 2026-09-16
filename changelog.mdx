@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 16, 2026
+
+#### Performance
+- **Faster repo provisioning when multiple classes release at once** — The async worker now drains each GitHub organization in parallel rather than in a single queue. When several classes in different GitHub organizations release assignments at the same time, each organization's repositories are created concurrently instead of waiting behind one another ([#980](https://github.com/pawtograder/platform/pull/980))
+
+#### Bug fixes
+- **Microsoft sign-in now works** — The Azure authentication provider was missing a redirect URI, which prevented Microsoft accounts from completing sign-in ([#957](https://github.com/pawtograder/platform/pull/957))
+- **Leaderboard submissions no longer silently discarded** — A database check constraint could cause a leaderboard entry to be dropped when a submission was recorded; this no longer happens ([#964](https://github.com/pawtograder/platform/pull/964))
+- **Handout sync handles non-ASCII content correctly** — Files containing characters outside the ASCII range (accented letters, emoji, etc.) are now read and written as UTF-8 instead of Latin-1, preventing corruption during handout synchronization ([#970](https://github.com/pawtograder/platform/pull/970))
+- **Expired GitHub org invitations are re-sent automatically** — When a student's GitHub organization invitation expired before they accepted it, they were stuck. The worker now detects expired invitations and re-invites automatically ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Handout creation no longer fails when the course team is missing** — Creating a handout repository no longer returns a 500 error when the course's GitHub team has not been created yet ([#959](https://github.com/pawtograder/platform/pull/959))
+- **A deleted repository no longer stalls permission sync for the whole org** — One missing repository could block permission synchronization for every other repository in the same GitHub organization ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Permission sync no longer does redundant work with many spurious admins** — When a course GitHub organization had many unexpected admin members, permission sync would perform a large amount of work that changed nothing. It now skips that work ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Disabled forks no longer retry for hours** — A repository fork that was disabled would keep retrying for hours before giving up. It now stops quickly and parks the job for staff review ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Permission sync no longer queues work for repositories in another org** — A bug caused permission sync to enqueue jobs for repositories belonging to a different GitHub organization than the one being synced ([#972](https://github.com/pawtograder/platform/pull/972))
+
 ## August 2026
 
 ### August 19, 2026
