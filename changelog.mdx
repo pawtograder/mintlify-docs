@@ -6,6 +6,64 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 17, 2026
+
+#### Bug fixes
+- **Bottleneck Redis 7 compatibility restored** — The edge layer's rate-limiter (Bottleneck) can once again recognise its own Lua errors when running against Redis 7, preventing spurious failures under load ([#997](https://github.com/pawtograder/platform/commit/151061fc2238d17501e6ca519abf69a59ccf2872))
+- **Async worker waits correctly when a repo is not ready** — Instead of relying on the SQS visibility timeout, the worker now applies an explicit delay when a repository is not yet available, so retries are predictable and do not block the queue ([#999](https://github.com/pawtograder/platform/commit/d8477570df045a91c62a4adc302bdb49d6b38186))
+
+### September 16, 2026
+
+#### Performance
+- **Async worker keeps N messages in flight** — The worker now maintains a configurable number of messages in flight concurrently instead of draining a full batch before picking up the next one, improving throughput under sustained load ([#982](https://github.com/pawtograder/platform/commit/0d60dd6e3afad87806fb1742b2e69f492611c25c))
+
+#### Bug fixes
+- **Edge: supabase-js auth ticker no longer leaks per request** — Per-request supabase-js clients on the edge are now torn down correctly, and parked repositories no longer trigger repeated alerts ([#990](https://github.com/pawtograder/platform/commit/54c653355dce35323e15c9cf9f72048c9bf6c31f))
+
+### September 15, 2026
+
+#### Bug fixes
+- **Web: supabase-js auth ticker no longer leaks per request** — Per-request supabase-js clients in the web layer are now torn down correctly, preventing a slow memory and connection leak over long-running sessions ([#984](https://github.com/pawtograder/platform/commit/7399205de48ebf6ea06bcbcc5eaab7ecfd5033f2))
+
+### September 14, 2026
+
+#### Async worker
+- **Queue drains per GitHub org** — The async worker now drains work per GitHub organization rather than globally, so a slow or rate-limited release for one course no longer blocks grading and repository operations for every other class ([#980](https://github.com/pawtograder/platform/commit/24617b06e59cd7590fbffbe3502b8618a2c1b9d3))
+
+### September 12, 2026
+
+#### Infrastructure
+- **Backup image bundles `mc`** — The MinIO client (`mc`) is now baked into the backup image instead of being downloaded at run time, making backup jobs faster and immune to network failures during startup ([#976](https://github.com/pawtograder/platform/commit/6fd1f66e6686920641f255ae709a8ff6ab820810))
+- **Backup dumps staged on a dedicated volume** — Database backup dumps are now written to their own persistent volume instead of the node's ephemeral disk, preventing backup failures on nodes with limited local storage ([#975](https://github.com/pawtograder/platform/commit/c0aa7d8ed2c917705f8107f40c971c3c112fe317))
+
+### September 11, 2026
+
+#### Bug fixes
+- **Kong header buffer raised** — Kong's client request header buffer has been increased beyond the 8 KB default, preventing request failures for users with large session cookies or many custom headers ([#974](https://github.com/pawtograder/platform/commit/6517c825081c7d56b5bb9c7b951655d833eedac4))
+- **Permission sync scoped to the correct org** — GitHub permission synchronization no longer queues work for repositories that belong to a different organization, eliminating spurious permission-sync jobs on multi-org deployments ([#972](https://github.com/pawtograder/platform/commit/a7dd332f25ad86b0bdd78b3a8dc017b7f4fdef13))
+
+### September 10, 2026
+
+#### Bug fixes
+- **GitHub org membership self-heals expired invitations** — When a GitHub organization invitation expires before a student accepts it, the platform now re-invites them automatically instead of leaving them locked out ([#962](https://github.com/pawtograder/platform/commit/748667048267c3da28400f81de2e9f87936ded6f))
+- **Discord channels get a repair path** — Discord channels that end up in a broken state can now be repaired automatically, and the member-lookup cost is no longer paid twice per sync ([#967](https://github.com/pawtograder/platform/commit/a1438e32ac0548d1843a26b4d6426db493c4711d))
+- **Disabled fork no longer retries for hours** — A repository fork that is disabled now fails fast instead of retrying until the visibility timeout expires, and a dead-lettered repo creation is parked rather than lost ([#966](https://github.com/pawtograder/platform/commit/d09d329e46f3b0aded2040ba5c9dfa483db60d5d))
+- **Handout sync reads and writes UTF-8** — Handout repository content is now read and written as UTF-8 instead of Latin-1, fixing corruption of non-ASCII characters in handout files ([#970](https://github.com/pawtograder/platform/commit/40a5e4f25b724866467e037116b5ec4885c6f3d2))
+- **Deleted repo no longer throttles permission sync** — A single deleted repository can no longer stall permission synchronization for an entire GitHub organization ([#965](https://github.com/pawtograder/platform/commit/e343562facfb1d56140f81d8ae4fd5b9e141d8b9))
+- **Leaderboard check constraint no longer discards submissions** — A database check constraint on the leaderboard table was incorrectly rejecting valid submissions; this is now fixed ([#964](https://github.com/pawtograder/platform/commit/2ca880f7abe3079fe8c5cf27467383b4f74e9bc3))
+
+### September 9, 2026
+
+#### Performance
+- **Permission sync skips no-op admin changes** — When a course GitHub org has many spurious admin entries, permission sync now detects that no real change is needed and skips the work, significantly reducing API calls and sync time ([#960](https://github.com/pawtograder/platform/commit/400bbf282e7d91b00c491723a508159af4559465))
+
+### September 8, 2026
+
+#### Bug fixes
+- **Handout creation no longer 500s on a missing course team** — Creating a handout repository no longer returns a 500 error when the course's GitHub team does not exist yet; the team is created on demand ([#959](https://github.com/pawtograder/platform/commit/95059e5f0f208f7d3bb8500f585d86e4de78430f))
+
 ## August 2026
 
 ### August 19, 2026
