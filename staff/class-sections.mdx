@@ -1,0 +1,66 @@
+---
+title: "Class Sections"
+description: "View and rename the class sections in your course"
+icon: "school"
+---
+
+# Class sections
+
+**Course Settings → Class Sections** lists every class section in your course with its CRN, meeting times, location, campus, and active student count. Instructors can rename sections from this page; graders can view the page but cannot rename.
+
+Class sections are created when a SIS or LMS roster is imported. Their meeting times, location, and campus are refreshed from SIS every hour. Names are not refreshed: rename a section here and the name sticks.
+
+## Renaming a section
+
+1. Open **Course Settings → Class Sections**.
+2. Find the section you want to rename. Use the **Filter by name** field to narrow the list.
+3. Click the edit icon in the **Actions** column.
+4. Type the new name and click **Save**.
+
+The rename takes effect immediately and is reflected everywhere students see their section — dropdowns, enrollment tables, and calendar titles.
+
+<Note>
+Graders can see the Class Sections page but the rename button is disabled for them. Only instructors can rename sections.
+</Note>
+
+<Note>
+Section names are limited to 100 characters.
+</Note>
+
+## How sections are named on import
+
+When a roster is imported from SIS, class sections are named after their instructor:
+
+| Case | Name format |
+| --- | --- |
+| One instructor | `3500 - MWF 9:15am-10:20am (Doe)` |
+| Co-taught | `3500 - MWF 9:15am-10:20am (Doe, Smith)` |
+| No instructor listed | `3500 - MWF 9:15am-10:20am` |
+| Lab section | `3501 - T 2:30pm-4:10pm` (unchanged) |
+
+Lab sections keep the plain course-number-and-times format. The people SIS lists against a lab CRN are the lecture instructors, not whoever actually runs the lab, so their names are not appended.
+
+This naming applies to new imports only. Existing sections keep their current names, and the hourly SIS sync does not overwrite a name you have set by hand.
+
+## The section table
+
+The table has one row per section, sorted by name. Each column is sortable; click a column header to sort by it. Use the **Filter by name** field to search by section name.
+
+| Column | What it shows |
+| --- | --- |
+| **Name** | Section name |
+| **CRN** | The SIS course reference number, or `—` for sections not linked to SIS |
+| **Meeting Times** | The section's scheduled meeting times, or `—` |
+| **Location** | Room or building, or `—` |
+| **Campus** | Campus name, or `—` |
+| **Students** | Number of active students enrolled in the section |
+| **Actions** | Rename button (instructors only) |
+
+## Relationship to lab sections
+
+Class sections and lab sections are separate. A student can belong to one class section and one lab section at the same time.
+
+- **Class sections** correspond to lecture sections. They are created by SIS import and their meeting details are kept in sync with SIS.
+- **Lab sections** are created and managed manually from **Course Settings → Lab Sections**, and they drive lab-based assignment deadlines.
+
+See [Lab sections](/staff/lab-sections) for how to create and manage lab sections.
