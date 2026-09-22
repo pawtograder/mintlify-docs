@@ -174,6 +174,11 @@ Notes that will save you a support ticket:
   *Repository Status*, *Rerun Autograder*, *Security Audit*, and *Test
   Insights* disappear from the assignment's left-hand nav, because there
   is nothing for them to act on.
+- **No-submission assignments hide the Files and Autograder Detail tabs.**
+  Because there is no artifact to display, the submission view shows only
+  the **Grade** tab and opens directly on the editable rubric, full width.
+  Stale links pointing at `/files` (such as **Next incomplete review**
+  navigation) continue to work and land on the same grading view.
 - **Changing the repository configuration after students have repositories
   does not clean up after itself.** Switching an assignment to one of the
   no-repository modes leaves the existing student repositories in place,
