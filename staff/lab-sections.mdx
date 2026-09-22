@@ -206,6 +206,37 @@ meeting before due date" in place of a date. See
 [Assignment Configuration](/staff/assignments/configuration) for the rest of the
 assignment form.
 
+## Class sections
+
+Class sections are the lecture sections that come from a SIS or LMS roster import. They are separate from lab sections and are managed from **Course Settings → Class Sections** (`manage/course/class-sections`).
+
+The page lists every class section with its CRN, meeting times, location, campus, and active student count. Instructors can rename sections; graders can view but not rename.
+
+### Renaming a class section
+
+1. Go to **Course Settings → Class Sections**
+2. Find the section in the table and click the edit icon in its **Actions** column
+3. Enter the new name (up to 100 characters) and click **Save**
+
+The rename takes effect immediately and updates everywhere the section name appears — dropdowns, enrollment tables, and calendar titles. Meeting times, location, and campus are refreshed from SIS every hour and are not editable here; only the name sticks.
+
+Saving without changing the name closes the dialog without writing anything.
+
+### SIS-imported section names
+
+When a SIS import creates a class section, Pawtograder names it after the course number, meeting time, and instructor surname:
+
+| Case | Name format |
+| --- | --- |
+| One instructor | `3500 - MWF 9:15am-10:20am (Doe)` |
+| Co-taught | `3500 - MWF 9:15am-10:20am (Doe, Smith)` |
+| No instructor listed | `3500 - MWF 9:15am-10:20am` |
+| Lab section | `3501 - T 2:30pm-4:10pm` (unchanged) |
+
+Lab sections keep the plain format because the people SIS lists against a lab CRN are the lecture instructors, not whoever actually runs the lab.
+
+This naming applies only to new imports. Existing sections keep their current names, and the hourly SIS sync does not overwrite a name you have set by hand.
+
 ## Where else lab sections are used
 
 - **Grading.** Bulk grading assignment offers **Assign to lab leaders**, which assigns each submission to all lab leaders of that student's section with no manual grader selection. See [Grading Assignments](/staff/assignments/grading-assignments).
