@@ -110,3 +110,17 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Class sections
+
+Class sections are created by a SIS or LMS roster import and cannot be created or deleted from the course interface. Navigate to **Course Settings → Class Sections** to view and rename them.
+
+The page lists every section with its CRN, meeting times, location, campus, and active student count. Instructors can rename any section by clicking the edit button on its row; graders can view the list but the rename button is disabled for them.
+
+**What renaming does and does not affect:**
+
+- The name is shown wherever students are asked to pick or are shown their section — enrollment tables, section dropdowns, and calendar titles.
+- Meeting times, location, and campus are refreshed from SIS every hour and are not editable here. A rename sticks because the hourly sync never touches the `name` field.
+- Renaming does not affect LTI section mapping. The LMS integration keys on the CRN, not the Pawtograder-side name.
+
+**SIS-imported names** for class sections include the instructor's surname by default — for example, `3500 - MWF 9:15am–10:20am (Doe)` — so multiple lecture sections at the same time are easier to tell apart. Lab sections keep the plain course-number-and-times format because the people SIS lists against a lab CRN are the lecture instructors, not whoever runs the lab. This format applies to new imports; existing sections keep their current names until renamed by hand.
