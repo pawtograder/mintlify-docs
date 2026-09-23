@@ -8,6 +8,18 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 25, 2026
+
+#### Discord
+- **Guided Discord server install flow** — Connecting a course to a Discord server is now a verified OAuth flow instead of a free-text server ID field. Click **Add Pawtograder to your Discord server** on **Course Settings → Discord**, pick the server on Discord's consent screen, and Pawtograder confirms the bot is present before recording the connection. One unarchived course per server is enforced. A new **Discord Server** panel on the settings page reports whether the bot is installed, which permissions are missing, whether the role hierarchy allows role assignment, and whether any tracked channels or roles have drifted — with specific remediation steps for each state. Instructors can also disconnect a server and reconnect to a different one from the same panel ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Students prompted to link Discord before their invite appears** — Students who have not linked a Discord account now see a **Connect to Discord** prompt on their dashboard when their course has Discord enabled, so the invite panel that follows it is no longer blank with no explanation ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Discord bot member lookup fixed** — The installation check was using an invalid API path (`/members/@me`) that Discord rejects. It now resolves the bot's own user ID first and uses that snowflake, so the check works correctly on real Discord servers ([#938](https://github.com/pawtograder/platform/pull/938))
+- **Role provisioning after joining** — After a student opens their Discord invite and returns to the dashboard, Pawtograder automatically requests role provisioning rather than waiting for the next hourly sync. A **My roles have not appeared** button is available as a fallback, rate-limited to five presses per day ([#938](https://github.com/pawtograder/platform/pull/938))
+- **Discord username shown in user settings** — The linked Discord username now appears in the user settings drawer alongside the GitHub handle ([#938](https://github.com/pawtograder/platform/pull/938))
+
+#### Submissions
+- **Extensionless compiled binaries no longer crash submissions** — A student who committed a compiled executable (such as `mystery` next to `mystery.c`) with no file extension would have every subsequent push fail with a database error. Pawtograder now detects binary content by scanning for NUL bytes, not just by file extension, and routes those files to storage instead of trying to store them as text ([#941](https://github.com/pawtograder/platform/pull/941))
+
 ### August 19, 2026
 
 #### Surveys

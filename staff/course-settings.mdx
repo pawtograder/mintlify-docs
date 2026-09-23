@@ -21,7 +21,7 @@ Routes are relative to `/course/<course_id>/`.
 
 | Entry | Route | What it does | Documentation |
 | --- | --- | --- | --- |
-| **Discord** | `manage/discord` | Connects the course to a Discord server, so help requests and regrade requests post automatically to Discord channels. Also holds the **Calendar Integration** section, which auto-syncs every 5 minutes. | Not yet documented |
+| **Discord** | `manage/discord` | Connects the course to a Discord server through a verified OAuth install flow, so help requests and regrade requests post automatically to Discord channels. The page also shows the bot's installation status and any permission or role-hierarchy issues. Also holds the **Calendar Integration** section, which auto-syncs every 5 minutes. | See below |
 | **Enrollments** | `manage/course/enrollments` | The course roster table, plus a panel of university Student Information System (SIS) section links. | Not yet documented |
 | **LMS (LTI) Sync** | `manage/course/lti` | Syncs rosters from your LMS and pushes assignment grades back over LTI 1.3. | Not yet documented |
 | **Feature flags** | `manage/course/feature-flags` | Turns course features on or off. Navigation, dashboards, and student tools follow these flags. | [Feature flags](/staff/feature-flags) |
@@ -57,6 +57,46 @@ instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
+
+## Discord
+
+Open **Course Settings → Discord** to connect your course to a Discord server and manage the integration.
+
+### Connecting a server
+
+Click **Add Pawtograder to your Discord server**. You are taken to Discord's consent screen, where you pick the server you want to connect. Pawtograder confirms the bot is present before recording the connection. Only one unarchived course can be connected to a given server at a time.
+
+You must have **Manage Server** permission on the Discord server you choose. That permission is what authorizes the course to use it.
+
+### Installation status panel
+
+After connecting, the **Discord Server** panel shows whether the bot is working correctly. It reports:
+
+- **Not connected** — the bot is not in any server yet, or was removed after connecting.
+- **Missing permissions** — the bot is present but lacks one or more required permissions. The panel names each missing permission and offers a **Re-authorize** button that takes you back to Discord's consent screen, pinned to the connected server.
+- **Role hierarchy problem** — the bot holds all required permissions, but its role sits at or below one of the course's roles in the server's role list. Discord refuses to assign a role at or above the bot's own position. Fix it by dragging the **Pawtograder** role above the course roles in **Server Settings → Roles**, then press **Re-check**.
+- **Channel permission problem** — a channel-level permission override blocks the bot in one or more tracked channels. The panel names the channel and the blocked permission. Fix it in **Edit Channel → Permissions** for the Pawtograder role, then press **Re-check**.
+- **Connected and working** — the bot is present, all permissions are in order, and the role hierarchy allows role assignment.
+
+Graders can see the status panel but cannot connect, disconnect, or re-authorize.
+
+### Changing or disconnecting a server
+
+From the **Connected and working** state, instructors can:
+
+- **Re-authorize permissions** — takes you back to Discord's consent screen, pinned to the current server, to widen permissions after a change.
+- **Connect a different Discord server** — opens the server picker so you can move the course to a new server. Pawtograder forgets the roles, channels, and tracked messages it created in the old server; those remain in Discord for an administrator to delete, and no one is removed from the old server.
+- **Disconnect Discord** — removes the connection entirely. Same cleanup as moving servers.
+
+### Channel organization
+
+Optionally, set a **Channel Category ID** to have Pawtograder create the course's channels under a specific category in the server. Leave it empty to create channels at the top level. To find a category's ID, enable Developer Mode in Discord (**Settings → Advanced**), then right-click the category and choose **Copy Channel ID**.
+
+The category ID is cleared automatically if the course moves to a different server.
+
+### Student Discord access
+
+To let students join the course's Discord server, turn on the **Let students join this course's Discord server** flag under **Course Settings → Feature flags**. Students with a linked Discord account will see an invitation on their dashboard. See [Feature flags](/staff/feature-flags) for details.
 
 ## Course time zone
 
