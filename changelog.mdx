@@ -8,6 +8,20 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 25, 2026
+
+#### Submissions
+- **Extensionless binaries stored correctly** — A compiled executable committed without a file extension (for example, `mystery` next to `mystery.c`) is now classified by its contents rather than its name. Previously, such files were treated as text, which caused the submission to fail with a database error and left the student with no recorded submission. Files without a recognized binary extension are now stored in the binary path if they contain binary data ([#941](https://github.com/pawtograder/platform/pull/941))
+
+### August 24, 2026
+
+#### Discord
+- **Guided Discord server connection** — Connecting a course to a Discord server now uses a verified OAuth flow instead of a free-text server ID field. Press **Add Pawtograder to your Discord server** on **Course Settings → Discord**, pick the server on Discord's consent screen (which requires Manage Server on the guild you choose), and Pawtograder confirms the bot is present before recording the connection. One unarchived course per server is enforced ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Discord installation status panel** — The **Course Settings → Discord** page now shows whether the bot can actually work in the connected server, not just whether one is configured. It reports missing permissions by name, role hierarchy problems with both positions shown, channel-level permission overrides that block posting or invites, stale tracked roles, and missing tracked channels — each with its own remediation ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Students prompted to link Discord** — When the **Student Discord invitations** feature flag is on and a server is configured, students who have not yet linked a Discord account see a **Connect Discord** card on their dashboard. Previously, students with no linked account had no way to proceed and no explanation ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Invite fallback across channels** — When creating a student invite, Pawtograder now tries up to four candidate channels in order (preferring welcome or general channels) rather than stopping at the first one. A single channel with a Create Invite override no longer blocks enrollment for the whole class ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Per-guild circuit breaker** — A Discord server that repeatedly returns permission errors is now parked automatically, so one misconfigured server cannot consume the shared bot's rate limit for every course on the deployment ([#936](https://github.com/pawtograder/platform/pull/936))
+
 ### August 19, 2026
 
 #### Surveys

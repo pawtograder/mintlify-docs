@@ -80,7 +80,11 @@ See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where th
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
 
-While it is on, students see their invitation to the course's Discord server on their dashboard, and the sync creates one for every student who has linked a Discord account and is not in the server yet. While it is off, no invitations are created and no student is shown one. Role syncing for students who are already in the server is unaffected.
+While it is on, students see a **Connect Discord** prompt on their dashboard if they have not yet linked a Discord account, and an invitation to join the course's server once they have. The sync creates an invitation for every student who has linked a Discord account and is not in the server yet. While it is off, no invitations are created and no student is shown one. Role syncing for students who are already in the server is unaffected.
+
+<Note>
+Students must link their Discord account before they can receive an invitation. The **Connect Discord** card appears on the student dashboard whenever the flag is on and a server is configured, and disappears once the account is linked.
+</Note>
 
 <Warning>
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
