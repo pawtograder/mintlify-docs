@@ -8,6 +8,15 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 25, 2026
+
+#### Discord
+- **Verified Discord bot install flow** — Connecting a course to a Discord server now uses a guided OAuth flow instead of a free-text server ID field. Press **Add Pawtograder to your Discord server** on **Course Settings → Discord**, pick the server on Discord's own consent screen, and Pawtograder confirms the bot is present before recording the connection. One unarchived course per server is enforced. A new status panel on the settings page reports whether the bot can work in the server — missing permissions, role hierarchy problems, and channel-level overrides are each diagnosed separately with specific remediation steps. Instructors can also disconnect a server and reconnect to a different one. Students who have not linked their Discord account now see a **Connect to Discord** prompt on their dashboard when the course has Discord enabled ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Bug fixes
+- **Extensionless binaries classified by content** — Submitted files with no extension are now identified by their content rather than their name, so binary files are handled correctly ([#941](https://github.com/pawtograder/platform/pull/941))
+- **Discord bot member lookup fixed** — The bot's own guild membership is now fetched by its user snowflake, fixing a lookup that was previously broken ([#938](https://github.com/pawtograder/platform/pull/938))
+
 ### August 19, 2026
 
 #### Surveys
