@@ -89,6 +89,9 @@ The visual builder uses SurveyJS, providing access to a wide variety of question
 - **Single Choice**: Radio buttons to select one option from a list
 - **Checkboxes**: Multiple select boxes allowing students to choose one or more options
 - **Yes / No**: Binary question with two clear options for simple confirmations
+- **Rating**: A numeric scale with configurable minimum, maximum, and end labels (e.g., 1–5 with "Strongly disagree" to "Strongly agree")
+
+Question types not listed above — such as matrix, ranking, and dropdown — can be added via the JSON editor. The Visual Builder displays them as read-only cards and preserves them exactly when you save, so opening and saving a survey that uses them does not change those questions.
 
 ### Building Your Survey
 
@@ -134,6 +137,12 @@ Use multi-page surveys to:
 
 - Customize the **True label** (default: "Yes")
 - Customize the **False label** (default: "No")
+
+**For Rating questions:**
+
+- Set the **Minimum** and **Maximum** values for the numeric scale
+- Add a **Low end label** and **High end label** to describe the extremes (e.g., "Strongly disagree" / "Strongly agree")
+- If the question uses explicit scale points defined in JSON (such as a Likert scale with stored numeric values), those are shown as read-only in the builder; edit them in the JSON editor to avoid orphaning already-submitted responses
 
 ### Survey JSON Editor
 
