@@ -6,6 +6,20 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 21–23, 2026
+
+#### Assignments
+- **No-submission assignments open directly on Grade** — For assignments configured as *No submission — graded manually, no artifact*, the **Files** and **Autograder Detail** tabs are now hidden. The submission view opens straight to the **Grade** tab with the rubric rendered full-width. Stale links pointing at `/files` (such as **Next incomplete review**) redirect automatically to the grade view ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+#### Surveys
+- **Survey responses visible on submissions** — When a published or closed survey is linked to an assignment, a **Survey** tab appears on every submission for that assignment. Graders and instructors see every group member's completion status and can read answered responses without extra clicks. Students see only their own response, read-only. A member who was never assigned the survey is labeled **Not assigned** rather than **Not started** ([#1019](https://github.com/pawtograder/platform/pull/1019))
+- **Survey autosave no longer downgrades a submitted response** — Reloading a survey page with `allow_response_editing` on and then typing no longer reverted the response to draft status. The autosave now keeps the row submitted and preserves the original submission timestamp ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Instructor-editable class section names** — A new **Class Sections** page under **Course Settings** lets instructors rename class sections. Graders can view the page but not rename. SIS-imported sections are now named after their instructor by default (e.g. `3500 - MWF 9:15am-10:20am (Doe)`); lab sections keep the plain format. See [Course Settings](/staff/course-settings#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
 ## August 2026
 
 ### August 19, 2026
