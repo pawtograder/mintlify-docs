@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 25, 2026
+
+#### GitHub
+- **Expired org invitations replaced automatically** — When a GitHub organization invitation has been pending for 7 or more days (GitHub's expiry window), Pawtograder now cancels it and sends a fresh one instead of skipping the send. Students who were left holding a dead invitation after the weekly membership sweep will receive a new one on the next sweep run. The replacement carries teams for all of the student's other active enrollments in the same organization, so a sibling class is not left unattached ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
+### September 22, 2026
+
+#### Surveys
+- **Survey responses visible on submissions** — When a published or closed survey is linked to an assignment, a **Survey** tab appears on the submission view. Graders and instructors see every group member's completion status and can read submitted responses without leaving the grading interface. Students see only their own response, read-only. Members who were never assigned the survey are labeled **Not assigned** rather than **Not started**. See [Surveys → Survey tab on submissions](/staff/surveys#survey-tab-on-submissions) ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Instructor-editable class section names** — A new **Class Sections** page under **Course Settings** lets instructors rename class sections. Graders can view sections but cannot rename them. SIS-imported sections are now named after their instructor on first import (e.g., `3500 - MWF 9:15am-10:20am (Doe)`); existing sections keep their current names until renamed. See [Course Settings → Class sections](/staff/course-settings#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
+#### Assignments
+- **No-submission assignments open directly on Grade** — For assignments configured with no file submission (graded manually), the **Files** and **Autograder Detail** tabs are now hidden. The submission opens directly on the **Grade** tab with the editable rubric shown full width. Stale links pointing at `/files` (such as "next incomplete review" navigation) still work ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
 ## August 2026
 
 ### August 19, 2026
