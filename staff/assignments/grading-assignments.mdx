@@ -243,6 +243,17 @@ For assignments with GitHub repositories, the **Fix Permissions** button on the 
 
 The button displays a summary showing the number of syncs enqueued, repositories skipped (no usernames or not ready), and any errors encountered. This is useful when students join or leave groups after repository creation, when GitHub permissions become out of sync with group membership, or when you need to verify that all students have correct repository access.
 
+## Grading No-Submission Assignments
+
+Some assignments are configured with `repo_mode: no_submission` — they are graded manually with no file upload or autograder output. For these assignments:
+
+- The **Files** and **Autograder Detail** tabs are hidden on the submission page. Only the **Grade** tab is shown.
+- The submission page opens directly on the grading view, with the full editable rubric rendered at full width.
+- Stale links that point at `/files` (such as "next incomplete review" navigation) still work — they redirect to the grading view automatically.
+- The **Survey** tab still appears if a survey is linked to the assignment.
+
+This applies to both the student-facing submission route and the staff grading route.
+
 ## Grading Students Without a Submission
 
 Every enrolled student appears on the assignment roster, even if they haven't submitted yet. Students without an active submission show a **"Not submitted"** status and a **Grade anyway** button.

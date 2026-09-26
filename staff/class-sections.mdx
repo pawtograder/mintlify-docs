@@ -1,0 +1,66 @@
+---
+title: "Class Sections"
+description: "View and rename the class sections imported from your SIS or LMS roster"
+icon: "school"
+---
+
+# Class Sections
+
+The **Class Sections** page lists every class section in your course and lets instructors rename them. It is accessible to both instructors and graders under **Course Settings → Class Sections**.
+
+## What class sections are
+
+Class sections are created automatically when a roster is imported from your university Student Information System (SIS) or LMS. Each section carries a CRN, meeting times, location, and campus that are refreshed from SIS every hour. The **name** is the only field you can edit here — SIS sync never overwrites it, so a rename sticks.
+
+<Note>
+Class sections are different from [lab sections](/staff/lab-sections). Lab sections are created manually in Pawtograder and drive lab-based assignment deadlines. Class sections come from SIS and identify which lecture a student is enrolled in.
+</Note>
+
+## Viewing sections
+
+The table shows one row per class section with these columns:
+
+| Column | What it shows |
+| --- | --- |
+| **Name** | The section's display name |
+| **CRN** | The SIS course reference number, or — if none |
+| **Meeting Times** | Days and times from SIS |
+| **Location** | Room or building from SIS |
+| **Campus** | Campus from SIS |
+| **Students** | Count of active students in the section |
+| **Actions** | Rename button (instructors only) |
+
+Use the **Name** filter at the top of the Name column to narrow the list. Click any sortable column header to sort; click again to reverse.
+
+## Renaming a section
+
+1. Click the pencil icon in the **Actions** column for the section you want to rename.
+2. The **Rename Class Section** dialog opens, pre-filled with the current name.
+3. Edit the name. Names are limited to 100 characters.
+4. Click **Save**.
+
+The new name appears immediately in the table and propagates to every place in Pawtograder that shows section names: student dashboards, enrollment tables, section dropdowns, and calendar titles.
+
+Saving without changing the name closes the dialog without writing anything to the database.
+
+<Note>
+Graders can view the Class Sections page but cannot rename sections. The rename button is visible but disabled for graders, with a tooltip explaining the restriction.
+</Note>
+
+## SIS-generated section names
+
+When a SIS import creates a new class section, Pawtograder generates a default name from the course number, meeting times, and instructor surnames:
+
+| Case | Example name |
+| --- | --- |
+| One instructor | `3500 - MWF 9:15am-10:20am (Doe)` |
+| Co-taught | `3500 - MWF 9:15am-10:20am (Doe, Smith)` |
+| No instructor listed | `3500 - MWF 9:15am-10:20am` |
+
+Lab sections keep the plain `<number> - <times>` format regardless of who SIS lists against them, because SIS lists the lecture instructors against lab CRNs, not the people who actually run the lab.
+
+This naming only applies to **new** imports. The hourly SIS sync does not touch existing section names, so a section you have renamed by hand keeps its name.
+
+## Backfilling instructor names on existing sections
+
+The SIS-generated name format only applies to sections created after this feature was introduced. To update existing sections, a Pawtograder administrator can run a SQL script against your course. Contact your administrator if you need existing sections renamed to include instructor surnames.
