@@ -245,12 +245,33 @@ The button on the student's survey list reads **Start Survey**, **Continue Surve
 
 ### Linking Surveys to Assignments
 
-You can optionally link a survey to a specific assignment. When linked, students see the survey status banner on their submission page, making it easy to complete assignment-related feedback.
+You can optionally link a survey to a specific assignment. When linked, students see the survey status banner on their submission page, and a **Survey** tab appears on the submission view for both students and graders.
 
 1. In the survey form, select an assignment from the **Link to Assignment** dropdown
 2. The survey appears on the assignment's submission page for students
 3. The banner shows whether the survey is pending, completed, or overdue
 4. Students can quickly access and complete the survey from their submission view
+
+#### Survey tab on submissions
+
+When a published or closed survey is linked to an assignment, a **Survey** tab appears on every submission for that assignment.
+
+**For graders and instructors**, the tab shows every member of the submitting group with their completion status:
+
+- **Completed** — the member submitted a response
+- **In progress** — the member has a saved draft but has not submitted
+- **Not started** — the member was assigned the survey but has no response
+- **Not assigned** — the member was not in the survey's assignee list (only appears when the survey uses **Assign to specific students**)
+
+Answered responses expand automatically so you can read them without clicking. Members who have not started collapse to a card that says so, distinguishing "was asked and did not answer" from "was never asked."
+
+If the assignment has more than one linked survey, a dropdown at the top of the tab lets you switch between them.
+
+**For students**, the tab shows only their own response, read-only. Teammates' answers are never visible to other students.
+
+<Note>
+The Survey tab appears only for published and closed surveys. Draft surveys are not shown. A survey scheduled with an **Available At** date in the future is shown to staff (with a "Not yet open" badge) but not to students.
+</Note>
 
 <Tip>
 Use assignment-linked surveys for:
