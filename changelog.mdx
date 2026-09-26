@@ -6,6 +6,26 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 26, 2026
+
+#### GitHub
+- **Expired org invitations replaced automatically** — When the membership sweep finds a GitHub organization invitation that is 7 or more days old (GitHub's expiry window), it now cancels the stale invitation and sends a fresh one instead of skipping the send. Students who received an expired invitation no longer have to wait a full week for the next sweep to retry ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
+### September 22, 2026
+
+#### Surveys
+- **Survey responses visible on submissions** — When a published or closed survey is linked to an assignment, a **Survey** tab now appears on every submission for that assignment. Graders and instructors see every group member's completion status and can read submitted responses without leaving the submission view. Students see only their own response, read-only. See [Surveys](/staff/surveys#survey-tab-on-submissions) ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Assignments
+- **No-submission assignments open directly on the grading rubric** — For assignments configured as "No submission — graded manually, no artifact", the **Files** and **Autograder Detail** tabs are now hidden (there is nothing to show there), and the grading rubric renders full-width so graders can apply checks immediately. Stale links pointing at `/files` continue to work ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+### September 21, 2026
+
+#### Course settings
+- **Instructors can rename class sections** — A new **Class Sections** entry under **Course Settings** lists every class section with its CRN, meeting times, location, campus, and active student count. Instructors can rename any section; graders can view but not rename. SIS-imported sections are now named after their instructor by default (e.g. `3500 - MWF 9:15am-10:20am (Doe)`). See [Course Settings](/staff/course-settings#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
 ## August 2026
 
 ### August 19, 2026
