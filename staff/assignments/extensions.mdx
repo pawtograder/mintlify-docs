@@ -94,7 +94,9 @@ Before the first deadline, confirm what students will actually get:
   pick a student, and open the assignment. Before the deadline they should
   see an **Extend Due Date** button next to the due date. If the course
   gives no tokens they see "(This course does not give late tokens. Contact
-  your instructor if you need an extension.)" instead.
+  your instructor if you need an extension.)" instead. A student who has
+  been gifted tokens individually still sees the button even when the
+  course allotment is 0.
 
 Changing the allotment takes effect immediately for every student.
 A balance is the course
@@ -141,6 +143,32 @@ directly.
 
 For group assignments, the exception applies to every member of the
 group automatically.
+
+### Bulk extensions
+
+To extend multiple students at once, select rows in the **Manage Due Date
+Exceptions** table using the checkboxes, then choose one of the two bulk
+actions that appear:
+
+- **Add extension** — adds the same number of hours and minutes on top of
+  each selected student's current due date. For a group member, the
+  extension applies to the whole group.
+- **Set due date to…** — gives every selected student the same final due
+  date. The target must be later than every selected student's current due
+  date. For groups whose members have different current due dates (for
+  example, members in different lab sections), use **Add extension**
+  instead, or adjust each group individually with **Adjust Due Date**.
+
+Both dialogs accept **Tokens to Consume** and a **Notes** field with the
+same behavior as the per-student dialog. Students who finalized their
+submission early are skipped by default; a checkbox in the dialog lets you
+include them deliberately (which reopens submissions for them).
+
+The table supports sorting and filtering by student name, group, class
+section, and lab section. Use the column visibility toggles to show or
+hide the Group, Class Section, Lab Section, and Lab-Based Due Date
+columns. A row count at the bottom reads "Showing *N* of *M* Students"
+when a filter is active.
 
 You can also add a single-assignment exception without leaving the course
 level: **Course Settings → Due Date Extensions → Assignment Exceptions**
