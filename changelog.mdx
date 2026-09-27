@@ -6,6 +6,25 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Bug fixes
+- **GitHub org invitations no longer expire silently** — When a student's GitHub organization invitation had already lapsed (GitHub expires them after 7 days but can keep listing them as pending for hours longer), the membership sweep was skipping the re-invite instead of replacing the dead invitation. Lapsed invitations are now cancelled and a fresh one is sent. The sweep also rewinds its internal timestamp to match the real invitation, so it comes back at the right time rather than a week late ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
+### September 21, 2026
+
+#### Surveys
+- **Survey responses visible on submissions** — When a survey is linked to an assignment, a **Survey** tab now appears on every submission for that assignment. Graders and instructors see every group member's completion status and can read submitted responses without leaving the submission view. Students see only their own response, read-only. See [Surveys](/staff/surveys#survey-tab-on-submissions) ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Class Sections page** — A new **Class Sections** entry in the Course Settings menu lists every class section with its CRN, meeting times, location, campus, and active-student count. Instructors can rename sections from this page; graders can view but not rename. See [Course Settings](/staff/course-settings#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+- **SIS section names include instructor surnames** — Class sections imported from SIS are now named after their instructor — for example, `3500 - MWF 9:15am-10:20am (Doe)`. Co-taught sections list every instructor's surname. Lab sections keep the plain format. This applies to new imports; existing sections keep their current names ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
+#### Assignments
+- **No-submission assignments open directly on Grade** — For assignments configured with no submission (graded manually, no artifact), the Files and Autograder Detail tabs are now hidden and the submission view opens straight to the editable grading rubric. Stale links pointing at `/files` continue to work ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
 ## August 2026
 
 ### August 19, 2026
