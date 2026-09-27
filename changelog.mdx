@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Bug fixes
+- **No-submission assignments open directly on the Grade tab** — The **Files** and **Autograder Detail** tabs are now hidden for no-submission assignments, and the submission view opens straight to the full rubric. Stale links pointing at `/files` (such as "next incomplete review" navigation) redirect to `/grade` automatically ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+### September 25, 2026
+
+#### GitHub
+- **Expired org invitations are replaced, not skipped** — When the membership sweep finds a GitHub org invitation that is 7 or more days old (GitHub's expiry window), it now cancels the stale invitation and sends a fresh one instead of treating it as still-pending. This fixes a case where students were left holding a dead invitation for an extra week. The replacement invitation carries the teams for all of the student's other live enrollments in the same org ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
+### September 21, 2026
+
+#### Surveys
+- **Survey responses visible on the submission view** — When a published or closed survey is linked to an assignment, a **Survey** tab now appears on every submission for that assignment. Graders and instructors see every group member's response (including members who never started), with responses expanded automatically. Students see only their own response, read-only. See [Surveys](/staff/surveys#survey-tab-on-the-submission-view) ([#1019](https://github.com/pawtograder/platform/pull/1019))
+- **Submitted survey responses can no longer revert to draft** — A bug where reloading an already-submitted survey on an editable survey could cause autosave to overwrite the submission with a draft has been fixed. The original submission time is now preserved across edits ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Instructor-editable class section names** — A new **Class Sections** page under **Course Settings** lets instructors rename class sections. Graders can view the page but not rename sections. See [Course settings → Class sections](/staff/course-settings#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+- **SIS-imported class sections named after their instructor** — New SIS imports now include the instructor's surname in the section name: `3500 - MWF 9:15am-10:20am (Doe)`. Co-taught sections list every instructor. Existing sections are not renamed automatically ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
 ## August 2026
 
 ### August 19, 2026
