@@ -119,6 +119,60 @@ page describes the same behavior; if you expected group extensions to cost
 one token total, budget your **Late Tokens Per Student** allotment
 accordingly.
 
+## Manage Due Date Exceptions table
+
+The **Manage Due Date Exceptions** page lists every student in the course
+with their current due date, any extensions already granted, and the final
+due date. The table supports:
+
+- **Sorting** on every column except the selection and Actions columns.
+  Date columns sort by value; empty cells sort last.
+- **Filtering** by student name, group, class section, and lab section.
+  Each filter is a multi-select that includes a "No group" / "Not assigned"
+  option for students without one.
+- **Column visibility** toggles for Group, Class Section, Lab Section, and
+  Lab-Based Due Date. Class Section and Lab Section are shown by default
+  when the course has more than one class section or the assignment uses
+  lab scheduling.
+- **Pagination** with configurable page size (25 – 2000 rows).
+- A **row count** that reads "Showing N of M Students" while a filter is
+  active.
+
+### Bulk extensions
+
+Select rows using the checkboxes in the leftmost column, then choose an
+action from the toolbar that appears above the table:
+
+- **Add extension** — adds the same number of hours and minutes to every
+  selected student's current due date, on top of any extensions already
+  granted. Enter **Hours Extended**, **Minutes Extended**, an optional
+  **Tokens to Consume**, and an optional **Note**.
+- **Set due date to…** — gives every selected student the same final due
+  date. The date picker's minimum is the latest current due date among the
+  selection, so the target is always later than every selected student's
+  current deadline. Hours and minutes are calculated automatically for each
+  student. Enter the **Target Due Date** (interpreted in the course time
+  zone), an optional **Tokens to Consume**, and an optional **Note**.
+
+Both actions write a single atomic batch: either every exception is saved
+or none is. Selecting two members of the same group extends that group
+once, not twice.
+
+<Warning>
+Students who have **finalized early** are skipped by default in both bulk
+actions, because extending a finalized student would reopen their
+submissions. A warning names who is skipped. Check **Also extend / set the
+due date for N students that finalized early** to include them deliberately.
+</Warning>
+
+<Warning>
+**Set due date to…** refuses to submit when a selected group's members
+have different current due dates, because one group exception cannot give
+every member the same final deadline. Deselect that group and use
+**Adjust Due Date** on each member individually, or use **Add extension**
+instead, which adds the same time to everyone.
+</Warning>
+
 ## Granting a manual extension
 
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the
