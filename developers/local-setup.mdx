@@ -116,13 +116,22 @@ Read the local URLs and keys out of the CLI rather than copying them by hand (`A
 npx supabase status -o env
 ```
 
-That prints `API_URL`, `ANON_KEY`, `SERVICE_ROLE_KEY`, `DB_URL`, and the rest. Set these in `.env.local`:
+That prints `API_URL`, `ANON_KEY`, `SERVICE_ROLE_KEY`, `DB_URL`, and the rest. Instead of copying values by hand, you can append them directly to `.env.local` with the correct variable names:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
-SUPABASE_URL=http://127.0.0.1:54321
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<ANON_KEY>
-SUPABASE_SERVICE_ROLE_KEY=<SERVICE_ROLE_KEY>
+npx supabase status -o env \
+  --override-name api.url=NEXT_PUBLIC_SUPABASE_URL \
+  --override-name auth.anon_key=NEXT_PUBLIC_SUPABASE_ANON_KEY \
+  --override-name auth.service_role_key=SUPABASE_SERVICE_ROLE_KEY >> .env.local
+npx supabase status -o env --override-name api.url=SUPABASE_URL | \
+  grep '^SUPABASE_URL=' >> .env.local
+```
+
+The `--override-name` flag renames each value once, so the API URL needs the second command to also land under the server-side name `SUPABASE_URL`. These commands append rather than replace, so delete any earlier copies of those keys from `.env.local` afterwards.
+
+Then add the remaining variables:
+
+```bash
 NEXT_PUBLIC_PAWTOGRADER_WEB_URL=http://localhost:3000
 ENABLE_SIGNUPS=true
 ```
