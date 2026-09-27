@@ -152,6 +152,41 @@ and a **Note**. Same result, one screen for the whole course, which is
 convenient when you are entering several exceptions on different
 assignments at once.
 
+### Bulk extensions
+
+To extend multiple students or groups at once, select rows in the **Manage
+Due Date Exceptions** table using the checkboxes, then choose one of the
+two bulk actions that appear:
+
+- **Add extension** — adds the same hours and minutes to every selected
+  student or group, on top of each one's current due date (including any
+  existing extensions). Enter **Hours Extended**, **Minutes Extended**,
+  **Tokens to Consume**, and an optional note, then click **Add Due Date
+  Exceptions**.
+- **Set due date to...** — gives every selected student or group the same
+  final deadline. Enter a **Target Due Date** in the course time zone; the
+  extension for each student is calculated automatically as the difference
+  between their current due date and the target. The target must be later
+  than every selected student's current due date.
+
+Both actions collapse group members to a single group-level exception, so
+selecting two members of one group extends the group once. Students who
+finalized early are skipped by default; a warning names them and a
+checkbox lets you include them deliberately (which reopens their
+submissions).
+
+<Note>
+**Set due date to...** refuses to submit when a selected group's members
+have different current due dates — for example, members in different lab
+sections. In that case, use **Add extension** to add the same time to
+everyone, or deselect the group and use **Adjust Due Date** to set each
+member's deadline individually.
+</Note>
+
+Use the column filters to narrow the table to a section or lab before
+selecting rows, so the bulk action applies only to the students you
+intend.
+
 ## Granting a student-wide extension
 
 A student-wide extension is the blanket accommodation: one entry that
