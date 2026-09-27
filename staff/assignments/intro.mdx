@@ -121,3 +121,21 @@ repo to every student repo while preserving each student's work. The
 sync detects merge conflicts, retries transient failures, and lets you
 target a subset of students. Trigger it from the assignment's
 **Repositories** page.
+
+Each repository row shows a sync status badge:
+
+| Status | Meaning |
+|---|---|
+| **Synced** | The repository is at the latest handout revision. |
+| **Not Up-to-date** | A newer handout revision exists; press **Sync** to queue an update. |
+| **Sync in Progress** | A sync job is queued or running. |
+| **PR Open** | The sync opened a pull request that the student needs to merge. |
+| **Sync Finalizing** | The pull request was merged and the record is being updated. |
+| **Sync Blocked** | The sync could not write the update because every changed file belongs to the student. The badge lists the affected paths. Ask the student to apply those changes manually, then press **Sync** to retry. |
+| **Sync Error** | The sync stopped with a terminal error (for example, the student pushed to the sync branch while it was being built). The badge shows the reason. Press **Sync** to retry after the situation is resolved. |
+
+When a sync is blocked or errors, the **Sync** button on that row forces a
+retry regardless of the repository's recorded state. The grading workflow
+(`.github/workflows/grade.yml`) is always written by the sync even when
+other files are blocked, so toggling the autograder on or off is always
+enforced.
