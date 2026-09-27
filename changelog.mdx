@@ -6,6 +6,26 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Surveys
+- **Survey responses on the submission view** — When a published or closed survey is linked to an assignment, a **Survey** tab appears on every submission for that assignment. Graders and instructors see every member of the submitting group with their completion status (Completed, In progress, Not started, or Not assigned), and answered responses are expanded automatically. Students see only their own response, read-only. A member who was never assigned the survey is labeled **Not assigned** rather than **Not started**. Also fixed a bug where reloading an already-submitted survey response on an editable survey could silently revert it to a draft ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Instructor-editable class section names** — A new **Class Sections** page under **Course Settings** lets instructors rename class sections. Graders can view the list but not rename. SIS-imported class sections are now named with the instructor's surname appended — for example `3500 - MWF 9:15am-10:20am (Doe)` — so sections that share a meeting time are distinguishable in dropdowns. Lab sections keep the plain format. See [Class sections](/staff/lab-sections#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
+### September 22, 2026
+
+#### Assignments
+- **No-submission assignments open directly on Grade** — For assignments configured as **No submission — graded manually, no artifact**, the submission view now opens directly on the **Grade** tab with the full editable rubric. The **Files** and **Autograder Detail** tabs are hidden. Stale links pointing at `/files` (such as "next incomplete review" navigation) continue to work ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+### September 25, 2026
+
+#### GitHub
+- **Lapsed org invitations are replaced, not skipped** — When the membership sweep finds a GitHub org invitation that is 7 or more days old (expired under GitHub's own rule but still listed as pending), it now cancels the old invitation and sends a fresh one instead of skipping. This fixes a case where students were left holding a dead invitation for an extra week. The replacement invitation carries the teams for all of the user's other live, unconfirmed enrollments in classes sharing the org ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
 ## August 2026
 
 ### August 19, 2026
