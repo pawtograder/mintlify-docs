@@ -6,6 +6,26 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Bug fixes
+- **No-submission assignments open directly on Grade** — For assignments configured as *No submission — graded manually, no artifact*, the submission view now opens straight to the **Grade** tab. The **Files** and **Autograder Detail** tabs are hidden because there is no artifact to show. Stale links that pointed at `/files` (such as "next incomplete review" navigation) redirect to `/grade` automatically, and the editable rubric renders full-width ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+### September 25, 2026
+
+#### GitHub
+- **Lapsed org invitations are replaced, not skipped** — When the membership sweep finds a GitHub org invitation that is 7 or more days old (GitHub's expiry window), it now cancels the stale invitation and sends a fresh one instead of treating it as a live duplicate. The replacement carries the user's other active, unconfirmed enrollments in classes sharing the org, so sibling enrollments are not stranded. When a live invitation suppresses the send, the enrollment's `invitation_date` is rewound to the real invitation's creation time so the sweep returns when that invitation actually expires rather than a week later ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
+### September 21, 2026
+
+#### Surveys
+- **Survey responses visible on the submission view** — When a published or closed survey is linked to an assignment, a **Survey** tab now appears on every submission for that assignment. Graders and instructors see every member of the submitting group with their response status (Completed, In progress, Not started, or Not assigned), and answered responses are expanded automatically. Students see only their own response, read-only. The tab is hidden when no eligible survey is linked. Also fixed a bug where reloading an already-submitted survey response on an editable survey could silently revert it to a draft ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Instructor-editable class section names** — A new **Class Sections** page under **Course Settings** lets instructors rename class sections. The page lists every section with its CRN, meeting times, location, campus, and active student count. Graders can view the page but cannot rename sections. SIS-imported class sections are now also named after their instructor on import — for example, `3500 - MWF 9:15am-10:20am (Doe)` — so multiple sections at the same time are distinguishable in dropdowns. The hourly SIS sync does not overwrite names set here ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
 ## August 2026
 
 ### August 19, 2026
