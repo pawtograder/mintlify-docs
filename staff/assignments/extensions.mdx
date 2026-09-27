@@ -119,6 +119,48 @@ page describes the same behavior; if you expected group extensions to cost
 one token total, budget your **Late Tokens Per Student** allotment
 accordingly.
 
+## Manage Due Date Exceptions table
+
+The **Manage Due Date Exceptions** page lists every student in the course
+with their current due date, any extensions already granted, and the
+final due date. The table supports:
+
+- **Sorting** on every column (click the column header). Empty cells sort
+  last.
+- **Filtering** by Student name, Group, Class Section, and Lab Section
+  using the multi-select dropdowns in each column header. The row count
+  updates to show how many students match the current filters.
+- **Column visibility** toggles for Group, Class Section, Lab Section,
+  and Lab-Based Due Date. Columns that are not relevant to your course
+  (for example, Lab Section on a course with no lab sections) are hidden
+  by default.
+- **Pagination** with configurable page size (25 to 2000 rows).
+
+### Bulk extensions
+
+Select one or more rows using the checkboxes in the leftmost column. The
+header checkbox selects or deselects every row matching the current
+filters across all pages. Once rows are selected, two bulk actions appear:
+
+- **Add extension** — adds the same number of hours and minutes to every
+  selected student's or group's current due date. Enter **Hours
+  Extended**, **Minutes Extended**, an optional **Tokens to Consume**
+  count, and an optional **Note** (visible to students and staff).
+- **Set due date to…** — gives every selected student or group the same
+  final due date. The date picker is in the course's time zone. The
+  target must be later than every selected student's current due date.
+
+For group assignments, selecting any member of a group applies the
+exception to the whole group once, not once per member. If a group's
+members have different current due dates (for example, because they are
+in different lab sections), **Set due date to…** is blocked for that
+group; use **Add extension** or adjust the group with **Adjust Due Date**
+instead.
+
+Students who finalized their submission early are skipped by default.
+A warning names them, and a checkbox lets you include them deliberately
+(which reopens submissions for them).
+
 ## Granting a manual extension
 
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the
