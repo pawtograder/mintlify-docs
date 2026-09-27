@@ -67,6 +67,27 @@ page describes the same behavior; if you expected group extensions to cost
 one token total, budget your **Late Tokens Per Student** allotment
 accordingly.
 
+## Manage Due Date Exceptions table
+
+The **Manage Due Date Exceptions** page lists every student in the assignment with their current due date, any extensions already granted, and their group and section assignments.
+
+### Sorting and filtering
+
+Every column header is sortable. Click a header to sort ascending; click again to sort descending. Empty cells (students with no group, no section, or no extension) sort last.
+
+Multi-select filters appear below the **Student**, **Group**, **Class Section**, and **Lab Section** column headers. Select one or more values to narrow the table; the row count at the bottom updates to show how many students match. Hiding a column clears its filter automatically.
+
+Use the **Toggle Column Visibility** controls above the table to show or hide the **Group**, **Class Section**, **Lab Section**, and **Lab-Based Due Date** columns. The section columns appear by default when the class has more than one class section or the assignment uses lab scheduling.
+
+### Bulk extensions
+
+Select students using the checkboxes in the leftmost column. The header checkbox selects all rows matching the current filters across all pages; **None** clears the selection. Once rows are selected, two bulk actions appear:
+
+- **Add extension** — adds the same number of hours and minutes to every selected student's current due date. For group members, the extension applies to the whole group. You can optionally consume tokens and add a note.
+- **Set due date to…** — gives every selected student the same final due date. The target must be later than every selected student's current due date. For groups whose members have different current due dates (for example, members in different lab sections), use **Adjust Due Date** per student or **Add extension** instead.
+
+Both bulk actions skip students who finalized their submission early by default. A warning names who will be skipped, and a checkbox lets you include them deliberately (which reopens their submission window).
+
 ## Granting a manual extension
 
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the
