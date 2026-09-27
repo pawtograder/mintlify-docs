@@ -6,6 +6,17 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Assignments
+
+- **Handout sync no longer overwrites student work** — The handout sync now checks whether a student has modified a file before writing the handout's version over it. Files the student changed are left alone and listed in the sync pull request body; the PR stays open for the student to resolve them manually. If every changed file belongs to the student, no PR is opened and the repository shows a **Sync Blocked** status with the affected paths. Pressing **Sync** retries the blocked update. The grading workflow (`.github/workflows/grade.yml`) is always written by the sync regardless of student edits, so toggling the autograder on or off is always enforced ([#973](https://github.com/pawtograder/platform/pull/973))
+- **Due date exceptions table: sorting, filtering, and bulk actions** — The **Manage Due Date Exceptions** table now sorts and filters on every column. New **Class Section** and **Lab Section** columns appear when the course has multiple sections or uses lab scheduling. Selecting rows reveals two bulk actions: **Add extension** adds the same hours and minutes to every selected student or group on top of their current due date, and **Set due date to...** gives every selected student or group the same final deadline. Both actions handle groups correctly — selecting two members of one group extends the group once — and skip students who finalized early by default, with an opt-in to include them ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Clearer messages when a course has no late tokens** — When a course's **Late Tokens Per Student** is 0 but an assignment's **Max late tokens** is above 0, a warning now appears on the assignment form and on the **Manage Due Date Exceptions** page explaining that students have no tokens to spend and linking to Course Settings. Students see "This course does not give late tokens. Contact your instructor if you need an extension." instead of the previous "No late submissions allowed." Late pushes rejected for this reason now say the course gives no late tokens rather than that the student's balance ran out ([#1043](https://github.com/pawtograder/platform/pull/1043))
+- **Repository not shown as ready before GitHub org authorization** — The assignment page no longer shows a student's repository as a clickable GitHub link with a ready status before they have authorized their GitHub account with the course's organization. Before authorization, the repository name is shown as plain text with a note that GitHub authorization is required ([#987](https://github.com/pawtograder/platform/pull/987))
+
 ## August 2026
 
 ### August 19, 2026
