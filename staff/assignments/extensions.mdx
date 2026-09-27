@@ -121,6 +121,58 @@ accordingly.
 
 ## Granting a manual extension
 
+### Finding a student in the table
+
+The **Manage Due Date Exceptions** table supports sorting, filtering, and
+column visibility controls to help you find students in large classes.
+
+- **Sort** any column by clicking its header. Clicking again reverses the
+  order. Students without a value in the sorted column (no group, no lab
+  section) sort last.
+- **Filter** by Student name, Group, Class Section, or Lab Section using
+  the multi-select dropdowns in each column header. Selecting multiple
+  values shows rows that match any of them. Hiding a column clears its
+  filter.
+- **Toggle columns** with the checkboxes above the table. **Class
+  Section** and **Lab Section** are shown by default when the class has
+  more than one class section or when the assignment uses lab scheduling.
+  **Group** is shown when the assignment has groups. **Lab-Based Due
+  Date** is shown when the assignment uses lab scheduling.
+- The row count at the bottom reads **Showing N of M Students** when a
+  filter is active.
+
+### Bulk extensions
+
+Select students with the checkboxes in the leftmost column, then choose
+an action from the toolbar that appears above the table.
+
+- **Add extension** — adds the same number of hours and minutes to every
+  selected student's current due date. For group members, the extension
+  applies to the whole group. Enter **Hours Extended**, **Minutes
+  Extended**, an optional **Tokens to Consume** (deducted from each
+  student's balance), and an optional **Note** visible to students.
+- **Set due date to…** — gives every selected student the same final due
+  date. The date picker's minimum is the latest current due date among
+  the selection, so the target is always later than every selected
+  student's current deadline. For each student, an exception is added for
+  the difference between their current due date and the target.
+
+Both actions skip students who have finalized early by default. A warning
+names the skipped students, and a checkbox lets you include them
+deliberately (with a note that this reopens submissions for them).
+
+**Set due date to…** refuses to submit when a selected group's members
+have different current due dates, because one group exception cannot give
+every member the same final date. The dialog tells you to deselect that
+group and use **Adjust Due Date** instead, or to use **Add extension**,
+which adds the same time to everyone and is still correct.
+
+The **All matching filters** button in the selection column header selects
+every row that matches the current filters, across all pages. **None**
+clears the selection.
+
+### Adjusting one student's due date
+
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the
 student's (or group's) row. The dialog accepts either:
 
