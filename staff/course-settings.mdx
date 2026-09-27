@@ -59,6 +59,26 @@ instructor-only.
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+## Class sections
+
+**Course Settings → Class Sections** (`manage/course/class-sections`) lists every class section for the course with its CRN, meeting times, location, campus, and active-student count.
+
+Instructors can rename any section by clicking the edit button on its row. The rename dialog shows the current name pre-filled; saving without editing closes the dialog without writing anything. Names are limited to 100 characters.
+
+<Note>
+Meeting times, location, and campus are refreshed from SIS every hour and cannot be edited here. A name you set is never overwritten by the sync, so renames stick.
+</Note>
+
+Graders can view the page but the rename button is disabled for them.
+
+Class sections are created by a SIS or LMS roster import. There is no create or delete action on this page.
+
+### SIS-imported section names
+
+When a SIS import creates a class section, the default name includes the instructor's surname: `3500 - MWF 9:15am-10:20am (Doe)`. Co-taught sections list every instructor: `3500 - MWF 9:15am-10:20am (Doe, Smith)`. A section with no listed instructor keeps the plain `3500 - MWF 9:15am-10:20am` format. Lab sections keep the plain format regardless of who SIS lists against them.
+
+This naming applies to new imports only. Existing sections keep their current names until you rename them.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
