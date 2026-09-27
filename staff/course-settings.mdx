@@ -109,3 +109,41 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Class sections
+
+**Course Settings → Class Sections** opens a table of every class section in the
+course, with columns for name, CRN, meeting times, location, campus, and active
+student count. The table can be sorted by any column and filtered by name.
+
+Class sections are created when the roster is imported from your SIS or LMS.
+Their meeting times, location, and campus are refreshed from SIS every hour.
+Names are not refreshed: rename a section here and the name sticks.
+
+### Renaming a section
+
+Instructors can rename any section. Graders can view the page but the rename
+button is disabled for them.
+
+1. Click the edit icon in the **Actions** column for the section you want to rename.
+2. Edit the name in the dialog. The name must be between 1 and 100 characters.
+3. Click **Save**.
+
+The new name appears immediately and is reflected everywhere the section name is
+shown — student dashboards, enrollment tables, and calendar titles.
+
+Saving without changing the name closes the dialog without writing anything.
+
+### SIS-imported section names
+
+When a SIS roster import creates a class section, the default name includes the
+instructor's surname: `3500 - MWF 9:15am-10:20am (Doe)`. Co-taught sections list
+every surname: `3500 - MWF 9:15am-10:20am (Doe, Smith)`. A section with no
+instructor listed keeps the plain format: `3500 - MWF 9:15am-10:20am`.
+
+Lab sections keep the plain format regardless of who SIS lists against them,
+because SIS lists the lecture instructors against lab CRNs, not the people who
+actually run the lab.
+
+This naming applies to new imports only. Existing sections keep their current
+names, and the hourly SIS sync does not overwrite a name you have set by hand.
