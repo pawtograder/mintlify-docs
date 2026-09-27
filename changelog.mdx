@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 21–27, 2026
+
+#### Surveys
+- **Survey responses on submissions** — When a survey is linked to an assignment, the submission view now has a **Survey** tab. Graders and instructors see every group member's response, including members who never started. Students see only their own response, read-only. See [Surveys](/staff/surveys#survey-responses-on-submissions) ([#1019](https://github.com/pawtograder/platform/pull/1019))
+- **Submitted responses no longer revert to draft** — A bug where reloading an already-submitted survey on an editable survey would cause the first keystroke to autosave `is_submitted: false` over the submission has been fixed. The database now also enforces that a submitted response cannot be returned to draft ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Rename class sections** — Instructors can now rename class sections from **Course Settings → Class Sections**, the same way lab sections can be renamed. Graders can view the page but cannot rename. See [Class Sections](/staff/course-settings#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+- **SIS-imported sections named after their instructor** — Class sections created by a SIS roster import now include the instructor's surname in the name, e.g. `3500 - MWF 9:15am-10:20am (Doe)`. Lab sections keep the plain format. This applies to new imports only; existing sections are unchanged ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
+#### Assignments
+- **No-submission assignments open directly on Grade** — For assignments configured with no submission artifact (`repo_mode: no_submission`), the Files and Autograder Detail tabs are now hidden and the submission view opens straight to the Grade tab with the full editable rubric. Stale links pointing at `/files` continue to work ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+#### GitHub
+- **Expired org invitations replaced automatically** — GitHub org invitations expire after 7 days but can remain listed as pending for hours after that. The membership sweep now detects these lapsed invitations, cancels them, and sends a fresh one rather than skipping the re-invite. When a fresh invitation is sent, it also carries the teams for any other live, unconfirmed enrollments the student has in the same GitHub organization ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
 ## August 2026
 
 ### August 19, 2026
