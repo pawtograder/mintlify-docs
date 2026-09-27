@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Assignments
+- **No-submission assignments open directly on Grade** — For assignments configured as *No submission — graded manually, no artifact*, the submission view now opens straight to the **Grade** tab. The **Files** and **Autograder Detail** tabs are hidden because there is no artifact to show. Stale links that pointed at `/files` (such as "next incomplete review" navigation) redirect to `/grade` automatically ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+### September 21, 2026
+
+#### Surveys
+- **Survey responses visible on the submission view** — When a published or closed survey is linked to an assignment, a **Survey** tab appears on every submission for that assignment. Graders and instructors see every group member's response, including members who never started and members who were assigned but did not respond (labeled **Not assigned** rather than **Not started**). Students see only their own response, read-only. A dropdown switches between multiple linked surveys. Staff can see surveys whose **Available At** date has not yet passed, badged as **Not yet open** ([#1019](https://github.com/pawtograder/platform/pull/1019))
+- **Survey submission data-loss fix** — Reloading an already-submitted survey on a course with **Allow Response Editing** enabled no longer reverts the submission to a draft. The original submission time is preserved across edits, and a database trigger now prevents any client from setting `is_submitted = false` on a submitted response ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+### September 20, 2026
+
+#### Course settings
+- **Instructor-editable class section names** — A new **Class Sections** page under **Course Settings** lets instructors rename class sections. The page lists every section with its CRN, meeting times, location, campus, and active-student count. Graders can view sections but cannot rename them. Names are not overwritten by the hourly SIS sync. See [Course Settings](/staff/course-settings#class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+- **SIS section names include instructor surnames** — Newly imported SIS class sections are now named `<number> - <times> (<Surname>)` (for example, `3500 - MWF 9:15am-10:20am (Doe)`), so multiple sections at the same time are easy to tell apart in dropdowns. Co-taught sections list every surname. Lab sections keep the plain format. This applies only to new imports; existing sections are unchanged ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
+### September 25, 2026
+
+#### GitHub
+- **Expired org invitations are replaced, not skipped** — When the membership sweep finds a GitHub org invitation that is 7 or more days old (GitHub's expiry window), it now cancels the stale invitation and sends a fresh one instead of treating it as still-pending. This fixes a case where students were left holding a dead invitation for an extra week. The replacement invitation carries the user's other live, unconfirmed enrollments in classes sharing the org, so sibling-class team memberships are not lost. When a live invitation suppresses the send, the enrollment's `invitation_date` is rewound to the real invitation's creation time so the sweep returns when that invitation actually expires ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
 ## August 2026
 
 ### August 19, 2026
