@@ -83,13 +83,17 @@ Before the first deadline, confirm what students will actually get:
 
 - **Course allotment.** In the **Class Late Token Settings** card, the
   **Current Setting** line should read "Each student receives *N* late
-  tokens" with *N* above 0.
+  tokens" with *N* above 0. When the allotment is 0, the card says "Late
+  tokens are off for this course: students cannot extend any deadline
+  themselves, even on assignments that allow late tokens."
 - **Student balances.** The **Roster Tokens** tab on the same page lists
   every student with their **Used** and **Left** counts. Before anyone has
   spent a token, **Left** should equal the allotment (plus any gifts).
 - **The assignment.** The assignment's **Manage Due Date Exceptions** page
   states both numbers: how many tokens the assignment allows, and how many
-  each student in the course is given.
+  each student in the course is given. If the allotment is 0 and the
+  assignment's **Max late tokens** is above 0, both the assignment form
+  and the **Manage Due Date Exceptions** page show a warning.
 - **What a student sees.** Use **View as student** on the course home page,
   pick a student, and open the assignment. Before the deadline they should
   see an **Extend Due Date** button next to the due date. If the course
