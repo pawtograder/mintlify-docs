@@ -121,3 +121,27 @@ repo to every student repo while preserving each student's work. The
 sync detects merge conflicts, retries transient failures, and lets you
 target a subset of students. Trigger it from the assignment's
 **Repositories** page.
+
+### Sync statuses
+
+Each repository row on the **Repositories** page shows a sync status badge:
+
+| Status | Meaning |
+|---|---|
+| **Synced** | The repository is at the latest handout revision. |
+| **Not Up-to-date** | A newer handout revision exists but has not been synced yet. |
+| **PR Open** | A sync pull request is open in the student's repository and waiting to be merged. |
+| **Sync in Progress** | A sync job is currently running. |
+| **Sync Finalizing** | The pull request was merged and the sync is recording the result. |
+| **Sync Blocked** | The handout update could not be applied because every changed file is the student's own work. Nothing was written and no pull request was opened. |
+| **Sync Error** | The sync stopped with a terminal error that requires manual action (for example, a student pushed commits onto the sync branch while it was being built). |
+
+### Sync Blocked
+
+A **Sync Blocked** badge means the handout changed files that the student has also modified, and the sync could not safely write any of them. The badge expands to show which paths were affected and what to do: check those files against the handout, ask the student to apply the changes themselves, and then press **Sync** again. Re-running a blocked sync is safe and idempotent — it re-classifies the files and either delivers the update or blocks again with the same information.
+
+A sync is blocked only when *every* changed file is the student's own work. If some files can be merged automatically, the sync opens a pull request for those and lists the remaining files in the pull request body.
+
+### Sync Error
+
+A **Sync Error** badge means the sync stopped with a condition that cannot be resolved by retrying automatically. The most common cause is a student pushing their own commits onto the sync branch while the sync was building it. The error message names the reason. Press **Sync** to try again after the condition is resolved (for example, after the student merges or closes the branch).
