@@ -6,6 +6,22 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Extensions and due dates
+- **Bulk extensions on the due date exceptions table** — The **Manage Due Date Exceptions** page now supports row selection, sorting, and filtering. Select any combination of students and groups, then use **Add extension** to add the same hours and minutes to every selected deadline, or **Set due date to…** to give every selected student the same final deadline. Both actions accept a token cost and a note. Students who finalized early are skipped by default, with an opt-in to include them. See [Extensions](/staff/assignments/extensions#bulk-extensions) ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Class Section and Lab Section columns** — The due date exceptions table now shows **Class Section** and **Lab Section** columns (visible by default when relevant), with multi-select filters for each. Column visibility can be toggled from the panel above the table ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Clearer messaging when a course has no late tokens** — When **Late Tokens Per Student** is 0 but an assignment's **Max late tokens** is above 0, the assignment form, the **Manage Due Date Exceptions** page, and the **Class Late Token Settings** card all show a warning explaining that students have no tokens to spend. The student-facing due date widget now says "(This course does not give late tokens. Contact your instructor if you need an extension.)" instead of the previous "(No late submissions allowed)", and "(Late tokens cannot be used on this assignment)" replaces the old "(You may not extend the due date for this assignment any further)" when the per-assignment cap is 0. Late pushes on a 0-allotment course now report that the course gives no late tokens rather than that the student's balance ran out ([#1043](https://github.com/pawtograder/platform/pull/1043))
+
+#### GitHub and repositories
+- **Handout sync no longer overwrites a student's own work** — The handout sync now checks whether each changed file has been modified by the student before writing it. Files the student has edited, deleted, or placed a directory at are left alone; a text patch that can be merged into the student's copy is still applied. When files are skipped, the pull request body lists them and explains why, and auto-merge is disabled until the student resolves them. If every changed file is the student's own work, no pull request is opened and the repository shows a new **Sync Blocked** badge with the affected paths. Pressing **Sync** retries a blocked repository. See [Assignments Overview → Sync statuses](/staff/assignments/intro#sync-statuses) ([#973](https://github.com/pawtograder/platform/pull/973))
+- **Repository link hidden before GitHub org authorization** — The assignment page no longer shows a student's repository as a clickable link with a ready/not-ready status before they have joined the course GitHub organization. Until authorization is confirmed, the repository name appears as plain text with the note "(requires GitHub authorization to access)". See [GitHub Help](/students/github-help#your-repository-link-before-joining-the-organization) ([#987](https://github.com/pawtograder/platform/pull/987))
+
+#### Accessibility
+- **Gradebook screen reader fix** — The gradebook no longer announces scores as "Submitted slash 100"; the slash separator is now read correctly ([#915](https://github.com/pawtograder/platform/pull/915))
+
 ## August 2026
 
 ### August 19, 2026
