@@ -101,6 +101,9 @@ course, not something you get for free.
 - Instructors can gift extra tokens to individual students and grant
   manual extensions; see [Extensions](/staff/assignments/extensions).
 
+Before relying on late tokens, confirm that the course allotment is above 0;
+see [Extensions → Checking your setup](/staff/assignments/extensions#checking-your-setup).
+
 <Warning>
 Unchecking **Require students to apply late tokens before the original due
 date** while **Max late tokens** is `0` is a validation error — the form
@@ -109,12 +112,9 @@ cap first.
 </Warning>
 
 <Note>
-The student-facing message for an assignment with `max_late_tokens = 0`
-reads *"You may not extend the due date for this assignment any further"*,
-because the button's guard is a `>=` comparison against the cap. A student
-who never had a token on this assignment will read that as though they
-spent one. If you set the cap to `0` deliberately, say so in your own
-course materials.
+Students on an assignment with `max_late_tokens = 0` see *"(Late tokens
+cannot be used on this assignment)"* next to the due date. If you set the
+cap to `0` deliberately, say so in your own course materials.
 </Note>
 
 ### NOT-GRADED submissions after the deadline

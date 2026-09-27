@@ -49,6 +49,58 @@ one token per 24 hours of extension on their own due date.
 - Students see "You have N late tokens remaining" in the due-date widget
   on the assignment page.
 
+### Turning late tokens on
+
+Late tokens need two settings, and the assignment setting alone does
+nothing. **Max late tokens** on an assignment only limits how many of a
+student's course-wide tokens they may spend there. It does not give them
+any. If the course allotment is 0, no student has a token to spend, however
+the assignment is configured.
+
+1. **Set the course allotment.** Open **Course Settings → Due Date
+   Extensions**, which is `/course/<course_id>/manage/course/due-date-extensions`.
+   The **Assignment Exceptions** tab opens first. In the **Class Late Token
+   Settings** card, click **Edit Late Token Allocation**, enter **Late
+   Tokens Per Student**, and click **Save Changes**.
+2. **Set the per-assignment cap.** On each assignment's edit page, in the
+   **Late submissions** card, set **Max late tokens** above 0. Then decide
+   whether to leave **Require students to apply late tokens before the
+   original due date** checked.
+
+<Warning>
+With **Require students to apply late tokens before the original due date**
+unchecked and a course allotment of 0, the late-token setup looks complete
+on the assignment form, but every push after the deadline is rejected
+because the student has no token to apply. The assignment form and the
+assignment's **Manage Due Date Exceptions** page show a warning in this
+case. If you only notice after the deadline, you can raise the allotment
+or grant manual extensions (see [Granting a manual extension](#granting-a-manual-extension)).
+</Warning>
+
+### Checking your setup
+
+Before the first deadline, confirm what students will actually get:
+
+- **Course allotment.** In the **Class Late Token Settings** card, the
+  **Current Setting** line should read "Each student receives *N* late
+  tokens" with *N* above 0.
+- **Student balances.** The **Roster Tokens** tab on the same page lists
+  every student with their **Used** and **Left** counts. Before anyone has
+  spent a token, **Left** should equal the allotment (plus any gifts).
+- **The assignment.** The assignment's **Manage Due Date Exceptions** page
+  states both numbers: how many tokens the assignment allows, and how many
+  each student in the course is given.
+- **What a student sees.** Use **View as student** on the course home page,
+  pick a student, and open the assignment. Before the deadline they should
+  see an **Extend Due Date** button next to the due date. If the course
+  gives no tokens they see "(This course does not give late tokens. Contact
+  your instructor if you need an extension.)" instead.
+
+Changing the allotment takes effect immediately for every student.
+A balance is the course
+allotment, minus tokens used, plus tokens gifted. Extensions you enter
+by hand with a token cost count as used tokens.
+
 ### Late tokens on group assignments
 
 A group extension records **one** due-date exception, against the group,
