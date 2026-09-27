@@ -6,6 +6,26 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Extensions
+- **Sortable, filterable due-date exceptions table** — The **Manage Due Date Exceptions** page now supports sorting on every column, multi-select filters for Student, Group, Class Section, and Lab Section, column visibility toggles, and pagination. New **Class Section** and **Lab Section** columns appear automatically when the class has more than one section or the assignment uses lab scheduling ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Bulk extensions** — Select any number of students or groups on the due-date exceptions page and apply the same extension to all of them at once with **Add extension** (adds hours/minutes to each current due date) or **Set due date to…** (gives everyone the same final deadline). Both actions skip students who finalized early by default, with an opt-in to include them ([#1031](https://github.com/pawtograder/platform/pull/1031))
+
+### September 21, 2026
+
+#### Surveys
+- **Survey responses on a submission** — When a published or closed survey is linked to an assignment, a **Survey** tab appears on the submission view. Graders and instructors see the full group roster including members who never started, with status chips (Completed, In progress, Not started, Not assigned) and answered responses expanded automatically. Students see only their own response, read-only ([#1019](https://github.com/pawtograder/platform/pull/1019))
+- **Survey autosave data-loss fix** — Returning to an already-submitted survey with response editing enabled no longer silently reverts the submission to a draft on the first keystroke. A database trigger now enforces that a submitted response can never be returned to draft ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Assignments
+- **No-submission assignments show only the Grade tab** — The **Files** and **Autograder Detail** tabs are now hidden for no-submission assignments (graded manually, no artifact). The submission view opens directly on the Grade tab with the full editable rubric ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+#### GitHub
+- **Lapsed org invitations replaced automatically** — When the membership sweep finds a GitHub org invitation that is 7 or more days old (expired under GitHub's own rule but still listed as pending), it now cancels the old invitation and sends a fresh one instead of skipping. The replacement carries the user's other live, unconfirmed enrollments in classes sharing the org, so sibling-class team memberships are not lost ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
 ## August 2026
 
 ### August 19, 2026
