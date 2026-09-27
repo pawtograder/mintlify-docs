@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 27, 2026
+
+#### Extensions and due dates
+- **Bulk extensions on the due date exceptions table** — The **Manage Due Date Exceptions** table now supports row selection and two bulk actions: **Add extension** (adds the same hours and minutes to every selected student's current due date) and **Set due date to…** (gives every selected student the same final deadline). Both actions skip students who finalized early by default, with an opt-in to include them. Group members are deduplicated so selecting two members of one group extends the group once. See [Extensions](/staff/assignments/extensions#bulk-extensions) ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Class Section and Lab Section columns** — The due date exceptions table now shows each student's class section and lab section. Both columns support multi-select filtering and sorting, and are shown by default when relevant. Column visibility can be toggled above the table ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Sortable and filterable due date exceptions table** — All columns in the due date exceptions table now sort correctly. Student, Group, Class Section, and Lab Section columns have multi-select header filters. A row count reads "Showing N of M Students" when a filter is active ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Clearer messaging when a course has no late tokens** — When **Late Tokens Per Student** is 0 and an assignment's **Max late tokens** is above 0, the assignment form and the **Manage Due Date Exceptions** page now show a warning explaining that students have no tokens to spend. The **Class Late Token Settings** card also notes when tokens are off for the whole course. Students in a zero-allotment course see "(This course does not give late tokens. Contact your instructor if you need an extension.)" instead of the old "(No late submissions allowed)" message, which was misleading because instructors can still grant manual extensions. Late-push rejection messages also distinguish between "you have no tokens" and "this course gives no tokens" ([#1043](https://github.com/pawtograder/platform/pull/1043))
+
+#### Assignments
+- **No-submission assignments open directly on the Grade tab** — Assignments configured as "No submission — graded manually, no artifact" now hide the Files and Autograder Detail tabs, open straight to the Grade tab, and render the editable rubric full width. Stale links pointing at `/files` redirect to `/grade` automatically ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+### September 25, 2026
+
+#### GitHub
+- **Expired org invitations are replaced, not skipped** — When a student's GitHub organization invitation has been pending for 7 or more days (GitHub's expiry window), the membership sweep now cancels it and sends a fresh one instead of treating it as a live duplicate. The replacement carries the student's other active enrollments in the same organization, so sibling-class team memberships are not lost. When a live invitation suppresses the send, the invitation date is rewound to the real invitation's creation time so the sweep returns when that invitation actually expires ([#1030](https://github.com/pawtograder/platform/pull/1030))
+
 ## August 2026
 
 ### August 19, 2026
