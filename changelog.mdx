@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 29, 2026
+
+#### Submissions
+- **Files and Checks tabs usable on large pull-request submissions** — The **Files** and **Checks** tabs on a pull-request submission now load and scroll correctly even when the PR contains a large number of changed files or check runs ([#1046](https://github.com/pawtograder/platform/pull/1046))
+
+### September 27, 2026
+
+#### Assignments
+- **Due-date exceptions table: sort, filter, section columns, and bulk extensions** — The **Manage Due Date Exceptions** table can now be sorted and filtered, shows section columns for each student, and supports bulk extensions so you can adjust multiple students' deadlines at once ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Repository not shown as linked before GitHub org authorization** — The assignment page no longer shows a student's repository as ready or linked before they have authorized the GitHub organization ([#987](https://github.com/pawtograder/platform/pull/987))
+
+#### Late tokens
+- **Clearer message when a course gives no late tokens** — When a course has not enabled late tokens, the assignment page now explains this explicitly rather than showing a generic unavailable state ([#1043](https://github.com/pawtograder/platform/pull/1043))
+
+#### GitHub
+- **Handout sync no longer overwrites student work** — The handout sync process now checks whether a student has made commits before pushing updates, so it cannot overwrite a student's own work ([#973](https://github.com/pawtograder/platform/pull/973))
+
+#### Accessibility
+- **Gradebook no longer announces "Submitted slash 100"** — Screen readers now hear a properly formatted score rather than the raw slash-separated string ([#915](https://github.com/pawtograder/platform/pull/915))
+
 ## August 2026
 
 ### August 19, 2026
