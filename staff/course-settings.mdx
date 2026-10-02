@@ -26,6 +26,7 @@ Routes are relative to `/course/<course_id>/`.
 | **LMS (LTI) Sync** | `manage/course/lti` | Syncs rosters from your LMS and pushes assignment grades back over LTI 1.3. | Not yet documented |
 | **Feature flags** | `manage/course/feature-flags` | Turns course features on or off. Navigation, dashboards, and student tools follow these flags. | [Feature flags](/staff/feature-flags) |
 | **GitHub Templates** | `manage/course/github` | Overrides the handout and solution (grader) template repositories used when creating new assignment repos. Blank fields inherit your GitHub org's default, then the Pawtograder default. | Not yet documented |
+| **Class Sections** | `manage/course/class-sections` | Lists every class section with its CRN, meeting times, location, campus, and active student count. Instructors can rename sections; graders can view but not rename. | [Class sections](#class-sections) |
 | **Lab Sections** | `manage/course/lab-roster` | Shows which students are in each lab section, with a CSV export. Instructors get a **Manage lab sections** button that opens the lab section editor at `manage/course/lab-sections`. | [Lab sections](/staff/lab-sections) |
 | **Flashcard Decks** | `manage/course/flashcard-decks` | Creates and manages flashcard decks for student practice, with per-deck, per-card, and per-student analytics. | [Flashcard decks](/staff/flashcard-decks) |
 | **Discussion Topics** | `manage/discussion-topics` | Manages the topics students use to categorize discussion posts. | Not yet documented; [Discussion Board](/staff/discussion) covers how topics appear on the board |
@@ -48,12 +49,12 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 ### What graders see
 
-A grader's menu is a subset of an instructor's. Graders see five entries:
-**Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
-**Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
-instructor-only.
+A grader's menu is a subset of an instructor's. Graders see six entries:
+**Discord**, **Class Sections**, **Lab Sections**, **Flashcard Decks**,
+**Discussion Engagement**, and **Grading Conflicts**. The other nine —
+**Enrollments**, **LMS (LTI) Sync**, **Feature flags**, **GitHub Templates**,
+**Discussion Topics**, **Due Date Extensions**, **Audit Log**, **Emailer**, and
+**Workflow Runs** — are instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
@@ -112,3 +113,41 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Class sections
+
+**Course Settings → Class Sections** opens a table of every class section in the
+course, with columns for name, CRN, meeting times, location, campus, and active
+student count. The table can be sorted by any column and filtered by name.
+
+Class sections are created when the roster is imported from your SIS or LMS.
+Their meeting times, location, and campus are refreshed from SIS every hour.
+Names are not refreshed: rename a section here and the name sticks.
+
+### Renaming a section
+
+Instructors can rename any section. Graders can view the page but the rename
+button is disabled for them.
+
+1. Click the edit icon in the **Actions** column for the section you want to rename.
+2. Edit the name in the dialog. The name must be between 1 and 100 characters.
+3. Click **Save**.
+
+The new name appears immediately and is reflected everywhere the section name is
+shown — student dashboards, enrollment tables, and calendar titles.
+
+Saving without changing the name closes the dialog without writing anything.
+
+### SIS-imported section names
+
+When a SIS roster import creates a class section, the default name includes the
+instructor's surname: `3500 - MWF 9:15am-10:20am (Doe)`. Co-taught sections list
+every surname: `3500 - MWF 9:15am-10:20am (Doe, Smith)`. A section with no
+instructor listed keeps the plain format: `3500 - MWF 9:15am-10:20am`.
+
+Lab sections keep the plain format regardless of who SIS lists against them,
+because SIS lists the lecture instructors against lab CRNs, not the people who
+actually run the lab.
+
+This naming applies to new imports only. Existing sections keep their current
+names, and the hourly SIS sync does not overwrite a name you have set by hand.
