@@ -1,6 +1,6 @@
 ---
 title: "Course Settings"
-description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
+description: "Index of the 15 Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
@@ -8,7 +8,7 @@ icon: "gear"
 
 **Course Settings** is a menu, not a page. Its trigger is a button with no link:
 clicking it opens the menu and the address in your browser does not change. Every
-course-wide setting lives on one of the menu's 14 entries, so this page is an
+course-wide setting lives on one of the menu's 15 entries, so this page is an
 index — find the entry you want below, then follow the link for the details.
 
 <Frame>
@@ -26,6 +26,7 @@ Routes are relative to `/course/<course_id>/`.
 | **LMS (LTI) Sync** | `manage/course/lti` | Syncs rosters from your LMS and pushes assignment grades back over LTI 1.3. | Not yet documented |
 | **Feature flags** | `manage/course/feature-flags` | Turns course features on or off. Navigation, dashboards, and student tools follow these flags. | [Feature flags](/staff/feature-flags) |
 | **GitHub Templates** | `manage/course/github` | Overrides the handout and solution (grader) template repositories used when creating new assignment repos. Blank fields inherit your GitHub org's default, then the Pawtograder default. | Not yet documented |
+| **Class Sections** | `manage/course/class-sections` | Lists every SIS-imported class section with its CRN, meeting times, location, campus, and active student count. Instructors can rename sections; graders can view them. | [Class sections](/staff/class-sections) |
 | **Lab Sections** | `manage/course/lab-roster` | Shows which students are in each lab section, with a CSV export. Instructors get a **Manage lab sections** button that opens the lab section editor at `manage/course/lab-sections`. | [Lab sections](/staff/lab-sections) |
 | **Flashcard Decks** | `manage/course/flashcard-decks` | Creates and manages flashcard decks for student practice, with per-deck, per-card, and per-student analytics. | [Flashcard decks](/staff/flashcard-decks) |
 | **Discussion Topics** | `manage/discussion-topics` | Manages the topics students use to categorize discussion posts. | Not yet documented; [Discussion Board](/staff/discussion) covers how topics appear on the board |
@@ -48,12 +49,12 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 ### What graders see
 
-A grader's menu is a subset of an instructor's. Graders see five entries:
-**Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
-**Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
-instructor-only.
+A grader's menu is a subset of an instructor's. Graders see six entries:
+**Discord**, **Class Sections**, **Lab Sections**, **Flashcard Decks**,
+**Discussion Engagement**, and **Grading Conflicts**. The other nine —
+**Enrollments**, **LMS (LTI) Sync**, **Feature flags**, **GitHub Templates**,
+**Discussion Topics**, **Due Date Extensions**, **Audit Log**, **Emailer**, and
+**Workflow Runs** — are instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
