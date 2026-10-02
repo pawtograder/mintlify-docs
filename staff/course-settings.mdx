@@ -1,6 +1,6 @@
 ---
 title: "Course Settings"
-description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
+description: "Index of the 15 Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
@@ -8,14 +8,14 @@ icon: "gear"
 
 **Course Settings** is a menu, not a page. Its trigger is a button with no link:
 clicking it opens the menu and the address in your browser does not change. Every
-course-wide setting lives on one of the menu's 14 entries, so this page is an
+course-wide setting lives on one of the menu's 15 entries, so this page is an
 index — find the entry you want below, then follow the link for the details.
 
 <Frame>
   <img src="/images/staff/course-settings-menu-1787281367482.png" alt="Course navigation with the Course Settings menu open, listing Discord, Enrollments, LMS (LTI) Sync, Feature flags, GitHub Templates, Lab Sections, Flashcard Decks, Discussion Topics, Discussion Engagement, Grading Conflicts, Due Date Extensions, Audit Log, Emailer, and Workflow Runs" />
 </Frame>
 
-## The 14 entries
+## The 15 entries
 
 Routes are relative to `/course/<course_id>/`.
 
@@ -26,6 +26,7 @@ Routes are relative to `/course/<course_id>/`.
 | **LMS (LTI) Sync** | `manage/course/lti` | Syncs rosters from your LMS and pushes assignment grades back over LTI 1.3. | Not yet documented |
 | **Feature flags** | `manage/course/feature-flags` | Turns course features on or off. Navigation, dashboards, and student tools follow these flags. | [Feature flags](/staff/feature-flags) |
 | **GitHub Templates** | `manage/course/github` | Overrides the handout and solution (grader) template repositories used when creating new assignment repos. Blank fields inherit your GitHub org's default, then the Pawtograder default. | Not yet documented |
+| **Class Sections** | `manage/course/class-sections` | Lists every class section with its CRN, meeting times, location, campus, and active-student count. Instructors can rename sections; graders can view but not rename. Names are not overwritten by the hourly SIS sync. | [Class sections](#class-sections) |
 | **Lab Sections** | `manage/course/lab-roster` | Shows which students are in each lab section, with a CSV export. Instructors get a **Manage lab sections** button that opens the lab section editor at `manage/course/lab-sections`. | [Lab sections](/staff/lab-sections) |
 | **Flashcard Decks** | `manage/course/flashcard-decks` | Creates and manages flashcard decks for student practice, with per-deck, per-card, and per-student analytics. | [Flashcard decks](/staff/flashcard-decks) |
 | **Discussion Topics** | `manage/discussion-topics` | Manages the topics students use to categorize discussion posts. | Not yet documented; [Discussion Board](/staff/discussion) covers how topics appear on the board |
@@ -48,12 +49,15 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 ### What graders see
 
-A grader's menu is a subset of an instructor's. Graders see five entries:
-**Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
-**Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
-instructor-only.
+A grader's menu is a subset of an instructor's. Graders see six entries:
+**Discord**, **Class Sections**, **Lab Sections**, **Flashcard Decks**,
+**Discussion Engagement**, and **Grading Conflicts**. The other nine —
+**Enrollments**, **LMS (LTI) Sync**, **Feature flags**, **GitHub Templates**,
+**Discussion Topics**, **Due Date Extensions**, **Audit Log**, **Emailer**, and
+**Workflow Runs** — are instructor-only.
+
+On **Class Sections**, graders can view sections but the rename button is
+disabled for them.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
@@ -102,6 +106,29 @@ See [Extensions](/staff/assignments/extensions) for the rest of the late token
 and extension settings, including gifted tokens, and
 [Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions)
 for how students spend them.
+
+## Class sections
+
+**Course Settings → Class Sections** lists every class section for the course
+with its CRN, meeting times, location, campus, and active-student count. The
+table is sortable and filterable by name.
+
+Instructors can rename a section by clicking the edit icon on its row. The name
+is the only editable field: meeting times, location, and campus are refreshed
+from SIS every hour and would revert if you edited them here. A rename sticks
+because the hourly sync never writes the `name` column.
+
+<Note>
+Class sections are created by a SIS or LMS roster import, not from this page.
+There is no create or delete action.
+</Note>
+
+Section names for newly imported SIS class sections now include the instructor's
+surname — for example, `3500 - MWF 9:15am-10:20am (Doe)` — so that multiple
+sections at the same time are easy to tell apart in dropdowns. Lab sections keep
+the plain `number - times` format because the people SIS lists against a lab CRN
+are the lecture instructors, not whoever runs the lab. This naming applies only
+to new imports; existing sections keep their current names until you rename them.
 
 ## Grading conflicts
 
