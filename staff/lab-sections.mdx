@@ -211,3 +211,27 @@ assignment form.
 - **Grading.** Bulk grading assignment offers **Assign to lab leaders**, which assigns each submission to all lab leaders of that student's section with no manual grader selection. See [Grading Assignments](/staff/assignments/grading-assignments).
 - **Filters and columns.** The assignment dashboard, the security dashboard, the gradebook grid and its export, and survey response filters all carry a lab section dimension.
 - **Students.** A student's course dashboard shows a card for their lab section with its meeting time and lab leaders.
+
+## Class sections
+
+Class sections are the lecture sections that come from a SIS or LMS roster import. They are separate from lab sections and are managed from **Course Settings → Class Sections** (`manage/course/class-sections`).
+
+The page lists every class section with its CRN, meeting times, location, campus, and active student count. Instructors can rename sections; graders can view them but cannot rename.
+
+### Renaming a class section
+
+1. Open **Course Settings → Class Sections**
+2. Find the section in the table (use the **Filter by name** field to narrow the list)
+3. Click the edit icon in the **Actions** column
+4. Enter the new name in the dialog (maximum 100 characters)
+5. Click **Save**
+
+The rename takes effect immediately and updates everywhere the section name appears — enrollment tables, section dropdowns, and calendar titles. Meeting times, location, campus, and CRN are not editable here: those fields are refreshed from SIS every hour and would revert.
+
+<Note>
+SIS-imported class sections are named after their instructor by default — for example, `3500 - MWF 9:15am-10:20am (Doe)` for a section taught by Doe. Co-taught sections list every instructor's surname: `3500 - MWF 9:15am-10:20am (Doe, Smith)`. This naming applies to new imports; existing sections keep their current names until you rename them.
+</Note>
+
+<Warning>
+Saving the dialog without changing the name is a no-op: the name is not written and `updated_at` is not bumped. This is intentional — it prevents unnecessary realtime broadcasts.
+</Warning>
