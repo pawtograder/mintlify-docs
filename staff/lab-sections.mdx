@@ -211,3 +211,34 @@ assignment form.
 - **Grading.** Bulk grading assignment offers **Assign to lab leaders**, which assigns each submission to all lab leaders of that student's section with no manual grader selection. See [Grading Assignments](/staff/assignments/grading-assignments).
 - **Filters and columns.** The assignment dashboard, the security dashboard, the gradebook grid and its export, and survey response filters all carry a lab section dimension.
 - **Students.** A student's course dashboard shows a card for their lab section with its meeting time and lab leaders.
+
+## Class sections
+
+Class sections are the lecture sections that come from a SIS or LMS roster import. They are distinct from lab sections: a course typically has a handful of class sections (one per lecture time) and many lab sections.
+
+### Viewing and renaming class sections
+
+**Course Settings → Class Sections** (`manage/course/class-sections`) is visible to instructors and graders. It lists every class section with its CRN, meeting times, location, campus, and active-student count.
+
+Instructors can rename any section by clicking the edit button on its row. The rename dialog shows the current name pre-filled and the section's CRN and meeting times for reference. Names are limited to 100 characters.
+
+Graders can view the list but the rename button is disabled for them.
+
+<Note>
+Meeting times, location, and campus are refreshed from SIS every hour and cannot be edited here. Names are not touched by the sync, so a rename sticks.
+</Note>
+
+### How SIS-imported sections are named
+
+When a SIS import creates a class section, Pawtograder names it after the course number, meeting times, and the instructor's surname:
+
+| Case | Name |
+| --- | --- |
+| One instructor | `3500 - MWF 9:15am-10:20am (Doe)` |
+| Co-taught | `3500 - MWF 9:15am-10:20am (Doe, Smith)` |
+| No instructor listed | `3500 - MWF 9:15am-10:20am` |
+| Lab section | `3501 - T 2:30pm-4:10pm` (unchanged) |
+
+Lab sections keep the plain format because the people SIS lists against a lab CRN are the lecture instructors, not whoever actually runs the lab.
+
+This naming applies only to **new** imports. Existing sections keep their current names, and the hourly sync does not overwrite a name you have set by hand.
