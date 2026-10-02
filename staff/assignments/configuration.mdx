@@ -164,6 +164,12 @@ The repository configuration has five options.
 | **No repository — students upload submission files directly** | uncommon | No GitHub repository at all. The assignment page shows an upload control instead of a repository box, and what the student uploads is the submission. |
 | **No submission — graded manually, no artifact** | uncommon | Nothing to hand in. The assignment page shows a *"No submission required"* notice telling the student their instructor will grade the work directly — a presentation or oral exam, for example. |
 
+#### Grading no-submission assignments
+
+When you open a submission for a no-submission assignment, the **Files** and **Autograder Detail** tabs are hidden — there is nothing to show there. The submission view opens directly on the **Grade** tab and renders the rubric full-width so you can apply checks and complete the review without any extra navigation. Stale links that point at `/files` (such as the **Next incomplete review** button) redirect automatically to the grade view.
+
+If the assignment also has a linked survey, a **Survey** tab appears alongside **Grade** and works normally.
+
 Notes that will save you a support ticket:
 
 - **Fork from prior assignment requires a source assignment**, and the
