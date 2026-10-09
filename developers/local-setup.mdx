@@ -116,7 +116,7 @@ Read the local URLs and keys out of the CLI rather than copying them by hand (`A
 npx supabase status -o env
 ```
 
-That prints `API_URL`, `ANON_KEY`, `SERVICE_ROLE_KEY`, `DB_URL`, and the rest. Set these in `.env.local`:
+That prints `API_URL`, `SERVICE_ROLE_KEY` (labeled `Secret` in the CLI's interactive output), `ANON_KEY` (labeled `Publishable`), `DB_URL`, and the rest. Set these in `.env.local`:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
