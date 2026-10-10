@@ -8,6 +8,11 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 24, 2026
+
+#### Discord
+- **Guided Discord server connection** — Connecting a course to a Discord server is now a verified OAuth flow instead of a free-text server ID field. Click **Add Pawtograder to your Discord server** on **Course Settings → Discord**, pick the server on Discord's own consent screen, and Pawtograder confirms the bot is present before recording the connection. The settings page now shows a health panel that names exactly what is wrong when the bot is installed but cannot work — missing permissions, role hierarchy problems, or channel overrides — with a re-authorize link for each. One unarchived course per server is enforced. See [Discord integration](/staff/discord) ([#936](https://github.com/pawtograder/platform/pull/936))
+
 ### August 19, 2026
 
 #### Surveys
@@ -24,6 +29,9 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 #### Grading and gradebook
 - **Safeguards on scores and completion** — Rubric point values are rejected if they are negative, grading completion is computed from each student's own reviews rather than an assignment-wide summary, and an out-of-date gradebook recalculation can no longer overwrite newer grades ([#922](https://github.com/pawtograder/platform/pull/922))
+
+#### Bug fixes
+- **Revoking an API token is now idempotent** — Clicking **Revoke** on an already-revoked token no longer produced a spurious error. The Revoke button is also disabled while a revocation is in flight, preventing a double-click from firing a second request ([#920](https://github.com/pawtograder/platform/pull/920))
 
 ### August 6, 2026
 
