@@ -6,6 +6,21 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 22, 2026
+
+#### Assignments
+- **Files and Autograder tabs hidden for no-submission assignments** — Assignments configured as **No submission — graded manually, no artifact** no longer show the **Files** or **Autograder Detail** tabs, which had nothing to display. The submission page opens directly on the **Grade** tab, and the editable rubric is rendered full width. Stale links pointing at `/files` (such as **Next incomplete review** navigation) continue to work and land on the same grading view ([#1016](https://github.com/pawtograder/platform/pull/1016))
+
+### September 21, 2026
+
+#### Surveys
+- **Survey responses visible on a submission** — When a survey is linked to an assignment, the submission view gains a **Survey** tab. Graders and instructors see every member of the submitting group, including members who never started, with their completion status and answers. Students see only their own response, read-only. Also fixed a data-loss bug where returning to an already-submitted survey with response editing enabled could silently revert the submission to a draft on the first keystroke ([#1019](https://github.com/pawtograder/platform/pull/1019))
+
+#### Course settings
+- **Instructor-editable class section names** — A new **Class Sections** page under **Course Settings** lets instructors rename class sections. Meeting times, location, and campus are still refreshed from SIS every hour; names are not, so a rename sticks. Graders can view the page but cannot rename sections. SIS-imported class sections now include the instructor's surname in the default name (for example, `3500 - MWF 9:15am–10:20am (Doe)`) so multiple lecture sections at the same time are easier to tell apart in dropdowns ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
 ## August 2026
 
 ### August 19, 2026
