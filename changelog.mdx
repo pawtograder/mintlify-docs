@@ -6,7 +6,52 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 10, 2026
+
+#### GitHub
+- **Handout sync now handles UTF-8 content correctly** — Handout repository files are read and written as UTF-8 instead of Latin-1, so non-ASCII characters in handout files are no longer corrupted during sync ([#970](https://github.com/pawtograder/platform/pull/970))
+- **Deleted repositories no longer stall permission sync** — A single deleted repository in a course organization can no longer block the entire permission synchronization job for that org ([#965](https://github.com/pawtograder/platform/pull/965))
+
+#### Leaderboard
+- **Submissions no longer silently discarded** — A database check constraint that could cause a valid submission to be dropped from the leaderboard has been removed ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### GitHub
+- **Permission sync ignores spurious admins** — When a course organization has many accounts with unexpected admin rights, permission sync no longer performs redundant work for each one, keeping sync fast and avoiding unnecessary GitHub API calls ([#960](https://github.com/pawtograder/platform/pull/960))
+
+### September 8, 2026
+
+#### GitHub
+- **Handout creation no longer fails on new courses** — Creating a handout repository no longer returns a 500 error when the course team has not been created yet ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Authentication
+- **Microsoft sign-in now works** — The Azure provider is given a redirect URI, which is required for Microsoft OAuth to complete successfully ([#957](https://github.com/pawtograder/platform/pull/957))
+
+#### Infrastructure
+- **Async worker concurrency and visibility timeout are tunable** — Operators can now configure the drain concurrency and SQS visibility timeout for the async worker, and repository creation is instrumented for better observability ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+- **Webhook and Discord delivery failures are no longer silent** — Two failure modes in webhook dispatch and Discord notifications that were swallowing errors in production have been fixed ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
+
+### August 28, 2026
+
+#### Security and privacy
+- **Eight audit findings resolved** — Extensions are no longer hidden on the assignment dashboard, a survey response data-loss path is closed, help-request content is protected from unauthorized access, and row-level security on the audit log is tightened ([#940](https://github.com/pawtograder/platform/pull/940))
+
+### August 25, 2026
+
+#### Bug fixes
+- **Stale pages update after writes** — The browser router cache is invalidated after data writes, so navigating back to a page shows current data rather than a stale snapshot ([#939](https://github.com/pawtograder/platform/pull/939))
+- **Group membership cache stays consistent on moves** — Moving a student between groups now invalidates the cache entry for their previous group as well as their new one ([#943](https://github.com/pawtograder/platform/pull/943))
+- **Discord bot resolves members reliably** — The bot now looks up guild members by their Discord snowflake ID, fixing cases where a member could not be found ([#938](https://github.com/pawtograder/platform/pull/938))
+- **Extensionless binaries detected by content** — Submitted files with no extension are now classified by their content rather than their name, so binary files are handled correctly ([#941](https://github.com/pawtograder/platform/pull/941))
 
 ### August 19, 2026
 
