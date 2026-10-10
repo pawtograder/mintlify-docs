@@ -8,6 +8,19 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 25, 2026
+
+#### Discord
+- **Guided Discord server connection** — Connecting a course to a Discord server is now a guided OAuth flow. Click **Add Pawtograder to your Discord server** on the Discord settings page, pick the server on Discord's own consent screen, and Pawtograder confirms the bot is in the server before recording the connection. The old free-text server ID field is gone. One unarchived course per server is enforced, and a server can be disconnected from the same page ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Discord installation status panel** — The Discord settings page now shows whether the bot is in the server and whether it can work there. Missing permissions are named individually with a re-authorize link. If the bot's role sits too low to assign course roles, the panel shows both role positions and explains the fix. Channel-level permission problems and stale or missing tracked roles and channels are also reported ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Students prompted to link Discord** — Students whose course has Discord enabled now see a **Connect to Discord** prompt on their dashboard, so they can receive their server invitation. Previously the prompt was shown only to staff ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Submissions
+- **Extensionless binaries classified by content** — Submitted files with no extension are now identified by their content rather than their name, so binary files are stored and displayed correctly ([#941](https://github.com/pawtograder/platform/pull/941))
+
+#### Bug fixes
+- **Page navigation stays current after writes** — Browser navigation no longer shows stale data after a form save or other write ([#939](https://github.com/pawtograder/platform/pull/939))
+
 ### August 19, 2026
 
 #### Surveys
@@ -19,6 +32,11 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 - **Preview as student stays on its own assignment** — On the **Test Assignment** page, **Preview as student** no longer shows submissions from other assignments ([#918](https://github.com/pawtograder/platform/pull/918))
 - **Discord role sync scoped to active courses** — Role synchronization now runs only for active courses and stops retrying failures that cannot succeed ([#924](https://github.com/pawtograder/platform/pull/924))
 - **Long-idle tabs no longer crash** — Returning to a Pawtograder tab left open for a long time no longer errors out when you come back to it ([#902](https://github.com/pawtograder/platform/pull/902))
+
+### August 11, 2026 (continued)
+
+#### Integrations
+- **MCP token revocation is now idempotent** — Revoking an already-revoked MCP token no longer produces an error. Double-clicking the Revoke button is also prevented while the request is in flight ([#920](https://github.com/pawtograder/platform/pull/920))
 
 ### August 11, 2026
 
