@@ -6,6 +6,62 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 11, 2026
+
+#### GitHub
+
+- **Permission sync no longer queues work for repositories in another org** — When a student's GitHub org membership was confirmed, the sync could enqueue permission updates for repository rows whose org did not match the class's GitHub org (for example, rows left behind by end-to-end test fixtures). Those jobs could never succeed and would open the org-wide circuit breaker. The sync now skips any repository whose org does not match the class's, using a case-insensitive comparison ([#972](https://github.com/pawtograder/platform/pull/972))
+
+#### Infrastructure
+
+- **Large cookie headers no longer cause 400 errors at the API gateway** — On deployments that serve multiple channels, the authentication cookie can exceed 8 KB and was being rejected by Kong's default request-header buffer limit. The limit is now raised to 16 KB, matching the realtime service's own header ceiling ([#974](https://github.com/pawtograder/platform/pull/974))
+
+### September 10, 2026
+
+#### GitHub
+
+- **Expired org invitations are now automatically re-sent** — A GitHub org invitation expires after 7 days with no notification. Previously, a student whose invitation lapsed would silently lose team membership and repository access for the rest of the term unless they logged in or pressed "Sync GitHub Account." An hourly reconciler now detects lapsed invitations and re-sends them, bounded to the course's active term window. Classes with no start or end date are flagged in Sentry rather than silently skipped. When a student leaves the org, their enrollment is immediately un-confirmed and a repair invitation is queued ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Deleted repositories no longer throttle permission sync for the whole org** — A repository that no longer exists on GitHub would spend the full 93-second retry ladder on every sync attempt, then escape as a bare error that opened the org-wide circuit breaker — pausing permission sync for every other class in the org. The sync now probes the repository on a 404 and classifies it as definitively missing (parks the row) or inaccessible (stops retrying without touching the database). Archived assignments are also excluded from permission sync, preventing deleted repos from those assignments from triggering the same failure ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Disabled forks fail immediately with an actionable message** — When a handout repository is private and the GitHub org does not allow forking private repositories, every `create_repo` attempt would fail with a 403 and retry for hours. The worker now detects this condition before the first attempt and parks the row with a message naming the exact remedy. A generic backstop also parks any repository whose most recent creation job was dead-lettered, capping retries at one cycle instead of eight for any future unclassified terminal error ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Handout sync handles Unicode correctly** — Files containing characters outside the ASCII range (accented letters, non-Latin scripts) were being decoded as Latin-1, causing patch application to fail and the fallback full-file write to throw an error. Handout sync now reads and writes files as UTF-8, with a byte-preserving Latin-1 fallback for files that are not valid UTF-8 ([#970](https://github.com/pawtograder/platform/pull/970))
+
+#### Leaderboard
+
+- **A score above the maximum no longer discards a student's grade** — The `assignment_leaderboard` table had a check constraint requiring `autograder_score <= max_score`. When a grader legitimately awarded extra credit (for example, through mutation scoring that generated more mutants than declared), the constraint fired inside the same transaction as the grade write and rolled back the entire submission. The constraint is removed; scores above the maximum are now recorded as-is and the leaderboard update can no longer abort a grading run ([#964](https://github.com/pawtograder/platform/pull/964))
+
+#### Discord
+
+- **Discord channels now have a repair path** — If a course's `#scheduling` or `#operations` channels failed to be created when the Discord server was first connected (for example, because the bot lacked permissions at the time), there was no way to recover them short of manual intervention. The "Retry Discord" button now re-creates missing class-level channels alongside missing roles. Short rate-limit responses from Discord are also waited out in place rather than being reported as errors and triggering a full retry cycle ([#967](https://github.com/pawtograder/platform/pull/967))
+
+### September 9, 2026
+
+#### GitHub
+
+- **Permission sync skips spurious admins more efficiently** — When a course org has many accounts with admin access that are not on the course roster, the permission sync was doing significant work on every run to compute removals that would never take effect (since `DELETE /repos/.../collaborators/{username}` cannot revoke access held through a team or org ownership). Removal candidates are now filtered to direct collaborators only, and the org member list is skipped entirely when there are no users to add. Per-org exemption lists for accounts that should never be removed (institutional IT, integration accounts) can now be configured on the GitHub Orgs admin page ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Handout creation no longer fails for brand-new courses** — The `<slug>-students` team is created lazily the first time a student enrolls. Creating a mode-2 handout repository before any student had enrolled would fail with a 404 after the repository was already created on GitHub, leaving an orphaned repo and no record of it in the database. The sync now creates the students team when it is absent and a handout grant requires it ([#959](https://github.com/pawtograder/platform/pull/959))
+
+#### Infrastructure
+
+- **Microsoft sign-in now works** — The Helm chart was missing the required `GOTRUE_EXTERNAL_AZURE_REDIRECT_URI` environment variable for the Azure/Entra provider. GoTrue rejects any OAuth provider with an empty redirect URI before contacting the identity provider, so sign-in attempts returned a 400 error regardless of whether credentials were configured. The redirect URI now defaults to the API gateway origin plus `/auth/v1/callback`, matching the GitHub and Discord providers. An optional `url` field is also available for tenant pinning ([#957](https://github.com/pawtograder/platform/pull/957))
+
+### September 7, 2026
+
+#### Performance
+
+- **Assignment repository provisioning is faster and more observable** — The async worker's drain concurrency and pgmq visibility timeout are now tunable via chart values (`edgeFunctions.githubAsyncWorker.drainConcurrency` and `visibilityTimeoutSeconds`). The defaults reproduce the previous hardcoded values (4 / 300s) so upgrading changes nothing until the values are set. Per-step timing instrumentation was added to `createRepo` and `syncRepoPermissions`, emitting a single structured log line per operation so the source of latency in long-running provisioning jobs can be identified from the logs ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+
+- **Webhook and Discord silent failures fixed** — Two silent failure modes found in production: provisioning-push rejections during a large assignment release were reported at `error` severity and grouped with genuine failures, making real problems invisible in the noise. These are now reported at `info` with their own fingerprint. Separately, the Discord discussion stats update was putting all author UUIDs in a single `.in()` filter that exceeded the URL length limit; the lookup is now chunked, partial failures are counted rather than silently swallowed, and the completion summary can no longer report `0 errors` on a run that failed to fetch any authors ([#955](https://github.com/pawtograder/platform/pull/955))
+
+### September 5, 2026
+
+#### Infrastructure
+
+- **Monitoring changes no longer restart the Postgres primary** — The Helm chart was hashing the entire `monitoring.yaml` template into the Postgres pod's restart annotation. Since that file renders every ServiceMonitor in the chart, any monitoring change — including enabling the metrics leader — would roll the database and cause a ~60-second outage as auth, storage, and realtime crash-looped. The postgres_exporter queries ConfigMap is now in its own template (`postgres-exporter-queries.yaml`) and only that file plus `postgres-config.yaml` are included in the hash. A render-time guard asserts both directions: unrelated monitoring changes do not move the checksum, and a real query change does ([#954](https://github.com/pawtograder/platform/pull/954))
+
 ## August 2026
 
 ### August 19, 2026
