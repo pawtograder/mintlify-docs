@@ -6,6 +6,26 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 9, 2026
+
+#### GitHub
+- **Permission sync exemptions** — Site admins can now configure a list of GitHub usernames that repository permission sync must never remove, per GitHub organization. Use this for accounts that legitimately hold access the course roster cannot explain — institutional IT, integration accounts, or faculty carried on repos directly. Configure from the **GitHub Orgs** admin page ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Faster handout and solution repo creation** — Repository permission sync now skips removals that GitHub cannot act on (access held through a team or org ownership), and skips fetching the full org member list when there are no users to add. For a large course org this cut handout creation from ~96 seconds to ~13 seconds ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Handout creation no longer fails on new courses** — Creating a handout repository for a brand-new course no longer returns a 500 error when the student team does not exist yet. The student team is now created automatically as part of handout setup ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### GitHub
+- **Async worker drain tuning** — The number of repository creation jobs processed concurrently and the queue visibility timeout are now configurable via Helm chart values (`edgeFunctions.githubAsyncWorker.drainConcurrency` and `visibilityTimeoutSeconds`). Defaults are unchanged from the previous hardcoded values. Operators can raise concurrency to improve throughput for large class releases; the chart enforces that the visibility timeout and isolate lifetime cover the modelled batch ([#956](https://github.com/pawtograder/platform/pull/956))
+- **Step-level timing for repository creation** — Repository creation and permission sync now emit a single structured log line per operation with per-step wall-clock breakdowns, making it possible to identify where time is spent during provisioning ([#956](https://github.com/pawtograder/platform/pull/956))
+- **Microsoft (Azure/Entra) sign-in fixed** — Microsoft sign-in now works correctly. The Helm chart sets the required OAuth redirect URI for the Azure provider, and an optional `url` value can pin sign-in to a specific Entra tenant ([#957](https://github.com/pawtograder/platform/pull/957))
+
+#### Reliability
+- **Provisioning push noise reduced** — Webhook events for repository pushes that arrive while provisioning is still in flight are now reported at `info` level rather than `error`, so a genuine readiness failure is no longer buried in routine provisioning noise. A 58-student assignment release previously produced 412 error-level events; these are now classified and reported appropriately ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord stats update no longer silently fails** — The hourly Discord discussion stats update now fetches author profiles in bounded chunks instead of one large query, preventing `URI too long` failures. A failed chunk is counted as errors in the run summary rather than silently falling back to "Anonymous" ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
 
 ### August 19, 2026
