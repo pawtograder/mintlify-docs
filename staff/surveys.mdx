@@ -89,6 +89,9 @@ The visual builder uses SurveyJS, providing access to a wide variety of question
 - **Single Choice**: Radio buttons to select one option from a list
 - **Checkboxes**: Multiple select boxes allowing students to choose one or more options
 - **Yes / No**: Binary question with two clear options for simple confirmations
+- **Rating**: A numeric scale with configurable minimum, maximum, and end labels
+
+Question types the builder has no editor for — such as matrix, ranking, dropdown, and slider — are preserved as read-only cards in the builder. You can reorder or delete them, and edit them in the JSON editor below the builder. Opening and saving the builder on a survey that contains these types does not change them.
 
 ### Building Your Survey
 
@@ -617,7 +620,7 @@ Draft surveys can be edited freely with no restrictions:
 On a published survey, the ⋯ menu item is labelled **Edit (New Version)**, and the dashboard shows a version badge next to each survey.
 
 <Warning>
-Editing a published survey overwrites it rather than creating a second version. Responses already collected keep pointing at the questions you just changed, so edit a published survey carefully — and prefer creating a new survey when the wording change would make old and new answers mean different things. This is a known issue with an open report against Pawtograder, and a fix is on the way.
+Editing a published survey overwrites it rather than creating a second version. Responses already collected keep pointing at the questions you just changed, so edit a published survey carefully — and prefer creating a new survey when the wording change would make old and new answers mean different things.
 </Warning>
 
 **What You Can Safely Edit:**

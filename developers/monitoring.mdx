@@ -157,6 +157,10 @@ Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that a
 
 Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are individually toggleable through `monitoring.dashboards.*`: `stack-overview`, `postgres-deep-dive`, `realtime-fanout`, `edge-functions`, `app-business`, `rate-limiting`, `edge-soak`, and `queues-and-workers`. Each exposes a `datasource` template variable rather than a hardcoded datasource UID, so they import cleanly into any Prometheus-compatible Grafana.
 
+<Note>
+The `edge-functions` and `app-business` dashboards require the edge metrics scrape to be working. A gzip encoding issue that prevented the edge-functions scrape endpoint from being read was fixed in September 2026; if you deployed before that, update to pick up the fix.
+</Note>
+
 Alert rules live in `charts/pawtograder/templates/prometheus-rules.yaml`, grouped as `pawtograder.backup`, `pawtograder.walg`, `pawtograder.replication`, `pawtograder.postgres`, `pawtograder.app`, `pawtograder.edgefunctions`, `pawtograder.secrets`, and `pawtograder.certs`. Routing is in `alertmanager-config.yaml`.
 
 ## Error tracking and product analytics
