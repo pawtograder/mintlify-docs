@@ -6,7 +6,60 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 10, 2026
+
+#### GitHub
+
+- **GitHub org membership now self-heals after expired invitations** — A GitHub org invitation expires after 7 days with no notification. Previously, a student whose invitation lapsed was silently locked out of the org — and therefore out of their repositories — for the rest of the term, with no automatic repair. An hourly reconciler now detects lapsed invitations and re-invites affected students, bounded to the course's active term window so finished courses are never re-invited. Students who leave the org mid-term are also re-invited immediately. The "Sync GitHub Account" button and the login callback continue to work as before ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Handout sync now handles Unicode correctly** — Files containing accented characters or other non-ASCII text (such as `Yāo` or `Sénior`) were silently corrupted or caused handout syncs to fail entirely. The sync now reads and writes files as UTF-8, with a fallback for legacy-encoded files that preserves their bytes exactly ([#970](https://github.com/pawtograder/platform/pull/970))
+- **Disabled fork no longer retries for hours** — When a handout repository was private and the GitHub org did not allow forking private repositories, every student's repository creation failed with a 403 and was re-enqueued for up to 8.5 hours before giving up. The error is now detected immediately and reported with an actionable message. A generic backstop also parks any repository whose creation job was dead-lettered, capping retries at one cycle instead of eight ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Deleted repository no longer throttles permission sync for a whole org** — A repository deleted outside Pawtograder caused its permission sync job to spend 93 seconds on a retry ladder, then trip the org-wide circuit breaker — pausing permission sync for every other class in the org. Deleted repositories are now detected quickly and parked without affecting other classes. Archived assignments are also excluded from permission sync ([#965](https://github.com/pawtograder/platform/pull/965))
+
+#### Discord
+
+- **Discord channels now have a repair path** — If a course's `#scheduling` or `#operations` channels failed to be created (for example, due to a missing bot permission), the "Retry Discord" button previously only restored roles, leaving the channels permanently missing. The button now also recreates missing class-level channels ([#967](https://github.com/pawtograder/platform/pull/967))
+
+#### Leaderboard
+
+- **Leaderboard no longer blocks grading when scores exceed the maximum** — A check constraint on the leaderboard table rejected scores above the declared maximum (which can legitimately occur with mutation-testing graders), causing the entire grading transaction to roll back and the student to receive no grade. The constraint is removed; scores above the maximum are now recorded as-is ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### GitHub
+
+- **Permission sync skips 80 seconds of work that changes nothing** — Handout and solution repository creation was taking up to 95 seconds, causing browser timeouts and leaving assignments with a handout but no grader repository. The bottleneck was permission sync attempting to remove collaborators whose access came from a team or org ownership — removals that GitHub accepts but silently ignores. Only direct collaborator grants are now removed. The org member list is also skipped when there are no users to add. Per-org permission sync exemptions can now be configured on the GitHub Orgs admin page for accounts that should never be removed ([#960](https://github.com/pawtograder/platform/pull/960))
+- **Handout creation no longer fails on a brand-new course** — Creating the first mode-2 handout for a course with no enrolled students failed with a 500 because the student team did not exist yet. The team is now created automatically during handout setup ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Infrastructure
+
+- **Microsoft (Azure/Entra) sign-in now works on staging** — The Helm chart was missing a required redirect URI for the Azure OAuth provider, causing every sign-in attempt to fail with a 400 error before even contacting Microsoft. The redirect URI is now set automatically, and an optional tenant-pinning URL is available for deployments that should restrict sign-in to a single directory ([#957](https://github.com/pawtograder/platform/pull/957))
+- **GitHub async worker drain concurrency and visibility timeout are now tunable** — After a 58-repository release took 88 minutes to drain (with 20 messages re-read mid-flight due to a too-short visibility timeout), the worker's concurrency ceiling and pgmq visibility timeout are now configurable via `edgeFunctions.githubAsyncWorker.drainConcurrency` and `visibilityTimeoutSeconds`. Defaults reproduce the previous behaviour exactly. Step-level timing instrumentation was also added to `createRepo` and `syncRepoPermissions` to identify where the ~280s per-repository time is spent ([#956](https://github.com/pawtograder/platform/pull/956))
+
+#### Bug fixes
+
+- **Webhook retries no longer flood Sentry during a release** — Releasing an assignment to 58 students produced 412 error-level Sentry events from a single throw site over 88 minutes — one per repository per redelivery — making it impossible to spot a genuine failure in the same window. Expected retries (provisioning still in flight) are now reported at `info` level with their own fingerprint, while genuine readiness failures remain at `error` ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Discord author lookup no longer silently fails and reports zero errors** — The hourly Discord discussion stats update was putting all ~280 author UUIDs into a single `.in()` filter, exceeding the URL length limit. The request failed silently and fell through to an "Anonymous" fallback, while the summary still reported `0 errors`. Author lookups are now chunked into bounded batches, partial failures are counted and reported, and messages with unresolved authors are left for the next run rather than attributed to the wrong person ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
+
+### August 28, 2026
+
+#### Infrastructure
+
+- **Postgres liveness probes removed** — The liveness probes on the Postgres primary and replica killed both pods twice on 2026-08-27 during a transient NFS stall, taking the platform down for ~60 seconds each time. The probes were not wrong — the postmaster genuinely could not fork workers — but the condition was self-resolving and the probes ran out of patience one second before it cleared. Restarting a single-writer Postgres cannot fix external storage, and a restart during crash recovery can trigger a self-worsening loop. Readiness probes are kept (they remove an unready pod from Service endpoints without destroying it). A new `PawtograderPostgresUnavailable` alert fires critical after 5 minutes of zero ready replicas ([#946](https://github.com/pawtograder/platform/pull/946))
+- **Global database metrics moved to the postgres exporter** — The `metrics` edge function was calling `database_ram_metrics()` and `vacuum_health_check()` on every Prometheus scrape. With 32 edge-function replicas and a 30-second scrape interval, this amounted to ~1.07 calls per second — 77.7% of all production database execution time — for data that is identical across every pod. These metrics now come from the postgres exporter sidecar, which is scraped once. The buffer-cache scan runs at most once every 5 minutes ([#946](https://github.com/pawtograder/platform/pull/946))
+- **Edge autoscaling unblocked** — The edge HPA had been pinned at 32 replicas because the eszip bundle cache (512 MB) set a load-independent memory floor that kept utilization above the HPA's dead band regardless of actual traffic. The cache default is now 256 MB, and the memory target is 80% (previously 100%, which created a dead band of 90–110% — too narrow to trigger scaling in either direction) ([#948](https://github.com/pawtograder/platform/pull/948))
+- **Submission insert trigger no longer rewrites already-inactive rows** — The trigger that deactivates a student's previous submission on each new push was updating every prior submission for the assignment, including ones already marked inactive. On a load-test dataset with thousands of submissions per student, a single insert rewrote 1,483 rows and took 284 ms. The trigger now skips already-inactive rows, reducing execution time by ~27× ([#948](https://github.com/pawtograder/platform/pull/948))
+
+### August 25, 2026
+
+#### Bug fixes
+
+- **Eight audit findings fixed** — A security audit identified eight issues that are now resolved: extensions were hidden from the student dashboard for students with due-date extensions; the Survey Visual Builder destroyed `rating` questions and numeric choice values on save; removing the last code reference from a help request accidentally made it public; lab sections with no end time silently disabled their lab-based deadline; discussion karma was credited to the wrong profile for anonymous posts; the audit log always showed zero rows due to a missing RLS policy; the leaderboard was readable by unauthenticated callers; and the "Ask For Help" button on submission pages did nothing. The follow-up field on help requests is also now saved correctly ([#940](https://github.com/pawtograder/platform/pull/940))
 
 ### August 19, 2026
 
