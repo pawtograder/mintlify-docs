@@ -1,0 +1,65 @@
+---
+title: "Class Sections"
+description: "View and rename the class sections in your course"
+icon: "school"
+---
+
+# Class Sections
+
+**Course Settings → Class Sections** lists every class section in your course and lets instructors rename them. Graders can view the list but cannot rename sections.
+
+Class sections are created when the roster is imported from your university's Student Information System (SIS) or LMS. Their meeting times, location, and campus are refreshed from SIS every hour. Names are not refreshed — rename a section here and the name sticks.
+
+## Viewing class sections
+
+The table shows one row per section with the following columns:
+
+| Column | What it shows |
+| --- | --- |
+| **Name** | The section's display name |
+| **CRN** | The SIS course reference number, or — if none |
+| **Meeting Times** | Days and times the section meets |
+| **Location** | Room or building, or — if none |
+| **Campus** | Campus identifier, or — if none |
+| **Students** | Count of active students assigned to the section |
+| **Actions** | Rename button (instructors only) |
+
+Click any sortable column header to sort the table. Use the **Filter by name** field under the Name header to narrow the list.
+
+## Renaming a section
+
+1. Click the pencil icon in the **Actions** column for the section you want to rename
+2. Edit the name in the **Rename Class Section** dialog
+3. The CRN and meeting times are shown below the field for reference
+4. Click **Save**
+
+Names are limited to 100 characters. Saving without changing the name closes the dialog without writing anything.
+
+<Note>
+Only instructors can rename class sections. Graders see the rename button but it is disabled, with a tooltip explaining why.
+</Note>
+
+## How sections are named on import
+
+When a SIS import creates a class section, the default name includes the course number, meeting times, and the instructor's surname:
+
+| Case | Example name |
+| --- | --- |
+| One instructor | `3500 - MWF 9:15am-10:20am (Doe)` |
+| Co-taught | `3500 - MWF 9:15am-10:20am (Doe, Smith)` |
+| No instructor listed | `3500 - MWF 9:15am-10:20am` |
+
+Lab sections keep the plain `course number - meeting times` format. The people SIS lists against a lab CRN are the lecture instructors, not whoever actually runs the lab, so their names are not appended.
+
+This naming only applies to new imports. Existing sections keep their current names, and the hourly SIS sync does not overwrite a name you have set by hand.
+
+## Relationship to lab sections
+
+Class sections and lab sections are separate concepts in Pawtograder:
+
+- **Class sections** correspond to lecture sections. They are managed here and used for section-level filtering in surveys, the gradebook, and analytics.
+- **Lab sections** correspond to weekly lab meetings. They drive lab-based assignment deadlines and are managed under **Course Settings → Lab Sections**.
+
+A student can belong to one class section and one lab section at the same time.
+
+See [Lab sections](/staff/lab-sections) for details on creating and managing lab sections.

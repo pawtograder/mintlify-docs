@@ -122,6 +122,7 @@
             "pages": [
               "staff/course-settings",
               "staff/feature-flags",
+              "staff/class-sections",
               "staff/lab-sections",
               "staff/flashcard-decks",
               "staff/workflow-runs",
