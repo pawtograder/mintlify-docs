@@ -8,6 +8,26 @@ This page covers changes since the end of the Spring 2026 term. Entries are grou
 
 ## August 2026
 
+### August 28, 2026
+
+#### Discord
+- **Verified Discord bot install flow** — Connecting a course to a Discord server is now a guided OAuth flow instead of a free-text server ID field. Click **Add Pawtograder to your Discord server** on the Discord settings page, pick the server on Discord's own consent screen, and Pawtograder confirms the bot is in the server before recording the connection. One unarchived course per server is enforced, and the settings page now shows whether the bot has the permissions it needs, including a role-hierarchy check that explains why role assignment can fail even when all permissions are granted ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Discord server disconnect** — Instructors can disconnect a course from its Discord server from the settings page. Pawtograder forgets the roles and channels it created; those remain in the server for an administrator to delete, and nobody is removed ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Per-guild circuit breaker** — A guild that produces repeated permission errors is automatically parked for a cooling-off period so it cannot consume the shared bot rate limit for every course on the deployment ([#936](https://github.com/pawtograder/platform/pull/936))
+- **Students can link Discord from their dashboard** — When a course has the Discord student-join feature flag on, students now see a **Connect to Discord** card on their dashboard so they can link their account and receive their server invitation. Previously the link control was staff-only, which silently blocked the whole student join flow ([#936](https://github.com/pawtograder/platform/pull/936))
+
+#### Bug fixes
+- **Extensions now appear in the student dashboard's upcoming list** — A student holding a due-date extension was dropped from the **Upcoming Assignments** list because the dashboard was filtering on the original deadline rather than the extended one. The dashboard now uses the same final per-student deadline that submission enforcement uses, so an extended assignment stays visible until the extended deadline passes ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Survey Visual Builder preserves rating questions and numeric choices** — Opening an existing survey in the Visual Builder and saving it without making any changes no longer rewrites `rating` questions as short-text inputs or corrupts numeric Likert-scale choice values. The builder now supports rating questions natively, and question types it has no editor for (matrix, ranking, dropdown) are preserved read-only rather than overwritten ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Private help requests stay private** — Removing the last code reference from a help request no longer accidentally published it. Privacy can now only escalate: adding a code reference makes a request private, but removing one does not make it public again ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Follow-up help requests now record the original request** — The **Follow-Up to Previous Request** field on the new-request form was collected but never saved. Follow-up links now reach the database ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Ask For Help button now opens the help drawer** — The **Ask For Help** button on submission pages was a no-op since it shipped. It now opens the same help drawer as the floating widget and the office-hours status card ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Audit log now shows rows** — The instructor audit log was returning zero rows due to a missing row-level security policy on the partitioned audit table. Instructors can now read their course's audit events ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Discussion karma credited to the right profile** — Karma earned on anonymous posts was credited to the student's private (named) profile but displayed from the pseudonymous one, so the badge always read zero. Karma is now per-identity: anonymous posts credit the pseudonymous profile, and named posts credit the private one. Staff engagement reports still show the combined total ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Lab section end time is now required** — A lab section with no end time silently disabled lab-based due dates for its students. The lab section form now requires an end time, and sections with no end time recorded are treated as ending at 11:59 PM on their meeting day ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Office-hours karma notes no longer abort writes** — A database trigger bug made every insert, update, and delete on office-hours karma notes fail silently. Karma notes now save correctly ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Leaderboard no longer readable without signing in** — The assignment leaderboard was readable by anyone with the public anonymous key, returning scores across all courses. It now requires an authenticated session and is scoped to the reader's own course ([#940](https://github.com/pawtograder/platform/pull/940))
+
 ### August 19, 2026
 
 #### Surveys
