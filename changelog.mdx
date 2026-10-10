@@ -6,7 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 4, 2026
+
+#### Monitoring (operators)
+- **App Business and Edge Functions dashboards now populate** — Both Grafana dashboards were previously empty in production. The `app-business` dashboard's workflow panels now have a dedicated metrics-leader Deployment (`web.metricsLeader.enabled`), required for multi-replica installs; the `edge-functions` dashboard now receives per-function request, latency, worker, and eszip-cache metrics from the edge demuxer. Business counters (submissions created, grading actions) moved from never-incremented web-tier counters to trigger-maintained `postgres_exporter` queries. All dashboard queries are now scoped to a `$namespace` variable so staging, preview, and production environments do not bleed into each other. Helm chart bumped to 0.3.18. See [Monitoring and Metrics](/developers/monitoring) ([#952](https://github.com/pawtograder/platform/pull/952))
+
 ## August 2026
+
+### August 28, 2026
+
+#### Bug fixes
+- **Submission insert no longer rewrites the student's entire history** — The trigger that deactivates a prior submission when a new one arrives was updating every row for that student and assignment, including rows already inactive. On a load-test dataset with thousands of submissions per student this caused statement timeouts; in production the fan-out was small but unnecessary. The trigger now skips already-inactive rows, reducing a worst-case 284 ms operation to 11 ms ([#948](https://github.com/pawtograder/platform/pull/948))
+- **Extensions shown on the student dashboard** — Assignments you held an extension on were silently dropped from the **Upcoming Assignments** list and bucketed as past-due on the **Assignments** tab, because the dashboard was filtering on the lab-adjusted deadline rather than the final per-student deadline that includes extensions and late tokens. Both surfaces now agree with the assignment detail page and with submission enforcement ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Survey Visual Builder no longer destroys question types** — Opening an existing survey in the Visual Builder and saving it, even without making any changes, previously rewrote every question type the builder had no editor for (rating, matrix, ranking, dropdown, nouislider) as a plain text input. Rating questions are now fully editable in the builder; all other unsupported types are preserved read-only and written back unchanged. Numeric and boolean choice values (used by Likert scales) are also preserved correctly — they were previously stringified to `[object Object]` ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Private help requests stay private** — Saving the **Referenced Code** panel on a help request used to recompute `is_private` from the current reference set, so removing the last code reference silently published the request and its entire message thread to the class. Privacy can now only escalate: removing references never makes a private request public, and a database trigger enforces this for all callers ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Follow-up help requests now record the original request** — The **Follow-Up to Previous Request** field on the new-request form was collected and pre-filled from the queue list's Follow-Up button, but never sent to the server. The `followup_to` column is now populated correctly ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Audit log now shows entries** — The instructor audit log had been showing zero rows since late 2025. A database migration renamed the original audit table and the read policy followed it, leaving the new partitioned table with row-level security enabled but no policy — which is default-deny with no error. The policy is restored ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Discussion karma credited to the correct profile** — Karma earned on anonymous posts was always credited to the student's private (named) profile, so the pseudonymous byline always showed 0. Karma is now per-identity: anonymous posts credit the public profile, named posts credit the private profile. Staff can still see the combined total in the engagement report. Karma also transfers correctly when staff toggle a thread's anonymity ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Lab section end time now required** — A lab section with no recorded end time silently disabled the lab-based deadline offset for its students, falling back to the plain assignment due date. The lab section form now requires an end time, and a missing end time defaults to end of day (23:59:59) everywhere the deadline is computed ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Ask For Help button now works** — The **Ask For Help** button on submission pages had an empty click handler since it was introduced. It now opens the same help drawer as the floating widget and the office-hours status card, including for staff and for students who already have an active request ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Discussion anonymity toggle fixed** — The staff control to make a discussion post anonymous or named had been broken since January 2026 due to a type mismatch in the database function. It now works correctly ([#940](https://github.com/pawtograder/platform/pull/940))
 
 ### August 19, 2026
 
