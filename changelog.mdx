@@ -6,6 +6,61 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 16, 2026
+
+#### Bug fixes
+- **Auth session leak fixed in edge functions and web** — Per-request Supabase clients were starting a background auth refresh timer that was never cancelled, causing memory and connection growth over time. Both the edge-function layer and the web app now share a single client per request and clean up correctly ([#990](https://github.com/pawtograder/platform/pull/990), [#984](https://github.com/pawtograder/platform/pull/984))
+- **Parked repositories no longer re-alert** — A repository that has already been parked after repeated failures no longer triggers a fresh alert on every subsequent check ([#990](https://github.com/pawtograder/platform/pull/990))
+
+### September 14, 2026
+
+#### Async worker
+- **Queue drains per GitHub org, not globally** — The async worker now drains one queue per GitHub organization, so a slow or stuck release for one course no longer delays repository creation and permission sync for every other course running at the same time ([#980](https://github.com/pawtograder/platform/pull/980))
+
+### September 12, 2026
+
+#### Infrastructure
+- **`mc` baked into the backup image** — The MinIO client (`mc`) is now built into the backup container image instead of being downloaded at the start of each backup run, making backups faster and resilient to network issues at run time ([#976](https://github.com/pawtograder/platform/pull/976))
+- **Backup dumps staged on a dedicated volume** — Database backup dumps are now written to their own persistent volume instead of the node's ephemeral disk, preventing backup failures on nodes with limited local storage ([#975](https://github.com/pawtograder/platform/pull/975))
+
+### September 11, 2026
+
+#### Infrastructure
+- **Kong request header buffer raised** — Kong's client request header buffer has been increased beyond the 8 KB default, preventing 400 errors on requests with large cookies or many headers ([#974](https://github.com/pawtograder/platform/pull/974))
+
+#### Bug fixes
+- **Permission sync scoped to the correct org** — GitHub permission sync no longer queues work for repositories that belong to a different organization, preventing spurious permission changes across courses ([#972](https://github.com/pawtograder/platform/pull/972))
+
+### September 10, 2026
+
+#### Bug fixes
+- **GitHub org membership self-heals expired invitations** — When a student's GitHub organization invitation has expired, Pawtograder now cancels the stale invitation and sends a fresh one instead of leaving the student stuck ([#962](https://github.com/pawtograder/platform/pull/962))
+- **Discord channels get a repair path** — Discord channels that end up in a broken state can now be repaired automatically, and the member-lookup cost during channel operations has been halved by deduplicating calls ([#967](https://github.com/pawtograder/platform/pull/967))
+- **Disabled fork no longer retries for hours** — A repository fork that is disabled now parks immediately instead of retrying until the dead-letter timeout, and a repo creation that exhausts all retries is parked rather than left in an unresolvable state ([#966](https://github.com/pawtograder/platform/pull/966))
+- **Handout sync reads and writes UTF-8** — Handout repository content is now read and written as UTF-8 instead of Latin-1, fixing garbled characters in files that contain non-ASCII text ([#970](https://github.com/pawtograder/platform/pull/970))
+- **Deleted repo no longer throttles permission sync** — A single deleted repository can no longer stall permission synchronization for an entire GitHub organization ([#965](https://github.com/pawtograder/platform/pull/965))
+- **Leaderboard check constraint no longer discards submissions** — A database constraint on the leaderboard table was incorrectly rejecting valid submissions; it has been corrected ([#964](https://github.com/pawtograder/platform/pull/964))
+
+### September 9, 2026
+
+#### Performance
+- **Permission sync skips no-op admin changes** — When a course GitHub org has many spurious admin members, permission sync now detects that no real change is needed and skips the work, significantly reducing GitHub API usage for large courses ([#960](https://github.com/pawtograder/platform/pull/960))
+
+### September 8, 2026
+
+#### Bug fixes
+- **Handout creation no longer 500s on a missing team** — Creating a handout repository no longer returns a 500 error when the course's GitHub team does not exist yet; the team is created on demand ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Infrastructure
+- **Microsoft sign-in redirect URI configured** — The Azure OAuth provider now has a redirect URI set in the Helm chart, allowing Microsoft/Azure AD sign-in to complete successfully ([#957](https://github.com/pawtograder/platform/pull/957))
+
+#### Async worker
+- **Drain concurrency and visibility timeout are tunable** — Operators can now configure the number of messages processed concurrently and the SQS visibility timeout for the async worker without redeploying. Repository creation is also instrumented with timing metrics ([#956](https://github.com/pawtograder/platform/pull/956))
+
 ## August 2026
 
 ### August 19, 2026
