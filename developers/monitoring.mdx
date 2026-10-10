@@ -35,10 +35,10 @@ The `metrics` edge function is deployed with `verify_jwt = false`, so it does no
 Authentication here is **optional**: when `METRICS_TOKEN` is unset the endpoint serves metrics to anyone who can reach it. When the variable is set, a request without a `Bearer` prefix or with the wrong token gets **401**.
 
 <Warning>
-`METRICS_TOKEN` and `METRICS_SCRAPE_TOKEN` are different variables with different defaults. Leaving `METRICS_TOKEN` unset publishes queue depths, circuit breaker state, and database table sizes to any client that can reach the functions host.
+`METRICS_TOKEN` and `METRICS_SCRAPE_TOKEN` are different variables with different defaults. Leaving `METRICS_TOKEN` unset publishes queue depths and circuit breaker state to any client that can reach the functions host.
 </Warning>
 
-If the queue RPCs fail, the endpoint returns **500** with the body `# Error generating metrics`. Failures in the vacuum and RAM collectors are non-fatal: they are reported to Sentry and the rest of the response still renders.
+If the queue RPCs fail, the endpoint returns **500** with the body `# Error generating metrics`.
 
 ```bash Scrape the edge function
 curl -s -H "Authorization: Bearer $METRICS_TOKEN" \
@@ -111,6 +111,8 @@ Prefer age over depth for alerting. Depth alone cannot distinguish a healthy bus
 
 `pawtograder_circuit_breaker_open{scope,key,state}` is `1` when a breaker is open and `0` when it is closed, one series per breaker returned by the `get_circuit_breaker_statuses` RPC.
 
+`pawtograder_discord_circuit_breaker_open{key}` is `1` when a per-guild Discord circuit breaker is open. The `PawtograderDiscordCircuitBreakerOpen` alert fires (warning) when a guild's breaker stays open for more than 10 minutes (configurable via `monitoring.prometheusRules.discordCircuitOpenFor`). A tripped breaker means the bot is being refused by that guild — typically because it was removed, lost permissions, or the server no longer exists.
+
 ### Rate limiter gauges
 
 Pawtograder rate-limits outbound work with Bottleneck backed by a shared Redis store. The metrics collector connects with the same factory the limiters use: `REDIS_URL` (real Redis over ioredis) if set, otherwise `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`. With neither configured it collects nothing and these three series are absent.
@@ -129,15 +131,25 @@ Discovery is capped per scrape by `METRICS_MAX_BOTTLENECK_LIMITERS` (default 200
 
 ### Database health
 
-`pawtograder_vacuum_alert` is `1` per active alert from the `vacuum_health_check` RPC, labelled `check`, `severity`, and `table_name`. When the RPC fails or exceeds its 3-second timeout, the endpoint emits a single series labelled `check="rpc_failed"`, `severity="error"`, `error_type="rpc_error"` instead of the raw error. When there are no alerts it emits `0` with `check="none"`, `severity="ok"`.
+Global database metrics come from the `postgres_exporter` sidecar (scraped once), not from the `metrics` edge function. The edge function was previously responsible for 77.7% of all database execution time because Prometheus scraped it once per functions pod (32 replicas in production). These metrics are now in the exporter's `queries.yaml` ConfigMap and are scraped once per 30-second interval.
 
-The `database_ram_metrics` RPC produces `pawtograder_db_`-prefixed gauges, with labels taken from each row's `metric_labels`:
+| Metric | Labels | Notes |
+| --- | --- | --- |
+| `pawtograder_vacuum_alert` | `check`, `severity`, `table_name` | `1` per active alert; `0` with `check="none"` when healthy |
+| `pawtograder_db_buffer_cache_bytes` | `relname` | Shared buffer cache per relation (>1 MiB, top 20); cached 5 min |
+| `pawtograder_db_buffer_cache_total_used_bytes` | — | Total shared buffer cache in use; cached 5 min |
+| `pawtograder_db_dead_tuples` | `relname` | Dead tuples per table (>100, top 20) |
+| `pawtograder_db_connections_used` | — | Client backend connections |
+| `pawtograder_db_connections_max` | — | `max_connections` setting |
+| `pawtograder_db_connections_reserved` | — | Superuser-reserved connections |
+| `pawtograder_table_sizes_total_bytes` | `relation` | Table size including indexes and TOAST (>10 MiB, top 30); `relation` is schema-qualified |
+| `pawtograder_table_sizes_heap_bytes` | `relation` | Heap size only |
 
-- `pawtograder_db_buffer_cache_bytes`: shared buffer cache used by a table or index
-- `pawtograder_db_buffer_cache_total_used_bytes`: total shared buffer cache in use
-- `pawtograder_db_connections`: connections by state
-- `pawtograder_db_table_total_bytes`: table size including indexes and TOAST
-- `pawtograder_db_dead_tuples`: dead tuples per table
+<Warning>
+Two metric contracts changed when database metrics moved to the exporter. `pawtograder_db_connections{state}` (per-state breakdown) is gone; use the built-in `pg_stat_activity_count` series if you need the state breakdown. Table sizes moved from `pawtograder_db_table_total_bytes{relname}` (bare name) to `pawtograder_table_sizes_total_bytes{relation}` (schema-qualified value). Update any dashboards or alert rules that reference the old names.
+</Warning>
+
+When the exporter's custom queries fail, `pg_exporter_last_scrape_error` is set to `1`. Two alerts guard this: `PawtograderPostgresExporterQueryFailing` (warning, 15 minutes) fires when a query is failing, and `PawtograderPostgresExporterDown` (warning, 30 minutes) fires when the exporter stops being scraped entirely.
 
 Finally, `pawtograder_info{version}` is a constant `1` used as a target-presence marker.
 
@@ -152,6 +164,18 @@ The web app's `ServiceMonitor` reads `METRICS_SCRAPE_TOKEN` from the JWT secret 
 </Note>
 
 Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that adds Pawtograder-specific series on top of the exporter defaults, including `pawtograder_replication_*`, `pawtograder_wal_archiving_*`, `pawtograder_db_connections_*`, `pawtograder_classes_*`, `pawtograder_active_submissions_active_count`, `pawtograder_help_queue_depth_*`, and `pawtograder_table_sizes_*`.
+
+<Warning>
+Setting `monitoring.enabled=true` with `postgres.enabled=false` (externally managed database) is refused at install time unless you also set `monitoring.externalPostgresExporter=true`. Every database-derived metric comes from the `postgres_exporter` sidecar inside the chart-managed Postgres StatefulSet. With an external database, supply your own exporter and ServiceMonitor, then set the acknowledgement flag. The `queries.yaml` ConfigMap still renders so you can mount it into your exporter to keep the same metric names.
+</Warning>
+
+### Postgres availability alert
+
+`PawtograderPostgresUnavailable` (critical, default `for: 5m`) fires when the Postgres StatefulSet reports zero ready replicas. It is keyed on `kube_statefulset_status_replicas_ready` from kube-state-metrics, deliberately outside the Postgres pod, so it survives a dead database, a dead exporter, and a dead edge function. The threshold is configurable via `monitoring.prometheusRules.postgresUnavailableFor`.
+
+<Warning>
+Every other critical alert in the `pawtograder.app` and `pawtograder.postgres` groups fails silently when the database is down. They are all `metric > threshold` on series that disappear when the database is gone. `PawtograderPostgresUnavailable` is the only rule that actually detects a dead or wedged primary. Do not remove it on the grounds that the queue alerts appear to cover the same ground — they do not.
+</Warning>
 
 ### Dashboards and alerts
 
