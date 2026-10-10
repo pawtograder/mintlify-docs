@@ -6,7 +6,46 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 8, 2026
+
+#### Bug fixes
+- **Handout repositories created for brand-new courses** — Creating a handout repository for a course with no enrolled students no longer fails. The student GitHub team is now created on demand when the first handout is provisioned, rather than requiring enrollment to happen first ([#959](https://github.com/pawtograder/platform/pull/959))
+
+### September 7, 2026
+
+#### Bug fixes
+- **Discord discussion stats errors now reported correctly** — The hourly Discord discussion stats update was silently reporting zero errors even when author lookups failed due to URL length limits. Errors are now counted and reported accurately, and author lookups are batched to stay within URL size limits ([#955](https://github.com/pawtograder/platform/pull/955))
+- **Provisioning noise reduced in error monitoring** — Webhook deliveries that arrive while a student repository is still being provisioned are now reported at a lower severity than genuine failures, so a large assignment release no longer floods error monitoring with expected retries ([#955](https://github.com/pawtograder/platform/pull/955))
+
 ## August 2026
+
+### August 28, 2026
+
+#### Student dashboard
+- **Extensions now appear on the student dashboard** — Assignments with a due-date extension were incorrectly dropped from the "Upcoming Assignments" list and shown as past-due on the Assignments tab. The dashboard now uses the final per-student deadline — including lab-section offsets and any extensions — so extended assignments stay visible until their extended deadline passes ([#940](https://github.com/pawtograder/platform/pull/940))
+
+#### Surveys
+- **Survey Visual Builder preserves all question types** — Opening an existing survey in the Visual Builder and saving it no longer destroys `rating` questions or converts numeric Likert scale values to `[object Object]`. Question types the builder has no editor for (matrix, ranking, dropdown) are now shown as read-only cards and passed through unchanged ([#940](https://github.com/pawtograder/platform/pull/940))
+
+#### Office hours
+- **Help request privacy can no longer be accidentally removed** — Removing the last code reference from a help request no longer makes it public. Privacy can only escalate (private → public requires staff action), and this is now enforced in the database as well as the UI ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Follow-up requests now link to the original** — The "Follow-Up to Previous Request" field on the new help request form was collected but never saved. It is now persisted correctly ([#940](https://github.com/pawtograder/platform/pull/940))
+- **"Ask For Help" button works from submission pages** — The Ask For Help button on submission pages now opens the help drawer for all users, including staff and students who already have an active request ([#940](https://github.com/pawtograder/platform/pull/940))
+
+#### Lab sections
+- **Lab section end time is now required** — The lab section form requires an end time, since assignment deadlines relative to lab are measured from it. Sections imported from the SIS without a parseable end time default to end of day ([#940](https://github.com/pawtograder/platform/pull/940))
+
+#### Discussion
+- **Karma credits the correct profile** — Discussion karma earned on anonymous posts now appears on the pseudonymous byline rather than being credited to the student's named profile (where it was invisible). Karma follows a post when staff toggle its anonymity ([#940](https://github.com/pawtograder/platform/pull/940))
+
+#### Bug fixes
+- **Audit log now shows entries** — The audit log was always empty due to a missing database policy. Instructors can now see audit events for their course ([#940](https://github.com/pawtograder/platform/pull/940))
+- **Leaderboard no longer readable without authentication** — The assignment leaderboard was accessible to unauthenticated callers. It now requires an enrolled course member ([#940](https://github.com/pawtograder/platform/pull/940))
+
+#### Discord
+- **Guided Discord server connection** — Connecting a course to a Discord server now uses a verified OAuth install flow instead of a free-text server ID field. The new **Discord Server** panel on the Discord settings page shows whether the bot is installed, which permissions it holds, and whether its role is positioned correctly to assign course roles. Missing permissions are named individually with a re-authorize link, and the role hierarchy problem (which Discord reports identically to a missing permission) is diagnosed separately with both role positions shown. See [Course Settings](/staff/course-settings) ([#936](https://github.com/pawtograder/platform/pull/936))
 
 ### August 19, 2026
 
