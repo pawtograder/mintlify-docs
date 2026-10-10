@@ -6,6 +6,19 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## September 2026
+
+### September 21, 2026
+
+#### Course settings
+- **Rename class sections** — Instructors can now rename class sections from **Course Settings → Class Sections**, the same way lab sections can be renamed. The page lists every class section with its CRN, meeting times, location, campus, and active student count. Graders can view the page but cannot rename sections. See [Class sections](/staff/class-sections) ([#1018](https://github.com/pawtograder/platform/pull/1018))
+- **SIS-imported class sections named after their instructor** — When a roster is imported from SIS, class sections are now named `<course number> - <meeting times> (<instructor surname>)`, for example `3500 - MWF 9:15am-10:20am (Doe)`. Co-taught sections list every instructor. Lab sections keep the existing format. This applies to new imports only; existing sections are unchanged ([#1018](https://github.com/pawtograder/platform/pull/1018))
+
+### September 14, 2026
+
+#### Performance
+- **Async worker drains per GitHub org** — The background worker that creates student repositories now runs one drain per GitHub organization in parallel, so a large assignment release in one course no longer delays repository creation for other courses running in different GitHub organizations ([#980](https://github.com/pawtograder/platform/pull/980))
+
 ## August 2026
 
 ### August 19, 2026
