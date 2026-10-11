@@ -121,3 +121,27 @@ repo to every student repo while preserving each student's work. The
 sync detects merge conflicts, retries transient failures, and lets you
 target a subset of students. Trigger it from the assignment's
 **Repositories** page.
+
+The sync checks whether a student has modified each file before writing
+the handout's version over it. Files the student changed are left alone
+and listed in the pull request body; the PR stays open for the student to
+resolve them manually. The autograder workflow file
+(`.github/workflows/grade.yml`) is always written regardless of student
+edits, because it controls whether submissions are graded.
+
+The **Sync Status** column on the Repositories page shows one of these
+states:
+
+| Status | Meaning |
+|---|---|
+| **Synced** | The repository is at the latest handout revision. |
+| **PR Open** | A sync pull request is open and waiting for the student to merge it. |
+| **Sync Blocked** | Every file the handout changed was also changed by the student, so nothing could be written without overwriting their work. The affected paths are listed. Click **Sync** after the student resolves the conflict to retry. |
+| **Sync Error** | The sync stopped for a reason that needs staff attention (for example, the student pushed commits onto the sync branch while it was being built). |
+| **Sync in Progress** | A sync job is queued or running. |
+
+When a sync is blocked, the Repositories page lists the paths that could
+not be delivered. Ask the student to apply those changes manually, then
+click **Sync** to retry. The retry re-classifies the files; if the
+student has since applied the changes, the sync reports no changes needed
+and marks the repository as synced.
