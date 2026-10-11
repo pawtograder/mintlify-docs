@@ -6,6 +6,23 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 11, 2026
+
+#### Bug fixes
+- **Submission Files and Checks tabs work on large PR submissions** — The Files tab now loads all files for submissions with more than 1,000 files (previously truncated silently, causing the diff to show most files as deleted). The diff is collapsed behind a **Show changed files** toggle and shares a resizable split with the file navigator and editor on desktop. The Checks tab no longer times out on large submissions ([#1046](https://github.com/pawtograder/platform/pull/1046))
+- **Gradebook no longer announces "Submitted slash 100"** — Screen readers now hear the score and total as separate values ([#919](https://github.com/pawtograder/platform/pull/919))
+
+## September 2026
+
+### September 27, 2026
+
+#### Assignments
+- **Handout sync no longer overwrites student work** — The sync now checks whether a student has modified a file before writing the handout's version over it. Files the student changed are left alone and listed in the pull request body; the PR stays open for the student to resolve them manually. The autograder workflow file (`.github/workflows/grade.yml`) is always written, since it controls whether submissions are graded. A sync that cannot deliver any file without overwriting student work is reported as **Sync Blocked** on the Repositories page, with the affected paths listed, and can be retried after the student resolves the conflict ([#973](https://github.com/pawtograder/platform/pull/973))
+- **Due date exceptions table: sorting, filtering, and bulk actions** — The **Manage Due Date Exceptions** table now sorts on every column, filters by student name, group, class section, and lab section, and shows class and lab section columns. Selecting rows reveals two bulk actions: **Add extension** (adds the same hours and minutes to every selected student's current due date) and **Set due date to…** (gives every selected student the same final deadline). Both actions handle group members correctly — a group gets one exception however many members are selected — and skip students who finalized early by default ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Late-token misconfiguration explained** — When a course's **Late Tokens Per Student** is 0 but an assignment's **Max late tokens** is above 0, a warning now appears on the assignment form, the **Manage Due Date Exceptions** page, and the **Class Late Token Settings** card. Students in a 0-allotment course see a clearer message explaining that the course does not give late tokens, and the rejection message on a late push names the real cause instead of saying the student ran out ([#1043](https://github.com/pawtograder/platform/pull/1043))
+
 ## August 2026
 
 ### August 19, 2026

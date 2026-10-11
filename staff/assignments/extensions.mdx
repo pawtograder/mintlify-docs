@@ -150,6 +150,32 @@ and a **Note**. Same result, one screen for the whole course, which is
 convenient when you are entering several exceptions on different
 assignments at once.
 
+## Granting bulk extensions
+
+When you need to extend many students at once, use the bulk actions on
+**Manage Due Date Exceptions**. Select rows using the checkboxes (or
+**All matching filters** to select every row that passes the current
+filters), then choose one of two actions:
+
+- **Add extension** — adds the same number of hours and minutes to every
+  selected student's current due date, on top of any existing extensions.
+- **Set due date to…** — gives every selected student the same final
+  deadline. The target must be later than every selected student's current
+  due date. For each student, an exception is calculated for the difference
+  between their current due date and the target.
+
+Both dialogs accept a **Tokens to Consume** value and an optional note.
+For group assignments, selecting any member of a group extends the whole
+group once — two members of the same group count as one target, not two.
+
+Students who finalized early (via **Finalize Submission Early**) are
+skipped by default. A warning names them, and a checkbox lets you include
+them deliberately (which reopens their submissions).
+
+The table also supports filtering by student name, group, class section,
+and lab section, and sorting on every column, so you can narrow to a
+section before selecting all.
+
 ## Granting a student-wide extension
 
 A student-wide extension is the blanket accommodation: one entry that
