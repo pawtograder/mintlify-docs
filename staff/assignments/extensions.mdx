@@ -119,6 +119,27 @@ page describes the same behavior; if you expected group extensions to cost
 one token total, budget your **Late Tokens Per Student** allotment
 accordingly.
 
+## Bulk extensions
+
+When you need to extend several students at once, select their rows in the **Manage Due Date Exceptions** table and choose one of the two bulk actions that appear:
+
+- **Add extension** — adds the same number of hours and minutes to every selected student's current due date, on top of any extensions they already have.
+- **Set due date to…** — gives every selected student the same final due date. The target must be later than every selected student's current due date. The extension written for each student is the difference between their current due date and the target, so students who already have extensions end up at the same deadline as everyone else.
+
+Both actions accept a **Tokens to Consume** field and a **Notes** field, the same as the per-student dialog.
+
+**Groups are deduplicated.** Selecting two members of one group extends the group once, not twice. A group exception moves the deadline for every member.
+
+**Students who finalized early are skipped by default.** A student who used **Finalize Submission Early** has a negative exception that closes their deadline; extending them would reopen submissions. Both dialogs show a warning naming the skipped students and a checkbox to include them deliberately ("this reopens submissions for them").
+
+**Set due date to… refuses mixed-deadline groups.** If a group's members have different current due dates (for example, because they are in different lab sections), one group exception cannot give every member the same final deadline. The dialog asks you to deselect that group and use **Adjust Due Date** or **Add extension** instead.
+
+### Filtering and selecting
+
+The table supports multi-select filters on **Student**, **Group**, **Class Section**, and **Lab Section**. Filter first, then use **All matching filters** in the selection column header to select every filtered row across all pages. The row count reads "Showing N of M Students" while a filter is active.
+
+Column visibility can be toggled for **Group**, **Class Section**, **Lab Section**, and **Lab-Based Due Date**. Section columns are shown by default when the class has more than one class section or when the assignment uses lab scheduling.
+
 ## Granting a manual extension
 
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the

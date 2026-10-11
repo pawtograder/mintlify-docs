@@ -121,3 +121,17 @@ repo to every student repo while preserving each student's work. The
 sync detects merge conflicts, retries transient failures, and lets you
 target a subset of students. Trigger it from the assignment's
 **Repositories** page.
+
+The sync checks whether a student has modified each file before writing the handout's version over it. Files the student changed are left alone and listed in the pull request body; the PR stays open for the student to resolve manually. If every changed file belongs to the student, no PR is opened and the repository shows a **Sync Blocked** badge with the affected paths listed. Pressing **Sync** on a blocked repository retries it — once the student has resolved the conflict, the next sync takes the ordinary path and clears the status.
+
+Sync status badges on the **Repositories** page:
+
+| Status | Meaning |
+|---|---|
+| **Synced** | The repository is at the latest handout revision. |
+| **Not Up-to-date** | A newer handout revision exists; sync has not been requested yet. |
+| **Sync in Progress** | A sync job is queued or running. |
+| **PR Open** | A sync PR is open on GitHub waiting for the student to merge. |
+| **Sync Finalizing** | The PR was merged; the repository record is being updated. |
+| **Sync Blocked** | Every changed file belongs to the student; nothing was written. The badge lists the affected paths. Press **Sync** to retry after the student resolves the conflict. |
+| **Sync Error** | A terminal failure occurred (for example, the student pushed onto the sync branch). The badge shows the reason. Press **Sync** to retry. |
