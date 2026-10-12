@@ -227,6 +227,35 @@ Use the **Bulk edit grading due dates** or **Bulk edit self-review due dates** b
 
 The system updates all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately for clarity.
 
+## Navigating between submissions
+
+The grading toolbar shows **Previous** and **Next Incomplete** links that move
+through your assigned submissions. Both links keep the tab you are currently
+on (Files, Autograder Detail, Survey, etc.), so you do not need to re-select
+the tab on every submission.
+
+Completing a review assignment automatically opens the next incomplete
+submission on the same tab. If all of your assigned reviews are complete, a
+toast notification says so and you stay on the current page.
+
+When you have no review assignments, **Previous** and **Next** step through all
+submissions in the picker's order (by student name).
+
+### Grading assigned to panel
+
+The rubric sidebar shows a **Grading assigned to** panel listing every review
+assignment on the current submission:
+
+- **Instructors** see every assignment, or "Not assigned to anyone" when none
+  exist.
+- **Graders** see only their own assignment, or "Not assigned to you" when the
+  submission is not theirs. Other graders' assignments are not visible.
+- **Students** see their own self-review task with the assignee's name rather
+  than a profile ID.
+
+Each row shows the assignee's name (with "(you)" for your own), the rubric and
+parts, the due date or completion time, and a Complete/Pending badge.
+
 ## Tracking Progress
 
 Use the [Grading Status](/staff/assignments/grading-status) view to
