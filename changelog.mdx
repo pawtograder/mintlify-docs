@@ -6,6 +6,36 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 12, 2026
+
+#### Grading
+- **Tab stays with you across submissions** — Navigating to the next or previous submission, completing a review, and using the submission picker all keep the tab you are on (Files, Autograder Detail, Survey, etc.). Completing a review assignment automatically opens the next incomplete submission on the same tab; if all assigned reviews are complete, a toast says so ([#1058](https://github.com/pawtograder/platform/pull/1058))
+- **Assignees shown by name** — The rubric sidebar now shows a **Grading assigned to** panel listing each review assignment by assignee name (with "(you)" for your own), rubric parts, due date, and status. Instructors see every assignment on the submission; graders see only their own. Students see their self-review task with the grader's name instead of a profile ID ([#1058](https://github.com/pawtograder/platform/pull/1058))
+- **Previous button** — A **Previous** link now appears alongside **Next Incomplete** in the grading toolbar, letting graders step back through their assigned submissions (including completed ones) without using the dropdown ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
+## September 2026
+
+### September 29, 2026
+
+#### Submissions
+- **Files and Checks tabs fixed for large PR submissions** — Submissions with more than 1,000 files now load the complete file list. On pull-request submissions, the changed-files diff is collapsed behind a **Show changed files (N)** toggle; when expanded on desktop, the diff and the file navigator share a resizable split so neither takes the other's space. The Checks tab no longer times out on large repositories ([#1046](https://github.com/pawtograder/platform/pull/1046))
+
+### September 27, 2026
+
+#### Extensions
+- **Due date exceptions table: sorting, filtering, and bulk actions** — The **Manage Due Date Exceptions** table now sorts on every column, filters by student name, group, class section, and lab section, and supports row selection with **Add extension** and **Set due date to…** bulk actions. New **Class Section** and **Lab Section** columns appear automatically when the class has multiple sections or lab scheduling is on. Column visibility is toggleable. Students who finalized early are skipped by default in bulk actions, with an opt-in checkbox to include them ([#1031](https://github.com/pawtograder/platform/pull/1031))
+
+#### Late tokens
+- **Clearer messages when a course gives no late tokens** — When **Late Tokens Per Student** is 0, students see "(This course does not give late tokens. Contact your instructor if you need an extension.)" instead of the previous "(No late submissions allowed)". When an assignment's **Max late tokens** is 0, students see "(Late tokens cannot be used on this assignment)". Instructors see a warning on the assignment form and the due date exceptions page when the course allotment is 0 but the assignment cap is above 0. Late pushes rejected for this reason now say the course gives no tokens rather than that the student's balance ran out ([#1043](https://github.com/pawtograder/platform/pull/1043))
+
+#### GitHub
+- **Handout sync no longer overwrites student work** — The handout sync now checks whether a student has modified a file before writing the handout's version over it. Files the student changed are left alone and listed in the pull request body; the PR stays open for the student to merge manually. If every changed file belongs to the student, no PR is opened and the repository shows a **Sync Blocked** status with the affected paths listed. Pressing **Sync** retries a blocked repository ([#973](https://github.com/pawtograder/platform/pull/973))
+
+#### Accessibility
+- **Gradebook no longer announces "Submitted slash 100"** — Screen readers now hear the score and total as separate values rather than the raw fraction string ([#915](https://github.com/pawtograder/platform/pull/915))
+
 ## August 2026
 
 ### August 19, 2026
