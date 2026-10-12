@@ -121,6 +121,39 @@ accordingly.
 
 ## Granting a manual extension
 
+The **Manage Due Date Exceptions** table now supports sorting, filtering, row
+selection, and bulk actions. You can:
+
+- **Sort** any column by clicking its header.
+- **Filter** by student name, group, class section, or lab section using the
+  multi-select dropdowns in each column header.
+- **Toggle column visibility** — Group, Class Section, Lab Section, and
+  Lab-Based Due Date columns can be shown or hidden from the controls above the
+  table.
+- **Select rows** with the checkboxes, then use **Add extension** or **Set due
+  date to…** to apply the same change to every selected student or group at
+  once. Selecting two members of the same group counts as one group-level
+  exception.
+
+The row count at the bottom reads "Showing N of M Students" while a filter is
+active, so you can confirm the filter is working before acting on the selection.
+
+### Bulk actions
+
+**Add extension** adds the same hours and minutes to every selected student's
+current due date. **Set due date to…** gives every selected student the same
+final due date; the date picker's minimum is the latest current due date among
+the selection, and the dialog refuses to submit if a selected group's members
+have different current due dates (use **Adjust Due Date** per row or **Add
+extension** instead).
+
+Both dialogs accept a **Tokens to Consume** field and a **Notes** field (visible
+to students and staff). Students who finalized early are skipped by default; a
+checkbox lets you include them deliberately, with a warning that doing so
+reopens their submission.
+
+### Per-student adjustment
+
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the
 student's (or group's) row. The dialog accepts either:
 
