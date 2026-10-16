@@ -8,6 +8,21 @@ icon: "users-gear"
 
 Pawtograder has a robust feature to allow instructors to assign grading tasks to staff. When a grading task is assigned, the instructor can set a due date for that task, and re-assign the task to a different grader if needed. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the new work will appear in their pending work list. Pawtograder will also automatically allow any other grader to complete the task if the original grader is unable to complete it (without needing to re-assign the task).
 
+## Navigating Between Submissions
+
+When grading multiple submissions, the toolbar shows **Previous** and **Next Incomplete** links that keep you on the same tab (Files, Autograder Detail, Survey, …) as you move between submissions. You do not need to re-select the tab on each submission.
+
+The **Grading assigned to** panel in the rubric sidebar shows who is assigned to grade the current submission, the rubric parts they cover, the due date, and whether the review is complete or pending. Instructors see every assignment on the submission; graders see only their own.
+
+### Completing a review
+
+When you finish grading, click **Complete Review Assignment** in the toolbar. The popover offers two choices:
+
+- **Complete** — saves the review and stays on the current submission.
+- **Complete and go to next** — saves the review and opens your next incomplete review on the same tab. If you have another incomplete review assignment on the current submission (for example, a second rubric part), that one opens first before moving to a different submission.
+
+If there are no more incomplete reviews, only **Complete** appears, and finishing shows a confirmation toast.
+
 ## Automatic Completion of Related Reviews
 
 When a grader completes their assigned review, Pawtograder automatically:
