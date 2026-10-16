@@ -78,6 +78,39 @@ When using the **Assign to group mentors** mode in bulk grading, each group's su
 Export the groups table to CSV to see mentor assignments alongside group membership.
 </Tip>
 
+## Navigating Between Submissions
+
+The grading toolbar provides **Previous** and **Next Incomplete** (or **Next** when you have no review assignments) links that move between submissions while keeping the tab you are on — Files, Autograder Detail, Survey, and so on — so you do not have to re-select the tab on every submission.
+
+- **In review mode** (you have review assignments on the assignment): **Next Incomplete** opens the first incomplete submission after the current one by id, wrapping around to the first incomplete one overall. **Previous** walks back through all of your assigned submissions, including completed ones, so you can return to a submission you just finished.
+- **Without review assignments**: **Previous** and **Next** step through submissions in the picker's order (by student name).
+
+The submission picker dropdown also keeps the current tab when you jump directly to a submission.
+
+### Grading assigned to panel
+
+The rubric sidebar shows a **Grading assigned to** panel for staff:
+
+- **Instructors** see every review assignment on the submission, or "Not assigned to anyone" if none exist.
+- **Graders** see only their own assignment, or "Not assigned to you" if they have none (without revealing other graders' assignments).
+
+Each row shows the assignee's name (with "(you)" for your own), the rubric or rubric parts, the due date or completion time, and a **Complete** / **Pending** badge.
+
+## Completing a Review
+
+When all required rubric checks have been applied, the review popover offers:
+
+- **Complete** — saves the review as complete and stays on the current submission.
+- **Complete and go to next** — saves the review as complete and opens the next incomplete review on the same tab. This button only appears when there is a next review to go to.
+
+If you have multiple review assignments on the same submission (for example, one per rubric part), completing one opens the next assignment on that submission before moving to a different submission.
+
+When you complete your last assigned review, a toast confirms that all of your assigned reviews are complete.
+
+<Note>
+Students completing a self-review see only **Complete**, which stays on the current page.
+</Note>
+
 ## Review Due Dates
 
 Each review assignment has its own due date — separate from the
