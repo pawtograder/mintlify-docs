@@ -6,6 +6,45 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 16, 2026
+
+#### Bug fixes
+- **Atomic assignment deletion** — Deleting an assignment now cleans up its GitHub repositories in a single atomic operation, and foreign-key indexes were added to speed up the cascade ([#1086](https://github.com/pawtograder/platform/pull/1086))
+- **Office hours help request security** — Write rules on help request rows are tightened so child rows (messages, attachments) are always tied to their parent request's class ([#1085](https://github.com/pawtograder/platform/pull/1085))
+
+### October 14, 2026
+
+#### Grading
+- **Complete or complete and go to next** — After all required checks are applied, the review popover offers two buttons: **Complete**, which saves and stays on the current submission, and **Complete and go to next**, which saves and opens the next incomplete review on the same tab. If there is no next review, only **Complete** appears. When a grader has multiple review assignments on one submission (one per rubric part), completing one opens the next assignment on the same submission before moving on. See [Grading assignments](/staff/assignments/grading-assignments) ([#1079](https://github.com/pawtograder/platform/pull/1079))
+
+### October 12, 2026
+
+#### Grading
+- **Tab preserved across submissions, assignees shown by name** — Navigating between submissions with **Previous**, **Next Incomplete**, or the submission picker now keeps the tab you are on (Files, Autograder Detail, Survey, etc.). The rubric sidebar shows a **Grading assigned to** panel with each assignee's name, rubric parts, due date, and status — instructors see every assignment on the submission, graders see only their own. Survey-only assignments open on the Survey tab for staff. See [Grading assignments](/staff/assignments/grading-assignments) ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
+### October 11, 2026
+
+#### Operations
+- **Tiered backup retention** — Database backups are now stored under `daily/` and `monthly/` prefixes so retention policies can be applied per tier ([#1061](https://github.com/pawtograder/platform/pull/1061))
+
+## September 2026
+
+### September 29, 2026
+
+#### Submissions
+- **Files and Checks tabs fixed for large PR submissions** — Submissions with more than 1,000 files now load the complete file list (previously truncated at 1,000 with no error). The PR diff is collapsed behind a **Show changed files (N)** toggle; on desktop the diff and the file navigator share a resizable split so the editor is never pushed off screen. The Checks tab no longer times out on large repositories ([#1046](https://github.com/pawtograder/platform/pull/1046))
+
+### September 27, 2026
+
+#### Assignments
+- **Due date exceptions table: sort, filter, and bulk actions** — The **Manage Due Date Exceptions** table now sorts on every column, filters by student name, group, class section, and lab section, and shows **Class Section** and **Lab Section** columns. Selecting rows reveals two bulk actions: **Add extension** (adds the same hours and minutes to every selected student's current due date) and **Set due date to…** (gives every selected student the same final deadline). Group members are deduplicated so a group is extended once regardless of how many members are selected. See [Extensions](/staff/assignments/extensions) ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Late token message when course gives none** — When a course has no late tokens configured, the assignment page now shows "(This course does not give late tokens. Contact your instructor if you need an extension.)" instead of no message ([#1043](https://github.com/pawtograder/platform/pull/1043))
+- **Gradebook accessibility fix** — The gradebook no longer announces scores as "Submitted slash 100" to screen readers ([#919](https://github.com/pawtograder/platform/pull/919))
+- **Handout sync no longer overwrites student work** — The handout sync process now skips files that a student has already modified, so a re-sync cannot overwrite a student's own commits ([#973](https://github.com/pawtograder/platform/pull/973))
+- **Repository not shown as linked before GitHub org auth** — The assignment page no longer shows a repository as ready or linked before the student has authorized the GitHub organization ([#987](https://github.com/pawtograder/platform/pull/987))
+
 ## August 2026
 
 ### August 19, 2026
