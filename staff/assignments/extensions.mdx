@@ -119,6 +119,33 @@ page describes the same behavior; if you expected group extensions to cost
 one token total, budget your **Late Tokens Per Student** allotment
 accordingly.
 
+## Manage Due Date Exceptions table
+
+The **Manage Due Date Exceptions** page (`/course/<course_id>/manage/assignments/<assignment_id>/due-date-exceptions`) lists every enrolled student with their current due date, any extensions, and the final deadline.
+
+### Sorting and filtering
+
+Every column except the selection and Actions columns is sortable. Click a column header to sort; click again to reverse. Empty cells sort last.
+
+Multi-select filters appear under the **Student**, **Group**, **Class Section**, and **Lab Section** column headers. Each filter shows the values present in the data, including a "No group" or "Not assigned" option for students without a group or section. Hiding a column clears its filter.
+
+The row count at the bottom reads **Showing N of M Students** while a filter is active.
+
+### Column visibility
+
+A **Toggle Column Visibility** panel above the table lets you show or hide the **Group**, **Class Section**, **Lab Section**, and **Lab-Based Due Date** columns. Columns are shown by default when the data warrants it: Class Section appears when the course has more than one section, Lab Section when the assignment uses lab scheduling or the course has lab sections.
+
+### Bulk actions
+
+Select rows using the checkboxes in the first column. The header checkbox selects or deselects all rows matching the current filters across all pages. Once rows are selected, two bulk actions appear:
+
+- **Add extension** — adds the same hours and minutes to every selected student or group, on top of their current due date (including any existing extensions). Enter **Hours Extended**, **Minutes Extended**, an optional **Tokens to Consume**, and an optional note. The extension is added for each student individually, or once per group for group members.
+- **Set due date to…** — gives every selected student or group the same final deadline. Enter a **Target Due Date** in the course time zone. The extension for each student is calculated as the difference between their current due date and the target, so students with different current due dates each receive a different number of hours. The target must be later than every selected student's current due date. If a group's members have different current due dates (for example, from different lab sections), the dialog refuses to submit and asks you to use **Add extension** or the per-student **Adjust Due Date** instead.
+
+Both bulk actions skip students who finalized their submission early by default. A warning names the skipped students, and a checkbox lets you include them deliberately (which reopens their submission window).
+
+Tokens recorded in a bulk action are deducted from each selected student's balance. For a group, the token cost is charged to every member, the same as the per-student dialog.
+
 ## Granting a manual extension
 
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the
