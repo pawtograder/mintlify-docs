@@ -6,6 +6,52 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 16, 2026
+
+#### Security
+- **SECURITY DEFINER functions locked down** — PostgREST-exposed functions that ran with elevated privileges have been tightened so they can only be called by authenticated users with the appropriate course role ([#1087](https://github.com/pawtograder/platform/pull/1087))
+
+#### Bug fixes
+- **Office hours help request write rules hardened** — Row-level security on help request writes is stricter, and child rows (messages, attachments) are now tied to their parent request's class so they cannot be created for a request in a different course ([#1085](https://github.com/pawtograder/platform/pull/1085))
+
+### October 14, 2026
+
+#### Grading
+- **Both "Complete" and "Complete and go to next"** — After the previous release made completing a review always advance to the next submission, graders asked for the option to stay. Both buttons are now shown side by side whenever there is a next review to go to: **Complete** saves and stays, **Complete and go to next** saves and opens the next review on the same tab. If there is no next review, only **Complete** appears. Navigation also now finishes all incomplete reviews on the current submission before moving to the next one. See [Grading assignments](/staff/assignments/grading-assignments) ([#1079](https://github.com/pawtograder/platform/pull/1079))
+
+### October 12, 2026
+
+#### Grading
+- **Tab preserved across submissions, assignees shown by name** — Moving between submissions with Previous, Next Incomplete, or the submission picker now keeps the tab you are on (Files, Autograder Detail, Survey, etc.), so grading 20 submissions in a row no longer requires re-picking the tab each time. A new **Grading assigned to** panel in the rubric sidebar replaces the raw UUID with the assignee's name, their rubric parts, due date, and status. Instructors see every assignment on the submission; graders see only their own. Survey-only assignments now open on the Survey tab for staff. See [Grading assignments](/staff/assignments/grading-assignments) ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
+### October 11, 2026
+
+#### Assignments
+- **Due date exceptions table: sorting, filtering, section columns, and bulk extensions** — The **Manage Due Date Exceptions** table now sorts on every column, filters by student name, group, class section, and lab section, and shows **Class Section** and **Lab Section** columns. Selecting rows reveals two bulk actions: **Add extension** adds the same hours and minutes to every selected student or group on top of their current due date, and **Set due date to…** gives every selected student or group the same final deadline. Both actions handle group deduplication, finalized submissions, and token recording the same way as the per-student dialog. See [Extensions](/staff/assignments/extensions) ([#1031](https://github.com/pawtograder/platform/pull/1031))
+
+### October 1, 2026
+
+#### Submissions
+- **Files and Checks tabs fixed for large PR submissions** — Submissions with more than 1,000 files now load the complete file list (previously truncated at 1,000 with no error). The PR diff is now collapsed behind a **Show changed files (N)** toggle and shares a resizable split with the file navigator and editor on desktop, so the editor is no longer pushed off screen. The Checks tab no longer times out on large repositories ([#1046](https://github.com/pawtograder/platform/pull/1046))
+
+## September 2026
+
+### September 27, 2026
+
+#### Assignments
+- **Repository not shown as linked before GitHub org auth** — The assignment page no longer shows a student's repository as ready or linked before they have authorized the GitHub organization ([#987](https://github.com/pawtograder/platform/pull/987))
+
+#### Late tokens
+- **Explanation when a course gives no late tokens** — When a course has not allocated any late tokens, the assignment page now shows a clear message explaining why the **Extend Due Date** button is absent, rather than showing nothing ([#1043](https://github.com/pawtograder/platform/pull/1043))
+
+#### Gradebook
+- **Gradebook no longer announces "Submitted slash 100"** — Screen readers now hear the grade and total as separate values rather than the raw slash-separated string ([#919](https://github.com/pawtograder/platform/pull/919))
+
+#### GitHub
+- **Handout sync no longer overwrites a student's own work** — The handout sync now skips files that a student has already modified, so a re-sync after the deadline does not overwrite their submission ([#973](https://github.com/pawtograder/platform/pull/973))
+
 ## August 2026
 
 ### August 19, 2026
