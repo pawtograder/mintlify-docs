@@ -6,6 +6,36 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 16, 2026
+
+#### Security
+- **Office hours write-side hardening** — Help-request child rows (messages, students, watchers, file references, feedback, read receipts) are now tied to their request's class via composite foreign keys. Write policies check the caller's access to the request, and a trigger prevents non-staff from changing the creator, queue, assignee, follow-up, or template of a request ([#1085](https://github.com/pawtograder/platform/pull/1085))
+
+### October 14, 2026
+
+#### Grading
+- **Complete or complete and go to next** — The review completion popover now offers two buttons: **Complete** (saves and stays on the current submission) and **Complete and go to next** (saves and opens the next incomplete review on the same tab). If there is no next review, only **Complete** appears. Students completing a self-review always see only **Complete** ([#1079](https://github.com/pawtograder/platform/pull/1079))
+
+### October 12, 2026
+
+#### Grading
+- **Tab persistence and assignee names across submissions** — Navigating between submissions with **Previous**, **Next Incomplete**, or the submission picker now keeps the tab you are on (Files, Autograder Detail, Survey, etc.), so moving through a queue no longer requires re-selecting the tab on each submission. A **Grading assigned to** panel in the rubric sidebar shows each grader's name, rubric parts, due date, and status; instructors see all assignments on the submission, graders see only their own ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
+## September 2026
+
+### September 29, 2026
+
+#### Submissions
+- **Files and Checks tabs fixed for large PR submissions** — Submissions with more than 1,000 files now load the complete file list. On pull-request submissions, the inline diff is collapsed behind a **Show changed files (N)** toggle; on desktop, the diff and the file navigator share the height as a resizable split so the editor is never pushed off screen. The **Checks** tab no longer times out on large repositories ([#1046](https://github.com/pawtograder/platform/pull/1046))
+
+### September 27, 2026
+
+#### Assignments
+- **Due date exceptions table: sorting, filtering, and bulk extensions** — The **Manage Due Date Exceptions** table now sorts on every column, filters by student name, group, class section, and lab section, and shows **Class Section** and **Lab Section** columns. Selecting rows reveals two bulk actions: **Add extension** (adds the same hours and minutes to every selected student) and **Set due date to…** (gives every selected student the same final deadline). Both actions skip students who finalized early by default, with an opt-in to include them ([#1031](https://github.com/pawtograder/platform/pull/1031))
+- **Late tokens: clearer messages when the course allotment is zero** — When **Max late tokens** is above 0 on an assignment but the course's **Late Tokens Per Student** is 0, the assignment form, the **Manage Due Date Exceptions** page, and the **Class Late Token Settings** card all show a warning. Students see "(This course does not give late tokens. Contact your instructor if you need an extension.)" instead of the previous "(No late submissions allowed)". Late-push rejection messages also explain when the course has no allotment ([#1043](https://github.com/pawtograder/platform/pull/1043))
+
 ## August 2026
 
 ### August 19, 2026
