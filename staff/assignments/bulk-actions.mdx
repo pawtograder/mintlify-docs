@@ -88,6 +88,19 @@ gradebook history. Don't unrelease without a plan to re-release — the
 student may have already seen the previous grade.
 </Warning>
 
+## Release all and Unrelease all
+
+The **Release all** and **Unrelease all** buttons on the grading status panel act on every grading review in the assignment at once, without requiring row selection. They touch only the grading review — self-review, meta-grading, and code-walk reviews are not affected.
+
+## Release code walks and Unrelease code walks
+
+When an assignment has a code-walk rubric, the grading status panel also shows **Release code walks** and **Unrelease code walks** buttons. These are visible to instructors only.
+
+- **Release code walks** publishes every *completed* code-walk review for active submissions in the assignment. Incomplete code walks are skipped; the toast reports how many were released and notes that incomplete ones were not.
+- **Unrelease code walks** hides every released code-walk review, complete or not, reversing any release made per submission before the code walk was finished.
+
+Neither button touches grading, self-review, or meta-grading reviews. Releasing a code walk does not expose hidden autograder tests — only releasing the grading review does that.
+
 ## Reassign Grading by Grader
 
 Reassignment is grader-centric rather than submission-centric: you pick
