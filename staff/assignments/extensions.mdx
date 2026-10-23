@@ -119,6 +119,31 @@ page describes the same behavior; if you expected group extensions to cost
 one token total, budget your **Late Tokens Per Student** allotment
 accordingly.
 
+## Manage Due Date Exceptions table
+
+The **Manage Due Date Exceptions** table supports sorting, filtering, and bulk actions to help you find and extend students in large classes.
+
+### Sorting and filtering
+
+Every column except **Actions** is sortable. Click a column header to sort; click again to reverse. Empty cells sort last.
+
+Multi-select filters appear in the column headers for **Student**, **Group**, **Class Section**, and **Lab Section**. Select one or more values to narrow the rows. The row count below the table reads "Showing N of M Students" while a filter is active.
+
+Use the **Toggle Column Visibility** controls above the table to show or hide **Group**, **Class Section**, **Lab Section**, and **Lab-Based Due Date**. Columns with sections are shown by default when the class has more than one class section or when the assignment uses lab scheduling.
+
+### Bulk actions
+
+Select rows using the checkboxes in the leftmost column. The column header has **All matching filters** (selects every filtered row across all pages) and **None** (clears the selection). Once rows are selected, two bulk actions appear:
+
+- **Add extension** — adds the same hours and minutes to every selected student's current due date. Enter **Hours Extended** and **Minutes Extended**, optionally set **Tokens to Consume** and a **Note**, then click **Add Due Date Exceptions**. The extension is added on top of each student's current due date, including any existing extensions.
+- **Set due date to…** — gives every selected student the same final deadline. Enter a **Target Due Date** in the course time zone; the extension for each student is calculated automatically as the difference between their current due date and the target. The target must be after every selected student's current due date.
+
+Both actions handle groups correctly: selecting two members of the same group extends that group once, not twice. Students who finalized early are skipped by default; a warning names them and a checkbox lets you include them deliberately (which reopens their submission).
+
+<Warning>
+The **Notes** field is visible to students. Write only what you would say to the student directly.
+</Warning>
+
 ## Granting a manual extension
 
 From **Manage Due Date Exceptions**, click **Adjust Due Date** on the
