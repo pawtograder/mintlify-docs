@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 23, 2026
+
+#### Grading
+- **Bulk release and unrelease code walks** — The grading status panel now shows **Release code walks** and **Unrelease code walks** buttons when an assignment has a code-walk rubric. Releasing publishes only completed code walks; incomplete ones are skipped and the toast says so. Unreleasing reverses any released code walk, complete or not. The buttons are visible to instructors only. Autograder test visibility is now tied exclusively to the grading review, so releasing a code walk, self-review, or meta-grading review no longer exposes hidden tests ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
+### October 12, 2026
+
+#### Grading
+- **Complete and go to next** — The review completion popover now offers two buttons: **Complete** (save and stay on the current submission) and **Complete and go to next** (save and open the next incomplete review on the same tab). The second button only appears when there is a next review to go to. If a grader has multiple incomplete review assignments on the same submission, **Complete and go to next** finishes that submission before moving on. Students completing a self-review see only **Complete** ([#1079](https://github.com/pawtograder/platform/pull/1079))
+- **Tab preserved across submissions** — Previous, Next Incomplete, both submission pickers, and completing a review all open the next submission on the tab you are already on (Files, Autograder Detail, Survey, etc.), so moving through submissions no longer requires re-picking the tab each time ([#1058](https://github.com/pawtograder/platform/pull/1058))
+- **Grading assigned to panel** — The rubric sidebar now shows a **Grading assigned to** panel for staff, listing each assignee by name with their rubric, status, and due date. Instructors see every assignment on the submission; graders see only their own. Students keep their existing self-review task box ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
+### October 11, 2026
+
+#### Assignments
+- **Due date exceptions table improvements** — The **Manage Due Date Exceptions** table now supports sorting on every column, multi-select filters for Student, Group, Class Section, and Lab Section, column visibility toggles, row selection, and pagination. Two new bulk actions are available when rows are selected: **Add extension** (adds the same hours and minutes to every selected student's current due date) and **Set due date to…** (gives every selected student the same final deadline). Both actions handle groups correctly — selecting two members of one group extends that group once — and skip students who finalized early by default, with an opt-in to include them ([#1031](https://github.com/pawtograder/platform/pull/1031))
+
+### September 27, 2026
+
+#### Assignments
+- **Clearer late-token messaging** — When a course's **Late Tokens Per Student** is 0, the assignment form and the **Manage Due Date Exceptions** page now show a warning explaining that the per-assignment **Max late tokens** cap does not grant any tokens, and link to Course Settings to fix it. Students in a zero-allotment course see "(This course does not give late tokens. Contact your instructor if you need an extension.)" instead of the previous "(No late submissions allowed)". Late pushes rejected because the course has no allotment now say so explicitly rather than reporting that the student ran out of tokens ([#1043](https://github.com/pawtograder/platform/pull/1043))
+- **Due date exceptions for group members** — The **Manage Due Date Exceptions** table now counts a group member's own exceptions alongside the group's, matching how `calculate_final_due_date` computes the actual deadline. Previously, a group member with a student-wide extension could see an earlier Final Due Date in the table than the one they actually had ([#1031](https://github.com/pawtograder/platform/pull/1031))
+
 ## August 2026
 
 ### August 19, 2026
