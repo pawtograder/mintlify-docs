@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 24, 2026
+
+#### Security
+- **CVE-2026-111497 patch on staging** — The storage-api service on staging has been updated to v1.84.23, which runs on Node 24.22.1 and resolves a vulnerability in the bundled Brotli decoder. The fix will be promoted to production after staging runs clean
+
+### October 23, 2026
+
+#### Grading
+- **Bulk release and unrelease of code-walk reviews** — The assignment grading status panel now shows **Release code walks** and **Unrelease code walks** buttons when the assignment has a code-walk rubric. Releasing publishes every *completed* code walk for active submissions; incomplete code walks are skipped and the toast says how many were skipped. Unreleasing reverses any released code walk, complete or not. Both actions are available to instructors only and do not affect grading, self-review, or meta-grading reviews. See [Grading Status](/staff/assignments/grading-status) ([#1130](https://github.com/pawtograder/platform/pull/1130))
+- **Hidden autograder tests stay hidden until the grading review is released** — Previously, releasing any review on a submission (a code walk, self-review, or meta-grading review) would also publish the submission's hidden autograder tests. Hidden tests are now only revealed when the grading review itself is released ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
+### October 14, 2026
+
+#### Grading
+- **Complete or complete and go to next** — The review completion popover now offers two buttons: **Complete**, which saves the review and stays on the current submission, and **Complete and go to next**, which saves and opens the next incomplete review on the same tab. The second button only appears when there is a next review to go to. Graders who prefer to look over a submission after finishing it can use **Complete** without being pushed away. Students completing a self-review always see only **Complete** ([#1079](https://github.com/pawtograder/platform/pull/1079))
+
+### October 12, 2026
+
+#### Grading
+- **Tab preserved across submissions, assignees shown by name, and Previous navigation** — Moving between submissions (Next Incomplete, Previous, both submission pickers, and completing a review) now keeps the tab you are on — Files, Autograder Detail, Survey, and so on — so grading 20 submissions in a row no longer requires re-picking the tab each time. The rubric sidebar's **Grading assigned to** panel replaces the old UUID display with the assignee's name, rubric parts, due date, and status; instructors see every assignment on the submission, graders see only their own. A **Previous** link lets graders step back to the submission they just finished. Survey-only assignments open on the Survey tab for staff ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
 ## August 2026
 
 ### August 19, 2026
