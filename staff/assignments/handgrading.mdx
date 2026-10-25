@@ -145,9 +145,25 @@ When a group submission has individual grading components, the submission view s
 
 Students see only their own breakdown; instructors and graders see all group members' scores. Tooltips on the assignments table also show individual score breakdowns.
 
+## Navigating between submissions
+
+The grading toolbar shows **Previous** and **Next Incomplete** (or **Next** when you have no review assignments) links that move between submissions while keeping the tab you are on — Files, Autograder Detail, Survey, and so on. You do not need to re-pick the tab each time you move to a new submission.
+
+The **Grading assigned to** panel in the rubric sidebar shows who is assigned to grade the current submission:
+
+- **Instructors** see every grading assignment on the submission, or "Not assigned to anyone" if none exist.
+- **Graders** see only their own assignment, or "Not assigned to you" if the submission is not assigned to them. Other graders' assignments are not visible.
+
+Each row in the panel shows the assignee's name (with "(you)" for your own), the rubric or rubric parts, the due date, and whether the assignment is pending or complete.
+
 ## Completing a review
 
-Once all required rubric checks are applied, click **Complete Review** to mark the review done. This does **not** release the review to the student; it indicates to the instructor that the review is ready to be released.
+Once all required rubric checks are applied, click **Complete Review** to open the completion popover. The popover offers:
+
+- **Complete** — saves the review and stays on the current submission.
+- **Complete and go to next** — saves the review and opens the next incomplete review on the same tab. This button only appears when there is a next review to go to.
+
+Completing a review does **not** release it to the student; it indicates to the instructor that the review is ready to be released.
 
 When you complete an assigned rubric part, Pawtograder will also automatically complete any other review assignments on the same submission whose assigned parts are a subset of yours. For example, if you complete parts A, B, and C, another grader assigned only to A+B has their assignment auto-completed.
 
