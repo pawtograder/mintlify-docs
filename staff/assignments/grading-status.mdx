@@ -24,7 +24,10 @@ On the assignment's **Dashboard** tab, the grading panel reports:
 
 The panel also carries the assignment-wide grading actions:
 **Finalize grading**, plus **Release all** and **Unrelease all** for
-instructors. See [Bulk Actions](/staff/assignments/bulk-actions).
+instructors. When the assignment has a code-walk rubric, instructors
+also see **Release code walks** and **Unrelease code walks**. See
+[Bulk Actions](/staff/assignments/bulk-actions) and
+[Releasing code-walk reviews](#releasing-code-walk-reviews) below.
 
 ## Per-TA Grading Progress Dashboard
 
@@ -84,6 +87,19 @@ Reassigning work and editing review due dates happen on the parent
 [Assigning Grading Tasks](/staff/assignments/grading-assignments). For
 release and unrelease across selected submissions, see
 [Bulk Actions](/staff/assignments/bulk-actions).
+
+## Releasing code-walk reviews
+
+When an assignment has a code-walk rubric, the grading status panel shows two additional instructor-only actions next to **Release all** and **Unrelease all**:
+
+- **Release code walks** — Publishes every *completed* code-walk review for active submissions. Incomplete code walks are skipped; the confirmation toast reports how many were released and notes that incomplete ones were not. Grading, self-review, and meta-grading reviews are not affected.
+- **Unrelease code walks** — Hides code-walk grades from students again for every active submission, whether the code walk was complete or not. This reverses a per-submission release as well as a bulk release.
+
+Both buttons show a confirmation popover before acting. The buttons are only visible when the assignment has a rubric with `review_round = code-walk`; they do not appear on assignments without one.
+
+<Note>
+Releasing a code-walk review does not publish the submission's hidden autograder tests. Hidden tests are only revealed when the grading review is released.
+</Note>
 
 ## Best practices
 
