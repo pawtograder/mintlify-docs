@@ -227,6 +227,19 @@ Use the **Bulk edit grading due dates** or **Bulk edit self-review due dates** b
 
 The system updates all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately for clarity.
 
+## Navigating between submissions
+
+When you have review assignments, the grading toolbar shows **Previous** and **Next Incomplete** links. Both keep the tab you are currently on (Files, Autograder Detail, Survey, etc.), so moving through a queue does not require re-selecting the tab on each submission.
+
+**Next Incomplete** follows this order:
+
+1. Another incomplete review assignment on the current submission (for example, a second rubric part).
+2. The next submission with an incomplete review, by submission id, wrapping around to the beginning.
+
+**Previous** walks back through all of your assigned submissions, including completed ones, without wrapping — so after completing a review and advancing, you can return to the submission you just finished.
+
+When you have no review assignments, **Next** and **Previous** step through submissions in the picker's order (by student name).
+
 ## Tracking Progress
 
 Use the [Grading Status](/staff/assignments/grading-status) view to

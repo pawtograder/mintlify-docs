@@ -145,9 +145,28 @@ When a group submission has individual grading components, the submission view s
 
 Students see only their own breakdown; instructors and graders see all group members' scores. Tooltips on the assignments table also show individual score breakdowns.
 
+## Grading assigned to panel
+
+When you open a submission as a grader or instructor, the rubric sidebar shows a **Grading assigned to** panel listing every staff review assignment on that submission. Each row shows:
+
+- The assignee's name (with **(you)** if it is yours)
+- The rubric and rubric parts assigned
+- The due date or completion timestamp
+
+Instructors see every assignment on the submission, or **Not assigned to anyone** if none exist. Graders see only their own assignment, or **Not assigned to you** if they have not been assigned — so the panel never reveals other graders' assignments to a grader.
+
 ## Completing a review
 
 Once all required rubric checks are applied, click **Complete Review** to mark the review done. This does **not** release the review to the student; it indicates to the instructor that the review is ready to be released.
+
+The completion popover offers two choices:
+
+- **Complete** — saves the review as complete and keeps you on the current submission.
+- **Complete and go to next** — saves the review as complete and opens your next incomplete review on the same tab. If there is no next review, only **Complete** appears.
+
+If you have another incomplete review assignment on the current submission (for example, a second rubric), **Complete and go to next** opens that one before moving to a different submission.
+
+Students completing a self-review always see only **Complete**.
 
 When you complete an assigned rubric part, Pawtograder will also automatically complete any other review assignments on the same submission whose assigned parts are a subset of yours. For example, if you complete parts A, B, and C, another grader assigned only to A+B has their assignment auto-completed.
 
