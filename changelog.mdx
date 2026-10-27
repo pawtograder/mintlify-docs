@@ -6,6 +6,37 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 27, 2026
+
+#### Security
+- **Credentials no longer written to logs** — Two edge-function log lines were writing the service-role JWT and signed artifact bearer URLs into the function logs. Both are now replaced with safe, non-credential fields ([#1144](https://github.com/pawtograder/platform/pull/1144))
+
+### October 23, 2026
+
+#### Grading
+- **Bulk release and unrelease for code-walk reviews** — The assignment grading status panel now shows **Release code walks** and **Unrelease code walks** buttons when the assignment has a code-walk rubric. Releasing affects only completed code walks; incomplete ones are skipped and the toast says so. Grading, self-review, and meta-grading reviews are not affected. The buttons are visible to instructors only ([#1130](https://github.com/pawtograder/platform/pull/1130))
+- **Releasing a code walk no longer exposes hidden autograder tests** — Previously, releasing any review (including a code walk or self-review) would publish the submission's hidden autograder tests. Hidden tests are now only revealed when the grading review itself is released ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
+### October 16, 2026
+
+#### Assignments
+- **Assignment deletion is now atomic with GitHub cleanup** — Deleting an assignment now queues GitHub archive jobs inside the same database transaction as the delete, so a failed or timed-out delete can no longer leave GitHub repositories being archived while the assignment stays live. The delete also cancels any queued handout-sync jobs for the assignment's repositories and refuses if a sync is actively running ([#1086](https://github.com/pawtograder/platform/pull/1086))
+
+#### Security
+- **Office hours help request write access hardened** — Students could previously post messages into private help requests they were not part of, and a grader in any class could add themselves to a private request in another class. Write policies on all help-request child tables now verify the caller's access to the specific request, and a composite foreign key ensures a child row's class always matches its request's class ([#1085](https://github.com/pawtograder/platform/pull/1085))
+
+### October 14, 2026
+
+#### Grading
+- **"Complete" and "Complete and go to next" are now separate buttons** — Completing a review now offers two choices: **Complete** (save and stay on the current submission) and **Complete and go to next** (save and open the next incomplete review on the same tab). If there is no next review, only **Complete** appears. Students completing a self-review always see only **Complete** ([#1079](https://github.com/pawtograder/platform/pull/1079))
+
+### October 12, 2026
+
+#### Grading
+- **Tab preserved across submissions, assignees shown by name** — Navigating between submissions (Previous, Next Incomplete, the submission picker, and completing a review) now keeps the tab you are on (Files, Autograder Detail, Survey, etc.). The rubric sidebar shows a **Grading assigned to** panel with the assignee's name, rubric parts, due date, and status — replacing the raw profile UUID. Instructors see every assignment on the submission; graders see only their own. Survey-only assignments open on the Survey tab for staff ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
 ## August 2026
 
 ### August 19, 2026
