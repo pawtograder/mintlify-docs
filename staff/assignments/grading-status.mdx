@@ -24,7 +24,10 @@ On the assignment's **Dashboard** tab, the grading panel reports:
 
 The panel also carries the assignment-wide grading actions:
 **Finalize grading**, plus **Release all** and **Unrelease all** for
-instructors. See [Bulk Actions](/staff/assignments/bulk-actions).
+instructors. On assignments with a code-walk rubric, instructors also
+see **Release code walks** and **Unrelease code walks**. See
+[Bulk Actions](/staff/assignments/bulk-actions) and
+[Releasing code walks](#releasing-code-walks) below.
 
 ## Per-TA Grading Progress Dashboard
 
@@ -84,6 +87,32 @@ Reassigning work and editing review due dates happen on the parent
 [Assigning Grading Tasks](/staff/assignments/grading-assignments). For
 release and unrelease across selected submissions, see
 [Bulk Actions](/staff/assignments/bulk-actions).
+
+## Releasing code walks
+
+When an assignment has a code-walk rubric, the grading panel shows two additional buttons (instructors only):
+
+- **Release code walks** — Publishes every *completed* code-walk review in the assignment, making code-walk grades visible to students. Code walks that are not yet complete are skipped; the confirmation toast reports how many were released and notes that incomplete ones were left alone. Grading, self-review, and meta-grading reviews are not affected.
+- **Unrelease code walks** — Hides code-walk grades from all students for every submission in the assignment, including any that were released per submission before they were finished. Grading, self-review, and meta-grading reviews are not affected.
+
+Both buttons require confirmation before running.
+
+The submissions table on the assignment page shows the release state of each code walk alongside the grading release state. See the [submissions table columns](#submissions-table-code-walk-column) note below.
+
+<Note>
+Releasing a code walk does not expose hidden autograder tests. Hidden tests are only revealed when the grading review itself is released.
+</Note>
+
+### Submissions table code-walk column
+
+On assignments with a code-walk rubric, the submissions table relabels the **Released** column as **Grading released** and adds a **Code walk released** column. The code-walk column shows:
+
+- **✓** — the code walk is released.
+- **✗** — the code walk is complete but not yet released.
+- **Incomplete** — the code walk is not finished; Release code walks skips it.
+- **—** — no code-walk review exists for this row (for example, a student with no submission).
+
+Both columns support filtering by release status.
 
 ## Best practices
 

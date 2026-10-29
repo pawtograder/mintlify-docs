@@ -227,6 +227,34 @@ Use the **Bulk edit grading due dates** or **Bulk edit self-review due dates** b
 
 The system updates all review assignments for the selected rubric that match your criteria, showing you how many rows were affected. Grading reviews and self-reviews are edited separately for clarity.
 
+## Grading navigation
+
+When grading multiple submissions, the toolbar at the top of each submission page provides navigation controls:
+
+- **Previous** — opens the previous submission in your list (all of your assigned submissions, including completed ones, so you can go back and fix one).
+- **Next Incomplete** — opens the next submission with an incomplete review assignment. If you have another incomplete review on the *current* submission (for example, a second rubric part), it opens that one first before moving to a different submission. Wraps around to the first incomplete submission if none are left after the current one.
+- **Submission picker** — jump to any submission directly.
+
+All navigation keeps the tab you are on (Files, Autograder Detail, Survey, etc.), so you do not have to re-pick the tab for every submission.
+
+### Grading assigned to panel
+
+The rubric sidebar shows a **Grading assigned to** panel listing every review assignment on the submission:
+
+- **Instructors** see every assignment, or "Not assigned to anyone" if none exist.
+- **Graders** see only their own assignment (RLS limits what they can read), or "Not assigned to you".
+
+Each row shows the assignee's name (with "(you)" for your own), the rubric part(s), due date, and whether the assignment is complete or pending.
+
+### Completing a review
+
+The review completion popover offers two buttons when there is a next review to go to:
+
+- **Complete** — saves the review as complete and stays on the current submission.
+- **Complete and go to next** — saves the review as complete and opens the next review on the same tab.
+
+If there is no next review, only **Complete** appears. When you finish your last assigned review, a toast confirms that all of your assigned reviews are complete.
+
 ## Tracking Progress
 
 Use the [Grading Status](/staff/assignments/grading-status) view to
