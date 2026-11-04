@@ -43,6 +43,16 @@ groups stay staged for you to retry, and you get a "Published with
 errors" toast.
 
 <Note>
+When an assignment has a future release date, group repositories are
+created at release time rather than immediately on publish. This ensures
+students do not get early access and that repos are pinned to the latest
+template commit at release. The publish confirmation toast reports how
+many repos will be created at release. You cannot clear a future release
+date while groups are still waiting for their repos; set a past date
+instead to release immediately.
+</Note>
+
+<Note>
 Adding or removing a member notifies the group's other members, including
 when the change comes from publishing. That notification is suppressed
 while the assignment is unreleased, so you can prepare and adjust groups
@@ -69,7 +79,8 @@ groups and memberships.
 
 Existing groups that become empty are removed when they have no
 submission history. Groups with submission history are preserved, so
-graded work stays intact.
+graded work stays intact. Students who are removed from a group lose
+GitHub access to its repository even when the group is kept.
 </Warning>
 
 ## Group mentors
