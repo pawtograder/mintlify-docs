@@ -529,6 +529,20 @@ Submit and autosave race by construction, since SurveyJS fires a final `onValueC
 
 Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode (`:313-314`).
 
+## Duplicate question name validation
+
+SurveyJS stores every answer under the question's answer key — `valueName` when set, otherwise the question's `name` cleaned by `Question.getValidName` (trim, drop the first `|`, drop `{` and `}`, drop leading `#`s). Two questions with the same effective key share one answer slot: answering the second clears the first, and a required question can appear complete while its answer is empty.
+
+A `BEFORE INSERT/UPDATE` trigger (`supabase/migrations/20261106130000_unique_survey_question_names.sql`) refuses to move a survey to `published` when any two questions resolve to the same answer key. The check walks `pages`, `elements`, `panel` and `flowpanel` groups, and `paneldynamic` template elements. It applies the same key rules as SurveyJS: a truthy `valueName` is used as-is, HTML and image elements (`questionnonvalue` types) are skipped, and `getValidName` is applied to bare names.
+
+The trigger exempts updates that do not change `status` or `questions` on an already-published survey, so closing a survey, extending its due date, or changing its settings still works even if the survey was published before the check was added. Reopening a closed survey with duplicate names is refused: that transition is a publish, and the trigger treats it the same way.
+
+The visual builder highlights repeated **Question name** fields live as you type. Drafts may keep duplicates so that work in progress can be saved and fixed before publishing.
+
+<Note>
+Some question types — dropdowns, matrices, and questions with a `valueName` — cannot have their name changed in the Visual Builder. If the refusal message names one of these, edit the survey as raw JSON to rename it.
+</Note>
+
 ## CSV export
 
 The live export is inline in `SurveyResponsesView.tsx`, and it escapes for formula injection:
