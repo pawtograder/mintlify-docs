@@ -227,17 +227,19 @@ Use the available date to schedule surveys in advance without manually publishin
 
 ### Response Editing Control
 
-Toggle **Allow Response Editing** to control whether students can modify their submissions. The form summarizes it as: "When on, changes auto-save. When off, a student's first submission is final."
+Toggle **Allow Response Editing** to control whether students can modify their submissions after they submit.
+
+Answers in progress autosave as the student works regardless of this setting, so a student can close the page and return to a partly finished survey either way.
 
 **Enabled:**
 
-- Answers autosave as the student works, so a student can close the page and come back to a partly finished survey
+- Answers autosave as the student works
 - After submitting, the student sees a green banner reading "You can edit your response since editing is allowed for this survey." and can submit again
 - Each re-submission updates the recorded submission time
 
 **Disabled:**
 
-- Nothing is saved until the student clicks **Complete**, so a student who closes the page loses their answers
+- Answers still autosave as the student works, so a student can close the page and come back to a partly finished survey
 - After submitting, the student sees a yellow banner reading "This survey has been submitted and cannot be edited." and the survey renders read-only
 - The original submission time is preserved
 
