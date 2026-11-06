@@ -370,10 +370,10 @@ The helpers are `authorizeforclass(class__id bigint)`, `authorizeforclassgrader(
 
 ### The renderer
 
-`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries four non-obvious behaviors, three of them accessibility fixes for issue #881.
+`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries several non-obvious behaviors, including accessibility fixes for issue #881.
 
 ```typescript
-// components/Survey.tsx:41-71
+// components/Survey.tsx
 const surveyJsonKey = useMemo(() => JSON.stringify(surveyJson ?? null), [surveyJson]);
 
 const survey = useMemo(() => {
@@ -390,11 +390,21 @@ const survey = useMemo(() => {
 }, [surveyJsonKey]);
 ```
 
-- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor (`:33-41`).
-- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync (`:53-61`).
-- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing (`:62-64`).
+- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor.
+- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync.
+- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing.
 
-The theme is applied in an effect from the Chakra color mode (`:73-79`).
+The theme is applied in an effect from the Chakra color mode.
+
+#### Database title override
+
+`Survey.tsx` accepts an optional `title` prop. When provided, a layout effect sets it on the model before paint, so the database title is shown instead of whatever `"title"` is in the SurveyJS JSON (the visual builder writes `"Survey Name"` as a placeholder). The model is not rebuilt; only the title string is updated in place, so typed answers, the current page, and focus are preserved when the title changes (for example, when an instructor renames the survey while a student is answering it).
+
+When `title` becomes falsy, the effect restores the JSON title with `locTitle.setJson`, which handles per-locale title objects as well as plain strings. While a database title is set, the title string's `onGetTextCallback` returns the unprocessed text, so SurveyJS placeholder syntax (`{q1}`) in the database title is shown literally rather than being substituted with the student's answer.
+
+The `titleTag` prop (default `"h1"`) controls the HTML element used to render the survey title. The student survey page uses the default; the Student Preview dialog passes `"div"` because its own `h2` already names the survey.
+
+`ViewSurveyResponse.tsx` hides the SurveyJS title entirely (its callers show the database title as a heading) and renders the survey description itself, above the response, so the description is not lost along with the title block.
 
 ### Survey JSON structure
 
@@ -513,22 +523,21 @@ Note that the client sets `submitted_at` explicitly even though `set_survey_subm
 
 ### Autosave
 
-Autosave is gated on `allow_response_editing` and returns early when the flag is off:
+Autosave runs on every survey regardless of `allow_response_editing`. The flag only governs whether a student can re-submit after clicking **Complete**:
 
 ```typescript
-// app/course/[course_id]/surveys/[survey_id]/page.tsx:236-260
-const handleValueChanged = useCallback((surveyModel: Model) => {
-  if (!private_profile_id || !surveyId || !allowResponseEditing) return;
-  if (isSubmittingRef.current || hasSubmittedRef.current) return;
-  // debounced by AUTOSAVE_DEBOUNCE_MS, trailing edge only
-}, [private_profile_id, surveyId, allowResponseEditing, saveResponseToDb]);
+// app/course/[course_id]/surveys/[survey_id]/page.tsx
+// shouldAutosaveResponse returns true for drafts on any survey,
+// and for submitted responses only when allow_response_editing is on.
+const shouldAutosave = shouldAutosaveResponse(isSubmitted, allowResponseEditing);
+if (!shouldAutosave) return;
 ```
 
-With the flag off, nothing is persisted until the student clicks Complete. That is the behavior the user-facing pages describe, and it is enforced here rather than in RLS: `can_respond_to_survey` would accept the draft insert either way.
+Autosaves are serialized: each one chains on the previous, so a slow in-flight save cannot overwrite a newer one. When multiple edits queue up behind a slow save, only the newest queued save is sent; intermediate ones are skipped. This prevents a stalled older write from replacing a newer answer on the server.
 
-Submit and autosave race by construction, since SurveyJS fires a final `onValueChanged` on blur. `handleSurveyComplete` cancels any pending autosave timer, awaits any in-flight one, and only then writes, so the submit is guaranteed to be the last write (`:196-207`). `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense (`:147`). Preserve both if you touch this.
+Submit and autosave are coordinated: `handleSurveyComplete` awaits the entire autosave chain before writing the final submitted row, so the submit is always the last write. `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense. Preserve both if you touch this.
 
-Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode (`:313-314`).
+Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode.
 
 ## CSV export
 
