@@ -373,7 +373,7 @@ The helpers are `authorizeforclass(class__id bigint)`, `authorizeforclassgrader(
 `components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries several non-obvious behaviors.
 
 ```typescript
-// components/Survey.tsx:41-71
+// components/Survey.tsx
 const surveyJsonKey = useMemo(() => JSON.stringify(surveyJson ?? null), [surveyJson]);
 
 const survey = useMemo(() => {
@@ -390,11 +390,17 @@ const survey = useMemo(() => {
 }, [surveyJsonKey]);
 ```
 
-- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor (`:33-41`).
-- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync (`:53-61`).
-- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing (`:62-64`).
+- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor.
+- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync.
+- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing.
 
-The theme is applied in an effect from the Chakra color mode (`:73-79`).
+The theme is applied in an effect from the Chakra color mode.
+
+#### Database title override
+
+`SurveyComponent` accepts an optional `title` prop. When provided, a layout effect sets it on the model before paint, overriding whatever title is in the JSON. The stored JSON is not modified. The effect uses `onGetTextCallback` to return the raw database string without SurveyJS placeholder substitution, so `{q1}` in a database title shows literally rather than expanding to the student's answer.
+
+When `title` becomes falsy after a real value, the effect restores the JSON title with `locTitle.setJson` (which handles per-locale title objects) and clears the `onGetTextCallback`. Pass `titleTag="div"` to render the title as a `div` instead of the default `h1` — the Student Preview dialog uses this so the survey title does not create an `h1` inside a dialog already headed by an `h2`.
 
 ### Survey JSON structure
 
@@ -531,6 +537,16 @@ Drafts always autosave. A submitted response autosaves only when `allow_response
 Autosaves are serialized: each save chains on the previous one, so a slow in-flight save cannot overwrite a newer answer. If multiple saves queue up behind a slow one, only the newest is sent when the slow one finishes. `handleSurveyComplete` waits for the whole chain before writing the final submission, so the submit is guaranteed to be the last write. `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense. Preserve both if you touch this.
 
 Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode.
+
+### Live responses list
+
+`useSurveyResponses` builds a `TableController` filtered to `is_submitted = true` and `deleted_at IS NULL`. Its realtime filter applies the same predicate to every broadcast row, so a draft insert, a draft-to-submitted transition, and a soft delete are all handled correctly:
+
+- A draft insert is skipped (not submitted).
+- A draft updated to `is_submitted = true` joins the list.
+- A soft delete (`deleted_at` set) removes the row.
+
+The filter runs on every broadcast path, including after the controller fetches the full row for an ID-only broadcast. This means the instructor's **Total Responses**, **Response Rate**, and **Export to CSV** counts never include in-progress drafts.
 
 ## CSV export
 
@@ -674,9 +690,10 @@ npx playwright test surveys                    # surveys.test.tsx
 npx playwright test survey-assignment-grading  # survey-assignment-grading.test.tsx
 npx playwright test survey-taking              # a11y-tasks/survey-taking__survey-complete.spec.ts
 
-# Jest: tests/unit
-npx jest survey-analytics-format
-npx jest survey-component-a11y
+# Jest: tests/unit (issue-* pattern)
+npx jest --testPathPatterns "tests/unit/issue"
+# includes issue-977-autosave-every-survey.test.ts
+# includes issue-1002-*.test.tsx
 ```
 
 `tests/e2e/surveys.test.tsx` is the main suite. Worth reading before you change behavior: draft and closed surveys staying invisible to students (`:133`, `:148`), assignment-scoped visibility (`:163`, `:195`), students being rejected by `create_survey_assignments` (`:250`), in-progress answers surviving a re-render (`:589`), the WCAG 1.3.2 reading order this page's renderer notes exist for (`:646`), and multi-page multi-question builder coverage (`:865`). `tests/fixtures/teamCollaborationSurvey.ts` holds a reusable survey definition.
