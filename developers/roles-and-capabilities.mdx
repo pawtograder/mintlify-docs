@@ -1,0 +1,164 @@
+---
+title: "Roles and Capabilities"
+description: "How class roles and fine-grained capabilities work in Pawtograder, and how to write policies that use them"
+icon: "shield-check"
+---
+
+# Roles and Capabilities
+
+Pawtograder has two layers of access control within a class: **app roles** (the coarse `student`, `grader`, `instructor`, `admin` enum) and **capabilities** (fine-grained permissions that can be mixed and matched within the grader tier). This page covers the capability layer, which is newer and not yet used by all pages.
+
+For the app role model, see [Access control](/developers/intro#access-control).
+
+## Overview
+
+Every class gets four default roles: **instructor**, **grader**, **student**, and **admin**. Each person in the class is linked to one of them through `user_roles.class_role_id`. Instructors can create additional custom roles for graders (for example, "Head TA") and choose which capabilities those roles hold.
+
+Capabilities are stored in `role_capabilities`. A user's effective capabilities come from `user_class_capabilities()`, which unions the capabilities of their class role with the capabilities of the default grader role (so a custom role can only add, never remove).
+
+## Tables
+
+### `class_roles`
+
+```sql
+-- One row per role per class. Four default rows are created for every new class.
+create table public.class_roles (
+  id         bigint primary key generated always as identity,
+  class_id   bigint not null references public.classes(id) on delete cascade,
+  name       text not null,
+  app_role   app_role not null,   -- which app_role this role maps to
+  is_default boolean not null default false
+);
+```
+
+The four default rows have `is_default = true` and cannot be renamed or deleted. Custom roles always have `app_role = 'grader'` and `is_default = false`.
+
+### `role_capabilities`
+
+```sql
+create table public.role_capabilities (
+  id             bigint primary key generated always as identity,
+  class_role_id  bigint not null references public.class_roles(id) on delete cascade,
+  capability     text not null,
+  unique (class_role_id, capability)
+);
+```
+
+### `user_roles.class_role_id`
+
+`user_roles` gained a `class_role_id` column that references `class_roles(id)`. A trigger fills it automatically on insert from the user's `app_role`, so existing inserts that omit it continue to work. The column is `NOT NULL` in the database; the generated TypeScript types mark it optional on `Insert` because the trigger always provides it.
+
+## Capabilities
+
+The current set of capabilities:
+
+| Capability | What it allows |
+|---|---|
+| `manage_review_assignments` | Assign and reassign grading |
+| `publish_groups` | Publish group assignments |
+| `manage_assignments` | Create, edit, and delete assignments |
+| `manage_roles` | Create, rename, and delete custom grader roles; set their capabilities |
+
+Only the default instructor role holds all four. The default grader role holds none. Custom roles can hold any subset except `manage_roles`.
+
+<Note>
+`manage_roles` lets a role manager create and configure custom roles, but it does not let them assign people to roles. Assigning a person to a role is controlled by the `user_roles` policies, which remain instructor-only.
+</Note>
+
+A role manager can only grant a capability they themselves hold in that class. This is enforced by the database, not just the UI.
+
+## `user_class_capabilities()`
+
+```sql
+-- Returns the set of capabilities the calling user holds in each of their classes.
+SELECT * FROM user_class_capabilities();
+-- (class_id bigint, capability text)
+```
+
+This is the single source of truth for what a user can do. It unions the capabilities of the user's own class role with the capabilities of the default grader role for that class, so a custom role always inherits the grader baseline.
+
+**Never join `role_capabilities` directly in a policy.** That join finds only the user's own class role and misses the default grader role's capabilities. Always use `user_class_capabilities()` or `user_class_ids_with_capability()`.
+
+## `user_class_ids_with_capability(cap text)`
+
+```sql
+-- Returns the class_ids where the calling user holds the given capability.
+SELECT * FROM user_class_ids_with_capability('manage_assignments');
+-- (class_id bigint)
+```
+
+Use this in RLS policies:
+
+```sql
+-- Example: let users with manage_assignments create assignment rows.
+CREATE POLICY assignments_insert ON public.assignments
+  FOR INSERT TO authenticated
+  WITH CHECK (
+    class_id IN (SELECT user_class_ids_with_capability('manage_assignments'))
+  );
+```
+
+The policy must be `TO authenticated`. The function uses `auth.uid()`, which is `NULL` for the `anon` role, so an `anon` policy would always return an empty set.
+
+This function replaces `authorizeforclassinstructor` for capabilities that instructors hold. Do not add a new capability to the instructor role and then check it with `authorizeforclassinstructor`; use `user_class_ids_with_capability` instead so the check works for any role that holds the capability.
+
+## Writing a policy
+
+```sql
+-- Pattern for a table that has a class_id column.
+CREATE POLICY my_table_insert ON public.my_table
+  FOR INSERT TO authenticated
+  WITH CHECK (
+    class_id IN (SELECT user_class_ids_with_capability('manage_assignments'))
+  );
+
+-- Pattern for a table without a class_id column (join through a parent).
+CREATE POLICY my_child_insert ON public.my_child
+  FOR INSERT TO authenticated
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.my_parent p
+      WHERE p.id = my_child.parent_id
+        AND p.class_id IN (SELECT user_class_ids_with_capability('manage_assignments'))
+    )
+  );
+```
+
+## Adding a new capability
+
+1. Pick a name in `snake_case` that describes what the holder can do, not what they are.
+2. Add it to the instructor role's default capabilities in the migration that creates the feature. The instructor role always holds every capability.
+3. Write policies using `user_class_ids_with_capability('your_capability')`.
+4. Document the capability in the table above.
+
+Do not add the capability to the default grader role unless every grader in every class should hold it. Custom roles can add it selectively.
+
+## `useCapability()` hook
+
+Pages use `useCapability(capability)` to show or hide controls based on what the viewer can do:
+
+```typescript
+import { useCapability } from "@/hooks/useCapability";
+
+function PublishGroupsButton() {
+  const canPublish = useCapability("publish_groups");
+  if (!canPublish) return null;
+  return <Button onClick={handlePublish}>Publish groups</Button>;
+}
+```
+
+The hook reads `user_class_capabilities()` through a provider in the course layout. The provider fetches once per class page and re-fetches when:
+
+- The viewer's own `user_roles` row changes.
+- Any `role_capabilities` row in the class changes (via a trigger on `role_capabilities` that broadcasts to the staff channel).
+- The staff realtime channel reconnects.
+
+The hook and the database policies use the same function, so the page and the database always agree on what the user can do.
+
+<Note>
+`useCapability` is not yet wired to every control. Pages that have not been migrated still use the coarser `app_role` check. The migration is ongoing.
+</Note>
+
+## Realtime
+
+A trigger on `role_capabilities` sends an update to `class:{class_id}:staff` whenever a capability is added or removed. The `useCapability` provider subscribes to this channel and re-fetches when it fires, so a role change takes effect on open pages without a reload.
