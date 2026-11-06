@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Surveys
+- **Duplicate question names rejected at publish** — Publishing a survey whose questions share a name is now refused. Each question's name is the key under which the student's answer is stored; two questions with the same name would overwrite each other. The error message names each repeated question, its location, and where to rename it. Drafts may keep duplicates so work in progress can be saved and fixed later. A database trigger enforces the same rule, so a CLI copy or a direct API write cannot publish a survey with duplicates either ([#1005](https://github.com/pawtograder/platform/pull/1005))
+- **Answers always autosave** — Survey answers now autosave as the student works regardless of the **Allow Response Editing** setting. Previously, autosave was gated on that flag, so on most surveys (where editing is off by default) nothing was saved until the student clicked **Complete** and a page refresh lost every answer. The flag still controls whether a student can re-submit after completing. Autosaves are also now serialized so a slow in-flight save cannot overwrite a newer answer ([#977](https://github.com/pawtograder/platform/pull/977))
+- **Survey title shown correctly** — The student survey page, the Student Preview, and the single-response view now show the survey's database title instead of the placeholder "Survey Name" that the visual builder writes into the JSON. Renaming a survey while a student is answering it updates the title in place without rebuilding the model or losing typed answers ([#1002](https://github.com/pawtograder/platform/pull/1002))
+
+#### Authentication
+- **Sign in to Forgejo and Coder with Pawtograder** — Pawtograder now acts as an OAuth 2.1 / OIDC identity provider, so Forgejo and Coder can offer "Sign in with Pawtograder". An OAuth consent page at `/oauth/consent` shows the requesting application and scopes. The sign-in, sign-up, and email confirmation flows carry the return path through so a new user can create an account and complete the authorization in one flow. Redirect paths are validated against the same-origin rule to prevent open-redirect attacks ([#1164](https://github.com/pawtograder/platform/pull/1164))
+
+#### Roles and permissions
+- **Class roles made of capabilities** — Each class now has instructor, grader, student, and admin roles, and each person is linked to one. Instructors can create custom grader roles that add capabilities on top of the default grader role. The `useCapability()` hook lets pages show or hide controls based on what the signed-in user can do, using the same rule the database policies enforce ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+#### Realtime
+- **Class row updates broadcast to students and staff** — An `AFTER UPDATE` trigger on `classes` now sends a `classes_update` broadcast to both the students and staff topics, so pages can react to course setting changes without a reload ([#1145](https://github.com/pawtograder/platform/pull/1145))
+
+#### Assignments
+- **Assignment provider and GitHub guards** — First step of the assignment provider refactor, adding a provider and GitHub access guards ([#1128](https://github.com/pawtograder/platform/pull/1128))
+- **Fail-safe group repo deletes; defer pre-release group repos** — Group repository deletions are now fail-safe, and group repositories for pre-release assignments are deferred until the assignment is released ([#1174](https://github.com/pawtograder/platform/pull/1174))
+
 ## August 2026
 
 ### August 19, 2026
