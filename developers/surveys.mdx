@@ -513,18 +513,17 @@ Note that the client sets `submitted_at` explicitly even though `set_survey_subm
 
 ### Autosave
 
-Autosave is gated on `allow_response_editing` and returns early when the flag is off:
+Autosave runs on every survey regardless of `allow_response_editing`. The flag only controls whether a student can edit their response after submitting:
 
 ```typescript
-// app/course/[course_id]/surveys/[survey_id]/page.tsx:236-260
-const handleValueChanged = useCallback((surveyModel: Model) => {
-  if (!private_profile_id || !surveyId || !allowResponseEditing) return;
-  if (isSubmittingRef.current || hasSubmittedRef.current) return;
-  // debounced by AUTOSAVE_DEBOUNCE_MS, trailing edge only
-}, [private_profile_id, surveyId, allowResponseEditing, saveResponseToDb]);
+// app/course/[course_id]/surveys/[survey_id]/page.tsx
+const shouldAutosaveResponse = (isSubmitted: boolean, allowEditing: boolean) =>
+  !isSubmitted || allowEditing;
 ```
 
-With the flag off, nothing is persisted until the student clicks Complete. That is the behavior the user-facing pages describe, and it is enforced here rather than in RLS: `can_respond_to_survey` would accept the draft insert either way.
+Autosaves are serialized: each save chains on the previous one, and only the newest queued save is sent when multiple edits arrive while one is in flight. `Complete` waits for the whole chain before writing the final submitted row, so a slow in-flight autosave cannot overwrite the submission.
+
+`allow_response_editing` governs only the post-submit path: `shouldAutosaveResponse` returns false for a submitted response on a survey without editing, so no further autosaves go out after `Complete`.
 
 Submit and autosave race by construction, since SurveyJS fires a final `onValueChanged` on blur. `handleSurveyComplete` cancels any pending autosave timer, awaits any in-flight one, and only then writes, so the submit is guaranteed to be the last write (`:196-207`). `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense (`:147`). Preserve both if you touch this.
 
