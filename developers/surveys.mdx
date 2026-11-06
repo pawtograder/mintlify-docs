@@ -204,6 +204,10 @@ The two `sync_survey_type` triggers make `type` and `assigned_to_all` a single l
 
 All three broadcasts go to the staff channel only. Students receive no realtime survey traffic and need a reload to see a survey publish.
 
+<Note>
+The `broadcast_surveys_realtime` trigger sends to `class:{class_id}:staff`. The student survey page subscribes to this channel to receive live title renames: when an instructor renames a survey while a student is answering it, the new title arrives over the staff channel and is applied in place without rebuilding the model. The student's typed answers, current page, and focus are preserved.
+</Note>
+
 ## RPC functions
 
 `SECURITY DEFINER` functions carry the authorization checks that client-side code cannot.
