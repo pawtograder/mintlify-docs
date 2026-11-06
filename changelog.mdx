@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Roles and permissions
+- **Custom grader roles with capabilities** — Instructors can now create custom roles for graders (for example, "Head TA") and assign specific capabilities to each role. Capabilities control access to bulk grading assignment, group publishing, assignment management, and role management. Graders without `manage_review_assignments` no longer see the Assignment Management row or edit/delete icons on the Grading Assignments page, and are redirected away from Bulk Assign and Reassign. Graders without `publish_groups` see Manage Groups in read-only mode. See [Course Settings → Custom grader roles](/staff/course-settings#custom-grader-roles) ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+#### Surveys
+- **Duplicate question names rejected at publish** — Publishing a survey with two questions that share the same answer key is now refused. The visual builder warns when names repeat, and the database enforces the check so a CLI copy or direct API write is also rejected. Drafts may keep duplicate names so work in progress can be saved and fixed later. A survey closed with duplicate names from before this check cannot be reopened until the names are resolved ([#1005](https://github.com/pawtograder/platform/pull/1005))
+- **Autosave works on all surveys** — Answers in progress now autosave regardless of whether response editing is allowed. The "Allow Response Editing" setting only controls whether a student can re-edit after submitting; drafts always save. Autosaves are also serialized so a slow in-flight save cannot overwrite a newer answer ([#977](https://github.com/pawtograder/platform/pull/977))
+- **Survey pages show the database title** — The student survey page, Student Preview, and single-response view now show the survey's database title instead of the placeholder "Survey Name" written by the visual builder. Renaming a survey while a student is answering it updates the heading without losing their typed answers ([#1002](https://github.com/pawtograder/platform/pull/1002))
+
+#### Authentication
+- **Sign in to Forgejo and Coder with Pawtograder** — Pawtograder now acts as an OAuth 2.1 / OIDC identity provider, so Forgejo and Coder can offer "Sign in with Pawtograder". An OAuth consent page at `/oauth/consent` shows the requesting app and scopes, and the authorization is preserved through sign-in and sign-up so a new user can authorize an external tool in one flow ([#1164](https://github.com/pawtograder/platform/pull/1164))
+
+#### Infrastructure
+- **Realtime class row updates** — An `AFTER UPDATE` trigger on `classes` now broadcasts updates to the `students` and `staff` realtime topics, so pages that subscribe to class settings receive live updates without a reload ([#1145](https://github.com/pawtograder/platform/pull/1145))
+
 ## August 2026
 
 ### August 19, 2026
