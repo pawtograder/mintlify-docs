@@ -75,6 +75,25 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Capabilities
+
+Each class has four default roles — instructor, grader, student, and admin — and each person in a class is linked to one of them through `user_roles.class_role_id`. A role carries a set of capabilities that control fine-grained access within the class.
+
+The current capabilities are:
+
+| Capability | Default holder | What it allows |
+|---|---|---|
+| `manage_review_assignments` | instructor | Assign and manage grading reviews |
+| `publish_groups` | instructor | Publish group assignments |
+| `manage_assignments` | instructor | Create, edit, and delete assignments |
+| `manage_roles` | instructor | Create and configure custom grader roles |
+
+Instructors can create custom grader roles that extend the default grader role with additional capabilities. A grader on a custom role holds everything the default grader role holds, plus the custom role's extras.
+
+**Checking a capability in a policy.** Every RLS policy that gates on a capability calls `user_class_ids_with_capability(<capability>)` and checks whether the class id is in the result. Never look up the capability inline from `role_capabilities`, because that only finds the user's own class role and misses the default grader role's capabilities.
+
+**Checking a capability in a component.** Call `useCapability("publish_groups")` to show or hide a control. The hook reads `user_class_capabilities()`, the same function the database policies use, so the page and the database agree. The hook is provided by the course layout and re-fetches when the viewer's own role or a role's capabilities change, or when the staff channel reconnects.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
@@ -98,6 +117,18 @@ Which profile a row references is what decides whether the record is attributabl
 <Warning>
 `create_class_with_admin` gives the creating admin their real name on **both** profiles rather than generating a pseudonym (`supabase/migrations/20250820185937_admin_portal_system.sql:81-100`). Do not treat a public profile name as guaranteed to be anonymous.
 </Warning>
+
+## OAuth / OIDC identity provider
+
+Pawtograder acts as an OAuth 2.1 / OIDC identity provider through Supabase Auth's OAuth server, so external tools such as Forgejo and Coder can offer "Sign in with Pawtograder". This is enabled in `supabase/config.toml` under `[auth.oauth_server]`.
+
+The consent page lives at `app/(auth-pages)/oauth/consent`. It shows the requesting application and the scopes it is asking for, records the user's Approve or Deny choice, and forwards straight back when GoTrue already has the user's consent. The `authorization_id` is preserved through sign-in so a cold-start user without an account can still finish authorizing after signing up.
+
+**Redirect safety.** Sign-in, sign-up, and the auth callback all validate redirect paths with `safeRedirectPath` (`lib/redirectPath.ts`) before following them. The function rejects protocol-relative paths (`//attacker.example`), control characters, backslashes, and anything that does not resolve to the same origin.
+
+**Registering an OAuth client.** Dynamic registration is off. Register Forgejo or Coder as an OAuth client through the Supabase Auth admin API or the GoTrue CLI. Both require PKCE on every authorization request.
+
+**Scopes.** The `profile` scope returns the user's name (which is their email address) and email.
 
 ## Data access
 
