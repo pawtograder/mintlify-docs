@@ -107,6 +107,14 @@ Which profile a row references is what decides whether the record is attributabl
 `create_class_with_admin` gives the creating admin their real name on **both** profiles rather than generating a pseudonym (`supabase/migrations/20250820185937_admin_portal_system.sql:81-100`). Do not treat a public profile name as guaranteed to be anonymous.
 </Warning>
 
+## OAuth / OIDC identity provider
+
+Pawtograder can act as an OAuth 2.1 / OIDC identity provider through Supabase Auth's OAuth server, so tools like Forgejo and Coder can offer "Sign in with Pawtograder". The consent page lives at `app/(auth-pages)/oauth/consent` and is enabled via `[auth.oauth_server]` in `supabase/config.toml`.
+
+The consent page shows the requesting application and the scopes it is asking for, records the user's Approve or Deny choice, and forwards straight back when GoTrue already has the user's consent. The `authorization_id` is preserved through sign-in and sign-up so a cold-start user without an account can still finish authorizing the external tool.
+
+Redirect paths through sign-in, sign-up, and email confirmation are validated with `safeRedirectPath` (`lib/redirectPath.ts`) before use. Paths must be same-origin, and control characters and backslashes are rejected.
+
 ## Data access
 
 Prefer a Postgres RPC over a Next.js server action or an edge function for data operations. Edge functions are for integrations that need an external API, such as GitHub, Discord, or AWS Chime, not for general data access.
