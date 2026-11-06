@@ -513,22 +513,24 @@ Note that the client sets `submitted_at` explicitly even though `set_survey_subm
 
 ### Autosave
 
-Autosave is gated on `allow_response_editing` and returns early when the flag is off:
+Autosave always runs for drafts. `allow_response_editing` only gates autosave on an already-submitted response:
 
 ```typescript
-// app/course/[course_id]/surveys/[survey_id]/page.tsx:236-260
+// app/course/[course_id]/surveys/[survey_id]/page.tsx
+const shouldAutosaveResponse = !hasSubmittedRef.current || allowResponseEditing;
+
 const handleValueChanged = useCallback((surveyModel: Model) => {
-  if (!private_profile_id || !surveyId || !allowResponseEditing) return;
-  if (isSubmittingRef.current || hasSubmittedRef.current) return;
+  if (!private_profile_id || !surveyId) return;
+  if (isSubmittingRef.current || !shouldAutosaveResponse) return;
   // debounced by AUTOSAVE_DEBOUNCE_MS, trailing edge only
-}, [private_profile_id, surveyId, allowResponseEditing, saveResponseToDb]);
+}, [private_profile_id, surveyId, shouldAutosaveResponse, saveResponseToDb]);
 ```
 
-With the flag off, nothing is persisted until the student clicks Complete. That is the behavior the user-facing pages describe, and it is enforced here rather than in RLS: `can_respond_to_survey` would accept the draft insert either way.
+Drafts always autosave. A submitted response autosaves only when `allow_response_editing` is true. `can_respond_to_survey` enforces the same rule at the database level: the RLS update policy requires `allow_response_editing` when `is_submitted` is true.
 
-Submit and autosave race by construction, since SurveyJS fires a final `onValueChanged` on blur. `handleSurveyComplete` cancels any pending autosave timer, awaits any in-flight one, and only then writes, so the submit is guaranteed to be the last write (`:196-207`). `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense (`:147`). Preserve both if you touch this.
+Autosaves are serialized: each save chains on the previous one, so a slow in-flight save cannot overwrite a newer answer. If multiple saves queue up behind a slow one, only the newest is sent when the slow one finishes. `handleSurveyComplete` waits for the whole chain before writing the final submission, so the submit is guaranteed to be the last write. `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense. Preserve both if you touch this.
 
-Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode (`:313-314`).
+Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode.
 
 ## CSV export
 
