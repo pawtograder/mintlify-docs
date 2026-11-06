@@ -118,6 +118,12 @@ is escaped to prevent CSV-injection in spreadsheet apps.
 The student export (from the **Students** page) uses the same
 `Name <email>` format for the student column.
 
+## Group repository creation and deletion
+
+Group repositories are created when the assignment is released, not when the group is formed. If you publish groups before releasing the assignment, the repositories are queued and created at release time.
+
+When a group is deleted, Pawtograder attempts to delete its GitHub repository. If the delete fails (for example, because the repository was already removed or GitHub is temporarily unavailable), the rest of the group deletion still proceeds — the group membership and database records are cleaned up regardless.
+
 ## Group permissions and grades
 
 When a group is published:
