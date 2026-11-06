@@ -6,6 +6,27 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Surveys
+- **Duplicate question names blocked at publish** — Publishing a survey is now refused when two questions share the same answer key. The refusal message names each duplicate, where it appears, and how to fix it. Drafts may keep duplicates so work in progress can be saved. A survey closed with duplicate names from before this check cannot be reopened until the names are resolved; renaming while closed is allowed ([#1005](https://github.com/pawtograder/platform/pull/1005))
+- **Answers always autosave** — Survey answers in progress now autosave on every survey, regardless of the **Allow Response Editing** setting. Previously, autosave only ran when response editing was on, so a student who closed the page on most surveys lost their answers. The **Allow Response Editing** setting still controls whether a submitted response can be changed after clicking **Complete** ([#977](https://github.com/pawtograder/platform/pull/977))
+- **Survey page shows the correct title** — The survey page now shows the title you set in the survey form, not the placeholder "Survey Name" that the Visual Builder writes into the JSON. Renaming a survey while a student is answering it updates the title in place without losing their answers ([#1002](https://github.com/pawtograder/platform/pull/1002))
+
+#### Access control
+- **Custom grader roles with capabilities** — Every class now has a set of roles (instructor, grader, student, admin by default) that carry fine-grained capabilities. Instructors can create custom grader roles — for example "Head TA" — and choose which capabilities they hold. Graders on a custom role inherit everything the default grader role holds, plus the custom role's extras. The `useCapability()` hook lets pages show or hide controls based on what the viewer can do, matching the database policies exactly. Controls that graders cannot use (assignment management, bulk review assignment, group publishing) are now hidden from graders who lack the relevant capability ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+#### Authentication
+- **Sign in to Forgejo and Coder with Pawtograder** — Pawtograder now acts as an OAuth 2.1 / OIDC identity provider, so Forgejo and Coder can offer "Sign in with Pawtograder". A consent page at `/oauth/consent` shows the requesting application and its scopes, skips the form when consent was already given, and carries the authorization through sign-in and sign-up so a new user can authorize Forgejo or Coder in one flow ([#1164](https://github.com/pawtograder/platform/pull/1164))
+
+#### Autograding
+- **Forgejo Actions job tokens verified by provider** — The grading server now verifies each Actions job token's issuer and audience, and binds it to the repository's git provider. GitHub tokens are accepted by default; Forgejo tokens are accepted only when `FORGEJO_URL` is configured and only for repositories whose provider is set to `forgejo`. A token from one provider cannot reach a repository on the other ([#1153](https://github.com/pawtograder/platform/pull/1153), [#1176](https://github.com/pawtograder/platform/pull/1176))
+
+#### Infrastructure
+- **Optional Forgejo, Actions runner, and Coder in the Helm chart** — The chart now supports deploying Forgejo, a Forgejo Actions runner, and Coder alongside the existing Pawtograder stack. Actions jobs run in their own namespace with a token-only dispatcher. The runner mirrors `actions/checkout` and `pawtograder/assignment-action` into Forgejo so grading does not depend on GitHub availability. Cilium network policies can be enabled to prevent job pods and Coder workspaces from reaching internal services ([#1059](https://github.com/pawtograder/platform/pull/1059))
+
 ## August 2026
 
 ### August 19, 2026
