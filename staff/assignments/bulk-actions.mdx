@@ -115,6 +115,23 @@ Both actions require confirmation via a popover before they run. The
 toast reports the number of code walks changed. A no-op (nothing to
 release or unrelease) shows a warning toast instead of a success.
 
+### Code walk release state in the submissions table
+
+When an assignment has a code-walk rubric, the submissions table on the
+**Dashboard** tab shows two release columns instead of one:
+
+- **Grading released** — whether the grading review has been released
+  (the same as the previous single **Released** column).
+- **Code walk released** — the release state of the code-walk review.
+  A checkmark means released; an ✗ means complete but not yet released;
+  **Incomplete** (muted) means the code walk is not complete and will
+  be skipped by **Release code walks**; **—** (muted) means there is
+  no code-walk review for that row (for example, a student with no
+  submission).
+
+Both columns support filtering by release status. Assignments without a
+code-walk rubric continue to show only the single **Released** column.
+
 ## Reassign Grading by Grader
 
 Reassignment is grader-centric rather than submission-centric: you pick
