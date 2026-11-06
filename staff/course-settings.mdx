@@ -58,6 +58,33 @@ instructor-only.
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+## Custom grader roles
+
+Instructors can create custom roles for graders — for example, "Head TA" — and assign specific capabilities to each role. Custom roles build on the default grader role: a grader on a custom role holds everything the default grader role holds, plus any extras the custom role adds.
+
+### Capabilities
+
+Each role is defined by a set of capabilities:
+
+| Capability | What it allows |
+|---|---|
+| `manage_review_assignments` | Bulk assign and reassign grading tasks; edit and delete review assignments |
+| `publish_groups` | Create, edit, delete, and publish student groups |
+| `manage_assignments` | Create, edit, and delete assignments |
+| `manage_roles` | Create and configure custom grader roles (does not grant the ability to assign people to roles) |
+
+Instructors hold all four capabilities. The default grader role holds none. A custom role can add any capability except `manage_roles`.
+
+### Managing custom roles
+
+Instructors can manage custom roles from **Course Settings → Roles** (requires the `manage_roles` capability):
+
+1. Click **Create Role** and enter a name
+2. Toggle the capabilities the role should add on top of the default grader role
+3. Save the role
+
+To assign a grader to a custom role, go to **Course Settings → Enrollments**, find the grader, and select their role from the dropdown. Changing a grader's app role (e.g., from grader to instructor) always moves them to that role's default, overriding any custom role assignment.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
