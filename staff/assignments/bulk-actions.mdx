@@ -129,6 +129,26 @@ self-review due dates are managed separately to avoid accidental
 cross-edits. For per-student due-date changes use the inline edit
 control on the submissions table or the student's gradebook row.
 
+## Bulk Release and Unrelease Code Walks
+
+On assignments with a code-walk rubric, the grading status panel shows
+**Release code walks** and **Unrelease code walks** buttons next to
+**Release all** and **Unrelease all**. Both buttons are instructor-only
+and require confirmation.
+
+- **Release code walks** publishes every *completed* code-walk review
+  for active submissions in the assignment. Incomplete code walks are
+  skipped; the result toast says how many were released and notes that
+  incomplete ones were not changed. Grading, self-review, and
+  meta-grading reviews are not affected.
+- **Unrelease code walks** hides every released code-walk review,
+  complete or not, reversing any previous release including ones made
+  per submission.
+
+Releasing a code walk does not publish the submission's hidden
+autograder tests. Only releasing the grading review publishes hidden
+tests.
+
 ## Group Mentor Column
 
 When at least one group has an assigned mentor, a **Group mentor**
