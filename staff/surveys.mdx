@@ -642,8 +642,21 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- **Rejects duplicate question names** — every question in the survey must have a unique name (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+#### Duplicate question names
+
+Each question's **Question name** field sets the key under which its answer is stored. If two questions share the same name, one answer overwrites the other, and a required question can appear satisfied while actually empty. Publishing is refused when any two questions resolve to the same answer key.
+
+The Visual Builder warns you while you edit: a live notice lists every repeated name and marks the affected **Question name** fields. The survey can still be saved as a draft with duplicates so you can fix them at your own pace.
+
+When you try to publish, the error message names each repeated question, where it appears in the survey, and how to rename it. Questions inside panels, dropdowns, and matrices do not have a **Question name** field in the Visual Builder; rename them by editing the survey JSON directly.
+
+<Note>
+A survey that was published before this check was introduced and then closed cannot be reopened until the duplicate names are renamed. Renaming is allowed while the survey is closed. Answers already collected under the shared key are preserved.
+</Note>
 
 ## Saving Survey Templates
 
