@@ -642,8 +642,27 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- **Rejects duplicate question names** — every question in a published survey must have a unique name (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+#### Duplicate question names
+
+Each question in a survey has a **Question name** field (visible in the visual builder) that becomes the key under which the student's answer is stored. If two questions share the same name, one answer overwrites the other, and a required question can appear satisfied while its answer is actually empty.
+
+Pawtograder refuses to publish a survey that contains duplicate question names. The error message names each repeated question, its location in the survey, and where to rename it. Drafts may keep duplicates so that work in progress can be saved and fixed later.
+
+<Note>
+Some question types — dropdowns, matrices, and questions with a custom **valueName** — cannot be renamed in the visual builder. The error message says so and directs you to the JSON editor to rename them.
+</Note>
+
+**If you see a duplicate-name error on a survey that was published before this check was added:**
+
+The survey is still published and students can still answer it. You can close the survey, rename the duplicate questions in the JSON editor, and then reopen it. While the survey is closed, you can edit and save it freely. Once every question has a unique name, you can publish it again.
+
+<Warning>
+A survey that was closed with duplicate names from before this check cannot be reopened until the duplicates are renamed. Renaming while closed is allowed. Answers already given under the shared key are preserved.
+</Warning>
 
 ## Saving Survey Templates
 
