@@ -513,22 +513,21 @@ Note that the client sets `submitted_at` explicitly even though `set_survey_subm
 
 ### Autosave
 
-Autosave is gated on `allow_response_editing` and returns early when the flag is off:
+Autosave runs on every survey regardless of `allow_response_editing`. The flag only governs whether a student can re-submit after clicking **Complete**:
 
 ```typescript
-// app/course/[course_id]/surveys/[survey_id]/page.tsx:236-260
-const handleValueChanged = useCallback((surveyModel: Model) => {
-  if (!private_profile_id || !surveyId || !allowResponseEditing) return;
-  if (isSubmittingRef.current || hasSubmittedRef.current) return;
-  // debounced by AUTOSAVE_DEBOUNCE_MS, trailing edge only
-}, [private_profile_id, surveyId, allowResponseEditing, saveResponseToDb]);
+// app/course/[course_id]/surveys/[survey_id]/page.tsx
+// shouldAutosaveResponse returns true for drafts on any survey,
+// and for submitted responses only when allow_response_editing is on.
+const shouldAutosave = shouldAutosaveResponse(isSubmitted, allowResponseEditing);
+if (!shouldAutosave) return;
 ```
 
-With the flag off, nothing is persisted until the student clicks Complete. That is the behavior the user-facing pages describe, and it is enforced here rather than in RLS: `can_respond_to_survey` would accept the draft insert either way.
+Autosaves are serialized: each one chains on the previous, so a slow in-flight save cannot overwrite a newer one. When multiple edits queue up behind a slow save, only the newest queued save is sent; intermediate ones are skipped. This prevents a stalled older write from replacing a newer answer on the server.
 
-Submit and autosave race by construction, since SurveyJS fires a final `onValueChanged` on blur. `handleSurveyComplete` cancels any pending autosave timer, awaits any in-flight one, and only then writes, so the submit is guaranteed to be the last write (`:196-207`). `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense (`:147`). Preserve both if you touch this.
+Submit and autosave are coordinated: `handleSurveyComplete` awaits the entire autosave chain before writing the final submitted row, so the submit is always the last write. `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense. Preserve both if you touch this.
 
-Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode (`:313-314`).
+Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode.
 
 ## CSV export
 
