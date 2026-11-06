@@ -137,6 +137,54 @@ the grader into a sibling `grader/` directory. Both you and the student can
 view the run output (including the action's job summary table) under the
 Actions tab of the student repo.
 
+### Forgejo Actions
+
+Self-hosted Pawtograder deployments can use Forgejo as the git provider instead of GitHub. When an assignment is backed by Forgejo, the handout ships a `grade.yml` that targets the deployment's Forgejo Actions runner rather than a GitHub-hosted runner.
+
+A minimal Forgejo `grade.yml` looks like this:
+
+```yaml
+name: Submit Assignment and Run Grader
+permissions:
+  id-token: write
+  contents: read
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  grade:
+    name: Submit and Grade Assignment
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: submission
+      - name: Collect Submission and Run Grader
+        uses: pawtograder/assignment-action@v4
+        with:
+          grading_server: 'https://api.pawtograder.com'
+          action_ref: '${{ github.action_ref }}'
+          action_repository: '${{ github.action_repository }}'
+```
+
+Key differences from the GitHub workflow:
+
+- `runs-on: self-hosted` targets the Forgejo Actions runner provisioned by the deployment. Your deployment may use a different label — follow whatever the course template pins.
+- No language toolchain setup steps are needed when the runner image already includes the required tools (Java, Python, etc.).
+- `cancel-in-progress: false` is recommended so that a new push does not cancel an earlier grading run that is still in the queue.
+
+<Note>
+Job tokens issued by Forgejo are verified against the Forgejo instance's key set and must match the assignment's configured git provider. A GitHub token cannot authenticate a Forgejo-backed assignment, and vice versa.
+</Note>
+
 ### What Counts as a Submission
 
 The `on:` block above is what decides when a student submits. It is the workflow's own configuration, not something Pawtograder imposes, so editing it changes the submission rule for the assignment.
