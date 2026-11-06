@@ -75,6 +75,34 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Capabilities
+
+On top of the four `app_role` values, every class has a set of **class roles** (e.g. "Head TA") that carry fine-grained capabilities. Each person in a class is linked to exactly one class role, and a class role is a set of capabilities. The four default roles map to the four `app_role` values; instructors can create custom grader roles with a subset of grader capabilities.
+
+The capabilities defined today are:
+
+| Capability | What it allows |
+|---|---|
+| `manage_review_assignments` | Assign and reassign graders to submissions |
+| `publish_groups` | Create, edit, and publish student groups |
+| `manage_assignments` | Create, edit, and delete assignments |
+| `manage_roles` | Create and configure custom grader roles (does not grant the ability to assign people to roles) |
+
+**The one rule for checking a capability in a policy:**
+
+```sql
+-- Use this in every RLS policy that checks a capability.
+-- Never look up role_capabilities directly; that misses the default grader role's capabilities.
+EXISTS (
+  SELECT 1 FROM user_class_ids_with_capability('manage_review_assignments')
+  WHERE id = <class_id_column>
+)
+```
+
+Policies must be `TO authenticated` and must not include `class_id` in the table they protect (use the helper function instead). This replaces `authorizeforclassinstructor` for any action that should be available to a custom grader role.
+
+In the frontend, call `useCapability("publish_groups")` to show or hide a control. The hook reads `user_class_capabilities()`, the same function the database policies use, so the page and the database always agree. The provider in the course layout fetches once per class page and re-fetches when the viewer's role or a role's capabilities change.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
