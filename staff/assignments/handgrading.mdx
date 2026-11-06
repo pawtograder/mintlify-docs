@@ -159,6 +159,19 @@ Once an instructor **releases** the review to the student, only instructors can 
 
 ## Bulk operations
 
+### Release and unrelease code walks
+
+For assignments with a code-walk rubric, the grading status panel shows two additional actions: **Release code walks** and **Unrelease code walks**.
+
+- **Release code walks** — releases every *completed* code-walk review for the assignment in one step. Incomplete code walks are skipped; the toast reports how many changed and notes that incomplete ones were skipped. Grading, self-review, and meta-grading reviews are not affected.
+- **Unrelease code walks** — reverses all released code-walk reviews for the assignment, including any that were released per submission before they were finished.
+
+Both actions appear only when the assignment has a code-walk rubric, and only for instructors.
+
+<Note>
+Releasing a code walk does not publish hidden autograder tests. Only releasing the grading review publishes hidden tests.
+</Note>
+
 ### Finalize grading
 
 Use **Finalize grading** on the assignment's **Dashboard** tab to mark every eligible submission review complete in one step:
