@@ -370,10 +370,10 @@ The helpers are `authorizeforclass(class__id bigint)`, `authorizeforclassgrader(
 
 ### The renderer
 
-`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries four non-obvious behaviors, three of them accessibility fixes for issue #881.
+`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries several non-obvious behaviors, including accessibility fixes for issue #881.
 
 ```typescript
-// components/Survey.tsx:41-71
+// components/Survey.tsx
 const surveyJsonKey = useMemo(() => JSON.stringify(surveyJson ?? null), [surveyJson]);
 
 const survey = useMemo(() => {
@@ -390,11 +390,21 @@ const survey = useMemo(() => {
 }, [surveyJsonKey]);
 ```
 
-- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor (`:33-41`).
-- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync (`:53-61`).
-- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing (`:62-64`).
+- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor.
+- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync.
+- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing.
 
-The theme is applied in an effect from the Chakra color mode (`:73-79`).
+The theme is applied in an effect from the Chakra color mode.
+
+#### Database title override
+
+`Survey.tsx` accepts an optional `title` prop. When provided, a layout effect sets it on the model before paint, so the database title is shown instead of whatever `"title"` is in the SurveyJS JSON (the visual builder writes `"Survey Name"` as a placeholder). The model is not rebuilt; only the title string is updated in place, so typed answers, the current page, and focus are preserved when the title changes (for example, when an instructor renames the survey while a student is answering it).
+
+When `title` becomes falsy, the effect restores the JSON title with `locTitle.setJson`, which handles per-locale title objects as well as plain strings. While a database title is set, the title string's `onGetTextCallback` returns the unprocessed text, so SurveyJS placeholder syntax (`{q1}`) in the database title is shown literally rather than being substituted with the student's answer.
+
+The `titleTag` prop (default `"h1"`) controls the HTML element used to render the survey title. The student survey page uses the default; the Student Preview dialog passes `"div"` because its own `h2` already names the survey.
+
+`ViewSurveyResponse.tsx` hides the SurveyJS title entirely (its callers show the database title as a heading) and renders the survey description itself, above the response, so the description is not lost along with the title block.
 
 ### Survey JSON structure
 
