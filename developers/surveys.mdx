@@ -204,6 +204,10 @@ The two `sync_survey_type` triggers make `type` and `assigned_to_all` a single l
 
 All three broadcasts go to the staff channel only. Students receive no realtime survey traffic and need a reload to see a survey publish.
 
+<Note>
+The `broadcast_surveys_realtime` trigger sends to `class:{class_id}:staff`. The student survey page subscribes to this channel to receive live title renames: when an instructor renames a survey while a student is answering it, the new title arrives over the staff channel and is applied in place without rebuilding the model. The student's typed answers, current page, and focus are preserved.
+</Note>
+
 ## RPC functions
 
 `SECURITY DEFINER` functions carry the authorization checks that client-side code cannot.
@@ -370,31 +374,29 @@ The helpers are `authorizeforclass(class__id bigint)`, `authorizeforclassgrader(
 
 ### The renderer
 
-`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries four non-obvious behaviors, three of them accessibility fixes for issue #881.
+`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries several non-obvious behaviors, three of them accessibility fixes for issue #881.
 
-```typescript
-// components/Survey.tsx:41-71
-const surveyJsonKey = useMemo(() => JSON.stringify(surveyJson ?? null), [surveyJson]);
+The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor.
 
-const survey = useMemo(() => {
-  const model = new Model(JSON.parse(surveyJsonKey));
-  model.questionTitleLocation = "top";
-  model.focusFirstQuestionAutomatic = false;
-  model.textUpdateMode = "onTyping";
-  model.onGetTitleTagName.add((_sender, options) => {
-    if ((options.element as { isQuestion?: boolean }).isQuestion) {
-      options.tagName = "h2";
-    }
-  });
-  return model;
-}, [surveyJsonKey]);
-```
+- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync.
+- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing.
 
-- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor (`:33-41`).
-- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync (`:53-61`).
-- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing (`:62-64`).
+The theme is applied in an effect from the Chakra color mode.
 
-The theme is applied in an effect from the Chakra color mode (`:73-79`).
+### Survey title override
+
+The student survey page, the Student Preview modal, and the single-response view all pass the database `surveys.title` to the renderer so that the page heading matches the survey list. The visual builder writes a placeholder `"title": "Survey Name"` into the JSON, and without this override students would land on a page headed "Survey Name" regardless of what the instructor named the survey.
+
+The title is applied in a layout effect that sets it on the existing model rather than rebuilding it. This means an instructor can rename a survey while a student is answering it — the new title appears without losing the student's typed answers, current page, or focus.
+
+**Behavior when the `title` prop is absent or empty:**
+
+- If `title` is a non-empty string, it overrides the JSON title and SurveyJS placeholder processing is bypassed for that string (so `{q1}` in a database title shows literally, not as the student's answer to `q1`).
+- If `title` is `""` or `undefined`, the JSON title is restored with `locTitle.setJson`, which correctly handles per-locale title objects as well as plain strings.
+
+**Where the title is not overridden:**
+
+The standalone `/manage/surveys/preview` page reads its JSON from the query string and has no database title, so it is unchanged. `ViewSurveyResponse` hides the SurveyJS title entirely (its callers already show the database title as a heading) and renders the survey description itself above the response so it is not lost along with the title block.
 
 ### Survey JSON structure
 
