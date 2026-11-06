@@ -127,6 +127,45 @@ Which profile a row references is what decides whether the record is attributabl
 `create_class_with_admin` gives the creating admin their real name on **both** profiles rather than generating a pseudonym (`supabase/migrations/20250820185937_admin_portal_system.sql:81-100`). Do not treat a public profile name as guaranteed to be anonymous.
 </Warning>
 
+### OAuth / OIDC identity provider
+
+Pawtograder acts as an OAuth 2.1 / OIDC identity provider through Supabase Auth's OAuth server. This lets Forgejo and Coder offer "Sign in with Pawtograder" so users do not need separate accounts on those services.
+
+**How it works:**
+
+1. A user clicks "Sign in with Pawtograder" in Forgejo or Coder.
+2. They are redirected to `/oauth/consent` on the Pawtograder web app.
+3. The consent page shows the requesting application and the scopes it is asking for. If the user has already approved this application, the page forwards them straight back without showing the form again.
+4. The user approves or denies. Approval redirects back to Forgejo or Coder with an authorization code; denial sends an error.
+5. If the user is not signed in, the consent page carries the `authorization_id` through the sign-in and sign-up flows so the authorization is not lost.
+
+**Scopes:**
+
+| Scope | What it grants |
+|---|---|
+| `openid` | An ID token identifying the user |
+| `profile` | The user's name (which is their email address in Pawtograder's OIDC claims) |
+| `email` | The user's email address |
+
+**Configuration (`supabase/config.toml`):**
+
+```toml
+[auth.oauth_server]
+enabled = true
+consent_path = "/oauth/consent"
+dynamic_registration = false
+```
+
+Dynamic registration is off. OAuth clients (Forgejo, Coder) must be registered by a site administrator.
+
+**Registering a client:**
+
+Use the Supabase Auth admin API or the Supabase CLI to register each OAuth client with its `redirect_uri`. The Forgejo/Coder E2E lane (`tests/e2e/forgejo-coder/`) shows the bootstrap sequence.
+
+**Redirect safety:**
+
+Sign-in, sign-up, and SSO redirect paths are validated with `safeRedirectPath` (`lib/redirectPath.ts`) before use. Paths must be same-origin, must not contain control characters or backslashes, and must resolve to the same origin. Protocol-relative URLs (`//attacker.example`) and tab/newline-injected paths are rejected.
+
 ## Data access
 
 Prefer a Postgres RPC over a Next.js server action or an edge function for data operations. Edge functions are for integrations that need an external API, such as GitHub, Discord, or AWS Chime, not for general data access.
