@@ -236,6 +236,14 @@ SELECT create_survey_assignments('<surveys.id>', ARRAY['<profile-1>', '<profile-
 Two sibling RPCs exist and have **no callers**: `get_survey_responses_with_group_context(p_survey_id uuid, p_class_id bigint)` (`20260222000000:112`) and `get_survey_series_trend_data(p_series_id uuid, p_class_id bigint)` (`20260222000002:135`). They are typed in `SupabaseTypes.d.ts` and are callable, but nothing reads them. Note the parameter order on the group-context one: survey first, class second. Calling it positionally with the class id first fails on type mismatch.
 </Warning>
 
+### Duplicate question name enforcement
+
+SurveyJS stores each answer under the question's effective key — the `valueName` when set, otherwise the `name` cleaned by `Question.getValidName` (trim, drop first `|`, drop `{` and `}`, drop leading `#`s). Two questions with the same effective key share one answer slot, so the second answer silently overwrites the first.
+
+A `BEFORE INSERT/UPDATE` trigger (`20261106130000_unique_survey_question_names.sql`) rejects any write that would publish a survey with duplicate effective keys. The check walks `pages`, `panels`, `paneldynamic` template elements, and `flowpanel` groups, applying the same key derivation as `survey-core 2.3`. Other updates to a survey that was published before this check (closing it, changing dates, changing settings) are still allowed, so those surveys are not stranded. A survey closed with duplicate names from before the check cannot be reopened until the names are resolved; renaming while closed is allowed.
+
+The visual builder warns when two **Question name** fields match as typed. It does not apply the full SurveyJS key derivation, so the warning is a best-effort hint. The database trigger is the authoritative check and its error message names each duplicate and explains where to rename it.
+
 ### Due dates are advisory
 
 `can_respond_to_survey` never reads `due_date` (`20260817120000_tighten_survey_and_poll_rls.sql:27-32`). Nothing else enforces it either — not RLS, not the client, which only renders it (`app/course/[course_id]/surveys/page.tsx`). Surveys accept late responses, and `submitted_at` is what records how late.
