@@ -227,17 +227,19 @@ Use the available date to schedule surveys in advance without manually publishin
 
 ### Response Editing Control
 
-Toggle **Allow Response Editing** to control whether students can modify their submissions. The form summarizes it as: "When on, changes auto-save. When off, a student's first submission is final."
+Toggle **Allow Response Editing** to control whether students can modify their submissions after they submit.
+
+Answers in progress autosave as the student works regardless of this setting, so a student can close the page and return to a partly finished survey either way.
 
 **Enabled:**
 
-- Answers autosave as the student works, so a student can close the page and come back to a partly finished survey
+- Answers autosave as the student works
 - After submitting, the student sees a green banner reading "You can edit your response since editing is allowed for this survey." and can submit again
 - Each re-submission updates the recorded submission time
 
 **Disabled:**
 
-- Nothing is saved until the student clicks **Complete**, so a student who closes the page loses their answers
+- Answers still autosave as the student works, so a student can close the page and come back to a partly finished survey
 - After submitting, the student sees a yellow banner reading "This survey has been submitted and cannot be edited." and the survey renders read-only
 - The original submission time is preserved
 
@@ -642,8 +644,15 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- Rejects surveys where two or more questions share the same answer key, since SurveyJS stores answers by question name and a shared name means one answer overwrites the other
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+<Note>
+The duplicate-name check runs at publish time only. You can save a draft with repeated question names and fix them before publishing. The visual builder highlights repeated **Question name** fields as you type so you can catch them early.
+
+If a survey was published before this check was added and its questions share a name, you can still close it and update its dates or settings. To reopen it (change it back to published), rename the duplicate questions first — the database will refuse to republish until every question has a unique name.
+</Note>
 
 ## Saving Survey Templates
 

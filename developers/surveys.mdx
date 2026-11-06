@@ -370,10 +370,10 @@ The helpers are `authorizeforclass(class__id bigint)`, `authorizeforclassgrader(
 
 ### The renderer
 
-`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries four non-obvious behaviors, three of them accessibility fixes for issue #881.
+`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries several non-obvious behaviors.
 
 ```typescript
-// components/Survey.tsx:41-71
+// components/Survey.tsx
 const surveyJsonKey = useMemo(() => JSON.stringify(surveyJson ?? null), [surveyJson]);
 
 const survey = useMemo(() => {
@@ -390,11 +390,19 @@ const survey = useMemo(() => {
 }, [surveyJsonKey]);
 ```
 
-- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor (`:33-41`).
-- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync (`:53-61`).
-- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing (`:62-64`).
+- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor.
+- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync.
+- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing.
 
-The theme is applied in an effect from the Chakra color mode (`:73-79`).
+The theme is applied in an effect from the Chakra color mode.
+
+#### Database title override
+
+The component accepts an optional `title` prop. When provided, it overrides the title stored in the SurveyJS JSON — the visual builder writes a placeholder `"Survey Name"` into every new survey's JSON, so without this override the student survey page would show that placeholder instead of the survey's real name.
+
+The override is applied in a layout effect (before paint) so the title is never visible in its placeholder form. While a database title is set, SurveyJS's text processor is bypassed for the title string, so `{q1}` in a database title shows as typed rather than being replaced with the student's answer to `q1`. When the `title` prop is cleared, the JSON title is restored with `locTitle.setJson` so per-locale title objects come back correctly.
+
+Callers that already show the survey title as their own heading (the response page, the submission Survey panel) do not pass `title`, so the SurveyJS title is hidden inside those views to avoid repeating it.
 
 ### Survey JSON structure
 
@@ -513,22 +521,35 @@ Note that the client sets `submitted_at` explicitly even though `set_survey_subm
 
 ### Autosave
 
-Autosave is gated on `allow_response_editing` and returns early when the flag is off:
+Autosave runs on every survey regardless of `allow_response_editing`. The flag only controls whether a student can edit their response after submitting:
 
 ```typescript
-// app/course/[course_id]/surveys/[survey_id]/page.tsx:236-260
-const handleValueChanged = useCallback((surveyModel: Model) => {
-  if (!private_profile_id || !surveyId || !allowResponseEditing) return;
-  if (isSubmittingRef.current || hasSubmittedRef.current) return;
-  // debounced by AUTOSAVE_DEBOUNCE_MS, trailing edge only
-}, [private_profile_id, surveyId, allowResponseEditing, saveResponseToDb]);
+// app/course/[course_id]/surveys/[survey_id]/page.tsx
+const shouldAutosaveResponse = (isSubmitted: boolean, allowEditing: boolean) =>
+  !isSubmitted || allowEditing;
 ```
 
-With the flag off, nothing is persisted until the student clicks Complete. That is the behavior the user-facing pages describe, and it is enforced here rather than in RLS: `can_respond_to_survey` would accept the draft insert either way.
+Autosaves are serialized: each save chains on the previous one, and only the newest queued save is sent when multiple edits arrive while one is in flight. `Complete` waits for the whole chain before writing the final submitted row, so a slow in-flight autosave cannot overwrite the submission.
+
+`allow_response_editing` governs only the post-submit path: `shouldAutosaveResponse` returns false for a submitted response on a survey without editing, so no further autosaves go out after `Complete`.
 
 Submit and autosave race by construction, since SurveyJS fires a final `onValueChanged` on blur. `handleSurveyComplete` cancels any pending autosave timer, awaits any in-flight one, and only then writes, so the submit is guaranteed to be the last write (`:196-207`). `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense (`:147`). Preserve both if you touch this.
 
 Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode (`:313-314`).
+
+## Duplicate question name validation
+
+SurveyJS stores every answer under the question's answer key — `valueName` when set, otherwise the question's `name` cleaned by `Question.getValidName` (trim, drop the first `|`, drop `{` and `}`, drop leading `#`s). Two questions with the same effective key share one answer slot: answering the second clears the first, and a required question can appear complete while its answer is empty.
+
+A `BEFORE INSERT/UPDATE` trigger (`supabase/migrations/20261106130000_unique_survey_question_names.sql`) refuses to move a survey to `published` when any two questions resolve to the same answer key. The check walks `pages`, `elements`, `panel` and `flowpanel` groups, and `paneldynamic` template elements. It applies the same key rules as SurveyJS: a truthy `valueName` is used as-is, HTML and image elements (`questionnonvalue` types) are skipped, and `getValidName` is applied to bare names.
+
+The trigger exempts updates that do not change `status` or `questions` on an already-published survey, so closing a survey, extending its due date, or changing its settings still works even if the survey was published before the check was added. Reopening a closed survey with duplicate names is refused: that transition is a publish, and the trigger treats it the same way.
+
+The visual builder highlights repeated **Question name** fields live as you type. Drafts may keep duplicates so that work in progress can be saved and fixed before publishing.
+
+<Note>
+Some question types — dropdowns, matrices, and questions with a `valueName` — cannot have their name changed in the Visual Builder. If the refusal message names one of these, edit the survey as raw JSON to rename it.
+</Note>
 
 ## CSV export
 

@@ -1,0 +1,146 @@
+---
+title: "Forgejo and Coder Integration"
+description: "Deploy Forgejo as a self-hosted Git provider and Coder for cloud development environments, with Pawtograder as the identity provider"
+icon: "git-branch"
+---
+
+# Forgejo and Coder Integration
+
+Pawtograder's Helm chart can optionally deploy [Forgejo](https://forgejo.org/) as a self-hosted Git provider and [Coder](https://coder.com/) for cloud development environments. Both services authenticate through Pawtograder's OAuth 2.1 / OIDC server, so students and staff sign in with their existing Pawtograder credentials.
+
+## Overview
+
+| Component | Role |
+|---|---|
+| Forgejo | Self-hosted Git forge; hosts student and staff repositories instead of GitHub |
+| Forgejo Actions runner | Runs grading workflows inside the cluster instead of on GitHub-hosted runners |
+| Coder | Provides browser-based development environments (workspaces) for students |
+| Pawtograder OAuth server | Issues OIDC tokens so Forgejo and Coder can offer "Sign in with Pawtograder" |
+
+These components are all optional. A deployment can run Forgejo without Coder, or neither, and continue using GitHub for repositories.
+
+## Enabling Forgejo and the Actions runner
+
+Set `forgejo.enabled=true` in your Helm values. The chart deploys Forgejo 15 at the pinned version and, when `forgejoRunner.enabled=true`, a Forgejo Actions runner alongside it.
+
+```yaml
+forgejo:
+  enabled: true
+
+forgejoRunner:
+  enabled: true
+  quota: 20          # Maximum concurrent grading jobs; sized against the job namespace's ResourceQuota
+  actions:
+    mirrors:
+      - actions/checkout
+      - pawtograder/assignment-action
+```
+
+### Actions mirrors
+
+Forgejo Actions jobs clone their actions from GitHub by default. With the runner enabled, the chart keeps pull mirrors of the repositories listed under `forgejoRunner.actions.mirrors` inside Forgejo itself, and points `DEFAULT_ACTIONS_URL` at the Forgejo service. This means grading continues even during a GitHub outage.
+
+The default mirror list includes `actions/checkout` and `pawtograder/assignment-action`. Add any other actions your grading workflows use.
+
+### Grading workflow for Forgejo
+
+The Forgejo version of `grade.yml` differs from the GitHub version in two ways: the runner image already has the language toolchain installed (no `setup-*` steps needed), and `concurrency.cancel-in-progress` must be `false` to prevent a new push from cancelling an earlier grading run.
+
+```yaml
+# examples/forgejo-grade.yml
+name: Grade
+on: [push]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false   # Required: do not cancel earlier grading runs
+
+jobs:
+  grade:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pawtograder/assignment-action@v4
+        with:
+          grading_server: https://api.your-instance.example.edu
+          action_ref: ${{ github.action_ref }}
+          action_repository: ${{ github.action_repository }}
+```
+
+### Capacity sizing
+
+Set `forgejoRunner.quota` to the number of concurrent grading jobs you want to allow. The chart render fails if the job pods would not fit the job namespace's `ResourceQuota`, and it tells you how many would fit. Use the load-test script at `tests/forgejo-actions-load.sh` to measure queue wait and peak concurrency before committing to a capacity.
+
+## Enabling Coder
+
+Set `coder.enabled=true`. The chart deploys Coder 2.37 at the pinned version.
+
+```yaml
+coder:
+  enabled: true
+```
+
+## Network security requirements
+
+Job pods and Coder workspaces run student code. Before enabling either, you must satisfy one of these conditions:
+
+- `networkPolicy.cilium.enabled=true` — renders a `CiliumNetworkPolicy` with egress-deny rules for job pods and workspaces (see below)
+- `networkPolicy.cniEnforcesEgress=true` — asserts that your CNI enforces the chart's existing egress policies
+- postgres-meta and Studio are disabled, and Kong's admin API is off or moved to the status endpoint
+
+The chart render fails with an explanation if you enable Forgejo runner or Coder without meeting one of these conditions.
+
+### Cilium network policy
+
+When `networkPolicy.cilium.enabled=true`, the chart renders a namespaced `CiliumNetworkPolicy` that denies egress from job pods and workspaces to:
+
+- Other namespaces' pods, except kube-dns and (for workspaces) the ingress controller
+- The release's own pods, except Forgejo's HTTP port and coderd's 8080/8443
+- Other pods in the job or workspace namespace
+- Node ports other than 80 and 443 (including the kube-apiserver)
+- Private CIDRs
+
+A deny rule wins over any cluster-wide allow, so this holds regardless of other policies in the cluster.
+
+<Warning>
+A Ripley install without the Cilium deny policy in place is not safe for real students. Job pods can reach postgres-meta's POST /query (which runs arbitrary SQL as postgres), Studio (no login inside the cluster), and Kong's admin API (which can replace routes). Enable the Cilium policy or disable those services before running student code.
+</Warning>
+
+## OAuth / OIDC identity provider
+
+Pawtograder acts as an OAuth 2.1 / OIDC identity provider through Supabase Auth's OAuth server. Forgejo and Coder register as OAuth clients and offer "Sign in with Pawtograder" to their users.
+
+### Consent page
+
+When a user authorizes Forgejo or Coder for the first time, they are redirected to `/oauth/consent` on the Pawtograder web app. The consent page shows the application name and the scopes it is requesting, and records the user's Approve or Deny choice. Subsequent authorizations from the same application skip the consent page if the user has already approved.
+
+The `profile` scope grants access to the user's name and email address. The name claim is the user's email address (Pawtograder does not expose display names through OIDC).
+
+### Sign-in flow
+
+The OAuth flow carries the authorization state through sign-in and sign-up:
+
+- A user who is not signed in is redirected to `/sign-in` with the consent page as the return path.
+- A user who signs up during the flow is redirected back to the consent page after their account is confirmed.
+- A user who denies the request is sent back to the application with an `access_denied` error.
+
+### Redirect validation
+
+All redirect URIs are validated against the registered client's allowed list. Protocol-relative URIs (`//attacker.example`), URIs with control characters or backslashes, and URIs that resolve to a different origin are rejected.
+
+## Assignment provider routing
+
+Each assignment in Pawtograder has a `git_provider` field (`github` or `forgejo`). Edge functions that create repositories, sync permissions, trigger grading, and clone code route through a `GitProvider` interface (`supabase/functions/_shared/GitProvider.ts`) that dispatches to the correct implementation based on this field.
+
+### Job token validation
+
+Grading workflows authenticate to Pawtograder's autograder edge functions with an OIDC job token issued by the Actions runner. The token's issuer (`iss`) determines which key set is used for verification:
+
+- GitHub's issuer (`https://token.actions.githubusercontent.com` and enterprise variants) uses GitHub's JWKS endpoint.
+- A Forgejo instance uses its own JWKS endpoint, only when `FORGEJO_URL` is configured in the edge function environment.
+
+The token's audience (`aud`) must be the provider's default: `<host>/<repository_owner>`. Any other audience is rejected. The verified claims carry a `provider` field (`github` or `forgejo`), and the autograder functions check that the token's provider matches the repository's `git_provider` before doing any work.
+
+<Note>
+A GitHub token naming a Forgejo repository, or a Forgejo token naming a GitHub repository, is rejected even if the repository name matches. The provider check runs before any database write or GitHub/Forgejo API call.
+</Note>
