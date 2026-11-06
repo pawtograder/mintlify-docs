@@ -6,6 +6,27 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Roles and capabilities
+- **Custom grader roles with fine-grained capabilities** — Instructors can now create custom grader roles (for example, "Head TA") and assign capabilities to them. Capabilities control specific actions such as managing assignments, publishing groups, managing review assignments, and managing roles. Custom roles inherit the default grader role's capabilities and can only add to them. A role manager can only grant capabilities they themselves hold. See [Roles and capabilities](/developers/roles-and-capabilities) ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+#### Surveys
+- **Survey drafts always autosave** — Answers in progress now autosave on every survey, regardless of whether response editing is allowed. The **Allow Response Editing** setting only controls whether a student can change their answers after clicking **Complete** ([#977](https://github.com/pawtograder/platform/pull/977))
+- **Survey pages show the correct title** — The student survey page, Student Preview, and response views now show the survey's database title instead of the placeholder "Survey Name" that the visual builder writes into the JSON. Renaming a survey while a student is answering it updates the title without losing their answers ([#1002](https://github.com/pawtograder/platform/pull/1002))
+- **Drafts stay off the live responses list** — In-progress drafts no longer appear in the instructor's responses table, Total Responses count, Response Rate, or CSV export. Only submitted responses are counted ([#977](https://github.com/pawtograder/platform/pull/977))
+
+#### Realtime
+- **Class row updates broadcast to students and staff** — Changes to a class's settings now broadcast to both the students and staff realtime topics, so open pages can react without a reload ([#1145](https://github.com/pawtograder/platform/pull/1145))
+
+#### Groups
+- **Safer group repository cleanup** — Group repository deletions are now fail-safe and pre-release group repositories are deferred, preventing errors when dissolving groups before an assignment is released ([#1174](https://github.com/pawtograder/platform/pull/1174))
+
+#### Security
+- **Actions job tokens verified by issuer and audience** — GitHub Actions job tokens are now validated against both the issuer and the default audience, tightening the token verification for autograding workflows ([#1153](https://github.com/pawtograder/platform/pull/1153))
+
 ## August 2026
 
 ### August 19, 2026
