@@ -117,6 +117,12 @@ The `id-token: write` permission is required so the action can request an OIDC t
 </Warning>
 
 <Note>
+**Forgejo Actions.** Deployments that run Forgejo instead of GitHub use the same `grade.yml` structure, but with a Forgejo-hosted runner label and without the `actions/setup-java` (or equivalent) steps — the runner image ships the toolchain. See `examples/forgejo-grade.yml` in the platform repository for a reference workflow. Set `concurrency.cancel-in-progress: false` in the Forgejo workflow; without it, a new push cancels the student's earlier grading run.
+
+The grading server verifies each job token's issuer and audience. GitHub tokens are accepted by default. Forgejo tokens are accepted only when `FORGEJO_URL` is configured on the deployment, and only for repositories whose `git_provider` is set to `forgejo`. A token from one provider cannot reach a repository on the other.
+</Note>
+
+<Note>
 **Runner label and action version.** `runs-on: ubuntu-latest` and
 `pawtograder/assignment-action@v4` are the portable defaults: they work on any
 GitHub-hosted runner and on any Pawtograder deployment. Both `v4` and `v3` of the action
