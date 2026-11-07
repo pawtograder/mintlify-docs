@@ -227,7 +227,7 @@ Use the available date to schedule surveys in advance without manually publishin
 
 ### Response Editing Control
 
-Toggle **Allow Response Editing** to control whether students can modify their submissions. The form summarizes it as: "When on, changes auto-save. When off, a student's first submission is final."
+Toggle **Allow Response Editing** to control whether students can modify their submissions after they click **Complete**.
 
 **Enabled:**
 
@@ -237,9 +237,14 @@ Toggle **Allow Response Editing** to control whether students can modify their s
 
 **Disabled:**
 
-- Nothing is saved until the student clicks **Complete**, so a student who closes the page loses their answers
+- Answers still autosave as the student works, so a student can close the page and return to a partly finished survey
 - After submitting, the student sees a yellow banner reading "This survey has been submitted and cannot be edited." and the survey renders read-only
 - The original submission time is preserved
+
+<Note>
+Answers in progress autosave either way. **Allow Response Editing** only controls
+whether a student can change their response *after* clicking **Complete**.
+</Note>
 
 The button on the student's survey list reads **Start Survey**, **Continue Survey**, or **View Submission** based on their own progress, not on this setting.
 
@@ -642,8 +647,31 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- Rejects surveys where two or more questions share the same answer key (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+#### Duplicate question names
+
+Every question in a published survey must have a unique name, because SurveyJS
+saves each answer under its question's name. If two questions share a name, one
+answer overwrites the other and a required question can appear answered while
+staying empty.
+
+Pawtograder checks for duplicates when you publish. If any are found, the
+publish is refused with a message naming each repeated question, where it
+appears, and how to rename it. Drafts may keep duplicate names so that
+work in progress can be saved and fixed later.
+
+<Note>
+Some question types — dropdowns, matrices, and questions inside panels — do not
+have a name field in the Visual Builder. To rename them, switch to the
+**JSON editor** and update the `name` property directly.
+</Note>
+
+A survey that was published before this check was added and has duplicate names
+can still be edited and closed, but it cannot be reopened (closed → published)
+until the duplicates are renamed. Renaming is allowed while the survey is closed.
 
 ## Saving Survey Templates
 
