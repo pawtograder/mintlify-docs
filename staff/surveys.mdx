@@ -227,17 +227,17 @@ Use the available date to schedule surveys in advance without manually publishin
 
 ### Response Editing Control
 
-Toggle **Allow Response Editing** to control whether students can modify their submissions. The form summarizes it as: "When on, changes auto-save. When off, a student's first submission is final."
+Toggle **Allow Response Editing** to control whether students can modify their submissions after they click **Complete**.
+
+Answers in progress autosave on every survey, regardless of this setting, so a student can always close the page and return to a partly finished survey without losing their work.
 
 **Enabled:**
 
-- Answers autosave as the student works, so a student can close the page and come back to a partly finished survey
 - After submitting, the student sees a green banner reading "You can edit your response since editing is allowed for this survey." and can submit again
 - Each re-submission updates the recorded submission time
 
 **Disabled:**
 
-- Nothing is saved until the student clicks **Complete**, so a student who closes the page loses their answers
 - After submitting, the student sees a yellow banner reading "This survey has been submitted and cannot be edited." and the survey renders read-only
 - The original submission time is preserved
 
@@ -642,8 +642,25 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- Rejects surveys where two or more questions share the same answer key (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+### Unique question names
+
+Every question in a survey must have a unique **Question name** (the answer key SurveyJS uses to store responses). Publishing is refused — by both the form and the database — when two questions share a name.
+
+The error message names each repeated question, its location in the survey, and where to rename it. Some question types (dropdowns, matrices, and questions with a **Value name** set) can only be renamed in the JSON editor, not in the Visual Builder.
+
+**Drafts may keep duplicate names** so that work in progress can be saved and fixed before publishing.
+
+<Warning>
+A survey that was published before this check was introduced and then closed cannot be reopened until the duplicate names are renamed. Renaming is allowed while the survey is closed. Answers already collected under a shared key are preserved.
+</Warning>
+
+<Note>
+The Visual Builder numbers new default question names across the whole survey (not per page), and highlights any repeated **Question name** fields while you edit, so duplicates are visible before you try to publish.
+</Note>
 
 ## Saving Survey Templates
 

@@ -121,6 +121,7 @@
             "group": "Course Settings",
             "pages": [
               "staff/course-settings",
+              "staff/roles",
               "staff/feature-flags",
               "staff/lab-sections",
               "staff/flashcard-decks",
