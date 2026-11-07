@@ -6,6 +6,21 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 7, 2026
+
+#### Roles and capabilities
+- **Custom grader roles** — Instructors can now create custom grader roles (for example, "Head TA") with fine-grained capabilities. Four capabilities control access to specific features: `manage_review_assignments` (Bulk Assign and Reassign), `publish_groups` (editing groups), `manage_assignments` (creating and editing assignments), and `manage_roles` (managing roles). Graders without a capability see the relevant controls hidden or are redirected away. See [Roles and capabilities](/staff/roles) ([#1010](https://github.com/pawtograder/platform/issues/1010))
+
+#### Surveys
+- **Unique question names enforced** — Publishing a survey is now refused when two or more questions share the same answer key. The error message names each repeated question and where to rename it. Drafts may keep duplicates. A survey closed with duplicate names from before this check cannot be reopened until the names are fixed ([#1005](https://github.com/pawtograder/platform/issues/1005))
+- **Autosave on every survey** — Survey answers in progress now autosave on all surveys, not only those with **Allow Response Editing** turned on. The setting now controls only whether a submitted response can be changed after clicking **Complete** ([#977](https://github.com/pawtograder/platform/issues/977))
+- **Survey pages show the database title** — The student survey page, Student Preview, and response views now show the title you set in the survey form rather than the placeholder "Survey Name" from the SurveyJS JSON ([#1002](https://github.com/pawtograder/platform/issues/1002))
+
+#### LMS grade sync
+- **Grade push failures now surface correctly** — Failures in the LTI grade-push queue no longer hide inside a 200 response. A failed queue read returns 500, per-assignment failures are captured to Sentry, and a drain with any failure returns 500 with a count. Rows whose class has grade sync disabled are deferred rather than blocking the queue, and a repeatedly failing row is moved to the back so it cannot starve newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+
 ## August 2026
 
 ### August 19, 2026
