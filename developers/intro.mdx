@@ -75,6 +75,65 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Capabilities
+
+On top of the four `app_role` values, every class has a set of **class roles** made of capabilities. Each person in a class is linked to one class role, and the class role determines which fine-grained actions they can take.
+
+Every new class gets four default class roles:
+
+| Class role | Default capabilities |
+|------------|---------------------|
+| `instructor` | `manage_review_assignments`, `publish_groups`, `manage_assignments`, `manage_roles` |
+| `grader` | (none by default) |
+| `student` | (none) |
+| `admin` | (none) |
+
+Instructors can create custom grader roles (e.g. "Head TA") that add capabilities on top of the default grader role. A custom role can only add capabilities, not remove them from the default.
+
+The four capabilities and what they gate:
+
+| Capability | What it controls |
+|------------|-----------------|
+| `manage_review_assignments` | Bulk Assign and Reassign grading tasks |
+| `publish_groups` | Creating, editing, and publishing group changes on Manage Groups |
+| `manage_assignments` | Creating and editing assignments (New Assignment, Edit Assignment) |
+| `manage_roles` | Creating and managing custom grader roles |
+
+**Writing a policy that checks a capability:**
+
+Always use `user_class_ids_with_capability(capability_name)` in a policy `TO authenticated`. Never look up the capability directly from `role_capabilities`, because that only finds the user's own class role and misses capabilities inherited from the default grader role.
+
+```sql
+-- Correct
+CREATE POLICY "manage_assignments holders can insert"
+  ON assignments FOR INSERT
+  TO authenticated
+  USING (class_id = ANY(user_class_ids_with_capability('manage_assignments')));
+
+-- Wrong — misses capabilities from the default grader role
+CREATE POLICY "bad example"
+  ON assignments FOR INSERT
+  TO authenticated
+  USING (EXISTS (
+    SELECT 1 FROM role_capabilities rc
+    JOIN user_roles ur ON ur.class_role_id = rc.class_role_id
+    WHERE ur.user_id = auth.uid() AND rc.capability = 'manage_assignments'
+  ));
+```
+
+This policy pattern replaces `authorizeforclassinstructor` for any action that should be delegatable to a custom grader role. `authorizeforclassinstructor` remains correct for actions that must stay instructor-only (reading and deleting assignments, managing enrollments, etc.).
+
+**Reading capabilities in the frontend:**
+
+Use the `useCapability(capability)` hook. It reads `user_class_capabilities()`, the same function the database policies use, so the page and the database always agree.
+
+```typescript
+const canManageAssignments = useCapability('manage_assignments');
+// returns true | false | undefined (loading)
+```
+
+The hook re-fetches when the viewer's own role or any role's capabilities change, or when the staff realtime channel reconnects.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
