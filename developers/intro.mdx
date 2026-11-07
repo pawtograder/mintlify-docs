@@ -75,6 +75,28 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Capabilities
+
+On top of `app_role`, every class has a set of **class roles** (`class_roles` table) made up of capabilities. Each person in a class is linked to one class role through `user_roles.class_role_id`. The four default class roles mirror the four `app_role` values; instructors can also create custom grader roles.
+
+Capabilities are stored in `role_capabilities` and checked through two SQL functions:
+
+- `user_class_capabilities(user_id, class_id)` — returns the set of capabilities the user holds in that class, combining their class role's own capabilities with the default grader role's capabilities (for custom grader roles).
+- `user_class_ids_with_capability(user_id, capability)` — returns the set of class IDs where the user holds a given capability. **Use this in RLS policies**, not an inline join, because an inline join only finds the user's own class role and misses the default grader role's capabilities.
+
+The four capabilities and their default holders:
+
+| Capability | Default holder |
+|---|---|
+| `manage_assignments` | instructor |
+| `manage_review_assignments` | instructor |
+| `publish_groups` | instructor |
+| `manage_roles` | instructor |
+
+When you add a new capability, add it to the `class_capability` enum, grant it to the instructor role in a migration, and write any new RLS policies using `user_class_ids_with_capability`. See `docs/capabilities.md` in the repository for the full policy rule and worked examples.
+
+The `useCapability(capability)` React hook reads `user_class_capabilities()` on the client and re-fetches when the viewer's role or any role's capabilities change (via the staff Realtime channel). Use it to show or hide UI controls; the database policy is the authoritative gate.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
