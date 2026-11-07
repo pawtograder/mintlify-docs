@@ -129,6 +129,67 @@ Components do not query Supabase directly. `TableController` (`lib/TableControll
 
 `utils/supabase/SupabaseTypes.d.ts` is generated and copied into `supabase/functions/_shared/`. Regenerate it with `npm run client-local` after a schema change; do not hand-edit it.
 
+## OAuth server (OIDC provider)
+
+Pawtograder can act as an OAuth 2.1 / OIDC identity provider, so tools like
+Forgejo and Coder can offer "Sign in with Pawtograder". This is enabled through
+Supabase Auth's OAuth server support.
+
+### Enabling the OAuth server
+
+In `supabase/config.toml`, set:
+
+```toml
+[auth.oauth_server]
+enabled = true
+consent_path = "/oauth/consent"
+```
+
+The consent page at `app/(auth-pages)/oauth/consent` shows the requesting
+application and its requested scopes, records the user's Approve or Deny
+decision, and forwards back to the application. When GoTrue already has the
+user's consent for that application, it forwards immediately without showing
+the page again.
+
+### Registering OAuth clients
+
+Register Forgejo and Coder as OAuth clients through the Supabase Auth admin
+API (GoTrue's `POST /admin/oauth/clients`). The chart's bootstrap scripts
+handle this automatically when `forgejo.enabled` or `coder.enabled` is set in
+the Helm values.
+
+### Scopes
+
+The OAuth server exposes the `openid`, `profile`, and `email` scopes. The
+`profile` scope provides the user's name (which is their email address) and
+the `email` scope provides their email address.
+
+### Redirect validation
+
+The OAuth server validates redirect URIs strictly. Each client's allowed
+redirect URIs must be registered at client-creation time; unregistered URIs
+are rejected before any user interaction. The `GOTRUE_URI_ALLOW_LIST` must
+include each web channel host with `/**` (not just `/*`, which stops at one
+path segment).
+
+### Sign-in flow
+
+1. The user clicks "Sign in with Pawtograder" in Forgejo or Coder.
+2. Forgejo/Coder redirects to Pawtograder's authorization endpoint with a
+   PKCE challenge.
+3. If the user is not signed in, they are sent to the sign-in page with the
+   OAuth return path preserved through the `redirect` query parameter.
+4. After sign-in (or if already signed in), the consent page is shown (or
+   skipped if consent was already given).
+5. Pawtograder redirects back to Forgejo/Coder with an authorization code.
+6. Forgejo/Coder exchanges the code for tokens and signs the user in.
+
+<Note>
+GoTrue requires PKCE on every authorization request. Forgejo skips PKCE on
+the first sign-in after a login source is added through the CLI, so the
+bootstrap scripts spend one request to satisfy this requirement.
+</Note>
+
 ## Contributing
 
 1. Fork the repository and create a feature branch.
