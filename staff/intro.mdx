@@ -47,6 +47,57 @@ A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
 
+Within **Manage Assignments**, graders only see controls they have been granted
+access to. By default, graders cannot create or edit assignments, manage review
+assignments, publish group changes, or manage roles. Instructors can grant these
+capabilities to individual graders through custom roles — see
+[Custom grader roles](#custom-grader-roles) below.
+
+## Custom grader roles
+
+Every course has four built-in roles: **instructor**, **grader**, **student**,
+and **admin**. Instructors can also create custom grader roles (for example,
+"Head TA") that extend the default grader role with additional capabilities.
+
+### Capabilities
+
+Each role is defined by a set of capabilities:
+
+| Capability | What it allows |
+|---|---|
+| `manage_assignments` | Create and edit assignments (New Assignment, Edit Assignment) |
+| `manage_review_assignments` | Bulk assign and reassign grading tasks |
+| `publish_groups` | Publish group changes on Manage Groups |
+| `manage_roles` | Create, rename, and delete custom grader roles and set their capabilities |
+
+The default **instructor** role holds all four capabilities. The default
+**grader** role holds none. A custom role can only add capabilities on top of
+the default grader role — it cannot remove capabilities the default grader role
+already has.
+
+### Creating a custom role
+
+1. Open **Course Settings → Enrollments** and navigate to the **Roles** tab
+   (visible only to instructors).
+2. Click **Add Role**, enter a name, and choose which capabilities to grant.
+3. Assign graders to the new role from the same page.
+
+<Note>
+`manage_roles` lets a role manager create and configure roles, but it does not
+let them assign people to roles — that stays instructor-only through the
+enrollment policies.
+</Note>
+
+### Effect on the UI
+
+Controls are hidden from graders who lack the required capability:
+
+- **New Assignment** and **Edit Assignment** are hidden without `manage_assignments`.
+- **Bulk Assign** and **Reassign** redirect to Grading Assignments without `manage_review_assignments`.
+- **Publish Changes** and all edit controls on Manage Groups are hidden without `publish_groups`.
+
+Instructors always see all controls regardless of role configuration.
+
 ## Key features
 
 - **Assignments**: distribute and grade programming assignments with autograders,
