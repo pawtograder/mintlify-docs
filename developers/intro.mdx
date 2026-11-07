@@ -129,6 +129,43 @@ Components do not query Supabase directly. `TableController` (`lib/TableControll
 
 `utils/supabase/SupabaseTypes.d.ts` is generated and copied into `supabase/functions/_shared/`. Regenerate it with `npm run client-local` after a schema change; do not hand-edit it.
 
+## Git provider abstraction
+
+The grading loop's repository operations are routed through a `GitProvider`
+interface (`supabase/functions/_shared/GitProvider.ts`) rather than calling
+GitHub directly. `getGitProvider()` returns a GitHub implementation today;
+a Forgejo implementation can sit beside it without touching each caller.
+
+The interface covers four operations:
+
+| Method | Description |
+|---|---|
+| `createRepo` | Create a student or grader repository |
+| `syncRepoPermissions` | Sync collaborator access to a repository |
+| `startGrading` | Trigger the grading workflow (replaces `triggerWorkflow(repo, sha, "grade.yml")`) |
+| `cloneRepository` | Clone a repository for grading |
+
+Each assignment row carries a `git_provider` column (`github` or `forgejo`).
+Edge functions that create or operate on repositories read this column and
+call `getGitProvider(git_provider)` to get the right implementation.
+
+### Job token validation
+
+`validateOIDCToken` picks the JWKS endpoint by the token's `iss` claim:
+GitHub's issuer (and enterprise issuers under it) as before, and a Forgejo
+instance only when `FORGEJO_URL` is set. Any other issuer is rejected before
+any key is fetched.
+
+The `aud` claim must be the provider's default audience
+(`<host>/<repository_owner>`), which is what `assignment-action` sends when
+it requests no audience. This rejects a token the same job minted for another
+service.
+
+`validateOIDCToken` and `validateOIDCTokenOrAllowE2E` take an
+`allowedProviders` parameter (default `["github"]`). Callers opt in to
+Forgejo once they compare the token's provider with the repository's
+`git_provider`.
+
 ## OAuth server (OIDC provider)
 
 Pawtograder can act as an OAuth 2.1 / OIDC identity provider, so tools like
