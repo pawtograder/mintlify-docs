@@ -201,6 +201,12 @@ Run `scripts/setup-sso-clients.sh` to register both OAuth clients in Pawtograder
 
 **Job token security:** The autograder verifies Actions job tokens by issuer. GitHub tokens are accepted by default; Forgejo tokens are accepted only when `FORGEJO_URL` is set in the edge function environment. Each token is also bound to the repository's configured Git provider, so a GitHub token cannot reach a Forgejo repository and vice versa.
 
+### GitProvider abstraction
+
+Edge functions that operate on repositories go through `supabase/functions/_shared/GitProvider.ts` rather than calling GitHub directly. `getGitProvider()` returns a `GitProvider` implementation — currently GitHub — and a Forgejo implementation can be added alongside it without touching each caller. The interface covers `createRepo`, `syncRepoPermissions`, `startGrading`, and `cloneRepository`. `startGrading` replaces the previous `triggerWorkflow(repo, sha, "grade.yml")` call; every caller passed the same workflow name.
+
+When adding a new repository operation, implement it on the `GitProvider` interface and call it through `getGitProvider()` rather than importing `GitHubWrapper` functions directly.
+
 ## Contributing
 
 1. Fork the repository and create a feature branch.
