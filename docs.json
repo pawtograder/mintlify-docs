@@ -137,6 +137,7 @@
                 "group": "Setup & Configuration",
                 "pages": [
                   "staff/assignments/configuration",
+                  "staff/assignments/exam-grading",
                   "staff/assignments/testing",
                   "staff/assignments/repository-permissions"
                 ]
