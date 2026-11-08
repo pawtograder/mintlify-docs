@@ -635,15 +635,28 @@ Editing a published survey overwrites it rather than creating a second version. 
 
 **Best Practice**: If substantial changes are needed, leave the published survey alone. Save it to the Template Library, clone it into a new survey, and close the original.
 
-### Validation and Error Handling
+### Validation and error handling
 
 The system validates surveys before publishing:
 
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- Rejects duplicate question names (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+### Duplicate question names
+
+Each question's **Question name** field is the key under which its answer is stored. Two questions with the same name share one answer slot: answering the second clears the first, and a required question can appear complete while actually empty.
+
+Pawtograder refuses to publish a survey with duplicate question names. The error message names each repeated question, its location in the survey, and where to rename it. Drafts may keep duplicates so that work in progress can be saved and fixed later.
+
+<Note>
+A survey published before this check was added, then closed, cannot be reopened until the duplicate names are renamed. Renaming while closed is allowed. Answers already given under a shared key are preserved.
+</Note>
+
+The Visual Builder marks repeated **Question name** fields as you type. Questions inside panels, dropdowns, and matrices cannot be renamed in the Visual Builder — use the JSON editor or the SurveyJS documentation to rename them directly.
 
 ## Saving Survey Templates
 
