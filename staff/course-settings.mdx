@@ -55,6 +55,40 @@ instructor-only.
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+## Gemini API key
+
+The **Gemini API Key** page (`manage/course/gemini-key`) lets instructors store a course-owned Google Gemini API key for AI-assisted exam grading features such as OCR and template extraction.
+
+### Before you can save a key
+
+Saving a key requires the `gemini-api-key-setup` feature flag to be explicitly on for the course. Turn it on under **Course Settings → Feature flags**. The Gemini API Key page is always visible in the menu, but the **Save** and **Replace** buttons are disabled until the flag is on. Removing a previously saved key works regardless of the flag.
+
+### Saving and replacing a key
+
+1. Open **Course Settings → Gemini API Key**.
+2. If the flag is off, turn it on first under **Feature flags**.
+3. Enter your Gemini API key in the password field. The field is masked and excluded from analytics capture.
+4. Click **Save** (first key) or **Replace** (updating an existing key).
+
+The key is stored in Vault, not in the application database. Once saved, it cannot be viewed again through Course Settings. Pawtograder does not validate the key with Google at save time.
+
+### Removing a key
+
+Click **Remove** on the Gemini API Key page. Removal works whether or not the `gemini-api-key-setup` flag is on.
+
+<Warning>
+Removing the key is immediate and cannot be undone from the UI. Any exam grading features that depend on the key will stop working until a new key is saved.
+</Warning>
+
+### Status indicators
+
+The page shows two independent status indicators:
+
+- **Setup enabled / disabled** — whether the `gemini-api-key-setup` flag is on.
+- **Configured / not configured** — whether a key is currently stored.
+
+A key can be stored while setup is disabled (for example, if you turn the flag off after saving). In that state the key is still present but the Save/Replace buttons are disabled.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
