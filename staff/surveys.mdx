@@ -94,13 +94,15 @@ The visual builder uses SurveyJS, providing access to a wide variety of question
 
 1. Name the page if needed (optional, helps organize multi-page surveys)
 2. Click a question type button to add a new question (+ Short Text, + Long Text, etc.)
-3. Enter the question name (this becomes the column header in response exports)
+3. Enter the question name (this becomes the column header in response exports and the key under which the answer is stored — it must be unique across the whole survey)
 4. Add an optional description to provide context for students
 5. Mark questions as required using the **Required** toggle
 6. For choice-based questions, add and reorder answer options
 7. Use the arrow buttons (↑ ↓) to reorder questions
 8. Click the trash icon to delete a question
 9. Click **Use This Survey** when finished
+
+The builder warns you when two **Question name** fields match. Publishing is blocked until every question has its own name; see [Duplicate question names](#duplicate-question-names) for details.
 
 ### Multi-Page Surveys
 
