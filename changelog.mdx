@@ -6,6 +6,34 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 8, 2026
+
+#### Assignments
+- **Exam grading with OCR and student matching** — A new **Exam** assessment type lets you upload scanned paper exams, automatically match each page to the student who wrote it using OCR, and grade the matched submissions with rubrics and handgrading. See [Exam Grading](/staff/assignments/exam-grading) ([#814](https://github.com/pawtograder/platform/pull/814))
+- **Exam grading points box refresh** — When a grader selects a rubric option and then picks a different option worth the same number of points, the points box now refreshes to reflect the new selection ([#1203](https://github.com/pawtograder/platform/pull/1203))
+
+#### Course roles and capabilities
+- **Custom grader roles with capabilities** — Instructors can create custom grader roles (for example, "Head TA") that extend the default grader role with specific capabilities: `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. Controls that require a capability are hidden from graders who do not hold it. See [Custom grader roles and capabilities](/staff/intro#custom-grader-roles-and-capabilities) ([#1010](https://github.com/pawtograder/platform/issues/1010))
+- **manage_assignments gates assignment creation and editing** — New Assignment, Edit Assignment, and the (Edit) link on Manage Groups are hidden from graders without the `manage_assignments` capability. The create and edit pages also check the capability on the server ([#1199](https://github.com/pawtograder/platform/pull/1199))
+- **manage_review_assignments gates bulk assign and reassign** — Graders without `manage_review_assignments` no longer see the Bulk Assign and Reassign controls ([#1198](https://github.com/pawtograder/platform/pull/1198))
+- **publish_groups gates group management changes** — Graders without `publish_groups` can view groups, mentors, and the CSV export, but all change controls are hidden ([#1198](https://github.com/pawtograder/platform/pull/1198))
+
+#### AI assistance
+- **Course Gemini API key storage** — Instructors can save, replace, or remove a Google Gemini API key for their course. The key is stored encrypted in Vault and is used only by Gemini-backed features. Requires the `gemini-api-key-setup` feature flag. See [AI assistance → Course Gemini API key](/staff/ai-assistance#course-gemini-api-key) ([#1160](https://github.com/pawtograder/platform/pull/1160))
+
+#### Surveys
+- **Duplicate question names rejected at publish** — Publishing a survey whose questions share a name is now refused. The error message names each repeated question, where it appears, and how to rename it. Drafts may keep duplicates. A closed survey with duplicate names from before this check can be renamed while closed and then reopened. See [Surveys → Duplicate question names](/staff/surveys#duplicate-question-names) ([#1005](https://github.com/pawtograder/platform/issues/1005))
+
+#### Integrations
+- **LTI grade-push reliability** — Grade-push drain failures now surface as 500 responses and are captured to Sentry with class and assignment tags. Rows whose class has grade sync disabled are deferred rather than blocking the drain, and a failing row is moved to the back of the queue so it does not starve newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **OAuth server for Forgejo and Coder sign-in** — Pawtograder can now act as an OAuth 2.1 / OIDC identity provider so that Forgejo and Coder deployments on the same cluster can offer "Sign in with Pawtograder". Controlled by the Helm chart. See [Developer Guide → OAuth server](/developers/intro#oauth-server-sso-for-forgejo-and-coder) ([#1165](https://github.com/pawtograder/platform/pull/1165), [#1164](https://github.com/pawtograder/platform/pull/1164))
+- **Helm chart: optional Forgejo, Actions runner, and Coder** — The Helm chart now supports deploying Forgejo, a GitHub Actions runner, and Coder alongside Pawtograder on the same Postgres instance ([#1059](https://github.com/pawtograder/platform/pull/1059))
+
+#### Bug fixes
+- **Bug reporter redacted reports with replay** — The bug reporter now produces redacted reports with session replay, with PII stripped before transmission ([#1050](https://github.com/pawtograder/platform/pull/1050))
+
 ## August 2026
 
 ### August 19, 2026

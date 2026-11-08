@@ -47,6 +47,25 @@ A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
 
+### Custom grader roles and capabilities
+
+Instructors can create custom grader roles (for example, "Head TA") that extend the default grader role with additional capabilities. A grader on a custom role holds everything the default grader role holds, plus whatever the custom role adds.
+
+The four built-in capabilities that can be granted to custom roles are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | Bulk assign and reassign grading tasks |
+| `publish_groups` | Create, edit, and publish student groups |
+| `manage_assignments` | Create and edit assignments (including autograder settings and rubrics) |
+| `manage_roles` | Create and manage custom grader roles and their capabilities |
+
+Controls that require a capability are hidden from graders who do not hold it. For example, a grader without `manage_assignments` does not see **New Assignment** or the **Edit Assignment** menu item.
+
+Instructors always hold all four capabilities. Admins hold none.
+
+To manage custom roles, open **Course Settings → Enrollments** and look for the **Roles** section (requires the `manage_roles` capability or instructor access).
+
 ## Key features
 
 - **Assignments**: distribute and grade programming assignments with autograders,

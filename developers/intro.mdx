@@ -58,6 +58,12 @@ Two consequences for anything you build:
 - A missing policy fails closed and looks like a bug in your feature. If a query returns nothing, check the policy before the code.
 - A privileged path is not privileged because the UI hides it. Anything reachable with a service-role client bypasses RLS entirely, which is why the [MCP server](/developers/mcp-server#authorization) confines its service-role use to the authentication layer.
 
+### Capabilities
+
+In addition to the four `app_role` values, instructors can create custom grader roles that extend the default grader role with specific capabilities. The capability system is enforced in Postgres through `user_class_capabilities()` and `user_class_ids_with_capability()`. Policies that gate a capability use `user_class_ids_with_capability()` in a `TO authenticated` policy; they never look up the capability inline, because that lookup misses the default role's inherited capabilities.
+
+The four capabilities are `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. See `docs/capabilities.md` in the repository for the full policy rule and how to add a new capability.
+
 ### User roles
 
 `user_roles.role` is an `app_role`, and that enum has four values (`utils/supabase/SupabaseTypes.d.ts:13949`, `:14155`):
@@ -106,6 +112,27 @@ Prefer a Postgres RPC over a Next.js server action or an edge function for data 
 Components do not query Supabase directly. `TableController` (`lib/TableController.ts`) caches and loads data scoped to a context such as a course, assignment, submission, or discussion thread, and the realtime controllers in `lib/` extend it for live updates. Components consume all of it through the hooks in `hooks/`.
 
 `utils/supabase/SupabaseTypes.d.ts` is generated and copied into `supabase/functions/_shared/`. Regenerate it with `npm run client-local` after a schema change; do not hand-edit it.
+
+## OAuth server (SSO for Forgejo and Coder)
+
+Pawtograder can act as an OAuth 2.1 / OIDC identity provider so that Forgejo and Coder deployments on the same cluster can offer "Sign in with Pawtograder". This is an opt-in deployment feature controlled by the Helm chart.
+
+### How it works
+
+- `auth.oauthServer.enabled` in the chart turns on GoTrue's OAuth server and adds Kong routes for the OIDC discovery, JWKS, authorize, token, and userinfo endpoints. Those endpoints are reachable without an API key.
+- An OAuth consent page at `/oauth/consent` shows the requesting app and scopes, records Approve or Deny, and forwards straight back when GoTrue already has the user's consent.
+- `coder.oidc.enabled` and `forgejo.gitea.oauth` in the chart wire each app to Pawtograder as its OIDC provider.
+- `scripts/setup-sso-clients.sh` registers both OAuth clients and writes their credentials into Kubernetes Secrets.
+
+### Account creation on first sign-in
+
+By default, signing in to Forgejo or Coder with a Pawtograder account does **not** automatically create an account in those apps. Set `forgejo.gitea.oauth[].autoRegister: true` or `coder.oidc.allowSignups: true` in the chart to enable automatic account creation on first sign-in.
+
+Forgejo usernames are derived from the GoTrue subject (the user's UUID) rather than the email address, so two users with the same email prefix at different institutions do not collide.
+
+### Running the SSO end-to-end tests
+
+The repository includes an opt-in Playwright lane (`tests/e2e/forgejo-coder/`) that boots an isolated Supabase stack, Forgejo, and Coder, registers both as OAuth clients, and walks warm and cold sign-in, deny, and repeat sign-in journeys. Run it with `npm run test:e2e:forgejo-coder`. See `AGENTS.md` for the environment variables it needs.
 
 ## Contributing
 
