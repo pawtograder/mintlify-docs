@@ -75,6 +75,24 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Capabilities
+
+On top of the four app roles, every class has a capability system that lets instructors grant graders fine-grained permissions. Each class gets four default roles (instructor, grader, student, admin), and instructors can create custom grader roles that add capabilities on top of the default grader role.
+
+The four capabilities are `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. Instructors hold all four; the default grader role holds none.
+
+**How to check a capability in a policy:**
+
+Use `user_class_ids_with_capability(auth.uid(), 'manage_assignments')` in a policy `TO authenticated`. Never look up the capability directly from `role_capabilities` — that finds only the user's own class role and misses the default role's capabilities. See `supabase/docs/capabilities.md` in the repository for the full rule and examples.
+
+**How to check a capability in a component:**
+
+```tsx
+const canManageAssignments = useCapability("manage_assignments");
+```
+
+`useCapability` reads `user_class_capabilities()`, the same function the database policies use, so the page and the database always agree. The provider in the course layout fetches once per class page and re-fetches when the viewer's role or any role's capabilities change.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
