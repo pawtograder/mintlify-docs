@@ -109,3 +109,48 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Gemini API key
+
+Each course can store one Google Gemini API key for use by AI grading features.
+The key is held in Vault and is never returned through the interface — once saved,
+it cannot be viewed again through Course Settings.
+
+### Prerequisites
+
+The `gemini-api-key-setup` feature flag must be turned on before you can save a
+key. Open **Course Settings → Feature flags** and enable **Gemini API key setup**.
+You can check the status and remove an existing key whether or not the flag is on.
+
+### Saving or replacing a key
+
+1. Open **Course Settings → Gemini API Key**.
+2. The panel shows whether a key is already configured.
+3. Enter your Gemini API key in the password field. The field is masked and
+   excluded from analytics capture.
+4. Click **Save** (first key) or **Replace** (updating an existing key).
+
+Pawtograder does not validate the key with Google or turn on AI grading
+automatically. Storing a key is a prerequisite for AI grading features, not a
+guarantee that they are active.
+
+<Warning>
+The key input uses `autocomplete="one-time-code"` to suppress Chrome's password
+manager. Other browsers or future Chrome versions may behave differently. Do not
+rely on this as a security control — treat the key as a secret and rotate it if
+it may have been exposed.
+</Warning>
+
+### Removing a key
+
+Click **Remove** on the Gemini API Key page. Removal works whether or not the
+`gemini-api-key-setup` flag is on, so you can clean up a key even after the flag
+is turned off.
+
+### Security notes
+
+- The key is stored only in Vault. No RPC returns the key value; the page shows
+  only whether a key is configured.
+- Saving, replacing, and removing a key each lock the course row, so two
+  concurrent saves cannot corrupt the stored value.
+- Deleting the course removes the Vault secret automatically.
