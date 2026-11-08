@@ -58,6 +58,40 @@ instructor-only.
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+## Custom grader roles and capabilities
+
+Instructors can create custom grader roles — for example, "Head TA" — and grant
+them additional capabilities beyond the default grader role. Custom roles build
+on the default grader role: a capability added to the default grader role
+automatically reaches every grader, and a custom role can only add capabilities,
+not remove them.
+
+### Available capabilities
+
+| Capability | What it allows |
+|---|---|
+| `manage_review_assignments` | Bulk assign and reassign grading; access the Grading Assignments page |
+| `publish_groups` | Create, edit, and publish groups on the Manage Groups page |
+| `manage_assignments` | Create and edit assignments, sync repositories, and create student repos |
+| `manage_roles` | Create, rename, and delete custom grader roles; set their capabilities |
+
+Instructors hold all four capabilities. The default grader role holds none.
+`manage_roles` does not let a role manager assign people to roles — that stays
+instructor-only through the enrollment policies.
+
+### Managing custom roles
+
+Instructors can manage custom roles from **Course Settings → Enrollments** (or
+wherever the role management UI is surfaced in your deployment). A role manager
+can only grant capabilities they themselves hold in that class.
+
+Rules:
+- Role names must be non-blank and unique (case-insensitive).
+- The four default roles (instructor, grader, student, admin) cannot be modified.
+- A role that has members cannot be deleted.
+- Changing a person's app role (for example, from grader to student) always moves
+  them to that role's default, overriding any custom role assignment.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
