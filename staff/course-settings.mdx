@@ -59,6 +59,42 @@ instructor-only.
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+## Gemini API key
+
+Each course can store one Google Gemini API key for use by AI-assisted features
+such as exam OCR and template extraction. The key is held in Vault and is never
+returned through the Course Settings page — once saved, it can be replaced or
+removed but not viewed again.
+
+Open **Course Settings → Gemini API Key**. The page shows two status indicators:
+
+- **Setup enabled** — whether the `gemini-api-key-setup` feature flag is on for
+  this course. Saving or replacing a key requires this to be enabled; removing
+  the key works regardless.
+- **Configured** — whether a key is currently stored.
+
+To save or replace a key, enter it in the **API Key** field (masked as a
+password field) and click **Save**. The field is cleared after every request
+whether it succeeds or not. To remove the stored key, click **Remove**.
+
+<Note>
+Storing a key does not validate it with Google and does not turn on AI grading.
+It only makes the key available to the platform's AI-assisted features when they
+run for this course.
+</Note>
+
+<Warning>
+The key input uses `autocomplete="one-time-code"` to suppress browser
+password-save prompts. Most browsers will not offer to save it, but behavior
+varies. Do not store a key you would not want a browser extension or password
+manager to capture.
+</Warning>
+
+To enable the **Gemini API Key** entry, turn on the `gemini-api-key-setup` flag
+under **Course Settings → Feature flags**. The nav entry is always visible to
+instructors regardless of the flag; the flag only gates saving and replacing the
+key.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
