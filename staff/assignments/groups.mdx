@@ -43,6 +43,14 @@ groups stay staged for you to retry, and you get a "Published with
 errors" toast.
 
 <Note>
+Creating, editing, and publishing group changes requires the `publish_groups`
+capability. Graders without it see **Manage Groups** in read-only mode: the
+groups table, mentor assignments, and CSV export are available, but all change
+controls are hidden. Instructors can grant `publish_groups` to a custom grader
+role — see [Custom grader roles and capabilities](/staff/intro#custom-grader-roles-and-capabilities).
+</Note>
+
+<Note>
 Adding or removing a member notifies the group's other members, including
 when the change comes from publishing. That notification is suppressed
 while the assignment is unreleased, so you can prepare and adjust groups
