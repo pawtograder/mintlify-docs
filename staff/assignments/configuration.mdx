@@ -17,6 +17,10 @@ few settings that shape the student experience live somewhere else
 entirely; those are collected at the end under
 [Settings that are not on this form](#settings-that-are-not-on-this-form).
 
+<Note>
+Creating and editing assignments requires the `manage_assignments` capability. By default only instructors hold this capability, but instructors can grant it to custom grader roles. A grader without `manage_assignments` does not see **New Assignment** or the **Edit Assignment** nav item, and the `/new` and `/edit` pages redirect them back to the assignment list.
+</Note>
+
 Group-specific settings are covered in
 [Groups](/staff/assignments/groups); the extension and late-token
 workflow is in [Extensions](/staff/assignments/extensions).
