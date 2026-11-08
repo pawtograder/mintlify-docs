@@ -6,6 +6,25 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 7–8, 2026
+
+#### Surveys
+- **Duplicate question names blocked at publish** — Publishing a survey is now refused when two or more questions share the same answer key. The Visual Builder warns you while you edit, and the error message names each duplicate and tells you where to rename it. Drafts may keep duplicates so work in progress can be saved and fixed later. A survey published before this check was added and then closed cannot be reopened until its duplicate names are resolved ([#1005](https://github.com/pawtograder/platform/pull/1005))
+- **Autosave works on all surveys** — Survey answers now autosave as the student works regardless of whether the survey allows response editing. Previously, autosaves were skipped on surveys with editing disabled, so a student who closed the page before clicking Complete lost their answers. The **Allow Response Editing** setting now only controls whether a submitted response can be changed, not whether drafts are saved ([#977](https://github.com/pawtograder/platform/pull/977))
+- **Survey title shows the database title** — The survey page now shows the title you set in the survey form, not the placeholder "Survey Name" that the Visual Builder writes into the survey JSON. Renaming a survey while a student is answering it updates the title in place without losing their answers or resetting the page ([#1002](https://github.com/pawtograder/platform/pull/1002))
+
+#### Assignments and roles
+- **Custom grader roles with capabilities** — Instructors can now create custom grader roles (such as "Head TA") under **Course Settings → Enrollments → Roles**. A custom role extends the default grader role with one or more capabilities: `manage_assignments` (create and edit assignments), `manage_review_assignments` (bulk assign and reassign grading), and `publish_groups` (manage group membership). Controls that require a capability are hidden from graders who do not hold it ([#1010](https://github.com/pawtograder/platform/pull/1010))
+- **Exam grading with OCR and student matching** — Added an exam grading system that uses OCR to extract answers from scanned exam papers and matches them to students ([#814](https://github.com/pawtograder/platform/pull/814))
+
+#### Infrastructure
+- **Pawtograder as an OAuth/OIDC provider** — Pawtograder can now act as an OAuth 2.1 / OIDC identity provider, allowing Forgejo and Coder to offer "Sign in with Pawtograder". An OAuth consent page shows the requesting app and scopes. This is an opt-in deployment feature configured in the Helm chart ([#1164](https://github.com/pawtograder/platform/pull/1164), [#1165](https://github.com/pawtograder/platform/pull/1165))
+- **Forgejo and Coder in the Helm chart** — The Helm chart now supports optional Forgejo, GitHub Actions runner, and Coder deployments on the existing Postgres instance ([#1059](https://github.com/pawtograder/platform/pull/1059))
+- **LTI grade drain errors now surface correctly** — Grade sync failures that previously hid inside a 200 response now return 500 and are captured to Sentry. Disabled-sync rows no longer block the drain, and failing rows are moved to the back of the queue rather than blocking every batch ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **Git provider abstraction** — Repository operations in the grading loop now route through a `GitProvider` interface, making it possible to add Forgejo support alongside GitHub without changing each caller ([#1177](https://github.com/pawtograder/platform/pull/1177))
+
 ## August 2026
 
 ### August 19, 2026
