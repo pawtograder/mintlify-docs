@@ -58,6 +58,12 @@ Two consequences for anything you build:
 - A missing policy fails closed and looks like a bug in your feature. If a query returns nothing, check the policy before the code.
 - A privileged path is not privileged because the UI hides it. Anything reachable with a service-role client bypasses RLS entirely, which is why the [MCP server](/developers/mcp-server#authorization) confines its service-role use to the authentication layer.
 
+### Capabilities
+
+In addition to the four `app_role` values, instructors can create custom grader roles that extend the default grader role with specific capabilities. The capability system is enforced in Postgres through `user_class_capabilities()` and `user_class_ids_with_capability()`. Policies that gate a capability use `user_class_ids_with_capability()` in a `TO authenticated` policy; they never look up the capability inline, because that lookup misses the default role's inherited capabilities.
+
+The four capabilities are `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. See `docs/capabilities.md` in the repository for the full policy rule and how to add a new capability.
+
 ### User roles
 
 `user_roles.role` is an `app_role`, and that enum has four values (`utils/supabase/SupabaseTypes.d.ts:13949`, `:14155`):
