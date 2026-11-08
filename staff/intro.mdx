@@ -41,11 +41,34 @@ Graders get a smaller navigation set than instructors. A grader has **no
 Gradebook entry at all** — neither the staff gradebook nor the student one — and
 does not see these **Course Settings** entries: **Enrollments**, **LMS (LTI)
 Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due
-Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
+Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, **Gemini API
+Key**.
 
 A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
+
+### Custom grader roles and capabilities
+
+Instructors can create custom grader roles — for example, "Head TA" — and grant
+them additional capabilities beyond the default grader set. The four built-in
+capabilities are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | Bulk-assign and reassign grading |
+| `publish_groups` | Create, edit, and publish student groups |
+| `manage_assignments` | Create and edit assignments |
+| `manage_roles` | Create and manage custom grader roles |
+
+Only instructors hold all four by default. A custom grader role can hold any
+combination except `manage_roles`. A grader on a custom role inherits everything
+the default grader role holds, plus the custom role's extras.
+
+To manage roles, open **Course Settings → Enrollments** and use the **Roles**
+tab. Controls that require a capability are hidden from graders who do not hold
+it — for example, a grader without `manage_assignments` does not see **New
+Assignment** or the **Edit Assignment** menu item.
 
 ## Key features
 
