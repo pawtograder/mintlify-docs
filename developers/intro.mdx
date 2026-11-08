@@ -113,6 +113,27 @@ Components do not query Supabase directly. `TableController` (`lib/TableControll
 
 `utils/supabase/SupabaseTypes.d.ts` is generated and copied into `supabase/functions/_shared/`. Regenerate it with `npm run client-local` after a schema change; do not hand-edit it.
 
+## OAuth server (SSO for Forgejo and Coder)
+
+Pawtograder can act as an OAuth 2.1 / OIDC identity provider so that Forgejo and Coder deployments on the same cluster can offer "Sign in with Pawtograder". This is an opt-in deployment feature controlled by the Helm chart.
+
+### How it works
+
+- `auth.oauthServer.enabled` in the chart turns on GoTrue's OAuth server and adds Kong routes for the OIDC discovery, JWKS, authorize, token, and userinfo endpoints. Those endpoints are reachable without an API key.
+- An OAuth consent page at `/oauth/consent` shows the requesting app and scopes, records Approve or Deny, and forwards straight back when GoTrue already has the user's consent.
+- `coder.oidc.enabled` and `forgejo.gitea.oauth` in the chart wire each app to Pawtograder as its OIDC provider.
+- `scripts/setup-sso-clients.sh` registers both OAuth clients and writes their credentials into Kubernetes Secrets.
+
+### Account creation on first sign-in
+
+By default, signing in to Forgejo or Coder with a Pawtograder account does **not** automatically create an account in those apps. Set `forgejo.gitea.oauth[].autoRegister: true` or `coder.oidc.allowSignups: true` in the chart to enable automatic account creation on first sign-in.
+
+Forgejo usernames are derived from the GoTrue subject (the user's UUID) rather than the email address, so two users with the same email prefix at different institutions do not collide.
+
+### Running the SSO end-to-end tests
+
+The repository includes an opt-in Playwright lane (`tests/e2e/forgejo-coder/`) that boots an isolated Supabase stack, Forgejo, and Coder, registers both as OAuth clients, and walks warm and cold sign-in, deny, and repeat sign-in journeys. Run it with `npm run test:e2e:forgejo-coder`. See `AGENTS.md` for the environment variables it needs.
+
 ## Contributing
 
 1. Fork the repository and create a feature branch.
