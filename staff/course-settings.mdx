@@ -1,6 +1,6 @@
 ---
 title: "Course Settings"
-description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
+description: "Index of the Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
@@ -8,21 +8,17 @@ icon: "gear"
 
 **Course Settings** is a menu, not a page. Its trigger is a button with no link:
 clicking it opens the menu and the address in your browser does not change. Every
-course-wide setting lives on one of the menu's 14 entries, so this page is an
+course-wide setting lives on one of the menu's entries, so this page is an
 index — find the entry you want below, then follow the link for the details.
 
-<Frame>
-  <img src="/images/staff/course-settings-menu-1787281367482.png" alt="Course navigation with the Course Settings menu open, listing Discord, Enrollments, LMS (LTI) Sync, Feature flags, GitHub Templates, Lab Sections, Flashcard Decks, Discussion Topics, Discussion Engagement, Grading Conflicts, Due Date Extensions, Audit Log, Emailer, and Workflow Runs" />
-</Frame>
-
-## The 14 entries
+## The entries
 
 Routes are relative to `/course/<course_id>/`.
 
 | Entry | Route | What it does | Documentation |
 | --- | --- | --- | --- |
 | **Discord** | `manage/discord` | Connects the course to a Discord server, so help requests and regrade requests post automatically to Discord channels. Also holds the **Calendar Integration** section, which auto-syncs every 5 minutes. | Not yet documented |
-| **Enrollments** | `manage/course/enrollments` | The course roster table, plus a panel of university Student Information System (SIS) section links. | Not yet documented |
+| **Enrollments** | `manage/course/enrollments` | The course roster table, plus a panel of university Student Information System (SIS) section links. Instructors can also manage custom grader roles from this page. | [Grader roles and capabilities](/staff/grader-roles) |
 | **LMS (LTI) Sync** | `manage/course/lti` | Syncs rosters from your LMS and pushes assignment grades back over LTI 1.3. | Not yet documented |
 | **Feature flags** | `manage/course/feature-flags` | Turns course features on or off. Navigation, dashboards, and student tools follow these flags. | [Feature flags](/staff/feature-flags) |
 | **GitHub Templates** | `manage/course/github` | Overrides the handout and solution (grader) template repositories used when creating new assignment repos. Blank fields inherit your GitHub org's default, then the Pawtograder default. | Not yet documented |
@@ -35,6 +31,7 @@ Routes are relative to `/course/<course_id>/`.
 | **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
 | **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
+| **Gemini API Key** | `manage/course/gemini-key` | Stores a course-owned Google Gemini API key for AI-assisted exam grading features. Requires the `gemini-api-key-setup` feature flag to be on before saving a key. | See [Gemini API key](#gemini-api-key) below |
 
 <Note>
 Two entries do not match the route they open, which matters if you are reading
@@ -50,13 +47,47 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 A grader's menu is a subset of an instructor's. Graders see five entries:
 **Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
+and **Grading Conflicts**. The other entries — **Enrollments**, **LMS (LTI) Sync**,
 **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
+Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, and **Gemini API Key** — are
 instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
+
+## Gemini API key
+
+The **Gemini API Key** page (`manage/course/gemini-key`) lets instructors store a course-owned Google Gemini API key for AI-assisted exam grading features such as OCR and template extraction.
+
+### Before you can save a key
+
+Saving a key requires the `gemini-api-key-setup` feature flag to be explicitly on for the course. Turn it on under **Course Settings → Feature flags**. The Gemini API Key page is always visible in the menu, but the **Save** and **Replace** buttons are disabled until the flag is on. Removing a previously saved key works regardless of the flag.
+
+### Saving and replacing a key
+
+1. Open **Course Settings → Gemini API Key**.
+2. If the flag is off, turn it on first under **Feature flags**.
+3. Enter your Gemini API key in the password field. The field is masked and excluded from analytics capture.
+4. Click **Save** (first key) or **Replace** (updating an existing key).
+
+The key is stored in Vault, not in the application database. Once saved, it cannot be viewed again through Course Settings. Pawtograder does not validate the key with Google at save time.
+
+### Removing a key
+
+Click **Remove** on the Gemini API Key page. Removal works whether or not the `gemini-api-key-setup` flag is on.
+
+<Warning>
+Removing the key is immediate and cannot be undone from the UI. Any exam grading features that depend on the key will stop working until a new key is saved.
+</Warning>
+
+### Status indicators
+
+The page shows two independent status indicators:
+
+- **Setup enabled / disabled** — whether the `gemini-api-key-setup` flag is on.
+- **Configured / not configured** — whether a key is currently stored.
+
+A key can be stored while setup is disabled (for example, if you turn the flag off after saving). In that state the key is still present but the Save/Replace buttons are disabled.
 
 ## Course time zone
 

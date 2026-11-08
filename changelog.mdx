@@ -6,6 +6,27 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 8, 2026
+
+#### Roles and permissions
+- **Custom grader roles with capabilities** — Instructors can create custom grader roles (for example, "Head TA") that extend the default grader role with specific capabilities: `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. Controls that require a capability are hidden from graders who lack it, so the UI matches what the database allows. See [Grader roles and capabilities](/staff/grader-roles) ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1198](https://github.com/pawtograder/platform/pull/1198), [#1199](https://github.com/pawtograder/platform/pull/1199), [#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Course settings
+- **Course-owned Gemini API key** — Instructors can store a course-owned Google Gemini API key for AI-assisted exam grading features. The key is stored in Vault and cannot be viewed again through Course Settings after saving. Requires the `gemini-api-key-setup` feature flag to be on before saving. See [Course Settings → Gemini API key](/staff/course-settings#gemini-api-key) ([#1126](https://github.com/pawtograder/platform/pull/1126), [#1160](https://github.com/pawtograder/platform/pull/1160), [#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Exam grading
+- **Exam grading system with OCR and student matching** — A new exam grading system supports scanning paper exams, matching pages to students via OCR, and grading through a region-based editor. Answer types extracted by Gemini are now normalized so an unrecognized type (such as "composite") falls back to `free_text` instead of failing the save ([#814](https://github.com/pawtograder/platform/pull/814), [#1212](https://github.com/pawtograder/platform/pull/1212))
+
+#### Bug fixes
+- **LTI grade push reliability** — Grade sync failures are now reported to Sentry with class and assignment tags, rows whose class has disabled grade sync are deferred rather than retried endlessly, and a failed row is moved to the back of the queue so it cannot block newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **Password reset and email links on staging** — GoTrue mailer URL paths, email templates, and the reset-password redirect are now configured correctly so enrollment emails and password reset links resolve to the right pages ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+#### Infrastructure
+- **SSO with Forgejo and Coder** — Deployments can turn on GoTrue's OAuth 2.1 server and wire Forgejo and Coder to sign in with Pawtograder accounts. Account creation on first SSO sign-in is off by default ([#1165](https://github.com/pawtograder/platform/pull/1165))
+- **Realtime class updates via broadcast** — Class updates are now delivered over the existing students/staff broadcast channel instead of a separate Postgres CDC channel, reducing the number of open Realtime subscriptions ([#1148](https://github.com/pawtograder/platform/pull/1148))
+
 ## August 2026
 
 ### August 19, 2026
