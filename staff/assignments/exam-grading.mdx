@@ -1,0 +1,112 @@
+---
+title: "Exam Grading (Scan & OCR)"
+description: "Upload scanned paper exams, use OCR to match pages to students, and create graded submissions"
+icon: "file-scan"
+---
+
+# Exam Grading (Scan & OCR)
+
+Pawtograder's exam grading workflow lets you administer paper exams and grade them digitally. You upload a blank exam template, label question regions on each page, scan completed student exams, and let OCR match pages to students. The result is a graded submission for each student that you can hand-grade with rubrics.
+
+<Note>
+Exam grading is controlled by a course feature flag. Ask your Pawtograder administrator to enable it for your course before you begin.
+</Note>
+
+## Assignment types
+
+When creating an assignment, choose one of two assessment types depending on how students will take the exam:
+
+| Type | How students submit |
+| --- | --- |
+| **Quiz / worksheet (in-app)** | Students answer questions directly in Pawtograder. Objective questions (multiple choice, numeric, true/false) are auto-graded; free-text answers go to rubric grading. |
+| **Paper exam (scan & OCR)** | You print and administer a paper exam, then scan and upload the completed exams. OCR extracts student identity and answers; you confirm matches and create submissions for grading. |
+
+Both types use the same question hierarchy and rubric system. The assignment type cannot be changed after creation.
+
+## In-app quizzes
+
+For in-app quizzes, use the **Quiz (Questions & Grading)** page in the assignment's left-hand nav to author questions.
+
+### Building questions
+
+The quiz builder uses a three-level hierarchy: **Parts** (level 1) → **Questions** (level 2) → **Items** (level 3). Leaf nodes at any level are gradeable.
+
+For each leaf question, set:
+
+- **Label** — the question identifier shown to students and graders
+- **Prompt** — the question text
+- **Answer type** — `free_text`, `short_answer`, `multiple_choice`, `numeric`, or `true_false`
+- **Points** — the point value
+- **Answer key** — for objective types (multiple choice, numeric, true/false), the correct answer used for auto-grading
+
+Click **Save & generate** to persist the question tree and generate a printable PDF of the exam. The rubric is scaffolded automatically from the question structure.
+
+<Warning>
+Once a student has submitted, the question set is locked. Editing questions after submissions exist would orphan saved answers. Duplicate the assignment to make changes.
+</Warning>
+
+### Student experience
+
+Students see a **Take the quiz →** link on their assignment page. The quiz renders as a form; objective questions are auto-graded on submit. Scores appear once you release them.
+
+If a submit fails (for example, due to a network error), the student's answers are held on the page with a **Retry submit** button. They should not close or reload the tab until the retry succeeds.
+
+## Paper exams (scan & OCR)
+
+Paper exam assignments use the **Exam (Scan & OCR)** page in the assignment's left-hand nav, which has two steps.
+
+### Step 1: Template & regions
+
+1. Upload the blank exam as a PDF. Each page is rasterized so you can label regions.
+2. In the **Question structure** panel, build the question hierarchy (same three-level structure as quizzes). For each leaf question, set the label, answer type, and points.
+3. In the **Draw a region** panel, select what the next drawn box represents:
+   - **Answer region** — where a student writes their answer to a specific question
+   - **Student name region** — where the student writes their name (used for OCR matching)
+   - **Student ID region** — where the student writes their SIS ID (used for OCR matching)
+4. Drag on the page image to draw each region. Answer regions must be attached to a question.
+5. Click **Save structure** to persist the question tree and regions.
+
+After saving, click **Build rubric from exam** to scaffold the grading rubric from the question structure. If the rubric already has content, it is left alone.
+
+<Tip>
+Click **Auto-extract (Gemini)** to have the AI propose a question structure and regions from the template. Review the proposal carefully before saving — auto-extraction replaces the current structure and clears any answer key.
+</Tip>
+
+### Step 2: Scan & match
+
+1. Scan all completed student exams into a single PDF (all students, all pages, in order).
+2. On the **Scan & Match** page, set **Pages/exam** to the number of pages per student exam (must match the template).
+3. Click **Upload scans** to upload the PDF.
+4. Once uploaded, click **Process (OCR + match)** on the batch. The system OCRs each page, reads the identity regions, and matches each exam to a student.
+5. Review the matches in the table:
+   - **Suggested** — OCR found a match with a confidence score; review and confirm
+   - **Unmatched** — OCR could not identify the student; select one from the dropdown
+   - **Confirmed** — ready to create a submission
+   - **Skipped** — excluded from submission creation
+6. Use the **Student** dropdown to correct or override any match.
+7. Click **Confirm** on each row you are satisfied with.
+8. Click **Create N submission(s)** to finalize confirmed matches and create graded submissions.
+
+<Note>
+The page polls automatically while OCR is running. Refresh the page if the status does not update after a few minutes.
+</Note>
+
+### Grading exam submissions
+
+Once submissions are created, they appear in the assignment's grading view like any other submission. The **Files** tab shows each question's answer region as a cropped image alongside the OCR text, so graders can read handwritten answers without scrolling through the full scan.
+
+Apply rubric checks and comments as you would for any hand-graded assignment. See [Handgrading](/staff/assignments/handgrading) for the full grading interface.
+
+## Rubric structure for exams
+
+The rubric is scaffolded automatically from the question tree when you click **Build rubric from exam** (or on first save for quizzes). The structure maps as follows:
+
+- Level-1 questions → rubric parts
+- Level-2 questions → rubric criteria
+- Level-3 questions (and leaf questions at any level) → rubric checks
+
+Objective questions (multiple choice, numeric, true/false) get a generated check that is auto-graded. Free-text questions get a check for manual grading.
+
+<Warning>
+Rebuilding the rubric after grading has started will reset generated checks. The rubric is only built automatically when it is empty; use **Build rubric from exam** manually to rebuild it, and only do so before grading begins.
+</Warning>
