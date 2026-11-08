@@ -1,0 +1,137 @@
+---
+title: "Exam grading"
+description: "Upload scanned paper exams, OCR student answers, match pages to students, and create graded submissions"
+icon: "file-scan"
+---
+
+# Exam grading
+
+Pawtograder's exam grading pipeline lets you upload a blank exam PDF as a template, label question regions on each page, then upload a batch of scanned student exams. The system OCRs each page, matches it to a student on your roster, and creates a graded submission for each student — ready for hand grading with the standard rubric interface.
+
+<Note>
+Exam grading is controlled by a course feature flag. Ask a Pawtograder administrator to enable it for your course before the **Exam (Scan & OCR)** menu item appears.
+</Note>
+
+## Assignment types
+
+When creating an assignment, the **Assignment type** field controls which workflow the assignment uses:
+
+| Type | Description |
+|------|-------------|
+| **Code** (default) | GitHub repository + autograder |
+| **Quiz / worksheet (in-app)** | Students answer questions in the browser; objective questions are auto-graded |
+| **Paper exam (scan & OCR)** | Printable exam + scan upload + OCR matching |
+| **Required survey** | Completion of a linked survey earns credit |
+
+Assignment type cannot be changed after creation. Quiz and exam assignments are always individual (no groups).
+
+## In-app quizzes
+
+For a **Quiz / worksheet** assignment, use the **Quiz (Questions & Grading)** page in the assignment management menu to author questions.
+
+### Building a quiz
+
+1. Open the assignment's management menu and click **Quiz (Questions & Grading)**.
+2. Add questions using the **+ Part (level 1)** button. Questions support a three-level hierarchy: parts → questions → items.
+3. For each leaf question, set:
+   - **Label** — shown to students
+   - **Prompt** — the question text
+   - **Answer type** — `free_text`, `short_answer`, `multiple_choice`, `numeric`, or `true_false`
+   - **Points** — point value (must be ≥ 0)
+   - **Answer key** — for objective types (multiple choice, numeric, true/false)
+4. Click **Save & generate** to persist the questions and generate a printable PDF.
+
+Objective questions (multiple choice, numeric, true/false) are auto-graded against the answer key when a student submits. Free-text and short-answer questions are graded by rubric.
+
+<Warning>
+Once students have submitted, the question set is locked. Editing questions would orphan their saved answers. Duplicate the assignment to make changes.
+</Warning>
+
+### Student experience
+
+Students see a **This is an in-app quiz** banner on the assignment page with a **Take the quiz →** link. The quiz renders as a standard form. On submit, objective answers are graded immediately and the student is returned to the assignment page. Scores appear once the instructor releases them.
+
+If a submit fails (for example, due to a network error), the student's answers are held on the page with a **Retry submit** button. The student should not close or reload the tab until the retry succeeds.
+
+## Paper exam workflow
+
+For a **Paper exam (scan & OCR)** assignment, the management menu shows two steps: **1. Template & Regions** and **2. Scan & Match**.
+
+### Step 1: Template and regions
+
+1. Open **Exam (Scan & OCR)** → **1. Template & Regions**.
+2. Upload the blank exam PDF. Each page is rasterized so you can draw regions on it.
+3. Define the question structure in the **Question structure** panel on the left. Questions use the same three-level hierarchy as quizzes.
+4. Draw regions on each page by selecting a region type and dragging on the page image:
+   - **Answer region** (green) — the area where a student writes their answer. Must be attached to a question.
+   - **Student name region** (purple) — where the student writes their name, used for roster matching.
+   - **Student ID region** (purple) — where the student writes their SIS ID, used for roster matching.
+5. Click **Save structure** to persist the question tree and regions.
+6. Optionally click **Auto-extract (Gemini)** to have the AI propose a question structure and regions from the template. Review the proposal before saving — auto-extraction replaces the current structure.
+7. Once the structure is saved, click **Build rubric from exam** to scaffold a grading rubric from the question tree. This only runs when the rubric is empty; a rubric that already has content is left alone.
+
+<Note>
+Save the structure before clicking **Build rubric from exam**. The rubric is built from the saved questions, so unsaved edits would be ignored.
+</Note>
+
+### Step 2: Scan and match
+
+1. Open **Exam (Scan & OCR)** → **2. Scan & Match**.
+2. Upload a single PDF containing all scanned student exams. Set **Pages/exam** to match the number of pages in your template.
+3. Click **Upload scans**. The batch appears in the list with status `uploaded`.
+4. Click **Process (OCR + match)** on the batch. The system OCRs each page and attempts to match each exam to a student using the name and SIS ID regions.
+
+#### Reviewing matches
+
+Once processing reaches `review` status, a match table appears for the batch. Each row shows:
+
+| Column | Description |
+|--------|-------------|
+| **Exam** | Sequential exam number within the batch |
+| **Detected** | Name and SIS ID read by OCR |
+| **Match** | `confirmed`, `suggested` (with confidence %), `unmatched`, or `skipped` |
+| **Student** | Dropdown to select or override the matched student |
+| **Actions** | **Confirm** to accept the match; **Skip** to exclude this exam |
+
+Selecting a student from the dropdown sets the match to `suggested`. Click **Confirm** to mark it ready for submission creation. Click **Skip** to exclude an exam (for example, a blank or test sheet).
+
+#### Creating submissions
+
+Once all matches you want are confirmed, click **Create N submission(s)**. The system creates a graded submission for each confirmed exam, attaching the scanned pages and OCR results as an artifact. The submission then appears in the standard grading interface.
+
+<Tip>
+If submission creation fails partway through (for example, due to a network error), click **Create N submission(s)** again. The system skips exams that already have a submission and retries the rest.
+</Tip>
+
+## Grading exam submissions
+
+Exam submissions appear in the standard grading interface alongside code submissions. The **Files** tab shows an **Exam** artifact with:
+
+- A cropped image of each answer region
+- The OCR text extracted from that region
+- An interpreted value for objective questions
+
+Apply rubric checks and comments as you would for any submission. For rubric checks generated from exam questions, you can enter a partial point value (0 to the check's maximum) in the **Points** field before adding a comment.
+
+## Environment configuration
+
+The exam OCR worker requires the `EXAM_VISION_PROVIDER` environment variable. Set it in your edge function environment:
+
+| Value | Description |
+|-------|-------------|
+| `fake` | Offline/deterministic provider for local development and E2E tests. Derives identity from file paths; never sends data to external APIs. |
+| `gemini` | Google Vision OCR + Gemini composite provider. Requires `GOOGLE_API_KEY`. |
+
+Additional variables for the `gemini` provider:
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_API_KEY` | API key for both Google Vision OCR and Gemini |
+| `EXAM_OCR_API_KEY` | Optional separate key for the OCR provider |
+| `EXAM_GEMINI_MODEL` | Gemini model name (default: `gemini-2.0-flash`) |
+| `EXAM_OCR_RPM` | OCR rate limit in requests per minute (default: 60) |
+| `EXAM_GEMINI_RPM` | Gemini rate limit in requests per minute (default: 60) |
+
+<Warning>
+`EXAM_VISION_PROVIDER` has no default. An unset value raises a configuration error rather than silently using the offline provider, which would return placeholder OCR that looks like a successful scan.
+</Warning>
