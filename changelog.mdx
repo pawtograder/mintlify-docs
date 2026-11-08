@@ -6,6 +6,50 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 8, 2026
+
+#### Exams
+
+- **Exam grading: points box refills when a grader picks another option** — When a grader selects a different multiple-choice option on an exam check, the points input now updates to reflect the new option's point value ([#1203](https://github.com/pawtograder/platform/pull/1203))
+
+### November 7, 2026
+
+#### Exams
+
+- **Exam grading system with OCR and student matching** — A complete paper-exam pipeline is now available for courses with the `exams` feature flag enabled. Instructors upload a blank exam PDF as a template, label question regions on each page, upload a batch of scanned student exams, and the system OCRs each page, matches it to a student on the roster, and creates a graded submission. In-app quizzes with auto-graded objective questions are also supported as a new assignment type. See [Exam grading](/staff/assignments/exam-grading) ([#814](https://github.com/pawtograder/platform/pull/814))
+
+#### Integrations
+
+- **Grade sync: failed drains now surface as errors** — LTI grade-push drain failures that were previously hidden inside a 200 response now return 500 and are captured to Sentry. Classes that have grade sync disabled after a grade was enqueued no longer block the drain; those rows are deferred and reported as a `deferred` count. Rows that keep failing are moved to the back of the queue rather than starving newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+
+#### Roles and permissions
+
+- **Capability-based grader roles** — Instructors can now create custom grader roles (for example, "Head TA") and grant them fine-grained capabilities: `manage_assignments`, `manage_review_assignments`, `publish_groups`, and `manage_roles`. The **New Assignment**, **Edit Assignment**, and related pages are now gated on `manage_assignments`, so a grader on a custom role with that capability can create and edit assignments. Graders without `manage_review_assignments` no longer see the bulk-assign and reassign controls. Graders without `publish_groups` see the Manage Groups page in read-only mode ([#1010](https://github.com/pawtograder/platform/issues/1010), [#1189](https://github.com/pawtograder/platform/pull/1189), [#1198](https://github.com/pawtograder/platform/pull/1198), [#1199](https://github.com/pawtograder/platform/pull/1199))
+
+#### Integrations (Helm chart)
+
+- **Sign in to Forgejo and Coder with Pawtograder** — The Helm chart can now turn on Supabase Auth's OAuth 2.1 / OIDC server and wire Forgejo and Coder to it, so the first sign-in with a Pawtograder account creates the Forgejo or Coder account. All of it is off by default. A `scripts/setup-sso-clients.sh` script registers both clients and writes the Kubernetes Secrets. An OAuth consent page at `/oauth/consent` shows the app and scopes and records Approve or Deny ([#1165](https://github.com/pawtograder/platform/pull/1165), [#1164](https://github.com/pawtograder/platform/pull/1164))
+
+- **Optional Forgejo, Actions runner, and Coder on the existing Postgres** — The Helm chart now supports deploying Forgejo, a self-hosted GitHub Actions runner, and Coder alongside Pawtograder on the same Postgres instance ([#1059](https://github.com/pawtograder/platform/pull/1059))
+
+#### Autograder
+
+- **GitProvider abstraction for Forgejo support** — Repository operations in the grading loop (create repo, sync permissions, start grading, clone) now go through a `GitProvider` abstraction, so a Forgejo implementation can sit beside GitHub's without touching each caller. GitHub behavior is unchanged ([#1177](https://github.com/pawtograder/platform/pull/1177))
+
+- **Job tokens bound to the repository's provider** — Autograder job tokens are now validated against the repository's git provider. A GitHub token naming a Forgejo repository is rejected, and vice versa. The token's issuer and audience are also verified ([#1176](https://github.com/pawtograder/platform/pull/1176))
+
+### November 6, 2026
+
+#### Surveys
+
+- **Duplicate question names rejected at publish** — Publishing a survey with two questions that share a name is now refused. The error message names each repeated question and where to rename it. Drafts may keep duplicates so work in progress can be saved and fixed later. A survey published before this check was added, then closed, cannot be reopened until the duplicate names are renamed ([#1005](https://github.com/pawtograder/platform/issues/1005), [#1168](https://github.com/pawtograder/platform/pull/1168))
+
+- **Survey answers always autosave** — Answers in progress now autosave on every survey, regardless of whether **Allow Response Editing** is on. Previously, autosave only ran when response editing was enabled, so a student who closed the page before submitting lost all their answers. The **Allow Response Editing** setting still controls whether a submitted response can be changed ([#977](https://github.com/pawtograder/platform/issues/977), [#1067](https://github.com/pawtograder/platform/pull/1067))
+
+- **Survey pages show the database title** — The student survey page, the Student Preview modal, and the single-response view now show the survey's database title instead of the placeholder "Survey Name" that the Visual Builder writes into the JSON ([#1002](https://github.com/pawtograder/platform/issues/1002), [#1167](https://github.com/pawtograder/platform/pull/1167))
+
 ## August 2026
 
 ### August 19, 2026
