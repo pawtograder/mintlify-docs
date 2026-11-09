@@ -1,0 +1,76 @@
+---
+title: "Custom grader roles"
+description: "Create custom grader roles with specific capabilities so head TAs and specialized graders can do exactly what their role requires"
+icon: "user-gear"
+---
+
+# Custom grader roles
+
+Every course starts with four fixed roles: **instructor**, **grader**, **student**, and **admin**. Instructors can create additional grader roles — such as "Head TA" or "Lab Leader" — and choose which capabilities each one carries. A grader on a custom role holds everything the default grader role holds, plus whatever the custom role adds.
+
+## Capabilities
+
+Capabilities are the actions a role can perform. The four available capabilities are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | See and delete review assignments for the class. Creating and editing review assignments remain instructor-only. |
+| `manage_assignments` | Create and edit assignments, sync autograder and handout changes to student repositories, and create student repositories when a save moves the release date into the past. Reading and deleting assignments remain instructor-only. |
+| `publish_groups` | Make changes to groups on **Manage Groups** (add/remove members, rename, delete, publish). Without this capability, **Manage Groups** is read-only: groups, mentors, and CSV export are still visible. |
+| `manage_roles` | Create, rename, and delete custom grader roles, and choose their capabilities. This capability cannot be added to a custom role — only instructors hold it. |
+
+The default grader role has none of these capabilities. The default instructor role has all four.
+
+## Opening the page
+
+Open **Course Settings → Enrollments**, then select the **Roles** tab. The entry is instructor-only.
+
+## Creating a custom role
+
+1. Click **New Role**.
+2. Enter a name. Role names must be non-blank and unique within the course (case-insensitive).
+3. Check the capabilities you want the role to carry. You can only grant capabilities you hold yourself.
+4. Click **Save**.
+
+The new role appears in the roles list and is immediately available to assign to graders.
+
+## Assigning a role to a grader
+
+Custom roles can only be assigned to graders. Changing someone's app role (for example, promoting a grader to instructor) always moves them to that role's default, overriding any custom role assignment.
+
+To assign a custom role:
+
+1. Open **Course Settings → Enrollments**.
+2. Find the grader in the roster.
+3. Select the custom role from the **Role** dropdown on their row.
+
+The change takes effect immediately. The grader's access updates to reflect the new role's capabilities.
+
+## Editing and deleting roles
+
+Click the edit icon on a role's row to rename it or change its capabilities. You cannot add a capability you do not hold yourself.
+
+A role that has at least one grader assigned to it cannot be deleted. Reassign or remove those graders first.
+
+The four default roles (instructor, grader, student, admin) are fixed and cannot be renamed, edited, or deleted.
+
+## What graders on custom roles see
+
+A grader's navigation and available actions follow their capabilities:
+
+- **`manage_review_assignments`** — The **Grading Assignments** page shows the Assignment Management row and row-level Edit/Delete icons. **Bulk Assign** and **Reassign** are accessible. Without this capability, those controls are hidden.
+- **`manage_assignments`** — **New Assignment** and the **Edit Assignment** menu item are visible. The `/new` and `/edit` pages are accessible. Without this capability, those pages redirect back to the assignment list.
+- **`publish_groups`** — **Manage Groups** shows all change controls (add/remove members, rename, delete, publish). Without this capability, the page is read-only.
+
+Instructors see no change regardless of which capabilities are on custom roles.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Grading assignments" icon="users-gear" href="/staff/assignments/grading-assignments">
+    Bulk assign, reassign, and track grading tasks.
+  </Card>
+  <Card title="Groups" icon="users" href="/staff/assignments/groups">
+    Create and manage student groups, including the publish_groups capability.
+  </Card>
+</CardGroup>
