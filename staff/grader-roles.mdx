@@ -1,0 +1,86 @@
+---
+title: "Grader roles and capabilities"
+description: "Create custom grader roles with specific capabilities so head TAs and specialized graders can manage assignments, review assignments, and groups without full instructor access"
+icon: "user-shield"
+---
+
+# Grader roles and capabilities
+
+Every course has four built-in roles: **instructor**, **grader**, **student**, and
+**admin**. Instructors now have a fifth tool: custom grader roles that bundle a
+specific set of capabilities, so a head TA can manage assignments or review
+assignments without holding full instructor access.
+
+## Built-in roles and their capabilities
+
+| Role | Capabilities |
+| --- | --- |
+| **instructor** | All four capabilities: `manage_review_assignments`, `publish_groups`, `manage_assignments`, `manage_roles` |
+| **grader** | None by default. Can be given additional capabilities through a custom role |
+| **student** | No capabilities |
+| **admin** | No capabilities (platform administration is separate) |
+
+## Capabilities
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | View, create, edit, and delete review assignments for the class. Enables **Bulk Assign**, **Reassign**, and the **All Assignments** table on the Grading Assignments page |
+| `publish_groups` | Create, edit, and delete groups; assign mentors; publish groups to students. Without it, **Manage Groups** is read-only |
+| `manage_assignments` | Create and edit assignments, configure autograders, sync and create student repositories. Without it, **New Assignment** and **Edit Assignment** are hidden |
+| `manage_roles` | Create, rename, and delete custom grader roles; choose their capabilities. Cannot be granted to a custom role |
+
+Instructors hold all four capabilities and are unaffected by this system. Graders
+hold none by default; a grader on a custom role holds everything the default
+grader role holds plus whatever the custom role adds.
+
+## Managing custom roles
+
+Open **Course Settings → Enrollments** and navigate to the **Roles** tab (visible
+to instructors only). From there you can:
+
+- **Create a role** — give it a name and choose its capabilities (any combination
+  of `manage_review_assignments`, `publish_groups`, and `manage_assignments`).
+  `manage_roles` cannot be added to a custom role.
+- **Rename a role** — edit the name inline. Names are unique within the course,
+  case-insensitively.
+- **Delete a role** — only possible when no one is currently on that role.
+
+<Note>
+You can only grant a capability you yourself hold in that class. An instructor
+holds all four, so they can grant any of the three grantable capabilities.
+</Note>
+
+## Assigning a grader to a custom role
+
+On the **Enrollments** page, find the grader's row and change their **Role**
+dropdown from the default grader role to the custom role. Only graders can be
+placed on custom roles. Changing someone's app role (e.g. from grader to
+instructor) always moves them back to that role's default, so access follows the
+role automatically.
+
+## What graders on custom roles see
+
+A grader on a custom role sees the same navigation as any other grader, plus the
+controls unlocked by their capabilities:
+
+- **`manage_review_assignments`** — the **Assignment Management** row and
+  Edit/Delete icons on Grading Assignments; **Bulk Assign** and **Reassign**
+  links; the full **All Assignments** table.
+- **`publish_groups`** — all edit controls on **Manage Groups** (create, edit,
+  delete groups; assign mentors; publish).
+- **`manage_assignments`** — **New Assignment** in the nav; **Edit Assignment**
+  in the assignment menu; the **(Edit)** link on Manage Groups.
+
+Without a capability, those controls are hidden and the corresponding pages
+redirect back to the assignment list.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Assigning grading tasks" icon="users-gear" href="/staff/assignments/grading-assignments">
+    How bulk assign and reassign work, and who can run them.
+  </Card>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings">
+    The full Course Settings menu.
+  </Card>
+</CardGroup>
