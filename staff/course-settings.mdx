@@ -113,3 +113,48 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Gemini API key
+
+**Course Settings → Gemini API Key** lets instructors store a Google Gemini API
+key for the course. The key is used by AI-assisted exam features such as OCR
+template extraction. It is stored in the database's secret vault and is never
+returned to the browser — once saved, it cannot be viewed again through Course
+Settings.
+
+### Prerequisites
+
+The `gemini-api-key-setup` feature flag must be turned on before you can save a
+key. Open **Course Settings → Feature flags** and enable **Gemini API Key Setup**.
+You can check the status of the key and remove an existing key whether or not the
+flag is on.
+
+### Saving a key
+
+1. Open **Course Settings → Gemini API Key**.
+2. The page shows two status indicators: **Setup enabled** (whether the feature
+   flag is on) and **Configured** (whether a key is already stored).
+3. Paste your Gemini API key into the key field and click **Save** (first save) or
+   **Replace** (to overwrite an existing key).
+4. The field is cleared after every request. If the outcome is not recognized, the
+   page re-reads the status automatically.
+
+<Note>
+Saving a key does not validate it with Google and does not turn on AI grading by
+itself. It only stores the credential for features that need it.
+</Note>
+
+### Removing a key
+
+Click **Remove** on the Gemini API Key page. Removal works whether or not the
+`gemini-api-key-setup` flag is on, so you can clean up a key even after disabling
+the feature.
+
+### Security notes
+
+- The key is stored in the database vault. No RPC returns the key value; only the
+  configuration status (enabled/configured) is readable from the app.
+- Deleting the course also removes the stored key.
+- Trusted database operators with direct vault access can read the key. Pawtograder
+  does not suppress PostgreSQL bind-parameter logging, so the key may appear in
+  database logs visible to cluster operators.
