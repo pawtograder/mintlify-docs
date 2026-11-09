@@ -1,6 +1,6 @@
 ---
 title: "Course Settings"
-description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
+description: "Index of the 15 Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
@@ -8,14 +8,14 @@ icon: "gear"
 
 **Course Settings** is a menu, not a page. Its trigger is a button with no link:
 clicking it opens the menu and the address in your browser does not change. Every
-course-wide setting lives on one of the menu's 14 entries, so this page is an
+course-wide setting lives on one of the menu's 15 entries, so this page is an
 index — find the entry you want below, then follow the link for the details.
 
 <Frame>
   <img src="/images/staff/course-settings-menu-1787281367482.png" alt="Course navigation with the Course Settings menu open, listing Discord, Enrollments, LMS (LTI) Sync, Feature flags, GitHub Templates, Lab Sections, Flashcard Decks, Discussion Topics, Discussion Engagement, Grading Conflicts, Due Date Extensions, Audit Log, Emailer, and Workflow Runs" />
 </Frame>
 
-## The 14 entries
+## The 15 entries
 
 Routes are relative to `/course/<course_id>/`.
 
@@ -35,6 +35,7 @@ Routes are relative to `/course/<course_id>/`.
 | **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
 | **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
+| **Gemini API Key** | `manage/course/gemini-api-key` | Stores a course-owned Google Gemini API key for AI-assisted exam grading features. Requires the `gemini-api-key-setup` feature flag to be on before a key can be saved. | [Gemini API key](#gemini-api-key) |
 
 <Note>
 Two entries do not match the route they open, which matters if you are reading
@@ -50,10 +51,10 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 A grader's menu is a subset of an instructor's. Graders see five entries:
 **Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
+and **Grading Conflicts**. The other ten — **Enrollments**, **LMS (LTI) Sync**,
 **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
-instructor-only.
+Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, and **Gemini API
+Key** — are instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
@@ -112,3 +113,48 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Gemini API key
+
+**Course Settings → Gemini API Key** lets instructors store a Google Gemini API
+key for the course. The key is used by AI-assisted exam features such as OCR
+template extraction. It is stored in the database's secret vault and is never
+returned to the browser — once saved, it cannot be viewed again through Course
+Settings.
+
+### Prerequisites
+
+The `gemini-api-key-setup` feature flag must be turned on before you can save a
+key. Open **Course Settings → Feature flags** and enable **Gemini API Key Setup**.
+You can check the status of the key and remove an existing key whether or not the
+flag is on.
+
+### Saving a key
+
+1. Open **Course Settings → Gemini API Key**.
+2. The page shows two status indicators: **Setup enabled** (whether the feature
+   flag is on) and **Configured** (whether a key is already stored).
+3. Paste your Gemini API key into the key field and click **Save** (first save) or
+   **Replace** (to overwrite an existing key).
+4. The field is cleared after every request. If the outcome is not recognized, the
+   page re-reads the status automatically.
+
+<Note>
+Saving a key does not validate it with Google and does not turn on AI grading by
+itself. It only stores the credential for features that need it.
+</Note>
+
+### Removing a key
+
+Click **Remove** on the Gemini API Key page. Removal works whether or not the
+`gemini-api-key-setup` flag is on, so you can clean up a key even after disabling
+the feature.
+
+### Security notes
+
+- The key is stored in the database vault. No RPC returns the key value; only the
+  configuration status (enabled/configured) is readable from the app.
+- Deleting the course also removes the stored key.
+- Trusted database operators with direct vault access can read the key. Pawtograder
+  does not suppress PostgreSQL bind-parameter logging, so the key may appear in
+  database logs visible to cluster operators.

@@ -6,6 +6,40 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 9, 2026
+
+#### Infrastructure
+- **Forgejo and Coder on staging** — Staging now runs Forgejo (a self-hosted Git forge), its Actions runner, and Coder (cloud development environments). Workspace apps run in a separate namespace and DNS zone (`*.workspaces-staging.pawtograder.net`) to keep session cookies isolated from the main staging domain. SSO sign-in to both services uses Pawtograder's OAuth 2.1 server, so a Pawtograder account creates the Forgejo or Coder account on first sign-in ([#1129](https://github.com/pawtograder/platform/pull/1129), [#1165](https://github.com/pawtograder/platform/pull/1165))
+
+### November 8, 2026
+
+#### Exams
+- **Exam and quiz seeding** — The development seed database now includes eight exam and quiz assignments covering every question shape, answer type, lifecycle state, scan batch, and grading scenario. Page images are rendered from the same draw operations used to generate PDFs, so handwriting and OCR word boxes align with stored regions ([#1213](https://github.com/pawtograder/platform/pull/1213))
+- **Exam answer type normalization** — Unknown answer types returned by Gemini (such as "composite") are now normalized to `free_text` instead of failing the save. A database trigger enforces valid types as a backstop for any writer ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+#### Course settings
+- **Gemini API key management** — Instructors can now store, replace, and remove a course-owned Google Gemini API key from **Course Settings → Gemini API Key**. The key is stored in the database vault and is never returned to the browser. Saving requires the new `gemini-api-key-setup` feature flag to be on. See [Course Settings → Gemini API key](/staff/course-settings#gemini-api-key) and [Feature flags](/staff/feature-flags) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Grader roles and capabilities
+- **Custom grader roles** — Instructors can create custom grader roles (e.g. "Head TA") with specific capabilities: `manage_review_assignments`, `publish_groups`, and `manage_assignments`. A grader on a custom role holds the default grader permissions plus the role's extras. The database enforces that you can only grant a capability you hold yourself. See [Grader roles and capabilities](/staff/grader-roles) ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1204](https://github.com/pawtograder/platform/pull/1204))
+- **Capability-gated assignment editing** — Creating and editing assignments, syncing student repositories, and saving autograder settings now follow the `manage_assignments` capability instead of requiring a full instructor role. Graders on a custom role with this capability can do everything the New Assignment and Edit Assignment forms allow ([#1199](https://github.com/pawtograder/platform/pull/1199), [#1204](https://github.com/pawtograder/platform/pull/1204))
+- **Capability-gated review assignments** — Viewing and deleting review assignments now follow the `manage_review_assignments` capability. A grader on a custom role with this capability can see and delete the class's review assignments ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Bug fixes
+- **LTI grade drain reliability** — Grade-push failures are now captured to Sentry with class and assignment tags, a failed queue read returns 500 instead of silently appearing empty, and rows whose class has disabled grade sync are deferred rather than blocking every drain batch. Failing rows are moved to the back of the queue to avoid starving newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **Email links on staging** — Notification emails and autograder check-run links now use the correct app URL instead of `https://undefined/course/...` ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Password reset flow** — GoTrue email links now point at the correct `/auth/v1/verify` path, and the reset-password action goes through the proper `/auth/callback` exchange before reaching the update-password page ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+### November 7, 2026
+
+#### Exams
+- **Exam grading system with OCR and student matching** — A new exam grading system supports paper exams and in-app quizzes. Features include: AI-assisted template extraction from uploaded PDFs using Gemini Vision, scan batch upload and student matching, a region editor for mapping question boxes to pages, multi-select and numeric-tolerance answer types, and grading with per-question rubrics. See [AI Assistance](/staff/ai-assistance) for how the Gemini API key is used ([#814](https://github.com/pawtograder/platform/pull/814))
+
+#### Integrations
+- **Git provider abstraction** — Repository operations in the grading loop (create repo, sync permissions, start grading, clone) now go through a `GitProvider` interface. GitHub behavior is unchanged; a Forgejo implementation can be added without touching each caller. Actions job tokens are now validated by issuer and bound to the repository's provider, so a GitHub token cannot reach a Forgejo repository and vice versa ([#1177](https://github.com/pawtograder/platform/pull/1177), [#1176](https://github.com/pawtograder/platform/pull/1176))
+
 ## August 2026
 
 ### August 19, 2026
