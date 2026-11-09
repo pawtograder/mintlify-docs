@@ -9,7 +9,13 @@ import CommonVsUncommon from "/snippets/common-vs-uncommon.mdx";
 # Assignment Configuration
 
 Per-assignment settings are configured from **Edit Assignment** in the
-assignment's left-hand nav. This page documents what each field does, in
+assignment's left-hand nav. By default, only instructors can create and edit
+assignments. Graders on a custom role with the `manage_assignments` capability
+can also open **New Assignment** and **Edit Assignment** and save their changes,
+including syncing repositories and creating student repos. Reading and deleting
+assignments remain instructor-only. See
+[Custom grader roles](/staff/assignments/grading-assignments#custom-grader-roles)
+for how to set this up. This page documents what each field does, in
 the order the form presents them: **Basics**, **Schedule**, **Late
 submissions**, **Groups**, **Student Repositories**, **Submission mode**,
 **Self-evaluation**, and the collapsed **Advanced settings** accordion. A
