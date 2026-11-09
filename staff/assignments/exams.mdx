@@ -1,0 +1,121 @@
+---
+title: "Exam Grading"
+description: "Create paper and in-app exams, scan and match student submissions, and grade with OCR-assisted region detection"
+icon: "file-pen"
+---
+
+# Exam Grading
+
+Pawtograder supports two exam formats: **paper exams** (printed, scanned, and matched back to students) and **in-app quizzes** (completed directly in the browser). Both share the same question structure and grading interface.
+
+<Note>
+Exam grading requires a Google Gemini API key stored for your course. Enable the `gemini-api-key-setup` feature flag and save a key under **Course Settings → Gemini API Key** before using OCR or template extraction features.
+</Note>
+
+## Assignment type
+
+When creating an assignment, set the **Assessment type** to **Exam** or **Quiz** to enable the exam grading system. Exam assignments use a dedicated question editor and grading interface instead of the standard rubric and submission flow.
+
+## Question structure
+
+Exam questions are organized in a tree. A question can have sub-questions at any depth, and each leaf question has an **answer type**:
+
+| Answer type | What the student writes |
+| --- | --- |
+| `free_text` | Open-ended written response (default) |
+| `multiple_choice` | One option from a list |
+| `multi_select` | One or more options from a list |
+| `numeric` | A number, graded with a configurable tolerance |
+| `true_false` | True or False |
+
+Questions that only group sub-questions (section headers) do not have an answer type.
+
+## Paper exams
+
+### Creating a template
+
+A paper exam template defines the layout of the printed exam. Pawtograder can generate a PDF from the question tree, or you can upload your own PDF and mark the answer regions by hand.
+
+**Generated templates** — Pawtograder renders a PDF from the question tree. Each question gets a labeled answer box sized to its expected response length.
+
+**Uploaded PDFs** — Upload a PDF you designed yourself. Use the **Region Editor** to draw bounding boxes over each answer area and link them to questions in the tree. A single question can span multiple regions (for example, when an answer box continues onto the next page).
+
+#### AI-assisted template extraction
+
+For an uploaded PDF, click **Extract template** to have Gemini analyze the document and propose question text, answer types, and region boundaries. Review the proposal in the Region Editor before saving — the extraction is a starting point, not a final answer. Unknown answer types are normalized to `free_text` automatically.
+
+### Printing and distributing
+
+Download the generated or uploaded PDF from the template page and print it. Each page includes a QR code that encodes the exam and page number, used during scanning to match pages to the correct exam.
+
+### Scanning and matching
+
+After students complete the exam, scan the papers and upload the scan batch from the assignment's **Scans** tab.
+
+1. Click **Upload scans** and select the scanned PDF or image files.
+2. Pawtograder reads the QR codes on each page and groups pages into per-student submissions.
+3. Pages that cannot be matched automatically appear in the **Match review** queue. Drag unmatched pages to the correct student or mark them as blank.
+4. Once all pages are matched, click **Finalize** to create graded submissions.
+
+Each finalized submission stores the scanned page images alongside the question regions, so graders see the student's handwriting next to the grading interface.
+
+### Grading scanned submissions
+
+Open a submission from the assignment's **Submissions** tab. The grading view shows:
+
+- The scanned page image with the answer region highlighted.
+- The question text and answer type.
+- A score input and comment box.
+
+Navigate between questions with the arrow keys or the question list in the sidebar. Mark a question complete when you have entered a score; the submission is complete when all questions are marked.
+
+## In-app quizzes
+
+In-app quizzes are completed by students directly in the browser. Students see one question at a time and submit their answers before the quiz closes.
+
+### Autograding
+
+Multiple choice, multi-select, true/false, and numeric questions are autograded on submission. Free-text questions are left for hand grading.
+
+### Retakes
+
+Instructors can allow retakes. Each attempt is recorded separately, and the highest score (or the most recent, depending on the quiz settings) is used for grading.
+
+### Releasing grades
+
+Quiz grades follow the same release workflow as other assignments. Complete the hand-graded questions, then release the review to make scores visible to students.
+
+## Grading interface
+
+The exam grading interface is shared between paper and in-app exams. For each question:
+
+- Enter a **score** (numeric, up to the question's point value).
+- Optionally leave a **comment**.
+- For multiple-choice and similar questions, select the **chosen option** to record what the student answered.
+
+The sidebar shows overall progress: how many questions are scored, how many are left, and the running total.
+
+### Grading conflicts
+
+Graders with a conflict of interest for a student are skipped when assigning exam reviews, and an instructor is assigned instead. Declare conflicts under **Course Settings → Grading Conflicts** before grading begins.
+
+## Releasing exam grades
+
+Use the standard **Release** button on the submissions table to make exam grades visible to students. Students see their score per question, any comments, and the total.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings#gemini-api-key">
+    Store the Gemini API key required for OCR and template extraction.
+  </Card>
+  <Card title="Feature flags" icon="sliders" href="/staff/feature-flags">
+    Enable the gemini-api-key-setup flag before saving a key.
+  </Card>
+  <Card title="Handgrading" icon="pen" href="/staff/assignments/handgrading">
+    The grading interface shared with other assignment types.
+  </Card>
+  <Card title="Rubrics" icon="list-check" href="/staff/assignments/rubrics">
+    Rubric structure for non-exam assignments.
+  </Card>
+</CardGroup>
