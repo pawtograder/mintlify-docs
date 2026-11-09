@@ -271,6 +271,35 @@ The grading progress panel counts only students with an active submission toward
 
 When using **Bulk Assign Grading**, the default behavior assigns grading only to students who have already submitted. Enable the **Assign grading for all students** toggle to also create empty stub submissions for non-submitters (respecting the current section, lab, and tag filters) before drafting grading assignments. This is useful when you want to ensure every enrolled student receives a grading assignment regardless of submission status.
 
+## Custom grader roles
+
+Every class has four built-in roles: **instructor**, **grader**, **student**, and **admin**. Instructors can create additional custom roles for graders — for example, a "Head TA" role — and assign specific capabilities to them.
+
+### Capabilities
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | View and delete review assignments; use Bulk Assign and Reassign |
+| `publish_groups` | Create, edit, and delete groups; assign mentors |
+| `manage_assignments` | Create and edit assignments (including saving New Assignment and Edit Assignment forms, syncing repositories, and creating student repos) |
+| `manage_roles` | Create, rename, and delete custom grader roles; assign capabilities to them |
+
+Only instructors hold `manage_roles` by default. A role manager can only grant capabilities they themselves hold in that class.
+
+### Creating a custom role
+
+1. Open **Course Settings → Enrollments** and navigate to the **Roles** tab (instructor-only).
+2. Click **New role**, enter a name, and choose which capabilities to include.
+3. The four default roles are fixed and cannot be renamed or deleted.
+
+### Assigning a grader to a custom role
+
+On the **Enrollments** page, find the grader's row and change their role from the default **Grader** to the custom role. Changing a person's app role (for example, from grader to instructor) always moves them back to that role's default, so access follows the role.
+
+<Note>
+Custom roles can only be assigned to graders. Instructors, students, and admins always use their default role.
+</Note>
+
 ## Student Overview Page
 
 The student overview page (accessible from **Manage** → **Students** → select a student) provides instructors with a comprehensive view of an individual student's course participation and performance.
