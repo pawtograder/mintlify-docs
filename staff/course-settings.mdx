@@ -51,13 +51,40 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 A grader's menu is a subset of an instructor's. Graders see five entries:
 **Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
+and **Grading Conflicts**. The other ten — **Enrollments**, **LMS (LTI) Sync**,
 **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
-instructor-only.
+Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, and **Gemini API
+Key** — are instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
+
+### Custom grader roles and capabilities
+
+Instructors can create custom grader roles — for example, "Head TA" — and grant
+them specific capabilities beyond what the default grader role holds. Custom
+roles build on the default grader role: a grader on a custom role holds
+everything the default grader holds, plus whatever the custom role adds.
+
+The four capabilities that can be granted to a custom role are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | See and delete review assignments for the class (creating and editing stay instructor-only) |
+| `publish_groups` | Make changes in **Manage Groups** (without it, the page is read-only) |
+| `manage_assignments` | Create and edit assignments, sync student repositories, and run repository permission fixes |
+| `manage_roles` | Create, rename, and delete custom grader roles and choose their capabilities |
+
+A role manager can only grant capabilities they themselves hold. The four default
+roles (instructor, grader, student, admin) are fixed and cannot be changed.
+Changing a person's app role (instructor ↔ grader) always moves them to that
+role's default, so custom roles apply only to graders.
+
+<Note>
+Capabilities control what the database allows, not only what the UI shows. A
+grader without `manage_assignments` who reaches the New Assignment or Edit
+Assignment URL is redirected back to the assignment list.
+</Note>
 
 ## Course time zone
 
