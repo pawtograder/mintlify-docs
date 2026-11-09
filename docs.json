@@ -157,6 +157,12 @@
                 ]
               },
               {
+                "group": "Exams & Quizzes",
+                "pages": [
+                  "staff/assignments/exams"
+                ]
+              },
+              {
                 "group": "Groups & Extensions",
                 "pages": [
                   "staff/assignments/groups",
