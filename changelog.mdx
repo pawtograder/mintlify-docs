@@ -6,6 +6,32 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 9, 2026
+
+#### Bug fixes
+- **Bulk CSV import sets all authentication tokens** — Importing users via CSV now correctly sets all GoTrue token columns, preventing authentication failures for newly imported accounts ([#1224](https://github.com/pawtograder/platform/pull/1224))
+
+### November 8, 2026
+
+#### Course settings
+- **Course-owned Gemini API key** — Instructors can now save, replace, and remove a Google Gemini API key per course from **Course Settings → Gemini API Key**. The key is stored in Vault and cannot be viewed again through the settings page after saving. Saving and replacing require the `gemini-api-key-setup` feature flag to be on; removal works regardless. See [Feature flags](/staff/feature-flags) and [Course Settings](/staff/course-settings) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Roles and capabilities
+- **Custom grader roles with capabilities** — Instructors can create custom grader roles (such as "Head TA") and assign specific capabilities to them: `manage_review_assignments`, `manage_assignments`, and `publish_groups`. A grader on a custom role holds everything the default grader role holds, plus the custom role's extras. The UI hides controls that a grader's role does not permit — Bulk Assign, Reassign, New Assignment, Edit Assignment, and group change controls — so graders only see what they can do. See [Custom grader roles](/staff/grader-roles) ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Exam grading
+- **Exam and quiz seed data** — The development seed database now includes eight exam and quiz assignments covering all question shapes, answer types, scan lifecycle states, and in-app quiz scenarios with autograded and hand-graded attempts ([#1213](https://github.com/pawtograder/platform/pull/1213))
+- **Exam answer type normalization** — Unknown answer types returned by AI template extraction (such as "composite") are now normalized to `free_text` instead of failing the save. The allowed types are enforced by a database trigger as a backstop ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Grader points box refills on same-value option change** — Selecting a different check option worth the same number of points now correctly updates the points input instead of leaving the previous value ([#1208](https://github.com/pawtograder/platform/pull/1208))
+
+#### LTI grade sync
+- **Grade drain failures are now visible** — Failed grade pushes to the LMS are captured to Sentry and return HTTP 500 instead of being silently swallowed inside a 200 response. Rows whose class has grade sync disabled are deferred rather than retried on every drain, and persistently failing rows are moved to the back of the queue so they do not block newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+
+#### Infrastructure
+- **Forgejo and Coder on staging** — The staging environment now runs Forgejo (git hosting) and Coder (cloud development environments), with SSO sign-in via Pawtograder accounts ([#1129](https://github.com/pawtograder/platform/pull/1129), [#1165](https://github.com/pawtograder/platform/pull/1165))
+
 ## August 2026
 
 ### August 19, 2026
