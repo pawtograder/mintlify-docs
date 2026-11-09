@@ -111,6 +111,12 @@ Two specifics worth knowing:
 
 The one flag whose off state has a lasting consequence is `discord-student-join`, described above: invitations not created while it was off are not created later on their own.
 
+### Gemini API key setup
+
+This flag gates the **Save** and **Replace** actions on **Course Settings → Gemini API Key**. While it is off, instructors can still remove an existing key, but they cannot save a new one — the save button is disabled and the page says setup is not enabled. Turn it on before asking instructors to configure a key for AI-assisted exam grading.
+
+Turning the flag off after a key has been saved does not remove the key. The key stays in Vault and continues to be used by exam features that read it. To remove the key, use the **Remove** button on the Gemini API Key page (available whether or not the flag is on).
+
 ## Related pages
 
 <CardGroup cols={2}>
