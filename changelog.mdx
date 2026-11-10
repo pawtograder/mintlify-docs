@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 10, 2026
+
+#### Exams
+- **Exam grading behind a course feature flag** — The **Exam (Scan & OCR)** nav entry, the three exam pages (template editor, scan upload, and grading), and the **Paper exam (scan & OCR)** assignment type are now hidden unless the `exams` course feature flag is on. Courses that have not opted in see a "not enabled" notice instead of the upload form. See [Exam Grading (Scan & OCR)](/staff/assignments/exams) and [Feature flags](/staff/feature-flags) ([#1196](https://github.com/pawtograder/platform/pull/1196))
+
+#### Course settings
+- **Course-owned Gemini API key** — Instructors can store a Google Gemini API key per course under **Course Settings → Gemini API Key**. The key is saved in Vault and is never shown again after saving. It is used by AI-assisted features such as exam OCR and template extraction. Saving requires the `gemini-api-key-setup` feature flag to be on. See [Course Settings → Gemini API Key](/staff/course-settings#gemini-api-key) ([#1126](https://github.com/pawtograder/platform/pull/1126))
+
+#### Grading
+- **Capability-based access for graders** — Instructors can create custom grader roles with specific capabilities: `manage_review_assignments` (see and delete review assignments, access Bulk Assign and Reassign), `manage_assignments` (create and edit assignments, sync repos), `publish_groups` (make and publish group changes), and `manage_roles` (manage custom roles). Graders on a custom role hold the default grader permissions plus whatever the role adds. See [Grader capabilities and custom roles](/staff/assignments/grading-assignments#grader-capabilities-and-custom-roles) ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+### November 8, 2026
+
+#### Exams
+- **Exam grading system with OCR** — Paper exam assignments can now be created, scanned, matched to students, and graded with OCR-assisted region detection. Includes template extraction from PDFs via Gemini, scan batch upload, student matching with a manual review queue, and per-question region grading. See [Exam Grading (Scan & OCR)](/staff/assignments/exams) ([#814](https://github.com/pawtograder/platform/pull/814))
+- **Exam answer type normalization** — Unknown answer types returned by the AI vision service (such as "composite") are now normalized to `free_text` instead of failing the template save ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+#### Bug fixes
+- **Password reset links on staging** — GoTrue mailer URL paths are now set correctly so reset, confirm, invitation, and magic-link emails point at the right app pages ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Bulk CSV import token columns** — All GoTrue token columns are now set correctly when importing users via bulk CSV ([#1224](https://github.com/pawtograder/platform/pull/1224))
+
 ## August 2026
 
 ### August 19, 2026
