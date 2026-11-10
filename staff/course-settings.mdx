@@ -113,3 +113,46 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Gemini API key
+
+Each course can store its own Google Gemini API key for AI-assisted features
+such as exam OCR and template extraction. The key is stored in Vault and is
+never returned to the browser after it is saved — you cannot view it again
+through Course Settings.
+
+### Enabling the key setup page
+
+Saving a key requires the `gemini-api-key-setup` feature flag to be on for
+your course. Turn it on under **Course Settings → Feature flags**. The
+**Gemini API Key** menu entry is always visible to instructors, but the save
+and replace controls are disabled while the flag is off. You can still remove
+a previously saved key with the flag off.
+
+### Saving or replacing a key
+
+1. Open **Course Settings → Gemini API Key**.
+2. Type or paste your Gemini API key into the key field.
+3. Click **Save** (first key) or **Replace** (updating an existing key).
+
+The page shows whether a key is already configured and whether the
+`gemini-api-key-setup` flag is on. It does not validate the key with Google
+or turn on AI grading automatically — those steps depend on the specific
+feature that uses the key.
+
+<Note>
+The key field uses `autocomplete="one-time-code"` to prevent browsers from
+offering to save it as a password. The value is held only in the page's
+component state and is cleared after every request completes.
+</Note>
+
+### Removing a key
+
+Click **Remove** on the **Gemini API Key** page. Removal works whether or not
+the `gemini-api-key-setup` flag is on. The key is deleted from Vault and
+cannot be recovered.
+
+<Warning>
+Removing the key disables any course feature that depends on it, such as exam
+OCR and template extraction. Re-enable those features by saving a new key.
+</Warning>
