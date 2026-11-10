@@ -36,6 +36,7 @@ Routes are relative to `/course/<course_id>/`.
 | **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
 | **Gemini API Key** | `manage/course/gemini-api-key` | Saves, replaces, or removes a course-owned Google Gemini API key used for AI-assisted exam grading features. Requires the `gemini-api-key-setup` feature flag to be on before saving a key. | [AI assistance](/staff/ai-assistance) |
+| **Grader Roles** | `manage/course/roles` | Creates and manages custom grader roles with specific capabilities, so different graders can have different levels of access within the course. | [Grader roles and capabilities](#grader-roles-and-capabilities) |
 
 <Note>
 Two entries do not match the route they open, which matters if you are reading
