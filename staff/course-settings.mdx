@@ -105,6 +105,48 @@ and extension settings, including gifted tokens, and
 [Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions)
 for how students spend them.
 
+## Grader roles and capabilities
+
+Every course has four built-in roles: **instructor**, **grader**, **student**, and **admin**. Instructors can create additional custom grader roles under **Course Settings → Grader Roles** to give specific graders a narrower or broader set of permissions within the course.
+
+### Built-in capabilities
+
+Capabilities are named permissions that control what a staff member can do. The four built-in capabilities are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | See and delete review assignments for the course |
+| `publish_groups` | Publish groups and manage group membership |
+| `manage_assignments` | Create, edit, and save assignments (including syncing repositories) |
+| `manage_roles` | Create, rename, and delete custom grader roles and assign capabilities to them |
+
+By default, only instructors hold all four capabilities. Graders hold none of them.
+
+### Custom grader roles
+
+A custom grader role is a named set of extra capabilities layered on top of the default grader role. A grader on a custom role holds everything the default grader role holds, plus whatever the custom role adds.
+
+To create a custom role:
+
+1. Open **Course Settings → Grader Roles**.
+2. Click **New Role** and enter a name.
+3. Check the capabilities you want to grant. You can only grant capabilities you hold yourself.
+4. Save the role.
+
+To assign a grader to a custom role, change their role from the **Enrollments** page. Changing a staff member's app role (instructor ↔ grader) always resets them to that role's default, so custom roles apply only to graders.
+
+<Note>
+The four default roles — instructor, grader, student, and admin — are fixed and cannot be renamed or deleted. Only custom roles can be managed here.
+</Note>
+
+<Warning>
+`manage_roles` does not let a role holder assign people to roles. Assigning a grader to a custom role is always instructor-only through the Enrollments page.
+</Warning>
+
+### Effect on the UI
+
+Pages and controls follow the capability, not the role name. A grader on a custom role with `manage_assignments` sees **New Assignment** and **Edit Assignment** and can save them. A grader without it does not. The same applies to `manage_review_assignments` (Manage Review Assignments page and delete controls), `publish_groups` (group management controls), and `manage_roles` (the Grader Roles page itself).
+
 ## Grading conflicts
 
 Course staff declare conflicts of interest so that they are not asked to grade
