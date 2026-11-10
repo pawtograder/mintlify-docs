@@ -18,6 +18,34 @@ When a grader completes their assigned review, Pawtograder automatically:
 
 This reduces duplicate work when multiple graders are assigned to overlapping parts of the same submission.
 
+## Custom grader roles and capabilities
+
+By default, graders can view and complete grading tasks but cannot manage review assignments, publish groups, create or edit assignments, or change course roles. Instructors can create custom grader roles that grant additional capabilities to specific TAs — for example, a "Head TA" role that can manage review assignments and edit assignments.
+
+### Creating a custom role
+
+Open **Course Settings → Enrollments** and navigate to the **Roles** tab. Click **New role**, give it a name, and choose which capabilities to include. The available capabilities are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | View, bulk-assign, reassign, and delete review assignments for the course |
+| `publish_groups` | Create, edit, and publish student groups |
+| `manage_assignments` | Create and edit assignments, sync repositories, and create student repos |
+| `manage_roles` | Create, rename, and delete custom grader roles, and assign capabilities to them (cannot grant capabilities the role manager does not hold) |
+
+The four default roles — instructor, grader, student, and admin — are fixed and cannot be edited or deleted. Custom roles build on the default grader role: a grader on a custom role holds everything the default grader role holds, plus the custom role's extras.
+
+### Assigning a custom role
+
+On the **Enrollments** page, find the grader and change their role from the **Role** dropdown. Changing a grader's app role (e.g. from grader to instructor) always moves them back to that role's default, so custom roles apply only to graders.
+
+### What changes for graders with extra capabilities
+
+- **`manage_review_assignments`**: The grader can see all review assignments in the class, use **Bulk Assign Grading** and **Reassign Grading by Grader**, and delete review assignments. Without this capability, graders see only their own assigned reviews.
+- **`manage_assignments`**: The grader can open **New Assignment** and **Edit Assignment**, save changes, sync repositories, and create student repos. Without this capability, those controls are hidden and the pages redirect back to the assignment list.
+- **`publish_groups`**: The grader can create, edit, and publish groups from the assignment's **Groups** page. Without it, the page is read-only.
+- **`manage_roles`**: The grader can create and configure custom roles from **Course Settings → Enrollments → Roles**. They can only add capabilities they themselves hold.
+
 ## Conflicts of Interest
 
 Pawtograder will automatically ensure that graders do not grade assignments that they have a conflict of interest in. Graders can self-input their conflicts (under "Course Settings" - "Grading Conflicts"), and instructors can review and enter conflicts for all graders in the class. Graders are encouraged to input a "Reason" for their conflict, so that instructors can understand the nature of the conflict and help avoid declaring spurious conflicts.
