@@ -78,6 +78,16 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Gemini API key setup
+
+This flag gates whether an instructor can save a course-owned Google Gemini API key from **Course Settings → Gemini API Key**. While it is off, the key input is disabled and the page says setup is not enabled for this course. Removing the key and reading the configuration status work regardless of the flag.
+
+The key is stored in Vault and is never returned to the browser after it is saved — the page shows only whether a key is configured, not the key itself. Saving a key does not validate it with Google or turn on any AI feature automatically; it makes the key available to edge functions that implement AI-assisted grading.
+
+<Note>
+The **Gemini API Key** entry in Course Settings is always visible to instructors, whether or not the flag is on. The flag controls only whether a key can be saved.
+</Note>
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
