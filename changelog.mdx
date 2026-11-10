@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 10, 2026
+
+#### Exams
+- **Exam grading behind a course feature flag** — The Exam (Scan & OCR) nav entry and its three pages (template editor, scan upload, exam grading) are now hidden unless the `exams` feature flag is on for the course. The **Paper exam (scan & OCR)** assignment type is disabled in the new-assignment form when the flag is off, with helper text pointing to **Course Settings → Feature flags**. Turn the flag on before creating a paper exam assignment. See [Feature flags](/staff/feature-flags) ([#1196](https://github.com/pawtograder/platform/pull/1196))
+
+### November 9, 2026
+
+#### Assignments
+- **Custom grader roles and capabilities** — Instructors can create custom grader roles under **Course Settings → Grader Roles** and assign named capabilities (`manage_review_assignments`, `publish_groups`, `manage_assignments`, `manage_roles`) to them. A grader on a custom role holds the default grader permissions plus the role's extras. Pages and controls follow the capability: a grader with `manage_assignments` can create and edit assignments; one with `manage_review_assignments` can see and delete review assignments. See [Course Settings → Grader roles and capabilities](/staff/course-settings#grader-roles-and-capabilities) ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+#### Course settings
+- **Course-owned Gemini API key** — Instructors can save, replace, or remove a Google Gemini API key per course under **Course Settings → Gemini API Key**. The key is stored in Vault and cannot be viewed again through the UI after saving. Saving requires the `gemini-api-key-setup` feature flag to be on. See [AI assistance → Course Gemini API key](/staff/ai-assistance#course-gemini-api-key) ([#1126](https://github.com/pawtograder/platform/pull/1126))
+
+#### Bug fixes
+- **Password reset links working on staging** — GoTrue mailer URL paths are now set correctly so reset, confirm, invitation, and magic-link emails point at the right app pages ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Exam answer types normalized** — Unknown answer types returned by Gemini (such as "composite") are now normalized to `free_text` instead of failing the template save ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+### November 8, 2026
+
+#### Exams
+- **Exam seeding with full lifecycle coverage** — The seed database now includes paper exam and in-app quiz assignments covering every question shape, answer type, scan batch state, and grading lifecycle, with page images rendered from the same draw operations used to generate PDFs ([#1213](https://github.com/pawtograder/platform/pull/1213))
+- **Exam grading system with OCR and student matching** — Paper exam scanning, OCR-based template extraction, student matching, and grading are now available as a course feature. Instructors upload scanned PDFs, match pages to students, and grade using the region editor ([#814](https://github.com/pawtograder/platform/pull/814))
+
 ## August 2026
 
 ### August 19, 2026
