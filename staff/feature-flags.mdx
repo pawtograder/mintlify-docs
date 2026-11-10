@@ -100,6 +100,22 @@ What a flag does not do is grant or withhold permission. Turning a module off is
 When you genuinely need material withheld — an assignment still being written, a survey you are not ready to run, a deck nobody should see yet — act on the material, not the menu. Unpublish it, hold it behind its release date, or delete it. Those are the controls that decide who may read something; a flag decides who can find it.
 </Warning>
 
+### Exam (Scan & OCR)
+
+This flag gates the paper exam scanning and OCR grading workflow. While it is off, the **Exam (Scan & OCR)** nav entry is hidden, the three exam pages (template editor, scan upload, and grading) redirect to a "not enabled" notice, and the **Paper exam (scan & OCR)** assignment type is disabled in the new-assignment form (shown with helper text pointing here).
+
+Turn this flag on before creating a paper exam assignment. An exam assignment created in a course where the flag is later turned off will have all its pages replaced by the notice, and the assignment type cannot be changed after creation.
+
+<Note>
+The flag gates the UI only. Direct database calls can still reach the exam worker and RPCs for anyone row-level security already allows. Gating the server side is a separate change.
+</Note>
+
+### Gemini API Key Setup
+
+This flag controls whether instructors can save or replace a course Gemini API key on **Course Settings → Gemini API Key**. While it is off, the **Save** and **Replace** buttons are disabled. The **Remove** button is always available regardless of the flag.
+
+Turn this flag on before asking instructors to configure a key. See [Course Settings → Gemini API Key](/staff/course-settings#gemini-api-key) for the full setup procedure.
+
 The staff search palette is gated alongside the menu, with one exception: its **Manage office hours** entry stays in the palette after you turn `office-hours` off, even though the nav entry is gone. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
 ## What happens to data you turn off
