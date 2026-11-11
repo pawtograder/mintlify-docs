@@ -41,11 +41,44 @@ Graders get a smaller navigation set than instructors. A grader has **no
 Gradebook entry at all** — neither the staff gradebook nor the student one — and
 does not see these **Course Settings** entries: **Enrollments**, **LMS (LTI)
 Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due
-Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
+Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, **Gemini API
+Key**.
 
 A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
+
+### Custom grader roles
+
+By default every grader in a course holds the same access. Instructors can create
+custom grader roles — for example, "Head TA" — and grant them additional
+capabilities beyond the default grader set.
+
+The four built-in roles (**instructor**, **grader**, **student**, **admin**) are
+fixed. Custom roles are grader-only: only a grader can be placed on a custom role,
+and changing someone's app role always moves them back to that role's default.
+
+**Available capabilities**
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | See and delete review assignments for the whole class (creating and editing stay instructor-only) |
+| `manage_assignments` | Create, edit, and save assignments, including syncing student repositories and creating repos on release |
+| `publish_groups` | Publish groups and manage group membership |
+
+Custom roles inherit everything the default grader role holds, plus whatever
+capabilities you add. A capability added to the default grader role later reaches
+every grader automatically.
+
+**Managing custom roles**
+
+Instructors with the `manage_roles` capability (all instructors by default) can
+create, rename, and delete custom roles under **Course Settings → Enrollments →
+Roles**. You can choose which capabilities a custom role holds, except
+`manage_roles` itself. A role that has members cannot be deleted.
+
+To place a grader on a custom role, edit their enrollment row in the Enrollments
+table and select the role from the **Role** dropdown.
 
 ## Key features
 
