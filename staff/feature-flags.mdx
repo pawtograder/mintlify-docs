@@ -90,6 +90,22 @@ While it is on, students see their invitation to the course's Discord server on 
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
 
+### Exam (Scan & OCR)
+
+This flag gates the paper exam scanning and OCR grading workflow. While it is off, the **Exam (Scan & OCR)** nav entry and the three pages behind it are hidden from all staff, and the **Paper exam (scan & OCR)** assignment type is disabled on the new-assignment form. The option is shown but grayed out, with helper text naming **Course Settings → Feature flags**, so instructors know where to enable it.
+
+<Warning>
+The assignment type cannot be changed after an assignment is created. If you create a paper exam assignment before turning this flag on, every page it links to will show a "not enabled" notice and there is no way to correct the type. Turn the flag on first, then create the assignment.
+</Warning>
+
+The flag covers the UI only. It does not prevent direct API calls to the exam worker or the underlying RPCs for anyone already permitted by row-level security.
+
+### Gemini API Key
+
+This flag controls whether instructors can save a course-owned Google Gemini API key. While it is off, the **Save** and **Replace** buttons on **Course Settings → Gemini API Key** are disabled. Checking the key's configuration status and removing a stored key work regardless of the flag.
+
+Turn this flag on before directing an instructor to store a key. The key is used by AI-powered exam features such as OCR and template extraction. See [AI assistance](/staff/ai-assistance) for details on how the key is stored and what it enables.
+
 ## Feature flags control navigation, not access
 
 Feature flags are a curation tool. They decide which modules your course puts in front of students and staff, and when — so you can hold Surveys or Flashcards back until the week they matter, retire Polls once you have stopped using them, and keep the course menu down to what the course is actually doing. Staff pages behave the same way, which is deliberate: a module you are not running should not clutter anyone's menu.
