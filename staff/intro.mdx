@@ -23,7 +23,7 @@ change. Pick one of its entries:
 **Discord**, **Enrollments**, **LMS (LTI) Sync**, **Feature flags**,
 **GitHub Templates**, **Lab Sections**, **Flashcard Decks**, **Discussion
 Topics**, **Discussion Engagement**, **Grading Conflicts**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
+Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, **Gemini API Key**.
 
 <Note>
 Most top-level entries are gated on course feature flags. If your course has
@@ -41,11 +41,31 @@ Graders get a smaller navigation set than instructors. A grader has **no
 Gradebook entry at all** — neither the staff gradebook nor the student one — and
 does not see these **Course Settings** entries: **Enrollments**, **LMS (LTI)
 Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due
-Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
+Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, and **Gemini
+API Key**.
 
 A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
+
+### Custom grader roles and capabilities
+
+Instructors can create custom grader roles (for example, "Head TA") and assign
+specific capabilities to them. A grader on a custom role holds everything the
+default grader role holds, plus any extras the custom role adds. The available
+capabilities are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | See and delete review assignments for the class |
+| `publish_groups` | Publish groups and manage group membership |
+| `manage_assignments` | Create, edit, and save assignments, including syncing student repos |
+| `manage_roles` | Create, rename, and delete custom grader roles and set their capabilities |
+
+Instructors always hold all capabilities. Changing a grader's app role always
+moves them to that role's default, so access follows the role. A grader on a
+custom role with `manage_assignments` can save new and edited assignments; a
+grader without it sees the forms but cannot save them.
 
 ## Key features
 
