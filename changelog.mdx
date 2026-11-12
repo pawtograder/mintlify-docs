@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 12, 2026
+
+#### Office hours
+- **New student requests appear in real time** — When a student creates a help request, TAs who already have the office hours queue open now see the new request and its student count update immediately, without needing to reload the page ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+### November 10–11, 2026
+
+#### Exams
+- **Exam (Scan & OCR) is now behind a feature flag** — The paper exam scanning and OCR grading feature is off by default. Courses opt in under **Course Settings → Feature flags**. The **Exam (Scan & OCR)** nav entry, the three exam management pages, and the **Paper exam (scan & OCR)** assignment type are all hidden until the flag is on. See [Feature flags](/staff/feature-flags) ([#1197](https://github.com/pawtograder/platform/pull/1197))
+
+#### Course settings
+- **Per-course Gemini API key** — Instructors can store a Google Gemini API key for their course under **Course Settings → Gemini API Key**. The key is held in Vault and never returned to the browser after it is saved. Saving requires the `gemini-api-key-setup` feature flag to be on; removal works regardless. See [Course Settings](/staff/course-settings#gemini-api-key) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Grading roles and capabilities
+- **Custom grader roles can manage review and regular assignments** — Graders on a custom role that holds the `manage_review_assignments` capability can now see and delete review assignments for the class. Graders with `manage_assignments` can create, edit, and save assignments, sync student repositories, and create repos on save. Instructors are unaffected. ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Bug fixes
+- **Password reset links work on staging** — Email links for password reset, account confirmation, and magic-link sign-in now point at the correct app pages ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Exam answer types normalized on save** — Unrecognized answer types returned by OCR extraction (such as "composite") are now normalized to `free_text` before saving, preventing a failed save on the exam template editor ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
 ## August 2026
 
 ### August 19, 2026
