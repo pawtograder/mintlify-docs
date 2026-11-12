@@ -26,6 +26,10 @@ Pawtograder will automatically ensure that graders do not grade assignments that
   <img src="/images/staff/assignments/grading-assignments-1756052760269.png" alt="Grading Conflicts Dashboard showing declared conflicts and reasons" />
 </Frame>
 
+## Access and custom grader roles
+
+By default, only instructors can see and manage review assignments. Graders on a custom role that holds the **manage_review_assignments** capability can view and delete review assignments for the class. Graders on a custom role that holds the **manage_assignments** capability can create and edit assignments, including saving the new-assignment and edit-assignment forms and syncing student repositories. Custom roles and their capabilities are managed by instructors with the **manage_roles** capability.
+
 ## Bulk Assign Grading
 
 Pawtograder's **Bulk Assign Grading** feature (from an Assignment's "Grading Assignments" page) allows instructors to assign grading tasks to staff in bulk. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the system automatically clears the completion timestamp so the new work appears in their pending work list.
