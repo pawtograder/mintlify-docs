@@ -35,6 +35,7 @@ Routes are relative to `/course/<course_id>/`.
 | **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
 | **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
+| **Gemini API Key** | `manage/course/gemini-api-key` | Saves, replaces, or removes a course-owned Google Gemini API key used for AI-assisted exam grading. The key is stored in Vault and is never returned to the browser after saving. Requires the `gemini-api-key-setup` feature flag to be on before saving a key; removal works regardless of the flag. | [Feature flags](/staff/feature-flags) |
 
 <Note>
 Two entries do not match the route they open, which matters if you are reading
