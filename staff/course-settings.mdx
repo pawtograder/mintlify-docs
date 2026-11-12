@@ -113,3 +113,40 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Gemini API key
+
+Each course can store one Google Gemini API key for use with AI-assisted exam
+grading features. The key is stored in Vault and is never returned to the
+browser after it is saved — the page shows only whether a key is configured,
+not the key itself.
+
+### Enabling the setting
+
+The **Gemini API Key** entry is always visible to instructors, but saving or
+replacing a key requires the `gemini-api-key-setup` feature flag to be on for
+the course. Turn it on under **Course Settings → Feature flags**. Removing a
+saved key works whether or not the flag is on.
+
+### Saving a key
+
+1. Open **Course Settings → Gemini API Key**.
+2. If the flag is off, the save control is disabled and the page says so. Enable
+   the flag first.
+3. Enter your Gemini API key in the key field. The field is masked and excluded
+   from analytics capture.
+4. Click **Save** (or **Replace** if a key is already configured).
+
+The page reports the outcome. A saved key cannot be viewed again through Course
+Settings; if you need to verify the key, you must replace it.
+
+<Note>
+Saving a key does not validate it with Google or turn on AI grading. It only
+stores the key so that exam grading features can use it when they are enabled.
+</Note>
+
+### Removing a key
+
+Click **Remove** on the **Gemini API Key** page. The key is deleted from Vault
+and the course's AI grading features that depend on it stop working until a new
+key is saved.
