@@ -42,7 +42,7 @@ A course records only the flags an instructor has touched. Every flag you have n
 
 ## What each flag hides
 
-The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the nine flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
+The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
 
 | Flag | Students lose | Staff lose |
 | --- | --- | --- |
@@ -55,6 +55,10 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
+| `gradebook-column-groups` | Nothing (groups are display-only) | Named, collapsible column groups in the instructor gradebook and student What-If; the **Group…** column menu item; **Auto-group Columns** and group header menus |
+| `gradebook-topics` | Topic units in the student What-If gradebook | The topic view toggle, **Suggest Topics**, the **Topic…** column menu item, and topic header menus |
+| `exams` | Nothing | The **Exam (Scan & OCR)** assignment type option and the three exam pages (template editor, scan upload, grading) |
+| `gemini-api-key-setup` | Nothing | The ability to save a course Gemini API key on **Course Settings → Gemini API Key** (the page is still visible; saving is disabled) |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
