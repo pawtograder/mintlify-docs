@@ -44,7 +44,7 @@ Courses that existed before the gradebook column groups and topics features ship
 
 ## What each flag hides
 
-The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the nine flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
+The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the eleven flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
 
 | Flag | Students lose | Staff lose |
 | --- | --- | --- |
@@ -57,6 +57,8 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
+| `gradebook-column-groups` | Nothing (groups are instructor-only) | The stored column groups in the gradebook; the gradebook falls back to slug-guessed groups |
+| `gradebook-topics` | The topic view in the student What-If gradebook | The topic view, **Suggest Topics** button, and **Topic…** column menu item in the instructor gradebook |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
