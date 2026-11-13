@@ -50,6 +50,57 @@ Staff-only columns are useful for internal grading calculations, curve adjustmen
 
 When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## Column Groups
+
+When the **Gradebook column groups** feature is on, you can organize columns into named, collapsible groups that you create, rename, reorder, and delete. Groups are stored in the database, so they persist across sessions and are visible to all instructors.
+
+### Enabling column groups
+
+Open **Course Settings → Feature flags** and turn on **Gradebook column groups**. Before anything changes, a preview dialog shows the groups that would be created from your current columns and lists every column whose header would differ from today, with the reason. Confirm to apply the groups. Turning the feature off returns to the slug-guessed display; your stored groups are kept and restored if you turn it back on.
+
+New courses have column groups on by default. Courses that existed before the feature shipped have it written as disabled and keep the slug-guessed display until an instructor enables it.
+
+### Creating and editing groups
+
+- **From a column's menu**: open the column menu (the chevron in the column header) and choose **Group…** to assign the column to an existing group, create a new group by name, or remove it from its current group.
+- **From the Add Column or Edit Column dialog**: the **Group** field lets you pick an existing group or create a new one when you save the column.
+- **Auto-group Columns**: the **Auto-group Columns** button in the toolbar groups any ungrouped columns using the same slug-prefix rule as the preview. It only affects columns that are not already in a group.
+
+### Managing groups
+
+Each group header carries a menu (the three-dot icon) with:
+
+- **Rename group**: change the group's name. Names are unique per gradebook, ignoring case.
+- **Move group left / Move group right**: shift the whole group one position.
+- **Delete group**: removes the group. Its columns stay where they are, ungrouped. No grades change.
+
+When column groups are on, **Move Left** and **Move Right** in a column's menu move the column within its group. An ungrouped column steps over a whole neighboring group.
+
+## Gradebook Topics
+
+When the **Gradebook topics** feature is on, you can mark columns as attempts at a topic and designate a standing column for each topic. The gradebook can then show one column per topic that collapses to its standing and expands to its attempts.
+
+Topics are designed for courses that assess each topic more than once — for example, a course where each quiz session covers several topics and each topic appears in multiple sessions.
+
+### Setting up topics
+
+Use **Suggest Topics** (the button in the toolbar) to let Pawtograder propose topics from your existing columns. It looks for computed columns whose inputs are only manual columns that nothing else reads, treats those inputs as attempts, and infers attempt numbers from "Attempt N" names. The dialog shows every proposed topic and lets you uncheck columns before applying. Nothing is written until you confirm.
+
+You can also assign topics manually from a column's menu (**Topic…**), where you pick an existing topic or create a new one and set the attempt number.
+
+### Standing columns
+
+Each topic can have a standing column that holds the topic's result. You can:
+
+- Use an existing computed column as the standing (its expression stays unchanged).
+- Switch to a **generated standing** from the topic header menu (**Standing: best attempt** or **Standing: latest attempt**). A generated standing's expression is kept in sync with the topic's attempts automatically.
+
+### Topic view
+
+When topics exist, a **Show topics** toggle appears in the toolbar. In topic view, each topic is one collapsible unit drawn where its standing column sits. Collapsed, it shows the standing; expanded, it shows the attempts in order. Columns outside any topic keep the group layout. Switch back to the group view with **Show groups**.
+
+Students see the same topic units in What-If.
+
 ## Managing Columns
 
 ### Reordering Columns
