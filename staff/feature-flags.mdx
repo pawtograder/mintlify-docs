@@ -106,6 +106,14 @@ While this flag is on, you can mark gradebook columns as attempts at a topic and
 
 See [Gradebook → Gradebook topics](/staff/gradebook#gradebook-topics) for how to set up and use topics.
 
+### Paper exams
+
+While this flag is on, the **Exam (Scan & OCR)** nav entry is visible on exam assignments, and the **Paper exam (scan & OCR)** assignment type is available in the new-assignment form. While it is off, the nav entry is hidden and the assignment type is disabled in the form (with a note pointing to **Course Settings → Feature flags**). An exam assignment created before the flag was turned off still shows the "not enabled" notice on its pages until the flag is turned back on.
+
+<Warning>
+The **Paper exam (scan & OCR)** assignment type cannot be changed after creation. Enable this flag before creating a paper exam assignment, and do not disable it while a scan-and-grade workflow is in progress.
+</Warning>
+
 ## Feature flags control navigation, not access
 
 Feature flags are a curation tool. They decide which modules your course puts in front of students and staff, and when — so you can hold Surveys or Flashcards back until the week they matter, retire Polls once you have stopped using them, and keep the course menu down to what the course is actually doing. Staff pages behave the same way, which is deliberate: a module you are not running should not clutter anyone's menu.
