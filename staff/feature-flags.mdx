@@ -82,6 +82,22 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Gradebook column groups
+
+The `gradebook-column-groups` flag controls whether the instructor gradebook uses stored, named groups or falls back to the slug-prefix heuristic. New courses start with it on. For courses that existed before this feature shipped, the migration writes it as disabled so no existing gradebook changes on deploy.
+
+Turning it on for the first time opens a preview dialog that shows the groups it would create from your current columns and lists every column whose header would change, before anything is written. Confirm to apply, or cancel to keep the current display. Turning it off goes back to the slug-guessed groups; your stored groups are kept and reappear when you turn it back on.
+
+See [Gradebook](/staff/gradebook) for how to create, rename, and delete groups once the flag is on.
+
+### Gradebook topics
+
+The `gradebook-topics` flag enables the topic view in the instructor gradebook and the **Suggest Topics** workflow. New courses start with it on. For older courses, the migration writes it as disabled.
+
+Turning it off hides the topic view toggle and the **Suggest Topics** button; your topics are kept and reappear when you turn it back on. Turning it on changes nothing until you create topics.
+
+See [Gradebook](/staff/gradebook) for how to suggest, create, and manage topics.
+
 ### Exams (paper scan & OCR)
 
 The `exams` flag gates the paper exam scanning and grading workflow. When it is off:
