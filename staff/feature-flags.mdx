@@ -41,7 +41,7 @@ A course records only the flags an instructor has touched. Every flag you have n
 
 ## What each flag hides
 
-The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the nine flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
+The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the ten flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
 
 | Flag | Students lose | Staff lose |
 | --- | --- | --- |
@@ -51,6 +51,7 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook` | The **Gradebook** nav entry | The **Gradebook** nav entry. This one is instructor-only to begin with, so graders have no gradebook entry either way |
 | `surveys` | The **Surveys** nav entry, the surveys-to-complete banner, and the active surveys section of the student dashboard | The **Surveys** nav entry and the surveys panel on the instructor dashboard |
 | `polls` | The **Polls** nav entry | The **Polls** nav entry |
+| `exams` | Nothing (students do not access exam setup pages) | The **Exam (Scan & OCR)** nav entry, the exam template editor, and the scan upload and grading pages. The **Paper exam (scan & OCR)** assignment type is disabled in the new-assignment form when the flag is off |
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
