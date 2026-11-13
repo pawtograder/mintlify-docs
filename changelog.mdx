@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13, 2026
+
+#### Gradebook
+- **Column groups and topics** — Instructors can now organize gradebook columns into named, collapsible groups that they create, rename, reorder, and delete. For courses that assess each topic more than once, columns can be marked as attempts at a topic with a standing column that shows the best or latest score; the gradebook can then show one column per topic that expands to its attempts. Both features are on by default for new courses and can be enabled for existing courses from **Course Settings → Feature flags**, where a preview shows every change before anything is written. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Exams
+- **Exam rubric out-of-date notice** — The exam template page now shows a notice when the saved questions no longer match the rubric built from them, and tells the instructor to click **Build rubric from exam** before grading starts ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Paper exam submissions open on the exam artifact** — Graders opening a paper exam submission now land on the answer crops rather than the scanned page image ([#1281](https://github.com/pawtograder/platform/pull/1281))
+- **Exam UI polish** — Dropdown chevrons, region labels moved above the answer area, the question picker clears after drawing a region, and "No exam template yet" links to the template page ([#1283](https://github.com/pawtograder/platform/pull/1283))
+
+#### Office hours
+- **New requests show student count in real time** — A TA with office hours open now sees the correct student count on a new request without reloading the page ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+#### Integrations
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories. Pushes are matched to a `repositories` row with `git_provider = 'forgejo'` and recorded in the commit history. The student commit history dialog shows only recorded rows for Forgejo repositories and does not link commits to GitHub ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
 ## August 2026
 
 ### August 19, 2026
