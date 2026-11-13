@@ -50,6 +50,56 @@ Staff-only columns are useful for internal grading calculations, curve adjustmen
 
 When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## Column groups
+
+Instructors can organize gradebook columns into named, collapsible groups. Groups are stored and persist across sessions — you create, rename, reorder, and delete them yourself, rather than having them guessed from column slugs.
+
+### Enabling column groups
+
+Column groups are on by default for new courses. For courses created before this feature shipped, turn it on from [**Course Settings → Feature flags**](/staff/feature-flags). When you flip the switch, a preview dialog shows the groups that would be created from your current columns and lists every column whose header would change from what the gradebook shows today. Nothing changes until you confirm.
+
+Once groups are on, turning the feature off goes back to slug-guessed groups and keeps your stored groups for later.
+
+### Creating and editing groups
+
+With column groups enabled, each column header menu gains a **Group…** item. Use it to assign a column to an existing group or create a new one by name. The **Add Column** and **Edit Column** dialogs also include a **Group** picker.
+
+Each group header has its own menu (the ellipsis icon on the header bar) with:
+
+- **Rename group**
+- **Move group left** / **Move group right**
+- **Delete group** — columns stay where they are, ungrouped; no grades change
+
+To group several ungrouped columns at once, click **Auto-group Columns** in the toolbar. A preview shows what would be created before anything is written.
+
+### Moving columns within groups
+
+When column groups are on, **Move Left** and **Move Right** in the column menu keep a grouped column inside its group. An ungrouped column steps over a whole neighbouring group rather than landing inside it.
+
+Drag-and-drop reordering is not available in topic view; switch to the group view first.
+
+## Gradebook topics
+
+Topics are for courses that assess each topic more than once — for example, a course where each quiz session covers several topics and each topic appears in multiple quizzes. Enable topics from [**Course Settings → Feature flags**](/staff/feature-flags).
+
+### Setting up topics
+
+Click **Suggest Topics** in the gradebook toolbar. Pawtograder infers topics from your existing columns: a computed column whose inputs are only manual columns that nothing else reads is treated as a topic's standing, and those inputs are its attempts. Attempt numbers are read from "Attempt N" column names, and attempts the standing's expression misses are recovered by name. Nothing is written until you confirm the proposed set; a duplicate attempt number blocks applying until you uncheck one column.
+
+You can also set topics manually from each column's header menu (**Topic…**), where you pick the topic and attempt number for that column.
+
+### Topic view
+
+Once topics exist, a **Show topics** toggle appears in the gradebook toolbar. In topic view, each topic collapses to its standing column and expands to show its attempts in order. Columns outside any topic keep the group layout. Students see the same topic units in What-If.
+
+Each topic header has a menu with:
+
+- **Standing: best attempt** — generates an expression that takes the highest non-excused score
+- **Standing: latest attempt** — generates an expression that takes the most recent non-excused score
+- **Standing: keep the column's own expression** — reverts to the instructor's own expression
+- **Rename topic**
+- **Delete topic** — columns stay; the standing column keeps its last expression
+
 ## Managing Columns
 
 ### Reordering Columns
@@ -69,6 +119,8 @@ The chevron in each column header opens a menu with:
 - **Show Filter** / **Hide Filter**: toggle the per-column filter input
 - **Sort Ascending**, **Sort Descending**, **Clear Sort**
 - **Edit Column**: open the column editor (name, maximum score, score expression, render expression, and staff-only)
+- **Topic…**: assign the column to a topic and set its attempt number (shown when the `gradebook-topics` feature is on)
+- **Group…**: assign the column to a group (shown when the `gradebook-column-groups` feature is on)
 - **Move Left**, **Move Right**
 - **Release Column**, **Unrelease Column**: shown only for manually-entered columns and for staff-only columns
 - **Convert Missing to 0**: shown only for manually-entered columns and for columns whose score expression starts with `assignments(`
