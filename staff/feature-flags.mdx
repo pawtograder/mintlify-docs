@@ -115,6 +115,28 @@ Two specifics worth knowing:
 
 The one flag whose off state has a lasting consequence is `discord-student-join`, described above: invitations not created while it was off are not created later on their own.
 
+### Gradebook column groups
+
+When this flag is on, the gradebook uses named, stored groups that you create, rename, reorder, and delete. When it is off, the gradebook falls back to the slug-prefix heuristic that guesses groups from column names. Your stored groups are kept while the flag is off and restored when you turn it back on.
+
+Turning the flag on for the first time shows a preview of the groups it would create from your current columns before anything changes. New courses have this flag on by default. Courses that existed before the feature shipped have it written as disabled.
+
+See [Gradebook](/staff/gradebook#column-groups) for how to create and manage groups.
+
+### Gradebook topics
+
+When this flag is on, you can mark columns as attempts at a topic and designate a standing column for each topic. The gradebook can then show one column per topic that collapses to its standing and expands to its attempts. The **Suggest Topics** button and the **Topic…** column menu item are only available while this flag is on.
+
+Turning the flag off hides the topic view and the **Suggest Topics** button; your topics are kept and restored when you turn it back on. New courses have this flag on by default.
+
+See [Gradebook](/staff/gradebook#gradebook-topics) for how to set up and use topics.
+
+### Paper exams
+
+When this flag is on, the **Exam (Scan & OCR)** entry appears in the course navigation and the three exam pages behind it are accessible. The **Paper exam (scan & OCR)** assignment type is also enabled in the new-assignment form.
+
+When the flag is off, the nav entry is hidden and the exam pages show a "not enabled" notice. The **Paper exam** option in the assignment form is shown but disabled, with helper text pointing to this page.
+
 ## Related pages
 
 <CardGroup cols={2}>
