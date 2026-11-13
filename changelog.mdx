@@ -6,6 +6,21 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13, 2026
+
+#### Gradebook
+- **Column groups and topics** — Gradebook columns can now be assigned to a named group and given a topic. Columns in the same group appear together in the staff grid and collapse into a single header in the student card view. Topics are metadata labels visible in column headers and exports. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Exams
+- **Exam rubric out-of-date notice** — The exam template page now shows a notice when the saved questions no longer match the rubric built from them — for example, when a leaf question has no generated check or its check's points differ from the question's points. The notice prompts you to click **Build rubric from exam** before grading starts ([#1190](https://github.com/pawtograder/platform/pull/1190))
+- **Paper exam grader opens on the exam artifact** — When grading a paper exam submission, the Files tab now defaults to the exam artifact (answer crops) instead of the scanned page image, so graders land on the right view without extra clicks ([#1267](https://github.com/pawtograder/platform/pull/1267))
+- **Exams feature flag** — Paper exam scanning and OCR grading is now gated behind a per-course `exams` feature flag, off by default. Turn it on under **Course Settings → Feature flags** before creating a paper exam assignment. The **Paper exam (scan & OCR)** assignment type is disabled in the new-assignment form while the flag is off. See [Feature flags](/staff/feature-flags) ([#1196](https://github.com/pawtograder/platform/pull/1196))
+
+#### Permissions
+- **Custom grader roles can manage review assignments** — Graders on a custom role with the `manage_review_assignments` capability can now see and delete the class's review assignments. Creating and editing review assignments remain instructor-only ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
 ## August 2026
 
 ### August 19, 2026
