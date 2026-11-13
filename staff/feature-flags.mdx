@@ -38,6 +38,8 @@ The global search palette lists **Feature flags** for all course staff, so a gra
 
 A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the three opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
 
+`gradebook-column-groups` and `gradebook-topics` default on for courses created after those features shipped, and are written as disabled for courses that existed before. Existing courses keep the old slug-guessed column display until an instructor enables the flag.
+
 ## What each flag hides
 
 The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the nine flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
