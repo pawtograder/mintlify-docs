@@ -1,6 +1,6 @@
 ---
 title: "Course Settings"
-description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
+description: "Index of the 16 Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
@@ -8,14 +8,14 @@ icon: "gear"
 
 **Course Settings** is a menu, not a page. Its trigger is a button with no link:
 clicking it opens the menu and the address in your browser does not change. Every
-course-wide setting lives on one of the menu's 14 entries, so this page is an
+course-wide setting lives on one of the menu's entries, so this page is an
 index — find the entry you want below, then follow the link for the details.
 
 <Frame>
   <img src="/images/staff/course-settings-menu-1787281367482.png" alt="Course navigation with the Course Settings menu open, listing Discord, Enrollments, LMS (LTI) Sync, Feature flags, GitHub Templates, Lab Sections, Flashcard Decks, Discussion Topics, Discussion Engagement, Grading Conflicts, Due Date Extensions, Audit Log, Emailer, and Workflow Runs" />
 </Frame>
 
-## The 14 entries
+## Entries
 
 Routes are relative to `/course/<course_id>/`.
 
@@ -35,6 +35,8 @@ Routes are relative to `/course/<course_id>/`.
 | **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
 | **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
+| **Gemini API Key** | `manage/course/gemini-key` | Stores a course-owned Google Gemini API key for AI-assisted grading features. Requires the `gemini-api-key-setup` feature flag to be on. | See [Gemini API key](#gemini-api-key) below |
+| **Roles** | `manage/course/roles` | Creates and manages custom grader roles with specific capabilities, so different graders can have different permissions within the course. | See [Custom grader roles](#custom-grader-roles) below |
 
 <Note>
 Two entries do not match the route they open, which matters if you are reading
@@ -112,3 +114,51 @@ instructors can review and enter conflicts for everyone in the class.
 
 See [Grading Assignments](/staff/assignments/grading-assignments) for how
 conflicts affect grader assignment.
+
+## Gemini API key
+
+Instructors can store a course-owned Google Gemini API key under **Course Settings → Gemini API Key**. The key is stored in Vault and is never returned through the interface — once saved, it cannot be viewed again through Course Settings.
+
+The page shows two separate states: whether the `gemini-api-key-setup` feature flag is on (which enables saving a key), and whether a key is currently configured. Saving a key does not validate it with Google or turn on AI grading; it only stores the credential for features that use it.
+
+To save or replace a key, the `gemini-api-key-setup` feature flag must be on. You can remove a key whether or not the flag is on.
+
+<Note>
+The **Gemini API Key** entry only appears in the menu when the `gemini-api-key-setup` feature flag is enabled for the course. Turn it on under **Course Settings → Feature flags**.
+</Note>
+
+## Custom grader roles
+
+By default, every grader in a course holds the same permissions. **Course Settings → Roles** lets instructors create custom grader roles with specific capabilities, so different graders can have different levels of access.
+
+### Default roles
+
+Every course has four fixed roles that cannot be renamed or deleted:
+
+| Role | Who it applies to |
+| --- | --- |
+| Instructor | Instructors |
+| Grader | Graders (default) |
+| Student | Students |
+| Admin | Site admins |
+
+### Capabilities
+
+Capabilities control what a role can do. The instructor role holds all capabilities. The default grader role holds none. Custom roles can add any capability the instructor holds, except `manage_roles`.
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | See and delete review assignments for the class |
+| `publish_groups` | Publish groups and manage group membership |
+| `manage_assignments` | Create, edit, and save assignments; sync and create student repositories |
+| `manage_roles` | Create, rename, and delete custom grader roles; assign capabilities to them |
+
+### Creating a custom role
+
+1. Open **Course Settings → Roles** and click **Add Role**.
+2. Give the role a name and select the capabilities it should have.
+3. Save. The role is now available to assign to graders.
+
+To assign a grader to a custom role, change their role on the **Enrollments** page. Changing a grader's app role (for example, promoting them to instructor) always moves them to that role's default, overriding any custom role assignment.
+
+A custom role can only be deleted when no grader is currently assigned to it.

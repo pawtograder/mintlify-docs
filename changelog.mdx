@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13, 2026
+
+#### Gradebook
+- **First-class column groups and topics** — Instructors can now create, rename, reorder, and delete named gradebook column groups that are stored in the database rather than guessed from slug prefixes. Turning the feature on for the first time shows a preview of the groups it would create before anything changes. For courses that assess each topic more than once, a new topics feature lets you mark columns as attempts at a topic, designate a standing column, and switch between a group view and a topic view that collapses each topic to its standing. Both features are on by default for new courses and off for existing ones until an instructor enables them from **Course Settings → Feature flags**. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+### November 10–12, 2026
+
+#### Office hours
+- **Real-time student count on new requests** — When a student creates a help request, TAs who already have office hours open now see the correct student count immediately without needing to reload the page ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+#### Exams
+- **Exam grading behind a feature flag** — The paper exam (Scan & OCR) assignment type and its pages are now gated on the `exams` course feature flag, which is off by default. Courses that have not opted in see the assignment type disabled in the form with a note pointing to **Course Settings → Feature flags** ([#1197](https://github.com/pawtograder/platform/pull/1197))
+
+#### Course settings
+- **Gemini API key management** — Instructors can store a course-owned Google Gemini API key under **Course Settings → Gemini API Key** (requires the `gemini-api-key-setup` feature flag). The key is stored in Vault and is never returned through the interface ([#1161](https://github.com/pawtograder/platform/pull/1161))
+- **Custom grader roles and capabilities** — Instructors can create custom grader roles with specific capabilities (`manage_review_assignments`, `publish_groups`, `manage_assignments`, `manage_roles`) under **Course Settings → Roles**, so different graders can have different levels of access. See [Course Settings](/staff/course-settings#custom-grader-roles) ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Bug fixes
+- **Password reset links on staging** — GoTrue email links now use the correct URL paths, and the reset-password flow correctly exchanges the token for a session before updating the password ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
 ## August 2026
 
 ### August 19, 2026
