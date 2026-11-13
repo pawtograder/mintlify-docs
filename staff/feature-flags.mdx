@@ -92,6 +92,26 @@ While it is on, students see their invitation to the course's Discord server on 
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
 
+### Gradebook column groups
+
+When this flag is on, the gradebook stores named column groups that you create, rename, reorder, and delete. Turning it on for the first time shows a preview of the groups it would create from your current columns before anything changes. Turning it off goes back to the slug-guessed groups and keeps your stored groups for later.
+
+See [Gradebook → Column Groups](/staff/gradebook#column-groups) for how to create and manage groups.
+
+### Gradebook topics
+
+When this flag is on, you can mark columns as attempts at a named topic and choose a standing column for each topic. The gradebook can then show one column per topic that expands to its attempts. **Suggest Topics** proposes topics from your existing columns and changes nothing until you confirm. Turning this off hides the topic view; your topics are kept.
+
+See [Gradebook → Gradebook Topics](/staff/gradebook#gradebook-topics) for how to set up topics.
+
+### Paper exams
+
+When this flag is on, the **Paper exam (Scan & OCR)** assignment type is available in the new-assignment form, and the three exam pages (template editor, scan upload, grading) are accessible. When it is off, the option is disabled in the form and the pages show a "not enabled" notice. Turn it on before creating a paper exam assignment.
+
+### Gemini API key
+
+When this flag is on, instructors can save a course-level Gemini API key from **Course Settings → Gemini API Key**. The key is stored in Vault and is never returned through the UI. Saving a key does not validate it with Google or turn on AI grading; it only makes the key available to edge functions that need it. When the flag is off, the status and removal controls still work, but saving a new key is disabled.
+
 ## Feature flags control navigation, not access
 
 Feature flags are a curation tool. They decide which modules your course puts in front of students and staff, and when — so you can hold Surveys or Flashcards back until the week they matter, retire Polls once you have stopped using them, and keep the course menu down to what the course is actually doing. Staff pages behave the same way, which is deliberate: a module you are not running should not clutter anyone's menu.
