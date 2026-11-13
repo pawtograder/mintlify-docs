@@ -58,9 +58,19 @@ The **Default** column above tells you the starting state. This table tells you 
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
-## The three behavior flags
+## The four behavior flags
 
-Six flags only govern what appears in menus. These three change how a feature behaves.
+Six flags only govern what appears in menus. These four change how a feature behaves.
+
+### Exams (Scan & OCR)
+
+The `exams` flag gates the paper exam scanning and grading workflow. While it is off, the **Exam (Scan & OCR)** nav entry is hidden, the three exam pages (template editor, scan & match, and grading) redirect to a "not enabled" notice, and the **Paper exam (scan & OCR)** option in the new-assignment form is disabled (shown but not selectable) with helper text pointing to **Course Settings → Feature flags**.
+
+<Warning>
+The flag gates the UI only. Direct API calls can still reach the exam worker and RPCs for anyone RLS already allows. The flag is the right tool for controlling which courses can use the feature; it is not a security boundary.
+</Warning>
+
+Turn this flag on before creating a paper exam assignment. An exam assignment created in a course where the flag is off cannot be used — every route it links to shows the "not enabled" notice — and the assignment type cannot be changed after creation.
 
 ### Student gradebook What-If
 
