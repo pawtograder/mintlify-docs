@@ -8,6 +8,10 @@ Repository Analytics pulls activity from each student's assignment repository (c
 
 Analytics are opt-in per assignment and only visible to staff. The dashboard lives under the **Repo Analytics** tab on any submission page.
 
+<Note>
+Pawtograder supports both GitHub and Forgejo as git providers for student repositories. Repository Analytics collects data from GitHub repositories only. For Forgejo repositories, the **Commit History** dialog shows the commits recorded by Pawtograder at push time; commits are not linked to Forgejo because the client has no Forgejo base URL configured.
+</Note>
+
 ## What Gets Collected
 
 For each repository, Pawtograder stores two kinds of records:
