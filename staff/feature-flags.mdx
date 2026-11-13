@@ -78,6 +78,19 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Exams (paper scan & OCR)
+
+The `exams` flag gates the paper exam scanning and grading workflow. When it is off:
+
+- The **Exam (Scan & OCR)** nav entry and its three pages (template editor, scan & match, and grading) are hidden. A direct URL to any of those pages shows a "not enabled" notice instead of the live form.
+- The **Paper exam (scan & OCR)** option in the new-assignment form is disabled, with helper text pointing to **Course Settings → Feature flags**. The option is disabled rather than hidden so instructors can see it exists and know where to turn it on.
+
+An exam assignment created before the flag was turned off continues to show its own type correctly; the flag does not change existing assignments.
+
+<Warning>
+The flag gates the UI only. It does not prevent direct API calls to the exam worker or the exam RPCs. Gate the server side separately if you need to stop background processing.
+</Warning>
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
