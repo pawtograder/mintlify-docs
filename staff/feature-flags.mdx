@@ -142,10 +142,12 @@ The staff search palette is gated alongside the menu, with one exception: its **
 
 Flipping a switch rewrites one entry in the course's feature list and touches nothing else. Discussion threads and karma, flashcard decks, office hours queues and help requests, gradebook columns and scores, survey responses, and poll results all survive intact and reappear the moment you turn the flag back on.
 
-Two specifics worth knowing:
+Several specifics worth knowing:
 
 - **Gradebook.** The `gradebook` flag is read only by the navigation bar, the search palette, and the keyboard shortcuts. Turning it off hides the links; it does not stop grade calculation, imports, or releases.
 - **What-If.** Simulations are never saved. Turning `gradebook-what-if` off costs students nothing they had saved, because there was nothing saved.
+- **Gradebook column groups.** Turning `gradebook-column-groups` off returns to the slug-guessed display; your stored groups are kept and reappear when you turn it back on.
+- **Gradebook topics.** Turning `gradebook-topics` off hides the topic view and controls; your topics are kept and reappear when you turn it back on.
 
 The one flag whose off state has a lasting consequence is `discord-student-join`, described above: invitations not created while it was off are not created later on their own.
 
