@@ -6,6 +6,25 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13, 2026
+
+#### Gradebook
+- **First-class column groups and topics** — Instructors can now create, rename, reorder, and delete named gradebook column groups instead of relying on the slug-prefix heuristic. Turning the feature on shows a preview of the groups it would create before anything changes. A second feature, gradebook topics, lets you mark columns as attempts at a named topic and choose a standing column; the gradebook can then show one column per topic that collapses to its standing and expands to its attempts. **Suggest Topics** proposes topics from existing columns and changes nothing until you confirm. Both features are on by default for new courses and off for existing ones. See [Gradebook](/staff/gradebook) and [Feature flags](/staff/feature-flags) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Exams
+- **Exam feature flag** — The paper exam (Scan & OCR) feature is now gated behind a course feature flag. The nav entry and exam pages are hidden until an instructor enables it from **Course Settings → Feature flags**. The **Paper exam** assignment type is disabled (but visible) in the new-assignment form when the flag is off, with helper text pointing to where to enable it ([#1197](https://github.com/pawtograder/platform/pull/1197))
+- **Rubric out-of-date notice** — The exam template page now shows a notice when the saved questions no longer match the rubric built from them, and tells the instructor to click **Build rubric from exam** before grading starts ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Exam UI polish** — Dropdown chevrons are consistent with the rest of the app, region labels appear as a small tag above the box's top-left corner instead of a bar across the middle, drawing an answer region clears the question picker so a second drag asks for a question, and "No exam template yet" on Scan & Match links to the template page ([#1283](https://github.com/pawtograder/platform/pull/1283))
+- **Paper exam submissions open on the exam artifact** — Graders opening a paper exam submission now land on the answer crops (the `exam_v1` artifact) instead of the scanned page image ([#1281](https://github.com/pawtograder/platform/pull/1281))
+
+#### Office hours
+- **Real-time student count on new requests** — A TA with office hours open now sees the correct student count on a new request without reloading. Previously, roster changes were only broadcast to the help request channel, which nobody holds when a student first creates a request ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+#### Bug fixes
+- **Next.js Link deprecation warning removed** — The shared `Link` component no longer uses the deprecated `legacyBehavior` prop ([#1285](https://github.com/pawtograder/platform/pull/1285))
+
 ## August 2026
 
 ### August 19, 2026
