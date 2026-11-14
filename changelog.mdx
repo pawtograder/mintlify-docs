@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13–14, 2026
+
+#### Gradebook
+- **Column groups** — Instructors can now create, rename, reorder, and delete named column groups in the gradebook. Turning the feature on from **Course Settings → Feature flags** shows a preview of the groups it would create before anything changes. Groups are stored and visible to all instructors; the legacy slug-guessed groups remain available for courses that have not opted in. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+- **Topics** — For courses that assess each topic more than once, columns can now be marked as attempts at a named topic with a standing column that holds the result. **Suggest Topics** proposes topics from existing columns and changes nothing until you confirm. In topic view, each topic collapses to its standing and expands to its attempts. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Exams
+- **Exam feature flag** — The **Exam (Scan & OCR)** nav entry and its pages are now gated behind a `exams` course feature flag, off by default. Courses must opt in from **Course Settings → Feature flags** before the exam workflow is accessible. The **Paper exam** assignment type is disabled in the new-assignment form when the flag is off, with a note pointing to where to enable it ([#1197](https://github.com/pawtograder/platform/pull/1197))
+- **Exam template editor question order** — Questions in the template editor now render in pre-order (parent before children, siblings by ordinal), matching the structure of the exam. Previously, questions from different parents could interleave ([#1280](https://github.com/pawtograder/platform/pull/1280))
+- **Exam rubric out-of-date notice** — The exam template page now shows a notice when the saved questions no longer match the rubric built from them, prompting you to click **Build rubric from exam** before grading starts ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Paper exam submission default view** — Opening a paper exam submission now defaults to the exam artifact (answer crops) rather than the scanned page image ([#1281](https://github.com/pawtograder/platform/pull/1281))
+- **Exam UI polish** — Dropdown chevrons added to exam selectors, region labels moved above the answer area, drawing an answer region now clears the question picker, and "No exam template yet" links to the template page ([#1283](https://github.com/pawtograder/platform/pull/1283))
+
+#### Cloud workspaces (Forgejo integration)
+- **Forgejo accounts on the roster** — For courses with cloud workspaces enabled, the enrollments table now shows a **Forgejo Username** column and the CSV export includes a matching field. Students without an account yet show "Not created yet". The roster refreshes the column automatically every 30 seconds while the tab is visible ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories, recording commits in the student commit history. The commit history dialog shows only recorded rows for Forgejo repositories (no GitHub link) ([#1228](https://github.com/pawtograder/platform/pull/1228))
+- **SSO consent and login page** — First-party apps (Forgejo and Coder) can now skip the OAuth consent page and Forgejo's login page on first sign-in, reducing the number of clicks for students ([#1245](https://github.com/pawtograder/platform/pull/1245))
+- **Forgejo as Coder's external auth provider** — Workspaces can now clone private Forgejo repositories using Forgejo as Coder's external auth provider ([#1234](https://github.com/pawtograder/platform/pull/1234))
+
+#### Office hours
+- **Student count visible to TAs immediately** — A TA with office hours open now sees the correct student count on a new help request without reloading the page ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
 ## August 2026
 
 ### August 19, 2026
