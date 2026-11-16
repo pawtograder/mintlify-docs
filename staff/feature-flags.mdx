@@ -1,12 +1,12 @@
 ---
 title: "Feature flags"
-description: "The nine course feature flags, their defaults, and exactly which menu entries each one hides"
+description: "The twelve course feature flags, their defaults, and exactly which menu entries each one hides"
 icon: "sliders"
 ---
 
 # Feature flags
 
-Nine switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
+Twelve switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
 
 ## Opening the page
 
@@ -18,7 +18,7 @@ Each flag is one card with a title, a description, and a single switch. There is
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
 </Note>
 
-## The nine flags
+## The twelve flags
 
 <Frame>
   <img src="/images/staff/feature-flags-1787313949494.png" alt="The Feature flags page with all nine flag cards: Discussion, Flashcards, Office hours, Gradebook, Surveys and Polls switched on, and Student gradebook What-If, Suggested due dates and Student Discord invitations switched off" />
@@ -35,8 +35,15 @@ The global search palette lists **Feature flags** for all course staff, so a gra
 | `gradebook-what-if` | Student gradebook What-If | **Allow What-If grade simulations for students** | Off |
 | `suggested-due-date` | Suggested due dates | **Present the suggested due date as the due date** | Off |
 | `discord-student-join` | Student Discord invitations | **Let students join this course's Discord server** | Off |
+| `gradebook-column-groups` | Gradebook column groups | **Use stored gradebook column groups** | On for new courses |
+| `gradebook-topics` | Gradebook topics | **Use gradebook topics** | On for new courses |
+| `exams` | Paper exams | **Enable paper exam scanning and grading** | Off |
 
-A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the three opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
+A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on, the three opt-in flags off, and the two gradebook organization flags on. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
+
+<Note>
+Courses that existed before gradebook column groups and topics were introduced have both flags written as **off** by the database migration, so their gradebooks keep the previous slug-guessed display until an instructor turns the flag on. New courses start with both flags on.
+</Note>
 
 ## What each flag hides
 
@@ -53,12 +60,15 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
+| `gradebook-column-groups` | Nothing visible | The stored column groups and the **Group…**, **Auto-group Columns**, group header menus, and group picker in Add/Edit Column |
+| `gradebook-topics` | Nothing visible | The **Topic…** column menu item, **Suggest Topics** button, topic header menus, and the topic view toggle |
+| `exams` | The **Exam (Scan & OCR)** nav entry and the three exam pages behind it | The **Exam (Scan & OCR)** nav entry and the **Paper exam (scan & OCR)** option in the new-assignment form (disabled rather than hidden) |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
-## The three behavior flags
+## The six behavior flags
 
-Six flags only govern what appears in menus. These three change how a feature behaves.
+Six flags only govern what appears in menus. These six change how a feature behaves.
 
 ### Student gradebook What-If
 
@@ -85,6 +95,30 @@ While it is on, students see their invitation to the course's Discord server on 
 <Warning>
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
+
+### Gradebook column groups
+
+When this flag is on, the gradebook uses groups you create, rename, reorder, and delete, instead of groups guessed from column slug prefixes. Turning it on for the first time shows a preview of the groups it would create from your current columns — nothing changes until you confirm. Turning it off goes back to the slug-guessed display and keeps your stored groups for later.
+
+New courses start with this flag on. Courses that existed before the feature was introduced have it written as off by the migration, so their gradebooks keep the previous display until an instructor enables it.
+
+See [Gradebook](/staff/gradebook) for how to create and manage column groups.
+
+### Gradebook topics
+
+When this flag is on, you can mark gradebook columns as attempts at a topic and designate a standing column for each topic. The gradebook can then show one column per topic that expands to its attempts. **Suggest Topics** proposes topics from your existing columns and changes nothing until you confirm.
+
+Turning this flag off hides the topic view; your topics are kept. New courses start with this flag on. Like column groups, courses that existed before the feature was introduced have it written as off.
+
+See [Gradebook](/staff/gradebook) for how to create and manage topics.
+
+### Paper exams
+
+When this flag is on, the **Exam (Scan & OCR)** entry appears in the course navigation and the three exam pages behind it are accessible. The **Paper exam (scan & OCR)** option in the new-assignment form is also enabled.
+
+When the flag is off, the nav entry is hidden and the exam pages show a notice rather than their content. The **Paper exam** option in the new-assignment form is disabled (not hidden), with helper text pointing to **Course Settings → Feature flags**, so instructors can see the type exists and where to enable it.
+
+This flag is off by default. Enable it before creating paper exam assignments.
 
 ## Feature flags control navigation, not access
 
