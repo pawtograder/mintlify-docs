@@ -6,6 +6,40 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 17, 2026
+
+#### GitHub reliability
+- **GitHub circuit breaker decays after a quiet day** — The circuit breaker that protects against GitHub rate limits now resets its escalation count after 24 hours of quiet, so a single rate-limit event from months ago no longer causes a 24-hour org-wide block on the next trip. The Sentry alert threshold is also lowered to trip 3, when the 24-hour window begins ([#1295](https://github.com/pawtograder/platform/pull/1295))
+
+### November 17, 2026
+
+#### Office hours
+- **Ticket escalation with student check-in** — Staff can now escalate a help request mid-session with a required note; the ticket returns to the queue ahead of ordinary requests with an **Escalated** badge. When staff resolve an in-progress request, the student receives a 10-minute check-in prompt; answering "No" automatically escalates the ticket back with the student's note. A new **End ticket** button closes a request immediately with no check-in. See [Help Requests](/staff/office-hours/help-requests) and [Resolving and Feedback](/students/office-hours/resolving-and-feedback) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+### November 13, 2026
+
+#### Gradebook
+- **First-class column groups and topics** — Instructors can now create, rename, reorder, and delete named column groups that persist across sessions. Turning the feature on shows a preview of the groups it would create before anything changes. A new **Topics** feature lets courses that assess each topic multiple times mark columns as attempts, choose a standing column per topic, and view the gradebook collapsed to one card per topic. Both features are on by default for new courses and off for existing ones until an instructor enables them. See [Gradebook](/staff/gradebook) and [Feature flags](/staff/feature-flags) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Cloud workspaces
+- **Forgejo accounts created for cloud-workspaces classes** — For courses with the cloud-workspaces feature enabled, Pawtograder now automatically creates a Forgejo account for each enrolled student. The roster shows a **Forgejo Username** column, and the enrollment CSV export includes the username. Accounts are provisioned hourly and on enrollment changes ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Forgejo as Coder's external auth provider** — Coder workspaces can now clone private student repositories using the student's linked Forgejo account ([#1234](https://github.com/pawtograder/platform/pull/1234))
+- **Coder workspace template clones the student's repository** — The Kubernetes workspace template now clones the student's assignment repository into the workspace on first start, with a 5-minute timeout and safe restart behavior ([#1229](https://github.com/pawtograder/platform/pull/1229))
+- **Coder accounts and workspace-open edge function** — The `workspace-open` edge function creates or starts a student's Coder workspace for an assignment, handling account creation, Forgejo linking, and restart logic. `workspace-status` returns the current workspace state without making changes ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **SSO consent page skipped for first-party apps** — Students signing into Forgejo or Coder for the first time no longer see a consent page; Pawtograder approves on their behalf for its own OAuth clients ([#1245](https://github.com/pawtograder/platform/pull/1245))
+
+#### Exams
+- **Exam questions listed under their parent in the template editor** — The template editor now renders questions in pre-order (parent before children, siblings by ordinal), so parts, questions, and items appear in the correct hierarchy instead of interleaved ([#1280](https://github.com/pawtograder/platform/pull/1280))
+- **Paper exam submissions open on the Exam artifact** — Graders landing on a paper exam submission now default to the answer crops view rather than the scanned page image ([#1281](https://github.com/pawtograder/platform/pull/1281))
+- **Rubric out-of-date notice** — The exam template page shows a notice when the saved questions no longer match the rubric, prompting the instructor to rebuild before grading ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Exam UI polish** — Dropdown chevrons, region labels moved above the answer area, answer region picker resets after drawing, and a link to the template page from Scan & Match ([#1283](https://github.com/pawtograder/platform/pull/1283))
+
+#### Bug fixes
+- **Office hours roster changes reach TAs immediately** — A new student joining a help request now shows "1 student" in the TA's queue without a reload ([#1275](https://github.com/pawtograder/platform/pull/1275))
+- **Forgejo push webhooks accepted** — Pawtograder now records pushes from Forgejo repositories and shows them in the commit history, without linking to GitHub ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
 ## August 2026
 
 ### August 19, 2026
