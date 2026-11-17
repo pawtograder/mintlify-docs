@@ -361,7 +361,8 @@ Draft a hand-grading rubric for this assignment as Pawtograder rubric YAML.
 - Each criteria has one check with 3 or 4 options. Each option label says
   what the grader sees in the submission, not a quality word like "good".
 - Set each check's points to its highest option.
-- The criteria total_points should add up to <assignment max points>.
+- The criteria total_points should add up to <assignment max points, minus
+  any autograder points>.
 Follow the format of this example: <paste the example below>
 ```
 </Step>
@@ -373,8 +374,9 @@ rubric is stored.
 </Step>
 
 <Step title="Check the rubric before grading">
-Confirm that the **Grading Rubric Points Summary** reports the total you expect and that it matches the
-assignment's max points. Then grade three or four real submissions with the rubric. Wherever you
+Confirm that the **Grading Rubric Points Summary** reports the total you expect. The rubric and the
+autograder together should add up to the assignment's max points, so if the autograder awards points,
+the rubric covers only the rest. Then grade three or four real submissions with the rubric. Wherever you
 hesitate between two options, rewrite their labels so the difference is something you can point to in
 the submission.
 </Step>
@@ -434,7 +436,7 @@ parts:
 ```
 
 <Tip>
-On an "Award per check" criteria, the points summary counts each check's `points`, not its options. Set
+On an "Award per check" criteria (`is_additive: true` and `is_deduction_only: false`, see [How Points Are Computed](#how-points-are-computed)), the points summary counts each check's `points`, not its options. Set
 `points` to the highest option, as the example does, or the summary counts the criteria as 0.
 </Tip>
 
