@@ -50,6 +50,24 @@ Staff-only columns are useful for internal grading calculations, curve adjustmen
 
 When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## Column Groups and Topics
+
+Columns can be organized into **groups** and tagged with **topics** to make large gradebooks easier to navigate and to enable group-level expressions.
+
+### Groups
+
+A **column group** is a named container for one or more gradebook columns. Groups appear as a collapsible section header in the gradebook grid, and you can collapse or expand them to focus on the columns you care about.
+
+To create a group, open the column editor for any column and set its **Group** field. Columns that share the same group name are collected under that header. Drag-and-drop reordering works within and across groups.
+
+Groups are also addressable in score expressions. Use `gradebook_columns("group:<group-name>/*")` to match every column in a group, or reference the group name directly in a glob pattern.
+
+### Topics
+
+A **topic** is a label you attach to one or more columns to mark them as belonging to a curriculum theme — for example, "Recursion" or "Data Structures". Topics appear as a tag on the column header and in the column editor.
+
+Topics are used for reporting and filtering. The gradebook's column filter can narrow the view to a single topic, and the rubric report can break down scores by topic.
+
 ## Managing Columns
 
 ### Reordering Columns
