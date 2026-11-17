@@ -348,7 +348,9 @@ to suggest grades, since its suggestions can only be as consistent as the rubric
 <Step title="Give the assistant the assignment">
 Paste in the handout, or point the assistant at the handout repository. If the assistant is connected
 to Pawtograder's MCP server, `get_handout_files` and `get_grader_files` return the handout and solution
-repositories. See [AI assistance for helping students](/staff/ai-assistance) for the setup.
+repositories. See [AI assistance for helping students](/staff/ai-assistance) for the setup. Anything
+the assistant reads is sent to its model provider, and `get_grader_files` sends your solution
+repository, so skip it if your course does not allow solutions to be shared with an outside service.
 </Step>
 
 <Step title="Ask for options in Pawtograder's YAML">
@@ -436,8 +438,7 @@ parts:
 ```
 
 <Tip>
-On an "Award per check" criteria (`is_additive: true` and `is_deduction_only: false`, see [How Points Are Computed](#how-points-are-computed)), the points summary counts each check's `points`, not its options. Set
-`points` to the highest option, as the example does, or the summary counts the criteria as 0.
+The example sets each check's `points` to its highest option. [Note on Options vs Base Points](#note-on-options-vs-base-points) explains why.
 </Tip>
 
 ### Troubleshooting
@@ -447,8 +448,8 @@ On an "Award per check" criteria (`is_additive: true` and `is_deduction_only: fa
 - **The editor rejects a check's options.** A check needs at least two options, or none.
 - **Save fails with "Point values cannot be negative".** Use positive points and pick a scoring mode for
   deductions instead.
-- **The points summary shows 0 for the rubric.** The checks have `points: 0`. Set each one to its
-  highest option.
+- **The points summary shows 0 for the rubric.** The checks have `points: 0`. See
+  [Note on Options vs Base Points](#note-on-options-vs-base-points).
 
 ## Editing Rubrics
 
