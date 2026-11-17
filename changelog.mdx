@@ -6,7 +6,36 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
-## August 2026
+## November 2026
+
+### November 17, 2026
+
+#### Cloud workspaces (Coder integration)
+- **Open in Coder — full end-to-end workspace flow** — Students on courses with the `cloud-workspaces` flag can click **Open in Coder** on their assignment submission page to open a browser-based VS Code workspace pre-loaded with their assignment repository. Pawtograder creates a Coder user and workspace automatically, clones the student's Forgejo repository into it, and reports clone, editor, and agent status on the card. Workspaces stop after one hour of inactivity and restart on the next open. See [Cloud workspaces](/students/assignments/cloud-workspaces) ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **Coder workspace image** — Workspaces run a first-party image built on the same base as the autograder runner, with JDK 21, Maven, Python 3, Node 22, and code-server pre-installed, so assignment tests behave the same in a workspace as in the grader ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **Forgejo as Coder's external auth provider** — Workspaces authenticate git operations through Forgejo's OAuth2 provider, so clones and pushes work without a password. The chart enforces that `coderBootstrap.workspaces.externalAuthId` matches `coder.externalAuth.forgejo.id` ([#1234](https://github.com/pawtograder/platform/pull/1234))
+- **SSO consent and Forgejo login shortcuts** — First-party apps (Forgejo and Coder) can be configured to skip the OAuth consent page and Forgejo's login page, so students go from Pawtograder to a linked account with fewer clicks ([#1245](https://github.com/pawtograder/platform/pull/1245))
+
+### November 13, 2026
+
+#### Cloud workspaces
+- **Forgejo accounts provisioned automatically** — When the `cloud-workspaces` feature flag is on, Pawtograder creates a Forgejo account for every enrolled student in the background. The course roster gains a **Forgejo Username** column that updates live as accounts are provisioned ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories and records them in the commit history, the same way GitHub pushes are handled. The student commit history dialog shows only recorded rows for Forgejo repositories ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### Gradebook
+- **Column groups and topics** — Gradebook columns can be organized into collapsible groups and tagged with topics. Groups start collapsed with a summary header; topics appear as filter chips above the grid. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Exams
+- **Rubric out-of-date notice** — The exam template page shows a notice when the saved questions no longer match the rubric built from them, prompting the instructor to rebuild before grading starts ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Paper exam submissions open on the Exam artifact** — Graders now land on the answer crops instead of the scanned page image when opening a paper exam submission ([#1281](https://github.com/pawtograder/platform/pull/1281))
+- **Template editor question ordering fixed** — Questions in the template editor now render in pre-order (parent before children, siblings by ordinal), matching the exam structure ([#1280](https://github.com/pawtograder/platform/pull/1280))
+- **Exam region and picker polish** — Region labels appear above the box instead of across the middle, drawing an answer region clears the question picker, and "No exam template yet" links to the template page ([#1283](https://github.com/pawtograder/platform/pull/1283))
+
+#### Office hours
+- **TA sees new request students without a reload** — A new help request's student roster is now broadcast to the staff channel, so a TA with office hours already open sees the correct student count immediately ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+#### Bug fixes
+- **Exams feature flag enabled on seeded classes** — The `exams` course flag is now set when seeding exam data, so the Exam nav entry appears on a freshly seeded class ([#1294](https://github.com/pawtograder/platform/pull/1294))
 
 ### August 19, 2026
 

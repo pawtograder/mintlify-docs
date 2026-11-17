@@ -1,0 +1,59 @@
+---
+title: "Cloud workspaces"
+description: "Open your assignment repository in a browser-based VS Code workspace with one click"
+---
+
+# Cloud workspaces
+
+If your course has cloud workspaces enabled, you can open your assignment repository in a browser-based VS Code environment without installing anything locally. The workspace comes pre-loaded with the same tools the autograder uses — Java, Maven, Python, and Node — so your code builds and tests the same way in the workspace as it does when you submit.
+
+## Opening a workspace
+
+1. Navigate to your assignment submission page.
+2. Click **Open in Coder**.
+
+The first time you open a workspace for an assignment, Pawtograder creates one for you and clones your repository into it. This takes about a minute. Subsequent opens resume the same workspace in seconds.
+
+The button shows the workspace's current status while it is starting:
+
+| Status | What it means |
+| --- | --- |
+| **Starting** | The workspace container is being created. |
+| **Cloning** | Your repository is being cloned into the workspace. |
+| **Loading editor** | VS Code is starting up. |
+| **Ready** | The workspace is running. Click to open it. |
+| **Restarting** | The workspace stopped and is being restarted. |
+
+Once the workspace is ready, clicking the button opens VS Code in a new browser tab.
+
+## Linking your Forgejo account
+
+Cloud workspaces use Forgejo to clone your repository and to authenticate git pushes. The first time you open a workspace, Pawtograder may ask you to link your Forgejo account:
+
+1. Click the link shown on the status card. It takes you to Coder's sign-in page.
+2. Sign in with your Pawtograder account. Coder redirects you to Forgejo's authorization page.
+3. Click **Authorize** to grant Coder access to your repositories.
+
+After authorizing, return to your assignment page and click **Open in Coder** again.
+
+<Note>
+If your course uses auto-approve for first-party apps, the Forgejo authorization page is skipped and you land directly in your workspace.
+</Note>
+
+## Working in the workspace
+
+Your repository is cloned into `/home/coder/<repository-name>` and VS Code opens it automatically. You can edit files, run tests in the terminal, and commit and push changes — git is configured with your Forgejo credentials, so `git push` works without entering a password.
+
+The workspace stops automatically after one hour of inactivity. Your files are saved on a persistent home volume and are there when you reopen the workspace.
+
+<Warning>
+The workspace clones your repository once when it is first created. If you want to pull changes you pushed from another machine, run `git pull` in the workspace terminal.
+</Warning>
+
+## Restarting a failed workspace
+
+If the workspace fails to start — for example, because the clone was interrupted — the status card shows a **Failed** state with a brief error message. Click **Open in Coder** again to restart it. The restart keeps your home volume, so any files you saved outside the repository are preserved.
+
+## Pushing your work
+
+Commits you make in the workspace are pushed to your Forgejo repository. To submit your work for grading, push to the default branch of your repository as you normally would. Pawtograder picks up the push and creates a submission.
