@@ -70,6 +70,7 @@ Each criteria uses one of three scoring modes. The rubric editor names them "Awa
 ### Note on Options vs Base Points
 
 - If a check has `data.options`, the selected option's `points` replaces the check's base `points` when applied.
+- The base `points` still matters for the points summary. On an "Award per check" criteria, the summary counts each check's base `points`, not its options, so set it to the highest option.
 - Options must be 2+ (single options are disallowed by the editor and schema).
 
 ### References Across Rubrics
@@ -163,7 +164,7 @@ parts:
             is_annotation: false
             is_required: true
             is_comment_required: false
-            points: 0
+            points: 5
             data:
               options:
                 - label: Complete and correct
@@ -327,6 +328,126 @@ parts:
             student_visibility: if_applied
 ```
 
+## Drafting a Rubric with an AI Assistant
+
+You can ask an AI assistant to draft a rubric from your assignment handout, then paste the YAML it
+produces into the YAML source editor. The assistant runs on your side. Pawtograder does not call a
+model, and the assistant does not need any student work to draft a rubric.
+
+### Why Coarse Buckets
+
+The rubrics that work best here give each criteria one check with three or four options, and each option
+label describes what a grader sees in the submission. Two graders will agree on "every function has a
+purpose statement". They will not agree on a 7 versus an 8 for "documentation quality". Clear buckets
+make grading faster and more consistent, and they are the first step if you later want an AI assistant
+to suggest grades, since its suggestions can only be as consistent as the rubric it is given.
+
+### How to Draft One
+
+<Steps>
+<Step title="Give the assistant the assignment">
+Paste in the handout, or point the assistant at the handout repository. If the assistant is connected
+to Pawtograder's MCP server, `get_handout_files` and `get_grader_files` return the handout and solution
+repositories. See [AI assistance for helping students](/staff/ai-assistance) for the setup.
+</Step>
+
+<Step title="Ask for options in Pawtograder's YAML">
+For example:
+
+```text
+Draft a hand-grading rubric for this assignment as Pawtograder rubric YAML.
+- One criteria per thing we grade, each with total_points, is_additive: true
+  and is_deduction_only: false.
+- Each criteria has one check with 3 or 4 options. Each option label says
+  what the grader sees in the submission, not a quality word like "good".
+- Set each check's points to its highest option.
+- The criteria total_points should add up to <assignment max points>.
+Follow the format of this example: <paste the example below>
+```
+</Step>
+
+<Step title="Paste the YAML into the rubric editor">
+Open **Configure Rubric**, select the **Grading Review** tab, switch to **YAML source**, replace the
+contents with the assistant's YAML, and click **Save**. The editor shows **Rubric Saved** when the
+rubric is stored.
+</Step>
+
+<Step title="Check the rubric before grading">
+Confirm that the **Grading Rubric Points Summary** reports the total you expect and that it matches the
+assignment's max points. Then grade three or four real submissions with the rubric. Wherever you
+hesitate between two options, rewrite their labels so the difference is something you can point to in
+the submission.
+</Step>
+</Steps>
+
+### Example
+
+This rubric is in the shape to ask for. It is worth 20 points and can be pasted in as it stands.
+
+```yaml
+name: Grading Rubric
+parts:
+  - name: Design
+    criteria:
+      - name: Data definitions
+        total_points: 10
+        is_additive: true
+        is_deduction_only: false
+        checks:
+          - name: Data definitions
+            description: Every data type in the program has a data definition, an interpretation and at least one example.
+            is_annotation: false
+            is_required: true
+            is_comment_required: false
+            points: 10
+            data:
+              options:
+                - label: "All present: every type has a definition, interpretation and examples"
+                  points: 10
+                - label: "Mostly: one type is missing its interpretation or examples"
+                  points: 6
+                - label: "Partial: two or more types are missing pieces"
+                  points: 3
+                - label: "Missing: no data definitions"
+                  points: 0
+      - name: Function design
+        total_points: 10
+        is_additive: true
+        is_deduction_only: false
+        checks:
+          - name: Purpose statements and signatures
+            description: Each function has a signature and a one-line purpose statement that matches what it does.
+            is_annotation: false
+            is_required: true
+            is_comment_required: false
+            points: 10
+            data:
+              options:
+                - label: "All functions have both, and they match the code"
+                  points: 10
+                - label: "One or two functions are missing one, or one does not match"
+                  points: 6
+                - label: "Most functions are missing them"
+                  points: 2
+                - label: "None"
+                  points: 0
+```
+
+<Tip>
+On an "Award per check" criteria, the points summary counts each check's `points`, not its options. Set
+`points` to the highest option, as the example does, or the summary counts the criteria as 0.
+</Tip>
+
+### Troubleshooting
+
+- **The editor marks an error on a criteria.** Every criteria needs `is_deduction_only`. See
+  [How Points Are Computed](#how-points-are-computed).
+- **The editor rejects a check's options.** A check needs at least two options, or none.
+- **Save fails with "Point values cannot be negative".** Use positive points and pick a scoring mode for
+  deductions instead.
+- **The points summary shows 0 for the rubric.** The checks have `points: 0`. Set each one to its
+  highest option.
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
@@ -415,7 +536,7 @@ Editing completed reviews does not automatically notify students. If grades have
 - Optional: `id`, `description`, `data`, `is_additive` (default: `false`), `total_points` (default: `0`), `min_checks_per_submission`, `max_checks_per_submission`
 
 **Check**
-- Mandatory: `name`, `is_annotation` (boolean), `is_required` (boolean), `is_comment_required` (boolean), `points` (number; use `0` when the check relies on `data.options`)
+- Mandatory: `name`, `is_annotation` (boolean), `is_required` (boolean), `is_comment_required` (boolean), `points` (number; on an "Award per check" criteria with `data.options`, set it to the highest option's points, or the points summary counts the check as 0)
 - Optional: `id`, `description`, `file`, `artifact`, `annotation_target` (`file` | `artifact`; default behavior in UI is `file` when omitted for annotations), `max_annotations`, `data` (see below), `student_visibility` (default: `always`)
 
 **Check `data.options`** (for multiple-choice checks)
