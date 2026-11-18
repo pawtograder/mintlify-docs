@@ -56,6 +56,24 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalating a request
+
+When you cannot finish helping a student, you can escalate the request rather than resolving it. Escalation returns the request to the queue with a required note for whoever picks it up next, and marks it so it sorts ahead of normal open requests.
+
+- **Escalate** — available while you are actively helping (`in_progress`). Opens a dialog that requires a note explaining what was tried and what remains.
+- **Resolve** — when you click Resolve on an `in_progress` request, a 10-minute check-in is sent to the student asking whether their problem was fixed. If the student answers no, they can add a note and the request is escalated automatically.
+- **End ticket** — closes the request permanently with no check-in and no escalation. Use it when the session is over and no follow-up is needed, or to withdraw a pending check-in after you have already clicked Resolve.
+
+<Note>
+End ticket is available even after Resolve, so you can cancel a pending check-in. A request that has been ended cannot be reopened through the API.
+</Note>
+
+Escalated requests show an **Escalated (×N)** badge where N is the escalation count, and a staff-only history panel lists each escalation's note and timing. The match controls and the Escalate button are disabled while a video call is live; end the call before escalating or ending a ticket.
+
+<Warning>
+Neither Escalate nor End ticket is available while a video call is running. End the call first.
+</Warning>
+
 ## Resolving
 
 | Status | Meaning |
