@@ -148,9 +148,30 @@ formation deadline. All of that is documented in
 ## Student repositories
 
 This card decides more about a student's experience than any other on the
-form, and none of it is visible from the assignment title. It has three
-parts: the repository configuration, the autograder checkbox, and branch
-protection.
+form, and none of it is visible from the assignment title. It has four
+parts: the repository host, the repository configuration, the autograder
+checkbox, and branch protection.
+
+### Repository host
+
+For courses with **Cloud Workspaces** enabled, a **Repository host** picker
+appears at the top of the Student Repositories card. Choose **GitHub** (the
+default) or **Forgejo**.
+
+The picker locks once the assignment has a handout, grader, or student
+repository, or a fork target. A locked assignment shows the current host
+read-only. Forgejo assignments are badged in the instructor assignment list.
+
+Forgejo assignments have the following restrictions:
+
+- **Fork-based repository configurations** are not available.
+- **Pull-request submission mode** is not available.
+- **Autograder** (GitHub Actions) is still available and works through Forgejo grading.
+- **Branch protection** and **repository analytics** are not available.
+- **GitHub invitation prompts** are hidden on the assignment page and on the course page when every live repository-backed assignment uses Forgejo.
+
+When editing a Forgejo assignment that already has a handout, switching to a
+no-repository mode is disabled because the cleanup path is GitHub-specific.
 
 ### Repository configuration
 
