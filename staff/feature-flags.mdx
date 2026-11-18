@@ -6,7 +6,7 @@ icon: "sliders"
 
 # Feature flags
 
-Nine switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
+Feature flags decide which Pawtograder modules and behaviors your course uses. Some remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
 
 ## Opening the page
 
@@ -18,7 +18,7 @@ Each flag is one card with a title, a description, and a single switch. There is
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
 </Note>
 
-## The nine flags
+## The flags
 
 <Frame>
   <img src="/images/staff/feature-flags-1787313949494.png" alt="The Feature flags page with all nine flag cards: Discussion, Flashcards, Office hours, Gradebook, Surveys and Polls switched on, and Student gradebook What-If, Suggested due dates and Student Discord invitations switched off" />
@@ -35,8 +35,13 @@ The global search palette lists **Feature flags** for all course staff, so a gra
 | `gradebook-what-if` | Student gradebook What-If | **Allow What-If grade simulations for students** | Off |
 | `suggested-due-date` | Suggested due dates | **Present the suggested due date as the due date** | Off |
 | `discord-student-join` | Student Discord invitations | **Let students join this course's Discord server** | Off |
+| `exams` | Exams | **Enable the Exam (Scan & OCR) module** | Off |
+| `cloud-workspaces` | Cloud workspaces | **Enable Forgejo-backed cloud workspaces** | Off |
+| `office-hours-queue-health` | Queue health cards | **Show queue health cards and red-queue alerts** | Off |
+| `office-hours-turn-alert` | Turn alerts | **Notify students when a TA picks up their request or they are next in line** | Off |
+| `office-hours-shift-release` | Shift-end release | **Return in-progress tickets to the queue when a TA's shift ends** | Off |
 
-A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the three opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
+A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
 
 ## What each flag hides
 
@@ -53,12 +58,17 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
+| `exams` | Nothing (exams are staff-managed) | The **Exam (Scan & OCR)** nav entry |
+| `cloud-workspaces` | Nothing visible | The **Repository host** picker on assignment forms; Forgejo username column on the roster |
+| `office-hours-queue-health` | Nothing | Queue health cards, the unstaffed badge, the severity sort, and the red-queue alert on the staff dashboard; the **Queue Settings** threshold section |
+| `office-hours-turn-alert` | Browser notification when a TA picks up their request or they are next in line | Nothing |
+| `office-hours-shift-release` | Nothing | Automatic return of in-progress tickets to the queue when a TA's shift ends |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
-## The three behavior flags
+## The behavior flags
 
-Six flags only govern what appears in menus. These three change how a feature behaves.
+Several flags only govern what appears in menus. These change how features behave.
 
 ### Student gradebook What-If
 
@@ -85,6 +95,30 @@ While it is on, students see their invitation to the course's Discord server on 
 <Warning>
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
+
+### Queue health cards (`office-hours-queue-health`)
+
+While this flag is on, each queue card on the staff **Working** view shows the number of waiting requests, the oldest wait time, and an **Unstaffed** badge when no TA has an active shift. Queues that need attention sort to the top. Instructors can set per-queue red thresholds under **Settings → Queue Settings**, and receive one browser notification when a queue crosses its threshold.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) and [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds) for details.
+
+### Turn alerts (`office-hours-turn-alert`)
+
+While this flag is on, students receive a browser notification when a TA picks up their request or when they move to the next position in the queue. Alerts fire only for members of the request and only while the request is open.
+
+### Shift-end release (`office-hours-shift-release`)
+
+While this flag is on, ending a shift automatically returns any in-progress requests on that queue to the open queue, so students are not left waiting with no TA assigned. If the TA still has other active shifts, requests on other queues are returned once all of their shifts have ended.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#shift-end-and-in-progress-tickets) for details.
+
+### Exams (`exams`)
+
+While this flag is on, the **Exam (Scan & OCR)** entry appears in the course navigation for instructors and graders. The module lets you upload scanned paper exams, run OCR, match pages to students, and grade from the resulting artifacts. The flag is off by default; enable it before seeding or creating exam data.
+
+### Cloud workspaces (`cloud-workspaces`)
+
+While this flag is on, the **Repository host** picker (GitHub or Forgejo) appears on assignment create and edit forms, and the roster shows a **Forgejo Username** column for each enrolled student. The flag enables the Forgejo account reconciler, which creates a Forgejo account for every enrolled student in the course.
 
 ## Feature flags control navigation, not access
 

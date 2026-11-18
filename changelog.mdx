@@ -6,6 +6,32 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 18, 2026
+
+#### Office hours
+- **Queue health cards** — When the `office-hours-queue-health` flag is on, each queue card on the staff Working view shows the number of waiting requests, the oldest wait, and an Unstaffed badge. Queues that need attention sort to the top. Instructors set per-queue red thresholds under Queue Settings and receive one browser notification when a queue crosses its threshold ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Turn alerts** — When the `office-hours-turn-alert` flag is on, students receive a browser notification when a TA picks up their request or they move to the next position in the queue ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Shift-end release** — When the `office-hours-shift-release` flag is on, ending a shift automatically returns in-progress tickets on that queue to the open queue ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Ticket escalation and check-in** — Staff can Escalate a request mid-help with a required note, returning it to the queue flagged ahead of normal tickets. Clicking Resolve on an in-progress request sends the student a 10-minute check-in; answering no escalates with the student's note. A new red **End ticket** button closes a request permanently with no check-in. Escalated tickets show an Escalated (×N) badge and a staff-only history panel. See [Help Requests](/staff/office-hours/help-requests#escalating-a-request) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+#### Assignments
+- **Repository host picker** — On courses with `cloud-workspaces` enabled, assignment create and edit forms show a GitHub/Forgejo picker. Fork-based configurations, pull-request submission, the autograder, branch protection, and repository analytics are disabled with a reason on Forgejo assignments. The picker locks once the assignment has a handout, grader, or student repository. Forgejo assignments are badged in the instructor list. See [Assignment Configuration](/staff/assignments/configuration#repository-host) ([#1313](https://github.com/pawtograder/platform/pull/1313))
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories and records them in the commit history. The commit history dialog shows only recorded rows for Forgejo repositories ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### Cloud workspaces
+- **Coder workspace accounts and open function** — Pawtograder records Coder accounts and workspaces it creates. The `workspace-open` edge function creates a student's Coder user if missing, creates or starts their workspace for the assignment's repository, and returns the workspace status and URL. `workspace-status` returns the same without making changes ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **Forgejo account reconciler** — For courses with `cloud-workspaces` on, Pawtograder automatically creates a Forgejo account for each enrolled student. The roster shows a **Forgejo Username** column for these courses ([#1217](https://github.com/pawtograder/platform/pull/1217))
+
+#### Exams
+- **Scan progress and finalize tracking** — The batch card now shows scan progress with a count of pages with OCR done and submissions finalized. Match controls are disabled while finalizing or completed. Polls skip ticks while the tab is hidden and refresh when shown ([#1262](https://github.com/pawtograder/platform/pull/1262))
+- **Exam overview and artifact labels corrected** — The exam overview no longer shows `status: draft` for graded exams. The message above an artifact now correctly distinguishes between no rubric, an exam artifact (grade in the rubric panel), and other artifacts ([#1269](https://github.com/pawtograder/platform/pull/1269))
+
+#### Bug fixes
+- **GitHub circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, preventing a single rate-limit event from triggering a 24-hour org-wide block after earlier trips ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Markdown editor accessibility** — The markdown editor's textarea is now named and its decorative toolbar icons are hidden from assistive technology ([#908](https://github.com/pawtograder/platform/pull/908))
+
 ## August 2026
 
 ### August 19, 2026

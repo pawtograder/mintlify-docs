@@ -20,6 +20,22 @@ Starting work puts you on duty for that queue. Other staff see you in the queue'
 
 Once you are on duty, **Working** stops listing queues and lists the requests you are responsible for instead. [Help Requests](/staff/office-hours/help-requests) covers what to do with one.
 
+## Queue health cards
+
+When the `office-hours-queue-health` course flag is on, each queue card on the **Working** view shows additional health information:
+
+- **Waiting count** — the number of open requests currently in the queue.
+- **Oldest wait** — how long the longest-waiting request has been open.
+- **Unstaffed badge** — shown when no TA has an active shift on that queue.
+
+Queues that need attention sort to the top of the list. Instructors can set per-queue thresholds for when a queue turns red under **Settings → Queue Settings**; see [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds) for the threshold fields.
+
+When a queue crosses its red threshold, the instructor who configured it receives one browser notification. The alert fires once per threshold crossing, not continuously.
+
+<Note>
+Queue health cards are off by default. An instructor must enable the `office-hours-queue-health` course flag before the cards, the unstaffed badge, and the red-queue alert appear. See [Feature Flags](/staff/feature-flags) for how to turn it on.
+</Note>
+
 <Note>
 Starting work always records a concurrent-student limit of `1`. There is no control for changing it, and it does not limit how many requests can be routed to you at once. Assignment Management displays the value. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
@@ -29,6 +45,14 @@ Starting work always records a concurrent-student limit of `1`. There is no cont
 Each queue card lists the staff currently on duty, the end time of the shift in progress with the time remaining, and the start of the next scheduled shift. Those times come from the course's office hours calendar, not from the assignment rows: an event counts toward a queue when it is explicitly linked to the queue, or when the event's queue name matches the queue's name, ignoring case. With nobody on duty the card reads "No staff currently on duty".
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
+
+## Shift end and in-progress tickets
+
+When you end a shift, any requests you were actively helping are automatically returned to the queue so another TA can pick them up. This behavior applies to requests on the queue whose shift you ended; requests on other queues are returned once you have no remaining active shifts.
+
+<Note>
+Automatic shift-end release is off by default. An instructor must enable the `office-hours-shift-release` course flag for this behavior to take effect.
+</Note>
 
 ## Two banners you may see
 
