@@ -6,6 +6,25 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 18, 2026
+
+#### Office hours
+- **Queue health cards and alerts** — When the `office-hours-queue-health` course flag is on, each queue card on the staff Working view shows the number of open requests, the longest current wait, and an **Unstaffed** badge when no TA has an active shift. Queues that exceed the course's configured threshold turn red and sort to the top. Instructors receive one browser notification per session when a queue first turns red. Students receive a browser notification when a TA picks up their request or they move to the next position in line. When a TA ends their shift, any in-progress request is returned to the queue automatically. See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) and [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Ticket escalation and student check-ins** — When the `office-hours-escalation` course flag is on, staff can **Escalate** a request mid-help with a required note, returning it to the front of the queue with an **Escalated (×N)** badge and a staff-only history panel. Resolving a request you were actively helping sends the student a 10-minute check-in prompt; answering "no" escalates the request with the student's note. A new **End ticket** button closes a request permanently with no check-in. See [Help Requests](/staff/office-hours/help-requests#escalation) and [Feature Flags](/staff/feature-flags#office-hours-escalation) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+#### Assignments
+- **Forgejo repository host picker** — Courses with cloud workspaces enabled can now choose **GitHub** or **Forgejo** as the repository host per assignment. The picker locks once the assignment has any repository. Forgejo assignments badge in the instructor list and hide GitHub-specific prompts. Fork-based configurations, pull-request submission, branch protection, and repository analytics are not available on Forgejo assignments. See [Assignment Configuration](/staff/assignments/configuration#repository-host) ([#1313](https://github.com/pawtograder/platform/pull/1313))
+
+#### Integrations
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories, recording commits and triggering grading for Forgejo-backed assignments. The commit history dialog shows only recorded commits for Forgejo repositories ([#1228](https://github.com/pawtograder/platform/pull/1228))
+- **Forgejo accounts on the roster** — For courses with cloud workspaces enabled, the enrollments roster shows each person's Forgejo username. Accounts are created automatically by the reconciler. See [Course Settings](/staff/course-settings) ([#1217](https://github.com/pawtograder/platform/pull/1217))
+
+#### Bug fixes
+- **GitHub circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, preventing a single rate-limit event from triggering a 24-hour org-wide block weeks later ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Markdown editor accessibility** — The markdown editor's textarea is now labelled for screen readers, and decorative toolbar icons are hidden from assistive technology ([#1312](https://github.com/pawtograder/platform/pull/1312))
+
 ## August 2026
 
 ### August 19, 2026

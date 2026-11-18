@@ -152,6 +152,29 @@ form, and none of it is visible from the assignment title. It has three
 parts: the repository configuration, the autograder checkbox, and branch
 protection.
 
+### Repository host
+
+For courses with cloud workspaces enabled, a **Repository host** picker
+appears at the top of the Student Repositories card. Choose **GitHub** or
+**Forgejo**. The picker is locked once the assignment has a handout,
+grader, or student repository, or a fork target, so set it before the
+assignment is released.
+
+Forgejo assignments have the following restrictions compared to GitHub
+assignments:
+
+| Feature | GitHub | Forgejo |
+| --- | --- | --- |
+| Fork-based repository configurations | Supported | Not available |
+| Pull-request submission mode | Supported | Not available |
+| Branch protection | Supported | Not available |
+| Repository analytics | Supported | Not available |
+| Autograder | Supported | Supported |
+
+Forgejo assignments are badged **Forgejo** in the instructor assignment
+list. The GitHub invitation and setup prompts are hidden on Forgejo
+assignment pages.
+
 ### Repository configuration
 
 The repository configuration has five options.

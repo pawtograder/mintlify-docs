@@ -57,6 +57,14 @@ The two flags are not interchangeable, and no single surface checks both.
 
 An inactive queue that is still available therefore stays listed for students and still accepts requests, while disappearing from your dashboard. Use **available** to close a queue for business, and **active** to tidy your own dashboard.
 
+### Queue health thresholds
+
+When the `office-hours-queue-health` course flag is on, a **Queue Health Settings** section appears at the bottom of Queue Management. Set the **Requests waiting** threshold — the number of open requests at which a queue is considered overloaded and turns red on the staff dashboard. The default is 5. Values must be positive whole numbers; anything else falls back to the default.
+
+Instructors receive one browser notification per session the first time any queue in the course crosses this threshold. The notification fires once and does not repeat until the page is reloaded.
+
+See [Feature Flags](/staff/feature-flags#office-hours-queue-health) to turn the flag on.
+
 ### Office hours description
 
 The **Office Hours Description** field at the top of Queue Management writes one markdown block for the whole course. It renders in the student help drawer and above the new-request form. Its helper text claims it appears at the top of the office hours page, which it does not.

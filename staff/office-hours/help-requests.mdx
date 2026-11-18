@@ -56,6 +56,34 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalation
+
+When the `office-hours-escalation` course flag is on, two additional actions appear on a request.
+
+### Escalate
+
+**Escalate** is available while you are actively helping a request (status `in_progress`). It requires a note — a brief summary of what was tried and what the next TA should know. After you submit the note, the request returns to the queue with an **Escalated (×N)** badge and sorts ahead of all non-escalated requests, so the next available TA sees it first. The original join time is preserved for tie-breaking among escalated requests.
+
+A collapsible **Escalation history** panel on the request shows each escalation note, who wrote it, and how long the request spent in the queue between escalations. This panel is staff-only.
+
+### End ticket
+
+**End ticket** closes the request permanently — no check-in prompt, no escalation. It is available even after **Resolve**, so you can withdraw a pending student check-in if needed. A request closed this way cannot be reopened through the interface.
+
+<Warning>
+End ticket is disabled while a video call is live on the request. End the call before closing the ticket.
+</Warning>
+
+### Student check-in after resolve
+
+When you resolve a request you were actively helping, the student receives a 10-minute check-in prompt asking whether their problem was fixed. If they answer "no", the request is escalated with their note. If the check-in expires without a response, the request stays resolved.
+
+The check-in is not shown when:
+- Nobody picked up the request before it was resolved.
+- The request was ended with **End ticket** rather than **Resolve**.
+
+See [Feature Flags](/staff/feature-flags#office-hours-escalation) to enable this feature.
+
 ## Resolving
 
 | Status | Meaning |
