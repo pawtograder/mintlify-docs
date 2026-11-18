@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 18, 2026
+
+#### Office hours
+- **Ticket escalation with student check-in** — When a TA cannot finish helping a student, they can now **Escalate** the request back to the queue with a required note. Escalated tickets sort ahead of normal requests in every queue view and show an **Escalated (×N)** badge with a staff-only history panel. After a staff member resolves an in-progress request, the student receives a 10-minute **Did your problem get fixed?** check-in; answering No automatically escalates the request with the student's note. A new red **End ticket** button closes a request immediately with no check-in. See [Help Requests](/staff/office-hours/help-requests) and [Resolving and Feedback](/students/office-hours/resolving-and-feedback) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+#### Assignments
+- **Repository host picker for Forgejo assignments** — Courses with Cloud Workspaces enabled can now choose **GitHub** or **Forgejo** as the repository host when creating or editing a code assignment. The picker locks once repositories exist. Forgejo assignments are badged in the instructor list, and options that require GitHub (fork-based configurations, pull-request mode, branch protection, repository analytics) are disabled with a reason. See [Assignment configuration](/staff/assignments/configuration) ([#1313](https://github.com/pawtograder/platform/pull/1313))
+
+#### Gradebook
+- **Column groups and topics** — Gradebook columns can now be organized into named column groups (displayed as collapsible header rows in the grid) and tagged with topics for quick filtering. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Cloud workspaces
+- **Coder workspace accounts and open-in-Coder edge function** — Pawtograder now creates Coder accounts for students and tracks workspaces per assignment. The new `workspace-open` edge function creates or starts a student's workspace and returns where to send them; `workspace-status` returns the current status without making changes. Workspaces clone the student's Forgejo repository and use the same toolchain image as the autograder runner ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **Forgejo accounts on the roster** — For courses with Cloud Workspaces enabled, the enrollment roster now shows each student's Forgejo username. Students without an account yet show "Not created yet". The reconciler runs hourly and is kicked when someone joins the class ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories, recording commits and triggering grading the same way GitHub webhooks do. The commit history dialog shows only recorded commits for Forgejo repositories ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### Bug fixes
+- **GitHub circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, preventing a single rate-limit incident from triggering a 24-hour org-wide block on subsequent unrelated events ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Exam overview and artifact messages** — The exam overview no longer shows a stale `status: draft` label; it now reads "Template configured: N page(s)." The message above an artifact with no applicable rubric checks is now context-aware: it distinguishes between no rubric, an exam artifact (grade in the rubric panel), and a non-exam artifact ([#1269](https://github.com/pawtograder/platform/pull/1269))
+- **Markdown editor accessibility** — The markdown editor's textarea is now labelled for screen readers, and decorative toolbar icons are hidden from assistive technology ([#908](https://github.com/pawtograder/platform/pull/908))
+
 ## August 2026
 
 ### August 19, 2026
