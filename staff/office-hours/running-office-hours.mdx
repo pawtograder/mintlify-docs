@@ -30,6 +30,24 @@ Each queue card lists the staff currently on duty, the end time of the shift in 
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Queue health cards
+
+When the **office-hours-queue-health** course feature flag is on, each queue card shows additional health information: the number of waiting requests, the longest current wait, and an **Unstaffed** badge when no TA has an active shift on that queue. Cards are sorted so queues that need attention appear first.
+
+Instructors can set per-queue thresholds under **Settings → Queue Settings**. When the number of open requests reaches the threshold, the card turns red and you receive one browser notification. The threshold field is labeled **Requests waiting** (one request can hold several students).
+
+<Note>
+Queue health cards, the unstaffed badge, the severity sort, and the red-queue alert are all off by default. An instructor must enable the **office-hours-queue-health** flag under **Course Settings → Feature Flags** before they appear.
+</Note>
+
+## Turn alerts
+
+When the **turn-alerts** course feature flag is on, students receive a browser notification when a TA picks up their request or they move to next in line. Staff receive a notification when a student's request is picked up.
+
+## Shift end and in-progress requests
+
+When a TA ends their shift, any requests they were actively helping are returned to the queue so another TA can pick them up. This behavior requires the **shift-release** course feature flag to be on.
+
 ## Two banners you may see
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
