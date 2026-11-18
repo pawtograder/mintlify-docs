@@ -149,8 +149,30 @@ formation deadline. All of that is documented in
 
 This card decides more about a student's experience than any other on the
 form, and none of it is visible from the assignment title. It has three
-parts: the repository configuration, the autograder checkbox, and branch
+parts: the repository host picker (on courses with cloud workspaces), the repository configuration, the autograder checkbox, and branch
 protection.
+
+### Repository host
+
+On courses with the `cloud-workspaces` feature enabled, a **Repository host** picker appears at the top of the Student Repositories card. Choose **GitHub** (the default) or **Forgejo**.
+
+The host is locked once the assignment has a handout repository, a grader repository, a student repository, or a fork target. To change the host, you must remove those repositories first.
+
+When **Forgejo** is selected, several options are unavailable:
+
+| Unavailable on Forgejo | Reason |
+| --- | --- |
+| Fork-based repository configurations | Forgejo grading does not support fork workflows |
+| Pull-request submission mode | Not supported on Forgejo |
+| Autograder (GitHub Actions) | Forgejo uses its own grading pipeline |
+| Branch protection | Not supported on Forgejo |
+| Repository analytics | Not supported on Forgejo |
+
+Forgejo assignments are badged **Forgejo** in the instructor assignment list. GitHub invitation prompts are hidden on Forgejo assignment pages, and on the course page they are hidden when every live repository-backed assignment uses Forgejo.
+
+<Note>
+The repository host picker only appears when the `cloud-workspaces` course flag is on. On courses without it, all assignments use GitHub.
+</Note>
 
 ### Repository configuration
 
