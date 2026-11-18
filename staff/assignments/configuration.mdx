@@ -240,6 +240,11 @@ Two ways the checkbox is decided for you:
   repository, so it must have the same autograder setting as its source.
   The form warns inline, and saving is rejected if they disagree.
 
+For **Forgejo assignments**, the autograder is available and uses Forgejo's
+CI rather than GitHub Actions. The **Configure Autograder** page shows a
+message explaining that grader setup is handled through Forgejo and blocks
+the GitHub-specific validation and workflow sync steps.
+
 ### Branch protection
 
 Applies to the default branch of every student or group repository for the
