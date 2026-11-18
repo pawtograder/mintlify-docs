@@ -6,6 +6,44 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 18, 2026
+
+#### Accessibility
+- **Markdown editor labelled for screen readers** — The markdown editor's textarea now has an accessible name, and its decorative toolbar icons are hidden from assistive technology ([#908](https://github.com/pawtograder/platform/pull/908))
+
+### November 17, 2026
+
+#### Office hours
+- **Ticket escalation with student check-in** — When a TA can't finish helping a student, they can now **Escalate** the ticket back to the queue with a required note for the next staff member. Escalated tickets sort ahead of ordinary open requests and show an **Escalated (×N)** badge. After a staff member resolves an in-progress request, the student receives a 10-minute check-in prompt; answering "No" automatically escalates the ticket with the student's note. A new red **End ticket** button closes a ticket immediately with no check-in. See [Help Requests](/staff/office-hours/help-requests) and [Resolving and Feedback](/students/office-hours/resolving-and-feedback) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+#### GitHub
+- **Circuit breaker decay after a quiet day** — The GitHub rate-limit circuit breaker now resets its escalation count after 24 hours of no trips, preventing a single old incident from triggering a 24-hour org-wide block on future rate-limit events ([#1295](https://github.com/pawtograder/platform/pull/1295))
+
+### November 13, 2026
+
+#### Gradebook
+- **Column groups and topics** — Gradebook columns can now be organized into named groups and tagged with topics. Groups appear as collapsible sections in the grid and are available in score expressions. Topics can be used to filter the gradebook and to reference sets of columns in expressions via `gradebook_columns_by_topic(...)`. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Cloud workspaces
+- **Forgejo accounts created automatically** — For courses with the cloud-workspaces feature enabled, Pawtograder now automatically creates a Forgejo account for each enrolled student. The course roster shows each student's Forgejo username, or "Not created yet" while the account is being provisioned ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Coder workspaces with repository cloning** — Coder workspaces now clone the student's assignment repository on first start, using the student's linked Forgejo account for authentication. The workspace image includes the same JDK 21, Maven, Python 3, and Node 22 toolchain as the autograder. Workspaces stop automatically after one hour of inactivity ([#1229](https://github.com/pawtograder/platform/pull/1229), [#1230](https://github.com/pawtograder/platform/pull/1230))
+
+#### Office hours
+- **TA sees new request's students immediately** — A TA with office hours open now sees the correct student count on a newly filed request without reloading the page ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+#### Exams
+- **Exam questions listed in tree order** — The template editor now renders questions in pre-order (parent before children, siblings by ordinal), so parts and items appear under their correct parent instead of interleaved ([#1264](https://github.com/pawtograder/platform/pull/1264))
+- **Rubric out-of-date notice** — The exam template page shows a notice when the saved questions no longer match the rubric built from them, prompting instructors to rebuild before grading starts ([#1190](https://github.com/pawtograder/platform/pull/1190))
+- **Paper exam submissions open on the exam artifact** — Graders are now taken directly to the answer crops when opening a paper exam submission, instead of landing on the scanned page image ([#1267](https://github.com/pawtograder/platform/pull/1267))
+
+#### Integrations
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories and records commits in the same commit history used for GitHub repositories. The student commit history dialog shows only recorded rows for Forgejo repositories ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### SSO
+- **Skip consent and Forgejo login pages for first-party apps** — With `autoApproveFirstParty` enabled, students are no longer shown the OAuth consent page when signing in to Forgejo or Coder for the first time. Forgejo's login page also redirects directly to the SSO provider when only one is configured ([#1245](https://github.com/pawtograder/platform/pull/1245))
+
 ## August 2026
 
 ### August 19, 2026
