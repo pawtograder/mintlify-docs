@@ -6,6 +6,27 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 18, 2026
+
+#### Office hours
+- **Ticket escalation with student check-in** — When a TA can't finish helping a student, they can now **Escalate** the request back into the queue with a required note for the next TA. Escalated tickets sort ahead of normal open requests and show an **Escalated (×N)** badge. When staff resolve an in-progress request, a 10-minute check-in opens for the student; answering "No" automatically escalates the ticket with the student's note. A new red **End ticket** button closes a request immediately with no check-in or escalation, and can also withdraw a pending check-in. End ticket is blocked while a video call is live ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+#### Assignments
+- **Repository host picker for Forgejo assignments** — On courses with Cloud Workspaces enabled, Create and Edit Assignment now show a GitHub/Forgejo picker for code assignments. Forgejo assignments are badged in the instructor assignment list. Fork-based configurations, pull-request submission, branch protection, and repository analytics are disabled with a reason on Forgejo assignments. The picker locks once the assignment has any repository ([#1313](https://github.com/pawtograder/platform/pull/1313))
+
+#### Gradebook
+- **Column groups and topics** — Gradebook columns can now be organized into named column groups and tagged with topics, making large gradebooks easier to navigate and filter ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Cloud Workspaces
+- **Coder workspace accounts and workspace-open edge function** — Pawtograder now creates Coder accounts for students and manages workspaces through the `workspace-open` and `workspace-status` edge functions. Workspaces clone the student's Forgejo repository automatically, use a purpose-built image with the same toolchain as the autograder runner, and stop after an hour of inactivity ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **Forgejo accounts on the roster** — For courses with Cloud Workspaces on, the enrollments table shows each person's Forgejo username. Students without an account yet show "Not created yet". The CSV export includes the same field ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories and records them in the commit history, using the same pipeline as GitHub pushes ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### Bug fixes
+- **GitHub circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, preventing a single rate-limit incident from triggering a 24-hour org-wide block on subsequent unrelated events ([#1295](https://github.com/pawtograder/platform/pull/1295))
+
 ## August 2026
 
 ### August 19, 2026

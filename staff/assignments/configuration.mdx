@@ -148,9 +148,43 @@ formation deadline. All of that is documented in
 ## Student repositories
 
 This card decides more about a student's experience than any other on the
-form, and none of it is visible from the assignment title. It has three
-parts: the repository configuration, the autograder checkbox, and branch
-protection.
+form, and none of it is visible from the assignment title. It has four
+parts: the repository host, the repository configuration, the autograder
+checkbox, and branch protection.
+
+### Repository host
+
+For courses with **Cloud Workspaces** enabled, a **GitHub / Forgejo**
+picker appears at the top of the Student Repositories card. It selects
+which Git provider hosts the student repositories for this assignment.
+
+- **GitHub** — the default. All existing features work as described on
+  this page.
+- **Forgejo** — uses the course's self-hosted Forgejo instance. Some
+  GitHub-specific features are disabled for Forgejo assignments (see
+  below).
+
+The picker locks once the assignment has a handout, grader, or student
+repository, or a fork target. A locked assignment shows the current
+provider as read-only. Forgejo assignments are badged in the instructor
+assignment list.
+
+**Features disabled on Forgejo assignments:**
+
+| Feature | Reason |
+| --- | --- |
+| Fork-based repository configurations | Forgejo grading does not support fork workflows |
+| Pull-request submission mode | Requires GitHub Actions |
+| Autograder (GitHub Actions) | GitHub-only; Forgejo assignments use the Forgejo grader |
+| Branch protection | Managed by GitHub only |
+| Repository analytics | GitHub-only |
+
+<Note>
+The autograder is not disabled for Forgejo assignments — Forgejo grading
+runs the same tests through the Forgejo runner. The GitHub Actions
+autograder page will show a message explaining that grader setup is
+GitHub-only and cannot be used for this assignment.
+</Note>
 
 ### Repository configuration
 
@@ -183,8 +217,9 @@ Notes that will save you a support ticket:
 
 ### Autograder
 
-**Enable autograder (GitHub Actions)** is checked by default, and
-assignments created outside the web form get it too.
+**Enable autograder** is checked by default, and assignments created
+outside the web form get it too. On GitHub assignments this runs GitHub
+Actions; on Forgejo assignments it runs the Forgejo runner.
 
 With it on, the handout and every student repository include
 `.github/workflows/grade.yml`, and GitHub Actions grades pushes. What
