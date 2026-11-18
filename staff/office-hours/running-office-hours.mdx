@@ -24,6 +24,20 @@ Once you are on duty, **Working** stops listing queues and lists the requests yo
 Starting work always records a concurrent-student limit of `1`. There is no control for changing it, and it does not limit how many requests can be routed to you at once. Assignment Management displays the value. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
+## Queue health cards
+
+When the **office-hours-queue-health** course feature flag is on, each queue card shows additional health information: the number of requests currently waiting, the age of the oldest waiting request, and an **Unstaffed** badge when no TA has an active shift on that queue. Queues that need attention sort to the top of the list.
+
+Instructors can set per-queue thresholds under **Settings → Queue Settings**. When the number of waiting requests reaches the threshold, the card turns red and you receive one browser notification. The threshold is measured in open requests, not students — one request can include several students.
+
+<Note>
+The queue health cards, the unstaffed badge, the red-queue alert, and the thresholds section are all behind the **office-hours-queue-health** feature flag. See [Feature Flags](/staff/feature-flags) to enable it.
+</Note>
+
+## Shift end and in-progress tickets
+
+When the **shift-release** course feature flag is on, ending your shift automatically returns any in-progress tickets you hold to the queue as open, so students are not left waiting with no one assigned. Tickets on other queues are returned once you have no remaining active shift on those queues.
+
 ## Staffing times and the schedule
 
 Each queue card lists the staff currently on duty, the end time of the shift in progress with the time remaining, and the start of the next scheduled shift. Those times come from the course's office hours calendar, not from the assignment rows: an event counts toward a queue when it is explicitly linked to the queue, or when the event's queue name matches the queue's name, ignoring case. With nobody on duty the card reads "No staff currently on duty".
