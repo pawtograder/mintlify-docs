@@ -6,6 +6,38 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 18, 2026
+
+#### Office hours
+- **Queue health cards** — When the `office-hours-queue-health` flag is on, each queue card shows the number of waiting requests, the age of the oldest request, and an **Unstaffed** badge when no TA has an active shift. Queues needing attention sort first. Instructors set per-queue thresholds under **Settings → Queue Settings**; reaching the threshold turns the card red and sends a one-time browser notification. See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Ticket escalation and End ticket** — Staff can escalate a ticket back to the queue with a note for the next TA. After staff resolve an in-progress ticket, the student receives a 10-minute check-in; answering "No" escalates the ticket automatically. **End ticket** closes a ticket immediately with no check-in. Escalated tickets sort first in every queue view and show an **Escalated (×N)** badge. See [Help Requests](/staff/office-hours/help-requests#escalation) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+- **Turn alerts** — When the `turn-alert` flag is on, students receive a browser notification when a TA picks up their request or when they move to next in line ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Shift-end ticket release** — When the `shift-release` flag is on, ending a shift automatically returns in-progress tickets to the queue so students are not left waiting ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Assignments
+- **Repository host picker** — For courses with the `cloud-workspaces` flag on, assignment setup shows a **Repository host** picker (GitHub or Forgejo). On Forgejo assignments, fork-based configurations, pull-request mode, branch protection, and repository analytics are unavailable. Forgejo assignments are badged in the instructor assignment list. See [Assignment Configuration](/staff/assignments/configuration#repository-host) ([#1313](https://github.com/pawtograder/platform/pull/1313))
+
+#### Cloud workspaces (Forgejo)
+- **Student and group repositories on Forgejo** — The `forgejo-reconciler` function creates student and group repositories for released Forgejo assignments, sets the workflow hash from the handout, and links each repository to the student's Forgejo account. Repository names are unique per provider, so the same name can exist on GitHub and Forgejo without conflict ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo accounts on the roster** — For courses with `cloud-workspaces` on, the roster shows a **Forgejo Username** column. Students without an account yet show "Not created yet" ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Coder workspace integration** — `workspace-open` and `workspace-status` edge functions create and start Coder workspaces that clone the student's Forgejo repository. The workspace image includes the same toolchain as the autograder runner (JDK 21, Maven, Python 3, Node 22). See [Feature Flags](/staff/feature-flags#cloud-workspaces) ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **Forgejo push webhooks** — `forgejo-repo-webhook` accepts push events from Forgejo, verifies the HMAC-SHA256 signature, and records commits in the same history as GitHub pushes. The commit history dialog shows only recorded rows for Forgejo repositories ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### Exams
+- **Exam feature flag** — The `exams` flag must be on for the Exam (Scan & OCR) nav entry and pages to appear. Seeded classes now have the flag enabled automatically ([#1266](https://github.com/pawtograder/platform/pull/1266))
+- **Scan progress and batch status** — The batch card shows live progress while pages are being OCR'd, matched, or finalized, with counts. Match controls are disabled while finalizing or completed ([#1315](https://github.com/pawtograder/platform/pull/1315))
+- **Rubric sync notice** — The exam template page shows a notice when the saved questions no longer match the rubric built from them, prompting the instructor to click **Build rubric from exam** before grading ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Exam overview and artifact labels** — The exam overview no longer shows a stale `status: draft`. Above an exam artifact, the message now correctly says to grade questions in the rubric panel ([#1316](https://github.com/pawtograder/platform/pull/1316))
+- **Question ordering in the template editor** — Questions now render in pre-order (parent before children, siblings by ordinal) instead of interleaving parts and questions ([#1280](https://github.com/pawtograder/platform/pull/1280))
+
+#### GitHub
+- **Circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, so a single rate-limit incident no longer escalates to a 24-hour org-wide block on subsequent trips ([#1295](https://github.com/pawtograder/platform/pull/1295))
+
+#### Accessibility
+- **Markdown editor labelling** — The markdown editor's textarea is now named for screen readers, and decorative toolbar icons are hidden from assistive technology ([#1312](https://github.com/pawtograder/platform/pull/1312))
+
 ## August 2026
 
 ### August 19, 2026
