@@ -232,6 +232,8 @@ Two ways the checkbox is decided for you:
   repository, so it must have the same autograder setting as its source.
   The form warns inline, and saving is rejected if they disagree.
 
+Forgejo assignments support the autograder. The grader setup page (**Configure Autograder**) validates the grader and syncs `grade.yml` through GitHub-specific edge functions, so those steps are not available on Forgejo assignments; the page explains why. The workflow hash (`autograder.workflow_sha`) is filled automatically from the handout's `.github/workflows/grade.yml` when the assignment is released.
+
 ### Branch protection
 
 Applies to the default branch of every student or group repository for the
