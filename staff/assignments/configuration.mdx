@@ -239,7 +239,7 @@ the default branch becomes a submission for you to grade by hand** — no
 for your reference solution and grading notes. Pushes to other branches
 are recorded in the commit history but are not submissions.
 
-Two ways the checkbox is decided for you:
+Three ways the checkbox is decided for you:
 
 - Pawtograder **forces it off** for pull-request submission mode
   and for the two no-repository modes. The autograder runs as a workflow
@@ -248,6 +248,9 @@ Two ways the checkbox is decided for you:
 - A **fork-from-prior-assignment** assignment shares its source's handout
   repository, so it must have the same autograder setting as its source.
   The form warns inline, and saving is rejected if they disagree.
+- On **Forgejo** assignments, the autograder checkbox remains available.
+  Grading runs through Forgejo's CI rather than GitHub Actions, so the
+  GitHub grader validation is skipped when you enable it.
 
 ### Branch protection
 
