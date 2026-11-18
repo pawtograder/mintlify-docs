@@ -56,6 +56,30 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalation
+
+When you cannot finish a request, **Escalate** flags it and returns it to the queue ahead of normal requests, with a note for whoever picks it up next. The **Escalate** button is available while you are actively helping a request.
+
+Escalated requests appear with an **Escalated (×N)** badge showing how many times the request has been escalated, and they sort before non-escalated requests in every queue view. A staff-only history panel on the request shows each escalation note and the time spent in queue between escalations.
+
+### Student check-in after Resolve
+
+When you click **Resolve** on a request you were actively helping, the student receives a 10-minute check-in prompt: "Did your problem get fixed?" If they answer no, the request is escalated with their note and returned to the queue.
+
+**End ticket** closes a request immediately with no check-in and no escalation. Use it when the session is definitively over and no follow-up is needed. End ticket is also available after Resolve, so you can withdraw a pending check-in.
+
+<Note>
+No check-in is sent when you resolve a request that was never claimed (nobody picked it up). The Resolve confirm dialog says which case it is.
+</Note>
+
+<Warning>
+End ticket is disabled while a video call is live. End the call before closing the request.
+</Warning>
+
+### Escalation state on new requests
+
+Students cannot create a request that is already in an escalated state. The database rejects any attempt to set escalation fields on a new request.
+
 ## Resolving
 
 | Status | Meaning |

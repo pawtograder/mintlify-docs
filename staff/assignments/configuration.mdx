@@ -152,6 +152,19 @@ form, and none of it is visible from the assignment title. It has three
 parts: the repository configuration, the autograder checkbox, and branch
 protection.
 
+### Repository host
+
+For courses with **Cloud Workspaces** enabled, a **Repository host** picker appears at the top of this card. Choose **GitHub** (the default) or **Forgejo**.
+
+The host is locked once the assignment has a handout, grader repository, student repository, or fork target. To change it, remove those resources first.
+
+On Forgejo assignments, the following options are disabled because they require GitHub:
+- Fork-based repository configurations and pull-request submission mode
+- Branch protection
+- Repository analytics
+
+Forgejo assignments are badged in the instructor assignment list. The student's repository link on their assignment page points to the Forgejo instance their account is on.
+
 ### Repository configuration
 
 The repository configuration has five options.
@@ -218,6 +231,8 @@ Two ways the checkbox is decided for you:
 - A **fork-from-prior-assignment** assignment shares its source's handout
   repository, so it must have the same autograder setting as its source.
   The form warns inline, and saving is rejected if they disagree.
+
+Forgejo assignments support the autograder. The grader setup page (**Configure Autograder**) validates the grader and syncs `grade.yml` through GitHub-specific edge functions, so those steps are not available on Forgejo assignments; the page explains why. The workflow hash (`autograder.workflow_sha`) is filled automatically from the handout's `.github/workflows/grade.yml` when the assignment is released.
 
 ### Branch protection
 
