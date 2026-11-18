@@ -56,13 +56,40 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalating a request
+
+When you cannot finish helping a student — they need to come back, or a different TA should take over — use **Escalate** instead of resolving. Escalate is available while the request is in progress.
+
+Escalating requires a note explaining what was tried and what the next TA should know. The request goes back to the queue flagged as escalated, sorted ahead of normal open requests, with an **Escalated (×N)** badge showing how many times it has been escalated. The escalation history panel on the request shows each note, who wrote it, and how long the student waited between escalations.
+
+## Student check-in after resolving
+
+When you click **Resolve** on an in-progress request, a 10-minute check-in window opens for the student. The student sees a dialog asking whether their problem was fixed:
+
+- **Yes** — the request closes normally.
+- **No** — the student can add a note and the request is escalated back into the queue automatically.
+
+If the student does not respond within 10 minutes, the request stays resolved.
+
+<Note>
+The check-in only opens when a staff member resolves a request that was in progress. Resolving a request that was never claimed skips the check-in, and the Resolve confirm dialog says so.
+</Note>
+
+## Ending a request without a check-in
+
+**End ticket** (shown in red) closes a request immediately with no check-in and no escalation. Use it when the student has left, the session is clearly over, or you need to withdraw a pending check-in. End ticket is available on resolved requests as well as in-progress ones, so you can close a check-in window that is still open.
+
+<Warning>
+End ticket cannot be used while a video call is live. End the call first.
+</Warning>
+
 ## Resolving
 
 | Status | Meaning |
 | --- | --- |
 | `open` | Filed, unclaimed, still in the queue. |
 | `in_progress` | A staff member has claimed it. |
-| `resolved` | Finished. Removed from the open list. |
+| `resolved` | Finished. Removed from the open list. A check-in may still be pending. |
 | `closed` | Also finished, and treated exactly like `resolved` in every list. |
 
 Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Resolving and Feedback](/students/office-hours/resolving-and-feedback)); staff do not get that dialog.
