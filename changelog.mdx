@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 18, 2026
+
+#### Office hours
+- **Queue health cards** — When the `office-hours-queue-health` course flag is on, the staff dashboard shows health cards for each queue: waiting request count, longest wait, an Unstaffed badge, and a red highlight when the count reaches the instructor-configured threshold. Queues needing attention sort first, and instructors receive one browser notification when a queue turns red. See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Turn alerts** — When the `turn-alerts` flag is on, students receive a browser notification when a TA picks up their request or they move to next in line ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Shift-end release** — When the `shift-release` flag is on, requests a TA was actively helping are returned to the queue when their shift ends ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Ticket escalation** — Staff can escalate a request mid-help with a required note, returning it to the front of the queue for another TA. Resolving an actively-helped request sends the student a 10-minute check-in; answering no escalates the request. A new **End ticket** button closes a request immediately with no check-in. Escalated requests show an **Escalated (×N)** badge and sort before normal requests. See [Help Requests](/staff/office-hours/help-requests#escalation) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+#### Assignments
+- **Forgejo repository host** — Assignments in courses with Cloud Workspaces enabled can now use Forgejo as the repository host. A **Repository host** picker (GitHub or Forgejo) appears on the assignment form; the host locks once a handout or student repository exists. Fork-based configurations, pull-request submission, branch protection, and repository analytics are GitHub-only. See [Assignment Configuration](/staff/assignments/configuration#repository-host) ([#1313](https://github.com/pawtograder/platform/pull/1313))
+
+#### Cloud workspaces
+- **Forgejo student and group repositories** — Pawtograder now creates Forgejo repositories for students and groups on released Forgejo assignments, generated from the handout template. The autograder workflow hash is filled automatically from the handout's `grade.yml` at release time ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Coder workspace integration** — `workspace-open` and `workspace-status` edge functions create and start Coder workspaces for students, cloning their Forgejo repository into the workspace. The workspace image includes the same toolchain as the autograder runner (JDK 21, Maven, Python 3, Node 22) ([#1230](https://github.com/pawtograder/platform/pull/1230))
+- **Forgejo push webhooks** — Pawtograder now accepts push webhooks from Forgejo repositories and records them in the commit history, using the same pipeline as GitHub pushes ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### GitHub
+- **Circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, so a rate-limit incident from months ago no longer contributes to the escalation threshold ([#1295](https://github.com/pawtograder/platform/pull/1295))
+
+#### Accessibility
+- **Markdown editor labelling** — The markdown editor's textarea now has an accessible name, and its decorative toolbar icons are hidden from assistive technology ([#1312](https://github.com/pawtograder/platform/pull/1312))
+
 ## August 2026
 
 ### August 19, 2026
