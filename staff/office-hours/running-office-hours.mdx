@@ -30,6 +30,24 @@ Each queue card lists the staff currently on duty, the end time of the shift in 
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Queue health cards
+
+When an instructor enables the **Office hours queue health** course feature flag, each queue card on the Working page gains live health indicators:
+
+- **Waiting count** — the number of open requests currently in the queue.
+- **Oldest wait** — how long the longest-waiting request has been open.
+- **Unstaffed badge** — shown when no TA has an active shift on that queue.
+
+Queues that need attention sort to the top of the list. Instructors set the threshold for what counts as a red (critical) queue under **Settings → Queue Settings → Queue Health Thresholds**; the field is labeled **Requests waiting** and accepts a positive integer. When the waiting count crosses that threshold, the card turns red and you receive one browser notification. The alert fires once per queue per session, not on every new request.
+
+When the flag is off, queue cards show the open-request count as before and no thresholds or sorting apply.
+
+## Shift end and in-progress tickets
+
+When you end a shift, any request you were actively helping is automatically returned to the queue as open. This prevents tickets from being stranded with no assigned TA. The behavior applies to all requests on the queue whose shift ended; if you were also helping requests on other queues, those are returned once you have no remaining active shift on any queue.
+
+This behavior is controlled by the **Office hours shift release** course feature flag and is off by default.
+
 ## Two banners you may see
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
@@ -38,3 +56,4 @@ A **Real-time updates disconnected** warning means queue status and new requests
 
 - [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking) for the record of shifts you have worked and the per-TA time dashboard.
 - [Office Hours Overview](/staff/office-hours/intro) for the header, the Settings menu, and finding any request.
+- [Feature Flags](/staff/feature-flags) for the queue health and shift-release flags.
