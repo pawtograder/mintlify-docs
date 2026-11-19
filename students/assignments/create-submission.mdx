@@ -125,6 +125,36 @@ Any single file over 50 MB is rejected with an error naming the file and its siz
 Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Give binary artifacts a conventional file extension — a binary with an unusual extension or none at all is stored as text, which corrupts it.
 </Note>
 
+## Cloud Workspaces (Open in Coder)
+
+If your course has cloud workspaces enabled, you will see an **Open in Coder** card on your assignment page. This gives you a browser-based VS Code editor with your assignment repository already cloned, using the same toolchain the autograder uses.
+
+### Starting your workspace
+
+The card walks through three startup steps:
+
+1. **Build** — the workspace container is being created.
+2. **Clone** — your assignment repository is being cloned into the workspace.
+3. **Editor** — VS Code (code-server) is starting up.
+
+Once all three steps are complete, an **Open in VS Code** link appears. Click it to open the editor in a new tab.
+
+### Linking your Forgejo account
+
+The first time you open a workspace, you may be asked to link your Forgejo account. Click the link in the card, authorize the connection on the Forgejo page that opens, then return to the assignment page. The card checks again automatically when you come back to the tab.
+
+### If the workspace fails to start
+
+If a step fails, the card shows which step and why. Click **Retry** to try again. The workspace stops automatically after an hour of inactivity; clicking **Open in Coder** starts it again and your work on the home volume is preserved.
+
+<Note>
+Cloud workspaces are only available when your instructor has enabled the feature for the course. If you do not see the card, the feature is not enabled.
+</Note>
+
+<Warning>
+Do not use **Open in Coder** while a staff member is viewing the course as you. The workspace would be opened under the staff member's account, not yours.
+</Warning>
+
 ## Assignment Leaderboard
 
 If your instructor has enabled the leaderboard for an assignment, it appears as a panel in the right-hand sidebar of the assignment page, listing the top ten entries. Assignments without it show no panel at all. See [Leaderboards](/students/assignments/leaderboard) for how the ranking works.
