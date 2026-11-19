@@ -271,6 +271,20 @@ The CLI exits `0` on success and `1` on any failure, and prints the reason. A fe
 - **Timeouts on long operations.** Set `PAWTOGRADER_HTTP_TIMEOUT_MS=600000` for a ten-minute limit. For artifact imports, a smaller `--batch-size` helps more than a longer timeout.
 - **Git or SSH failures.** Check `ssh -T git@github.com` and your membership in the course's GitHub organization, then retry with `--concurrency 1`.
 
+## Manage exam scan batches
+
+The `exams` command group lists and manages exam scan batches. Use it to check the status of a batch or to trigger reprocessing from the command line.
+
+```bash
+# List all scan batches for an exam
+pawtograder exams list --class cs3500-spring-2026 --exam midterm
+
+# Show the status of a specific batch
+pawtograder exams show --class cs3500-spring-2026 --batch <batch-id>
+```
+
+See the [CLI reference](/developers/cli#exams) for the full flag set.
+
 ## More commands
 
 The [CLI reference](/developers/cli) documents the rest of the command surface, including bulk student-repository maintenance (`repos sync-grade-workflow` and `repos copy-after-source-due`), batch import of grading comments and artifacts, assignment deletion, `submissions export`, `assessment deanonymize`, and the exact flags, defaults, and error messages for everything on this page.
