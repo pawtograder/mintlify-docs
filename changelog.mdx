@@ -6,6 +6,52 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 19, 2026
+
+#### Cloud workspaces
+
+- **Open in Coder on the assignment page** — Students with a Forgejo repository for an assignment now see an **Open in Coder** card that walks through workspace startup (build, clone, editor) and opens VS Code in the browser once the workspace is ready. The card handles linking Forgejo, restarting failed workspaces, and reporting which step failed. Requires the `cloud-workspaces` course flag and Coder configured for the deployment. See [Opening a Cloud Workspace](/students/assignments/cloud-workspace) ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Workspace accounts and status edge functions** — `workspace-open` and `workspace-status` edge functions create and start Coder workspaces, track them in the database, and return step-by-step status. Workspaces are keyed by repository, survive group changes, and restart automatically after a failed start ([#1222](https://github.com/pawtograder/platform/pull/1222))
+
+#### Assignments
+
+- **Repository host picker (GitHub / Forgejo)** — Courses with the `cloud-workspaces` flag can choose GitHub or Forgejo as the repository host per assignment. The host is locked once repositories exist. Forgejo assignments are badged in the instructor list, and GitHub invitation prompts are hidden on Forgejo assignments and on courses where every live assignment uses Forgejo. See [Assignment Configuration](/staff/assignments/configuration#repository-host) ([#1313](https://github.com/pawtograder/platform/pull/1313))
+- **Forgejo student and group repositories** — The `forgejo-reconciler` background job creates student and group repositories from the handout template after an assignment is released, sets the `grade.yml` workflow hash, and handles group membership changes. Repository names are unique per provider and start with the class slug ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo grading** — Submissions from Forgejo repositories are cloned through Forgejo's archive API, staff reruns dispatch through Forgejo's API, and Forgejo job tokens are accepted in `create-submission` and `submit-feedback` ([#1239](https://github.com/pawtograder/platform/pull/1239))
+
+#### Office hours
+
+- **Queue health cards** — When the `office-hours-queue-health` flag is on, queue cards show waiting request count, oldest wait, and an **Unstaffed** badge. Cards sort by urgency and instructors can set a red-alert threshold per class. See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Ticket escalation and End ticket** — Staff can **Escalate** a ticket mid-help with a required note, returning it to the front of the queue. **Resolve** opens a 10-minute student check-in; answering no escalates with the student's note. **End ticket** closes a request immediately with no check-in. See [Help Requests](/staff/office-hours/help-requests#escalation) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+- **Turn alerts** — When the `turn-alert` flag is on, students receive a browser notification when a TA picks up their request or they move to next in line ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Shift end release** — When the `shift-release` flag is on, ending a shift returns in-progress tickets to the queue. See [Running Office Hours](/staff/office-hours/running-office-hours#shift-end-and-in-progress-tickets) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Exams
+
+- **Scan progress and batch status** — The batch card shows progress while reading pages, matching, and creating submissions (pages OCR'd, submissions finalized). Create Submissions stays disabled until the batch leaves its current state, and the page follows finalize to completion without a manual reload ([#1315](https://github.com/pawtograder/platform/pull/1315))
+- **Exam overview and artifact labels** — The exam overview now reads "Template configured: N page(s)" instead of the uninformative `status: draft`. Above an exam artifact, the Files page says "Grade this exam's questions in the rubric panel" instead of "No rubric checks available" ([#1316](https://github.com/pawtograder/platform/pull/1316))
+- **Scan ownership hardening** — Exam scan pages are validated against the batch being processed before any OCR or finalization. A scan swapped in from another course is refused before the submission is created, and a confirmed exam's pages cannot be changed by staff after matching ([#1133](https://github.com/pawtograder/platform/pull/1133))
+
+#### Command line
+
+- **`pawtograder exams` command group** — New `exams list` and `exams show` commands for listing and inspecting exam scan batches. See [CLI reference](/developers/cli#exams) ([#1325](https://github.com/pawtograder/platform/pull/1325))
+
+#### Bug fixes
+
+- **Gemini transient failures retried** — Transient Gemini API errors during exam OCR are now retried automatically ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **Workspace starts on the template's active version** — Opening a workspace now uses the template's currently active version rather than a stale one ([#1326](https://github.com/pawtograder/platform/pull/1326))
+- **Forgejo job token repository match is case-insensitive** — A Forgejo job token whose repository name differs only in case is now accepted ([#1330](https://github.com/pawtograder/platform/pull/1330))
+- **GitHub circuit breaker resets after a quiet day** — A GitHub org circuit breaker that has been quiet for 24 hours now resets its trip count, so a single rate-limit event no longer escalates to a 24-hour block on the next trip ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Markdown editor textarea labelled and toolbar icons hidden from screen readers** — The markdown editor's textarea now has an accessible name, and its decorative toolbar icons are hidden from assistive technology ([#1312](https://github.com/pawtograder/platform/pull/1312))
+
+### November 18, 2026
+
+#### Exams
+
+- **`exam_create_submission` locks the scanned row** — The database function now locks the scanned submission row and refuses to create a submission if the matched student has changed since the worker read it, preventing a race between re-pick and finalize from splitting ownership ([#1317](https://github.com/pawtograder/platform/pull/1317))
+
 ## August 2026
 
 ### August 19, 2026

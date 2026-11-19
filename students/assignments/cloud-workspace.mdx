@@ -1,0 +1,45 @@
+---
+title: "Opening a Cloud Workspace"
+description: "Use the Open in Coder card to start a VS Code workspace in the browser for your assignment repository"
+icon: "cloud"
+---
+
+# Opening a Cloud Workspace
+
+Some courses provide a cloud workspace for each assignment: a VS Code environment in the browser, pre-configured with the same tools the autograder uses, with your assignment repository already cloned. If your course has this enabled, you will see an **Open in Coder** card on the assignment page.
+
+## Before you start
+
+You need a Forgejo account linked in Coder before a workspace can be created. If the link is missing, the card shows a **Link Forgejo account** prompt. Click it to open Coder's Forgejo authorization page, approve the connection, and return to the assignment page. The card re-checks automatically when you come back to the tab.
+
+## Starting your workspace
+
+Click **Open workspace** on the assignment page. The card walks through three startup steps:
+
+| Step | What is happening |
+| --- | --- |
+| **Build** | Coder is scheduling and starting the workspace pod. |
+| **Clone** | Your assignment repository is being cloned into the workspace. |
+| **Editor** | VS Code (code-server) is starting up. |
+
+Each step shows a spinner while it is running and a checkmark when it finishes. If a step fails, the card names the step and shows a **Retry** button.
+
+Once all three steps are complete, an **Open in VS Code** link appears. Click it to open the editor in a new tab.
+
+## Returning to your workspace
+
+Your workspace stops automatically after an hour of inactivity. When you come back to the assignment page and click **Open workspace** again, the card restarts it and walks through the same steps. Your files are preserved on the workspace's home volume — the clone step is skipped if your repository is already there.
+
+## Troubleshooting
+
+**The card shows "Link Forgejo account"** — Your Forgejo account is not linked in Coder yet. Click the prompt, approve the connection, and return to the assignment page.
+
+**A step fails with an error message** — Click **Retry**. If the clone step fails, the message says why (for example, a missing Forgejo link or a network timeout). Fix the underlying issue and retry.
+
+**The card shows "Contact course staff"** — Your Coder account was created with an old email address and cannot be signed in to. Ask your instructor or a TA to reset it.
+
+**The card shows "Restarting"** — The workspace is being restarted after a failed start. The card polls automatically and will update when the restart finishes.
+
+<Note>
+Staff viewing the course as a student do not see the Open in Coder card. The workspace would be created under the staff member's own account, not the student's.
+</Note>

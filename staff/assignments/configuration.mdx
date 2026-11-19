@@ -152,6 +152,19 @@ form, and none of it is visible from the assignment title. It has three
 parts: the repository configuration, the autograder checkbox, and branch
 protection.
 
+### Repository host
+
+For courses with the **cloud-workspaces** flag on, a **Repository host** picker appears at the top of the Student Repositories card. Choose **GitHub** (the default) or **Forgejo**.
+
+The host is locked once the assignment has a handout, grader, or student repository, or a fork target. Forgejo assignments are badged in the instructor assignment list.
+
+On Forgejo assignments, the following options are disabled because they depend on GitHub-specific features:
+- Fork-based repository configurations and pull-request submission mode
+- Branch protection
+- Repository analytics
+
+Forgejo student repositories are created automatically by the `forgejo-reconciler` background job after the assignment is released. The roster shows each student's Forgejo username under **Forgejo Username** when the cloud-workspaces flag is on.
+
 ### Repository configuration
 
 The repository configuration has five options.
@@ -368,6 +381,14 @@ declares no submission files — a repo-only assignment, for instance — has
 nothing to compare and never rejects a push as empty. See
 [Empty submission detection](/staff/assignments/autograding#empty-submission-detection)
 for what students see in each case.
+
+### Cloud workspaces
+
+When the **cloud-workspaces** course flag is on and the assignment uses a Forgejo repository, students see an **Open in Coder** card on the assignment page. The card walks through workspace startup steps — **Build**, **Clone**, and **Editor** — and opens VS Code in the browser once the workspace is ready.
+
+Students must link their Forgejo account in Coder before a workspace can be created. If the link is missing, the card shows a **Link Forgejo account** prompt. Once linked, clicking **Open workspace** creates or starts the workspace and polls for readiness.
+
+Staff viewing as a student do not see the card, because the workspace would be created under the staff member's own account.
 
 ### Handout URL
 

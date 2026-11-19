@@ -30,6 +30,14 @@ Each queue card lists the staff currently on duty, the end time of the shift in 
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Queue health cards
+
+When the **office-hours-queue-health** course flag is on, each queue card shows additional health information: the number of waiting requests, the longest current wait, and an **Unstaffed** badge when no shift is running. Cards are sorted so queues that need attention appear first. Instructors can set per-class thresholds under **Queue Settings**; when a queue's wait exceeds the red threshold, the card turns red and you receive one browser notification. See [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds) for the threshold settings.
+
+## Shift end and in-progress tickets
+
+When the **shift-release** course flag is on, ending a shift returns any in-progress tickets you hold to the queue as open, so students are not left waiting with no one assigned. Tickets on the queue you ended always go back; tickets on other queues go back once you have no other shift still running.
+
 ## Two banners you may see
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
