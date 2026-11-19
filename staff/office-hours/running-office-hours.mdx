@@ -24,6 +24,24 @@ Once you are on duty, **Working** stops listing queues and lists the requests yo
 Starting work always records a concurrent-student limit of `1`. There is no control for changing it, and it does not limit how many requests can be routed to you at once. Assignment Management displays the value. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
+## Queue health cards
+
+When the **office-hours-queue-health** feature flag is on, each queue card on the **Working** page shows additional health information:
+
+- **Waiting count** — the number of open requests currently in the queue.
+- **Oldest wait** — how long the longest-waiting request has been open.
+- **Unstaffed badge** — shown when no TA has an active shift for the queue.
+
+Cards are sorted so queues that need attention appear first: unstaffed queues with waiting requests sort above staffed ones, and within each group the queue with the most waiting requests sorts first.
+
+### Red thresholds
+
+Instructors can set per-class thresholds under **Settings → Queue health thresholds**. When a queue's waiting count or oldest wait exceeds its threshold, the card turns red. With the **turn-alert** flag also on, instructors receive one browser notification the first time a queue crosses into red.
+
+### Shift-end release
+
+With the **shift-release** flag on, ending your shift automatically returns any in-progress requests assigned to you to the queue, so another TA can pick them up. Without this flag, those requests stay assigned to you after your shift ends.
+
 ## Staffing times and the schedule
 
 Each queue card lists the staff currently on duty, the end time of the shift in progress with the time remaining, and the start of the next scheduled shift. Those times come from the course's office hours calendar, not from the assignment rows: an event counts toward a queue when it is explicitly linked to the queue, or when the event's queue name matches the queue's name, ignoring case. With nobody on duty the card reads "No staff currently on duty".

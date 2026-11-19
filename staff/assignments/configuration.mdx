@@ -148,9 +148,33 @@ formation deadline. All of that is documented in
 ## Student repositories
 
 This card decides more about a student's experience than any other on the
-form, and none of it is visible from the assignment title. It has three
-parts: the repository configuration, the autograder checkbox, and branch
-protection.
+form, and none of it is visible from the assignment title. It has four
+parts: the repository host, the repository configuration, the autograder
+checkbox, and branch protection.
+
+### Repository host
+
+For courses with the **cloud-workspaces** feature flag on, a **Repository
+host** picker appears at the top of the Student repositories card. Choose
+**GitHub** (the default) or **Forgejo**.
+
+The picker locks once the assignment has a handout, grader, or student
+repository, or a fork target. To change the host after that point you
+must remove those repositories first.
+
+On **Forgejo** assignments, several options are unavailable:
+
+- Fork-based repository configurations and pull-request submission mode
+  are not supported.
+- Branch protection is not available.
+- Repository analytics are not available.
+- The autograder still works: Forgejo runs `grade.yml` the same way
+  GitHub Actions does, and grading is cloned and scored through Forgejo's
+  archive API.
+
+Forgejo assignments are badged **Forgejo** in the instructor assignment
+list. The student's repository link on the assignment page points to the
+Forgejo instance rather than GitHub.
 
 ### Repository configuration
 
@@ -183,13 +207,13 @@ Notes that will save you a support ticket:
 
 ### Autograder
 
-**Enable autograder (GitHub Actions)** is checked by default, and
-assignments created outside the web form get it too.
+**Enable autograder** is checked by default, and assignments created
+outside the web form get it too.
 
 With it on, the handout and every student repository include
-`.github/workflows/grade.yml`, and GitHub Actions grades pushes. What
-exactly triggers a run is decided by that workflow's own `on:` block, not
-by this checkbox — see
+`.github/workflows/grade.yml`, and GitHub Actions (or Forgejo Actions on
+Forgejo assignments) grades pushes. What exactly triggers a run is decided
+by that workflow's own `on:` block, not by this checkbox — see
 [What Counts as a Submission](/staff/assignments/autograding#what-counts-as-a-submission).
 
 <Warning>
