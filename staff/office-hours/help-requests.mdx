@@ -113,6 +113,10 @@ Press **Watch** on a request you are helping. Only the student who filed a reque
 
 Browser notifications, the sound alert, the flashing tab title, and the favicon badge fire only while the tab is in the background, and only for other people's messages. Configure them from **Notification Settings** in your user menu.
 
+### Turn alerts for students
+
+When the **office-hours-turn-alerts** course feature flag is on, students receive a browser notification when a TA picks up their request or when they move to next in line. Turn alerts are sent only to students named on the request. Students must have browser notifications enabled to receive them.
+
 ## AI help
 
 On a request, the **Get AI help** button copies a prompt to your clipboard that names the request, the class, and any referenced submission, and tells an assistant which Pawtograder MCP tools to call for the details. Paste it into an MCP-connected assistant. No model is called from Pawtograder itself, and if you have no API token yet the button opens setup instructions instead. Only instructors and graders see it. See [AI Assistance](/staff/ai-assistance) for the server, the tokens, and the available tools.
