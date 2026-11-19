@@ -75,6 +75,17 @@ Templates are grouped by category under **Active Templates** and **Inactive Temp
 Creating your first active template makes template selection mandatory for students. When exactly one active template exists it is applied automatically and its content is pre-filled; with two or more, students must pick one. Deactivating a template hides it from students without losing it.
 </Tip>
 
+## Queue health thresholds
+
+When the **office-hours-queue-health** course flag is on, a **Queue Settings** section appears under **Settings**. Instructors can set two per-class thresholds:
+
+| Threshold | Effect |
+| --- | --- |
+| **Requests waiting** | A queue card turns red when the number of open, unassigned requests reaches this value. |
+| **Oldest wait (minutes)** | A queue card turns red when the longest-waiting student has been in the queue this long. |
+
+Both thresholds must be positive numbers. When either is exceeded, the card turns red and instructors receive one browser notification. The thresholds apply to all active queues in the course.
+
 ## See also
 
 - [Running Office Hours](/staff/office-hours/running-office-hours) for putting staff on duty once the queues exist.

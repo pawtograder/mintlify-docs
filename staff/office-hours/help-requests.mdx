@@ -56,6 +56,34 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalating a request
+
+When you cannot finish a request — the student needs more time, a different TA, or a follow-up — you can escalate it back to the queue instead of resolving it.
+
+**Escalate** appears in the request header while the request is in progress. It requires a note explaining what was tried and what the next TA should know. Once escalated, the request returns to the queue flagged as escalated, sorted ahead of normal open requests, and carries an **Escalated (×N)** badge showing how many times it has been escalated. Any staff member can pick it up.
+
+The request's **Escalation history** panel (staff-only) shows each escalation note, who wrote it, and how long the student waited between escalations.
+
+### Student check-in after Resolve
+
+When you click **Resolve** on an in-progress request, the student receives a 10-minute check-in prompt asking whether their problem was fixed. If they answer no, they can add a note and the request is escalated automatically. If the check-in expires without a response, the request stays resolved.
+
+<Note>
+The check-in only appears for requests that were in progress when you resolved them. Resolving an unclaimed request closes it immediately with no check-in.
+</Note>
+
+### End ticket
+
+**End ticket** (shown in red) closes a request permanently with no check-in and no escalation. Use it when a student has left, the session is over, or the request should not be re-queued. A request that has been ended cannot be reopened through the API.
+
+<Warning>
+End the call before you use End ticket. **End ticket** is disabled while a video call is live, for the same reason **Resolve** is: closing a request with a live call leaves the meeting running with no way to shut it down from the interface.
+</Warning>
+
+### Shift-end release
+
+When your shift ends, any requests still assigned to you are automatically returned to the queue as open. This prevents requests from being stranded when a TA leaves without resolving or escalating them. The **shift-end release** course flag must be on for this to happen; it is off by default.
+
 ## Resolving
 
 | Status | Meaning |

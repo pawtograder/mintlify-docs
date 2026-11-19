@@ -149,8 +149,25 @@ formation deadline. All of that is documented in
 
 This card decides more about a student's experience than any other on the
 form, and none of it is visible from the assignment title. It has three
-parts: the repository configuration, the autograder checkbox, and branch
+parts: the repository host picker (for courses with cloud workspaces), the repository configuration, the autograder checkbox, and branch
 protection.
+
+### Repository host
+
+For courses with the **cloud-workspaces** feature flag on, a **Repository host** picker appears at the top of this card. Choose **GitHub** or **Forgejo**.
+
+| Host | Notes |
+| --- | --- |
+| **GitHub** | The default. Repositories are created in the course's GitHub organization. All repository modes, the autograder, branch protection, and repository analytics are available. |
+| **Forgejo** | Repositories are created in the course's Forgejo organization. Fork-based repository modes, pull-request submission, branch protection, and repository analytics are not available on Forgejo assignments. |
+
+The host is locked once the assignment has a handout, grader, or student repository, or a fork target. The form disables the picker and says why.
+
+Forgejo assignments are badged **Forgejo** in the instructor assignment list.
+
+<Note>
+Forgejo assignments require Forgejo to be configured in your deployment. Contact your site administrator if you are unsure whether Forgejo is available.
+</Note>
 
 ### Repository configuration
 
@@ -218,6 +235,8 @@ Two ways the checkbox is decided for you:
 - A **fork-from-prior-assignment** assignment shares its source's handout
   repository, so it must have the same autograder setting as its source.
   The form warns inline, and saving is rejected if they disagree.
+
+For **Forgejo** assignments, the autograder is supported. Grading runs are dispatched through Forgejo's API rather than GitHub Actions, and the workflow hash is set automatically from the handout's `grade.yml` when the assignment is released. The **Configure Autograder** page reports that grader setup is GitHub-only and stops the save with a message if you try to use it on a Forgejo assignment; configure the grader repository directly instead.
 
 ### Branch protection
 
