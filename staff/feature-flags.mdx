@@ -117,6 +117,28 @@ Two specifics worth knowing:
 
 The one flag whose off state has a lasting consequence is `discord-student-join`, described above: invitations not created while it was off are not created later on their own.
 
+### Office hours queue health
+
+When on, each queue card on the staff **Working** page shows the number of waiting requests, the age of the oldest request, and an **Unstaffed** badge when no TA has an active shift. Cards are sorted so queues that need attention appear first. Instructors can set per-class thresholds under **Settings → Queue Settings** and receive one browser notification when a queue first turns red.
+
+See [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds) for the threshold settings.
+
+### Office hours escalation
+
+When on, staff can **Escalate** an in-progress request back to the queue with a note, and use **End ticket** to close a request permanently. After staff resolve a request that was in progress, a 10-minute check-in opens for the student; answering "no" escalates the request with the student's note.
+
+See [Help Requests](/staff/office-hours/help-requests#escalation) for how escalation works.
+
+### Office hours turn alerts
+
+When on, students receive a browser notification when a TA picks up their request or they move to the next position in line. Staff who end a shift have any in-progress requests they were helping returned to the open queue automatically.
+
+### Cloud workspaces
+
+When on, students with a Forgejo repository for an assignment see an **Open in Coder** card on the assignment page. The card walks through workspace startup steps (build, clone, editor) and opens VS Code in the browser once the workspace is ready. Pawtograder creates a Forgejo account for each enrolled student automatically.
+
+See [Cloud workspaces](/students/assignments/create-submission) for the student experience.
+
 ## Related pages
 
 <CardGroup cols={2}>
