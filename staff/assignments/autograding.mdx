@@ -16,6 +16,10 @@ artifacts back to Pawtograder. This page is the reference for the
 `pawtograder.yml` config that drives that flow.
 
 <Note>
+For **Forgejo assignments** (courses with the `cloud-workspaces` feature flag), grading runs are dispatched through Forgejo's API rather than GitHub Actions. The `pawtograder.yml` configuration and grading logic are the same, but the workflow is triggered by a Forgejo Actions runner instead of a GitHub-hosted runner. Staff can rerun grading for a Forgejo submission from the assignment page; the rerun dispatches a `pawtograder-submit/<sha>` tag through Forgejo's API.
+</Note>
+
+<Note>
 The `pawtograder.yml` schema is published at
 `https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json`.
 Reference it from the top of your YAML to get IDE autocomplete:

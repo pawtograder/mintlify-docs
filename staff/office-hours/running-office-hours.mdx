@@ -30,6 +30,24 @@ Each queue card lists the staff currently on duty, the end time of the shift in 
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Queue health cards
+
+When the `office-hours-queue-health` course feature flag is on, each queue card on the **Working** page shows additional health information: the number of requests currently waiting, the longest wait time among open requests, and an **Unstaffed** badge when no staff member has an active shift on that queue. Cards are sorted so queues that need attention appear first.
+
+Instructors can set per-class thresholds under **Queue Settings**. When the number of waiting requests exceeds the threshold, the card turns red. The threshold is measured in open requests, not students, since one request can include several students.
+
+### Red-queue alert
+
+When a queue first crosses its threshold and turns red, instructors receive one browser notification. The alert fires once per transition from healthy to red, not on every poll.
+
+### Turn alerts
+
+When the `office-hours-turn-alerts` course feature flag is on, students receive a browser notification when a TA picks up their request or when they move to the next position in line. Staff receive a notification when a student's check-in (see [Escalation](/staff/office-hours/help-requests#escalation)) answers that their problem was not fixed.
+
+### Shift end and in-progress tickets
+
+When a TA ends their shift, any requests they were actively helping are returned to the queue as open. This prevents tickets from being stranded in `in_progress` with no one attending to them. The release applies to all requests the TA was helping, across all queues, once they have no remaining active shift.
+
 ## Two banners you may see
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.

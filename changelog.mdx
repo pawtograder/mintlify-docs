@@ -6,6 +6,34 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 19, 2026
+
+#### Cloud workspaces (Open in Coder)
+- **Open in VS Code from the assignment page** — Students on courses with cloud workspaces enabled see an **Open in VS Code** button on their assignment page. Clicking it creates or resumes a Coder workspace with their Forgejo repository already cloned, using the same toolchain (JDK 21, Maven, Python 3, Node 22) as the autograder. The card walks through three startup steps — build, clone, and editor — and shows a Retry button if any step fails. Workspaces stop automatically after one hour of inactivity; files are preserved on a persistent volume. Staff viewing as a student do not see the button ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Forgejo account provisioning and roster column** — For courses with the `cloud-workspaces` flag on, Pawtograder automatically creates a Forgejo account for each enrolled student. The roster gains a **Forgejo Username** column showing each student's account, or "Not created yet" while provisioning is in progress ([#1217](https://github.com/pawtograder/platform/pull/1217))
+
+#### Assignments
+- **Repository host picker (GitHub or Forgejo)** — Courses with the `cloud-workspaces` flag can now choose **GitHub** or **Forgejo** as the repository host when creating or editing an assignment. The host is locked once repositories exist. Forgejo assignments support the autograder; fork-based configurations, pull-request submission, branch protection, and repository analytics are GitHub-only ([#1313](https://github.com/pawtograder/platform/pull/1313))
+- **Forgejo student and group repositories** — When a Forgejo assignment is released, the reconciler creates one repository per student (or per group) from the handout template, grants write access, and records the repository. Group membership changes kick the reconciler to update access ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo grading** — Submissions from Forgejo repositories are cloned through Forgejo's archive API and graded with the same autograder. Staff can rerun grading for a Forgejo submission; the rerun dispatches a tag through Forgejo's API. The actor of a Forgejo job is matched to staff through Forgejo accounts ([#1239](https://github.com/pawtograder/platform/pull/1239))
+
+#### Office hours
+- **Ticket escalation and student check-in** — When the `office-hours-escalation` flag is on, staff can **Escalate** a ticket mid-help with a required note, returning it to the front of the queue for the next available TA. **Resolve** opens a 10-minute check-in for the student; answering "no" escalates the ticket automatically. A new **End ticket** button closes a ticket permanently with no check-in. Escalated tickets show an **Escalated (×N)** badge and sort ahead of normal open tickets ([#1169](https://github.com/pawtograder/platform/pull/1169))
+- **Queue health cards and red-queue alerts** — When the `office-hours-queue-health` flag is on, each queue card shows waiting count, oldest wait, and an **Unstaffed** badge. Instructors set a per-class threshold under **Queue Settings**; when the threshold is crossed the card turns red and instructors receive a one-time browser notification. Queues needing attention sort first ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Turn alerts** — When the `office-hours-turn-alerts` flag is on, students receive a browser notification when a TA picks up their request or when they move to the next position in line ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Shift-end ticket release** — When a TA ends their shift, any requests they were actively helping are returned to the queue as open, preventing tickets from being stranded in `in_progress` ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Exams
+- **Exam scan progress and finalize tracking** — The batch card now shows scan progress in words (reading pages, matching, creating submissions) with a count. After Create submissions, the page follows the batch to completion without a manual reload. Match controls are disabled while finalizing or completed ([#1262](https://github.com/pawtograder/platform/pull/1262))
+- **Exam scan ownership validation** — The exam worker now validates that each scan page belongs to the batch being processed, that a scanned exam's batch, exam, and course are consistent, and that matched pages cannot be re-imaged or moved by staff after matching. A scan write that races the link that matches its page is refused ([#1133](https://github.com/pawtograder/platform/pull/1133))
+
+#### Bug fixes
+- **GitHub circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, so a rate-limit incident from months ago no longer contributes to the escalation threshold ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Markdown editor accessibility** — The markdown editor's textarea is now labelled and its decorative toolbar icons are hidden from assistive technology ([#908](https://github.com/pawtograder/platform/pull/908))
+- **Exam template editor question order** — Questions in the template editor now render in pre-order (parent before children, siblings by ordinal) instead of interleaving siblings from different parents ([#1264](https://github.com/pawtograder/platform/pull/1264))
+
 ## August 2026
 
 ### August 19, 2026

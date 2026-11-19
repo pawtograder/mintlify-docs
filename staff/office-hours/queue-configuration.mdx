@@ -75,6 +75,12 @@ Templates are grouped by category under **Active Templates** and **Inactive Temp
 Creating your first active template makes template selection mandatory for students. When exactly one active template exists it is applied automatically and its content is pre-filled; with two or more, students must pick one. Deactivating a template hides it from students without losing it.
 </Tip>
 
+## Queue health thresholds
+
+When the `office-hours-queue-health` feature flag is on, a **Queue Settings** section appears under **Settings**. Instructors can set a **Requests waiting** threshold per class. When the number of open requests in any queue exceeds this number, that queue's card turns red on the staff dashboard and instructors receive a one-time browser notification. The threshold must be a positive number; invalid values fall back to the default.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) for how the health cards look and how the alert fires.
+
 ## See also
 
 - [Running Office Hours](/staff/office-hours/running-office-hours) for putting staff on duty once the queues exist.
