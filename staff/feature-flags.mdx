@@ -84,6 +84,28 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Cloud workspaces
+
+This flag enables Forgejo as a repository host for assignments and Coder cloud workspaces for students. With it on:
+
+- A **Repository host** picker (GitHub or Forgejo) appears on the assignment create and edit forms. See [Assignment Configuration](/staff/assignments/configuration#repository-host).
+- Students with a Forgejo assignment see an **Open in Coder** card on their assignment page that walks through workspace startup and offers the editor link once every step passes.
+- The course roster shows each student's Forgejo username.
+
+The flag has no effect unless the deployment has Forgejo and Coder configured by the operator.
+
+### Office hours queue health
+
+When this flag is on, the staff **Working** page shows health information on each queue card: waiting count, oldest wait, and an **Unstaffed** badge. Queues that have crossed the red threshold sort to the top, and instructors receive one browser notification when a queue turns red. Instructors set the threshold under **Settings → Queue Settings**. See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) and [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds).
+
+### Turn alerts
+
+When this flag is on, students receive a browser notification when a TA picks up their request or when they move to the next position in line. The notification requires browser permission; students who have blocked notifications do not receive them.
+
+### Shift-end release
+
+When this flag is on, ending a shift automatically returns any in-progress tickets the TA holds to the queue, so another TA can pick them up. Without this flag, in-progress tickets stay assigned to the TA who ended their shift.
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
