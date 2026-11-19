@@ -6,6 +6,32 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 19, 2026
+
+#### Office hours
+- **Ticket escalation and student check-in** — When a TA cannot finish helping a student, they can now **Escalate** the ticket back to the queue with a required note. After a TA resolves a ticket they were actively helping with, the student receives a 10-minute check-in prompt; answering "no" escalates the ticket automatically. A new red **End ticket** button closes a ticket permanently with no check-in. Escalated tickets sort ahead of normal open requests and carry an **Escalated (×N)** badge with a staff-only history panel ([#1169](https://github.com/pawtograder/platform/pull/1169))
+- **Queue health cards** — When the `office-hours-queue-health` course flag is on, each queue card on the **Working** view shows a waiting count, the oldest wait time, and an **Unstaffed** badge. Instructors can set per-class thresholds that turn a card red and send a one-time browser notification. Queues that need attention sort to the top ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Turn alerts for students** — When the `office-hours-turn-alert` course flag is on, students receive a browser notification when a TA picks up their request or when they move to the next position in line ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Assignments
+- **Forgejo repository host picker** — Assignments in courses with cloud workspaces enabled can now be hosted on Forgejo instead of GitHub. A **GitHub / Forgejo** picker appears on the Student Repositories card; it locks once the assignment has repositories. Forgejo assignments are badged in the instructor list, and GitHub-only features (fork modes, pull-request submission, branch protection, repository analytics) are disabled with a reason ([#1313](https://github.com/pawtograder/platform/pull/1313))
+- **Forgejo student and group repositories** — The `forgejo-reconciler` function now creates student and group repositories from the handout template on Forgejo, grants write access, and sets the `grade.yml` workflow hash. Repository names are lowercased and prefixed with the class slug to avoid collisions across sections ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo grading** — Submissions from Forgejo repositories are now cloned, graded, and rerun through Forgejo's API. Staff are matched through their Forgejo accounts, and the Forgejo username column appears on the roster for cloud-workspaces courses ([#1239](https://github.com/pawtograder/platform/pull/1239))
+
+#### Cloud workspaces
+- **Open in Coder** — Students in courses with the `cloud-workspaces` flag on see an **Open in Coder** card on their assignment page. The card walks through workspace startup (build, clone, editor) and opens VS Code in the browser once ready. Workspaces stop after one hour of inactivity; work is preserved on the home volume ([#1170](https://github.com/pawtograder/platform/pull/1170), [#1230](https://github.com/pawtograder/platform/pull/1230))
+
+#### Exams
+- **Scan ownership validation** — Exam scan pages are now validated against the batch being processed before any OCR, matching, or finalization work is done. A scan swapped in from another course is rejected before it can be copied into a submission. Confirmed and finalized exams cannot be regrouped by a subsequent Process run ([#1133](https://github.com/pawtograder/platform/pull/1133))
+- **Scan progress display** — The batch card now shows progress during OCR, matching, and submission creation, with counts of pages processed and submissions finalized. The Create submissions button stays disabled until the batch has left the state it was clicked in ([#1315](https://github.com/pawtograder/platform/pull/1315))
+
+#### Bug fixes
+- **Gemini transient failures retried** — Transient Gemini API errors are now retried automatically instead of failing the OCR step ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **GitHub circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, so a single rate-limit incident no longer escalates to a 24-hour block on the third trip ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Markdown editor accessibility** — The markdown editor's textarea is now labelled and its decorative toolbar icons are hidden from assistive technology ([#1312](https://github.com/pawtograder/platform/pull/1312))
+
 ## August 2026
 
 ### August 19, 2026
