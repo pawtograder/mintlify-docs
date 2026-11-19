@@ -125,6 +125,42 @@ Any single file over 50 MB is rejected with an error naming the file and its siz
 Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Give binary artifacts a conventional file extension — a binary with an unusual extension or none at all is stored as text, which corrupts it.
 </Note>
 
+## Cloud Workspaces (Open in Coder)
+
+Some courses provide a cloud-based coding environment so you can work on assignments without installing anything locally. When your course has this enabled, an **Open in VS Code** card appears on your assignment page.
+
+### Starting your workspace
+
+The card walks through three startup steps:
+
+1. **Build** — the workspace container is being created.
+2. **Clone** — your assignment repository is being cloned into the workspace.
+3. **Editor** — VS Code is starting up.
+
+Once all three steps are complete, the card shows an **Open in VS Code** link. Click it to open your assignment repository in the browser-based editor.
+
+### Linking your Forgejo account
+
+Before your workspace can clone your repository, you need to link your Forgejo account to the workspace. If the card shows a **Link Forgejo account** prompt, click it to authorize the connection. You will be taken to a Forgejo authorization page and then returned to Pawtograder. The card re-checks your link status when you come back to the tab.
+
+### If the workspace fails to start
+
+If a startup step fails, the card names the step and shows a **Retry** button. Click it to try again. Common causes:
+
+- **Build failed** — the workspace could not be scheduled. This may be a temporary resource issue; retry after a moment.
+- **Clone failed** — your Forgejo account may not be linked, or the repository may not exist yet. Check that your Forgejo account is linked and that the assignment has been released.
+- **Editor failed** — VS Code did not start in time. Retry usually resolves this.
+
+If the card shows **Contact course staff**, your Pawtograder account has a conflict that staff need to resolve.
+
+### Workspace lifecycle
+
+Your workspace stops automatically after one hour of inactivity. The next time you open the assignment page and click **Open in VS Code**, it starts again from where you left off — your files on the home volume are preserved across restarts.
+
+<Note>
+Staff members viewing the course as a student do not see the Open in VS Code card. The workspace feature is only available to enrolled students.
+</Note>
+
 ## Assignment Leaderboard
 
 If your instructor has enabled the leaderboard for an assignment, it appears as a panel in the right-hand sidebar of the assignment page, listing the top ten entries. Assignments without it show no panel at all. See [Leaderboards](/students/assignments/leaderboard) for how the ranking works.
