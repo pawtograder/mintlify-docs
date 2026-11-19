@@ -56,6 +56,34 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalation
+
+When a TA cannot finish a ticket, they can escalate it rather than resolving it. An escalated ticket goes back to the queue flagged and sorted ahead of normal tickets, with a note for whoever picks it up next.
+
+<Note>
+Escalation is a course feature flag. It is off by default. Instructors can enable it under **Feature Flags**. See [Feature Flags](/staff/feature-flags).
+</Note>
+
+### Escalating a request
+
+While helping a request, an assigned staff member can press **Escalate** and enter a required note explaining what was tried and what remains. The request returns to the queue with an **Escalated (×N)** badge and sorts above non-escalated tickets. Staff see a collapsible escalation history panel on the request showing each escalation's note, who escalated it, and how long the student waited.
+
+### Student check-in after Resolve
+
+When a staff member presses **Resolve** on an `in_progress` request, the student receives a 10-minute **"Did your problem get fixed?"** check-in prompt. If the student answers no, they can add a note and the request is escalated automatically. If the check-in expires without a response, the request stays resolved.
+
+<Note>
+The check-in only appears when a staff member claimed the request before resolving it. Resolving an unclaimed ticket skips the check-in entirely, and the Resolve confirm dialog says so.
+</Note>
+
+### End ticket
+
+**End ticket** closes a request for good with no check-in and no escalation. Use it when a request is finished and you do not want the student to reopen it. End ticket is available even after Resolve, so you can withdraw a pending check-in. It is disabled while a video call is live.
+
+### Escalation order
+
+Escalated tickets sort first in every queue view, then by original join time. The student queue list and the staff sidebar both reflect this order.
+
 ## Resolving
 
 | Status | Meaning |
