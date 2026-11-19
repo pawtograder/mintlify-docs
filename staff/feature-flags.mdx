@@ -94,6 +94,38 @@ While it is on, students see their invitation to the course's Discord server on 
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
 
+### Cloud workspaces
+
+This flag requires a Forgejo and Coder deployment configured for the platform. With neither connected it has no visible effect.
+
+While it is on, the assignment form shows a **Repository host** picker (GitHub or Forgejo), and students with a Forgejo assignment see an **Open in VS Code** card on the assignment page that walks them through starting their cloud workspace. While it is off, all assignments use GitHub and no workspace card appears.
+
+See [Assignment Configuration](/staff/assignments/configuration#repository-host) for how the host picker works, and [Submitting Your Work](/students/assignments/create-submission#opening-your-work-in-a-cloud-workspace) for the student experience.
+
+### Office hours queue health
+
+While this flag is on, the staff office hours dashboard shows health information on each queue card: the number of waiting requests, the oldest wait time, and an **Unstaffed** badge when no TA has an active shift. Cards are sorted so queues needing attention appear first. Instructors can also set a red threshold under **Queue Settings**; when a queue's open-request count reaches the threshold, the card turns red and instructors receive a one-time browser notification.
+
+While the flag is off, queue cards show only the open-request count, as before.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) for details.
+
+### Turn alerts
+
+While this flag is on, students receive a browser notification when a TA picks up their request or they move to next in line. Alerts fire once per event. Students must allow browser notifications for the site.
+
+While the flag is off, no turn alerts are sent.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#turn-alerts) for details.
+
+### Shift-end release
+
+While this flag is on, ending a shift automatically returns any in-progress requests assigned to that TA back to the queue. If the TA still has an active shift on another queue, only requests on the ended queue are returned.
+
+While the flag is off, in-progress requests stay assigned to the TA after their shift ends and must be manually returned.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#shift-end-release) for details.
+
 ## Feature flags control navigation, not access
 
 Feature flags are a curation tool. They decide which modules your course puts in front of students and staff, and when — so you can hold Surveys or Flashcards back until the week they matter, retire Polls once you have stopped using them, and keep the course menu down to what the course is actually doing. Staff pages behave the same way, which is deliberate: a module you are not running should not clutter anyone's menu.
