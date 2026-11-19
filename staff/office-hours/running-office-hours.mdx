@@ -30,6 +30,32 @@ Each queue card lists the staff currently on duty, the end time of the shift in 
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Queue health cards
+
+<Note>
+Queue health is a course feature flag. It is off by default. Instructors can enable it under **Feature Flags**. See [Feature Flags](/staff/feature-flags).
+</Note>
+
+When the **office-hours-queue-health** flag is on, each queue card on the staff dashboard shows additional health information:
+
+- **Waiting count** — the number of open requests currently in the queue.
+- **Oldest wait** — how long the longest-waiting student has been in the queue.
+- **Unstaffed badge** — shown when no staff member has an active shift on the queue.
+
+Cards are sorted so queues that need attention appear first: queues over their red threshold, then unstaffed queues, then the rest.
+
+### Red thresholds
+
+Instructors can set per-class thresholds under **Queue Settings**. When the number of waiting requests reaches the threshold, the card turns red. You receive one browser notification when a queue first turns red; subsequent crossings do not repeat the alert.
+
+### Turn alerts
+
+When the **turn-alerts** flag is on, students receive a browser notification when a TA picks up their request or they move to next in line.
+
+### Shift end and in-progress tickets
+
+When a staff member ends their shift, any requests they were actively helping are returned to the queue so another TA can pick them up.
+
 ## Two banners you may see
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
