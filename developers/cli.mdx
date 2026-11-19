@@ -675,6 +675,38 @@ Allocation honors `grading_conflicts` and never assigns anyone their own submiss
 
 The report distinguishes new assignments from `retargeted_stale` ones, where an existing assignment was repointed at a newer submission and so is not new load on that grader. It separately reports `skipped_already_assigned`, excluded stubs, excluded dropped students, stale collisions, and any submission left with no eligible grader after conflicts.
 
+## exams
+
+The `exams` command group lists and manages exam scan batches.
+
+### exams list
+
+Lists scan batches for an exam.
+
+```bash
+pawtograder exams list --class cs3500-spring-2026 --exam midterm
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-e`, `--exam` | required | Exam ID or slug. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams show
+
+Shows the status and details of a single scan batch.
+
+```bash
+pawtograder exams show --class cs3500-spring-2026 --batch <batch-id>
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--json` | `false` | Emit the raw JSON response. |
+
 ## repos
 
 <Warning>
