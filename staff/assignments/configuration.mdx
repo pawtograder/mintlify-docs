@@ -343,6 +343,34 @@ for the assignment's student repositories and shows them to graders and
 instructors on each submission. See
 [Repository Analytics](/staff/assignments/repository-analytics).
 
+## Cloud workspaces
+
+When the **cloud-workspaces** course feature flag is on and an assignment uses Forgejo as its repository host, students see an **Open in Coder** button on their assignment page. Clicking it provisions a cloud-based VS Code workspace (via Coder) with their Forgejo repository pre-cloned.
+
+### Workspace startup steps
+
+The workspace goes through three steps before the editor is available:
+
+1. **Build** — the Kubernetes pod is scheduled and the Coder agent starts.
+2. **Clone** — the student's Forgejo repository is cloned into the workspace.
+3. **Editor** — code-server (VS Code) starts and becomes healthy.
+
+The assignment page shows progress through these steps. If a step fails, the card names the step and offers a **Retry** button.
+
+### Linking Forgejo
+
+Before a workspace can be opened, the student must link their Forgejo account to Coder. If the link is missing, the card shows a **Link Forgejo** button that takes the student through Coder's authorization flow. Once linked, the workspace can be opened.
+
+### Workspace lifecycle
+
+- Workspaces stop automatically after one hour of inactivity (no active connection). The timer resets on each connection.
+- A stopped workspace restarts when the student clicks **Open in Coder** again. The home volume is preserved across restarts, so work is not lost.
+- Workspaces are deleted 14 days after the assignment's final due date (including any late-token allowance), or 14 days after the student leaves the course, whichever is later.
+
+### Staff view
+
+Staff members who use **View as student** do not see the **Open in Coder** button, because the workspace would be provisioned against the staff member's own Forgejo account, not the student's.
+
 ## Settings that are not on this form
 
 ### Submission limits
