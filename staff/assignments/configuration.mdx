@@ -382,6 +382,14 @@ nothing to compare and never rejects a push as empty. See
 [Empty submission detection](/staff/assignments/autograding#empty-submission-detection)
 for what students see in each case.
 
+### Cloud workspaces
+
+When the **cloud-workspaces** course flag is on and the assignment uses a Forgejo repository, students see an **Open in Coder** card on the assignment page. The card walks through workspace startup steps — **Build**, **Clone**, and **Editor** — and opens VS Code in the browser once the workspace is ready.
+
+Students must link their Forgejo account in Coder before a workspace can be created. If the link is missing, the card shows a **Link Forgejo account** prompt. Once linked, clicking **Open workspace** creates or starts the workspace and polls for readiness.
+
+Staff viewing as a student do not see the card, because the workspace would be created under the staff member's own account.
+
 ### Handout URL
 
 Every assignment carries a **handout URL** field: a link to the
