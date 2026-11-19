@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 19, 2026
+
+#### Cloud workspaces
+
+- **Open in Coder on the assignment page** — Students with a Forgejo repository for an assignment now see an **Open in Coder** card that walks through workspace startup (build, clone, editor) and opens a browser-based VS Code editor once the workspace is ready. The workspace uses the same toolchain as the autograder, clones the student's repository automatically, and stops after an hour of inactivity. Work on the home volume is preserved across restarts. Enable the feature with the `cloud-workspaces` course flag. See [Cloud workspaces](/students/assignments/create-submission#cloud-workspaces-open-in-coder) ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Forgejo accounts and workspace tracking** — Pawtograder creates a Forgejo account for each enrolled student in a cloud-workspaces course and records each student's Coder workspace, including the scheduled deletion date. The course roster shows each student's Forgejo username ([#1238](https://github.com/pawtograder/platform/pull/1238))
+
+#### Assignments
+
+- **Forgejo repository host** — Assignments in cloud-workspaces courses can now use Forgejo as the repository host instead of GitHub. A **Repository host** picker on the assignment form lets instructors choose; the host is locked once repositories exist. Forgejo assignments are badged in the assignment list, and GitHub authorization prompts are hidden on Forgejo assignment pages. Grading, reruns, and group repositories all work on Forgejo. See [Assignment configuration](/staff/assignments/configuration#repository-host) ([#1238](https://github.com/pawtograder/platform/pull/1238), [#1239](https://github.com/pawtograder/platform/pull/1239), [#1313](https://github.com/pawtograder/platform/pull/1313))
+
+#### Office hours
+
+- **Ticket escalation and End ticket** — Staff can **Escalate** an in-progress request back to the queue with a note, and use **End ticket** to close a request permanently. Escalated requests sort ahead of normal open requests. After staff resolve a request that was in progress, a 10-minute check-in opens for the student; answering "no" escalates the request with the student's note. Enable with the `office-hours-escalation` course flag. See [Help Requests](/staff/office-hours/help-requests#escalation) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+- **Queue health cards** — Staff queue cards show waiting count, oldest wait, and an **Unstaffed** badge, sorted so queues that need attention appear first. Instructors set per-class thresholds under **Settings → Queue Settings** and receive one browser notification when a queue turns red. Enable with the `office-hours-queue-health` course flag. See [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-cards) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Turn alerts and shift-end release** — Students receive a browser notification when a TA picks up their request or they move to the next position in line. Staff who end a shift have in-progress requests returned to the open queue automatically. Enable with the `office-hours-turn-alert` course flag ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Bug fixes
+
+- **GitHub circuit breaker resets after a quiet day** — The GitHub circuit breaker trip count now resets after 24 hours of no trips, so a rate-limit incident from months ago no longer contributes to the escalation threshold ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Gemini failures retried** — Transient Gemini API failures are now retried automatically ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **Markdown editor accessibility** — The markdown editor's textarea is now properly labelled and its decorative toolbar icons are hidden from assistive technology ([#908](https://github.com/pawtograder/platform/pull/908))
+
 ## August 2026
 
 ### August 19, 2026

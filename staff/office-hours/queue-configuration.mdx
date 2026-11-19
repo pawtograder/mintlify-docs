@@ -75,6 +75,29 @@ Templates are grouped by category under **Active Templates** and **Inactive Temp
 Creating your first active template makes template selection mandatory for students. When exactly one active template exists it is applied automatically and its content is pre-filled; with two or more, students must pick one. Deactivating a template hides it from students without losing it.
 </Tip>
 
+## Queue health thresholds
+
+When the `office-hours-queue-health` course feature flag is on, instructors can set per-class thresholds that determine when a queue is considered overloaded. Open **Settings → Queue Settings** to configure:
+
+- **Requests waiting** — the number of open requests at which a queue turns red.
+- **Oldest wait** — the age of the oldest waiting request at which a queue turns red.
+
+These thresholds drive the health cards on the staff dashboard (described below) and the red-queue browser alert. Leave a threshold at its default to use the platform's built-in value.
+
+## Queue health cards
+
+When the `office-hours-queue-health` course feature flag is on, each queue card on the staff **Working** page shows:
+
+- The number of requests currently waiting.
+- The age of the oldest waiting request.
+- An **Unstaffed** badge when no TA has an active shift on that queue.
+
+Cards are sorted so queues that need attention appear first: queues over a threshold, then unstaffed queues, then the rest. A queue that crosses a threshold turns red. Instructors receive one browser notification when a queue first turns red; the alert does not repeat until the queue recovers and turns red again.
+
+<Note>
+Queue health cards, the unstaffed badge, the severity sort, and the red-queue alert are only shown when the `office-hours-queue-health` course feature flag is on. The flag is off by default. See [Feature Flags](/staff/feature-flags).
+</Note>
+
 ## See also
 
 - [Running Office Hours](/staff/office-hours/running-office-hours) for putting staff on duty once the queues exist.

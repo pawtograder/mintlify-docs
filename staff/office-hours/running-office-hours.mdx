@@ -34,6 +34,14 @@ When the course has an office hours or events calendar configured, a **Today's S
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
 
+## Shift end and in-progress requests
+
+When the `office-hours-turn-alert` course feature flag is on, stopping work on a queue returns any in-progress requests you were helping to the open queue automatically, so students are not left waiting with no one assigned. Requests on other queues you are still working are unaffected until you stop those shifts too.
+
+<Note>
+The automatic shift-end release is only active when the `office-hours-turn-alert` course feature flag is on. The flag is off by default. See [Feature Flags](/staff/feature-flags).
+</Note>
+
 ## See also
 
 - [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking) for the record of shifts you have worked and the per-TA time dashboard.

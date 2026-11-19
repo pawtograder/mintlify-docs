@@ -1,6 +1,6 @@
 ---
 title: "Help Requests"
-description: "Claim, help, and resolve a single help request: the request view, code references, video calls, work sessions, feedback, and notifications"
+description: "Claim, help, and resolve a single help request: the request view, code references, video calls, work sessions, escalation, feedback, and notifications"
 icon: "hand"
 ---
 
@@ -56,6 +56,22 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalation
+
+When a TA cannot finish a ticket, they can escalate it back to the queue so another staff member can pick it up with context.
+
+**Escalate** is available while a request is in progress. It requires a note explaining what was tried and what remains, and it returns the request to the queue flagged as escalated. Escalated requests sort ahead of normal open requests in every queue view, so the next available TA sees them first. An **Escalated (×N)** badge shows how many times the request has been escalated, and a staff-only history panel on the request shows each escalation note and the time back in line between escalations.
+
+**End ticket** closes a request for good with no check-in and no escalation. Use it when a request should not be re-queued — for example, when a student has left. End ticket is available after Resolve as well, so staff can withdraw a pending student check-in.
+
+<Note>
+Escalate, End ticket, and the student check-in described below are only available when the `office-hours-escalation` course feature flag is on. The flag is off by default. See [Feature Flags](/staff/feature-flags).
+</Note>
+
+<Warning>
+End ticket is disabled while a video call is live. End the call before closing the ticket, or the meeting will keep running with no way to shut it down from the interface.
+</Warning>
+
 ## Resolving
 
 | Status | Meaning |
@@ -66,6 +82,8 @@ The same sessions drive the course-wide dashboard described in [Staffing and Tim
 | `closed` | Also finished, and treated exactly like `resolved` in every list. |
 
 Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Resolving and Feedback](/students/office-hours/resolving-and-feedback)); staff do not get that dialog.
+
+When the `office-hours-escalation` flag is on and staff **Resolve** a request that was in progress, a 10-minute check-in window opens for the request's students. Students can confirm their problem was fixed, or answer that it was not — which escalates the request with their note. If the check-in expires without a response, the request stays resolved. Resolving a request that was never claimed skips the check-in.
 
 <Note>
 When staff resolve a request, no resolution status or note is recorded, only who resolved it and when. If you want data on how requests actually ended, ask students to resolve their own.
