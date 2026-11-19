@@ -20,6 +20,39 @@ Starting work puts you on duty for that queue. Other staff see you in the queue'
 
 Once you are on duty, **Working** stops listing queues and lists the requests you are responsible for instead. [Help Requests](/staff/office-hours/help-requests) covers what to do with one.
 
+## Queue health cards
+
+When the **office-hours-queue-health** course feature flag is on, each queue card on the staff dashboard shows additional health information:
+
+- **Waiting count** — the number of open requests currently waiting.
+- **Oldest wait** — how long the longest-waiting request has been in the queue.
+- **Unstaffed badge** — shown when no TA has an active shift on that queue.
+
+Cards are sorted so queues that need attention appear first: queues that have exceeded the red threshold come before those that have not, and unstaffed queues with waiting requests are surfaced prominently.
+
+### Red thresholds
+
+Instructors can set per-class thresholds under **Queue Settings**. When the number of open requests on a queue reaches the configured threshold, the card turns red. The threshold is a count of open requests; the default is no threshold (no red state).
+
+### Red-queue alert
+
+When a queue first turns red, instructors receive one browser notification. The notification fires once per threshold crossing, not continuously. Browser notifications must be allowed for the site; the **Notifications are blocked** banner tells you if they are not.
+
+## Turn alerts
+
+When the **turn-alert** course feature flag is on, students receive a browser notification when:
+
+- A TA picks up their request (the request moves to **In Progress**).
+- They are next in line in the queue.
+
+Alerts fire once per event. Students must allow browser notifications for the site to receive them.
+
+## Shift-end release
+
+When the **shift-end-release** course feature flag is on, ending a shift automatically returns any in-progress requests assigned to you back to the queue. This prevents requests from being stranded when a TA's shift ends while they are still helping a student.
+
+If you end a shift on one queue but still have an active shift on another, requests on the ended queue are returned to the queue. Requests on queues where you still have an active shift are unaffected.
+
 <Note>
 Starting work always records a concurrent-student limit of `1`. There is no control for changing it, and it does not limit how many requests can be routed to you at once. Assignment Management displays the value. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>

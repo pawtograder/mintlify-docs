@@ -6,6 +6,33 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 19, 2026
+
+#### Cloud workspaces (Forgejo + Coder)
+
+- **Open in VS Code on the assignment page** — Students on courses with cloud workspaces enabled now see an **Open in VS Code** card on the assignment page. The card walks through three startup steps (build, clone, editor) and opens VS Code once the workspace is ready. Failed steps show a **Retry** button; a missing Forgejo link shows a direct link to authorize it. Staff viewing as a student do not see the card ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Forgejo repository host picker** — The assignment form now shows a **Repository host** picker (GitHub or Forgejo) for courses with the `cloud-workspaces` flag on. The host locks once the assignment has any repository rows. Forgejo assignments badge in the assignment list, and options that Forgejo does not support (fork-based configs, pull-request mode, branch protection, repository analytics) are disabled with a reason ([#1313](https://github.com/pawtograder/platform/pull/1313))
+- **Forgejo student and group repositories** — The `forgejo-reconciler` function now creates student and group repositories from the handout template for released Forgejo assignments, grants write access, and records the repo. Repository names are unique per provider, so the same `org/repo` can exist on GitHub and Forgejo without conflict. The roster shows each student's Forgejo username for cloud-workspaces courses ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo grading** — Submissions from Forgejo repositories are cloned through Forgejo's archive API, graded with the same autograder, and staff can rerun grading through Forgejo's API. The `grade.yml` workflow hash is set from the handout automatically ([#1239](https://github.com/pawtograder/platform/pull/1239))
+- **Forgejo handout repo created from the assignment form** — Saving a Forgejo assignment with a handout now creates the handout repository in Forgejo directly from the form ([#1253](https://github.com/pawtograder/platform/pull/1253))
+
+#### Office hours
+
+- **Queue health cards, per-class thresholds, and turn alerts** — When the `office-hours-queue-health` flag is on, staff queue cards show waiting count, oldest wait, and an **Unstaffed** badge, sorted so queues needing attention come first. Instructors set red thresholds per class under **Queue Settings**. When the `turn-alert` flag is on, students receive a browser notification when a TA picks up their request or they are next in line. When the `shift-end-release` flag is on, ending a shift returns in-progress requests to the queue. See [Running Office Hours](/staff/office-hours/running-office-hours) and [Feature Flags](/staff/feature-flags) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Accessibility
+
+- **Markdown editor textarea named and toolbar icons hidden** — The markdown editor's textarea now has an accessible name, and its decorative toolbar icons are hidden from assistive technology ([#908](https://github.com/pawtograder/platform/pull/908))
+
+#### Bug fixes
+
+- **RLS update/delete errors surfaced** — When a row-level security policy silently refuses an update or delete, the platform now shows a real error instead of appearing to succeed ([#983](https://github.com/pawtograder/platform/pull/983))
+- **Gemini failures retried** — Transient Gemini API failures are now retried automatically ([#1077](https://github.com/pawtograder/platform/pull/1077))
+- **Forgejo job token matched case-insensitively** — Forgejo job tokens are now matched against repository names regardless of case ([#1330](https://github.com/pawtograder/platform/pull/1330))
+- **Workspace starts on the template's active version** — Opening a workspace now uses the template's currently active version rather than a stale one ([#1326](https://github.com/pawtograder/platform/pull/1326))
+
 ## August 2026
 
 ### August 19, 2026
