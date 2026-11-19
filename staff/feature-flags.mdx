@@ -84,6 +84,22 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Office hours queue health
+
+When on, each queue card on the Working page shows the number of waiting requests, the oldest wait, and an **Unstaffed** badge when no shift is running. Cards are sorted so queues needing attention appear first. Instructors can set a red-alert threshold per class under **Queue Settings**; when a queue exceeds it, the card turns red and staff on the Working page receive one browser notification. See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) and [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds).
+
+### Turn alerts
+
+When on, students receive a browser notification when a TA picks up their request or they move to next in line. Notifications are sent only to students named on the request.
+
+### Shift end release
+
+When on, ending a shift returns any in-progress tickets the TA holds to the queue as open. Tickets on the ended queue always go back; tickets on other queues go back once the TA has no other shift still running. See [Running Office Hours](/staff/office-hours/running-office-hours#shift-end-and-in-progress-tickets).
+
+### Cloud workspaces
+
+When on, students with a Forgejo repository for an assignment see an **Open in Coder** card on the assignment page. The card walks through workspace startup steps (build, clone, editor) and opens VS Code in the browser once the workspace is ready. This flag requires Coder to be configured for the deployment. See [Cloud Workspaces](/staff/assignments/configuration#cloud-workspaces).
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
