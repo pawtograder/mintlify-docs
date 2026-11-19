@@ -233,6 +233,8 @@ Two ways the checkbox is decided for you:
   repository, so it must have the same autograder setting as its source.
   The form warns inline, and saving is rejected if they disagree.
 
+On **Forgejo** assignments, the autograder is supported. The **Configure Autograder** page is GitHub-only; use the Forgejo handout's `.github/workflows/grade.yml` directly. The `forgejo-reconciler` reads the workflow hash from the handout and sets it on the assignment automatically.
+
 ### Branch protection
 
 Applies to the default branch of every student or group repository for the
