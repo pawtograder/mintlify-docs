@@ -125,6 +125,36 @@ Any single file over 50 MB is rejected with an error naming the file and its siz
 Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Give binary artifacts a conventional file extension — a binary with an unusual extension or none at all is stored as text, which corrupts it.
 </Note>
 
+## Opening Your Assignment in a Cloud Workspace
+
+On some courses, a **Open in VS Code** button appears on the assignment page. This opens a cloud-based VS Code editor (powered by Coder) with your assignment repository already cloned inside it. You do not need to install anything locally — the workspace has the same tools the autograder uses (Java, Maven, Python, Node, and git).
+
+### First-time setup
+
+The first time you open a workspace, you may be asked to link your Forgejo account. Click the link in the card, authorize the connection on the page that opens, then return to the assignment page. The card will re-check automatically once the tab is visible again.
+
+### Workspace startup steps
+
+The card walks through three steps as your workspace starts:
+
+1. **Build** — the workspace container is being prepared.
+2. **Clone** — your repository is being cloned into the workspace.
+3. **Editor** — VS Code is starting up.
+
+If a step fails, the card shows the reason and a **Retry** button. Retrying restarts the workspace from the failed step.
+
+### Pushing from the workspace
+
+Your workspace is already authenticated with Forgejo through the linked account. Use the VS Code Source Control panel or the terminal (`git push`) to push your changes. Pushes from the workspace count as submissions the same way a local push does.
+
+### Workspace timeout
+
+Workspaces stop automatically after one hour of inactivity. Your files are saved on a persistent volume, so nothing is lost when the workspace stops. Click **Open in VS Code** again to restart it.
+
+<Note>
+The **Open in VS Code** button only appears when your course has cloud workspaces enabled and you have a Forgejo repository for the assignment. It is not shown to course staff viewing the assignment as a student.
+</Note>
+
 ## Assignment Leaderboard
 
 If your instructor has enabled the leaderboard for an assignment, it appears as a panel in the right-hand sidebar of the assignment page, listing the top ten entries. Assignments without it show no panel at all. See [Leaderboards](/students/assignments/leaderboard) for how the ranking works.
