@@ -24,6 +24,24 @@ Once you are on duty, **Working** stops listing queues and lists the requests yo
 Starting work always records a concurrent-student limit of `1`. There is no control for changing it, and it does not limit how many requests can be routed to you at once. Assignment Management displays the value. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
+## Queue health cards
+
+When the **office-hours-queue-health** course feature flag is on, each queue card on the **Working** dashboard shows additional health information:
+
+- **Waiting count** — the number of open, unassigned requests in the queue right now.
+- **Oldest wait** — how long the longest-waiting request has been in the queue.
+- **Unstaffed badge** — shown when no TA has an active shift on that queue.
+
+Queues that need attention sort to the top of the list. A queue turns red when its waiting count or oldest wait exceeds the thresholds set by an instructor under **Queue Settings**. Instructors receive one browser notification when a queue first crosses a threshold; the alert does not repeat until the queue recovers and crosses again.
+
+To set thresholds, open **Settings → Queue Settings** and enter values under **Queue Health Thresholds**. The fields accept positive integers; leaving a field empty disables that threshold. The label reads **Requests waiting** because one request can include several students.
+
+## Shift end and in-progress tickets
+
+When you end a shift, any requests you were actively helping are returned to the queue as open. This prevents tickets from being stranded when a TA's shift ends mid-session. Requests on other queues are also returned once you have no remaining active shifts.
+
+This behavior is behind the **office-hours-shift-release** course feature flag and is off by default.
+
 ## Staffing times and the schedule
 
 Each queue card lists the staff currently on duty, the end time of the shift in progress with the time remaining, and the start of the next scheduled shift. Those times come from the course's office hours calendar, not from the assignment rows: an event counts toward a queue when it is explicitly linked to the queue, or when the event's queue name matches the queue's name, ignoring case. With nobody on duty the card reads "No staff currently on duty".
