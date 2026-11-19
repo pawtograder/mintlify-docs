@@ -149,8 +149,24 @@ formation deadline. All of that is documented in
 
 This card decides more about a student's experience than any other on the
 form, and none of it is visible from the assignment title. It has three
-parts: the repository configuration, the autograder checkbox, and branch
+parts: the repository host, the repository configuration, the autograder checkbox, and branch
 protection.
+
+### Repository host
+
+When the **cloud-workspaces** course feature flag is on, a **Repository host** picker appears at the top of the Student Repositories card. Choose **GitHub** (the default) or **Forgejo**.
+
+The host is locked once the assignment has a handout, grader, or student repository, or a fork target. To change it, remove those resources first.
+
+On **Forgejo** assignments:
+
+- Pawtograder's `forgejo-reconciler` creates one repository per student (or per group) from the handout template after the assignment is released.
+- The student's assignment page links to their repository on the Forgejo instance.
+- Fork-based repository configurations, pull-request submission mode, branch protection, and repository analytics are not available.
+- The autograder is supported: Forgejo runs the same `grade.yml` workflow and Pawtograder grades the result.
+- Students with a Forgejo repository see an **Open in Coder** button that launches a cloud VS Code workspace with their repository pre-cloned. See [Cloud workspaces](#cloud-workspaces) below.
+
+Forgejo assignments are badged **Forgejo** in the instructor assignment list.
 
 ### Repository configuration
 
