@@ -966,6 +966,37 @@ Keep the salt. Nothing records it: `manifest.json` stores the identity mode, dum
 
 Validation before any request: omitting `--i-understand-pii` gives `--i-understand-pii is required — this command writes real student names, emails, and SIS ids to disk`, and a short salt gives `--salt must be at least 16 characters (must match the salt from the original export run)`.
 
+## exams
+
+The `exams` command group manages exam scan batches. All actions require an instructor or grader role in the class.
+
+### exams list
+
+Lists exam scan batches for a class.
+
+```bash
+pawtograder exams list --class cs3500-spring-2026
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--json` | `false` | Emit the raw JSON response instead of a formatted table. |
+
+### exams batches
+
+Lists the scan batches for a specific exam.
+
+```bash
+pawtograder exams batches --class cs3500-spring-2026 --exam midterm-1
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--exam` | required | Exam ID or slug. |
+| `--json` | `false` | Emit the raw JSON response. |
+
 ## Who can run what
 
 Issuing any token requires an instructor or grader role in at least one class. Beyond that, every command checks your role in the class you named. Two commands are stricter than the rest:
