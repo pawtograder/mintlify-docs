@@ -18,9 +18,36 @@ If you push three commits at once, the last one is the one that gets graded.
 
 ## Your Assignment Repository
 
-Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears in the repository box below the assignment's due date and description. This repository is private, and only you and the course staff can see it.
+Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your repository for the assignment appears in the repository box below the assignment's due date and description. This repository is private, and only you and the course staff can see it.
 
 Your instructor may have provided starter code in that repository. Use this repository to complete the assignment.
+
+## Opening Your Repository in a Cloud Workspace
+
+Some courses provide a cloud-based coding environment (Coder) so you can work on assignments without installing anything locally. When this is available, an **Open in VS Code** card appears on your assignment page.
+
+The card walks through three startup steps:
+
+1. **Build** — the workspace container is being prepared.
+2. **Clone** — your assignment repository is being cloned into the workspace.
+3. **Editor** — VS Code (code-server) is starting up.
+
+Once all three steps are complete, the card shows an **Open in VS Code** link that opens the editor in a new tab.
+
+### Linking your Forgejo account
+
+Before a workspace can be created, you must link your Forgejo account to Coder. If the card shows a **Link Forgejo account** prompt, click it to be taken through the authorization flow. Once you have authorized Coder, return to the assignment page and the workspace will start automatically.
+
+### If the workspace fails to start
+
+If a step fails, the card shows which step failed and a **Retry** button. Common causes:
+
+- **Clone failed** — your Forgejo account may have been unlinked. Re-link it and retry.
+- **Editor failed** — the workspace ran into a startup error. Retry to restart it.
+
+If you see **Contact course staff**, your Coder account has a conflict that staff need to resolve.
+
+Workspaces stop automatically after an hour of inactivity. The next time you open the assignment page and click **Open in VS Code**, the workspace restarts and your files are preserved.
 
 ## What Counts as a Submission
 
