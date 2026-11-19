@@ -1,0 +1,86 @@
+---
+title: "Cloud Workspaces"
+description: "Give students a browser-based VS Code environment that clones their assignment repository automatically, backed by Forgejo and Coder"
+icon: "cloud"
+---
+
+# Cloud Workspaces
+
+Cloud workspaces give each student a browser-based VS Code environment that clones their assignment repository automatically. The workspace runs on Coder, uses Forgejo as the Git host, and is accessible from the student's assignment page with a single click.
+
+This feature requires the **cloud-workspaces** course feature flag to be on and a Pawtograder deployment with Forgejo and Coder enabled. Contact your site administrator if you are unsure whether your deployment supports it.
+
+## How it works
+
+When a student opens an assignment with cloud workspaces enabled:
+
+1. Pawtograder creates a Forgejo account for the student if one does not exist yet.
+2. Pawtograder creates a Forgejo repository for the student (or their group) from the assignment's handout template.
+3. The student clicks **Open in VS Code** on the assignment page.
+4. Pawtograder creates a Coder workspace that clones the student's Forgejo repository into `/home/coder/<repo-name>`.
+5. VS Code opens the clone. The student can edit, commit, and push without leaving the browser.
+
+The workspace stops automatically one hour after the student's last connection. Their work is preserved on the home volume and is there when they restart.
+
+## Forgejo accounts and repositories
+
+### Account creation
+
+Pawtograder creates a Forgejo account for every enrolled student in a cloud-workspaces class. The account is created automatically — students do not need to sign up on Forgejo themselves. The account's login is derived from the student's Pawtograder user ID, so the first time a student signs in to Forgejo through Pawtograder's SSO, they land on their pre-created account.
+
+Account creation runs hourly and is also triggered when a student joins the class or when the cloud-workspaces flag is turned on. Until the account exists, the student's assignment page shows the workspace card in a waiting state.
+
+### Forgejo usernames on the roster
+
+For classes with cloud-workspaces on, the **Enrollments** roster shows a **Forgejo Username** column. A student whose account has not been created yet shows **Not created yet**. The column refreshes automatically every 30 seconds while the roster is open.
+
+### Repository creation
+
+Pawtograder creates one Forgejo repository per student (or per group, for group assignments) when the assignment is released. The repository is generated from the assignment's handout template. Repository names are lowercase and start with the class slug, so two sections sharing a Forgejo organization do not collide.
+
+For group assignments, the repository is created once every group member has a Forgejo account and is marked ready once every member has write access.
+
+## The workspace card
+
+The workspace card appears on the student's assignment page when:
+
+- The **cloud-workspaces** course feature flag is on.
+- The student has a Forgejo repository for the assignment.
+- The student is not being viewed by a staff member using **View as student** (the card is hidden in that mode because the requests would act on the staff member's own repository).
+
+The card walks through three startup steps:
+
+| Step | What it covers |
+| --- | --- |
+| **Build** | The Coder agent connecting and the workspace pod starting |
+| **Clone** | The Git Clone script cloning the student's Forgejo repository |
+| **Editor** | The startup script and code-server becoming healthy |
+
+A failed step is named, with a **Retry** button. Once all three steps pass, the card shows an **Open in VS Code** link.
+
+### Linking Forgejo
+
+Before a workspace can be created, the student must link their Forgejo account to Coder. If the link is missing, the card shows a **Link Forgejo account** button that takes the student through Coder's Forgejo authorization page. Once linked, the card re-checks automatically when the student returns to the tab.
+
+### Account conflict
+
+If a student's Coder account was created with a real email address (before the current setup, or by hand) and has never signed in, the card shows an **Account conflict** message and asks the student to contact course staff. Staff can delete the old Coder account from the Coder admin panel; the next time the student opens a workspace, a new account is created automatically.
+
+## What a workspace restart keeps
+
+When a workspace stops and restarts, the clone check runs again. The workspace keeps an existing clone when:
+
+- The clone's remote origin matches the workspace's `repo_url` (compared without a trailing `/` or `.git`, with the scheme and host in lowercase).
+- The clone has at least one commit checked out (an empty repository is kept too).
+
+Anything else — an interrupted clone, a directory that is not a Git repository, a symlink — fails the clone step and leaves the directory untouched. The student sees the failure in the card and can retry.
+
+## Workspace image
+
+Workspaces run on the `ghcr.io/pawtograder/coder-workspace` image, which includes the same toolchain as the autograder runner: JDK 21, Maven, Python 3, Node 22, and git. This means an assignment's tests behave the same in a workspace and in the grader.
+
+## See also
+
+- [Assignment Configuration](/staff/assignments/configuration) for the repository host picker that selects Forgejo for an assignment.
+- [Feature Flags](/staff/feature-flags) for the `cloud-workspaces` flag.
+- [Roster](/staff/course-settings) for the Forgejo Username column on the Enrollments page.
