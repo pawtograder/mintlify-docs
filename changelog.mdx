@@ -6,6 +6,41 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 19, 2026
+
+#### Cloud workspaces (Forgejo + Coder)
+
+- **Open in VS Code from the assignment page** — Students in courses with cloud workspaces enabled can open a browser-based VS Code environment directly from their assignment page. The workspace clones their Forgejo repository automatically, walks through build, clone, and editor startup steps, and shows a **Retry** button on any failed step. The card handles needs-linking (guides the student through Forgejo authorization), restarting failed workspaces, and concurrent clicks safely. Staff viewing as a student do not see the card. See [Cloud Workspaces](/staff/assignments/cloud-workspaces) ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Forgejo student and group repositories** — For assignments on Forgejo, the reconciler creates one repository per student (or per group) from the handout template, grants write access, and records the repository. Repository names are lowercase and prefixed with the class slug to avoid collisions across sections sharing a Forgejo organization. The grade.yml workflow hash is set from the handout at release time ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo grading: clone, staff match, and rerun** — Submissions from Forgejo repositories are cloned through Forgejo's archive API, the push actor is matched to staff through Forgejo accounts, and staff can rerun grading for a Forgejo repository through Forgejo's API ([#1239](https://github.com/pawtograder/platform/pull/1239))
+- **Forgejo accounts on the roster** — For classes with cloud-workspaces on, the Enrollments roster shows a **Forgejo Username** column that refreshes automatically. A student whose account has not been created yet shows **Not created yet** ([#1217](https://github.com/pawtograder/platform/pull/1217))
+- **Nightly Forgejo and Coder backups** — The Helm chart now backs up Forgejo's database and `/data` volume and Coder's database nightly alongside Pawtograder's own dump. The backup-verify job and the restore drill cover all three, and production refuses Forgejo or Coder without their backups enabled ([#1192](https://github.com/pawtograder/platform/pull/1192))
+
+#### Assignments
+
+- **Repository host picker (GitHub / Forgejo)** — For courses with cloud-workspaces on, the assignment form shows a GitHub/Forgejo picker. Forgejo assignments disable fork-based configurations, pull-request submission, branch protection, and repository analytics, and badge Forgejo assignments in the instructor assignment list. The picker is locked once the assignment has repositories. See [Assignment Configuration](/staff/assignments/configuration) ([#1313](https://github.com/pawtograder/platform/pull/1313))
+
+#### Office hours
+
+- **Ticket escalation** — TAs can escalate a ticket back to the queue with a required note. **Resolve** on an in-progress ticket opens a 10-minute student check-in; answering "No" escalates with the student's note. **End ticket** closes a ticket immediately with no check-in. Escalated tickets sort first in every queue view with an **Escalated (×N)** badge and a staff-only history panel. See [Help Requests](/staff/office-hours/help-requests) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+- **Queue health cards** — When the `office-hours-queue-health` flag is on, queue cards show waiting count, oldest wait, and an Unstaffed badge, sorted so queues needing attention appear first. Instructors set per-queue red thresholds and receive one browser notification when a queue first crosses its threshold. See [Running Office Hours](/staff/office-hours/running-office-hours) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Turn alerts and shift-end release** — When the `turn-alerts` flag is on, students are notified when a TA picks up their request or they move to next in line. When the `shift-release` flag is on, ending a shift automatically returns in-progress tickets to the queue ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Exams
+
+- **Exam scan ownership validation** — The exam worker now validates that each scan page belongs to the batch being processed, that a scanned exam's batch, exam, and course are consistent, and that matched pages cannot be changed by staff after matching. A scan write that races the link that matches its page is refused. Completed batches are not overwritten by stale jobs ([#1133](https://github.com/pawtograder/platform/pull/1133))
+- **Exam scan progress UI** — The batch card shows scan progress with a count of pages OCR'd and submissions finalized. Create Submissions stays disabled until the batch leaves the state it was clicked in, and polls skip ticks while the tab is hidden ([#1262](https://github.com/pawtograder/platform/pull/1262))
+- **Exam overview and artifact label fixes** — The exam overview no longer shows `status: draft` for graded exams. The label above an artifact now says "Grade this exam's questions in the rubric panel" for exam artifacts, rather than the generic "No rubric checks available" ([#1269](https://github.com/pawtograder/platform/pull/1269))
+
+#### Bug fixes
+
+- **Exam scan confirmation prompt** — The exam worker now asks before confirming a student when the scan does not name them ([#1265](https://github.com/pawtograder/platform/pull/1265))
+- **GitHub circuit breaker decay** — The GitHub circuit breaker trip count now resets after 24 hours of quiet, so a rate-limit incident from months ago no longer contributes to the escalation threshold ([#1295](https://github.com/pawtograder/platform/pull/1295))
+- **Markdown editor accessibility** — The markdown editor's textarea is now named and its decorative toolbar icons are hidden from assistive technology ([#908](https://github.com/pawtograder/platform/pull/908))
+- **Exam question ordering in the template editor** — Questions in the template editor now render in pre-order (parent before children, siblings by ordinal) instead of interleaving siblings from different parents ([#1264](https://github.com/pawtograder/platform/pull/1264))
+
 ## August 2026
 
 ### August 19, 2026
