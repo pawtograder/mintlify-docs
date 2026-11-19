@@ -6,6 +6,34 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 19, 2026
+
+#### Cloud workspaces (Forgejo + Coder)
+
+- **Open in Coder on the assignment page** — Students on courses with the `cloud-workspaces` flag on now see an **Open in Coder** card on their assignment page. The card walks through three startup steps (build → clone → editor) and opens VS Code in the browser once the workspace is ready. A failed step is named with a **Retry** button. The workspace stops after one hour of inactivity and resumes from where it left off on the next open. See [Submitting your work](/students/assignments/create-submission#open-in-coder-cloud-workspaces) ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Forgejo repository host for assignments** — Instructors on courses with `cloud-workspaces` on can now choose **Forgejo** as the repository host when creating or editing an assignment. Pawtograder provisions Forgejo accounts for enrolled students, creates their repositories from the handout template, and grades submissions by cloning through Forgejo's archive API. Group assignments get one shared repository per group. See [Assignment configuration](/staff/assignments/configuration#repository-host) ([#1238](https://github.com/pawtograder/platform/pull/1238), [#1239](https://github.com/pawtograder/platform/pull/1239), [#1253](https://github.com/pawtograder/platform/pull/1253))
+- **Forgejo workspace tokens** — The chart can now mint and revoke per-workspace Forgejo tokens, giving each Coder workspace its own scoped credential for cloning and pushing ([#1302](https://github.com/pawtograder/platform/pull/1302))
+- **Forgejo username on the roster** — For courses with `cloud-workspaces` on, the enrollments roster shows each student's Forgejo username, or "Not created yet" while provisioning is in progress ([#1238](https://github.com/pawtograder/platform/pull/1238))
+
+#### Office hours
+
+- **Queue health cards** — When the `office-hours-queue-health` flag is on, each queue card on the **Working** page shows the number of waiting requests, the age of the oldest one, and an **Unstaffed** badge. Cards are sorted so queues that need attention appear first. Instructors set per-class red thresholds under **Queue Settings → Queue health thresholds**. See [Running office hours](/staff/office-hours/running-office-hours#queue-health-cards) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Turn alerts** — With the `turn-alert` flag on, instructors receive a browser notification when a queue first turns red, and students receive one when a TA picks up their request or they move to next in line ([#1287](https://github.com/pawtograder/platform/pull/1287))
+- **Shift-end release** — With the `shift-release` flag on, ending a shift automatically returns any in-progress requests assigned to that TA to the queue ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Exams
+
+- **Scan ownership validation** — The exam worker now validates that each scan page belongs to the batch being processed and that its path is the uploader's canonical key, preventing a grader from redirecting a scan to another course's submission ([#1133](https://github.com/pawtograder/platform/pull/1133))
+- **Scan progress and finalize tracking** — The batch card now shows OCR and finalization progress in real time, and the page follows the batch through to completion without a manual reload ([#1262](https://github.com/pawtograder/platform/pull/1262))
+- **Exam overview and artifact labels corrected** — The exam overview no longer shows a stale `draft` status, and the message above an exam artifact now correctly says to grade in the rubric panel rather than "No rubric checks available" ([#1269](https://github.com/pawtograder/platform/pull/1269))
+
+#### Bug fixes
+
+- **Transient Gemini failures retried** — The AI grading assistant now retries transient Gemini API failures instead of surfacing them as errors ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **RLS silent refusals surfaced** — A database row-level security policy that silently refused an update or delete now returns a real error message instead of appearing to succeed ([#1159](https://github.com/pawtograder/platform/pull/1159))
+
 ## August 2026
 
 ### August 19, 2026
