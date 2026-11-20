@@ -54,3 +54,9 @@ Pawtograder automatically manages repository permissions when:
 - Individual submissions are activated or deactivated
 
 The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
+
+## Grader repository role
+
+By default, graders are given the **Triage** role on student repositories, which lets them read code and manage issues and pull requests without being able to push. Instructors can change the default grader role for a course, and new custom roles are created as a copy of the current default so you can adjust from a known baseline.
+
+To change the default grader role, open **Course Settings → Repository Permissions** and select a different role from the **Default grader role** dropdown. The available roles are the standard GitHub repository roles: **Read**, **Triage**, **Write**, **Maintain**, and **Admin**. The change applies to new permission syncs; run **Fix Permissions** on each assignment to apply it to existing repositories.

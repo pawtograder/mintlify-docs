@@ -20,6 +20,22 @@ Starting work puts you on duty for that queue. Other staff see you in the queue'
 
 Once you are on duty, **Working** stops listing queues and lists the requests you are responsible for instead. [Help Requests](/staff/office-hours/help-requests) covers what to do with one.
 
+## Queue health cards
+
+When the **office-hours-queue-health** course feature flag is on, each queue card on the **Working** page shows additional health information:
+
+- **Waiting count** — the number of open requests currently waiting.
+- **Oldest wait** — how long the longest-waiting request has been open.
+- **Unstaffed badge** — shown when no TA has an active shift on the queue.
+
+Queues that need attention are sorted to the top of the list. When a queue's waiting count or oldest wait crosses the red thresholds set by an instructor, the card turns red and you receive one browser notification. Instructors set those thresholds under **Settings → Queue Settings**; see [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds).
+
+The flag is off by default. Instructors can turn it on under **Course Settings → Feature flags**.
+
+## Shift end and in-progress requests
+
+When you end a shift, any requests you have in progress are automatically returned to the queue so another TA can pick them up. This applies to all queues you were working, not only the one whose shift ended.
+
 <Note>
 Starting work always records a concurrent-student limit of `1`. There is no control for changing it, and it does not limit how many requests can be routed to you at once. Assignment Management displays the value. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
