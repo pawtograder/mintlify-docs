@@ -30,6 +30,44 @@ Each queue card lists the staff currently on duty, the end time of the shift in 
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Queue health cards
+
+When the `office-hours-queue-health` course flag is on, each queue card on the **Working** page shows additional health information:
+
+- **Waiting count** — the number of open requests currently waiting.
+- **Oldest wait** — how long the longest-waiting request has been open.
+- **Unstaffed badge** — shown when no TA has an active shift on that queue.
+
+Cards are sorted so queues that need attention appear first: queues with no staff on duty, then queues whose waiting count or oldest wait exceeds the thresholds you set.
+
+### Setting thresholds
+
+Instructors can set per-class red-alert thresholds under **Settings → Queue Settings**. The two fields are:
+
+| Field | What it controls |
+| --- | --- |
+| **Requests waiting** | The number of open requests at which a queue card turns red. |
+| **Oldest wait (minutes)** | The wait time at which a queue card turns red. |
+
+Thresholds must be positive numbers. A queue card turns red when either threshold is exceeded. Graders see the health cards but cannot change the thresholds.
+
+### Red-queue alert
+
+When a queue first turns red, instructors receive one browser notification. The notification fires once per queue per session, not on every poll, so you are not flooded when a queue stays red. Allow notifications from the lock icon in the address bar if the browser has blocked them.
+
+## Turn alerts
+
+When the `turn-alert` course flag is on, students receive a browser notification when:
+
+- A TA picks up their request (the request moves to **In Progress**).
+- They are next in line in the queue.
+
+The alert fires once per state change. A student who has notifications blocked sees nothing; the **Notifications are blocked** banner on the office hours page tells them how to allow them.
+
+## Shift-end release
+
+When the `shift-release` course flag is on, ending a shift automatically returns any in-progress requests assigned to that TA back to the queue. This prevents requests from being stranded when a TA's shift ends while they still have open work. Requests on other queues are also returned once the TA has no remaining active shifts.
+
 ## Two banners you may see
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
@@ -38,3 +76,4 @@ A **Real-time updates disconnected** warning means queue status and new requests
 
 - [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking) for the record of shifts you have worked and the per-TA time dashboard.
 - [Office Hours Overview](/staff/office-hours/intro) for the header, the Settings menu, and finding any request.
+- [Feature flags](/staff/feature-flags) for enabling `office-hours-queue-health`, `turn-alert`, and `shift-release`.
