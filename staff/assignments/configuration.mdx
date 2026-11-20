@@ -180,6 +180,12 @@ Notes that will save you a support ticket:
   both in Pawtograder and on GitHub; Pawtograder recognizes them as
   leftovers and ignores pushes to them, so students who push get silence
   rather than an error. Set the mode before the release date.
+- **For courses using Forgejo (cloud workspaces), the handout repository
+  is created on Forgejo when you save the assignment form.** The form
+  creates the Forgejo handout repo from the template you specify in
+  **Template repo** and sets the workflow hash from the handout's
+  `grade.yml`. Student repositories are then provisioned by the
+  Forgejo reconciler after the assignment is released.
 
 ### Autograder
 
