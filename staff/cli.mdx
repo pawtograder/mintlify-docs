@@ -271,6 +271,42 @@ The CLI exits `0` on success and `1` on any failure, and prints the reason. A fe
 - **Timeouts on long operations.** Set `PAWTOGRADER_HTTP_TIMEOUT_MS=600000` for a ten-minute limit. For artifact imports, a smaller `--batch-size` helps more than a longer timeout.
 - **Git or SSH failures.** Check `ssh -T git@github.com` and your membership in the course's GitHub organization, then retry with `--concurrency 1`.
 
+## Paper exams
+
+If your course has the paper exams feature enabled, the `exams` command group runs the Scans page workflow from a script. The course must have the **Exams** feature flag on.
+
+```bash
+# List exams in the course
+pawtograder exams list --class cs3500-spring-2026
+
+# List each question with its grading rubric check ID
+# (use the check IDs with submissions comments import to apply grades)
+pawtograder exams questions --class cs3500-spring-2026 --assignment midterm
+
+# Upload a scanned PDF as a new batch
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+
+# Start OCR and name matching
+pawtograder exams scans process --class cs3500-spring-2026 --batch 42
+
+# Check progress
+pawtograder exams scans status --class cs3500-spring-2026 --batch 42
+
+# Preview what finalize will do, then run it
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42 --dry-run
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42
+```
+
+`upload` rasterizes the PDF on your machine and refuses a `--pages-per-exam` that does not match the template before uploading anything. Confirming name matches stays on the Scans page in the web app — someone has to look at the name crops. `exams questions` gives the `rubric_check_id` for each question, which you can pass to `submissions comments import` to apply grades from an external source.
+
+<Note>
+`exams scans upload` requires Node.js 20.16 or later. All other `exams` commands work on Node.js 20 or later.
+</Note>
+
 ## More commands
 
 The [CLI reference](/developers/cli) documents the rest of the command surface, including bulk student-repository maintenance (`repos sync-grade-workflow` and `repos copy-after-source-due`), batch import of grading comments and artifacts, assignment deletion, `submissions export`, `assessment deanonymize`, and the exact flags, defaults, and error messages for everything on this page.
