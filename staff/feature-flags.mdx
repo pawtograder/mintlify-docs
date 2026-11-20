@@ -111,6 +111,26 @@ Two specifics worth knowing:
 
 The one flag whose off state has a lasting consequence is `discord-student-join`, described above: invitations not created while it was off are not created later on their own.
 
+### Cloud workspaces
+
+This flag controls whether your course uses Forgejo as an alternative repository host and gives students access to Coder cloud workspaces.
+
+While it is on:
+- Forgejo becomes a selectable repository host when creating assignments.
+- Every enrolled student gets a Forgejo account created for them immediately.
+- Students see an **Open in Coder** button on eligible assignment pages (both Forgejo and GitHub assignments), which opens their repository in a cloud workspace.
+
+While it is off:
+- Forgejo cannot be selected for new assignments.
+- The **Open in Coder** button is hidden and workspace requests return an error.
+- No new Forgejo accounts or student repositories are created.
+
+<Warning>
+Turning the flag off does not delete anything. Existing Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded. Students who enroll after the flag is turned off will not get a Forgejo account until it is turned back on.
+</Warning>
+
+Turning the flag on triggers Forgejo account creation for the whole roster right away. On a large course this may take a few minutes.
+
 ## Related pages
 
 <CardGroup cols={2}>
