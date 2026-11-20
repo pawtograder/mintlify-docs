@@ -742,6 +742,58 @@ pawtograder repos copy-after-source-due \
 
 Per-repository failures are reported and set the exit code to 1 after the run finishes.
 
+## exams
+
+The `exams` group manages exam scan batches: the physical paper scans that Pawtograder OCRs, matches to students, and turns into graded submissions.
+
+<Warning>
+All `exams` commands require an instructor or grader role in the class. `exams batches reprocess` is the only write command; the rest are reads.
+</Warning>
+
+### exams batches list
+
+Lists scan batches for an exam.
+
+```bash
+pawtograder exams batches list --class cs3500-spring-2026 --assignment midterm
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--status` | `all` | Filter by batch status: `ocr`, `matching`, `review`, `completed`, `error`, or `all`. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+Columns are `ID`, `Status`, `Pages`, `Created`, and `Updated`.
+
+### exams batches show
+
+Shows the details of one scan batch, including its page count, status, and any error message.
+
+```bash
+pawtograder exams batches show 42 --class cs3500-spring-2026
+```
+
+Takes a positional batch `id` plus `-c`/`--class` (required). No `--json`.
+
+### exams batches reprocess
+
+Re-queues a batch that is in `error` state for OCR and matching. This is the CLI equivalent of the **Reprocess** button in the exam scan UI.
+
+```bash
+pawtograder exams batches reprocess 42 --class cs3500-spring-2026
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--force` | `false` | Reprocess even if the batch is not in `error` state. |
+
+<Warning>
+Reprocessing re-runs OCR and matching from scratch. Any manual identity confirmations on the batch's scanned exams are preserved, but the page grouping is recomputed. If the grouping changes, confirmed exams whose pages would move are refused and the batch errors with a message naming what to undo.
+</Warning>
+
 ## Exporting student data
 
 Three commands write course data to disk: `assessment export`, `submissions export`, and `assessment deanonymize`. All three are gated by the same `--identity` contract, and all three can write student personal data. Read this section before running any of them.
