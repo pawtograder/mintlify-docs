@@ -180,6 +180,16 @@ Notes that will save you a support ticket:
   both in Pawtograder and on GitHub; Pawtograder recognizes them as
   leftovers and ignores pushes to them, so students who push get silence
   rather than an error. Set the mode before the release date.
+- **Forgejo assignments create their handout repository when you save the
+  form.** When the course has the **Cloud workspaces** feature flag on and
+  you choose Forgejo as the repository host, saving the assignment form
+  creates the handout repository in the class's Forgejo organization and
+  adds `.github/workflows/grade.yml` if the autograder is enabled. Student
+  repositories are created when the assignment is released. Only the
+  **Template repo (staff-only)** mode is supported for Forgejo; fork modes
+  and pull-request submission are not available. If Forgejo is not
+  configured on the deployment, the form saves the assignment row but
+  reports that Forgejo is not set up.
 
 ### Autograder
 
