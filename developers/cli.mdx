@@ -27,7 +27,7 @@ npm install -g @pawtograder/cli
 pawtograder --help
 ```
 
-Node.js 20 or later is required. The `repos` commands and `assignments copy` also need `git` on your `PATH` and working SSH access to the course's GitHub organization; `repos copy-after-source-due` additionally needs `rsync`.
+Node.js 20.16 or later is required. The `exams scans upload` command additionally requires `@napi-rs/canvas` to be available (it is an optional dependency of `pdfjs-dist`, which the CLI uses to rasterize PDFs locally). The `repos` commands and `assignments copy` also need `git` on your `PATH` and working SSH access to the course's GitHub organization; `repos copy-after-source-due` additionally needs `rsync`.
 
 ### Running from the platform repository
 
