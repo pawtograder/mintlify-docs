@@ -65,6 +65,21 @@ The **Office Hours Description** field at the top of Queue Management writes one
 
 Each queue card carries one button that opens the queue's Discord channel. Calendar events are matched to a queue by explicit link first, then by a case-insensitive match between the event's queue name and the queue's name; the shift times that match produces are the ones on the staff queue cards, described in [Running Office Hours](/staff/office-hours/running-office-hours#staffing-times-and-the-schedule). The calendar URL itself is set under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Queue health thresholds
+
+When the `office-hours-queue-health` course flag is on, a **Queue Settings** section appears under **Settings → Queue Management**. Instructors can set two per-class thresholds:
+
+| Threshold | Effect |
+| --- | --- |
+| **Requests waiting** | When the number of open requests in any queue reaches this number, that queue's card turns red and a one-time browser notification fires for staff. |
+| **Oldest wait (minutes)** | When any request has been waiting longer than this, the same red alert fires. |
+
+Both thresholds must be positive whole numbers. If either is left blank or set to an invalid value, the default is used. The alert fires once per queue per session; refreshing the page resets it.
+
+<Note>
+Queue health thresholds are instructor-only. Graders see the health cards but cannot change the thresholds.
+</Note>
+
 ## Templates
 
 A template is a prompt structure that pre-fills the description box on a new request, so students arrive having already answered "what have you tried" and "what is the error". Under **Settings → Templates**, each template has a name, a category, an optional description, the content itself, and an active flag. The category groups your own list on this page; the student picker lists names only.
