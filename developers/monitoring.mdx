@@ -107,6 +107,26 @@ All eight are gauges with no labels, sourced from the `get_async_queue_sizes` RP
 Prefer age over depth for alerting. Depth alone cannot distinguish a healthy busy queue from a stalled one, and depth thresholds need retuning every term.
 </Tip>
 
+### Office hours queue health
+
+Five gauges report the health of office hours queues across the deployment, labelled by `class_id`. They mirror the condition the staff dashboard paints red, so a queue the dashboard marks as over threshold is one these gauges count.
+
+| Metric | Meaning |
+| --- | --- |
+| `pawtograder_office_hours_queues_red` | Active queues at or over the class's waiting or oldest-wait threshold — the primary alert signal |
+| `pawtograder_office_hours_queues_unstaffed` | Active queues with nobody on shift |
+| `pawtograder_office_hours_queues_active` | Active queues in the class |
+| `pawtograder_office_hours_requests_waiting` | Open requests across the class's active queues |
+| `pawtograder_office_hours_oldest_wait_minutes` | Age of the oldest open request, in minutes |
+
+Thresholds come from each class's own `office_hours_health_thresholds` (set in Queue Settings), defaulting to 5 waiting requests and 30 minutes. A class that deliberately runs a long queue raises its own limit and stops alerting here without a deploy.
+
+These gauges are read non-fatally: a deployment that has not applied migration `20261120130100` drops them from the scrape without affecting any other metric.
+
+<Warning>
+`pawtograder_office_hours_queues_red` and `pawtograder_office_hours_queues_unstaffed` are per class, not per queue. Two positive gauges do not mean the same queue is both red and unstaffed — a staffed queue that is behind, beside an empty unstaffed queue, reads the same. Use `SELECT * FROM public.office_hours_queue_health(<class_id>)` to see which queue is which.
+</Warning>
+
 ### Circuit breakers
 
 `pawtograder_circuit_breaker_open{scope,key,state}` is `1` when a breaker is open and `0` when it is closed, one series per breaker returned by the `get_circuit_breaker_statuses` RPC.
