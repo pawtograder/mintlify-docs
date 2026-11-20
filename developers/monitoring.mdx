@@ -107,6 +107,28 @@ All eight are gauges with no labels, sourced from the `get_async_queue_sizes` RP
 Prefer age over depth for alerting. Depth alone cannot distinguish a healthy busy queue from a stalled one, and depth thresholds need retuning every term.
 </Tip>
 
+### Office hours queue health
+
+Five gauges report the health of office hours queues across all classes, labelled by `class_id`. They are sourced from `metrics_office_hours_queue_health()` and read non-fatally: a deployment that has not applied the migration drops these gauges without affecting the rest of the scrape.
+
+| Metric | Meaning |
+| --- | --- |
+| `pawtograder_office_hours_queues_red` | Active queues at or over the class's waiting or oldest-wait threshold — **the one to alert on** |
+| `pawtograder_office_hours_queues_unstaffed` | Active queues with nobody on shift |
+| `pawtograder_office_hours_queues_active` | Active queues in the class |
+| `pawtograder_office_hours_requests_waiting` | Open requests across those queues |
+| `pawtograder_office_hours_oldest_wait_minutes` | Age in minutes of the oldest open request |
+
+Thresholds come from each class's own `office_hours_health_thresholds` (set in Queue Settings), so a class that deliberately runs a long queue raises its own limit and stops alerting without a deploy. The metric mirrors the staff dashboard's red condition definition for definition, so the two cannot disagree.
+
+<Tip>
+`pawtograder_office_hours_queues_red > 0` sustained for 15 minutes is a reasonable alert threshold. A queue that is briefly red during a rush is normal; only a sustained one warrants attention. Keep the severity at `info` — nobody should be woken up because a class is busy.
+</Tip>
+
+<Warning>
+Both `queues_red` and `queues_unstaffed` are per class, not per queue. Two positive gauges do not mean the same queue is both red and unstaffed. Before acting on the pair, run `SELECT * FROM public.office_hours_queue_health(:class_id)` to see which queue is which.
+</Warning>
+
 ### Circuit breakers
 
 `pawtograder_circuit_breaker_open{scope,key,state}` is `1` when a breaker is open and `0` when it is closed, one series per breaker returned by the `get_circuit_breaker_statuses` RPC.

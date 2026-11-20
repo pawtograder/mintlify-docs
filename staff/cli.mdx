@@ -271,6 +271,55 @@ The CLI exits `0` on success and `1` on any failure, and prints the reason. A fe
 - **Timeouts on long operations.** Set `PAWTOGRADER_HTTP_TIMEOUT_MS=600000` for a ten-minute limit. For artifact imports, a smaller `--batch-size` helps more than a longer timeout.
 - **Git or SSH failures.** Check `ssh -T git@github.com` and your membership in the course's GitHub organization, then retry with `--concurrency 1`.
 
+## Work with paper exams
+
+The `exams` command group runs the exam Scans page workflow from a script. The course must have the **Paper exams** feature enabled.
+
+```bash
+# List exams in a class
+pawtograder exams list --class cs3500-spring-2026
+
+# List an exam's questions with their grading rubric check IDs
+pawtograder exams questions \
+  --class cs3500-spring-2026 \
+  --assignment midterm
+
+# Upload a scanned PDF as a new batch
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+
+# Start OCR and name matching
+pawtograder exams scans process \
+  --class cs3500-spring-2026 \
+  --batch 42
+
+# Check batch status
+pawtograder exams scans status \
+  --class cs3500-spring-2026 \
+  --batch 42
+
+# Preview what finalize will do, then run it
+pawtograder exams scans finalize \
+  --class cs3500-spring-2026 \
+  --batch 42 \
+  --dry-run
+
+pawtograder exams scans finalize \
+  --class cs3500-spring-2026 \
+  --batch 42
+```
+
+`upload` renders the PDF on your machine (requires Node.js 20.16 or later) and refuses a `--pages-per-exam` that does not match the exam template before uploading anything. Confirming name matches stays on the Scans page in the web app.
+
+`exams questions` lists each question's grading rubric check ID, so grades from outside Pawtograder can be applied to exam submissions with `submissions comments import`.
+
+<Note>
+The published package is `@pawtograder/cli` version 0.2.0. The `exams scans upload` command requires Node.js 20.16 or later (for PDF rasterization). Other `exams` commands work on Node.js 20 or later.
+</Note>
+
 ## More commands
 
 The [CLI reference](/developers/cli) documents the rest of the command surface, including bulk student-repository maintenance (`repos sync-grade-workflow` and `repos copy-after-source-due`), batch import of grading comments and artifacts, assignment deletion, `submissions export`, `assessment deanonymize`, and the exact flags, defaults, and error messages for everything on this page.

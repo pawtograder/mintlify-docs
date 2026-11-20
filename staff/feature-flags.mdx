@@ -18,7 +18,7 @@ Each flag is one card with a title, a description, and a single switch. There is
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
 </Note>
 
-## The nine flags
+## The flags
 
 <Frame>
   <img src="/images/staff/feature-flags-1787313949494.png" alt="The Feature flags page with all nine flag cards: Discussion, Flashcards, Office hours, Gradebook, Surveys and Polls switched on, and Student gradebook What-If, Suggested due dates and Student Discord invitations switched off" />
@@ -35,8 +35,10 @@ The global search palette lists **Feature flags** for all course staff, so a gra
 | `gradebook-what-if` | Student gradebook What-If | **Allow What-If grade simulations for students** | Off |
 | `suggested-due-date` | Suggested due dates | **Present the suggested due date as the due date** | Off |
 | `discord-student-join` | Student Discord invitations | **Let students join this course's Discord server** | Off |
+| `cloud-workspaces` | Cloud workspaces | **Enable Forgejo repositories and Coder cloud workspaces** | Off |
+| `office-hours-escalation-alert` | Office hours: escalation alerts | **Alert staff and students about office hours escalations** | Off |
 
-A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the three opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
+A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
 
 ## What each flag hides
 
@@ -53,12 +55,14 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
+| `cloud-workspaces` | The **Open in Coder** button on assignment pages | The Forgejo repository host option on the assignment form |
+| `office-hours-escalation-alert` | Nothing (behavior flag, not a navigation flag) | Nothing (behavior flag, not a navigation flag) |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
-## The three behavior flags
+## Behavior flags
 
-Six flags only govern what appears in menus. These three change how a feature behaves.
+Six flags only govern what appears in menus. The remaining flags change how a feature behaves.
 
 ### Student gradebook What-If
 
@@ -95,6 +99,27 @@ What a flag does not do is grant or withhold permission. Turning a module off is
 <Warning>
 When you genuinely need material withheld — an assignment still being written, a survey you are not ready to run, a deck nobody should see yet — act on the material, not the menu. Unpublish it, hold it behind its release date, or delete it. Those are the controls that decide who may read something; a flag decides who can find it.
 </Warning>
+
+### Cloud workspaces
+
+When `cloud-workspaces` is on, code assignments can use Forgejo instead of GitHub as their repository host (chosen per assignment), everyone enrolled in the course gets a Forgejo account, and students see an **Open in Coder** button that opens their repository in a cloud workspace. Turning it on creates the Forgejo accounts right away.
+
+When off, Forgejo cannot be chosen for new assignments, **Open in Coder** is hidden and workspaces cannot be opened, and no new Forgejo accounts or student repositories are created. Nothing is deleted: Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded.
+
+<Warning>
+Turning `cloud-workspaces` off does not remove existing Forgejo accounts or repositories. Students who enroll after you turn it off will not get a Forgejo account or repository until you turn it back on.
+</Warning>
+
+### Office hours escalation alerts
+
+When `office-hours-escalation-alert` is on, two browser alerts fire:
+
+- **Staff** receive a browser notification when a ticket's escalation count goes up while they have an office hours page open (tab in the background only). Multiple escalations in one update produce one notification naming the count.
+- **Students** receive a browser notification or an in-page banner when staff resolve their ticket and the check-in window opens.
+
+Neither alert fires for state that was already present when the page loaded. When off, escalation and check-in work as they do now, with no alerts.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#escalation-alerts) for more detail.
 
 The staff search palette is gated alongside the menu, with one exception: its **Manage office hours** entry stays in the palette after you turn `office-hours` off, even though the nav entry is gone. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
