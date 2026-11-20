@@ -11,7 +11,7 @@ The Pawtograder CLI runs course operations from a terminal. It copies assignment
 This page is the complete reference. If you are course staff looking for the handful of tasks you run most often, start with the [CLI page for course staff](/staff/cli).
 
 <Note>
-The published package is `@pawtograder/cli` version 0.2.0, licensed GPL-3.0-only. Commands and flags may still change.
+The published package is `@pawtograder/cli`, licensed GPL-3.0-only. Commands and flags may still change.
 </Note>
 
 ## Install
@@ -27,7 +27,7 @@ npm install -g @pawtograder/cli
 pawtograder --help
 ```
 
-Node.js 20 or later is required. The `repos` commands and `assignments copy` also need `git` on your `PATH` and working SSH access to the course's GitHub organization; `repos copy-after-source-due` additionally needs `rsync`.
+Node.js 20.16 or later is required. The `repos` commands and `assignments copy` also need `git` on your `PATH` and working SSH access to the course's GitHub organization; `repos copy-after-source-due` additionally needs `rsync`. The `exams scans upload` command additionally requires `@napi-rs/canvas` to be installed for PDF rasterization.
 
 ### Running from the platform repository
 
@@ -74,7 +74,7 @@ The CLI parses arguments in strict mode. A flag that the command you typed does 
 
 `--json` prints the raw JSON response instead of the formatted table or plan, and silences every progress message, so stdout is pure JSON that you can pipe into `jq`. Error text still goes to stderr.
 
-These eleven commands accept `--json`: `classes list`, `assignments list`, `flashcards list`, `rubrics list`, `rubrics import`, `submissions list`, `help-requests list`, `discussions list`, `reviews list`, `reviews assign`, and `repos list`.
+These commands accept `--json`: `classes list`, `assignments list`, `flashcards list`, `rubrics list`, `rubrics import`, `submissions list`, `help-requests list`, `discussions list`, `reviews list`, `reviews assign`, `repos list`, `exams list`, `exams questions`, `exams scans status`, and `exams scans finalize`.
 
 Every other command rejects it, including `classes show`, `assignments show`, `rubrics export`, and all three export commands.
 
@@ -741,6 +741,125 @@ pawtograder repos copy-after-source-due \
 </Warning>
 
 Per-repository failures are reported and set the exit code to 1 after the run finishes.
+
+## exams
+
+The `exams` command group runs the paper-exam Scans page workflow from a script. The course must have the **Paper exams** feature flag on for write commands.
+
+<Note>
+`exams scans upload` rasterizes the PDF locally using `pdfjs-dist` and requires Node.js 20.16 or later. The `@napi-rs/canvas` optional dependency must also be installed. Read-only commands (`exams list`, `exams questions`, `exams scans status`) have no extra requirements.
+</Note>
+
+### exams list
+
+Lists the paper exams in a class.
+
+```bash
+pawtograder exams list --class cs3500-spring-2026
+```
+
+Takes `-c`/`--class` (required) and `--json` (default `false`).
+
+### exams questions
+
+Lists an exam's questions with their grading rubric check IDs. The check IDs are what you pass to `submissions comments import` to apply grades from outside Pawtograder.
+
+```bash
+pawtograder exams questions --class cs3500-spring-2026 --assignment midterm
+```
+
+Takes `-c`/`--class` (required), `-a`/`--assignment` (required), and `--json` (default `false`).
+
+### exams scans upload
+
+Rasterizes a scanned PDF and uploads it as a new scan batch. The PDF is rendered on your machine at the same scale the web interface uses, and each page is sent as a PNG.
+
+```bash
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-f`, `--file` | required | Scanned PDF file. |
+| `--pages-per-exam` | required | Pages in each student's exam; must match the template. |
+
+Two checks run before any page is uploaded: the `--pages-per-exam` value must match the exam template's page count, and the total page count must be a multiple of `--pages-per-exam`. If either check fails, nothing is uploaded.
+
+If the upload fails partway through, the batch is marked as errored. Run `exams scans upload` again as a new batch — the failed batch cannot be processed.
+
+### exams scans process
+
+Starts OCR and name matching for an uploaded batch.
+
+```bash
+pawtograder exams scans process --class cs3500-spring-2026 --batch 42
+```
+
+Takes `-c`/`--class` (required) and `--batch` (required). Only an `uploaded` or `error` batch can be processed; a batch already in `ocr`, `matching`, `review`, or `completed` is refused.
+
+After processing, confirm the name matches on the exam's **Scans** page in the web interface, then run `exams scans finalize`.
+
+### exams scans status
+
+Shows a batch's state and match counts.
+
+```bash
+pawtograder exams scans status --class cs3500-spring-2026 --batch 42
+```
+
+Takes `-c`/`--class` (required), `--batch` (required), and `--json` (default `false`). Reports the batch status, pages uploaded vs. total, and counts of confirmed, suggested, unmatched, and skipped matches.
+
+### exams scans finalize
+
+Creates submissions for the batch's confirmed exams.
+
+```bash
+# Preview what would be created
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42 --dry-run
+
+# Create the submissions
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--batch` | required | Scan batch ID. |
+| `--dry-run` | `false` | List which pages become which student's submission, without creating anything. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+`--dry-run` prints a plan table showing each scanned exam's action (`create`, `needs_review`, `skipped`, or `already_created`), the matched student, and the page indexes. Only confirmed exams that have not already been finalized become submissions; suggested and unmatched exams are listed as `needs_review`.
+
+#### Full scan workflow
+
+```bash
+# 1. Upload the PDF
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+
+# 2. Start OCR and matching
+pawtograder exams scans process --class cs3500-spring-2026 --batch 42
+
+# 3. Check progress
+pawtograder exams scans status --class cs3500-spring-2026 --batch 42
+
+# 4. Confirm name matches on the Scans page in the web interface
+
+# 5. Preview the finalization plan
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42 --dry-run
+
+# 6. Create submissions
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42
+```
 
 ## Exporting student data
 

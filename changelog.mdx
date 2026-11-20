@@ -6,6 +6,44 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 20, 2026
+
+#### Cloud workspaces
+
+- **Cloud workspaces now manageable from Feature flags** — Instructors can turn the `cloud-workspaces` feature on and off from **Course Settings → Feature flags**. When on, Forgejo becomes a selectable repository host, enrolled students get Forgejo accounts, and students see the **Open in Coder** button on eligible assignments. When off, Forgejo cannot be selected for new assignments and the workspace button is hidden. Existing Forgejo assignments and repositories are unaffected either way ([#1351](https://github.com/pawtograder/platform/pull/1351))
+- **Open in Coder on GitHub assignments** — The **Open in Coder** cloud workspace card now appears on GitHub assignments as well as Forgejo ones, as long as the course has the `cloud-workspaces` flag on. The account-linking prompt names the correct Git host (GitHub or Forgejo) depending on the assignment ([#1350](https://github.com/pawtograder/platform/pull/1350))
+- **Forgejo handout repo created from the assignment form** — Creating a Forgejo assignment with the template handout mode now automatically creates the handout repository on Forgejo, including the grading workflow when the autograder is enabled. Student repositories are created when the assignment is released. A retry is safe: an existing handout is adopted and made private and a template ([#1332](https://github.com/pawtograder/platform/pull/1332))
+
+#### Office hours
+
+- **Browser alerts for escalations and student check-in** — A new opt-in course feature (`office-hours-escalation-alert`) adds two browser alerts: staff receive a notification when a ticket is escalated while their tab is in the background, and students receive one when staff resolve their ticket and the check-in window opens. Neither fires for state already present when the page loaded. Turn it on from **Course Settings → Feature flags** ([#1334](https://github.com/pawtograder/platform/pull/1334))
+- **Office hours queue health metrics** — Five new Prometheus gauges report office hours queue health per class: `pawtograder_office_hours_queues_red`, `pawtograder_office_hours_queues_unstaffed`, `pawtograder_office_hours_queues_active`, `pawtograder_office_hours_requests_waiting`, and `pawtograder_office_hours_oldest_wait_minutes`. The red condition mirrors the staff dashboard exactly, using each class's own thresholds. See [Monitoring and Metrics](/developers/monitoring) ([#1335](https://github.com/pawtograder/platform/pull/1335))
+- **Class-scoped help queue broadcasts restored** — Help queue real-time broadcasts are now correctly scoped to the class, fixing a regression where updates were not reaching clients ([#1162](https://github.com/pawtograder/platform/pull/1162))
+
+#### Exams
+
+- **Exam scan template shown as drawable in setup** — The exam setup wizard now shows that the template is drawable and allows progressing from step 1 to step 2 ([#1271](https://github.com/pawtograder/platform/pull/1271))
+- **Instructor question names in grader view** — The grader view now shows the instructor's question names instead of generic labels ([#1072](https://github.com/pawtograder/platform/pull/1072))
+- **Exam worker status messages** — The exam worker now reports what it is doing during processing ([#1157](https://github.com/pawtograder/platform/pull/1157))
+- **Rebuilding rubric sets assignment max points** — Rebuilding an exam rubric now correctly sets the assignment's max points to the exam total ([#1284](https://github.com/pawtograder/platform/pull/1284))
+
+#### Command line
+
+- **`pawtograder exams` command group** — A new `exams` command group runs the exam Scans page workflow from a script: `exams list`, `exams questions`, `exams scans upload`, `exams scans process`, `exams scans status`, and `exams scans finalize`. The upload command rasterizes the PDF locally and requires Node.js 20.16 or later. See [CLI](/developers/cli) ([#1328](https://github.com/pawtograder/platform/pull/1328))
+
+#### Grading
+
+- **Editable default grader role** — Instructors can now edit the default grader role's capabilities from the Roles page. New custom roles start as a copy of the default grader role (minus any capability the creating instructor does not hold), and the instructor can then turn capabilities on or off. A custom role can now hold fewer capabilities than a plain grader, enabling roles like a "course coordinator" who cannot grade ([#1286](https://github.com/pawtograder/platform/pull/1286))
+
+#### Bug fixes
+
+- **Coder workspace starts on template's active version** — Workspaces now start on the template's active version rather than a stale one ([#1326](https://github.com/pawtograder/platform/pull/1326))
+- **Forgejo job token matches repository regardless of case** — The Forgejo job token matcher now compares repository names case-insensitively ([#1330](https://github.com/pawtograder/platform/pull/1330))
+- **Gemini failures retried** — Transient Gemini API failures are now retried automatically ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **RLS silent refusals show a real error** — When a row-level security policy silently refuses an update or delete, the interface now shows a real error message instead of appearing to succeed ([#1159](https://github.com/pawtograder/platform/pull/1159))
+
 ## August 2026
 
 ### August 19, 2026
