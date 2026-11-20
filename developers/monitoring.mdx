@@ -127,6 +127,22 @@ Limiters are discovered by scanning Redis for `b_*_settings` keys. Each discover
 Discovery is capped per scrape by `METRICS_MAX_BOTTLENECK_LIMITERS` (default 200, hard maximum 5000). Limiters past the cap are dropped from the response with only a `console.warn`, so a deployment that outgrows the cap silently loses series. Redis errors here are non-fatal: they go to Sentry, and the Postgres-backed queue metrics still render.
 </Warning>
 
+### Office hours queue health
+
+Five gauges report the health of office hours queues across all active classes, labelled by `class_id`:
+
+| Metric | Meaning |
+| --- | --- |
+| `pawtograder_office_hours_queues_red` | Active queues at or over the class's waiting or oldest-wait threshold |
+| `pawtograder_office_hours_queues_unstaffed` | Active queues with nobody on shift |
+| `pawtograder_office_hours_queues_active` | Active queues |
+| `pawtograder_office_hours_requests_waiting` | Open requests across those queues |
+| `pawtograder_office_hours_oldest_wait_minutes` | Age of the oldest open request, in minutes |
+
+`pawtograder_office_hours_queues_red` is the primary signal: it mirrors the same red condition the staff dashboard shows, evaluated against each class's own thresholds from **Queue Settings**. A class that raises its threshold stops alerting here and on the dashboard without a deploy.
+
+These gauges are read non-fatally. A deployment that has not applied the migration drops them from the scrape without affecting any other metric.
+
 ### Database health
 
 `pawtograder_vacuum_alert` is `1` per active alert from the `vacuum_health_check` RPC, labelled `check`, `severity`, and `table_name`. When the RPC fails or exceeds its 3-second timeout, the endpoint emits a single series labelled `check="rpc_failed"`, `severity="error"`, `error_type="rpc_error"` instead of the raw error. When there are no alerts it emits `0` with `check="none"`, `severity="ok"`.

@@ -6,6 +6,40 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 20, 2026
+
+#### Cloud workspaces
+
+- **Cloud workspaces now work on GitHub assignments** — The **Open in Coder** button appears on GitHub assignments as well as Forgejo ones, as long as the course has the `cloud-workspaces` flag on and the repository is ready. The account-linking prompt names the correct Git host (GitHub or Forgejo) ([#1350](https://github.com/pawtograder/platform/pull/1350))
+- **Instructors can turn cloud workspaces on and off** — The `cloud-workspaces` flag is now on the **Feature flags** page. Turning it on creates Forgejo accounts for the roster and enables Forgejo as a repository host choice. Turning it off hides **Open in Coder** and stops creating new Forgejo accounts; existing accounts and repositories are kept ([#1351](https://github.com/pawtograder/platform/pull/1351))
+
+#### Office hours
+
+- **Browser alerts for escalations and the student check-in** — When the **Office hours: escalation alerts** flag is on, staff receive a browser notification when a ticket is escalated while their tab is in the background, and students receive an alert when staff resolve their ticket and the check-in window opens. Both alerts are off by default ([#1334](https://github.com/pawtograder/platform/pull/1334))
+- **Office hours queue health metrics** — Five Prometheus gauges now report queue health per class: active queues, red queues, unstaffed queues, open requests, and the oldest wait in minutes. `pawtograder_office_hours_queues_red` mirrors the same condition the staff dashboard shows, evaluated against each class's own thresholds ([#1335](https://github.com/pawtograder/platform/pull/1335))
+- **Class-scoped help queue broadcasts restored** — Real-time broadcasts for help queue events are now correctly scoped to the class, fixing a regression that caused queue updates to be missed ([#1162](https://github.com/pawtograder/platform/pull/1162))
+
+#### Grading
+
+- **Instructors can edit the default grader role** — The default grader role can now be edited from **Course Settings → Grader Roles**. New custom roles start as a copy of the default grader role's capabilities, and the instructor can then turn individual capabilities on or off. A custom role can hold more or fewer capabilities than a plain grader ([#1286](https://github.com/pawtograder/platform/pull/1286))
+- **Rebuilding the rubric sets the assignment's max points** — When a rubric is rebuilt from an exam scan, the assignment's max points are updated to match the exam total ([#1311](https://github.com/pawtograder/platform/pull/1311))
+- **Instructor question names shown in the grader view** — The grader view for paper exams now shows the instructor's question names instead of generic labels ([#1322](https://github.com/pawtograder/platform/pull/1322))
+
+#### Exams
+
+- **Exam template shows drawable status and step 1 can advance to step 2** — The exam setup wizard now shows whether the template is drawable, and step 1 can advance to step 2 ([#1324](https://github.com/pawtograder/platform/pull/1324))
+- **Exam worker status messages** — The exam worker now reports what it is doing while processing a scan batch ([#1321](https://github.com/pawtograder/platform/pull/1321))
+
+#### Bug fixes
+
+- **Workspace starts on the template's active version** — Starting a cloud workspace now uses the template's active version rather than an older one ([#1326](https://github.com/pawtograder/platform/pull/1326))
+- **Forgejo job token repository matching is case-insensitive** — A Forgejo job token is now matched to its repository regardless of case ([#1330](https://github.com/pawtograder/platform/pull/1330))
+- **Forgejo handout repo created from the assignment form** — The Forgejo handout repository is now created when the assignment is saved from the assignment form ([#1332](https://github.com/pawtograder/platform/pull/1332))
+- **Transient Gemini failures are retried** — Transient failures from the Gemini API are now retried automatically ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **RLS silent refusals now show a real error** — When a row-level security policy silently refuses an update or delete, the app now shows a real error message instead of appearing to succeed ([#1159](https://github.com/pawtograder/platform/pull/1159))
+
 ## August 2026
 
 ### August 19, 2026
