@@ -16,7 +16,7 @@ The published package is `@pawtograder/cli` version 0.2.0. Commands and flags ma
 
 ## Install and log in
 
-You need Node.js 20 or later. The `repos` commands and assignment copies also need `git` and SSH access to your course's GitHub organization.
+You need Node.js 20.16 or later. The `repos` commands and assignment copies also need `git` and SSH access to your course's GitHub organization. The `exams scans upload` command additionally requires Node.js 20.16 for PDF rasterization.
 
 <Steps>
 <Step title="Install the CLI">
@@ -271,9 +271,38 @@ The CLI exits `0` on success and `1` on any failure, and prints the reason. A fe
 - **Timeouts on long operations.** Set `PAWTOGRADER_HTTP_TIMEOUT_MS=600000` for a ten-minute limit. For artifact imports, a smaller `--batch-size` helps more than a longer timeout.
 - **Git or SSH failures.** Check `ssh -T git@github.com` and your membership in the course's GitHub organization, then retry with `--concurrency 1`.
 
+## Run the paper-exam scan workflow
+
+When your course has paper exams enabled, `pawtograder exams scans` runs the same steps as the Scans page. Confirming name matches still requires the web interface, since someone has to look at the name crops.
+
+```bash
+# 1. Upload the scanned PDF (rasterizes locally; requires Node 20.16+)
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+
+# 2. Start OCR and name matching
+pawtograder exams scans process --class cs3500-spring-2026 --batch 42
+
+# 3. Check progress
+pawtograder exams scans status --class cs3500-spring-2026 --batch 42
+
+# 4. After confirming matches on the Scans page, preview then finalize
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42 --dry-run
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42
+```
+
+`exams questions` lists each question's grading rubric check ID, so grades from an external source can be applied to exam submissions with `submissions comments import`.
+
+```bash
+pawtograder exams questions --class cs3500-spring-2026 --assignment midterm
+```
+
 ## More commands
 
-The [CLI reference](/developers/cli) documents the rest of the command surface, including bulk student-repository maintenance (`repos sync-grade-workflow` and `repos copy-after-source-due`), batch import of grading comments and artifacts, assignment deletion, `submissions export`, `assessment deanonymize`, and the exact flags, defaults, and error messages for everything on this page.
+The [CLI reference](/developers/cli) documents the rest of the command surface, including bulk student-repository maintenance (`repos sync-grade-workflow` and `repos copy-after-source-due`), batch import of grading comments and artifacts, assignment deletion, `submissions export`, `assessment deanonymize`, the full `exams` command group, and the exact flags, defaults, and error messages for everything on this page.
 
 ```bash
 pawtograder --help
