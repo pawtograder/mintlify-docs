@@ -100,6 +100,27 @@ What a flag does not do is grant or withhold permission. Turning a module off is
 When you genuinely need material withheld — an assignment still being written, a survey you are not ready to run, a deck nobody should see yet — act on the material, not the menu. Unpublish it, hold it behind its release date, or delete it. Those are the controls that decide who may read something; a flag decides who can find it.
 </Warning>
 
+### Cloud workspaces
+
+When `cloud-workspaces` is on, code assignments can use Forgejo instead of GitHub as their repository host (chosen per assignment), everyone enrolled in the course gets a Forgejo account, and students see an **Open in Coder** button that opens their repository in a cloud workspace. Turning it on creates the Forgejo accounts right away.
+
+When off, Forgejo cannot be chosen for new assignments, **Open in Coder** is hidden and workspaces cannot be opened, and no new Forgejo accounts or student repositories are created. Nothing is deleted: Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded.
+
+<Warning>
+Turning `cloud-workspaces` off does not remove existing Forgejo accounts or repositories. Students who enroll after you turn it off will not get a Forgejo account or repository until you turn it back on.
+</Warning>
+
+### Office hours escalation alerts
+
+When `office-hours-escalation-alert` is on, two browser alerts fire:
+
+- **Staff** receive a browser notification when a ticket's escalation count goes up while they have an office hours page open (tab in the background only). Multiple escalations in one update produce one notification naming the count.
+- **Students** receive a browser notification or an in-page banner when staff resolve their ticket and the check-in window opens.
+
+Neither alert fires for state that was already present when the page loaded. When off, escalation and check-in work as they do now, with no alerts.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#escalation-alerts) for more detail.
+
 The staff search palette is gated alongside the menu, with one exception: its **Manage office hours** entry stays in the palette after you turn `office-hours` off, even though the nav entry is gone. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 
 ## What happens to data you turn off
