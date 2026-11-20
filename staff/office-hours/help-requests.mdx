@@ -93,6 +93,14 @@ Press **Watch** on a request you are helping. Only the student who filed a reque
 
 Browser notifications, the sound alert, the flashing tab title, and the favicon badge fire only while the tab is in the background, and only for other people's messages. Configure them from **Notification Settings** in your user menu.
 
+### Escalation alerts
+
+When the `office-hours-escalation-alert` course feature flag is on, staff receive an additional browser notification when a ticket's escalation count goes up. The alert fires only for escalations that happen while the page is open — a queue already full of escalated tickets when the page loads stays quiet. Multiple escalations in one update are aggregated into a single notification rather than one per ticket.
+
+Students on the same flag receive a browser notification or an in-page banner when staff resolve their ticket and the check-in window opens. Both alerts fire only while the tab is in the background; a student already looking at their request page sees an in-page message instead.
+
+Turn the flag on under **Course Settings → Feature flags**. See [Feature flags](/staff/feature-flags#office-hours-escalation-alerts) for the full description.
+
 ## AI help
 
 On a request, the **Get AI help** button copies a prompt to your clipboard that names the request, the class, and any referenced submission, and tells an assistant which Pawtograder MCP tools to call for the details. Paste it into an MCP-connected assistant. No model is called from Pawtograder itself, and if you have no API token yet the button opens setup instructions instead. Only instructors and graders see it. See [AI Assistance](/staff/ai-assistance) for the server, the tokens, and the available tools.
