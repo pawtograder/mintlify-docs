@@ -271,9 +271,34 @@ The CLI exits `0` on success and `1` on any failure, and prints the reason. A fe
 - **Timeouts on long operations.** Set `PAWTOGRADER_HTTP_TIMEOUT_MS=600000` for a ten-minute limit. For artifact imports, a smaller `--batch-size` helps more than a longer timeout.
 - **Git or SSH failures.** Check `ssh -T git@github.com` and your membership in the course's GitHub organization, then retry with `--concurrency 1`.
 
+## Run paper exam scan batches
+
+When a course has paper exams enabled, `exams scans` runs the Scans page workflow from a script. Confirming name matches still requires the web Scans page.
+
+```bash
+# Upload a scanned PDF (requires Node.js 20.16+)
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+
+# Start OCR and name matching
+pawtograder exams scans process --class cs3500-spring-2026 --batch 42
+
+# Check progress
+pawtograder exams scans status --class cs3500-spring-2026 --batch 42
+
+# Confirm matches on the Scans page, then preview and finalize
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42 --dry-run
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42
+```
+
+`exams questions` lists each question's grading rubric check ID, so grades from outside Pawtograder can be applied to exam submissions with `submissions comments import`.
+
 ## More commands
 
-The [CLI reference](/developers/cli) documents the rest of the command surface, including bulk student-repository maintenance (`repos sync-grade-workflow` and `repos copy-after-source-due`), batch import of grading comments and artifacts, assignment deletion, `submissions export`, `assessment deanonymize`, and the exact flags, defaults, and error messages for everything on this page.
+The [CLI reference](/developers/cli) documents the rest of the command surface, including bulk student-repository maintenance (`repos sync-grade-workflow` and `repos copy-after-source-due`), batch import of grading comments and artifacts, assignment deletion, `submissions export`, `assessment deanonymize`, paper exam commands, and the exact flags, defaults, and error messages for everything on this page.
 
 ```bash
 pawtograder --help
