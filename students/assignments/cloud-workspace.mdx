@@ -1,0 +1,53 @@
+---
+title: "Cloud Workspace (Open in Coder)"
+description: "Open your assignment repository in a browser-based VS Code editor with your course's toolchain pre-installed"
+icon: "cloud"
+---
+
+# Cloud Workspace
+
+Some courses offer a **cloud workspace** — a browser-based VS Code editor that runs on the course's servers with the same Java, Python, Node, and other tools the autograder uses. When it is available for an assignment, an **Open in Coder** card appears on your assignment page.
+
+<Note>
+Cloud workspaces are only available when your instructor has enabled the **cloud-workspaces** feature for the course. If you do not see the card, your course is not using this feature.
+</Note>
+
+## Opening your workspace
+
+1. Go to your assignment page.
+2. Find the **Open in Coder** card below the assignment description.
+3. Click **Open workspace**. Pawtograder creates your workspace and clones your assignment repository into it.
+
+The card walks through three startup steps:
+
+| Step | What it means |
+| --- | --- |
+| **Build** | The workspace container is starting. |
+| **Clone** | Your assignment repository is being cloned into the workspace. |
+| **Editor** | VS Code (code-server) is starting up. |
+
+Once all three steps are complete, the card shows an **Open in VS Code** link. Click it to open the editor in a new tab.
+
+## Linking your Forgejo account
+
+The workspace clones your repository using your Forgejo account. If you have not linked Forgejo to Coder yet, the card shows a **Link Forgejo account** button. Click it to go through the one-time authorization flow, then return to the assignment page. The card re-checks your link status when you come back.
+
+## Workspace lifecycle
+
+- **Automatic stop** — Your workspace stops automatically after one hour of inactivity (no open browser tab connected to it). Your files on the home volume are preserved.
+- **Restart** — If your workspace stopped or encountered an error, click **Open workspace** again. The card restarts it and your files are kept.
+- **Restarting state** — If the workspace is in the middle of restarting, the card shows **Restarting**. Wait a moment and it will update automatically.
+
+## Pushing your work
+
+The workspace is pre-configured to push to your assignment repository using your Forgejo credentials. Use the VS Code Source Control panel or the terminal (`git push`) as you normally would. Pushes trigger the autograder the same way a local push does.
+
+## Troubleshooting
+
+| What you see | What to do |
+| --- | --- |
+| **Clone failed** | The card shows the reason. Check that your Forgejo account is linked (see above) and try again. |
+| **Account conflict** | Your Coder account was created with a different email address. Contact your course staff. |
+| **Open workspace does nothing** | You may be viewing the assignment as a staff member. Cloud workspaces are only available to enrolled students. |
+
+If the workspace keeps failing to start, contact your course staff and describe which step failed and any error message shown.

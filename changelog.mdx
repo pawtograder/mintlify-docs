@@ -6,6 +6,51 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 20, 2026
+
+#### Cloud workspaces (Open in Coder)
+
+- **Open in Coder on the assignment page** — Students on courses with the **cloud-workspaces** feature can now open their assignment repository in a browser-based VS Code editor directly from the assignment page. The card walks through three startup steps (build, clone, editor) and shows the editor link once the workspace is ready. Failed steps show a reason and a **Retry** button. See [Cloud Workspace](/students/assignments/cloud-workspace) ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Workspace image with the runner's toolchain** — Coder workspaces now use a dedicated `coder-workspace` image built on the same base as the autograder runner, so Java 21, Maven, Python 3, Node 22, and git behave the same in a workspace as in the grader ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Forgejo token through a Coder secret** — The Forgejo authentication token used by workspace clones is now provisioned as a Coder secret rather than through external auth, simplifying the setup for new deployments ([#1303](https://github.com/pawtograder/platform/pull/1303))
+- **External auth slot for GitHub repositories** — Coder workspaces on GitHub-backed assignments now use the external auth slot for repository access ([#1305](https://github.com/pawtograder/platform/pull/1305))
+
+#### Forgejo integration (cloud-workspaces courses)
+
+- **Forgejo student and group repositories** — For courses with the **cloud-workspaces** feature, Pawtograder now automatically creates Forgejo repositories for each student (individual assignments) and each group (group assignments) from the handout template when an assignment is released. The reconciler runs hourly and is triggered on enrollment and group changes. See [Assignment configuration](/staff/assignments/configuration#forgejo-repositories-cloud-workspaces-courses) ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo grading** — Submissions from Forgejo repositories are now cloned, graded, and rerun through Forgejo's API. Staff reruns dispatch a Forgejo workflow tag. The actor of a Forgejo job is matched to staff through `git_accounts` ([#1239](https://github.com/pawtograder/platform/pull/1239))
+- **Forgejo handout repo created from the assignment form** — The Forgejo handout repository is now created automatically when you save a Forgejo assignment, rather than requiring a separate manual step ([#1332](https://github.com/pawtograder/platform/pull/1332))
+- **Forgejo username on the roster** — The **Enrollments** roster shows a **Forgejo Username** column for cloud-workspaces courses, with live updates as accounts are created ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Repository names unique per provider** — Repository names are now unique per git provider (GitHub or Forgejo), so the same `org/repo` name can exist on both hosts without conflict ([#1238](https://github.com/pawtograder/platform/pull/1238))
+
+#### Grading
+
+- **Edit the default grader role** — Instructors can now edit the default grader role from **Course Settings → Grading Conflicts → Roles**. A new role is created as a copy of the current default, so customizing the default first saves time when you need multiple custom roles. See [Staff overview](/staff/intro#editing-the-default-grader-role) ([#1286](https://github.com/pawtograder/platform/pull/1286))
+
+#### Exam scanning
+
+- **Scan progress and finalize tracking** — The batch card now shows a live status line while pages are being OCR'd, matched, or finalized (with counts), and the page follows the batch through to completion without a manual reload. Match controls and the **Create submissions** button are disabled while finalization is in progress ([#1315](https://github.com/pawtograder/platform/pull/1315))
+- **Exam scan ownership validation** — The exam worker now validates that each scan page belongs to the batch being processed and that the scanned exam's batch, exam, and course are consistent. A scan swapped in from another course is rejected before any submission is created ([#1133](https://github.com/pawtograder/platform/pull/1133))
+- **Matching cannot change confirmed exams** — Re-processing a batch can no longer regroup pages that belong to a confirmed or finalized exam. A refused regroup is dead-lettered with a message on the batch explaining what to undo ([#1133](https://github.com/pawtograder/platform/pull/1133))
+
+#### Command line
+
+- **`exams` command group** — The CLI gains an `exams` command group for managing paper exam scan batches: `exams list-batches` and `exams reprocess-batch`. See [CLI Interface](/developers/cli#exams) ([#1325](https://github.com/pawtograder/platform/pull/1325))
+
+#### Bug fixes
+
+- **Office hours help queue broadcasts restored** — Class-scoped broadcasts for the help queue are working again after a regression that caused queue updates to not reach all connected staff ([#1082](https://github.com/pawtograder/platform/pull/1082))
+- **Workspace starts on the template's active version** — Opening a workspace now always uses the template's currently active version, fixing a bug where a workspace could be created on a stale template version ([#1326](https://github.com/pawtograder/platform/pull/1326))
+- **Forgejo job token matched case-insensitively** — A Forgejo job token's repository is now matched regardless of case, fixing grading failures when the repository name casing differed between Forgejo and Pawtograder ([#1330](https://github.com/pawtograder/platform/pull/1330))
+- **Transient Gemini failures retried** — The AI assistance backend now retries transient Gemini API failures instead of surfacing them as errors ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **RLS silent update/delete errors surfaced** — When a database row-level security policy silently refuses an update or delete, Pawtograder now shows a real error message instead of appearing to succeed ([#1159](https://github.com/pawtograder/platform/pull/1159))
+
+#### Infrastructure
+
+- **Nightly Forgejo and Coder backups** — The Helm chart now backs up Forgejo and Coder databases and Forgejo's repository volume nightly alongside Pawtograder's own dump. The restore drill verifies each backup and runs `git fsck` on every Forgejo repository in the archive ([#1192](https://github.com/pawtograder/platform/pull/1192))
+
 ## August 2026
 
 ### August 19, 2026
