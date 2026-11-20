@@ -164,6 +164,16 @@ The repository configuration has five options.
 | **No repository — students upload submission files directly** | uncommon | No GitHub repository at all. The assignment page shows an upload control instead of a repository box, and what the student uploads is the submission. |
 | **No submission — graded manually, no artifact** | uncommon | Nothing to hand in. The assignment page shows a *"No submission required"* notice telling the student their instructor will grade the work directly — a presentation or oral exam, for example. |
 
+### Forgejo repositories (cloud-workspaces courses)
+
+Courses with the **cloud-workspaces** feature enabled use a self-hosted [Forgejo](https://forgejo.org) instance instead of GitHub for student repositories. The assignment form gains a **Forgejo org** field and a **Handout template repo** field that point at the Forgejo instance. When the assignment is released, Pawtograder's reconciler automatically creates one repository per student (or per group) from the handout template, grants the student write access, and records the repository. Students see a link to their Forgejo repository on the assignment page instead of a GitHub link.
+
+The reconciler runs hourly and is also triggered whenever a student joins the course or a group membership changes. A student's Forgejo username appears in the **Enrollments** roster under the **Forgejo Username** column once their account has been created.
+
+<Note>
+Forgejo assignments use the same autograder flow as GitHub assignments. The `grade.yml` workflow hash is derived from the handout's `.github/workflows/grade.yml` at release time, and submissions are cloned from Forgejo rather than GitHub. Staff reruns dispatch a Forgejo workflow tag instead of a GitHub Actions dispatch.
+</Note>
+
 Notes that will save you a support ticket:
 
 - **Fork from prior assignment requires a source assignment**, and the
