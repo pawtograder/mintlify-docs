@@ -181,6 +181,12 @@ Notes that will save you a support ticket:
   leftovers and ignores pushes to them, so students who push get silence
   rather than an error. Set the mode before the release date.
 
+### Forgejo handout repository
+
+When your course has cloud workspaces enabled (`cloud-workspaces` feature flag), the assignment form includes a **Forgejo handout repository** field. Enter the `owner/name` of the handout repository on your Forgejo instance. Pawtograder uses this repository as the template when creating student repositories on Forgejo, and reads its `.github/workflows/grade.yml` to set the workflow hash for grading.
+
+The field is only shown when the `cloud-workspaces` flag is on. Leave it empty if the assignment does not use Forgejo repositories.
+
 ### Autograder
 
 **Enable autograder (GitHub Actions)** is checked by default, and

@@ -125,6 +125,46 @@ Any single file over 50 MB is rejected with an error naming the file and its siz
 Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Give binary artifacts a conventional file extension — a binary with an unusual extension or none at all is stored as text, which corrupts it.
 </Note>
 
+## Cloud workspaces (Open in Coder)
+
+If your course has cloud workspaces enabled, a **Workspace** card appears on your assignment page. It lets you open your assignment repository in a browser-based VS Code editor without installing anything locally.
+
+### Starting your workspace
+
+Click **Open workspace** on the card. Pawtograder creates a workspace for you, clones your assignment repository into it, and opens VS Code in your browser once it is ready. The card shows the startup steps as they complete:
+
+| Step | What it means |
+| --- | --- |
+| **Build** | The workspace container is starting. |
+| **Clone** | Your repository is being cloned into the workspace. |
+| **Editor** | VS Code is starting. |
+
+Once all three steps are done, the card shows an **Open in VS Code** link. Click it to open the editor.
+
+### Linking your Forgejo account
+
+The first time you open a workspace, you may see a **Link your Forgejo account** prompt. Click it to authorize Pawtograder to clone your repository on your behalf. After you authorize, return to the assignment page and the workspace will continue starting.
+
+### Restarting a workspace
+
+Workspaces stop automatically after an hour of inactivity. Click **Open workspace** again to restart it. Your files are preserved on the workspace's home volume across restarts.
+
+If a workspace fails to start (for example, because a clone failed), click **Retry** on the card. The workspace restarts and tries again.
+
+### Workspace states
+
+| State | What to do |
+| --- | --- |
+| **Starting** | Wait for the steps to complete. |
+| **Restarting** | A previous start failed; the workspace is restarting automatically. |
+| **Failed** | Click **Retry** to restart. The card shows which step failed and why. |
+| **Needs linking** | Click the link to authorize your Forgejo account, then return to this page. |
+| **Account conflict** | Contact your course staff. |
+
+<Note>
+The **Open in Coder** card is only shown to students, not to staff viewing the course as a student. Staff members who want to test a workspace should log in as a student.
+</Note>
+
 ## Assignment Leaderboard
 
 If your instructor has enabled the leaderboard for an assignment, it appears as a panel in the right-hand sidebar of the assignment page, listing the top ten entries. Assignments without it show no panel at all. See [Leaderboards](/students/assignments/leaderboard) for how the ranking works.

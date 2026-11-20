@@ -675,6 +675,54 @@ Allocation honors `grading_conflicts` and never assigns anyone their own submiss
 
 The report distinguishes new assignments from `retargeted_stale` ones, where an existing assignment was repointed at a newer submission and so is not new load on that grader. It separately reports `skipped_already_assigned`, excluded stubs, excluded dropped students, stale collisions, and any submission left with no eligible grader after conflicts.
 
+## exams
+
+The `exams` group manages paper exam scan batches. All actions require `-c`/`--class` and `-a`/`--assignment`.
+
+### exams list
+
+Lists scan batches for an assignment.
+
+```bash
+pawtograder exams list --class cs3500-spring-2026 --assignment midterm
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams show
+
+Shows details for one scan batch.
+
+```bash
+pawtograder exams show <batch-id> --class cs3500-spring-2026 --assignment midterm
+```
+
+Takes a positional `batch-id` plus `-c`/`--class` and `-a`/`--assignment` (both required). No `--json`.
+
+### exams process
+
+Triggers OCR processing for a scan batch.
+
+```bash
+pawtograder exams process <batch-id> --class cs3500-spring-2026 --assignment midterm
+```
+
+Takes a positional `batch-id` plus `-c`/`--class` and `-a`/`--assignment` (both required).
+
+### exams create-submissions
+
+Creates exam submissions from a matched scan batch.
+
+```bash
+pawtograder exams create-submissions <batch-id> --class cs3500-spring-2026 --assignment midterm
+```
+
+Takes a positional `batch-id` plus `-c`/`--class` and `-a`/`--assignment` (both required).
+
 ## repos
 
 <Warning>
