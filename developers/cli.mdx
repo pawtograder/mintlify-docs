@@ -27,7 +27,7 @@ npm install -g @pawtograder/cli
 pawtograder --help
 ```
 
-Node.js 20 or later is required. The `repos` commands and `assignments copy` also need `git` on your `PATH` and working SSH access to the course's GitHub organization; `repos copy-after-source-due` additionally needs `rsync`.
+Node.js 20.16 or later is required. The `repos` commands and `assignments copy` also need `git` on your `PATH` and working SSH access to the course's GitHub organization; `repos copy-after-source-due` additionally needs `rsync`. The `exams scans upload` command requires Node.js 20.16 specifically because it uses `process.getBuiltinModule` for PDF rasterization via pdfjs-dist.
 
 ### Running from the platform repository
 
@@ -741,6 +741,105 @@ pawtograder repos copy-after-source-due \
 </Warning>
 
 Per-repository failures are reported and set the exit code to 1 after the run finishes.
+
+## exams
+
+The `exams` command group runs the paper exam Scans page workflow from a script. Write commands require the course's **Exams** feature flag to be on.
+
+### exams list
+
+```bash
+pawtograder exams list --class cs3500-spring-2026
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams questions
+
+Lists each exam question with its grading rubric check IDs. Use the check IDs with `submissions comments import` to apply grades from an external source.
+
+```bash
+pawtograder exams questions --class cs3500-spring-2026 --assignment midterm
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams scans upload
+
+Rasterizes a scanned PDF on your machine and uploads it as a new scan batch. Requires Node.js 20.16 or later.
+
+```bash
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-f`, `--file` | required | Scanned PDF file. |
+| `--pages-per-exam` | required | Pages in each student's exam; must match the template. |
+
+The command refuses a `--pages-per-exam` that does not match the template before uploading anything, and refuses a total page count that is not a multiple of `--pages-per-exam`.
+
+### exams scans process
+
+Starts OCR and name matching for an uploaded batch.
+
+```bash
+pawtograder exams scans process --class cs3500-spring-2026 --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+Only a batch in `uploaded` or `error` status can be processed. Confirming name matches must be done on the Scans page in the web app.
+
+### exams scans status
+
+Shows a batch's state and how many exams are matched.
+
+```bash
+pawtograder exams scans status --class cs3500-spring-2026 --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams scans finalize
+
+Creates submissions for the batch's confirmed exams.
+
+```bash
+# Preview first
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42 --dry-run
+
+# Then create submissions
+pawtograder exams scans finalize --class cs3500-spring-2026 --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--dry-run` | `false` | List which pages become which student's submission, without creating anything. |
+| `--json` | `false` | Emit the raw JSON response. |
 
 ## Exporting student data
 
