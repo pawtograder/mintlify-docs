@@ -742,6 +742,126 @@ pawtograder repos copy-after-source-due \
 
 Per-repository failures are reported and set the exit code to 1 after the run finishes.
 
+## exams
+
+The `exams` command group runs the exam Scans page workflow from a script. The course must have the **Paper exams** feature enabled (`exams` course feature flag). Read commands work for any staff member; write commands (`scans upload`, `scans process`, `scans finalize`) require the exams feature to be on.
+
+<Note>
+`exams scans upload` renders the PDF locally using `pdfjs-dist` and requires Node.js 20.16 or later. All other `exams` commands work on Node.js 20 or later.
+</Note>
+
+### exams list
+
+Lists the paper exams in a class.
+
+```bash
+pawtograder exams list --class cs3500-spring-2026
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams questions
+
+Lists an exam's questions in tree order, with the grading rubric check IDs linked to each question. Use the check IDs with `submissions comments import` to apply grades from outside Pawtograder.
+
+```bash
+pawtograder exams questions \
+  --class cs3500-spring-2026 \
+  --assignment midterm
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams scans upload
+
+Rasterizes a scanned PDF locally and uploads it as a new scan batch. The PDF is rendered at 2× scale on your machine; each page is sent as a PNG.
+
+```bash
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-f`, `--file` | required | Scanned PDF file path. |
+| `--pages-per-exam` | required | Pages in each student's exam; must match the exam template. |
+
+Two checks run before any page is uploaded: the `--pages-per-exam` value must match the exam template's page count, and the total page count must be a multiple of `--pages-per-exam`. If either check fails, nothing is uploaded.
+
+If the upload fails partway, the batch is marked as errored. Upload the PDF again as a new batch rather than retrying the same one.
+
+### exams scans process
+
+Starts OCR and name matching for an uploaded batch.
+
+```bash
+pawtograder exams scans process \
+  --class cs3500-spring-2026 \
+  --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID (from `exams scans upload` output or `exams scans status`). |
+| `--json` | `false` | Emit the raw JSON response. |
+
+Only a batch in `uploaded` or `error` status can be processed. After processing starts, confirm the name matches on the exam's Scans page in the web app before running `finalize`.
+
+### exams scans status
+
+Shows a batch's state and how many exams are matched.
+
+```bash
+pawtograder exams scans status \
+  --class cs3500-spring-2026 \
+  --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams scans finalize
+
+Creates submissions for the batch's confirmed exams. Use `--dry-run` to preview the plan before writing anything.
+
+```bash
+# Preview
+pawtograder exams scans finalize \
+  --class cs3500-spring-2026 \
+  --batch 42 \
+  --dry-run
+
+# Create submissions
+pawtograder exams scans finalize \
+  --class cs3500-spring-2026 \
+  --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--dry-run` | `false` | List which pages become which student's submission, without creating anything. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+The dry-run table shows each scanned exam's index, planned action (`create`, `needs_review`, `skipped`, or `already_created`), match status, student name, and page indexes. Only confirmed exams that have not already been finalized become submissions; suggested and unmatched exams are listed as `needs_review`.
+
 ## Exporting student data
 
 Three commands write course data to disk: `assessment export`, `submissions export`, and `assessment deanonymize`. All three are gated by the same `--identity` contract, and all three can write student personal data. Read this section before running any of them.
