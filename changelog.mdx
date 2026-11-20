@@ -6,6 +6,41 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 20, 2026
+
+#### Office hours
+- **Queue health cards, per-class thresholds, and turn alerts** — When the new `office-hours-queue-health` course flag is on, each queue card on the **Working** page shows a waiting count, the oldest wait time, and an **Unstaffed** badge. Queues that need attention sort to the top. Instructors set red-queue thresholds under **Settings → Queue Settings**, and staff receive one browser notification when a queue crosses them. A second flag, `office-hours-turn-alert`, sends students a browser notification when a TA picks up their request or they move to next in line. Shift end now returns any in-progress requests to the queue automatically. See [Running Office Hours](/staff/office-hours/running-office-hours#queue-health-cards) and [Queue Configuration](/staff/office-hours/queue-configuration#queue-health-thresholds) ([#1287](https://github.com/pawtograder/platform/pull/1287))
+
+#### Assignments
+- **Editable default grader role** — Instructors can now change the default GitHub repository role granted to graders, and creating a new custom role starts from a copy of the current default. See [Repository Permissions](/staff/assignments/repository-permissions#grader-repository-role) ([#1286](https://github.com/pawtograder/platform/pull/1286))
+
+### November 19, 2026
+
+#### Assignments
+- **Forgejo handout repo created from the assignment form** — For courses using Forgejo (cloud workspaces), saving the assignment form now creates the Forgejo handout repository from the specified template and sets the `grade.yml` workflow hash automatically ([#1253](https://github.com/pawtograder/platform/pull/1253))
+
+#### Cloud workspaces (Forgejo + Coder)
+- **Open in Coder on the assignment page** — Students with a Forgejo repository for an assignment now see an **Open in Coder** card on their assignment page. The card walks through the workspace startup steps (build, clone, editor) and opens VS Code once the workspace is ready. Staff viewing as a student do not see the card. Workspaces stop automatically after one hour without use ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Forgejo student and group repos provisioned automatically** — The Forgejo reconciler creates one repository per student (or per group) for released Forgejo assignments, grants write access, and records the repo. Repository names are unique per provider, start with the class slug, and are lowercased to match Forgejo's case-insensitive matching. The reconciler also sets the `grade.yml` workflow hash from the handout ([#1238](https://github.com/pawtograder/platform/pull/1238))
+- **Forgejo submissions graded end-to-end** — Submissions from Forgejo repositories are now cloned, matched to staff, and graded through Forgejo's API. Staff can rerun grading for a Forgejo repo from the submission page. Forgejo job tokens are accepted by the grading pipeline ([#1239](https://github.com/pawtograder/platform/pull/1239))
+- **Forgejo workspace tokens** — The chart can mint and revoke Forgejo workspace tokens, with the settings needed for the Helm chart ([#1302](https://github.com/pawtograder/platform/pull/1302))
+- **Coder workspaces on GitHub repositories** — The Coder workspace template now uses an external auth slot for Forgejo and edge functions for workspace management ([#1305](https://github.com/pawtograder/platform/pull/1305))
+
+#### Command line
+- **`pawtograder exams` command group** — New `exams list`, `exams show`, `exams process`, and `exams create-submissions` commands manage exam scan batches from the CLI. See [CLI](/developers/cli#exams) ([#1325](https://github.com/pawtograder/platform/pull/1325))
+
+#### Exams
+- **Scan progress and finalize follow-through** — The batch card now shows OCR and finalization progress in words. After **Create submissions**, the page follows the batch to `completed` automatically without a manual reload. The **Create** button stays disabled until the batch leaves the state it was clicked in, and polls skip ticks while the tab is hidden ([#1262](https://github.com/pawtograder/platform/pull/1262))
+- **Exam scan ownership validated** — The exam worker now validates that each scan page belongs to the batch being processed, that a scanned exam's batch, exam, and course all match one batch row, and that only matching can change which pages a confirmed exam holds. Staff cannot change a matched page's scan object or OCR data after matching ([#1133](https://github.com/pawtograder/platform/pull/1133))
+
+#### Bug fixes
+- **Transient Gemini failures retried** — The AI grading assistant now retries transient Gemini API failures instead of failing the request ([#1132](https://github.com/pawtograder/platform/pull/1132))
+- **RLS silent update/delete errors surfaced** — When a row-level security policy silently refuses an update or delete, the platform now shows a real error instead of appearing to succeed ([#1159](https://github.com/pawtograder/platform/pull/1159))
+- **Workspace starts on the template's active version** — Starting a Coder workspace now uses the template's active version rather than an older pinned version ([#1326](https://github.com/pawtograder/platform/pull/1326))
+- **Forgejo job token repository match is case-insensitive** — A Forgejo job token's repository is now matched regardless of case ([#1330](https://github.com/pawtograder/platform/pull/1330))
+
 ## August 2026
 
 ### August 19, 2026
