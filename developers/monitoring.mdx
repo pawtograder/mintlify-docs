@@ -127,6 +127,26 @@ Limiters are discovered by scanning Redis for `b_*_settings` keys. Each discover
 Discovery is capped per scrape by `METRICS_MAX_BOTTLENECK_LIMITERS` (default 200, hard maximum 5000). Limiters past the cap are dropped from the response with only a `console.warn`, so a deployment that outgrows the cap silently loses series. Redis errors here are non-fatal: they go to Sentry, and the Postgres-backed queue metrics still render.
 </Warning>
 
+### Office hours queue health
+
+Five gauges per class report the health of office hours queues. They are sourced from `metrics_office_hours_queue_health()`, a `SECURITY DEFINER` function that mirrors the per-class `office_hours_queue_health` RPC used by the staff dashboard, so the metric and the dashboard cannot disagree.
+
+| Metric | Meaning |
+| --- | --- |
+| `pawtograder_office_hours_queues_red` | Active queues at or over the class's waiting or oldest-wait threshold — **the one to alert on** |
+| `pawtograder_office_hours_queues_unstaffed` | Active queues with nobody on shift |
+| `pawtograder_office_hours_queues_active` | Active queues in the class |
+| `pawtograder_office_hours_requests_waiting` | Open requests across those queues |
+| `pawtograder_office_hours_oldest_wait_minutes` | Age of the oldest open request, in minutes |
+
+All five are labelled by `class_id`. Thresholds come from each class's own `office_hours_health_thresholds` (set in Queue Settings), so a class that deliberately runs a long queue raises its own limit and stops alerting without a deploy.
+
+The scrape reads this function non-fatally: a deployment that has not applied migration `20261120130100` drops these five gauges and keeps every other metric in the response.
+
+<Tip>
+`pawtograder_office_hours_queues_red > 0` sustained for 15 minutes is the suggested alert expression. A queue that is briefly red during a rush is normal; only a sustained one is worth attention. See the operations playbook in the platform repository at `docs/operations/office-hours-queue-health.md` for triage guidance.
+</Tip>
+
 ### Database health
 
 `pawtograder_vacuum_alert` is `1` per active alert from the `vacuum_health_check` RPC, labelled `check`, `severity`, and `table_name`. When the RPC fails or exceeds its 3-second timeout, the endpoint emits a single series labelled `check="rpc_failed"`, `severity="error"`, `error_type="rpc_error"` instead of the raw error. When there are no alerts it emits `0` with `check="none"`, `severity="ok"`.
