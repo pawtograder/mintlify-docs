@@ -78,6 +78,16 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Cloud workspaces
+
+This flag requires a Coder deployment configured for the Pawtograder instance. With no Coder deployment connected it has no effect in either position.
+
+While it is on, students see an **Open in Coder** card on the assignment page for any assignment that has a Forgejo repository. The card walks through the workspace startup steps — build, repository clone, and editor — and offers an **Open in VS Code** link once the workspace is ready. While it is off, the card is hidden and no workspace is started.
+
+<Note>
+Cloud workspaces is off by default and must be explicitly enabled by an instructor. The flag is managed from **Course Settings → Feature flags**. Instructors can turn it on and off at any time; existing workspaces are not deleted when the flag is turned off.
+</Note>
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
