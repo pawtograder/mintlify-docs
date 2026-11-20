@@ -742,6 +742,135 @@ pawtograder repos copy-after-source-due \
 
 Per-repository failures are reported and set the exit code to 1 after the run finishes.
 
+## exams
+
+The `exams` command group runs the paper-exam Scans page workflow from a script. The course must have the `exams` feature flag on. Confirming name matches stays on the Scans page, since someone has to look at the name crops.
+
+<Note>
+`exams scans upload` rasterizes the PDF locally with `pdfjs-dist` and requires Node.js 20.16 or later. All other `exams` commands work on any supported Node version.
+</Note>
+
+### exams list
+
+Lists the paper exams in a class.
+
+```bash
+pawtograder exams list --class cs3500-spring-2026
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams questions
+
+Lists each question in an exam with its grading rubric check IDs. Use the check IDs with `submissions comments import` to apply grades from outside Pawtograder.
+
+```bash
+pawtograder exams questions --class cs3500-spring-2026 --assignment midterm
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams scans upload
+
+Rasterizes a scanned PDF locally and uploads it as a new scan batch. The PDF is rendered page by page on your machine and each page is sent as a PNG. The command refuses a `--pages-per-exam` that does not match the exam template before uploading anything, and refuses a page count that is not a multiple of `--pages-per-exam`.
+
+```bash
+pawtograder exams scans upload \
+  --class cs3500-spring-2026 \
+  --assignment midterm \
+  --file scans.pdf \
+  --pages-per-exam 2
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-a`, `--assignment` | required | Assignment ID or slug. |
+| `-f`, `--file` | required | Scanned PDF file. |
+| `--pages-per-exam` | required | Pages in each student's exam; must match the template. |
+
+If the upload fails partway, the batch is marked as errored and cannot be processed. Upload the PDF again as a new batch.
+
+### exams scans process
+
+Starts OCR and name matching for an uploaded batch.
+
+```bash
+pawtograder exams scans process --class cs3500-spring-2026 --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+Only a batch in `uploaded` or `error` status can be processed. After processing, confirm the name matches on the exam's Scans page, then run `exams scans finalize`.
+
+### exams scans status
+
+Shows a batch's state and how many exams are matched.
+
+```bash
+pawtograder exams scans status --class cs3500-spring-2026 --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams scans finalize
+
+Creates submissions for the batch's confirmed exams. Use `--dry-run` to preview which pages become which student's submission before creating anything.
+
+```bash
+# Preview first
+pawtograder exams scans finalize \
+  --class cs3500-spring-2026 \
+  --batch 42 \
+  --dry-run
+
+# Then create submissions
+pawtograder exams scans finalize \
+  --class cs3500-spring-2026 \
+  --batch 42
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `-b`, `--batch` | required | Scan batch ID. |
+| `--dry-run` | `false` | List which pages become which student's submission, without creating anything. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+#### Typical scan workflow
+
+```bash
+# 1. Upload the scanned PDF
+pawtograder exams scans upload -c cs3500-spring-2026 -a midterm --file scans.pdf --pages-per-exam 2
+
+# 2. Start OCR and matching
+pawtograder exams scans process -c cs3500-spring-2026 --batch 42
+
+# 3. Check progress
+pawtograder exams scans status -c cs3500-spring-2026 --batch 42
+
+# 4. Confirm name matches on the Scans page, then preview
+pawtograder exams scans finalize -c cs3500-spring-2026 --batch 42 --dry-run
+
+# 5. Create submissions
+pawtograder exams scans finalize -c cs3500-spring-2026 --batch 42
+```
+
 ## Exporting student data
 
 Three commands write course data to disk: `assessment export`, `submissions export`, and `assessment deanonymize`. All three are gated by the same `--identity` contract, and all three can write student personal data. Read this section before running any of them.
