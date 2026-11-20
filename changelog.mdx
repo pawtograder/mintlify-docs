@@ -6,6 +6,33 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 20, 2026
+
+#### Cloud workspaces
+- **Open in Coder on the assignment page** — Students with a Forgejo repository for an assignment now see an **Open in Coder** card on the assignment page when the `cloud-workspaces` course flag is on. The card walks through the workspace startup steps (build, repository clone, editor) and opens VS Code in the browser once the workspace is ready. Instructors can turn the flag on or off from **Course Settings → Feature flags**. See [Feature flags](/staff/feature-flags) ([#1170](https://github.com/pawtograder/platform/pull/1170))
+- **Cloud workspaces feature flag** — Instructors can now enable or disable cloud workspaces per course from **Course Settings → Feature flags**. The flag is off by default and requires the operator to have Coder and Forgejo enabled in the deployment ([#1351](https://github.com/pawtograder/platform/pull/1351))
+
+#### Exams
+- **Exam scan CLI commands** — The CLI gained an `exams` command group for managing scan batches: `exams batches list`, `exams batches show`, and `exams batches reprocess`. See [CLI reference](/developers/cli) ([#1325](https://github.com/pawtograder/platform/pull/1325))
+- **Rebuilding a rubric sets the assignment's max points** — Rebuilding the rubric on an exam assignment now updates the assignment's **Points possible** to match the exam total ([#1284](https://github.com/pawtograder/platform/pull/1284))
+
+#### Office hours
+- **Queue health metrics** — The `metrics` edge function now publishes per-queue health signals: open request count, staff on duty, age of the oldest open request, and requests per staff member. These feed the `queues-and-workers` Grafana dashboard and the `HelpQueueBacklogged` alert. See [Monitoring](/developers/monitoring) ([#1335](https://github.com/pawtograder/platform/pull/1335))
+- **Class-scoped help queue broadcasts restored** — Real-time broadcasts for help queue events are now correctly scoped to the class, so staff and students in one course no longer see events from another ([#1082](https://github.com/pawtograder/platform/pull/1082))
+
+#### Assignments
+- **Forgejo handout repository created from the assignment form** — For courses with cloud workspaces enabled, saving an assignment now creates the Forgejo handout repository automatically. See [Assignment configuration](/staff/assignments/configuration) ([#1253](https://github.com/pawtograder/platform/pull/1253))
+
+#### Course management
+- **Edit the default grader role** — Instructors can now edit the default grader role from **Course Settings → Enrollments** and create new roles as copies of it ([#1286](https://github.com/pawtograder/platform/pull/1286))
+
+#### Bug fixes
+- **Transient Gemini failures retried** — AI hint generation now retries transient Gemini API failures instead of surfacing an error to the student ([#1077](https://github.com/pawtograder/platform/pull/1077))
+- **Workspace starts on the template's active version** — Opening a cloud workspace now uses the template's currently active version rather than a stale one ([#1326](https://github.com/pawtograder/platform/pull/1326))
+- **Forgejo job token repository match is case-insensitive** — A Forgejo grading job token is now matched to its repository regardless of case differences in the repository name ([#1330](https://github.com/pawtograder/platform/pull/1330))
+
 ## August 2026
 
 ### August 19, 2026

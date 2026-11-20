@@ -151,7 +151,22 @@ The chart deploys no Prometheus or Grafana of its own. It assumes the cluster ru
 The web app's `ServiceMonitor` reads `METRICS_SCRAPE_TOKEN` from the JWT secret and injects it as the bearer. The edge functions' `ServiceMonitor` marks `METRICS_TOKEN` as `optional: true`, so a deployment that intentionally leaves edge metrics unauthenticated still gets scraped instead of having the whole `ServiceMonitor` rejected.
 </Note>
 
-Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that adds Pawtograder-specific series on top of the exporter defaults, including `pawtograder_replication_*`, `pawtograder_wal_archiving_*`, `pawtograder_db_connections_*`, `pawtograder_classes_*`, `pawtograder_active_submissions_active_count`, `pawtograder_help_queue_depth_*`, and `pawtograder_table_sizes_*`.
+Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that adds Pawtograder-specific series on top of the exporter defaults, including `pawtograder_replication_*`, `pawtograder_wal_archiving_*`, `pawtograder_db_connections_*`, `pawtograder_classes_*`, `pawtograder_active_submissions_active_count`, `pawtograder_help_queue_depth_*`, `pawtograder_help_queue_health_*`, and `pawtograder_table_sizes_*`.
+
+#### Office hours queue health metrics
+
+The `pawtograder_help_queue_health_*` family publishes per-queue health signals that the `queues-and-workers` Grafana dashboard uses and that the `pawtograder.app` alert group fires on.
+
+| Metric | Type | Labels | Meaning |
+| --- | --- | --- | --- |
+| `pawtograder_help_queue_health_open_requests` | gauge | `class_id`, `queue_id` | Unresolved requests in the queue right now |
+| `pawtograder_help_queue_health_staff_on_duty` | gauge | `class_id`, `queue_id` | Staff currently working the queue |
+| `pawtograder_help_queue_health_oldest_open_request_seconds` | gauge | `class_id`, `queue_id` | Age of the oldest unresolved request, in seconds |
+| `pawtograder_help_queue_health_requests_per_staff` | gauge | `class_id`, `queue_id` | Open requests divided by staff on duty (absent when no staff are on duty) |
+
+These are read from the `help_queue_health` view at scrape time. A queue with no open requests emits `0` for `open_requests` and `oldest_open_request_seconds`; `requests_per_staff` is omitted entirely when `staff_on_duty` is zero to avoid a divide-by-zero series that would trigger ratio-based alerts.
+
+An ops playbook for the `HelpQueueBacklogged` alert ships in `charts/pawtograder/runbooks/help-queue-backlog.md`.
 
 ### Dashboards and alerts
 
