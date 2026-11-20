@@ -47,6 +47,14 @@ A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
 
+### Custom grader roles
+
+Instructors can create custom grader roles — for example, a "Head TA" with extra permissions or a "Course Coordinator" with fewer. Custom roles are managed from the course's role settings.
+
+When a new custom role is created, it starts as a copy of the default grader role's capabilities. The instructor can then turn individual capabilities on or off. After that the two lists are independent: changing the default grader role later does not affect roles that were already created.
+
+Instructors can also edit the default grader role itself to add or remove capabilities for all plain graders. A role manager can only add or remove a capability they hold in the class, and `manage_roles` can never be placed on a grader or custom role.
+
 ## Key features
 
 - **Assignments**: distribute and grade programming assignments with autograders,
