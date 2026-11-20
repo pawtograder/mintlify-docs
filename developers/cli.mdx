@@ -74,7 +74,7 @@ The CLI parses arguments in strict mode. A flag that the command you typed does 
 
 `--json` prints the raw JSON response instead of the formatted table or plan, and silences every progress message, so stdout is pure JSON that you can pipe into `jq`. Error text still goes to stderr.
 
-These eleven commands accept `--json`: `classes list`, `assignments list`, `flashcards list`, `rubrics list`, `rubrics import`, `submissions list`, `help-requests list`, `discussions list`, `reviews list`, `reviews assign`, and `repos list`.
+These commands accept `--json`: `classes list`, `assignments list`, `flashcards list`, `rubrics list`, `rubrics import`, `submissions list`, `help-requests list`, `discussions list`, `reviews list`, `reviews assign`, `repos list`, `exams list`, `exams questions`, `exams scans status`, and `exams scans finalize`.
 
 Every other command rejects it, including `classes show`, `assignments show`, `rubrics export`, and all three export commands.
 
