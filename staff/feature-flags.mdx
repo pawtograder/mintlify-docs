@@ -78,6 +78,16 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Cloud workspaces
+
+When this flag is on, students see an **Open in Coder** card on each assignment page for assignments that have a Forgejo repository. The card walks through the workspace startup steps — build, repository clone, and editor — and opens VS Code in the browser once the workspace is ready.
+
+The flag is off by default. Turning it on requires that the deployment's operator has enabled Coder and Forgejo in the Helm chart. If those services are not running, the card will report an error regardless of the flag's state.
+
+<Note>
+Operators can enable or disable cloud workspaces for the whole deployment from the chart. The course-level flag lets instructors opt individual courses in or out independently of the deployment default.
+</Note>
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
