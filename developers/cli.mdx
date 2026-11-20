@@ -596,6 +596,53 @@ Four behaviors are worth knowing before you script this:
 
 Without `--force`, a request that already has a terminal status, or that has a live video call, fails with an API error and exit 1.
 
+## exams
+
+The `exams` group manages exam scan batches. All actions require `-c`/`--class`.
+
+### exams list
+
+Lists exam scan batches for a class.
+
+```bash
+pawtograder exams list --class cs3500-spring-2026
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c`, `--class` | required | Class ID, slug, or name. |
+| `--json` | `false` | Emit the raw JSON response. |
+
+### exams show
+
+Shows details for a single scan batch.
+
+```bash
+pawtograder exams show 42 --class cs3500-spring-2026
+```
+
+Takes a positional batch ID and `-c`/`--class` (required). No `--json`.
+
+### exams process
+
+Enqueues OCR processing for a scan batch.
+
+```bash
+pawtograder exams process 42 --class cs3500-spring-2026
+```
+
+Takes a positional batch ID and `-c`/`--class` (required).
+
+### exams create-submissions
+
+Creates exam submissions from a matched scan batch.
+
+```bash
+pawtograder exams create-submissions 42 --class cs3500-spring-2026
+```
+
+Takes a positional batch ID and `-c`/`--class` (required).
+
 ## discussions
 
 ### discussions list
