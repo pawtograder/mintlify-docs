@@ -80,6 +80,18 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Cloud workspaces
+
+This flag controls whether the course uses Forgejo as an alternative repository host and whether students get **Open in Coder** cloud workspaces.
+
+When you turn it on, Pawtograder creates a Forgejo account for every enrolled student right away, and Forgejo becomes a selectable repository host when creating new assignments. Students see an **Open in Coder** button on assignment pages that opens their repository in a cloud workspace.
+
+When you turn it off, Forgejo can no longer be chosen for new assignments, the **Open in Coder** button is hidden, and no new Forgejo accounts or student repositories are created. Nothing is deleted: existing Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded.
+
+<Warning>
+Turning this flag on immediately triggers Forgejo account creation for everyone enrolled. If your deployment does not have Forgejo configured, the flag has no visible effect but the switch still saves.
+</Warning>
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
