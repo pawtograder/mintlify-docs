@@ -107,6 +107,30 @@ All eight are gauges with no labels, sourced from the `get_async_queue_sizes` RP
 Prefer age over depth for alerting. Depth alone cannot distinguish a healthy busy queue from a stalled one, and depth thresholds need retuning every term.
 </Tip>
 
+### Office hours queue health
+
+Five gauges report the health of office hours queues across the deployment, labelled by `class_id`. They are sourced from `metrics_office_hours_queue_health()`, a `SECURITY DEFINER` function granted only to `service_role`. If the function is absent (the migration has not been applied), the scrape drops these five gauges and keeps every other metric.
+
+| Metric | Meaning |
+| --- | --- |
+| `pawtograder_office_hours_queues_red` | Active queues at or over the class's waiting or oldest-wait threshold — **the one to alert on** |
+| `pawtograder_office_hours_queues_unstaffed` | Active queues with nobody on shift |
+| `pawtograder_office_hours_queues_active` | Active queues in the class |
+| `pawtograder_office_hours_requests_waiting` | Open requests across those queues |
+| `pawtograder_office_hours_oldest_wait_minutes` | Age in minutes of the oldest open request |
+
+Thresholds come from each class's own `office_hours_health_thresholds` (set in Queue Settings), defaulting to 5 waiting requests or 30 minutes oldest wait. A class that deliberately runs a long queue raises its own limit and stops alerting here and on the staff dashboard without a deploy.
+
+The metric mirrors the `office_hours_queue_health` RPC that drives the staff dashboard, so a queue the dashboard paints red is one this counts as red.
+
+<Tip>
+`pawtograder_office_hours_queues_red > 0` sustained for 15 minutes is a reasonable alert threshold. A queue that is briefly red is normal; only a sustained one is worth attention. Keep the severity at `info` — nobody should be woken up because a class is busy.
+</Tip>
+
+<Warning>
+Both `queues_red` and `queues_unstaffed` are per class, not per queue. Two positive gauges do not mean the same queue is both red and unstaffed. Before acting on the pair, check the per-queue RPC for that class: `SELECT * FROM public.office_hours_queue_health(<class_id>);`
+</Warning>
+
 ### Circuit breakers
 
 `pawtograder_circuit_breaker_open{scope,key,state}` is `1` when a breaker is open and `0` when it is closed, one series per breaker returned by the `get_circuit_breaker_statuses` RPC.
