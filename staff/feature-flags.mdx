@@ -113,6 +113,25 @@ Two specifics worth knowing:
 
 The one flag whose off state has a lasting consequence is `discord-student-join`, described above: invitations not created while it was off are not created later on their own.
 
+### Cloud workspaces
+
+When this flag is on, code assignments can use Forgejo instead of GitHub as their repository host (chosen per assignment), everyone enrolled in the course gets a Forgejo account, and students see an **Open in Coder** button that opens their repository in a cloud workspace. Turning it on creates the Forgejo accounts right away.
+
+When off, Forgejo cannot be chosen for new assignments, **Open in Coder** is hidden and workspaces cannot be opened, and no new Forgejo accounts or student repositories are created. Nothing is deleted: Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded.
+
+<Warning>
+Turning the flag off does not remove existing Forgejo accounts or repositories. Students who enroll after the flag is turned off will not get a Forgejo account or repository until it is turned back on.
+</Warning>
+
+### Office hours: escalation alerts
+
+When this flag is on, two browser alerts fire during office hours:
+
+- **Staff** receive a browser notification when a ticket's escalation count goes up while they have an office hours page open. Only escalations that happen while the page is open trigger the alert; a queue already full of escalated tickets stays quiet.
+- **Students** receive a browser notification (or an in-page banner if the tab is focused) when staff resolve their ticket and the check-in window opens.
+
+Both alerts fire only while the tab is in the background. When the flag is off, escalation and check-in work as they do now, with no alerts. See [Running Office Hours](/staff/office-hours/running-office-hours#escalation-alerts) for details.
+
 ## Related pages
 
 <CardGroup cols={2}>
