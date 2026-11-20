@@ -107,6 +107,26 @@ All eight are gauges with no labels, sourced from the `get_async_queue_sizes` RP
 Prefer age over depth for alerting. Depth alone cannot distinguish a healthy busy queue from a stalled one, and depth thresholds need retuning every term.
 </Tip>
 
+### Office hours queue health
+
+Five gauges report the health of office hours queues across the deployment, labelled by `class_id`. They come from `metrics_office_hours_queue_health()`, a separate function from the main metrics RPC, so a deployment that has not applied migration `20261120130100` drops these five gauges without affecting any other metric.
+
+| Metric | Meaning |
+| --- | --- |
+| `pawtograder_office_hours_queues_red` | Active queues at or over the class's waiting or oldest-wait threshold — **the one to alert on** |
+| `pawtograder_office_hours_queues_unstaffed` | Active queues with nobody on shift |
+| `pawtograder_office_hours_queues_active` | Active queues |
+| `pawtograder_office_hours_requests_waiting` | Open requests across those queues |
+| `pawtograder_office_hours_oldest_wait_minutes` | Age of the oldest open request, in minutes |
+
+The red condition mirrors the staff dashboard exactly: a queue is red when its waiting count is at or over `waiting_red` (default 5), or when the oldest open request is at or over `oldest_wait_red_minutes` (default 30). Both thresholds come from each class's own `office_hours_health_thresholds`, so a course that deliberately runs a long queue raises its own limit and stops alerting here and on the dashboard without a deploy.
+
+Gauges are published per class, not per queue, because queue names are free text. Two positive gauges do not mean the same queue is both red and unstaffed; use the per-class `office_hours_queue_health` RPC to see which queue is which.
+
+<Tip>
+`pawtograder_office_hours_queues_red > 0` sustained for 15 minutes is the recommended alert expression. A queue that is briefly red during a rush is normal; only a sustained condition is worth acting on. Keep the severity at `info` — nobody should be woken up because a class is busy.
+</Tip>
+
 ### Circuit breakers
 
 `pawtograder_circuit_breaker_open{scope,key,state}` is `1` when a breaker is open and `0` when it is closed, one series per breaker returned by the `get_circuit_breaker_statuses` RPC.
