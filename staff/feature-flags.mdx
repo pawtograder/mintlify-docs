@@ -84,6 +84,16 @@ The **Suggested due date** field on the assignment form stays visible whether or
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
 
+### Cloud workspaces
+
+When this flag is on, code assignments can use Forgejo instead of GitHub as their repository host (chosen per assignment), everyone enrolled in the course gets a Forgejo account, and students get an **Open in Coder** button that opens their repository in a cloud workspace. Turning it on creates the Forgejo accounts right away.
+
+When the flag is off, Forgejo cannot be chosen for new assignments, **Open in Coder** is hidden and workspaces cannot be opened, and no new Forgejo accounts or student repositories are created. Nothing is deleted: Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded.
+
+<Warning>
+Turning the flag off does not remove Forgejo accounts or repositories. Students who enroll after the flag is turned off will not get a Forgejo account or repository until it is turned back on.
+</Warning>
+
 ### Student Discord invitations
 
 This flag needs a Discord server configured for the course. With no server connected it has no effect in either position.
