@@ -6,6 +6,25 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 20–21, 2026
+
+#### Cloud workspaces
+
+- **Open in Coder now works on GitHub assignments** — The **Open in Coder** cloud workspace card now appears on GitHub-hosted assignments as well as Forgejo ones, as long as the course has the `cloud-workspaces` feature flag on and the assignment repository is ready. The account-linking step names the correct provider (GitHub or Forgejo) depending on the assignment ([#1350](https://github.com/pawtograder/platform/pull/1350))
+- **Instructors can toggle cloud workspaces from Feature flags** — The `cloud-workspaces` course feature is now manageable from **Course Settings → Feature flags**. Turning it on creates Forgejo accounts for everyone enrolled and enables the **Open in Coder** button; turning it off hides the button and stops creating new Forgejo accounts, without deleting anything ([#1351](https://github.com/pawtograder/platform/pull/1351))
+
+#### Office hours
+
+- **Browser alerts for escalations and the student check-in** — When the **Office hours: escalation alerts** feature flag is on, staff receive a browser notification when a ticket is escalated while their tab is in the background, and students receive one when staff resolve their request and the check-in window opens. Both alerts fire only for changes that happen while the page is open, not for state already present on load ([#1334](https://github.com/pawtograder/platform/pull/1334))
+- **Office hours queue health metrics** — Five Prometheus gauges now report the health of every course's office hours queues: `pawtograder_office_hours_queues_red`, `pawtograder_office_hours_queues_unstaffed`, `pawtograder_office_hours_queues_active`, `pawtograder_office_hours_requests_waiting`, and `pawtograder_office_hours_oldest_wait_minutes`. They mirror the condition the staff dashboard paints red, so a queue over threshold is reported whether or not anyone has the page open ([#1335](https://github.com/pawtograder/platform/pull/1335))
+- **Feature flags update live** — The feature flags page now reflects changes made by another instructor without requiring a page reload ([#1342](https://github.com/pawtograder/platform/pull/1342))
+
+#### Bug fixes
+
+- **API token creation fixed on deployed environments** — Creating an MCP or CLI API token was failing on staging and every preview environment with `MCP_JWT_SECRET must be set`. The Helm chart now wires `MCP_JWT_SECRET` from the JWT secret, and `GenerateJwtKeys.ts` emits it in all output modes ([#1346](https://github.com/pawtograder/platform/pull/1346))
+
 ## August 2026
 
 ### August 19, 2026
