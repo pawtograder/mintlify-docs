@@ -908,8 +908,14 @@ old SHA and promote.
 Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
 
+Bulk reruns from the **Rerun Autograder** page support Forgejo-hosted repositories as well as GitHub repositories. Pawtograder dispatches the rerun to whichever platform hosts the student's repository.
+
 See [Workflow Runs](/staff/workflow-runs) for the status of the run a rerun
 dispatches.
+
+## Forgejo assignments
+
+Assignments can use Forgejo as the repository host instead of GitHub. For a Forgejo assignment, the **Autograder** configuration page lets you set the grader repository directly — pick the Forgejo repository that holds your `pawtograder.yml` and grader code. Pawtograder installs a push webhook on the course's Forgejo organization so that every student push triggers grading automatically, matching the behavior of GitHub-hosted assignments.
 
 ## Test Insights and Bulk Regrading
 
