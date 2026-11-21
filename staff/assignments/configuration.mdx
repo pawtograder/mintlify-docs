@@ -383,3 +383,19 @@ assignment. Nothing in the student-facing interface reads it. Do not treat
 it as the place to publish a handout link to students — put that in the
 assignment **description**, which is rendered on the assignment page.
 </Warning>
+
+### Grader repo and handout repo on the assignment page
+
+The assignment page shows the grader repository and handout repository
+under the assignment header. Both links are read from the assignment's
+stored configuration rather than guessed from the course slug:
+
+- **Grader repo** shows the repository recorded in the autograder
+  configuration, linked to GitHub. Graders see "Visible to instructors"
+  instead of the link, because only instructors can read the autograder
+  record. If no grader repository has been set, the field reads "No
+  grader repository".
+- **Handout repo** on a Forgejo assignment links to the Forgejo host. On
+  a GitHub assignment it links to GitHub. If the Forgejo host cannot be
+  determined (for example, no Forgejo account is visible to the viewer),
+  the repository name is shown without a link.
