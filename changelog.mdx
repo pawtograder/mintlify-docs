@@ -6,6 +6,38 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 21, 2026
+
+#### Office hours
+- **Browser alerts for escalations and the student check-in** — When the new **Office hours: escalation alerts** feature flag is on, staff receive a browser notification when a ticket is escalated while their tab is in the background. Students receive a notification (or an inline message if they are already looking at the request) when staff resolve their ticket and the check-in window opens. Neither alert fires for state already present when the page opened. See [Running Office Hours](/staff/office-hours/running-office-hours#escalation-alerts) ([#1334](https://github.com/pawtograder/platform/pull/1334))
+- **Office hours queue health metrics** — Queue depth, age, and circuit-breaker state for the help queue are now published to the Prometheus metrics endpoint. See [Monitoring and Metrics](/developers/monitoring) ([#1335](https://github.com/pawtograder/platform/pull/1335))
+- **Bug fixes** — Private-ticket refetch storms are stopped; check-in reopen now follows the solo rule ([#1310](https://github.com/pawtograder/platform/pull/1310)); class-scoped help queue broadcasts are restored ([#1082](https://github.com/pawtograder/platform/pull/1082))
+
+#### Feature flags
+- **Cloud workspaces flag is now manageable** — Instructors can turn the **Cloud workspaces** flag on and off from **Course Settings → Feature flags**. When on, Forgejo becomes a repository host choice, Forgejo accounts are created for the roster, and students get an **Open in Coder** button. See [Feature flags](/staff/feature-flags) ([#1351](https://github.com/pawtograder/platform/pull/1351))
+- **Feature flags update live** — Flipping a flag while another instructor has the page open now updates their view without a reload ([#1342](https://github.com/pawtograder/platform/pull/1342))
+
+#### Cloud workspaces
+- **Open in Coder for GitHub assignments** — The **Open in Coder** workspace card now appears on GitHub assignments as well as Forgejo ones, as long as the course has the **Cloud workspaces** flag on ([#1350](https://github.com/pawtograder/platform/pull/1350))
+- **GitHub prompts hidden in courses with no GitHub organization** — The "Connect to GitHub" and org invitation prompts no longer appear in courses that have no GitHub organization configured ([#1363](https://github.com/pawtograder/platform/pull/1363))
+
+#### Autograding
+- **Bulk rerun works for Forgejo assignments** — The **Rerun Autograder** page now correctly dispatches reruns through Forgejo's API for Forgejo-hosted assignments, instead of always using GitHub Actions ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **Forgejo org push hook** — Each class's Forgejo organization now gets a push hook to `forgejo-repo-webhook` automatically ([#1365](https://github.com/pawtograder/platform/pull/1365))
+
+#### Exams
+- **Rubric shown under the score** — On exam submissions, the rubric now appears below the score, and each answer shows its check ([#1268](https://github.com/pawtograder/platform/pull/1268))
+- **Exam worker status messages** — The exam worker now reports what it is doing at each step ([#1157](https://github.com/pawtograder/platform/pull/1157))
+- **Question names in the grader view** — The instructor's question names are now shown in the exam grader view ([#1072](https://github.com/pawtograder/platform/pull/1072))
+- **Rebuilding the rubric sets assignment max points** — Rebuilding an exam rubric now correctly sets the assignment's max points to the exam total ([#1284](https://github.com/pawtograder/platform/pull/1284))
+- **Exam template drawable indicator** — The exam creation flow now shows that the template is drawable and lets step 1 proceed to step 2 ([#1271](https://github.com/pawtograder/platform/pull/1271))
+
+#### Bug fixes
+- **Gradebook column keeps the assignment name** — A gradebook column linked to an assignment now stays named after the assignment when the assignment is renamed ([#891](https://github.com/pawtograder/platform/pull/891))
+- **Deployment fix: API token creation** — `MCP_JWT_SECRET` is now correctly wired in the Helm chart, fixing API token creation failures on deployed environments ([#1345](https://github.com/pawtograder/platform/pull/1345))
+
 ## August 2026
 
 ### August 19, 2026
