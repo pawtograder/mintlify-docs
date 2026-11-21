@@ -90,6 +90,24 @@ While it is on, students see their invitation to the course's Discord server on 
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
 
+### Cloud workspaces
+
+When this flag is on, code assignments can use Forgejo instead of GitHub as their repository host (chosen per assignment), everyone enrolled in the course gets a Forgejo account, and students see an **Open in Coder** button on their assignment page that opens their repository in a cloud workspace. The **Open in Coder** card appears for both Forgejo and GitHub assignments as long as the flag is on and the student has a ready repository.
+
+Turning the flag on creates Forgejo accounts for the current roster right away. Turning it off hides the **Open in Coder** card, prevents Forgejo from being chosen for new assignments, and stops creating new Forgejo accounts and student repositories. Nothing is deleted: existing Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded.
+
+<Warning>
+Turning the flag off does not warn you if the course has existing Forgejo assignments. Students who enroll after the flag is turned off will not get a Forgejo repository until it is turned back on.
+</Warning>
+
+### Office hours: escalation alerts
+
+When this flag is on, staff receive a browser notification when a ticket is escalated while their tab is in the background. Students receive a notification (or an in-page banner if the tab is focused) when staff resolve their ticket and the check-in window opens.
+
+Neither alert fires for state that was already present when the page opened — only changes that happen while the page is open trigger an alert. Multiple escalations in the same update are batched into one notification.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#escalation-alerts) for more detail.
+
 ## Feature flags control navigation, not access
 
 Feature flags are a curation tool. They decide which modules your course puts in front of students and staff, and when — so you can hold Surveys or Flashcards back until the week they matter, retire Polls once you have stopped using them, and keep the course menu down to what the course is actually doing. Staff pages behave the same way, which is deliberate: a module you are not running should not clutter anyone's menu.
