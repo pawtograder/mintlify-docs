@@ -885,6 +885,19 @@ Graders can attach rubric checks directly to an artifact by setting
 in the `artifact` field. See the
 [Rubrics documentation](/staff/assignments/rubrics) for details.
 
+## Forgejo assignments
+
+When the **Cloud workspaces** feature flag is on, an assignment can use Forgejo as its repository host. Forgejo assignments work the same way as GitHub assignments for grading, with a few differences:
+
+- **The grader repository stays on GitHub.** A Forgejo assignment's `pawtograder.yml` and instructor tests live in a GitHub repository, not on Forgejo. Set the grader repo from the **Autograder** page: enter the GitHub repository as `owner/name` in the **Grader repository** field. Turning the autograder on or off is done from **Edit Assignment**, not the Autograder page.
+- **Pushes to the grader repo refresh the config.** When you push to the GitHub grader repo, Pawtograder reads the updated `pawtograder.yml` and stores it, the same as for GitHub assignments.
+- **Bulk reruns work.** The **Rerun Autograder** page dispatches reruns for Forgejo repositories through Forgejo's API (tagging the commit and dispatching `grade.yml`), not through GitHub.
+- **Each class's Forgejo organization has a push webhook.** Pawtograder automatically registers a push webhook on the Forgejo organization when the course is set up, so student pushes are received and graded.
+
+<Note>
+Creating a grader repository for a Forgejo assignment from the form is not yet supported. Pick an existing GitHub repository as the grader repo from the Autograder page.
+</Note>
+
 ## Rerunning the Autograder
 
 You can rerun the autograder on an existing submission from the assignment
