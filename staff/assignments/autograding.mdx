@@ -52,6 +52,9 @@ Reference it from the top of your YAML to get IDE autocomplete:
   <Card title="Submission Viewer" icon="folder-open" href="#submission-viewer">
     How files and grader artifacts render in the UI.
   </Card>
+  <Card title="Forgejo Repositories" icon="git-branch" href="#forgejo-repositories">
+    Setting up autograding for Forgejo-hosted student repositories.
+  </Card>
   <Card title="Rerunning the Autograder" icon="rotate" href="#rerunning-the-autograder">
     Regrade existing submissions against a chosen grader version.
   </Card>
@@ -885,6 +888,22 @@ Graders can attach rubric checks directly to an artifact by setting
 in the `artifact` field. See the
 [Rubrics documentation](/staff/assignments/rubrics) for details.
 
+## Forgejo repositories
+
+Pawtograder supports Forgejo as an alternative to GitHub for hosting student repositories. Forgejo-based assignments work the same way as GitHub-based ones from the student's perspective, but a few setup steps differ for instructors.
+
+### Setting the grader repository
+
+For Forgejo assignments, you set the grader repository directly from the **Configure Autograder** page rather than from the assignment form. Open the assignment's **Autograder** tab and enter the Forgejo repository URL in the **Grader repository** field. Save the page to apply the change.
+
+### Push hook
+
+Pawtograder automatically registers a push webhook on the Forgejo organization for each class. This hook forwards push events to Pawtograder so that student submissions are recorded when a student pushes to their Forgejo repository. The hook is created when the class is set up and does not require manual configuration.
+
+### Hiding GitHub prompts
+
+If a course has no GitHub organization configured, GitHub-specific prompts (such as repository setup instructions) are hidden from the assignment pages automatically. Only the Forgejo-relevant controls are shown.
+
 ## Rerunning the Autograder
 
 You can rerun the autograder on an existing submission from the assignment
@@ -907,6 +926,8 @@ old SHA and promote.
 <Warning>
 Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
+
+Bulk reruns from the **Rerun Autograder** page work for both GitHub-hosted and Forgejo-hosted repositories. Pawtograder detects the repository host from the assignment configuration and dispatches the rerun to the appropriate system automatically.
 
 See [Workflow Runs](/staff/workflow-runs) for the status of the run a rerun
 dispatches.
