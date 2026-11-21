@@ -125,6 +125,18 @@ Any single file over 50 MB is rejected with an error naming the file and its siz
 Binary files are collected only if they match one of the file patterns your instructor configured, the same as text files. A binary that no pattern matches will not appear in your submission at all. Give binary artifacts a conventional file extension — a binary with an unusual extension or none at all is stored as text, which corrupts it.
 </Note>
 
+## Cloud Workspaces
+
+If your course has cloud workspaces enabled, an **Open in Coder** card appears on your assignment page. It opens your assignment repository in a browser-based code editor running in the cloud, so you can work on the assignment without installing anything locally.
+
+The first time you open a workspace, Coder may ask you to link your GitHub or Forgejo account. Follow the link in the card, authorize the connection, then return to the assignment page and open the workspace again.
+
+The card shows the workspace's current state as it starts up, step by step. Once every step has passed, a **Open Editor** link appears. The workspace keeps running until you stop it; coming back to the assignment page shows you its current state.
+
+<Note>
+The **Open in Coder** card only appears when your course has cloud workspaces turned on and your assignment repository is ready. If you do not see it, your instructor has not enabled the feature for this course.
+</Note>
+
 ## Assignment Leaderboard
 
 If your instructor has enabled the leaderboard for an assignment, it appears as a panel in the right-hand sidebar of the assignment page, listing the top ten entries. Assignments without it show no panel at all. See [Leaderboards](/students/assignments/leaderboard) for how the ranking works.
