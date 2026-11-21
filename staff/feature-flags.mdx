@@ -1,24 +1,24 @@
 ---
 title: "Feature flags"
-description: "The nine course feature flags, their defaults, and exactly which menu entries each one hides"
+description: "The ten course feature flags, their defaults, and exactly which menu entries each one hides"
 icon: "sliders"
 ---
 
 # Feature flags
 
-Nine switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
+Ten switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
 
 ## Opening the page
 
 Open **Course Settings → Feature flags** in the course navigation bar. The entry is instructor-only. Graders never see it in the menu, and a grader who reaches the URL gets "Access denied. This page is only available to instructors."
 
-Each flag is one card with a title, a description, and a single switch. There is no Save button and no confirmation step. Flipping a switch writes the change immediately and raises a **Saved** toast. If the write fails, the switch snaps back to its previous position and an error toast reports why.
+Each flag is one card with a title, a description, and a single switch. There is no Save button and no confirmation step. Flipping a switch writes the change immediately and raises a **Saved** toast. If the write fails, the switch snaps back to its previous position and an error toast reports why. Flag changes made by one instructor are reflected live for all other instructors viewing the page — no refresh is needed.
 
 <Note>
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
 </Note>
 
-## The nine flags
+## The ten flags
 
 <Frame>
   <img src="/images/staff/feature-flags-1787313949494.png" alt="The Feature flags page with all nine flag cards: Discussion, Flashcards, Office hours, Gradebook, Surveys and Polls switched on, and Student gradebook What-If, Suggested due dates and Student Discord invitations switched off" />
@@ -35,8 +35,9 @@ The global search palette lists **Feature flags** for all course staff, so a gra
 | `gradebook-what-if` | Student gradebook What-If | **Allow What-If grade simulations for students** | Off |
 | `suggested-due-date` | Suggested due dates | **Present the suggested due date as the due date** | Off |
 | `discord-student-join` | Student Discord invitations | **Let students join this course's Discord server** | Off |
+| `cloud-workspaces` | Cloud workspaces | **Enable cloud workspaces for this course** | Off |
 
-A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the three opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
+A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the four opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
 
 ## What each flag hides
 
@@ -53,12 +54,13 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
+| `cloud-workspaces` | The **Open in Coder** button on assignment pages | Nothing |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
-## The three behavior flags
+## The four behavior flags
 
-Six flags only govern what appears in menus. These three change how a feature behaves.
+Six flags only govern what appears in menus. These four change how a feature behaves.
 
 ### Student gradebook What-If
 
@@ -75,6 +77,10 @@ The **Suggested due date** field on the assignment form stays visible whether or
 </Tip>
 
 See [Assignment Dashboard](/staff/assignments/assignment-dashboard) for where the suggested date appears once the flag is on.
+
+### Cloud workspaces
+
+When this flag is on, an **Open in Coder** button appears on assignment pages for both GitHub and Forgejo assignments, letting students open their repository in a cloud development environment. When it is off, the button is hidden and cloud workspaces are unavailable for the course regardless of the deployment's Coder configuration.
 
 ### Student Discord invitations
 

@@ -908,6 +908,8 @@ old SHA and promote.
 Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
 
+Reruns on **Forgejo-hosted assignments** are dispatched directly to Forgejo rather than GitHub Actions. The bulk **Rerun Autograder** page handles Forgejo repositories correctly — selecting submissions from a Forgejo-backed assignment triggers the rerun through the Forgejo runner, not GitHub.
+
 See [Workflow Runs](/staff/workflow-runs) for the status of the run a rerun
 dispatches.
 
@@ -941,6 +943,26 @@ npx tsimp src/grading/main.ts \
 Use absolute paths. The grader produces output in a `pawtograder-grading/`
 directory in your current working directory; delete it between runs
 (or you may hit `EACCES` errors copying files).
+
+## Forgejo Assignments
+
+Pawtograder supports Forgejo as an alternative to GitHub for student repositories. Forgejo-backed assignments have a few differences from GitHub-backed ones.
+
+### Setting the grader repository
+
+For Forgejo assignments, the grader repository is configured directly from the **Autograder** page rather than from the assignment form. Open the assignment's **Autograder** tab and use the **Grader Repository** field to point to the Forgejo repository that contains your `pawtograder.yml` and grader code.
+
+### Push webhook
+
+Each Forgejo organization used by a course is automatically configured with a push webhook that notifies Pawtograder when students push to their repositories. This webhook is set up per organization when the course is created or when the organization is linked, so you do not need to configure it manually.
+
+### GitHub prompts
+
+If a course has no GitHub organization configured, GitHub-specific prompts and setup steps are hidden from the assignment configuration pages. Only Forgejo-relevant options are shown.
+
+### Bulk rerun
+
+The bulk **Rerun Autograder** page dispatches reruns to Forgejo for Forgejo-backed assignments. Select submissions from a Forgejo assignment and the rerun is routed through the Forgejo runner automatically.
 
 ## Architecture Overview
 
