@@ -1,24 +1,24 @@
 ---
 title: "Feature flags"
-description: "The nine course feature flags, their defaults, and exactly which menu entries each one hides"
+description: "Course feature flags, their defaults, and exactly which menu entries each one hides"
 icon: "sliders"
 ---
 
 # Feature flags
 
-Nine switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
+Switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
 
 ## Opening the page
 
 Open **Course Settings → Feature flags** in the course navigation bar. The entry is instructor-only. Graders never see it in the menu, and a grader who reaches the URL gets "Access denied. This page is only available to instructors."
 
-Each flag is one card with a title, a description, and a single switch. There is no Save button and no confirmation step. Flipping a switch writes the change immediately and raises a **Saved** toast. If the write fails, the switch snaps back to its previous position and an error toast reports why.
+Each flag is one card with a title, a description, and a single switch. There is no Save button and no confirmation step. Flipping a switch writes the change immediately and raises a **Saved** toast. If the write fails, the switch snaps back to its previous position and an error toast reports why. When another instructor changes a flag while you have the page open, your view updates live without a reload.
 
 <Note>
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
 </Note>
 
-## The nine flags
+## The flags
 
 <Frame>
   <img src="/images/staff/feature-flags-1787313949494.png" alt="The Feature flags page with all nine flag cards: Discussion, Flashcards, Office hours, Gradebook, Surveys and Polls switched on, and Student gradebook What-If, Suggested due dates and Student Discord invitations switched off" />
@@ -35,8 +35,10 @@ The global search palette lists **Feature flags** for all course staff, so a gra
 | `gradebook-what-if` | Student gradebook What-If | **Allow What-If grade simulations for students** | Off |
 | `suggested-due-date` | Suggested due dates | **Present the suggested due date as the due date** | Off |
 | `discord-student-join` | Student Discord invitations | **Let students join this course's Discord server** | Off |
+| `cloud-workspaces` | Cloud workspaces | **Enable Forgejo repositories and Coder cloud workspaces** | Off |
+| `office-hours-escalation-alert` | Office hours: escalation alerts | **Alert staff and students about office hours escalations** | Off |
 
-A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the three opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
+A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
 
 ## What each flag hides
 
@@ -53,6 +55,8 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
+| `cloud-workspaces` | The **Open in Coder** workspace card on assignment pages | Nothing visible; Forgejo can no longer be chosen for new assignments, and no new Forgejo accounts or student repositories are created |
+| `office-hours-escalation-alert` | Nothing | Nothing; alerts are simply not sent |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
@@ -85,6 +89,24 @@ While it is on, students see their invitation to the course's Discord server on 
 <Warning>
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
+
+### Cloud workspaces
+
+When this flag is on, code assignments can use Forgejo instead of GitHub as their repository host (chosen per assignment), everyone enrolled in the course gets a Forgejo account, and students see an **Open in Coder** button on their assignment page that opens their repository in a cloud workspace. The **Open in Coder** card appears for both Forgejo and GitHub assignments as long as the flag is on and the student has a ready repository.
+
+Turning the flag on creates Forgejo accounts for the current roster right away. Turning it off hides the **Open in Coder** card, prevents Forgejo from being chosen for new assignments, and stops creating new Forgejo accounts and student repositories. Nothing is deleted: existing Forgejo accounts and repositories are kept, assignments already on Forgejo stay on Forgejo, and pushes to their repositories are still graded.
+
+<Warning>
+Turning the flag off does not warn you if the course has existing Forgejo assignments. Students who enroll after the flag is turned off will not get a Forgejo repository until it is turned back on.
+</Warning>
+
+### Office hours: escalation alerts
+
+When this flag is on, staff receive a browser notification when a ticket is escalated while their tab is in the background. Students receive a notification (or an in-page banner if the tab is focused) when staff resolve their ticket and the check-in window opens.
+
+Neither alert fires for state that was already present when the page opened — only changes that happen while the page is open trigger an alert. Multiple escalations in the same update are batched into one notification.
+
+See [Running Office Hours](/staff/office-hours/running-office-hours#escalation-alerts) for more detail.
 
 ## Feature flags control navigation, not access
 

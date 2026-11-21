@@ -6,6 +6,44 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 21, 2026
+
+#### Forgejo integration
+
+- **Correct grader and handout repo links on the assignment page** — The assignment page now reads the grader repository from the autograder configuration rather than guessing it from the course slug. Forgejo handout links point to the Forgejo host instead of GitHub. Graders see "Visible to instructors" for the grader repo field, since only instructors can read the autograder record ([#1361](https://github.com/pawtograder/platform/pull/1361))
+- **Bulk rerun autograder works for Forgejo assignments** — The **Rerun Autograder** page now routes each submission to the correct host. Forgejo assignments dispatch `grade.yml` through Forgejo's API; GitHub assignments use GitHub Actions. Both can be regraded in the same bulk operation ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **Set a Forgejo assignment's grader repo from the Autograder page** — Instructors can now set the grader repository for a Forgejo assignment directly from the **Configure Autograder** page ([#1359](https://github.com/pawtograder/platform/pull/1359))
+- **Forgejo org push webhook** — Each class's Forgejo organization now receives a push hook to `forgejo-repo-webhook`, so pushes trigger grading without manual webhook setup ([#1365](https://github.com/pawtograder/platform/pull/1365))
+- **GitHub prompts hidden for Forgejo-only courses** — Courses with no GitHub organization no longer show GitHub-specific prompts in the UI ([#1363](https://github.com/pawtograder/platform/pull/1363))
+
+#### Cloud workspaces
+
+- **Open in Coder for GitHub assignments** — The **Open in Coder** workspace card now appears on GitHub assignments as well as Forgejo ones, as long as the course has the **Cloud workspaces** feature flag on and the student has a ready repository. The account-linking prompt names the correct Git host ([#1350](https://github.com/pawtograder/platform/pull/1350))
+- **Cloud workspaces flag on the Feature flags page** — Instructors can now turn the `cloud-workspaces` feature on and off from **Course Settings → Feature flags** without editing the database directly. Turning it on creates Forgejo accounts for the current roster right away ([#1351](https://github.com/pawtograder/platform/pull/1351))
+
+#### Office hours
+
+- **Browser alerts for escalations and the student check-in** — When the **Office hours: escalation alerts** feature flag is on, staff receive a browser notification when a ticket is escalated while their tab is in the background, and students receive one when staff resolve their ticket and the check-in window opens. Neither alert fires for state already present when the page opened ([#1334](https://github.com/pawtograder/platform/pull/1334))
+
+#### Feature flags
+
+- **Feature flags update live** — When another instructor changes a feature flag while you have the **Feature flags** page open, your view updates immediately without a reload ([#1342](https://github.com/pawtograder/platform/pull/1342))
+
+#### Bug fixes
+
+- **Gradebook column keeps the assignment name** — A gradebook column is now always named after its assignment, even after the assignment is renamed ([#891](https://github.com/pawtograder/platform/issues/891))
+- **Office hours check-in reopen follows the solo rule** — Reopening a private ticket's check-in now correctly applies the solo-student rule, and private-ticket refetch storms are stopped ([#1310](https://github.com/pawtograder/platform/pull/1310))
+- **MCP JWT secret wired in deployed environments** — `MCP_JWT_SECRET` is now generated and wired automatically on deployment, fixing API token creation failures in all deployed environments ([#1345](https://github.com/pawtograder/platform/pull/1345))
+
+#### Exams
+
+- **Rubric shown below the score on exams** — The rubric now appears under the score on exam submissions, and each answer shows its check result ([#1268](https://github.com/pawtograder/platform/issues/1268))
+- **Exam worker status messages** — The exam worker now reports what it is doing at each step, making it easier to diagnose slow or stuck exam processing ([#1157](https://github.com/pawtograder/platform/issues/1157))
+- **Instructor question names in the grader view** — The grader view now shows the instructor's question names instead of generic labels ([#1072](https://github.com/pawtograder/platform/issues/1072))
+- **Exam template drawable indicator** — The exam setup wizard now shows that the template is drawable and allows step 1 to proceed to step 2 ([#1271](https://github.com/pawtograder/platform/issues/1271))
+
 ## August 2026
 
 ### August 19, 2026
