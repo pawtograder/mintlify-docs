@@ -129,6 +129,14 @@ self-review due dates are managed separately to avoid accidental
 cross-edits. For per-student due-date changes use the inline edit
 control on the submissions table or the student's gradebook row.
 
+## Bulk Rerun Autograder
+
+The **Rerun Autograder** page lets you regrade multiple submissions at once. It is accessible from the assignment's **Dashboard** tab. Select the submissions to regrade, choose a grader version, and confirm.
+
+For Forgejo-backed assignments, the bulk rerun dispatches Forgejo Actions workflows rather than GitHub Actions runs. The page behaves identically regardless of which Git host backs the assignment.
+
+See [Rerunning the Autograder](/staff/assignments/autograding#rerunning-the-autograder) for the per-submission rerun flow and grader version options.
+
 ## Group Mentor Column
 
 When at least one group has an assigned mentor, a **Group mentor**
