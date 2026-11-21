@@ -908,6 +908,8 @@ old SHA and promote.
 Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
 
+Reruns work for both GitHub-hosted and Forgejo-hosted repositories. The bulk **Rerun Autograder** page dispatches reruns through Forgejo for Forgejo-backed assignments, so you do not need to switch workflows when your course uses Forgejo.
+
 See [Workflow Runs](/staff/workflow-runs) for the status of the run a rerun
 dispatches.
 
@@ -973,6 +975,26 @@ The action submits the tests, lint output, and logs back to the grading server. 
 If the action detects that the push came from a handout/template repo
 rather than a student repo, the server returns a `handout_notice` and
 the action exits successfully without grading.
+
+## Forgejo assignments
+
+Pawtograder supports Forgejo-hosted repositories as an alternative to GitHub. The autograder configuration and `pawtograder.yml` schema are the same for both, but a few setup steps differ.
+
+### Setting the grader repository
+
+For Forgejo assignments, you set the grader repository directly from the **Autograder** page rather than from the assignment form. Open the assignment's **Autograder** tab and use the **Grader Repository** field to point to the Forgejo repository that contains your `pawtograder.yml` and grader code.
+
+### Push hook
+
+Each class's Forgejo organization is automatically configured with a push hook that notifies Pawtograder when students push to their repositories. This hook is set up when the class is created and does not require any manual configuration. If you believe the hook is missing or broken, contact your deployment administrator.
+
+### Rerunning the autograder on Forgejo
+
+The bulk **Rerun Autograder** page dispatches reruns through Forgejo for Forgejo-backed assignments. Select the submissions you want to regrade and choose a grader version as you would for a GitHub assignment; Pawtograder handles the Forgejo-specific dispatch automatically.
+
+### GitHub prompts in a Forgejo course
+
+If your course has no GitHub organization configured, GitHub-specific prompts (such as repository setup instructions that reference GitHub) are hidden automatically. Only Forgejo-relevant instructions are shown.
 
 ## Running a Forked Action
 
