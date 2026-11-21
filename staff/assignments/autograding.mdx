@@ -908,6 +908,12 @@ old SHA and promote.
 Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
 
+Bulk reruns from the **Rerun Autograder** page route each submission to the
+correct host automatically. Forgejo assignments dispatch `grade.yml`
+through Forgejo's API; GitHub assignments use GitHub Actions. Both paths
+are handled in the same bulk operation, so a class that mixes GitHub and
+Forgejo assignments can be regraded in one step.
+
 See [Workflow Runs](/staff/workflow-runs) for the status of the run a rerun
 dispatches.
 
