@@ -6,6 +6,40 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 21, 2026
+
+#### Office hours
+- **Browser alerts for escalations and student check-in** — Pawtograder now sends native browser notifications when a student escalates a help request or checks in to a queue, so staff are alerted even when the tab is in the background. Alerts follow the solo rule: if you are the only staff member on duty, you receive the alert regardless of whether you are watching the request ([#1334](https://github.com/pawtograder/platform/pull/1334))
+- **Office hours metrics: queue health published** — Queue depth, age, and health metrics are now published to the Prometheus endpoint, with an ops playbook for responding to queue health alerts ([#1335](https://github.com/pawtograder/platform/pull/1335))
+
+#### Bug fixes
+- **Private-ticket refetch storms stopped** — Rapid re-fetches of private help-request data no longer pile up when multiple staff are viewing the same request ([#1310](https://github.com/pawtograder/platform/pull/1310))
+- **Check-in reopen follows the solo rule** — Reopening a check-in now correctly applies the solo-staff notification rule ([#1310](https://github.com/pawtograder/platform/pull/1310))
+- **Feature flags update live** — When one instructor changes a feature flag, the change is reflected immediately for all other instructors viewing the Feature flags page — no refresh needed ([#1342](https://github.com/pawtograder/platform/pull/1342))
+- **Gradebook column keeps the assignment name** — An assignment's gradebook column now stays named after the assignment when the assignment is renamed ([#891](https://github.com/pawtograder/platform/pull/891))
+
+#### Forgejo
+- **Rerun autograder for Forgejo repositories** — The bulk Rerun Autograder page now dispatches reruns through Forgejo for Forgejo-backed assignments ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **Set grader repo from the Autograder page** — For Forgejo assignments, the grader repository can now be set directly from the assignment's Autograder page ([#1359](https://github.com/pawtograder/platform/pull/1359))
+- **Push hook for Forgejo organizations** — Each class's Forgejo organization is now automatically configured with a push hook to `forgejo-repo-webhook` ([#1365](https://github.com/pawtograder/platform/pull/1365))
+- **GitHub prompts hidden in Forgejo-only courses** — Courses with no GitHub organization no longer show GitHub-specific prompts ([#1363](https://github.com/pawtograder/platform/pull/1363))
+
+#### Cloud workspaces
+- **Open in Coder for GitHub assignments** — The **Open in Coder** button now appears on GitHub-hosted assignments as well as Forgejo-hosted ones, when the `cloud-workspaces` feature flag is on ([#1350](https://github.com/pawtograder/platform/pull/1350))
+- **Cloud workspaces feature flag** — Instructors can now enable or disable cloud workspaces for their course from **Course Settings → Feature flags** ([#1351](https://github.com/pawtograder/platform/pull/1351))
+
+#### Exams
+- **Rubric shown under the score** — On exam submissions, the rubric is now displayed below the score, and each answer shows its rubric check result ([#1268](https://github.com/pawtograder/platform/pull/1268))
+- **Exam worker status messages** — The exam worker now reports what it is doing at each step, making it easier to diagnose slow or stuck exam processing ([#1157](https://github.com/pawtograder/platform/pull/1157))
+- **Question names in the grader view** — The grader view for exams now shows the instructor's question names alongside each answer ([#1072](https://github.com/pawtograder/platform/pull/1072))
+- **Rebuilding the rubric sets assignment max points** — Rebuilding an exam rubric now correctly sets the assignment's maximum points to the exam total ([#1284](https://github.com/pawtograder/platform/pull/1284))
+- **Exam template drawable indicator** — The exam creation wizard now shows that the template is drawable and allows step 1 to proceed to step 2 ([#1271](https://github.com/pawtograder/platform/pull/1271))
+
+#### Deployment
+- **MCP_JWT_SECRET wired in Helm chart** — The Helm chart (0.4.13) now maps `MCP_JWT_SECRET` from the JWT secret into the edge-functions environment and auto-generates it on upgrade. Previously, creating an API token failed on every deployed environment because this secret was not wired. Set `secrets.values.jwt.mcpJwtSecret` in your Helm values ([#1345](https://github.com/pawtograder/platform/pull/1345))
+
 ## August 2026
 
 ### August 19, 2026
