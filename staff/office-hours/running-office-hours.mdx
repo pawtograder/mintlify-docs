@@ -30,6 +30,16 @@ Each queue card lists the staff currently on duty, the end time of the shift in 
 
 When the course has an office hours or events calendar configured, a **Today's Schedule** strip appears above the queue list with buttons for the previous day, today, and the next day. Set the calendar under **Course Settings → Discord**, in the Calendar Integration section. See [Course Settings](/staff/course-settings).
 
+## Browser alerts for escalations and check-in
+
+Pawtograder can send browser notifications when a student escalates a help request or when a student checks in to a queue. These fire as native browser notifications so you are alerted even when the tab is in the background or minimized.
+
+To receive them, allow notifications from Pawtograder when the browser prompts you. If you dismissed the prompt, open the lock icon in the address bar and set **Notifications** to **Allow**. The **Notifications are blocked** banner (see below) appears when permission has been denied.
+
+<Note>
+Browser notifications for escalations and check-in follow the same solo rule as other queue notifications: if you are the only staff member on duty for a queue, you receive the alert regardless of whether you are watching the request. If other staff are also on duty, the alert goes only to the assigned staff member.
+</Note>
+
 ## Two banners you may see
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
