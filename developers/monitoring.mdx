@@ -153,6 +153,12 @@ The web app's `ServiceMonitor` reads `METRICS_SCRAPE_TOKEN` from the JWT secret 
 
 Enabling monitoring also installs a `postgres_exporter` queries ConfigMap that adds Pawtograder-specific series on top of the exporter defaults, including `pawtograder_replication_*`, `pawtograder_wal_archiving_*`, `pawtograder_db_connections_*`, `pawtograder_classes_*`, `pawtograder_active_submissions_active_count`, `pawtograder_help_queue_depth_*`, and `pawtograder_table_sizes_*`.
 
+### Office hours queue health
+
+The `metrics` edge function publishes a `pawtograder_office_hours_queue_health` gauge family that reports the health of each active office hours queue. Labels include `class_id`, `queue_id`, and `queue_name`. The value is `1` when the queue is healthy (staffed and not overloaded) and `0` otherwise. Use this metric to alert on queues that are open but have no staff on duty, or that have grown beyond a threshold you set.
+
+An ops playbook for responding to queue health alerts ships in the platform repository at `docs/ops/office-hours-queue-health.md`.
+
 ### Dashboards and alerts
 
 Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are individually toggleable through `monitoring.dashboards.*`: `stack-overview`, `postgres-deep-dive`, `realtime-fanout`, `edge-functions`, `app-business`, `rate-limiting`, `edge-soak`, and `queues-and-workers`. Each exposes a `datasource` template variable rather than a hardcoded datasource UID, so they import cleanly into any Prometheus-compatible Grafana.
