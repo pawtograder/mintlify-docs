@@ -885,6 +885,22 @@ Graders can attach rubric checks directly to an artifact by setting
 in the `artifact` field. See the
 [Rubrics documentation](/staff/assignments/rubrics) for details.
 
+## Forgejo repositories
+
+Pawtograder supports Forgejo as an alternative to GitHub for hosting student repositories. Forgejo-based assignments work the same way as GitHub-based ones from the student's perspective, but a few setup steps differ for instructors.
+
+### Setting the grader repository
+
+For Forgejo assignments, you set the grader repository directly from the **Configure Autograder** page rather than from the assignment form. Open the assignment's **Autograder** tab and enter the Forgejo repository URL in the **Grader repository** field. Save the page to apply the change.
+
+### Push hook
+
+Pawtograder automatically registers a push webhook on the Forgejo organization for each class. This hook forwards push events to Pawtograder so that student submissions are recorded when a student pushes to their Forgejo repository. The hook is created when the class is set up and does not require manual configuration.
+
+### Hiding GitHub prompts
+
+If a course has no GitHub organization configured, GitHub-specific prompts (such as repository setup instructions) are hidden from the assignment pages automatically. Only the Forgejo-relevant controls are shown.
+
 ## Rerunning the Autograder
 
 You can rerun the autograder on an existing submission from the assignment
