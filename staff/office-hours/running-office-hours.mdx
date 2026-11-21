@@ -34,6 +34,15 @@ When the course has an office hours or events calendar configured, a **Today's S
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
 
+## Escalation alerts
+
+When the **Office hours: escalation alerts** feature flag is on, Pawtograder sends browser notifications for two events that are easy to miss with the tab in the background:
+
+- **Staff**: a browser notification fires when a ticket's escalation count goes up. The notification aggregates — if two tickets are escalated in the same update, you get one notification naming the count. Nothing fires for tickets that were already escalated when you opened the page.
+- **Students**: when staff resolve a request and the check-in window opens, the student gets a browser notification if the tab is in the background, or an in-page banner if the tab is focused. The banner disappears after eight seconds.
+
+Neither alert fires for state that was already present when the page loaded, so opening a queue full of escalated tickets stays quiet. The flag is off by default; enable it under **Course Settings → Feature flags**. See [Feature flags](/staff/feature-flags).
+
 ## See also
 
 - [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking) for the record of shifts you have worked and the per-TA time dashboard.
