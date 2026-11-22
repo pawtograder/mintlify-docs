@@ -34,6 +34,15 @@ When the course has an office hours or events calendar configured, a **Today's S
 
 A **Real-time updates disconnected** warning means queue status and new requests may be stale until the connection recovers. A **Notifications are blocked** warning means the browser has denied notification permission, so you will not be alerted to new student messages; the banner tells you to allow notifications from the lock icon in the address bar.
 
+## Escalation and check-in alerts
+
+When the **Office hours: escalation alerts** course feature is on, two additional browser alerts fire while the tab is in the background:
+
+- **Staff escalation alert** — a persistent browser notification when a ticket's escalation count goes up. The alert fires once per escalation event (multiple tickets escalated at the same time produce one notification), and it never fires for tickets that were already escalated when the page opened.
+- **Student check-in alert** — a persistent browser notification (or an in-page banner when the tab is already focused) when staff resolve a student's ticket and the check-in window opens. The check-in window is short and closes on its own, so this alert exists to catch students who have the tab in the background.
+
+Both alerts are off by default. Enable them under **Course Settings → Feature flags** → **Office hours: escalation alerts**.
+
 ## See also
 
 - [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking) for the record of shifts you have worked and the per-TA time dashboard.

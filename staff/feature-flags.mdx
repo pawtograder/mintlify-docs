@@ -14,6 +14,8 @@ Open **Course Settings → Feature flags** in the course navigation bar. The ent
 
 Each flag is one card with a title, a description, and a single switch. There is no Save button and no confirmation step. Flipping a switch writes the change immediately and raises a **Saved** toast. If the write fails, the switch snaps back to its previous position and an error toast reports why.
 
+Flag state updates live: if another instructor changes a flag while you have the page open, your view reflects the change without a reload.
+
 <Note>
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
 </Note>

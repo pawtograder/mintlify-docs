@@ -180,6 +180,7 @@ Notes that will save you a support ticket:
   both in Pawtograder and on GitHub; Pawtograder recognizes them as
   leftovers and ignores pushes to them, so students who push get silence
   rather than an error. Set the mode before the release date.
+- **On Forgejo-backed assignments, the Repository Status page shows Forgejo-specific information.** Repository and handout-commit links point to the Forgejo instance rather than GitHub. The readiness column is headed **Ready** (not "GitHub Ready"), and a repository that has not been created yet says "Not Ready, pending creation" — Forgejo repositories are created by the reconciler once the student has a Forgejo account, not via a GitHub org invitation. Courses with no GitHub organization configured do not show GitHub-specific prompts (such as the org invitation banner) at all.
 
 ### Autograder
 
@@ -191,6 +192,8 @@ With it on, the handout and every student repository include
 exactly triggers a run is decided by that workflow's own `on:` block, not
 by this checkbox — see
 [What Counts as a Submission](/staff/assignments/autograding#what-counts-as-a-submission).
+
+On Forgejo-backed assignments, the **Configure Autograder** page also lets you set the **grader repository** directly. The grader repo is the repository that holds `pawtograder.yml` and the instructor test suite; setting it here tells Pawtograder which Forgejo repository to use when dispatching grading runs.
 
 <Warning>
 The form's helper text for this checkbox says that with the autograder

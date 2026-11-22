@@ -101,6 +101,28 @@ Each gauge family is reset only after its query succeeds, so a transient RPC fai
 
 All eight are gauges with no labels, sourced from the `get_async_queue_sizes` RPC.
 
+### Office hours queue health
+
+Five gauges per class report the health of office hours queues, labelled by `class_id`. They mirror the condition the staff dashboard paints red, so the metric and the dashboard cannot disagree. They are read non-fatally: a deployment that has not applied the `20261120130100` migration drops these gauges and keeps every other metric.
+
+| Metric | Means |
+| --- | --- |
+| `pawtograder_office_hours_queues_red` | Active queues at or over the class's waiting or oldest-wait threshold — **the one to alert on** |
+| `pawtograder_office_hours_queues_unstaffed` | Active queues with nobody on shift |
+| `pawtograder_office_hours_queues_active` | Active queues (denominator for the two above) |
+| `pawtograder_office_hours_requests_waiting` | Open requests across the class's active queues |
+| `pawtograder_office_hours_oldest_wait_minutes` | Age in minutes of the oldest open request in the class |
+
+Thresholds come from each class's own `office_hours_health_thresholds` (set in Queue Settings), defaulting to 5 waiting requests or 30 minutes oldest wait. A class that raises its own limit stops alerting here and on the staff dashboard without a deploy.
+
+One series per class, not per queue: queue names are free text and a Prometheus label domain must stay bounded. Two positive gauges (`queues_red > 0` and `queues_unstaffed > 0`) do not mean the same queue is both red and unstaffed — check the per-class RPC before acting on the pair:
+
+```sql
+SELECT * FROM public.office_hours_queue_health(<class_id>);
+```
+
+Outside office hours, `queues_red` is 0 and `queues_unstaffed` equals `queues_active` — nobody is on shift because there is nothing to staff. That is not an incident. The shape worth acting on is `queues_red > 0` **sustained**, especially alongside `queues_unstaffed > 0`.
+
 `pawtograder_queue_oldest_message_seconds{queue}` reports the age of the oldest message per queue, including messages deferred by retry backoff. The `queue` label takes one of: `async_calls`, `async_calls_dlq`, `async_calls_low_priority`, `gradebook_row_recalculate`, `gradebook_row_recalculate_dlq`, `discord_async_calls`, `discord_async_calls_dlq`, `notification_emails`.
 
 <Tip>
