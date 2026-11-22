@@ -26,13 +26,16 @@ Testing an assignment is not the same as looking at the course through a student
 
 Three things have to be in place first:
 
-- Your Pawtograder account must have a GitHub username linked. Without one the request fails with "User has no Github username linked".
 - The assignment must have a template (handout) repository configured. Without one the request completes but creates nothing.
 - You must be an instructor or grader in the course. Staff test repositories are refused for anyone else.
+- **GitHub assignments** additionally require your Pawtograder account to have a GitHub username linked. Without one the request fails with "User has no Github username linked".
+- **Forgejo assignments** additionally require your Forgejo account to be provisioned. Accounts are created for everyone in a course with cloud workspaces enabled; if yours is not ready yet, the request returns a 409 and tells you to try again in a few minutes.
 
 <Warning>
-**Create my test repo** creates a real repository in your course's GitHub organization, named `<course-slug>-<assignment-slug>-<your-github-username>`. You get one per assignment — the button disappears once a repository exists, and there is no control on this page to delete it. Clean up in GitHub if you need to start over.
+**Create my test repo** creates a real repository in your course's repository host (GitHub or Forgejo), named `<course-slug>-<assignment-slug>-<your-username>`. You get one per assignment — the button disappears once a repository exists, and there is no control on this page to delete it. Clean up on the host if you need to start over.
 </Warning>
+
+If repository creation fails partway through (for example, the write-access grant fails), the repository row is reserved but marked not ready. The page shows the repository name as plain text with a **(not yet ready ❌)** label and keeps **Create my test repo** available. Clicking it again resumes from where it stopped — no duplicate repository is created.
 
 On a groups-only assignment you still get an **individual** repository, not a group one. This is deliberate: staff are usually not members of a student group, and without the exception they would get no repository at all. So a test repo exercises the handout, the autograder, and grading, but not group formation or group permissions. (If you *are* a member of an assignment group, the group repository path applies instead.)
 
