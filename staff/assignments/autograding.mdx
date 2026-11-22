@@ -904,6 +904,10 @@ successfully. This is useful after fixing a bug in the grader or amending
 tests — you don't have to push a new commit, you just rerun against the
 old SHA and promote.
 
+<Note>
+Forgejo assignments are fully supported on the bulk **Rerun Autograder** page. Reruns for Forgejo repositories are dispatched to the Forgejo grading pipeline rather than GitHub Actions.
+</Note>
+
 <Warning>
 Rerunning replaces the existing autograder result for the selected submissions. If you have already released grades, rerun against a single test submission first to confirm the new behavior.
 </Warning>
