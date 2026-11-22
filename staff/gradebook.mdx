@@ -50,6 +50,10 @@ Staff-only columns are useful for internal grading calculations, curve adjustmen
 
 When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## Gradebook Visibility and Arrangement
+
+Who can see and rearrange the gradebook is controlled by a **capability** setting on the course. By default, only instructors can view and edit the gradebook. When the capability is configured to include graders, graders can also view the gradebook and rearrange columns. Contact your Pawtograder administrator to adjust the capability setting for your course.
+
 ## Managing Columns
 
 ### Reordering Columns
