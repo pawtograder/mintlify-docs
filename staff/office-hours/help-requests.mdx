@@ -67,8 +67,22 @@ The same sessions drive the course-wide dashboard described in [Staffing and Tim
 
 Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Resolving and Feedback](/students/office-hours/resolving-and-feedback)); staff do not get that dialog.
 
+### Resolve vs End ticket
+
+When you press **Resolve**, the student gets a 10-minute check-in asking "Did your problem get fixed?":
+
+- **Yes, I'm done** — the request stays resolved and the student gets the usual feedback prompt.
+- **No, still stuck** — the student writes what they are still stuck on, and the request is escalated automatically back to the queue. This is how students escalate; they do not have an Escalate button.
+- **No answer within 10 minutes** — the request stays resolved.
+
+The red **End ticket** button closes the request permanently with no check-in. Nobody can escalate it again, and the student cannot reopen it. Use it when more help will not fix the problem — wrong queue, a question for the instructor outside office hours, or a student who already left. You can also end a request you already resolved, during its check-in window, to withdraw the check-in.
+
+<Warning>
+End the video call before you resolve or end a request. Neither **Resolve** nor **End ticket** works while a call is running.
+</Warning>
+
 <Note>
-When staff resolve a request, no resolution status or note is recorded, only who resolved it and when. If you want data on how requests actually ended, ask students to resolve their own.
+When staff resolve or end a request, no resolution status or note is recorded, only who resolved it and when. If you want data on how requests actually ended, ask students to resolve their own.
 </Note>
 
 Nothing in the web interface sets `closed`. The only route to it is `pawtograder help-requests close`, which is instructor-only and defaults to that status. See [Command Line Interface](/staff/cli).
@@ -92,6 +106,10 @@ Press **Watch** on a request you are helping. Only the student who filed a reque
 </Tip>
 
 Browser notifications, the sound alert, the flashing tab title, and the favicon badge fire only while the tab is in the background, and only for other people's messages. Configure them from **Notification Settings** in your user menu.
+
+## What's new walkthrough
+
+The first time a staff member opens the office hours manage view, a **New in Office Hours: ticket escalation** dialog appears with a short tour of escalation, the Resolve check-in, and End ticket. Click **Show me** to walk through the five steps, or **Close** to dismiss it. A **What's new** button in the queue header reopens the tour at any time. The tour is shown once per person across all browsers and devices; dismissing or finishing it records the fact in your account.
 
 ## AI help
 
