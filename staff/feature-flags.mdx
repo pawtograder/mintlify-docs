@@ -12,7 +12,7 @@ Nine switches decide which Pawtograder modules your course uses. Six of them rem
 
 Open **Course Settings → Feature flags** in the course navigation bar. The entry is instructor-only. Graders never see it in the menu, and a grader who reaches the URL gets "Access denied. This page is only available to instructors."
 
-Each flag is one card with a title, a description, and a single switch. There is no Save button and no confirmation step. Flipping a switch writes the change immediately and raises a **Saved** toast. If the write fails, the switch snaps back to its previous position and an error toast reports why.
+Each flag is one card with a title, a description, and a single switch. There is no Save button and no confirmation step. Flipping a switch writes the change immediately and raises a **Saved** toast. If the write fails, the switch snaps back to its previous position and an error toast reports why. Changes made by one instructor are reflected live for all other instructors viewing the page — no reload is needed to see a colleague's update.
 
 <Note>
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
