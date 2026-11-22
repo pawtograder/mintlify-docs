@@ -6,6 +6,37 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22, 2026
+
+#### Office hours
+- **Ticket escalation walkthrough** — The first time a staff member opens the office hours queue in manage mode, a five-step **What's new** walkthrough explains ticket escalation, the Resolve check-in, and the End ticket button. A **What's new** button in the queue header reopens it at any time. The walkthrough is staff-only and remembered per user across browsers and devices ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Resolved requests visible without a reload** — After a TA resolves a request, the student's page now shows the resolved view and the Feedback button without requiring a reload. A new request's page also shows the correct student count and Resolve button immediately after creation, without waiting for a page reload ([#1166](https://github.com/pawtograder/platform/pull/1166))
+- **Private-ticket refetch storms fixed; check-in reopen follows the solo rule** — Resolved a bug where private ticket data was being refetched excessively, and ensured that reopening a check-in correctly follows the solo-request rule ([#1344](https://github.com/pawtograder/platform/pull/1344))
+
+#### Forgejo
+- **Forgejo assignment grader repo configurable from the Autograder page** — Forgejo assignments can now have their GitHub grader repository set from the **Configure Autograder** page. Creating a Forgejo assignment now navigates to the Autograder page, and grader pushes refresh the stored config and latest SHA ([#1360](https://github.com/pawtograder/platform/pull/1360))
+- **Repository Status describes Forgejo assignments correctly** — The Repository Status page for a Forgejo assignment now links repositories and handout commits to the Forgejo instance, shows a **Ready** column instead of **GitHub Ready**, and explains the reconciler flow instead of GitHub's rate limits ([#1362](https://github.com/pawtograder/platform/pull/1362))
+- **Forgejo repos show "waiting for access" when not yet ready** — A Forgejo repository that has not been provisioned yet shows a **Waiting for access** state on the assignment page ([#1390](https://github.com/pawtograder/platform/pull/1390))
+- **Forgejo org push hook** — Each class's Forgejo organization now receives a push hook to `forgejo-repo-webhook`, so pushes from Forgejo workspaces are recorded ([#1365](https://github.com/pawtograder/platform/pull/1365))
+- **Rerun autograder works for Forgejo repos** — The bulk **Rerun Autograder** page now correctly reruns grading on Forgejo repositories ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **GitHub prompts hidden for courses with no GitHub organization** — Courses that use only Forgejo no longer show GitHub-specific prompts ([#1363](https://github.com/pawtograder/platform/pull/1363))
+- **End-to-end cloud workspaces journey test** — Added a full end-to-end test covering the cloud workspaces journey on both GitHub and Forgejo: feature flag toggle, repository provisioning, workspace startup, repository cloning, and submission ([#1372](https://github.com/pawtograder/platform/pull/1372))
+
+#### Exams
+- **Auto-extract preserves points on questions with parts** — When Auto-extract places points on a question that has sub-parts, those points are now spread across the parts rather than being silently discarded. Adding the first part to a question also transfers the question's points to that part. A warning note appears on any question whose own points do not match what its parts add up to ([#1391](https://github.com/pawtograder/platform/pull/1391))
+- **Rubric shown under the score; each answer shows its check** — On exam submissions, the rubric now appears below the score, and each answer can show its grading check ([#1354](https://github.com/pawtograder/platform/pull/1354))
+
+#### Gradebook
+- **Assignment gradebook column keeps the assignment name** — Fixed a bug where renaming an assignment could cause its gradebook column to lose its name ([#963](https://github.com/pawtograder/platform/pull/963))
+
+#### Deployment
+- **`MCP_JWT_SECRET` wired in chart** — The Helm chart now generates and wires `MCP_JWT_SECRET`, which is required for creating API tokens. Previously, token creation failed on every deployed environment ([#1346](https://github.com/pawtograder/platform/pull/1346))
+
+#### Settings
+- **Feature flags update live** — When one instructor changes a feature flag, other instructors on the same course see the change immediately without a reload ([#1342](https://github.com/pawtograder/platform/pull/1342))
+
 ## August 2026
 
 ### August 19, 2026
