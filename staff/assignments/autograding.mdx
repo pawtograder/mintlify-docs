@@ -885,6 +885,14 @@ Graders can attach rubric checks directly to an artifact by setting
 in the `artifact` field. See the
 [Rubrics documentation](/staff/assignments/rubrics) for details.
 
+## Forgejo assignments
+
+Forgejo assignments use a GitHub grader repository. Set it from the **Configure Autograder** page under the **Grader repository** field (`owner/name`). The grader repository holds `pawtograder.yml` and the instructor test suite, exactly as for a GitHub assignment. Pawtograder reads the grader from GitHub when grading a Forgejo submission.
+
+Turning the autograder on or off is done from **Edit Assignment**, not from the Configure Autograder page. The Configure Autograder page disables that radio for Forgejo assignments.
+
+Pushes to the grader repository's default branch refresh the stored `pawtograder.yml` and the latest autograder SHA, the same as for GitHub assignments.
+
 ## Rerunning the Autograder
 
 You can rerun the autograder on an existing submission from the assignment
