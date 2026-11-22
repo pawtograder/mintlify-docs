@@ -1,12 +1,25 @@
 ---
 title: "Repository Permissions"
-description: "Audit and fix GitHub repository permissions for assignment repositories"
+description: "Audit and fix GitHub or Forgejo repository permissions for assignment repositories, and understand who can use each action"
 icon: "shield-check"
 ---
 
 # Repository Permissions
 
-Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+Pawtograder automatically manages repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+
+## Who can use the repair actions
+
+The **Repository Status** page is visible to all course staff. The repair actions — **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** — require the `manage_student_repositories` capability. The **Sync** actions require the `manage_assignments` capability.
+
+By default, instructors hold `manage_student_repositories` and graders do not. An instructor can grant it to a custom role (for example, a Head TA role) from **Course Settings → Roles**. A grader who opens the page by URL can read the repository table but will not see the repair buttons or the **Repository Status** nav item.
+
+| Action | Required capability |
+| --- | --- |
+| Retry creation | `manage_student_repositories` |
+| Fix Permissions | `manage_student_repositories` |
+| Cleanup individual repositories | `manage_student_repositories` |
+| Sync (one row or Sync Selected) | `manage_assignments` |
 
 ## Fix Repository Permissions
 
@@ -34,6 +47,17 @@ After running the fix, you'll see a summary showing:
 <Note>
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
+
+## Repository Status for Forgejo assignments
+
+On a Forgejo assignment, the **Repository Status** page shows Forgejo-specific information:
+
+- Repository names and commit links point to the Forgejo instance rather than GitHub.
+- The readiness column is headed **Ready** (not "GitHub Ready").
+- A repository that has not been created yet shows **Not Ready, pending creation**. Forgejo repositories are created by the reconciler once the student has a Forgejo account; there is no org invitation step.
+- The page description explains the Forgejo creation flow instead of GitHub's rate limits.
+
+If the Forgejo instance URL is not yet known, repository names appear as plain text without links.
 
 ## When to Use Fix Permissions
 

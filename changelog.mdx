@@ -6,6 +6,27 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22, 2026
+
+#### Office hours
+- **Onboarding hints for new students** — A new course feature flag, `office-hours-student-onboarding` (off by default), shows guided popovers to students on the office hours page until they click an enabled **New Request** button for the first time. One hint points at the queue list when the course has two or more text queues; the other tells the student whether staff are on duty and, if not, when the next office hours start. The new request form also gets longer helper text on the Help Queue, Template, and Description fields while the flag is on. Completion is saved per user in the database, so the hints stay closed on every browser and device. See [Feature flags](/staff/feature-flags) and [Submitting a Request](/students/office-hours/submitting-a-request#onboarding-hints) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **Ticket escalation and "What's new" walkthrough** — Staff can now hand a ticket to another TA with a short note using the purple **Escalate** button. The ticket returns to the top of the queue so the student does not restart at the back of the line. **Resolve** now triggers a 10-minute student check-in ("Did your problem get fixed?"); if the student says No, the ticket is escalated automatically. A new **End ticket** button closes a ticket permanently with no check-in. The first time a staff member opens the manage view, a "What's new" dialog offers a five-step tour of these changes; the **What's new** button in the queue header reopens it at any time. See [Help Requests](/staff/office-hours/help-requests) and [Running Office Hours](/staff/office-hours/running-office-hours) ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Resolved requests visible in new request form** — The new request form now loads the roster correctly and shows previously resolved requests ([#1166](https://github.com/pawtograder/platform/pull/1166))
+
+#### Assignments and repositories
+- **Repository Status actions gated by capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page now require the `manage_student_repositories` capability instead of the instructor role. Instructors keep all access; graders on a custom role can be granted it. The **Sync** buttons and row checkboxes continue to require `manage_assignments`. See [Repository Permissions](/staff/assignments/repository-permissions) ([#1384](https://github.com/pawtograder/platform/pull/1384))
+- **Forgejo: Repository Status shows Forgejo links and descriptions** — On a Forgejo assignment, the Repository Status page links repositories and commits to the Forgejo instance, heads the readiness column "Ready" instead of "GitHub Ready", and explains the Forgejo creation flow instead of GitHub's rate limits. A not-yet-ready Forgejo repo shows "Not Ready, pending creation" ([#1362](https://github.com/pawtograder/platform/pull/1362))
+- **Forgejo: bulk Rerun Autograder routes to Forgejo** — The **Rerun Autograder** page now correctly triggers `grade.yml` on Forgejo for Forgejo assignment submissions, instead of dispatching to GitHub ([#1366](https://github.com/pawtograder/platform/pull/1366))
+
+#### Exams
+- **Auto-extract keeps points on questions with parts** — When Gemini's Auto-extract puts points on a question that has sub-parts, those points are now spread evenly across the parts (in whole points) instead of being silently discarded. Adding the first part to a question that already has points gives the part those points. A warning note appears next to any question whose own points do not match what its parts add up to ([#1391](https://github.com/pawtograder/platform/pull/1391))
+
+#### Bug fixes
+- **Gradebook column keeps the assignment's name** — A gradebook column linked to an assignment now stays named after the assignment when the assignment is renamed ([#963](https://github.com/pawtograder/platform/pull/963))
+- **Deployment: MCP_JWT_SECRET wired in Helm chart** — The Helm chart now provisions `MCP_JWT_SECRET` alongside `JWT_SIGNING_JWK`, so deployed environments can create API tokens. Previously, clicking **Create Token** failed with `MCP_JWT_SECRET must be set and at least 32 characters` on every deployed environment. `GenerateJwtKeys.ts` emits the key in all output modes; `secrets.autogenerate` backfills it on upgrade ([#1346](https://github.com/pawtograder/platform/pull/1346))
+
 ## August 2026
 
 ### August 19, 2026
