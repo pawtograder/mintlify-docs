@@ -270,6 +270,10 @@ A message such as `MCP_JWT_SECRET must be set and at least 32 characters` is a d
 
 The same missing `MCP_JWT_SECRET` also breaks token creation, which fails with `HTTP 500 {"error":"MCP_JWT_SECRET must be set and at least 32 characters"}`. Listing tokens keeps working, because `createApiToken` is called only on the create path (`mcp-tokens/index.ts:203`), so the API Tokens dialog looks healthy until you click **Create Token**. That call also precedes the `api_tokens` insert at `:207`, so a failed create leaves no unusable token row behind.
 
+<Note>
+The Helm chart (0.4.13+) generates and wires `MCP_JWT_SECRET` automatically on install and upgrade, and backfills it on existing deployments. If you are on an older chart and token creation is failing with this error, set `secrets.values.jwt.mcpJwtSecret` (32 characters or more) in your Helm values and upgrade.
+</Note>
+
 <Tip>
 Check token creation first. If the dialog cannot issue a token, the deployment is misconfigured and nothing about your client is worth debugging yet.
 </Tip>
