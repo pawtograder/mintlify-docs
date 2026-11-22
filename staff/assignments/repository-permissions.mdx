@@ -62,3 +62,14 @@ Pawtograder automatically manages repository permissions when:
 - Individual submissions are activated or deactivated.
 
 The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
+
+## Forgejo assignments
+
+For assignments using Forgejo as the Git provider, the Repository Status page shows Forgejo-specific information:
+
+- Repository and handout commit links point to the Forgejo instance rather than GitHub.
+- The readiness column is labeled **Ready** (not "GitHub Ready").
+- A repository that hasn't been created yet shows **Not Ready, pending creation** — Forgejo repositories are created by the reconciler once the student has a Forgejo account, rather than through a GitHub org invitation flow.
+- The page description explains the Forgejo reconciler process instead of GitHub's rate limits.
+
+The **Sync** feature is not yet available for Forgejo assignments.
