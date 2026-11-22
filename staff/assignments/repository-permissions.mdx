@@ -1,12 +1,14 @@
 ---
 title: "Repository Permissions"
-description: "Audit and fix GitHub repository permissions for assignment repositories"
+description: "Audit and fix repository permissions for assignment repositories"
 icon: "shield-check"
 ---
 
 # Repository Permissions
 
-Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+Pawtograder automatically manages repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+
+For **Forgejo assignments**, student repositories are created by the Forgejo reconciler when the assignment is released and for students who enroll later. The **Repository Status** page shows a **Ready** column (rather than **GitHub Ready**) and links repositories and handout commits to the Forgejo instance. A repository that is not yet ready shows **Not Ready, pending creation** while the reconciler runs.
 
 ## Fix Repository Permissions
 
