@@ -6,6 +6,27 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22, 2026
+
+#### Gradebook
+- **Gradebook access controlled by capability** — The staff gradebook now requires the `manage_gradebook` capability. Instructors hold it by default; graders on the default grader role do not. A grader without it is redirected away from the gradebook page, and the Gradebook link, search result, and Grades card on a student's profile page are hidden. Instructors can grant it to a custom role such as Head TA. Download Gradebook remains instructor-only. See [Gradebook](/staff/gradebook) ([#1356](https://github.com/pawtograder/platform/pull/1356))
+- **Gradebook column named after its assignment** — A gradebook column linked to an assignment is now always named after that assignment. Previously the name could drift if the assignment was renamed ([#963](https://github.com/pawtograder/platform/pull/963))
+
+#### Repository permissions
+- **Repository repair actions controlled by capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page now require the `manage_student_repositories` capability. Instructors hold it by default; graders do not. The Repository Status nav link is also hidden from graders without it. The **Sync** button continues to require `manage_assignments`. See [Repository Permissions](/staff/assignments/repository-permissions) ([#1384](https://github.com/pawtograder/platform/pull/1384))
+
+#### Office hours
+- **Hints for first-time students** — A new `office-hours-student-onboarding` course feature flag (off by default) shows students up to two guided popovers on the office hours page: one pointing at the queue list when the course has multiple text queues, and one on the New Request button indicating whether staff are on duty. The new request form also gets longer helper text. Completion is recorded per user so the hints appear only once. See [Feature flags](/staff/feature-flags) and [Office Hours for Students](/students/office-hours) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **What's new walkthrough for ticket escalation** — The first time a staff member opens the office hours manage view, a dialog introduces ticket escalation with a five-step tour. A **What's new** button in the header reopens it at any time. See [Running Office Hours](/staff/office-hours/running-office-hours) ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Office hours roster and resolved requests** — The new request form now loads the course roster correctly, and resolved requests are shown in the queue view ([#1166](https://github.com/pawtograder/platform/pull/1166))
+
+#### Exams
+- **Line scans aligned with template before reading regions** — Exam scan processing now aligns each page with the template before reading question regions, improving accuracy on skewed scans ([#1292](https://github.com/pawtograder/platform/pull/1292))
+- **Batch processing lock** — The Process button is now disabled while a batch is already being processed, preventing duplicate runs ([#1329](https://github.com/pawtograder/platform/pull/1329))
+- **Auto-extract preserves points on questions with parts** — Auto-extract no longer clears the point value on a question that has sub-parts ([#1370](https://github.com/pawtograder/platform/pull/1370))
+
 ## August 2026
 
 ### August 19, 2026

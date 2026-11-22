@@ -10,6 +10,14 @@ icon: "table"
   <img src="/images/staff/gradebook-grid-1787282079132.png" alt="Gradebook grid with one row per student, Class Section and Lab Section columns, two assignment columns showing Max 100, a Skill #12 column marked with a lock icon, calculated skills columns, and a footer with Download Gradebook, Import Columns, and Add Column" />
 </Frame>
 
+## Access
+
+The staff gradebook requires the `manage_gradebook` capability. Instructors hold it by default. Graders on the default grader role do not — they are redirected to the course home page if they open the gradebook URL, and the **Gradebook** link, the **Manage gradebook** search result, and the **Grades** card on a student's profile page are all hidden from them.
+
+To give a grader access to the gradebook, create a custom role (for example, "Head TA"), turn on `manage_gradebook` for that role, and assign the grader to it. A grader with `manage_gradebook` can do everything an instructor can in the gradebook except download the gradebook CSV, which remains instructor-only.
+
+Students always see their own released grades regardless of this capability.
+
 ## Column Semantics
 
 In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources.
@@ -54,7 +62,7 @@ When you release or unrelease a gradebook column, Pawtograder automatically enqu
 
 ### Reordering Columns
 
-You can reorder gradebook columns to organize them logically:
+You can reorder gradebook columns to organize them logically. Reordering requires the `manage_gradebook` capability.
 
 - **Drag and drop**: Click and drag the grip handle in any column header to reorder columns
 - **Move left/right**: Open the column menu (the chevron in the column header) and select **Move Left** or **Move Right** to shift a column one position
@@ -68,11 +76,11 @@ The chevron in each column header opens a menu with:
 
 - **Show Filter** / **Hide Filter**: toggle the per-column filter input
 - **Sort Ascending**, **Sort Descending**, **Clear Sort**
-- **Edit Column**: open the column editor (name, maximum score, score expression, render expression, and staff-only)
-- **Move Left**, **Move Right**
-- **Release Column**, **Unrelease Column**: shown only for manually-entered columns and for staff-only columns
-- **Convert Missing to 0**: shown only for manually-entered columns and for columns whose score expression starts with `assignments(`
-- **Delete Column**
+- **Edit Column**: open the column editor (name, maximum score, score expression, render expression, and staff-only) — requires `manage_gradebook`
+- **Move Left**, **Move Right** — requires `manage_gradebook`
+- **Release Column**, **Unrelease Column**: shown only for manually-entered columns and for staff-only columns — requires `manage_gradebook`
+- **Convert Missing to 0**: shown only for manually-entered columns and for columns whose score expression starts with `assignments(` — requires `manage_gradebook`
+- **Delete Column** — requires `manage_gradebook`
 
 Column and section filter dropdowns carry **Select all** and **Select none** buttons for faster multi-select filtering.
 
