@@ -274,6 +274,10 @@ The same missing `MCP_JWT_SECRET` also breaks token creation, which fails with `
 Check token creation first. If the dialog cannot issue a token, the deployment is misconfigured and nothing about your client is worth debugging yet.
 </Tip>
 
+<Note>
+`MCP_JWT_SECRET` is a separate secret from `JWT_SECRET`. `JWT_SECRET` is the ES256 JWK that signs short-lived per-user JWTs; `MCP_JWT_SECRET` is the HMAC secret that signs the long-lived `mcp_` API tokens. Both must be set. The Helm chart's `secrets.autogenerate` generates `MCP_JWT_SECRET` on install and backfills it on upgrade; if you are running an older chart version, generate a value of at least 32 characters and set it under `secrets.values.jwt.mcpJwtSecret`.
+</Note>
+
 ### `503 Service Unavailable`
 
 `Could not verify token revocation status: <message>`. The `revoked_token_ids` lookup failed, so the request is rejected without deciding whether the token is good (`MCPAuth.ts:227`). It is deliberately not a 401, so a database or permission outage stays visible to monitoring instead of being reported as many revoked tokens.
