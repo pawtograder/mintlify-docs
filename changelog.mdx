@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22, 2026
+
+#### Office hours
+- **Ticket escalation: Escalate, Resolve check-in, and End ticket** — When you finish helping a student, **Resolve** now starts a 10-minute check-in: the student is asked whether their problem was fixed, and if they say no the ticket is automatically escalated back to the queue. A new **Escalate** button lets you hand a ticket to another staff member with a note on what you tried; the ticket sorts above every normal ticket so the student keeps their place. A new **End ticket** button closes a request permanently with no check-in, for cases where more help will not fix the problem. See [Help Requests](/staff/office-hours/help-requests) ([#1169](https://github.com/pawtograder/platform/pull/1169))
+- **What's new walkthrough for ticket escalation** — The first time a staff member opens the help queue in manage mode, a short tour explains the new Escalate, Resolve, and End ticket controls. The **What's new** button in the queue header reopens it at any time. The tour is shown once per person across all browsers and devices ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Office hours queue fixes** — Fixed a bug where private-ticket refetches could cause request storms, and check-in reopen now correctly follows the solo rule ([#1310](https://github.com/pawtograder/platform/pull/1310))
+
+#### Assignments
+- **Repository Status works for Forgejo assignments** — On a Forgejo assignment, the Repository Status page now links repositories and handout commits to the Forgejo instance, shows Forgejo-specific readiness information, and describes what the reconciler does instead of GitHub's rate limits ([#1362](https://github.com/pawtograder/platform/pull/1362))
+- **`manage_student_repositories` capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on Repository Status now require the `manage_student_repositories` capability instead of the instructor role. Instructors hold it by default; an instructor can grant it to a custom role such as Head TA. The **Sync** button continues to require `manage_assignments`. See [Repository Permissions](/staff/assignments/repository-permissions) ([#1010](https://github.com/pawtograder/platform/pull/1010))
+- **Forgejo assignment page improvements** — The assignment page now shows the real grader repository for Forgejo assignments and links the handout to the Forgejo instance. The bulk Rerun Autograder page triggers grading on Forgejo for Forgejo repos ([#1361](https://github.com/pawtograder/platform/pull/1361), [#1366](https://github.com/pawtograder/platform/pull/1366))
+- **Forgejo repository status indicators** — A Forgejo repository that is not yet ready shows "Waiting for access" instead of a GitHub org invitation prompt ([#1390](https://github.com/pawtograder/platform/pull/1390))
+- **Gradebook column names preserved** — An assignment's gradebook column now stays named after the assignment when the assignment is renamed ([#891](https://github.com/pawtograder/platform/pull/891))
+
+#### Exams
+- **Auto-extract preserves points on questions with parts** — Auto-extract no longer clears the point value on a question that has sub-parts ([#1370](https://github.com/pawtograder/platform/pull/1370))
+- **Rubric shown under the score on exams** — The rubric now appears below the score on exam submissions, and each answer can show its check ([#1268](https://github.com/pawtograder/platform/pull/1268))
+
+#### Deployment
+- **`MCP_JWT_SECRET` wired in the Helm chart** — The chart now provisions and supplies `MCP_JWT_SECRET` to edge functions, fixing API token creation on all deployed environments. `GenerateJwtKeys.ts` emits the key in all output modes. See [MCP Server](/developers/mcp-server) ([#1345](https://github.com/pawtograder/platform/pull/1345))
+
 ## August 2026
 
 ### August 19, 2026
