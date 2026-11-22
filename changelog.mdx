@@ -6,6 +6,39 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22, 2026
+
+#### Forgejo integration
+- **Forgejo staff repo file tools and test assignment repos** — Staff can now create test repositories for Forgejo-backed assignments from the **Test Assignment** page, and the MCP server's grader-file tools work against Forgejo repositories ([#1396](https://github.com/pawtograder/platform/pull/1396))
+- **Repository Status shows Forgejo repos with links** — The assignment's **Repository Status** page now describes Forgejo repositories and links them directly to Forgejo ([#1362](https://github.com/pawtograder/platform/pull/1362))
+- **Grader repo shown and linked on the Autograder page** — The assignment's real grader repository is displayed on the **Configure Autograder** page, and Forgejo handout repositories link to Forgejo ([#1361](https://github.com/pawtograder/platform/pull/1361))
+- **Set grader repo from the Autograder page** — For Forgejo assignments, the grader repository can now be set directly from the **Configure Autograder** page ([#1360](https://github.com/pawtograder/platform/pull/1360))
+- **Rerun Autograder works for Forgejo repos** — The bulk **Rerun Autograder** page now dispatches reruns against Forgejo repositories ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **Push hook per class Forgejo org** — Each class's Forgejo organization now receives a push webhook to `forgejo-repo-webhook`, so pushes trigger grading automatically ([#1365](https://github.com/pawtograder/platform/pull/1365))
+- **"Waiting for access" state for repos not yet ready** — Students see a "Waiting for access" message when their Forgejo repository exists but access has not been granted yet, instead of an error ([#1390](https://github.com/pawtograder/platform/pull/1390))
+- **GitHub prompts hidden when no GitHub org is configured** — Courses that use Forgejo exclusively no longer show GitHub-specific prompts ([#1363](https://github.com/pawtograder/platform/pull/1363))
+
+#### Exams
+- **Points preserved on questions with parts** — Auto-extract no longer drops the point value set on a question that has sub-parts ([#1391](https://github.com/pawtograder/platform/pull/1391))
+- **Rubric shown under the score; each answer shows its check** — On exam submissions, the rubric is now displayed beneath the score, and each answer shows its associated rubric check ([#1354](https://github.com/pawtograder/platform/pull/1354))
+
+#### Office hours
+- **Roster loaded fresh for each new request** — The student roster is fetched when the new-request form opens, so recently enrolled students appear without a page reload ([#1166](https://github.com/pawtograder/platform/pull/1166))
+- **Resolved requests shown in the queue sidebar** — The **Resolved** group in the request sidebar now displays resolved requests ([#1166](https://github.com/pawtograder/platform/pull/1166))
+- **Check-in reopen follows the solo rule** — Reopening a check-in request now correctly enforces the one-solo-request-per-queue limit ([#1344](https://github.com/pawtograder/platform/pull/1344))
+
+#### Gradebook
+- **Assignment column keeps its name** — The gradebook column for an assignment now stays named after the assignment when the assignment is renamed ([#963](https://github.com/pawtograder/platform/pull/963))
+
+#### Course settings
+- **Feature flags update live** — When one instructor changes a feature flag, all other instructors viewing the **Feature flags** page see the change immediately without reloading ([#1342](https://github.com/pawtograder/platform/pull/1342))
+
+#### Developer tools
+- **Open in Coder for GitHub assignments** — The **Open in Coder** button now works for GitHub-backed assignments, not only Forgejo ones ([#1350](https://github.com/pawtograder/platform/pull/1350))
+- **MCP_JWT_SECRET wired in Helm chart** — The Helm chart (0.4.13) now generates and wires `MCP_JWT_SECRET` automatically, fixing API token creation on all deployed environments. Existing deployments have the secret backfilled on upgrade ([#1346](https://github.com/pawtograder/platform/pull/1346))
+
 ## August 2026
 
 ### August 19, 2026
