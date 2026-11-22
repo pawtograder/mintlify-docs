@@ -101,6 +101,10 @@ The server accepts tokens issued by Pawtograder's own API token system in the `A
 | Revocation | Looked up in `revoked_token_ids` on every request | `MCPAuth.ts:203-230` |
 | Audit | `last_used_at` updated on both `GET` and `POST`, without blocking the response | `MCPAuth.ts:424-435` |
 
+<Warning>
+`MCP_JWT_SECRET` is required for token creation to work. It must be set to a string of at least 32 characters in the edge-functions environment. Without it, the **API Tokens** dialog appears healthy (listing tokens works), but clicking **Create Token** fails with `HTTP 500 {"error":"MCP_JWT_SECRET must be set and at least 32 characters"}`. The Helm chart (≥ 0.4.13) generates and wires this secret automatically on install and upgrade. If you are running an older chart or a custom deployment, add `MCP_JWT_SECRET` to the `jwt` secret and map it into the edge-functions environment.
+</Warning>
+
 Create a token from the **user menu** on a course page: click your avatar, then **API Tokens**. It is not under Settings, and the whole menu item is hidden while you preview the course as a student (`app/course/[course_id]/UserMenu.tsx:787`). The same dialog issues CLI tokens; see the [CLI reference](/developers/cli#create-an-api-token).
 
 ### Scopes

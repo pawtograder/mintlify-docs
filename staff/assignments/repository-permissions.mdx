@@ -1,12 +1,21 @@
 ---
 title: "Repository Permissions"
-description: "Audit and fix GitHub repository permissions for assignment repositories"
+description: "Audit and fix repository permissions for assignment repositories on GitHub or Forgejo"
 icon: "shield-check"
 ---
 
 # Repository Permissions
 
-Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+Pawtograder automatically manages repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course. Assignments can use either GitHub or Forgejo as the repository host.
+
+## Repository Status Page
+
+The **Repositories** page for an assignment shows every student repository, its readiness state, and links to the repository on its host. The page adapts to the assignment's Git provider:
+
+- **GitHub assignments** — links open `github.com`, the readiness column is labeled **GitHub Ready**, and the page describes GitHub's rate-limited provisioning and the Sync feature.
+- **Forgejo assignments** — links open the Forgejo instance, the readiness column is labeled **Ready**, and the page explains that repositories are created by the Forgejo reconciler when the assignment is released and for students who enroll later. A not-yet-ready Forgejo repository shows **Not Ready, pending creation** rather than a GitHub org invitation prompt.
+
+Handout commit history and synced-SHA links also use the assignment's host. If the host URL is not yet known, repository names and commit IDs are shown as plain text rather than links.
 
 ## Fix Repository Permissions
 
@@ -32,7 +41,7 @@ After running the fix, you'll see a summary showing:
 - **Errors**: Number of repositories that encountered errors during the audit
 
 <Note>
-The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
+The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on the repository host.
 </Note>
 
 ## When to Use Fix Permissions
