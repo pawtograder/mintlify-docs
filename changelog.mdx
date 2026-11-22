@@ -6,6 +6,34 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22, 2026
+
+#### Office hours
+- **Guided hints for new students** — A new course feature flag, `office-hours-student-onboarding`, adds optional guided hints for students on the office hours pages. When enabled, students see up to two hints (one pointing at the queue list when the course has multiple text queues, one next to the **New Request** button) until they click an enabled **New Request** button for the first time. The new-request form also shows longer helper text on the Help Queue, Template, and Description fields. The hints are off by default. See [Feature flags](/staff/feature-flags) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **What's new walkthrough for ticket escalation** — The first time a staff member opens the office hours manage view, a dialog introduces ticket escalation: the **Escalate** button, what an escalated ticket looks like, how **Resolve** now starts a student check-in, and the new **End ticket** button. A **What's new** button in the queue header reopens the tour at any time. See [Running Office Hours](/staff/office-hours/running-office-hours) ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Resolved requests visible in All Requests** — The All Requests view now shows resolved requests alongside open ones ([#1166](https://github.com/pawtograder/platform/pull/1166))
+
+#### Assignments and repositories
+- **Capability-based access to repository repair actions** — A new `manage_student_repositories` capability controls who can use **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** on the Repository Status page. Instructors hold this capability by default; it can be granted to custom roles such as Head TA. The **Sync** actions remain gated on `manage_assignments`. See [Repository Permissions](/staff/assignments/repository-permissions) ([#1384](https://github.com/pawtograder/platform/pull/1384))
+- **Forgejo: Repository Status page** — For Forgejo assignments, the Repository Status page now links repositories and handout commits to the Forgejo instance, labels the readiness column **Ready** (not "GitHub Ready"), and explains the Forgejo reconciler process instead of GitHub rate limits. Repositories awaiting creation show **Not Ready, pending creation** ([#1362](https://github.com/pawtograder/platform/pull/1362))
+- **Forgejo: rerun autograder from bulk page** — The bulk **Rerun Autograder** page now dispatches reruns for Forgejo assignments against Forgejo repositories ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **Forgejo: grader repo on the Autograder page** — The Autograder configuration page now shows and links the real grader repository for Forgejo assignments ([#1361](https://github.com/pawtograder/platform/pull/1361))
+- **Forgejo: push webhook per class org** — Each class's Forgejo organization now receives a push webhook to `forgejo-repo-webhook`, so pushes trigger grading ([#1365](https://github.com/pawtograder/platform/pull/1365))
+- **Forgejo: staff repo file tools and Test Assignment repos** — Staff can now use the grader file tools on Forgejo assignments, and Test Assignment repositories work on Forgejo ([#1396](https://github.com/pawtograder/platform/pull/1396))
+- **Forgejo: "waiting for access" state** — A Forgejo repository that isn't ready yet shows a **Waiting for access** state to students instead of an error ([#1390](https://github.com/pawtograder/platform/pull/1390))
+- **Hide GitHub prompts in courses without a GitHub org** — Courses that use Forgejo exclusively no longer show GitHub-specific prompts ([#1363](https://github.com/pawtograder/platform/pull/1363))
+
+#### Gradebook
+- **Gradebook column named after its assignment** — A gradebook column linked to an assignment now keeps the assignment's name when the assignment is renamed ([#891](https://github.com/pawtograder/platform/pull/891))
+
+#### Bug fixes
+- **Exam: line scan alignment** — The exam scanner now aligns each scan with the template before reading question regions, fixing misread scores on scans that were slightly rotated or shifted ([#1292](https://github.com/pawtograder/platform/pull/1292))
+- **Exam: batch processing guard** — The **Process** button is now disabled while a batch is already being processed, preventing duplicate processing jobs ([#1329](https://github.com/pawtograder/platform/pull/1329))
+- **Exam: auto-extract preserves points on questions with parts** — Auto-extract no longer clears the point value on a question that has sub-parts ([#1370](https://github.com/pawtograder/platform/pull/1370))
+- **Office hours: check-in reopen follows the solo rule** — Reopening a check-in now correctly applies the one-open-request-per-student rule ([#1310](https://github.com/pawtograder/platform/pull/1310))
+
 ## August 2026
 
 ### August 19, 2026
