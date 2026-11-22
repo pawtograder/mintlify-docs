@@ -6,6 +6,40 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22, 2026
+
+#### Forgejo integration
+
+- **Staff repo file tools on Forgejo** — The in-browser file editor (`pawtograder.yml` and workflow files) and the underlying `repository-get-file`, `repository-list-files`, and `repository-write-file` edge functions now work on Forgejo repositories as well as GitHub. Pass `gitProvider: "forgejo"` to target a Forgejo repo; the org is validated against the course's own Forgejo org so one course's staff cannot reach another's ([#1396](https://github.com/pawtograder/platform/pull/1396))
+- **Test Assignment repos on Forgejo** — On a Forgejo assignment, **Create my test repo** now creates the repository on Forgejo (named from the class slug, assignment slug, and your Forgejo login) rather than doing nothing. If creation fails partway, the button stays available to retry ([#1396](https://github.com/pawtograder/platform/pull/1396))
+- **Repository Status page for Forgejo assignments** — The **Repositories** page now shows Forgejo-aware content: repository and commit links point to the Forgejo instance, the readiness column is headed **Ready** instead of **GitHub Ready**, and not-yet-ready repos say **Not Ready, pending creation** rather than showing a GitHub org invitation prompt ([#1362](https://github.com/pawtograder/platform/pull/1362))
+- **Grader repo shown correctly on the assignment page** — The assignment page now reads the grader repo from `autograder.grader_repo` instead of guessing it from the course's GitHub org and slug. Graders see "Visible to instructors" rather than a wrong guess, and instructors see "No grader repository" when none is set ([#1361](https://github.com/pawtograder/platform/pull/1361))
+- **Set a Forgejo assignment's grader repo from the Autograder page** — Forgejo assignments can now have their GitHub grader repository configured from the **Configure Autograder** page. The page shows an editable **Grader repository** field, and a push to that GitHub grader repo refreshes the stored `pawtograder.yml` config and `latest_autograder_sha` ([#1360](https://github.com/pawtograder/platform/pull/1360))
+- **Bulk Rerun Autograder works for Forgejo assignments** — The **Rerun Autograder** page now correctly dispatches reruns for Forgejo assignment submissions through the Forgejo API rather than GitHub Actions ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **"Waiting for access" shown for a not-yet-ready Forgejo repo** — Students whose Forgejo repository is still being provisioned now see a clear "waiting for access" state instead of a broken link ([#1390](https://github.com/pawtograder/platform/pull/1390))
+- **GitHub prompts hidden on courses with no GitHub organization** — Assignment pages no longer show GitHub-specific prompts (such as org invitation links) on courses that use Forgejo and have no GitHub organization configured ([#1363](https://github.com/pawtograder/platform/pull/1363))
+- **Forgejo org gets a push webhook** — Each class's Forgejo organization now receives a push webhook to `forgejo-repo-webhook`, so pushes to Forgejo student repositories trigger grading ([#1365](https://github.com/pawtograder/platform/pull/1365))
+
+#### Cloud workspaces
+
+- **Open in Coder for GitHub assignments** — The **Open in Coder** cloud workspace card now appears on GitHub assignments as well as Forgejo ones, when the course has the `cloud-workspaces` flag on. The account-linking prompt names the correct Git host (GitHub or Forgejo) ([#1350](https://github.com/pawtograder/platform/pull/1350))
+
+#### Exams
+
+- **Auto-extract preserves points on questions with parts** — When Auto-extract assigns points to a question that has sub-parts, those points are now spread across the parts (evenly in whole points) rather than being silently lost. Adding the first part to a question that already has points gives the part those points. Questions with a mismatch between their own points and their parts' total show a warning note in the editor ([#1391](https://github.com/pawtograder/platform/pull/1391))
+
+#### Bug fixes
+
+- **Gradebook column stays named after the assignment** — Renaming an assignment now correctly renames its linked gradebook column ([#963](https://github.com/pawtograder/platform/pull/963))
+- **Feature flags update live when another instructor changes one** — The Feature Flags page now reflects changes made by other instructors in real time, without requiring a page reload ([#1342](https://github.com/pawtograder/platform/pull/1342))
+- **Office hours: roster loaded for new requests** — The student roster is now loaded correctly when creating a new office hours request, so the student list is populated immediately ([#1166](https://github.com/pawtograder/platform/pull/1166))
+- **Office hours: resolved requests shown** — Resolved help requests are now displayed in the office hours queue view ([#1166](https://github.com/pawtograder/platform/pull/1166))
+- **Office hours: private-ticket refetch storms stopped** — Rapid re-fetching of private ticket data that could cause performance issues has been fixed ([#1344](https://github.com/pawtograder/platform/pull/1344))
+- **Office hours: check-in reopen follows the solo rule** — Reopening a check-in now correctly applies the solo-student rule ([#1344](https://github.com/pawtograder/platform/pull/1344))
+- **API token creation fixed on deployed environments** — Creating an API token (for MCP or CLI use) was failing on all deployed environments because `MCP_JWT_SECRET` was not wired through the Helm chart. This is now fixed; the secret is auto-generated on upgrade ([#1346](https://github.com/pawtograder/platform/pull/1346))
+
 ## August 2026
 
 ### August 19, 2026
