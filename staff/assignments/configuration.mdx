@@ -180,6 +180,7 @@ Notes that will save you a support ticket:
   both in Pawtograder and on GitHub; Pawtograder recognizes them as
   leftovers and ignores pushes to them, so students who push get silence
   rather than an error. Set the mode before the release date.
+- **On Forgejo-backed assignments, the Repository Status page shows Forgejo-specific information.** Repository and handout-commit links point to the Forgejo instance rather than GitHub. The readiness column is headed **Ready** (not "GitHub Ready"), and a repository that has not been created yet says "Not Ready, pending creation" — Forgejo repositories are created by the reconciler once the student has a Forgejo account, not via a GitHub org invitation. Courses with no GitHub organization configured do not show GitHub-specific prompts (such as the org invitation banner) at all.
 
 ### Autograder
 
