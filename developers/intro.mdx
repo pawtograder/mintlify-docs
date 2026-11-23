@@ -71,6 +71,25 @@ Two consequences for anything you build:
 
 `student`, `grader`, and `instructor` are per class, so the same user can be an instructor in one course and a student in another. `admin` is not scoped that way in practice: the dashboard gate accepts any `admin` row for the user and ignores its `class_id` (`app/admin/layout.tsx:41-50`).
 
+### Capabilities and class roles
+
+On top of `app_role`, every class has a set of **class roles** (`class_roles` table) and each enrollment is linked to one (`user_roles.class_role_id`). A class role carries a set of capabilities from the `class_capability` enum. The four default roles — instructor, grader, student, admin — are created automatically for every class; instructors can also create custom grader roles.
+
+The capabilities that can be granted are:
+
+| Capability | What it gates |
+|---|---|
+| `manage_assignments` | Creating and editing assignments, syncing student repositories |
+| `manage_review_assignments` | Bulk assign and reassign grading tasks |
+| `publish_groups` | Publishing groups and managing group membership |
+| `manage_roles` | Creating and configuring custom grader roles |
+
+Only the instructor role holds all four by default. A custom grader role can hold any subset except `manage_roles`.
+
+**Checking a capability in a policy** — use `user_class_ids_with_capability(capability)` in a policy `TO authenticated`. Never look up the capability directly from `role_capabilities`, because that misses the default grader role's capabilities that a custom role inherits. See `docs/capabilities.md` in the repository for the full rule and examples.
+
+**Checking a capability in the UI** — call `useCapability("manage_assignments")` from a component. The hook reads `user_class_capabilities()`, the same function the database policies use, and re-fetches when the viewer's role or any role's capabilities change.
+
 <Warning>
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
