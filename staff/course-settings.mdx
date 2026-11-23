@@ -33,7 +33,7 @@ Routes are relative to `/course/<course_id>/`.
 | **Grading Conflicts** | `manage/course/grading-conflicts` | Records conflicts of interest so staff are not assigned submissions they should not grade. | [Grading Assignments](/staff/assignments/grading-assignments) |
 | **Due Date Extensions** | `manage/course/due-date-extensions` | Three tabs: **Assignment Exceptions** (the class-wide late token allotment, every due-date exception in the course, and **Gift Tokens**), **Student Extensions** (a student-wide extension across the course's assignments), and **Roster Tokens** (each student's token balance). Extensions for one assignment are usually granted from that assignment's own **Manage Due Date Exceptions** page. | [Extensions](/staff/assignments/extensions) |
 | **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
-| **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
+| **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. Requires the `send_announcements` capability; instructors hold it by default and can grant it to custom roles. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
 
 <Note>
@@ -53,7 +53,8 @@ A grader's menu is a subset of an instructor's. Graders see five entries:
 and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
 **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
 Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
-instructor-only.
+instructor-only by default. **Emailer** can be granted to a custom role via the
+`send_announcements` capability; the other eight remain instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.

@@ -256,6 +256,10 @@ The only required field is `preset`. The other fields are conditional:
 `student_tests` controls mutation/coverage features, and `timeouts_seconds`
 overrides the built-in timeouts.
 
+<Note>
+**Forgejo assignments:** The autograder can be enabled or disabled for Forgejo assignments from the **Configure Autograder** page. Enabling restores a parked `grade.yml.disabled` (or adds the stock Forgejo workflow if none exists). Disabling renames `grade.yml` to `grade.yml.disabled`. Because Forgejo has no push-direct submission path yet, a push only becomes a submission through a grading run — so the autograder cannot be turned off on a Forgejo assignment until push-direct submissions are supported. Existing student repositories keep their own copy of `grade.yml` and are not updated automatically; only repositories created after the change pick up the new setting.
+</Note>
+
 #### Presets
 
 - **`java-gradle`** — Builds with `./gradlew test`, uses Surefire XML for test results, JaCoCo for coverage, Checkstyle for linting, and Pitest for mutation testing. The grader repo must contain a working `build.gradle`.
