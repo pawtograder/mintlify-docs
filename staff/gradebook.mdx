@@ -52,12 +52,45 @@ When you release or unrelease a gradebook column, Pawtograder automatically enqu
 
 ## Managing Columns
 
+### Column groups
+
+Use column groups to organize related columns under a shared header that collapses and expands. Groups are stored and named by you — they are not guessed from column slugs.
+
+**Enabling groups** — Column groups are on by default for new courses. For courses created before this feature shipped, turn it on under **Course Settings → Feature flags → Gradebook column groups**. The first time you enable it, a preview dialog shows the groups that would be created from your existing columns and lists every column whose header would change, before anything is written. Confirm to apply, or cancel to keep the current display.
+
+**Creating and editing groups** — Once groups are on:
+- Open a column's menu and choose **Group…** to assign it to an existing group, create a new group by name, or remove it from its current group.
+- When adding or editing a column, a **Group** picker lets you assign it at creation time.
+- Click the **⋮** menu on any group header to **Rename**, **Move group left/right**, or **Delete** the group. Deleting a group ungroups its columns and never touches grades.
+- Click **Auto-group Columns** in the toolbar to group any ungrouped columns by slug prefix. A preview shows what would be created before anything changes.
+
+**Moving columns within a group** — **Move Left** and **Move Right** in a column's menu keep the column inside its group. To move a column out of a group, use **Group…** and choose **No group**.
+
+Group names are unique per gradebook (case-insensitive). An empty group deletes itself automatically.
+
+### Topics
+
+Topics are for courses that assess each topic more than once — for example, a course where each quiz session covers several topics and each topic appears in multiple sessions. A topic groups its attempt columns under a standing column that holds the result.
+
+**Enabling topics** — Topics are on by default for new courses. For older courses, turn on **Gradebook topics** under **Course Settings → Feature flags**.
+
+**Suggest topics** — Click **Suggest Topics** in the toolbar. Pawtograder infers topics from your existing columns: a computed column whose inputs are only manual columns that nothing else reads is proposed as a topic's standing, and those inputs are its attempts. Attempt numbers are read from "Attempt N" in column names, or assigned by position. The dialog shows every proposed topic and flags duplicate attempt numbers; uncheck any column to resolve a conflict. Applying keeps each standing column's existing expression, so no grades change.
+
+**Assigning topics manually** — Open a column's menu and choose **Topic…** to assign it as an attempt at a topic, with an attempt number (leave blank for the next available number). You can also create a new topic from this dialog.
+
+**Standing rules** — Click the **⋮** menu on a topic header to set the standing rule:
+- **Best attempt** — the standing column's expression is generated to take the highest non-excused score across all attempts.
+- **Latest attempt** — the expression takes the most recent attempt that has a score and is not excused.
+- **Keep the column's own expression** — the standing column keeps whatever expression you wrote.
+
+**Topic view** — When topics exist, a **Show topics** toggle (layers icon) appears in the toolbar. In topic view, each topic collapses to its standing column and expands to show its attempts in order. The **Show groups** toggle switches back to the group layout. Drag-and-drop reordering is only available in the group view.
+
 ### Reordering Columns
 
 You can reorder gradebook columns to organize them logically:
 
-- **Drag and drop**: Click and drag the grip handle in any column header to reorder columns
-- **Move left/right**: Open the column menu (the chevron in the column header) and select **Move Left** or **Move Right** to shift a column one position
+- **Drag and drop**: Click and drag the grip handle in any column header to reorder columns (group view only)
+- **Move left/right**: Open the column menu (the chevron in the column header) and select **Move Left** or **Move Right** to shift a column one position. With groups enabled, a grouped column moves within its group; an ungrouped column steps over a whole neighboring group.
 - **Auto-layout**: Click the **Auto-layout columns** button (grid icon) in the toolbar. Auto-layout first sorts every column by slug using a natural alphanumeric sort, so `lab-2` comes before `lab-10`. It then makes a second pass that moves each calculated column after the columns it depends on, so dependencies always appear to the left of the columns that use them.
 
 Column reordering is saved immediately and affects the display for all instructors and the export order in CSV files.
