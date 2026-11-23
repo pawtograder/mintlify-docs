@@ -6,6 +6,27 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Surveys
+- **Survey drafts always autosave** — Answers in progress now autosave on every survey, regardless of whether response editing is allowed. Previously, autosave only ran when **Allow Response Editing** was on, so students on most surveys lost their answers if they closed the page before clicking **Complete**. The **Allow Response Editing** setting now controls only whether a student can change their response after submitting ([#977](https://github.com/pawtograder/platform/pull/977))
+- **Survey page shows the database title** — The student survey page, the Student Preview modal, and the single-response view now display the title you entered in the survey form rather than whatever placeholder title is inside the SurveyJS JSON (typically "Survey Name" for builder-made surveys). The stored JSON is not modified ([#1002](https://github.com/pawtograder/platform/pull/1002))
+- **Drafts stay off the live responses list** — The instructor responses page no longer counts or lists a student's in-progress draft as a submitted response. Total Responses, Response Rate, and Export to CSV now reflect only submitted responses ([#977](https://github.com/pawtograder/platform/pull/977))
+
+#### Roles
+- **Class roles built from capabilities** — The first step of a new role system introduces capability-based class roles, laying the groundwork for fine-grained permission control within a course ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+#### Security
+- **Actions job tokens verified by issuer and audience** — GitHub Actions job tokens are now validated against their issuer and default audience, tightening the checks on tokens used to authenticate autograding runs ([#1153](https://github.com/pawtograder/platform/pull/1153))
+
+#### Groups
+- **Safer group repository cleanup** — Group repository deletes are now fail-safe, and pre-release group repositories are deferred to avoid removing repos that students may already be using ([#1174](https://github.com/pawtograder/platform/pull/1174))
+
+#### Infrastructure
+- **Realtime class row updates** — An `AFTER UPDATE` trigger on the `classes` table now broadcasts changes to subscribers on the students and staff topics, enabling live course-setting updates without a page reload ([#1145](https://github.com/pawtograder/platform/pull/1145))
+
 ## August 2026
 
 ### August 19, 2026
