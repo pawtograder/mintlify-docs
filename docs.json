@@ -176,7 +176,8 @@
               {
                 "group": "Optional Features",
                 "pages": [
-                  "staff/assignments/leaderboard"
+                  "staff/assignments/leaderboard",
+                  "staff/assignments/exams"
                 ]
               }
             ]

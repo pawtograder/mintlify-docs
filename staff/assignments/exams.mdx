@@ -1,0 +1,157 @@
+---
+title: "Exam Grading (Scan & OCR)"
+description: "Create paper exam templates, upload scanned batches, match pages to students, and grade with OCR-assisted rubrics"
+icon: "file-scan"
+---
+
+# Exam Grading (Scan & OCR)
+
+Pawtograder's exam grading workflow lets you create a paper exam template,
+upload scanned student answer sheets, automatically match pages to students
+using OCR, and grade responses with a rubric-based interface. The feature
+uses Google Gemini for OCR and template extraction.
+
+<Note>
+Exam grading is off by default. Turn on the `exams` feature flag under
+**Course Settings → Feature flags** before creating a paper exam assignment.
+You also need a Gemini API key saved under **Course Settings → Gemini API
+Key** (requires the `gemini-api-key-setup` flag). See
+[Feature flags](/staff/feature-flags) and
+[Course Settings → Gemini API key](/staff/course-settings#gemini-api-key).
+</Note>
+
+## Overview
+
+The exam workflow has four stages:
+
+1. **Template** — define the exam structure: questions, answer regions, and
+   point values.
+2. **Upload** — upload a PDF of scanned student answer sheets.
+3. **Match** — review and confirm which pages belong to which student.
+4. **Grade** — apply rubric checks to each student's answers.
+
+## Creating a paper exam assignment
+
+1. Open **Manage → Assignments** and click **New Assignment**.
+2. Under **Assignment type**, select **Paper exam (scan & OCR)**. This option
+   is disabled if the `exams` feature flag is off; the helper text names the
+   flag and where to turn it on.
+3. Fill in the standard assignment fields (title, dates, points possible).
+4. Save the assignment.
+
+<Note>
+The assignment type cannot be changed after the assignment is created. If you
+created a paper exam assignment before turning the `exams` flag on, turn the
+flag on to access the exam pages.
+</Note>
+
+## Building the exam template
+
+Open the assignment and navigate to **Exam Template**. The template editor
+lets you define the structure of your exam: questions, sub-questions, answer
+types, and the regions on each page where students write their answers.
+
+### Extracting a template from a PDF
+
+If you have a PDF of the blank exam, upload it and click **Extract template**.
+Gemini reads the PDF and proposes a question tree with answer types and
+regions. Review the proposal before saving — extracted answer types are
+normalized to the allowed values, and any type Gemini could not classify
+becomes `free_text`.
+
+### Answer types
+
+Each question has one answer type:
+
+| Type | Description |
+| --- | --- |
+| `free_text` | Open-ended written response |
+| `multiple_choice` | One option from a list |
+| `multi_select` | One or more options from a list |
+| `numeric` | A number, with an optional tolerance |
+| `true_false` | True or false |
+
+Questions that only group sub-questions (section headers) should use
+`free_text` as their type.
+
+### Defining answer regions
+
+Each answer region maps a question to a rectangle on a specific page of the
+exam. A question can span multiple regions (for example, when an answer box
+continues onto the next page). Draw regions directly on the page preview in
+the template editor.
+
+## Uploading scanned exams
+
+Once the template is saved, navigate to **Exam Scans** and click **Upload
+scans**. Upload a PDF containing all student answer sheets. Pawtograder
+splits the PDF into individual pages and runs OCR to extract student
+identifiers.
+
+Scan batches move through these states:
+
+| State | Meaning |
+| --- | --- |
+| Uploaded | PDF received, processing not yet started |
+| Processing | OCR running |
+| Awaiting review | OCR complete; some pages need manual student matching |
+| Completed | All pages matched; grading can begin |
+| Failed | Processing stopped due to an error |
+
+## Matching pages to students
+
+After OCR completes, open the scan batch and review the **Match** tab.
+Pages where OCR found a clear student identifier are matched automatically.
+Pages that could not be matched appear in the review queue.
+
+For each unmatched page:
+
+1. View the page image.
+2. Search for the student by name or ID.
+3. Confirm the match.
+
+Once all pages are matched, click **Complete matching** to move the batch
+to the **Completed** state and make submissions available for grading.
+
+## Grading
+
+Graded exam submissions appear in the standard **Grading Assignments**
+workflow. Each student's submission shows their scanned answer pages
+alongside the rubric.
+
+For questions with defined answer regions, the grading view highlights the
+relevant region on the page image. Apply rubric checks and leave comments
+as you would for any handgraded assignment.
+
+### In-app quizzes
+
+In addition to paper exams, Pawtograder supports in-app quizzes. Quiz
+submissions are autograded for objective question types (multiple choice,
+multi-select, numeric, true/false) and can be hand-graded for free-text
+responses. Released quiz results show students their score and, optionally,
+the correct answers.
+
+## Seeding exam data for development
+
+The development seed (`--exams`) generates exam and quiz assignments that
+cover the full range of question shapes and lifecycle states, including
+multi-page answer regions, scan batches at each processing stage, and
+graded submissions with OCR artifacts. Pass `--exam-scans <n>` to cap the
+number of scanned students per paper exam.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature flags" icon="sliders" href="/staff/feature-flags">
+    Turn the exams flag on for your course.
+  </Card>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings#gemini-api-key">
+    Save a Gemini API key for OCR and template extraction.
+  </Card>
+  <Card title="Handgrading" icon="pen" href="/staff/assignments/handgrading">
+    How graders apply rubric checks and leave comments.
+  </Card>
+  <Card title="Grading Assignments" icon="users-gear" href="/staff/assignments/grading-assignments">
+    Assign and track grading tasks across the class.
+  </Card>
+</CardGroup>
