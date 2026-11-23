@@ -6,6 +6,21 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Office hours
+- **Guided hints for new students** — A new course feature flag, **Office hours: hints for new students** (`office-hours-student-onboarding`), shows first-time students up to two guided popovers: one pointing at the queue list when the course has multiple text queues, and one on the **New Request** button saying whether staff are on duty and when the next office hours start. The hints stop appearing once a student clicks an enabled **New Request** button, and that is remembered across all their browsers and devices. The new request form also gets longer helper text on the Help Queue, Template, and Description fields while the flag is on. Off by default. See [Feature flags](/staff/feature-flags) and [Submitting a Request](/students/office-hours/submitting-a-request) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **What's new walkthrough for ticket escalation** — The first time a staff member opens the office hours manage view, a five-step dialog explains the Escalate button, escalated ticket appearance, the Resolve check-in, End ticket, and the difference between the two. A **What's new** button in the queue header reopens it at any time. Remembered per person across all browsers and devices ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Survey countdown stays live** — The Surveys to complete banner on the student dashboard now updates in real time, so a survey turns **Overdue** at the right moment without a page reload ([#1013](https://github.com/pawtograder/platform/pull/1013))
+
+#### Gradebook
+- **`manage_gradebook` capability** — Access to the staff gradebook is now controlled by the `manage_gradebook` capability rather than the instructor role. Instructors keep everything. Graders on the default grader role lose access to the gradebook page, student scores, overrides, and Convert Missing to 0 until an instructor grants the capability to their role (for example, a Head TA role). Students still see their own released grades. See [Gradebook](/staff/gradebook#gradebook-access-and-the-manage_gradebook-capability) ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Assignments
+- **`manage_student_repositories` capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page now require the `manage_student_repositories` capability. Instructors keep these actions; graders on the default role do not have them. The **Sync** button and row checkboxes continue to require `manage_assignments`. See [Repository Permissions](/staff/assignments/repository-permissions) ([#1384](https://github.com/pawtograder/platform/pull/1384))
+
 ## August 2026
 
 ### August 19, 2026
