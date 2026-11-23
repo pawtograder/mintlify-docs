@@ -232,6 +232,33 @@ populates it directly. Point your assistant at the handout yourself if it needs
 the written specification. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
+## Course Gemini API key
+
+Instructors can store a course-owned Google Gemini API key for AI-assisted exam grading features such as template extraction and OCR. The key is stored in Vault and is never returned through the UI — once saved, it cannot be viewed again through Course Settings.
+
+### Prerequisites
+
+The `gemini-api-key-setup` feature flag must be on before you can save a key. Turn it on under **Course Settings → Feature flags**. Removing a key or checking its status works regardless of the flag.
+
+### Managing the key
+
+Open **Course Settings → Gemini API Key**. The page shows two status indicators:
+
+- **Setup enabled** — whether the `gemini-api-key-setup` flag is on for this course.
+- **Configured** — whether a key has been saved.
+
+To save or replace a key, enter it in the key field and click **Save** (first save) or **Replace** (when a key is already configured). The field is masked and excluded from analytics capture. The key is cleared from the form after every request, whether it succeeds or fails.
+
+To remove the key, click **Remove**. Removal is available whether or not the flag is on.
+
+<Note>
+Saving a key does not validate it with Google or turn on AI grading. It only stores the key for use by exam features that require it.
+</Note>
+
+<Warning>
+The key field uses `autocomplete="one-time-code"` to discourage browser password managers from storing it. This is a best-effort measure; behavior varies by browser and version.
+</Warning>
+
 ## Privacy and access control
 
 - **Staff only.** Token creation and every tool call require an instructor or

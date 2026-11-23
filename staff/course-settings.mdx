@@ -1,6 +1,6 @@
 ---
 title: "Course Settings"
-description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
+description: "Index of the 16 Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
@@ -8,7 +8,7 @@ icon: "gear"
 
 **Course Settings** is a menu, not a page. Its trigger is a button with no link:
 clicking it opens the menu and the address in your browser does not change. Every
-course-wide setting lives on one of the menu's 14 entries, so this page is an
+course-wide setting lives on one of the menu's 16 entries, so this page is an
 index — find the entry you want below, then follow the link for the details.
 
 <Frame>
@@ -35,6 +35,8 @@ Routes are relative to `/course/<course_id>/`.
 | **Audit Log** | `manage/course/audit` | Records actions taken on assignments, due date exceptions, groups, discussion threads, and other course resources. | [Audit log](/staff/audit-log) |
 | **Emailer** | `manage/course/emails` | Composes email to the whole class or a subset, with a preview step before sending. | [Emailer](/staff/emails) |
 | **Workflow Runs** | `manage/workflow-runs` | Monitors GitHub Actions workflows, execution statistics, and grading errors across student submissions. | [Workflow runs](/staff/workflow-runs) |
+| **Gemini API Key** | `manage/course/gemini-api-key` | Saves, replaces, or removes a course-owned Google Gemini API key used for AI-assisted exam grading features. Requires the `gemini-api-key-setup` feature flag to be on before saving a key. | [AI assistance](/staff/ai-assistance) |
+| **Grader Roles** | `manage/course/roles` | Creates and manages custom grader roles with specific capabilities, so different graders can have different levels of access within the course. | [Grader roles and capabilities](#grader-roles-and-capabilities) |
 
 <Note>
 Two entries do not match the route they open, which matters if you are reading
@@ -50,10 +52,10 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 A grader's menu is a subset of an instructor's. Graders see five entries:
 **Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
+and **Grading Conflicts**. The other eleven — **Enrollments**, **LMS (LTI) Sync**,
 **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
-instructor-only.
+Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**, **Gemini API
+Key**, and **Grader Roles** — are instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
@@ -102,6 +104,48 @@ See [Extensions](/staff/assignments/extensions) for the rest of the late token
 and extension settings, including gifted tokens, and
 [Late Tokens and Extensions](/students/assignments/late-tokens-and-extensions)
 for how students spend them.
+
+## Grader roles and capabilities
+
+Every course has four built-in roles: **instructor**, **grader**, **student**, and **admin**. Instructors can create additional custom grader roles under **Course Settings → Grader Roles** to give specific graders a narrower or broader set of permissions within the course.
+
+### Built-in capabilities
+
+Capabilities are named permissions that control what a staff member can do. The four built-in capabilities are:
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_review_assignments` | See and delete review assignments for the course |
+| `publish_groups` | Publish groups and manage group membership |
+| `manage_assignments` | Create, edit, and save assignments (including syncing repositories) |
+| `manage_roles` | Create, rename, and delete custom grader roles and assign capabilities to them |
+
+By default, only instructors hold all four capabilities. Graders hold none of them.
+
+### Custom grader roles
+
+A custom grader role is a named set of extra capabilities layered on top of the default grader role. A grader on a custom role holds everything the default grader role holds, plus whatever the custom role adds.
+
+To create a custom role:
+
+1. Open **Course Settings → Grader Roles**.
+2. Click **New Role** and enter a name.
+3. Check the capabilities you want to grant. You can only grant capabilities you hold yourself.
+4. Save the role.
+
+To assign a grader to a custom role, change their role from the **Enrollments** page. Changing a staff member's app role (instructor ↔ grader) always resets them to that role's default, so custom roles apply only to graders.
+
+<Note>
+The four default roles — instructor, grader, student, and admin — are fixed and cannot be renamed or deleted. Only custom roles can be managed here.
+</Note>
+
+<Warning>
+`manage_roles` does not let a role holder assign people to roles. Assigning a grader to a custom role is always instructor-only through the Enrollments page.
+</Warning>
+
+### Effect on the UI
+
+Pages and controls follow the capability, not the role name. A grader on a custom role with `manage_assignments` sees **New Assignment** and **Edit Assignment** and can save them. A grader without it does not. The same applies to `manage_review_assignments` (Manage Review Assignments page and delete controls), `publish_groups` (group management controls), and `manage_roles` (the Grader Roles page itself).
 
 ## Grading conflicts
 
