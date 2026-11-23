@@ -6,6 +6,33 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Roles and capabilities
+- **Capability-based rubric editing** — Instructors can grant the `edit_rubrics` capability to a custom role, allowing staff in that role to edit rubrics. Previously only instructors could edit rubrics ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Capability-based gradebook access** — Instructors can grant the `manage_gradebook` capability to a custom role, allowing staff in that role to view and arrange the gradebook ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1356](https://github.com/pawtograder/platform/pull/1356))
+- **Capability-based group management** — Instructors can grant the `manage_groups` capability to a custom role, allowing staff in that role to create, rename, copy, and delete groups and assign mentors ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Capability-based roster management** — Instructors can grant the `manage_roster` capability to a custom role, allowing staff in that role to perform roster tasks for students ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Forgejo integration
+- **Forgejo autograding improvements** — Pawtograder now records finished Forgejo Actions runs, checks webhooks for every organization a course belongs to, and supports toggling the autograder on or off per assignment ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo group management** — Publishing group changes on Forgejo courses now moves students between Forgejo team groups, revokes access for students who leave a group, and grants course staff write access to group repositories ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Forgejo repository web links** — Submission pages now link to the correct Forgejo repository and Actions run URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Forgejo handout sync disabled** — Handout file syncing is no longer queued for Forgejo repositories, since handout distribution on Forgejo is handled outside Pawtograder ([#1425](https://github.com/pawtograder/platform/pull/1425))
+- **Staff file functions for courses without a GitHub org** — Staff file functions can now read and write a course's own GitHub grader repositories even when the course has no GitHub organization configured ([#1412](https://github.com/pawtograder/platform/pull/1412))
+
+#### Office hours
+- **First-time hints for students** — A short walkthrough now appears the first time a student visits the office hours pages, behind the new `office-hours-hints` course feature flag. The walkthrough stays dismissed across page reloads once closed ([#1348](https://github.com/pawtograder/platform/pull/1348))
+
+#### Bug fixes
+- **Exam answer crops rendered at consistent zoom** — All answer crop images on the exam grading page now render at the same zoom level ([#1263](https://github.com/pawtograder/platform/pull/1263), [#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Exam auto-extract regions widened** — Auto-extract regions now extend to where students write, reducing missed answers ([#1371](https://github.com/pawtograder/platform/pull/1371), [#1392](https://github.com/pawtograder/platform/pull/1392))
+- **Exam scan alignment** — Scans are now aligned with the template before regions are read, improving extraction accuracy ([#1292](https://github.com/pawtograder/platform/pull/1292), [#1331](https://github.com/pawtograder/platform/pull/1331))
+- **Exam batch processing guard** — The Process button is now disabled while a batch is already being processed, preventing duplicate runs ([#1329](https://github.com/pawtograder/platform/pull/1329), [#1355](https://github.com/pawtograder/platform/pull/1355))
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time so it correctly shows Overdue when the deadline passes ([#1013](https://github.com/pawtograder/platform/pull/1013), [#1184](https://github.com/pawtograder/platform/pull/1184))
+
 ## August 2026
 
 ### August 19, 2026
