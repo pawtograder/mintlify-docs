@@ -18,6 +18,23 @@ When a grader completes their assigned review, Pawtograder automatically:
 
 This reduces duplicate work when multiple graders are assigned to overlapping parts of the same submission.
 
+## Grader capabilities and custom roles
+
+By default, graders can complete grading tasks assigned to them but cannot manage review assignments, create or edit assignments, or publish group changes. Instructors can grant additional capabilities to graders by creating **custom grader roles** under **Course Settings → Enrollments**.
+
+Each custom role is a named set of capabilities layered on top of the default grader role. A grader on a custom role holds everything the default grader role holds, plus whatever the custom role adds. The available capabilities are:
+
+| Capability | What it unlocks |
+| --- | --- |
+| `manage_review_assignments` | See and delete the class's review assignments on the **Manage Review Assignments** page. **Bulk Assign** and **Reassign** also become accessible. |
+| `manage_assignments` | Create and edit assignments, sync autograder or handout changes to student repositories, and create all repos when a save moves the release date into the past. |
+| `publish_groups` | Make changes on **Manage Groups**: create, rename, delete, and move members, and publish those changes. Without this capability, **Manage Groups** is read-only. |
+| `manage_roles` | Create, rename, and delete custom grader roles, and choose their capabilities. Does not grant the ability to assign people to roles. |
+
+<Note>
+Capabilities control what the UI shows and what the database allows. A grader without `manage_review_assignments` is sent back to **Grading Assignments** if they navigate directly to **Bulk Assign** or **Reassign**. A grader without `manage_assignments` sees **New Assignment** and **Edit Assignment** hidden from the menu.
+</Note>
+
 ## Conflicts of Interest
 
 Pawtograder will automatically ensure that graders do not grade assignments that they have a conflict of interest in. Graders can self-input their conflicts (under "Course Settings" - "Grading Conflicts"), and instructors can review and enter conflicts for all graders in the class. Graders are encouraged to input a "Reason" for their conflict, so that instructors can understand the nature of the conflict and help avoid declaring spurious conflicts.

@@ -1,0 +1,106 @@
+---
+title: "Exam Grading (Scan & OCR)"
+description: "Create paper exam assignments, upload scans, match students, and grade with OCR-assisted region detection"
+icon: "file-scan"
+---
+
+# Exam Grading (Scan & OCR)
+
+Pawtograder's paper exam workflow lets you create a structured exam template, upload scanned answer sheets, automatically match pages to students, and grade each question region with OCR assistance. The feature is gated behind the `exams` course feature flag.
+
+## Enabling the feature
+
+Before creating a paper exam assignment, turn on the **Exam (Scan & OCR)** flag:
+
+1. Open **Course Settings → Feature flags**.
+2. Find the **Exam (Scan & OCR)** card and flip the switch on.
+
+The **Exam (Scan & OCR)** nav entry appears in the course menu, and the **Paper exam (scan & OCR)** assignment type becomes available in the new-assignment form.
+
+<Warning>
+The assignment type cannot be changed after creation. If you create a paper exam assignment in a course where the flag is later turned off, every exam page will show a "not enabled" notice and there is no way to access the exam tools until the flag is turned back on.
+</Warning>
+
+## Creating a paper exam assignment
+
+1. Go to **Manage → Assignments → New Assignment**.
+2. Under **Assignment type**, select **Paper exam (scan & OCR)**. This option is disabled when the `exams` flag is off.
+3. Fill in the standard fields: title, slug, release date, due date, and points possible.
+4. Save the assignment.
+
+## Building the exam template
+
+The template defines the structure of your exam: questions, sub-questions, answer regions, and point values. Pawtograder can generate a template from a PDF or you can build one manually.
+
+### Extracting a template from a PDF
+
+1. Open the exam assignment and navigate to **Exam → Template**.
+2. Upload your exam PDF.
+3. Click **Extract template**. Pawtograder sends the PDF to the AI vision service (requires a configured Gemini API key — see [Course Settings → Gemini API Key](/staff/course-settings#gemini-api-key)) and returns a proposed question tree with answer regions.
+4. Review the extracted proposal in the region editor. Answer types that the AI could not classify are normalized to `free_text`.
+5. Adjust regions, question text, point values, and answer types as needed.
+6. Click **Save template**.
+
+### Building a template manually
+
+In the region editor, add questions and sub-questions to the tree, draw answer regions on the page images, and set the answer type for each question:
+
+| Answer type | Use for |
+| --- | --- |
+| `free_text` | Open-ended written answers |
+| `multiple_choice` | Single-select options |
+| `multi_select` | Multiple-select options |
+| `numeric` | Numeric answers, with optional tolerance |
+
+Questions that only group sub-questions (section headers) should use `free_text` and will not have answer regions of their own.
+
+## Uploading scans
+
+After the exam is administered, upload the scanned answer sheets:
+
+1. Navigate to **Exam → Scans**.
+2. Click **Upload scans** and select the PDF or image files.
+3. Pawtograder processes the batch and attempts to match each page to a student using the student ID region defined in the template.
+
+### Reviewing matches
+
+Pages that could not be matched automatically appear in the **Awaiting review** queue. For each unmatched page:
+
+1. View the page image.
+2. Select the student from the roster dropdown.
+3. Confirm the match.
+
+Once all pages are matched, the batch moves to **Completed** and grading assignments are created.
+
+## Grading
+
+Grading a paper exam works like handgrading any other assignment. Each question region is presented alongside the student's scanned answer. Graders apply rubric checks, enter scores, and leave comments.
+
+OCR extracts the text from each answer region and displays it alongside the scan image, so graders can read handwritten answers without zooming in on the image.
+
+### Releasing grades
+
+Release exam grades the same way as any other assignment: from the **Dashboard** tab, select submissions and click **Release**, or use **Release all**. See [Bulk Actions](/staff/assignments/bulk-actions) for row-selection release.
+
+## In-app quizzes
+
+In addition to paper exams, the exam feature supports in-app quizzes: timed, browser-based assessments that students complete in Pawtograder. Quizzes support autograded attempts, retakes, and partial hand-grading before release.
+
+In-app quizzes are created as **Quiz** assignment types and share the same `exams` feature flag as paper exams.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Feature flags" icon="sliders" href="/staff/feature-flags">
+    Turn the exams flag on for your course.
+  </Card>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings#gemini-api-key">
+    Configure the Gemini API key required for OCR and template extraction.
+  </Card>
+  <Card title="Handgrading" icon="pen" href="/staff/assignments/handgrading">
+    How graders apply rubric checks and leave feedback.
+  </Card>
+  <Card title="Bulk Actions" icon="check-double" href="/staff/assignments/bulk-actions">
+    Release and unrelease grades in bulk.
+  </Card>
+</CardGroup>
