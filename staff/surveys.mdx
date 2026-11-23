@@ -94,13 +94,15 @@ The visual builder uses SurveyJS, providing access to a wide variety of question
 
 1. Name the page if needed (optional, helps organize multi-page surveys)
 2. Click a question type button to add a new question (+ Short Text, + Long Text, etc.)
-3. Enter the question name (this becomes the column header in response exports)
+3. Enter the question name (this becomes the column header in response exports and the key under which the answer is stored — it must be unique across the whole survey)
 4. Add an optional description to provide context for students
 5. Mark questions as required using the **Required** toggle
 6. For choice-based questions, add and reorder answer options
 7. Use the arrow buttons (↑ ↓) to reorder questions
 8. Click the trash icon to delete a question
 9. Click **Use This Survey** when finished
+
+The builder numbers new default names across the whole survey (not per page), so adding a question to page 2 when page 1 already has `question_1` gives you `question_2`. The builder also highlights any two **Question name** fields that match, so you can spot and fix duplicates before publishing.
 
 ### Multi-Page Surveys
 
@@ -227,7 +229,7 @@ Use the available date to schedule surveys in advance without manually publishin
 
 ### Response Editing Control
 
-Toggle **Allow Response Editing** to control whether students can modify their submissions. The form summarizes it as: "When on, changes auto-save. When off, a student's first submission is final."
+Toggle **Allow Response Editing** to control whether students can modify their submissions after they click **Complete**.
 
 **Enabled:**
 
@@ -237,9 +239,13 @@ Toggle **Allow Response Editing** to control whether students can modify their s
 
 **Disabled:**
 
-- Nothing is saved until the student clicks **Complete**, so a student who closes the page loses their answers
+- Answers still autosave as the student works, so a student can close the page and return to a partly finished survey
 - After submitting, the student sees a yellow banner reading "This survey has been submitted and cannot be edited." and the survey renders read-only
 - The original submission time is preserved
+
+<Note>
+Autosave runs on every survey regardless of this setting. **Allow Response Editing** only controls whether a student can change their answers *after* clicking **Complete**.
+</Note>
 
 The button on the student's survey list reads **Start Survey**, **Continue Survey**, or **View Submission** based on their own progress, not on this setting.
 
@@ -642,8 +648,21 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- Rejects duplicate question names (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+### Duplicate question names
+
+Every question in a survey must have a unique name, because SurveyJS saves each answer under its question's name. Two questions with the same name share one answer slot: answering the second clears the first, and a required question can appear complete while its answer is actually empty.
+
+Pawtograder rejects a publish attempt when any two questions share a name. The error message names each duplicate, where it appears in the survey, and how to rename it. Drafts may keep duplicates so that work in progress can be saved and fixed before publishing.
+
+<Note>
+Some question types — dropdowns, matrices, and questions with a **Value name** set — cannot be renamed in the Visual Builder. The error message says which questions fall into this category and directs you to the JSON editor to rename them there.
+</Note>
+
+A survey that was published before this check was added and then closed cannot be reopened until the duplicate names are renamed. Renaming is allowed while the survey is closed; answers already collected under the shared name are preserved.
 
 ## Saving Survey Templates
 
