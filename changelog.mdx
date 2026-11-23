@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 12, 2026
+
+#### Office hours
+- **Live student counts on queue cards** — When a student joins a help request after a TA has already opened the queue, the request card's student count updates in real time without a page reload ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+### November 10, 2026
+
+#### Exams
+- **Exam grading behind a course feature flag** — The Exam (Scan & OCR) nav entry, its three pages, and the Paper exam assignment type are now hidden unless the new `exams` course feature flag is on. Turn it on under **Course Settings → Feature flags** before creating a paper exam assignment. See [Feature flags](/staff/feature-flags) ([#1197](https://github.com/pawtograder/platform/pull/1197))
+
+#### Grading
+- **Custom grader roles for review and assignment management** — Graders on a custom role with the `manage_review_assignments` capability can now view and delete review assignments. Graders with `manage_assignments` can create and edit assignments, sync student repositories, and use the Repository Status Sync buttons. Instructors keep the same access. See [Assigning Grading Tasks](/staff/assignments/grading-assignments) ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+### November 8, 2026
+
+#### Course settings
+- **Course-owned Gemini API key** — Instructors can save, replace, or remove a Google Gemini API key for their course under **Course Settings → Gemini API Key**. The key is stored in Vault and is never returned to the browser after saving. Requires the `gemini-api-key-setup` feature flag to be on before saving. See [Course Settings](/staff/course-settings) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Bug fixes
+- **Password reset links work on staging** — Email links for password reset, account confirmation, and magic-link sign-in now resolve correctly ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Exam answer types normalized** — Unknown answer types returned by Gemini (such as "composite") are now normalized to `free_text` instead of failing the template save ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
 ## August 2026
 
 ### August 19, 2026
