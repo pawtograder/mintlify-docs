@@ -14,11 +14,41 @@ fetches the help request, submission, test output, and assignment spec for
 itself.
 
 <Warning>
-Pawtograder never calls a model. Every AI button in the product does exactly one
-thing: it puts text on your clipboard. Nothing is sent to Anthropic, OpenAI, or
-any other provider by Pawtograder, and no AI-generated text ever appears inside
-Pawtograder.
+Pawtograder never calls a model on your behalf for the MCP-based AI help buttons.
+Every AI button in the product does exactly one thing: it puts text on your
+clipboard. Nothing is sent to Anthropic, OpenAI, or any other provider by
+Pawtograder, and no AI-generated text ever appears inside Pawtograder through
+this path.
 </Warning>
+
+## Course Gemini API key
+
+Some AI-assisted features — such as exam template extraction and OCR — call
+Google's Gemini API directly from Pawtograder's edge functions. These features
+use a course-owned Gemini API key that an instructor stores under
+**Course Settings -> Gemini API Key**.
+
+The key is stored in Vault and is never returned to the browser after it is
+saved. The page shows only whether a key is configured, not the key itself.
+Saving a key does not validate it with Google or turn on any AI feature
+automatically; it makes the key available to the edge functions that implement
+those features.
+
+To store a key:
+
+1. Turn on the `gemini-api-key-setup` feature flag under **Course Settings ->
+   Feature flags**.
+2. Open **Course Settings -> Gemini API Key**.
+3. Enter your Gemini API key in the key field and click **Save**.
+
+To replace a key, enter the new key and click **Replace**. To remove it, click
+**Remove**. Status and removal work whether or not the feature flag is on.
+
+<Note>
+The key cannot be viewed again through Course Settings after it is saved.
+Privileged database operators can read Vault, but the key is never returned
+through any RPC or API endpoint.
+</Note>
 
 ## What the copied prompt contains
 

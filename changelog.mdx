@@ -6,6 +6,45 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 10, 2026
+
+#### Infrastructure
+- **SSO on staging** — Forgejo and Coder now authenticate through the platform's SSO server on staging. OAuth client secrets are synced from OpenBao via ExternalSecrets, and the chart renders the ExternalSecrets automatically when the relevant paths are configured ([#1235](https://github.com/pawtograder/platform/pull/1235))
+
+### November 9, 2026
+
+#### Infrastructure
+- **Postgres /dev/shm fix (chart 0.4.0)** — The Postgres primary and standby now get a real 1 GiB shared-memory volume instead of the container default of 64 MiB, preventing `SQLSTATE 53100` errors under load. This is a breaking operational change that restarts the database and must be deployed in a maintenance window. A new CI gate (`postgres-restart-gate`) fails any PR that would restart Postgres without a minor or major chart version bump ([#1028](https://github.com/pawtograder/platform/pull/1028))
+- **WAL-G retention moved to a CronJob** — Backup pruning is now handled by a dedicated `walg-retention` CronJob rather than the base-backup sidecar. This means changing the retention count no longer restarts Postgres. `postgres.walg.baseBackup.keepBackups` is removed; use `postgres.walg.retention.keepBackups` instead ([#1028](https://github.com/pawtograder/platform/pull/1028))
+- **Forgejo and Coder on staging** — Forgejo (with its Actions runner) and Coder now run on staging, on staging's Postgres, under `*.staging.pawtograder.net`. Coder workspace apps use a separate `*.workspaces-staging.pawtograder.net` zone to keep workspace cookies isolated from the staging session domain ([#1129](https://github.com/pawtograder/platform/pull/1129))
+- **Coder template variables passed via file** — The `coder-bootstrap` post-upgrade hook now writes template variables to a YAML file and passes `--variables-file`, fixing a parse error when JSON-valued variables (node selectors, tolerations, image pull secrets) contained quotes or commas ([#1227](https://github.com/pawtograder/platform/pull/1227))
+
+#### Bug fixes
+- **GoTrue token columns set in bulk CSV import** — All GoTrue token columns are now populated correctly when importing users via CSV ([#1224](https://github.com/pawtograder/platform/pull/1224))
+
+### November 8, 2026
+
+#### Grading
+- **Custom grader roles and capabilities** — Instructors can create custom grader roles (for example, "Head TA") and grant them specific capabilities: managing review assignments, publishing groups, creating and editing assignments, and managing roles. Graders on a custom role hold everything the default grader role holds, plus the custom role's extras. See [Grading assignments](/staff/assignments/grading-assignments#custom-grader-roles-and-capabilities) ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Course settings
+- **Course-owned Gemini API key** — Instructors can store a course-owned Google Gemini API key under **Course Settings → Gemini API Key**. The key is stored in Vault and is never returned to the browser after saving. Requires the `gemini-api-key-setup` feature flag to be on. See [Feature flags](/staff/feature-flags#gemini-api-key-setup) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Exams
+- **Exam answer type normalization** — Unknown answer types returned by Gemini during template extraction (such as "composite") are now normalized to `free_text` instead of failing the save. The region editor and the exam client also normalize types before saving, and a database trigger enforces valid types as a backstop ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Password reset and email links fixed on staging** — GoTrue mailer URL paths are now set correctly (`/auth/v1/verify`), email templates link to the app's token-hash pages, and `resetPasswordForEmail` routes through `/auth/callback` before `/auth/reset-password` ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+#### Bug fixes
+- **LTI grade drain failures now surface correctly** — Grade-push failures that previously hid inside a 200 response are now captured to Sentry, tagged with class and assignment IDs, and the drain returns 500 when any assignment fails. Rows for classes with grade sync disabled are deferred rather than retried endlessly, and persistently failing rows are moved to the back of the queue ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **Bug reporter with session replay** — Bug reports now include a redacted session replay to help diagnose UI issues ([#1050](https://github.com/pawtograder/platform/pull/1050))
+
+### November 7, 2026
+
+#### Exams
+- **Exam grading system with OCR and student matching** — A full exam grading system is now available: create paper exam templates with question trees, upload scanned PDFs, match scans to students, and grade with per-question rubrics. In-app quizzes with autograded and hand-graded attempts are also supported. See the Exams section of the staff guide ([#814](https://github.com/pawtograder/platform/pull/814))
+
 ## August 2026
 
 ### August 19, 2026
