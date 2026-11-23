@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Office hours
+- **Ticket escalation** — When you can't finish a student's question, you can now hand it to another staff member with a note on what you tried. The student keeps their place in the queue instead of rejoining at the back. **Resolve** now starts a 10-minute check-in with the student ("Did your problem get fixed?"); if they say No, the ticket is escalated automatically. A new **End ticket** button closes a ticket permanently with no check-in. A **What's new** walkthrough in the queue header explains all three buttons to staff on their first visit. See [Help Requests](/staff/office-hours/help-requests) ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Onboarding hints for new students** — A new course feature flag, `office-hours-student-onboarding`, shows first-time students up to two guided hints on the office hours page: one pointing at the queue list when the course has multiple text queues, and one on the New Request button that says whether staff are on duty and when the next office hours start. The hints stop appearing once the student clicks New Request. Off by default. See [Feature flags](/staff/feature-flags) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time, so it turns "Overdue" at the right moment without a page reload ([#1013](https://github.com/pawtograder/platform/pull/1013))
+
+#### Gradebook
+- **Gradebook access controlled by capability** — The staff gradebook is now gated by the `manage_gradebook` capability. By default it is on the instructor role and off the grader role. An instructor can grant it to a custom role (for example, a Head TA) from Course Settings → Roles. Without it, a staff member cannot open the gradebook, read scores, override a grade, or use Convert Missing to 0. Download Gradebook remains instructor-only. See [Gradebook](/staff/gradebook) ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Assignments and repositories
+- **Repository repair actions controlled by capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on Repository Status are now gated by the `manage_student_repositories` capability. By default it is on the instructor role and off the grader role. The **Sync** button and row checkboxes remain gated by `manage_assignments`. See [Repository Permissions](/staff/assignments/repository-permissions) ([#1384](https://github.com/pawtograder/platform/pull/1384))
+- **Forgejo Repository Status** — On a Forgejo assignment, the Repository Status page now shows Forgejo-specific information: a "Ready" column instead of "GitHub Ready", a "pending creation" message for not-yet-ready repos instead of a GitHub org invitation prompt, and an explainer describing the Forgejo reconciler. Repository and commit links open the Forgejo instance ([#1362](https://github.com/pawtograder/platform/pull/1362))
+
+#### Forgejo (cloud workspaces)
+- **Staff write access to Forgejo repos** — Instructors, graders, and admins now get write access to every student, group, and handout repository through a `{slug}-staff` team in the course's Forgejo organization. The reconciler keeps the team in sync; adding or removing a staff role kicks the reconciler within minutes ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Move students between Forgejo groups** — Instructors can now move students between Forgejo assignment groups. Group moves and departures no longer trigger GitHub-specific archive or permission-sync jobs for Forgejo repositories ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Forgejo group leavers lose repo access** — When a student leaves a Forgejo assignment group, their write access to the group's repository is revoked by the reconciler. Rejoining the group restores access ([#1397](https://github.com/pawtograder/platform/pull/1397))
+
+#### Bug fixes
+- **TableController reports RLS-refused writes** — Writes that Row Level Security silently refuses are now surfaced as errors rather than appearing to succeed ([#1296](https://github.com/pawtograder/platform/pull/1296))
+
 ## August 2026
 
 ### August 19, 2026
