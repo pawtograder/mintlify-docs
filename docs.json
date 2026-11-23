@@ -250,7 +250,8 @@
             "group": "Feature Internals",
             "pages": [
               "developers/polls",
-              "developers/surveys"
+              "developers/surveys",
+              "developers/roles-and-capabilities"
             ]
           },
           {

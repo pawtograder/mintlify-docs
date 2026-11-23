@@ -75,6 +75,14 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Capabilities
+
+Within the grader tier, instructors can create custom roles (for example, "Head TA") and assign fine-grained capabilities to them. A capability is a named permission such as `manage_assignments` or `publish_groups`. The instructor role always holds every capability; the default grader role holds none; custom roles can hold any subset.
+
+Use `user_class_ids_with_capability('capability_name')` in RLS policies instead of `authorizeforclassinstructor` when the action should be available to any role that holds the capability. Pages use the `useCapability()` hook to show or hide controls.
+
+See [Roles and capabilities](/developers/roles-and-capabilities) for the full schema, policy patterns, and the `useCapability()` hook.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
