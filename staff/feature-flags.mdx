@@ -1,12 +1,12 @@
 ---
 title: "Feature flags"
-description: "The nine course feature flags, their defaults, and exactly which menu entries each one hides"
+description: "The ten course feature flags, their defaults, and exactly which menu entries each one hides"
 icon: "sliders"
 ---
 
 # Feature flags
 
-Nine switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
+Ten switches decide which Pawtograder modules your course uses. Six of them remove entries from the course navigation bar when you turn them off, so a procedure elsewhere in this guide that starts "open **Surveys** in the course menu" quietly stops applying. If a menu entry named in a procedure is missing from your course, check this page first.
 
 ## Opening the page
 
@@ -18,7 +18,7 @@ Each flag is one card with a title, a description, and a single switch. There is
 The global search palette lists **Feature flags** for all course staff, so a grader can reach the URL from search and land on the access-denied message. Only instructors can read or change the switches.
 </Note>
 
-## The nine flags
+## The ten flags
 
 <Frame>
   <img src="/images/staff/feature-flags-1787313949494.png" alt="The Feature flags page with all nine flag cards: Discussion, Flashcards, Office hours, Gradebook, Surveys and Polls switched on, and Student gradebook What-If, Suggested due dates and Student Discord invitations switched off" />
@@ -32,15 +32,16 @@ The global search palette lists **Feature flags** for all course staff, so a gra
 | `gradebook` | Gradebook | **Show Gradebook in the course menu** | On |
 | `surveys` | Surveys | **Show Surveys in the course menu** | On |
 | `polls` | Polls | **Show Polls in the course menu** | On |
+| `exams` | Exams (Scan & OCR) | **Enable paper exam scanning and OCR grading** | Off |
 | `gradebook-what-if` | Student gradebook What-If | **Allow What-If grade simulations for students** | Off |
 | `suggested-due-date` | Suggested due dates | **Present the suggested due date as the due date** | Off |
 | `discord-student-join` | Student Discord invitations | **Let students join this course's Discord server** | Off |
 
-A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the three opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
+A course records only the flags an instructor has touched. Every flag you have never flipped uses the default in the table above, so a brand-new course arrives with the six module flags on and the four opt-in flags off. Turning a flag on and then off again leaves an explicit off setting rather than returning it to "unset", but the two behave identically.
 
 ## What each flag hides
 
-The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the nine flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
+The **Default** column above tells you the starting state. This table tells you what is absent whenever a flag is off, split by who loses it. Five of the ten flags — `discussion`, `office-hours`, `gradebook`, `surveys`, and `polls` — take menu entries away from staff as well as students, and the page marks those five cards with the line "This flag also hides matching entries from the staff course menu (not only students)." A sixth, `suggested-due-date`, changes what staff see without touching the menu, so its card carries no such line.
 
 | Flag | Students lose | Staff lose |
 | --- | --- | --- |
@@ -50,15 +51,26 @@ The **Default** column above tells you the starting state. This table tells you 
 | `gradebook` | The **Gradebook** nav entry | The **Gradebook** nav entry. This one is instructor-only to begin with, so graders have no gradebook entry either way |
 | `surveys` | The **Surveys** nav entry, the surveys-to-complete banner, and the active surveys section of the student dashboard | The **Surveys** nav entry and the surveys panel on the instructor dashboard |
 | `polls` | The **Polls** nav entry | The **Polls** nav entry |
+| `exams` | Nothing (students do not access exam setup pages) | The **Exam (Scan & OCR)** nav entry, the exam template editor, and the scan upload and grading pages. The **Paper exam (scan & OCR)** assignment type is disabled in the new-assignment form when the flag is off |
 | `gradebook-what-if` | The ability to type hypothetical scores into the student gradebook | Nothing |
 | `suggested-due-date` | Suggested dates presented as the assignment's due date | The **Suggested due** field in the assignment header and the **Suggested Due Date** column on **Manage Assignments** |
 | `discord-student-join` | Their invitation to the course's Discord server on the dashboard | Nothing |
 
 Flag state also reaches two places that are easy to forget. The global search palette drops the entries for a disabled module, and the `g` chord shortcuts (press `g`, then a letter) for **Office Hours**, **Gradebook**, **Discussion**, **Flashcards**, **Polls**, and **Surveys** stop working while the matching flag is off.
 
-## The three behavior flags
+## The four behavior flags
 
-Six flags only govern what appears in menus. These three change how a feature behaves.
+Six flags only govern what appears in menus. These four change how a feature behaves or gate access to a module that is off by default.
+
+### Exams (Scan & OCR)
+
+The `exams` flag gates the paper exam scanning and OCR grading module. While it is off, the **Exam (Scan & OCR)** nav entry is hidden, the exam template editor and scan upload pages are inaccessible (a pasted URL shows a "not enabled" notice), and the **Paper exam (scan & OCR)** option in the new-assignment form is disabled with a note pointing to **Course Settings → Feature flags**.
+
+Turn this flag on before creating a paper exam assignment. An exam assignment created in a course where the flag is off cannot be used: every route it links to shows the "not enabled" notice and there is no way to change the assignment type after creation.
+
+<Warning>
+The `exams` flag gates the UI only. Direct API calls can still reach the exam worker and its RPCs for anyone RLS already allows. The flag is the right tool for keeping the exam pages out of the course menu; it is not a security boundary.
+</Warning>
 
 ### Student gradebook What-If
 
