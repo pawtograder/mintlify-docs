@@ -6,6 +6,32 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 17, 2026
+
+#### Office Hours
+- **Ticket escalation with student check-in** — When a TA cannot finish helping a student, they can now **Escalate** the ticket back to the queue with a required note. Escalated tickets sort ahead of ordinary open requests so the student keeps their place. After a staff member resolves an in-progress request, the student receives a 10-minute check-in asking whether their problem was fixed; answering no escalates the ticket automatically. A new red **End ticket** button closes a ticket permanently with no check-in or escalation. Escalated tickets show an **Escalated (×N)** badge and a staff-only history panel with every escalation note ([#1169](https://github.com/pawtograder/platform/pull/1169))
+
+### November 13, 2026
+
+#### Cloud Workspaces
+- **Open in Coder — browser-based coding environments** — Courses with the `cloud-workspaces` feature enabled now show an **Open in Coder** button on assignment pages. Clicking it provisions a browser-based VS Code workspace with the student's repository already cloned, using the same JDK 21 / Maven / Python 3 / Node 22 toolchain as the autograder. Workspaces stop after an hour of inactivity and restart from the assignment page. Forgejo accounts are created automatically for enrolled students, and their usernames appear in the course roster ([#1217](https://github.com/pawtograder/platform/pull/1217), [#1229](https://github.com/pawtograder/platform/pull/1229), [#1230](https://github.com/pawtograder/platform/pull/1230))
+
+#### Gradebook
+- **Column groups and topics** — Gradebook columns can now be organized into named **groups** (collapsible sections in the grid) and tagged with **topics** (curriculum labels used for filtering and reporting) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Exams
+- **Rubric out-of-date notice** — The exam template page now shows a notice when the saved questions no longer match the rubric built from them, prompting instructors to click **Build rubric from exam** before grading starts ([#1190](https://github.com/pawtograder/platform/pull/1190))
+- **Paper exam submissions open on the Exam artifact** — Graders are now taken directly to the answer crops when opening a paper exam submission, instead of landing on the scanned page image ([#1267](https://github.com/pawtograder/platform/pull/1267))
+- **Template editor question ordering fixed** — Questions in the template editor now render in pre-order (parent before children, siblings by ordinal), so parts and items no longer interleave ([#1264](https://github.com/pawtograder/platform/pull/1264))
+
+#### SSO
+- **Skip consent and Forgejo login pages for first-party apps** — With `autoApproveFirstParty` enabled, students are no longer shown the OAuth consent page when signing in to Forgejo or Coder for the first time. Forgejo's login page also redirects straight to the Pawtograder SSO link when only one login source is configured ([#1245](https://github.com/pawtograder/platform/pull/1245))
+
+#### Bug fixes
+- **TA sees new request's students without a reload** — Roster changes are now broadcast to the staff channel, so a TA who already has office hours open sees the correct student count on a new request immediately ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
 ## August 2026
 
 ### August 19, 2026

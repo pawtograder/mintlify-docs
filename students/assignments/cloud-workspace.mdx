@@ -1,0 +1,47 @@
+---
+title: "Cloud Workspace"
+description: "Open your assignment repository in a browser-based VS Code environment with one click"
+icon: "cloud"
+---
+
+# Cloud Workspace
+
+Some courses give you a browser-based coding environment — a **cloud workspace** — so you can work on assignments without installing anything locally. When your course has this enabled, an **Open in Coder** button appears on the assignment page.
+
+## Opening a workspace
+
+Click **Open in Coder** on the assignment page. Pawtograder creates a workspace for you the first time, which takes about a minute. On later visits it starts the workspace if it is stopped, or opens it straight away if it is already running.
+
+The workspace opens in a new tab running VS Code in your browser. Your assignment repository is already cloned into it, so you can start coding immediately.
+
+<Note>
+The first time you open a workspace for a course, you may be asked to link your Forgejo account. Follow the on-screen prompt — it takes one click — and then return to the assignment page and click **Open in Coder** again.
+</Note>
+
+## What the workspace contains
+
+The workspace image includes the same toolchain the autograder uses: JDK 21, Maven, Python 3, Node 22, and git. Tests you run in the workspace behave the same way they will when you push and the autograder grades your submission.
+
+## Saving your work
+
+Your work is saved on a persistent home volume. Stopping or restarting the workspace does not delete your files. Push your changes to the repository as you normally would — the workspace's git is already configured with your credentials, so `git push` works from the terminal without entering a password.
+
+## Workspace lifecycle
+
+A workspace stops automatically after one hour of inactivity (no open browser tab connected to it). Starting it again from the assignment page takes about 30 seconds. Your files are always there when it comes back.
+
+<Warning>
+Workspaces are deleted some time after the assignment's final due date. Push your work to the repository before the deadline — the workspace is not a substitute for submitting.
+</Warning>
+
+## Troubleshooting
+
+| What you see | What to do |
+| --- | --- |
+| **Needs linking** | Click the link shown to connect your Forgejo account, then return and click **Open in Coder** again. |
+| **Starting** or **Cloning** | Wait a moment and the page will update automatically. |
+| **Failed** | Click **Open in Coder** again. Pawtograder will restart the workspace. If it fails repeatedly, contact your instructor. |
+
+## See also
+
+- [Submitting Your Work](/students/assignments/create-submission) for how pushes from the workspace become submissions.
