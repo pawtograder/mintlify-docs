@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Capabilities and custom roles
+
+- **Gradebook access controlled by capability** — The staff gradebook now requires the `manage_gradebook` capability. Graders on the default grader role can no longer open the gradebook page, read student scores, or override grades. Instructors can grant this capability to a custom role (for example, a Head TA) from **Course Settings → Enrollments → Roles**. Download Gradebook remains instructor-only. Students still see their own released grades ([#1356](https://github.com/pawtograder/platform/pull/1356))
+- **Repository repair tools controlled by capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page now require the `manage_student_repositories` capability. The **Sync** button and row checkboxes follow `manage_assignments` separately. All staff can still view the Repository Status table ([#1384](https://github.com/pawtograder/platform/pull/1384))
+- **Roster management delegatable to custom roles** — A new `manage_roster` capability covers lab sections, class section renaming, and student actions on the Enrollments page. A non-instructor with this capability can add, remove, and manage students, but cannot touch grader or instructor rows. The **Manage lab sections** button and the Enrollments nav entry now follow this capability ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Office hours
+
+- **Student onboarding hints** — A new course feature flag, **Office hours: hints for new students**, shows first-time students up to two guided hints on the office hours pages: one pointing at the queue list when the course has multiple text queues, and one on the New Request button that says whether staff are on duty and when the next session starts. Hints close permanently after the student clicks New Request. The flag also adds longer helper text to the new request form fields. Off by default ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **What's-new walkthrough for ticket escalation** — Staff see a one-time walkthrough the first time they open the office hours manage view, explaining the new Escalate button, what an escalated ticket looks like, how Resolve now checks in with the student, and the difference between Resolve and End ticket. A **What's new** button in the header reopens it ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Survey countdown stays live on the student dashboard** — Survey cards on the student dashboard now update their countdown and Overdue state while the page is open, without a reload. A hidden dashboard refreshes its data when shown again, at most once a minute ([#1184](https://github.com/pawtograder/platform/pull/1184))
+
+#### Forgejo (cloud workspaces)
+
+- **Repository links use the correct host** — Commit, pull request, and file links in student and staff views now use the assignment's configured Git provider. Forgejo assignments link to the Forgejo instance; GitHub assignments link to GitHub. The GitHub help page excludes Forgejo repositories from its list ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Handout sync skipped for Forgejo repositories** — Handout sync only works on GitHub. Forgejo repositories are now excluded from the sync queue and shown as "Unavailable on Forgejo" on the Repository Status page. Bulk sync reports how many Forgejo repositories were skipped ([#1425](https://github.com/pawtograder/platform/pull/1425))
+- **Forgejo staff teams and group access** — Staff now get write access to Forgejo repositories through a `{slug}-staff` team, matching the GitHub behavior. Students who leave a Forgejo assignment group lose their repository access. Instructors can move students between Forgejo groups ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Operations runbook for Forgejo and Coder** — A new staging operations guide covers live checks, component-by-component diagnosis and recovery, course flags, and known risks for the Cloud Workspaces feature ([#1327](https://github.com/pawtograder/platform/pull/1327))
+
 ## August 2026
 
 ### August 19, 2026
