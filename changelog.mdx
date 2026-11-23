@@ -6,6 +6,44 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 11, 2026
+
+#### Integrations
+- **Forgejo and Coder on staging** — Forgejo (a self-hosted Git forge) and Coder (cloud development environments) are now running on staging. Forgejo sign-in uses Pawtograder's SSO provider, and Coder workspaces can clone private Forgejo repositories using Forgejo as an external auth provider. Runner tokens are managed through OpenBao ([#1129](https://github.com/pawtograder/platform/pull/1129), [#1235](https://github.com/pawtograder/platform/pull/1235), [#1243](https://github.com/pawtograder/platform/pull/1243), [#1234](https://github.com/pawtograder/platform/pull/1234))
+
+### November 10, 2026
+
+#### Exams
+- **Exam grading behind a course feature flag** — The paper exam (scan & OCR) module is now off by default and must be enabled per course under **Course Settings → Feature flags**. The **Exam (Scan & OCR)** nav entry, the three exam pages, and the **Paper exam** assignment type are all hidden until the flag is on. See [Feature flags](/staff/feature-flags#exam-scan--ocr) ([#1197](https://github.com/pawtograder/platform/pull/1197))
+
+### November 9, 2026
+
+#### Infrastructure
+- **Postgres /dev/shm and WAL-G retention** — Chart 0.4.0 gives the Postgres primary and standby a 1 GiB shared-memory volume (replacing the container default of 64 MiB), and WAL-G backup pruning moves to a dedicated hourly CronJob so that changing the retention count no longer restarts the database. A CI gate now blocks any chart change that would restart Postgres without a minor version bump ([#1028](https://github.com/pawtograder/platform/pull/1028))
+- **Maintenance posture in the Helm chart** — `maintenance.active` renders the full maintenance fence (ingress reroute, writers at zero, CronJobs suspended) as chart values, so a Postgres-restarting release can be applied inside a window without live `kubectl` edits conflicting with the upgrade ([#1028](https://github.com/pawtograder/platform/pull/1028))
+
+#### Bug fixes
+- **Coder template variables passed via file** — Coder bootstrap no longer fails when template variables contain JSON (node selectors, tolerations, affinities). Variables are now written to a YAML file and passed with `--variables-file` instead of individual `--variable` flags ([#1227](https://github.com/pawtograder/platform/pull/1227))
+- **GoTrue bulk CSV import sets all token columns** — Bulk user import now correctly sets all required GoTrue token columns ([#1224](https://github.com/pawtograder/platform/pull/1224))
+
+### November 8, 2026
+
+#### Course settings
+- **Course-level Gemini API key** — Instructors can store, replace, or remove a Gemini API key per course under **Course Settings → Gemini API Key**. The key is stored in Vault and is never returned through the UI. Saving requires the `gemini-api-key-setup` feature flag to be on. See [Feature flags](/staff/feature-flags#gemini-api-key) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Grading
+- **Custom grader roles and capabilities** — Instructors can create custom grader roles (for example, "Head TA") with specific capabilities: `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. A grader on a custom role holds the default grader permissions plus the role's extras. Graders without `manage_assignments` can view assignment forms but cannot save them. See [Finding your way around](/staff/intro#custom-grader-roles-and-capabilities) ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Exams
+- **Exam answer type normalization** — Unknown answer types returned by Gemini (such as "composite") are now normalized to `free_text` instead of failing the template save. The allowed types are also listed in the extraction prompt ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Exam and quiz seed data** — The development seed database now includes paper exam and in-app quiz assignments covering all question shapes, lifecycle states, scan batches, and graded submissions ([#1213](https://github.com/pawtograder/platform/pull/1213))
+
+#### Bug fixes
+- **Password reset links on staging** — GoTrue mailer URL paths are now set correctly so reset, confirm, and magic-link emails point at the right app routes ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **Grading points box refills on same-value option change** — Selecting a rubric option worth the same points as the current selection now correctly refills the points input ([#1208](https://github.com/pawtograder/platform/pull/1208))
+
 ## August 2026
 
 ### August 19, 2026
