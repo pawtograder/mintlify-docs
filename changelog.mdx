@@ -6,6 +6,32 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Custom roles and capabilities
+
+- **Gradebook access for custom roles** — The staff gradebook is now controlled by the `manage_gradebook` capability. By default only instructors can open it; an instructor can grant it to a custom role (for example, a Head TA) so that role can read scores, override grades, add and edit columns, import, and release. **Download Gradebook** remains instructor-only. Graders on the default grader role are redirected away from the gradebook URL ([#1356](https://github.com/pawtograder/platform/pull/1356))
+- **Repository repair tools for custom roles** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page are now controlled by the `manage_student_repositories` capability. Instructors can grant it to a custom role. The **Sync** button and row checkboxes remain gated on `manage_assignments` ([#1384](https://github.com/pawtograder/platform/pull/1384))
+- **Roster management for custom roles** — A new `manage_roster` capability lets instructors delegate student roster tasks to a custom role. A staff member with it can add students, remove students, cancel pending student invitations, and change a student's SIS sync override. They cannot touch grader or instructor rows, change anyone's role, import from CSV, or create invitations. The **Enrollments** entry in the Course Settings menu and the **Manage lab sections** button on the lab roster follow this capability ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Office hours
+
+- **What's new walkthrough for ticket escalation** — The first time a staff member opens the office hours manage pages, a dialog offers a short tour of ticket escalation: how to hand a ticket to another staff member with a note, what an escalated ticket looks like, how **Resolve** now checks in with the student, and how **End ticket** differs. A **What's new** button in the header reopens it at any time ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Hints for first-time students** — A new course feature flag, **Office hours: hints for new students** (`office-hours-student-onboarding`), shows guided hints to students on the office hours pages until they first click an enabled **New Request** button. One hint points at the queue list when the course has two or more text queues; the other appears below **New Request** and says whether staff are on duty, with the next scheduled office hours time when nobody is. The new request form also gets longer helper text on the **Help Queue**, **Template**, and **Description** fields while the flag is on. The flag is off by default ([#1348](https://github.com/pawtograder/platform/pull/1348))
+
+#### Surveys
+
+- **Live survey countdown on the dashboard** — The **Surveys to complete** banner on the student dashboard now updates its countdown while the page is open, so a survey turns Overdue without a reload. When you switch back to a tab that has been in the background, the page refreshes its survey list at most once a minute ([#1184](https://github.com/pawtograder/platform/pull/1184))
+
+#### Forgejo (cloud workspaces)
+
+- **Repository links use the correct host** — Commit, pull request, and file links in the student assignment list, submission history, grade exports, security audit, and workflow run pages now point to the Forgejo instance for Forgejo assignments instead of github.com ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Handout sync skips Forgejo repositories** — The handout sync queue no longer accepts Forgejo repositories. The Repository Status page shows "Handout sync isn't available for Forgejo repositories yet" in place of the Sync button for those rows ([#1425](https://github.com/pawtograder/platform/pull/1425))
+- **Staff write access to Forgejo repositories** — Course staff (instructors, graders, and admins with a Forgejo account) are now added to a `{slug}-staff` team in the course's Forgejo organization, giving them write access to every student and group repository and to the handout. The team is kept in sync: a staff member removed from the course loses access within minutes ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Students can be moved between Forgejo groups** — Instructors can now move students between assignment groups that use Forgejo repositories. When a student leaves a group, their collaborator access to the group's Forgejo repository is revoked ([#1397](https://github.com/pawtograder/platform/pull/1397))
+
 ## August 2026
 
 ### August 19, 2026
