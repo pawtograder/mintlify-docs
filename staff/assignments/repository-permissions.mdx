@@ -35,6 +35,14 @@ After running the fix, you'll see a summary showing:
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
 
+## Access control
+
+By default, only instructors can use the **Fix Permissions**, **Retry creation**, and **Cleanup individual repositories** buttons. Graders on the default grader role can view the Repository Status table but cannot use these repair tools.
+
+An instructor can grant access to a custom role (for example, a Head TA) by adding the `manage_student_repositories` capability to that role from **Course Settings → Enrollments → Roles**.
+
+The **Sync** button and row checkboxes are controlled separately by the `manage_assignments` capability, which is also on the default instructor role.
+
 ## When to Use Fix Permissions
 
 Use the Fix Permissions tool when:
