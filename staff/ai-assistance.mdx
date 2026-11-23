@@ -232,6 +232,35 @@ populates it directly. Point your assistant at the handout yourself if it needs
 the written specification. This is a known issue with an open report against Pawtograder, and a fix is on the way.
 </Note>
 
+## Per-course Gemini API key
+
+Some AI-powered features — paper exam OCR and template extraction — call Google's Gemini API directly from Pawtograder's edge functions. By default these features use a shared platform key. Instructors can store a course-owned key to use instead, which lets a course control its own Gemini quota and billing.
+
+### Storing a key
+
+1. Turn on the `gemini-api-key-setup` feature flag under **Course Settings → Feature flags**. The flag is off by default.
+2. Open **Course Settings → Gemini API Key**.
+3. Paste your key into the **API Key** field and click **Save**.
+
+The key is stored in Vault and is never shown again through the Course Settings interface. The page reports only whether a key is configured, not its value.
+
+<Warning>
+The key field uses `autocomplete="one-time-code"` to discourage browser password managers from storing it. This is a workaround, not a guarantee — some browsers or extensions may still offer to save it. Do not store a production key in a browser password manager.
+</Warning>
+
+### Replacing or removing a key
+
+To replace a stored key, paste the new key into the field and click **Replace**. The old key is overwritten in Vault; it cannot be recovered.
+
+To remove a stored key, click **Remove**. The course reverts to the shared platform key. Removal is available whether or not the `gemini-api-key-setup` flag is on.
+
+### Access and security
+
+- Only instructors can save, replace, or remove a key. The page is not visible to graders.
+- The key is stored in Vault under a course-specific path. No RPC returns the key value; the RPCs return only `{setup_enabled, configured, outcome}`.
+- Privileged database operators with direct Vault access can read the stored key. Pawtograder's PostgreSQL logging configuration does not suppress bind-parameter logging, so the key may appear in database logs during the write. Only trusted cluster operators can read production logs.
+- Deleting a course removes its stored key from Vault.
+
 ## Privacy and access control
 
 - **Staff only.** Token creation and every tool call require an instructor or
