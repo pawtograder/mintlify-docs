@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 8–9, 2026
+
+#### Exams and quizzes
+- **Exam grading system with OCR and student matching** — Paper exams can now be scanned and uploaded as PDF batches. Pawtograder runs OCR on each answer region, matches pages to students, and queues unmatched exams for manual review. In-app quizzes support autograded objective questions and hand-graded free-text questions, with retakes and per-attempt scoring. See [Exams and Quizzes](/staff/assignments/exams) ([#814](https://github.com/pawtograder/platform/pull/814))
+- **Exam seed data** — The development seed database now includes eight exam and quiz assignments per class covering the full range of question shapes, lifecycle states, scan batches, and grading scenarios ([#1213](https://github.com/pawtograder/platform/pull/1213))
+- **Exam answer type normalization** — Unknown answer types returned by Gemini template extraction (such as "composite") are now normalized to `free_text` instead of failing the save. A database trigger enforces valid answer types as a backstop ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+#### Custom grader roles and capabilities
+- **Custom grader roles** — Instructors can create custom grader roles (for example, "Head TA") and grant them specific capabilities: `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. Custom roles build on the default grader role. See [Custom grader roles](/staff/course-settings#custom-grader-roles-and-capabilities) ([#1010](https://github.com/pawtograder/platform/issues/1010), [#1199](https://github.com/pawtograder/platform/pull/1199), [#1204](https://github.com/pawtograder/platform/pull/1204))
+- **manage_assignments capability** — Graders on a custom role with `manage_assignments` can now create and edit assignments, sync student repositories, and run repository permission fixes. Previously these actions required an instructor role ([#1199](https://github.com/pawtograder/platform/pull/1199))
+- **manage_review_assignments capability** — Graders on a custom role with `manage_review_assignments` can now see and delete review assignments for the class ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Course Gemini API key
+- **Store a Gemini API key per course** — Instructors can save, replace, and remove a course-owned Google Gemini API key from **Course Settings → Gemini API Key**. The key is stored in Vault and cannot be viewed again through Course Settings after saving. Requires the `gemini-api-key-setup` feature flag. See [Feature flags](/staff/feature-flags) ([#1126](https://github.com/pawtograder/platform/issues/1126), [#1160](https://github.com/pawtograder/platform/pull/1160), [#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Infrastructure
+- **SSO with Forgejo and Coder** — Pawtograder's OAuth 2.1 server can now be enabled so Forgejo and Coder sign in with Pawtograder accounts. Account creation on first SSO sign-in is off by default ([#1165](https://github.com/pawtograder/platform/pull/1165))
+- **LTI grade drain reliability** — Grade-push failures are now captured to Sentry with class and assignment tags, disabled-sync rows are deferred instead of blocking the drain, and failing rows are moved to the back of the queue to avoid starving newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **Bug reporter with redacted replay** — Bug reports now include a redacted session replay to help diagnose issues ([#1050](https://github.com/pawtograder/platform/pull/1050))
+
 ## August 2026
 
 ### August 19, 2026

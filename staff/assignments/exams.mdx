@@ -1,0 +1,106 @@
+---
+title: "Exams and Quizzes"
+description: "Paper exams with OCR scan matching and in-app quizzes with autograding and hand grading"
+icon: "file-pen"
+---
+
+# Exams and Quizzes
+
+Pawtograder supports two exam assignment types: **paper exams** scanned and matched to students via OCR, and **in-app quizzes** completed directly in the browser. Both types use the same question structure and rubric system as other assignments.
+
+## Assignment types
+
+When creating an assignment, set the **Assessment type** to one of:
+
+| Type | How students submit | How grading works |
+| --- | --- | --- |
+| **Exam** | Paper exam, scanned and uploaded as a PDF batch | OCR extracts answers; graders review and score each question region |
+| **Quiz** | In-app, answered directly in the browser | Objective questions are autograded; open-ended questions go to hand grading |
+
+## Question structure
+
+Both exam and quiz assignments share the same question tree. Questions can be nested up to three levels deep, and each question has an **answer type**:
+
+| Answer type | What it captures |
+| --- | --- |
+| `free_text` | Open-ended written answer (default for new questions) |
+| `multiple_choice` | One option selected from a list |
+| `multi_select` | One or more options selected from a list |
+| `numeric` | A number, with an optional tolerance for autograding |
+| `true_false` | True or False |
+
+A question that only groups sub-questions (a section header) should use `free_text` and will not have an answer region of its own.
+
+## Paper exams
+
+### Creating the exam template
+
+An exam template defines the layout of the paper exam. You can:
+
+- **Generate a template** — Pawtograder renders a PDF from the question tree, placing answer boxes automatically.
+- **Upload a PDF** — Upload a hand-designed PDF and use the region editor to draw answer boxes over each question.
+- **Extract from a PDF with AI** — Upload a PDF and use the Gemini-powered extraction to propose a question tree and region layout. Requires a course Gemini API key (see [Course Settings → Gemini API Key](/staff/course-settings#the-15-entries)).
+
+The region editor shows the PDF pages and lets you draw, resize, and label answer regions. Each region is linked to a question. A question can span a page break by having two regions on consecutive pages.
+
+### Scanning and matching
+
+After students complete the paper exam, upload a scan batch:
+
+1. Navigate to the exam assignment and open **Scan Batches**.
+2. Upload a multi-page PDF of scanned exams. Each student's exam should be a contiguous run of pages.
+3. Pawtograder processes the batch: it detects page boundaries, runs OCR on each answer region, and attempts to match each exam to a student by reading the student ID field.
+4. Exams that could not be matched automatically appear in the **Match Review** queue. Confirm or correct each match before grading begins.
+
+Scan batches can be in one of these states:
+
+| State | Meaning |
+| --- | --- |
+| Uploaded | Batch received, processing not yet started |
+| Processing | OCR and page detection running |
+| Awaiting match review | Processing complete; some exams need manual matching |
+| Complete | All exams matched; graded submissions created |
+| Failed | Processing stopped partway through |
+
+### Grading scanned exams
+
+Once a batch is complete, each matched exam becomes a submission. Graders open the submission and see each question's answer region alongside the rubric. The OCR text is shown as a reference, but graders score from the scanned image.
+
+## In-app quizzes
+
+### Student experience
+
+Students open the quiz from their assignment page and answer questions directly in the browser. The quiz records each attempt. Instructors can allow retakes; each retake is a new attempt and the highest score is used by default.
+
+### Autograding
+
+Objective question types (`multiple_choice`, `multi_select`, `numeric`, `true_false`) are autograded immediately on submission. For `numeric` questions, the answer is accepted if it falls within the configured tolerance.
+
+### Hand grading
+
+`free_text` questions go to the hand-grading queue. Graders score them using the assignment rubric, the same way as any other hand-graded assignment.
+
+### Releasing results
+
+Quiz results follow the same release flow as other assignments: graders complete their reviews, then an instructor releases the results to students. Unreleased quizzes show students only that their attempt was received.
+
+## Seeding and testing
+
+The development seed database includes eight exam and quiz assignments per class that cover the full range of question shapes and lifecycle states, including generated templates, uploaded PDFs, scan batches at each processing stage, and in-app quizzes with autograded and hand-graded attempts. Use these to test grading workflows before running a real exam.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings">
+    Enable the Gemini API key for AI-powered template extraction.
+  </Card>
+  <Card title="Rubrics" icon="list-check" href="/staff/assignments/rubrics">
+    Build the rubric that graders use to score exam questions.
+  </Card>
+  <Card title="Handgrading" icon="pen" href="/staff/assignments/handgrading">
+    How graders score submissions and leave feedback.
+  </Card>
+  <Card title="Assignment Configuration" icon="gear" href="/staff/assignments/configuration">
+    Full reference for assignment settings.
+  </Card>
+</CardGroup>
