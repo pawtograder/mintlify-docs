@@ -19,9 +19,20 @@ pages: grading assignment by lab leader, lab-based due dates, and the section
 filters and columns on dashboards, the gradebook, surveys and exports all read
 from them.
 
+## Who can manage lab sections
+
+Creating, editing, and deleting lab sections, their meetings, and their leaders requires the `manage_roster` capability. Instructors hold it by default. Graders on the default grader role do not.
+
+An instructor can grant `manage_roster` to a custom role (for example, a Head TA role) from **Course Settings → Roles**. A holder can do everything an instructor can on the lab sections pages, with two exceptions:
+
+- **SIS CRN** — Only an instructor can set or change a lab section's SIS CRN. The CRN links a section to a SIS roster, which can enroll instructors and TAs, so this stays instructor-only.
+- **Moving a section to another class** — Nobody can move a lab section to another class from the API.
+
+The `manage_roster` capability also covers renaming class sections and managing student enrollments. See [Enrollments](#how-students-get-assigned-to-a-section) for what a non-instructor with `manage_roster` can do on the Enrollments page.
+
 ## Two pages with the same name
 
-**Course Settings → Lab Sections** is visible to instructors and graders, and it
+**Course Settings → Lab Sections** is visible to all course staff, and it
 opens the *lab roster* at `manage/course/lab-roster`. The roster is read-only: it
 shows which students are in each section, plus a CSV export.
 
@@ -30,9 +41,9 @@ shows which students are in each section, plus a CSV export.
 </Frame>
 
 The *section editor* lives one click deeper, at `manage/course/lab-sections`.
-Nothing in the Course Settings menu points there. Instructors reach it through the
-**Manage lab sections** button in the top-right corner of the roster; graders do
-not see that button.
+Nothing in the Course Settings menu points there. Staff with the `manage_roster` capability reach it through the
+**Manage lab sections** button in the top-right corner of the roster; staff without it
+do not see that button.
 
 <Frame>
   <img src="/images/staff/lab-section-editor-1787313949499.png" alt="The lab section editor, also headed Lab Sections but with a Create Lab Section button and a table of sections showing Name, Schedule, Room Location, Lab Facilitators, Upcoming Meetings, Students and Actions, with a filter under most headers" />
