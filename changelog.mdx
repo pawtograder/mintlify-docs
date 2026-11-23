@@ -6,6 +6,25 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 9, 2026
+
+#### Exam grading
+- **Exam and quiz grading system** — Pawtograder now supports paper exams and in-app quizzes as a first-class assignment type. Paper exams can be generated from a question tree or uploaded as a PDF with hand-drawn answer regions; scanned batches are matched to students via QR codes, with a manual match-review queue for unreadable pages. In-app quizzes are completed in the browser with autograding for multiple-choice, multi-select, true/false, and numeric questions. Both formats share the same grading interface. See [Exam Grading](/staff/assignments/exams) ([#814](https://github.com/pawtograder/platform/pull/814), [#1213](https://github.com/pawtograder/platform/pull/1213))
+- **AI-assisted template extraction** — For uploaded exam PDFs, Gemini can propose question text, answer types, and region boundaries. Unknown answer types are normalized to `free_text` automatically, and a trigger on `exam_questions` enforces valid types as a backstop ([#1212](https://github.com/pawtograder/platform/pull/1212))
+
+#### Course settings
+- **Course-owned Gemini API key** — Instructors can store, replace, and remove a Google Gemini API key per course from **Course Settings → Gemini API Key**. The key is kept in Vault and is never returned to the browser. Enable the `gemini-api-key-setup` feature flag to unlock the entry. See [Course Settings → Gemini API Key](/staff/course-settings#gemini-api-key) ([#1161](https://github.com/pawtograder/platform/pull/1161), [#1160](https://github.com/pawtograder/platform/pull/1160))
+
+#### Access control
+- **Capability-based grader roles** — Instructors can create custom grader roles with specific capabilities. A grader on a custom role with `manage_review_assignments` can see and delete review assignments; one with `manage_assignments` can create and edit assignments. Manage custom roles under **Course Settings → Enrollments**. See [Assigning Grading Tasks](/staff/assignments/grading-assignments#who-can-manage-review-assignments) ([#1204](https://github.com/pawtograder/platform/pull/1204))
+
+#### Bug fixes
+- **Staging fixes: exam answer types, email links, password reset** — Exam template extraction normalizes answer types before saving; notification emails now link to the correct app URL; password-reset links work end-to-end on staging ([#1212](https://github.com/pawtograder/platform/pull/1212))
+- **LMS grade drain no longer silently drops failures** — A failed queue read now returns 500 instead of looking like an empty queue; per-assignment failures are captured to Sentry; disabled-sync rows are deferred rather than blocking every drain batch ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **Exam grading: points box refills when a same-value option is selected** — Picking a different multiple-choice option worth the same points no longer leaves the points field blank ([#1208](https://github.com/pawtograder/platform/pull/1208))
+
 ## August 2026
 
 ### August 19, 2026
