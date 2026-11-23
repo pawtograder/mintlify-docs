@@ -42,6 +42,13 @@ individual items fail, the rest still go through: the failed moves and
 groups stay staged for you to retry, and you get a "Published with
 errors" toast.
 
+**Manage Groups uses two capabilities.** Staging changes (Create New
+Group, Bulk Create, Tweak, Edit Group, Move Student) and publishing
+them require `publish_groups`. Setting a group's mentor and copying
+groups from another assignment require `manage_groups`. Both are on
+the default instructor role. An instructor can grant either or both to
+a custom role (such as a Head TA) from **Course Settings → Roles**.
+
 <Note>
 Adding or removing a member notifies the group's other members, including
 when the change comes from publishing. That notification is suppressed
