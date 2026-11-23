@@ -36,7 +36,16 @@ can no longer change groups.
 Use **Manage Groups** to create groups manually, add or remove members,
 rename or delete groups, and move students between groups. Changes are
 staged locally and applied in one operation when you click **Publish
-Changes**. Publishing creates or updates memberships, creates GitHub
+Changes**.
+
+### Permissions for group management
+
+**Manage Groups** uses two capabilities:
+
+- **`publish_groups`**: stage group changes (Create New Group, Bulk Create, Tweak a Group, Edit Group, Move Student) and publish them. A TA with `publish_groups` can stage changes and press Publish, but publishing still requires an instructor or site admin until a future update.
+- **`manage_groups`**: actions that save immediately without staging — setting a group's mentor, renaming a group, and copying groups from another assignment. Without this capability, the mentor is shown as text rather than an editable dropdown, and the Copy Groups button is hidden.
+
+Both capabilities are on the default instructor role only. An instructor can grant either to a custom role (for example, a Head TA) from **Course Settings → Roles**. Publishing creates or updates memberships, creates GitHub
 repositories for any new groups, and queues permission-sync jobs. If
 individual items fail, the rest still go through: the failed moves and
 groups stay staged for you to retry, and you get a "Published with
