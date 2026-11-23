@@ -6,6 +6,36 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Roles and capabilities
+
+- **Roster management delegated to a custom role** — A new `manage_roster` capability controls who can manage lab sections, rename class sections, and add, remove, or cancel invitations for students. It is on the default instructor role only, so no one gains or loses access on day one. An instructor can turn it on for a custom role such as a Head TA. A staff member with `manage_roster` who is not an instructor can only act on students — they cannot touch grader or instructor rows, change anyone's role, import from CSV, or create invitations. See [Lab Sections](/staff/lab-sections) and [Course Settings](/staff/course-settings) ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+- **Gradebook access delegated to a custom role** — A new `manage_gradebook` capability controls who can see and manage the staff gradebook. By default it is on the instructor role only, so graders on the default grader role can no longer open the gradebook page, read other students' scores, override grades, or use **Convert Missing to 0**. An instructor can grant it to a custom role such as a Head TA. **Download Gradebook** remains instructor-only. Students still see their own released grades. See [Gradebook](/staff/gradebook) ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Office hours
+
+- **Ticket escalation walkthrough for staff** — The first time a staff member opens the office hours manage view, a **New in Office Hours** dialog offers a five-step tour of ticket escalation, the updated Resolve check-in, and the new End ticket button. Dismissing or finishing the tour records it as seen per user, so it does not reopen on any browser or device. The **What's new** button in the queue header reopens it at any time. See [Running Office Hours](/staff/office-hours/running-office-hours) ([#1261](https://github.com/pawtograder/platform/pull/1261))
+
+- **Student onboarding hints on office hours pages** — A new course feature flag, **Office hours: hints for new students** (off by default), shows students up to two guided popovers on the office hours pages until they click an enabled **New Request** button for the first time. One hint points at the queue list when the course has two or more text queues; the other shows whether staff are on duty and, if not, when the next office hours start. The new request form also gets longer helper text on the **Help Queue**, **Template**, and **Description** fields while the flag is on. See [Feature flags](/staff/feature-flags) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+
+- **Dismissed walkthrough stays closed across remounts** — The office hours walkthrough no longer reopens when a staff member navigates between pages in the manage view before the database write has committed ([#1418](https://github.com/pawtograder/platform/pull/1418))
+
+#### Bug fixes
+
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time, so it turns **Overdue** at the correct moment without a page reload ([#1184](https://github.com/pawtograder/platform/pull/1184))
+
+### November 22, 2026
+
+#### Forgejo integration
+
+- **Repository web links corrected for Forgejo assignments** — Links to student repositories on Forgejo assignments now point to the correct URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Handout syncs no longer queued for Forgejo repositories** — Handout sync jobs are no longer queued for Forgejo-backed repositories, which do not support them ([#1425](https://github.com/pawtograder/platform/pull/1425))
+- **Forgejo group membership and staff access** — Students are moved between Forgejo groups when their section changes, leavers have their access revoked, and staff are given write access to student repositories ([#1397](https://github.com/pawtograder/platform/pull/1397))
+
 ## August 2026
 
 ### August 19, 2026
