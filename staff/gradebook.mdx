@@ -50,6 +50,16 @@ Staff-only columns are useful for internal grading calculations, curve adjustmen
 
 When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## Who can manage the gradebook
+
+The staff gradebook — opening the page, reading student scores, overriding grades, using Convert Missing to 0, and adding, editing, moving, importing, releasing, or deleting columns — requires the `manage_gradebook` capability. By default this is on the instructor role only. An instructor can turn it on for a custom role (such as a Head TA) from **Course Settings → Roles**.
+
+Graders on the default grader role cannot open the gradebook page, read other students' scores, or override grades until an instructor grants them this capability. Students still see their own released grades in the student gradebook and What-If.
+
+The private grades on a student's profile page (**Manage → Students → [student]**) also follow `manage_gradebook` and are hidden from staff who do not hold it.
+
+Download Gradebook remains instructor-only regardless of the capability.
+
 ## Managing Columns
 
 ### Reordering Columns

@@ -1,12 +1,18 @@
 ---
 title: "Repository Permissions"
-description: "Audit and fix GitHub repository permissions for assignment repositories"
+description: "Audit and fix repository permissions for assignment repositories, and manage the Repository Status page"
 icon: "shield-check"
 ---
 
 # Repository Permissions
 
-Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+Pawtograder automatically manages repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+
+## Who can use the repair tools
+
+The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons require the `manage_student_repositories` capability. By default this is on the instructor role only. An instructor can turn it on for a custom role (such as a Head TA) from **Course Settings → Roles**. Graders on the default grader role can still open the Repository Status page and read the table, but they do not see the repair buttons.
+
+The **Sync** button and the row checkboxes that select repositories for a bulk sync require the `manage_assignments` capability, which is also instructor-only by default.
 
 ## Fix Repository Permissions
 

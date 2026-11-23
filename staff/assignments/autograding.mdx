@@ -892,6 +892,8 @@ page, the test-insights page, or an individual submission. Reruns keep the
 original submission record (same timestamp, same submission count) and
 replace the autograder result.
 
+Bulk reruns from the **Rerun Autograder** page work for both GitHub and Forgejo assignments. For Forgejo repositories, the rerun tags the commit on Forgejo and dispatches `grade.yml` through Forgejo's API, the same path a single-commit rerun uses.
+
 Each rerun lets you choose which grader version to use:
 
 - The current grader (latest commit on the grader repo's default branch).

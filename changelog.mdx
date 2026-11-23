@@ -6,6 +6,32 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 22–23, 2026
+
+#### Office hours
+- **Ticket escalation and End ticket** — When you are helping a student, a purple **Escalate** button lets you hand the ticket to another staff member with a note on what you tried. The ticket returns to the queue above all normal tickets so the student keeps their place. **Resolve** now starts a 10-minute check-in with the student ("Did your problem get fixed?"); if they say No, the ticket is escalated automatically. A new **End ticket** button closes a ticket permanently with no check-in, for cases where more help will not fix the problem. A **What's new** button in the queue header opens a five-step walkthrough of these changes for staff ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Hints for first-time students** — A new course feature flag, **Office hours: hints for new students**, shows students up to two guided hints on the office hours page until they click an enabled New Request button. One hint points at the queue list when the course has two or more text queues; the other says whether staff are on duty and when the next office hours start. The new request form also gets longer helper text on the Help Queue, Template, and Description fields. Off by default; turn it on from **Course Settings → Feature flags** ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **Resolved requests visible in the queue** — The office hours page now shows resolved requests alongside open ones so staff can review recent history ([#1166](https://github.com/pawtograder/platform/pull/1166))
+
+#### Gradebook
+- **`manage_gradebook` capability** — The staff gradebook now requires the `manage_gradebook` capability. By default it is on the instructor role only. Graders on the default grader role can no longer open the gradebook page, read student scores, or override grades until an instructor grants them the capability through a custom role. Students still see their own released grades. The private grades on a student's profile page follow the same capability ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Assignments and repositories
+- **`manage_student_repositories` capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page now require the `manage_student_repositories` capability (instructor-only by default). Graders can still view the table. The **Sync** button and row checkboxes continue to require `manage_assignments` ([#1384](https://github.com/pawtograder/platform/pull/1384))
+- **Bulk rerun autograder works for Forgejo assignments** — The **Rerun Autograder** page now correctly dispatches reruns for Forgejo repositories through Forgejo's API instead of GitHub's ([#1366](https://github.com/pawtograder/platform/pull/1366))
+
+#### Forgejo (cloud workspaces)
+- **Staff write access to Forgejo repositories** — Course staff (instructors, graders, and admins) now automatically get write access to every student and group repository and handout on Forgejo, through a `{slug}-staff` team that the reconciler keeps in sync. A staff member removed from the course loses access within minutes ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Move students between Forgejo groups** — Instructors can now move students between groups on Forgejo assignments. When a student leaves a group, their write access to the old group's repository is revoked automatically by the reconciler ([#1397](https://github.com/pawtograder/platform/pull/1397))
+
+#### Bug fixes
+- **Exam scan alignment** — Line scans now align with the template before reading regions, fixing misread answers on scanned exams ([#1292](https://github.com/pawtograder/platform/pull/1292))
+- **Exam batch processing guard** — The exam scan processor now refuses to start a new batch while one is already being processed, preventing duplicate processing ([#1329](https://github.com/pawtograder/platform/pull/1329))
+- **Exam auto-extract points preserved** — Auto-extract no longer drops points on questions that have sub-parts ([#1370](https://github.com/pawtograder/platform/pull/1370))
+- **Gradebook column named after assignment** — A gradebook column linked to an assignment now keeps the assignment's name when the assignment is renamed ([#891](https://github.com/pawtograder/platform/pull/891))
+
 ## August 2026
 
 ### August 19, 2026
