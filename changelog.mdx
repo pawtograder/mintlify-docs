@@ -6,6 +6,25 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13, 2026
+
+#### Forgejo support
+- **Push webhooks from Forgejo** — Pawtograder now accepts push webhooks from Forgejo repositories in addition to GitHub. Pushes are matched to a repository by owner and name (case-insensitively), recorded in the commit history, and processed through the same submission pipeline as GitHub pushes. The commit history dialog shows recorded commits for Forgejo repositories without linking to GitHub ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### Exams
+- **Exam grading behind a course feature flag** — The paper exam (Scan & OCR) workflow is now off by default and must be enabled per course under **Course Settings → Feature flags**. The nav entry, the three exam pages, and the **Paper exam** assignment type are all hidden until the flag is on. See [Feature flags](/staff/feature-flags) ([#1197](https://github.com/pawtograder/platform/pull/1197))
+- **Rubric out-of-date notice on the exam template page** — The exam template page now shows a notice when the saved questions no longer match the rubric built from them (a leaf question has no generated check, or its check's points differ). The notice prompts you to click **Build rubric from exam** before grading starts, and clears once the rubric is in sync ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Scan & Match UX polish** — Exam dropdown menus now show chevrons consistent with the rest of the app. Region labels appear as a small tag above the answer box instead of a bar across the middle. Drawing an answer region clears the question picker so a second drag asks for a question rather than silently adding another box for the same one. The "No exam template yet" message on Scan & Match links to the template page ([#1283](https://github.com/pawtograder/platform/pull/1283))
+- **Paper exam submissions open on the exam artifact** — Graders opening a paper exam submission now land on the answer crops (the `exam_v1` artifact) instead of the scanned page image ([#1281](https://github.com/pawtograder/platform/pull/1281))
+
+#### Gradebook
+- **Column groups and topics** — Gradebook columns can now be assigned a **group** (a named collection that collapses in the student view) and a **topic** (a label for filtering and reporting). See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Bug fixes
+- **Office hours student count updates in real time** — A TA with office hours open now sees the correct student count on a new help request without reloading the page ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
 ## August 2026
 
 ### August 19, 2026
