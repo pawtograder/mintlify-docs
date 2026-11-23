@@ -9,7 +9,7 @@ icon: "list-check"
 This guide explains how rubrics drive the hand-grading experience and how scores are computed. It also includes copy-pasteable YAML examples for each configuration option.
 
 <Note>
-Rubrics can only be edited by instructors. When editing a rubric, you will be prompted to confirm before leaving the page if you have unsaved changes.
+Rubric editing requires the `manage_rubrics` capability. By default, only instructors hold it. An instructor can grant it to a custom role — for example, a Head TA who manages rubrics — from **Course Settings → Roles**. Graders on the default grader role can view rubrics but cannot edit them. When editing a rubric, you will be prompted to confirm before leaving the page if you have unsaved changes.
 </Note>
 
 ## High-Level Overview
@@ -452,6 +452,8 @@ The example sets each check's `points` to its highest option. [Note on Options v
   [Note on Options vs Base Points](#note-on-options-vs-base-points).
 
 ## Editing Rubrics
+
+The **Configure Rubric** menu item and the rubric editor page are only shown to users with the `manage_rubrics` capability. If you navigate directly to the rubric URL without the capability, you are redirected back to the assignment page.
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
 

@@ -6,6 +6,34 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Custom roles and capabilities
+
+- **Rubric editing follows `manage_rubrics`** — Editing rubrics now requires the `manage_rubrics` capability instead of the instructor role. Instructors hold it by default. An instructor can grant it to a custom role (for example, a Head TA who edits rubric items). Graders on the default grader role can still view rubrics but can no longer edit them directly. The **Configure Rubric** menu item and the rubric editor page are hidden without the capability, and navigating to the rubric URL directly redirects back to the assignment page. The CLI's `rubrics import` command also requires `manage_rubrics` ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Gradebook access follows `manage_gradebook`** — The staff gradebook now requires the `manage_gradebook` capability. Instructors hold it by default; graders on the default grader role no longer have access to the gradebook page, other students' scores, score overrides, or Convert Missing to 0. An instructor can grant the capability to a custom role. Download Gradebook remains instructor-only. Students still see their own released grades. The private grades card on a student's profile page is also gated by this capability ([#1356](https://github.com/pawtograder/platform/pull/1356))
+- **Group management follows `manage_groups`** — Setting a group's mentor, renaming a group, and copying groups from another assignment now require the `manage_groups` capability. Staging group changes and publishing them continue to use `publish_groups`. Both capabilities are instructor-only by default. Without `manage_groups`, the mentor dropdown is replaced with read-only text and the Copy Groups button is hidden. Also fixed a privacy bug where any enrolled user could read group memberships from any class ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Roster management follows `manage_roster`** — Lab sections, class section names, and the Enrollments page now follow the `manage_roster` capability ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Forgejo grading
+
+- **Finished Forgejo Actions runs recorded** — Completed and failed Forgejo Actions grading runs are now recorded in Commit History and the submission's Checks tab, with a link to the run. If a run finishes without producing a grader result, a zero-score error result is recorded, matching the behavior for GitHub Actions ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Autograder on/off for Forgejo assignments** — The autograder toggle on the Configure Autograder page is now enabled for Forgejo assignments. Enabling restores or adds `grade.yml` to the handout; disabling parks it as `grade.yml.disabled`. Existing student repositories keep their own copy of the workflow and are not automatically updated ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Org hook checks on every reconciler pass** — The Forgejo reconciler now checks every class org's webhook on each hourly pass, ensuring all orgs receive `action_run_success` and `action_run_failure` events for grading run completion ([#1395](https://github.com/pawtograder/platform/pull/1395))
+
+#### Office hours
+
+- **Student onboarding hints** — A new course feature flag, **Office hours: hints for new students**, adds guided hints to the office hours pages for first-time students. When enabled, students see a queue description hint (when the course has two or more text queues) and a New Request hint that shows whether staff are on duty and when the next office hours start. Hints close on click or Escape and do not reappear after the student first clicks an enabled New Request button. The request form also gets longer helper text on the Help Queue, Template, and Description fields. Staff do not see the hints. The flag is off by default ([#1348](https://github.com/pawtograder/platform/pull/1348))
+
+#### Bug fixes
+
+- **Exam answer crops rendered at consistent zoom** — All answer crops on the exam grading page now render at the same zoom level ([#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Office hours walkthrough stays closed** — A dismissed office hours walkthrough no longer reopens when the component remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time so it turns Overdue at the correct moment ([#1184](https://github.com/pawtograder/platform/pull/1184))
+- **Forgejo repository web links** — Repository links for Forgejo assignments now point to the correct Forgejo URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+
 ## August 2026
 
 ### August 19, 2026
