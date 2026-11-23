@@ -88,6 +88,50 @@ gradebook history. Don't unrelease without a plan to re-release — the
 student may have already seen the previous grade.
 </Warning>
 
+## Release and Unrelease Code Walks
+
+When an assignment has a code-walk rubric, the grading status panel on
+the assignment's **Dashboard** tab shows two additional assignment-wide
+actions: **Release code walks** and **Unrelease code walks**. These
+appear only for instructors and only when a code-walk rubric exists.
+
+**Release code walks** releases every *completed* code-walk review
+across all active submissions in the assignment. Incomplete code walks
+are skipped, and the result toast reports how many were released and
+notes that incomplete ones were not. Grading, self-review, and
+meta-grading reviews are never affected.
+
+**Unrelease code walks** reverses every released code-walk review,
+whether or not it is complete. This also reverses a code walk that was
+released per submission before it was finished.
+
+<Note>
+Releasing a code walk does not mark the submission itself as released
+and does not publish hidden autograder tests. Only releasing the
+grading review does those things.
+</Note>
+
+Both actions require confirmation via a popover before they run. The
+toast reports the number of code walks changed. A no-op (nothing to
+release or unrelease) shows a warning toast instead of a success.
+
+### Code walk release state in the submissions table
+
+When an assignment has a code-walk rubric, the submissions table on the
+**Dashboard** tab shows two release columns instead of one:
+
+- **Grading released** — whether the grading review has been released
+  (the same as the previous single **Released** column).
+- **Code walk released** — the release state of the code-walk review.
+  A checkmark means released; an ✗ means complete but not yet released;
+  **Incomplete** (muted) means the code walk is not complete and will
+  be skipped by **Release code walks**; **—** (muted) means there is
+  no code-walk review for that row (for example, a student with no
+  submission).
+
+Both columns support filtering by release status. Assignments without a
+code-walk rubric continue to show only the single **Released** column.
+
 ## Reassign Grading by Grader
 
 Reassignment is grader-centric rather than submission-centric: you pick

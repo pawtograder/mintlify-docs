@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Grading
+- **Class roles and capabilities (foundation)** — Every class now has four default roles (instructor, grader, student, admin), each backed by a list of capabilities. This is the database foundation for upcoming UI changes that will let instructors create custom grader roles (such as "Head TA") with a specific subset of capabilities. No behavior changes yet; the UI for managing roles is coming in a later release ([#1147](https://github.com/pawtograder/platform/pull/1147))
+
+#### Security
+- **Stricter Actions job-token validation** — Autograder job tokens are now verified against an issuer allowlist and must carry the provider's default audience (`<host>/<repository_owner>`). Tokens minted for another service (for example `sts.amazonaws.com`) are rejected before any key fetch. Rejection reasons are tagged in Sentry for monitoring. This is the first of three steps toward Forgejo CI support ([#1153](https://github.com/pawtograder/platform/pull/1153))
+
+## October 2026
+
+### October 28, 2026
+
+#### Grading
+- **Code walk release state in the submissions table** — On assignments with a code-walk rubric, the submissions table now shows two release columns: **Grading released** (the existing column, renamed) and **Code walk released**. The code-walk column shows whether the review is released, complete but unreleased, incomplete (skipped by bulk release), or absent. Both columns support filtering by release status ([#1151](https://github.com/pawtograder/platform/pull/1151))
+
+### October 23, 2026
+
+#### Grading
+- **Bulk release and unrelease of code walks** — The grading status panel on the assignment dashboard now has **Release code walks** and **Unrelease code walks** buttons for assignments with a code-walk rubric. **Release code walks** releases every completed code-walk review across all active submissions; incomplete code walks are skipped and the toast says so. **Unrelease code walks** reverses every released code walk, complete or not. Grading, self-review, and meta-grading reviews are never affected ([#1130](https://github.com/pawtograder/platform/pull/1130))
+- **Hidden autograder tests no longer exposed by non-grading releases** — Releasing a code walk, self-review, or meta-grading review from the submission page previously published the submission's hidden autograder tests. Only releasing the grading review now does so ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
 ## August 2026
 
 ### August 19, 2026
