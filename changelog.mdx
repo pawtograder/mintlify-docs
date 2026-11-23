@@ -6,6 +6,32 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Custom roles and capabilities
+
+- **`manage_groups` capability for group management** — Setting a group's mentor and copying groups from another assignment now require the `manage_groups` capability instead of the instructor role. Instructors have it by default. An instructor can grant it to a custom role (such as a Head TA) from **Course Settings → Roles**, giving that role access to the mentor dropdown and the **Copy Groups from Prior Assignment** button. Staging group changes and publishing them continue to use `publish_groups`. Also fixed a privacy bug where any enrolled user could read every class's group memberships ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **`manage_roster` capability for roster management** — Managing lab sections, renaming class sections, and performing student-only enrollment actions (remove, SIS sync override, cancel invitation, add) now require the `manage_roster` capability. Instructors have it by default. A custom role with `manage_roster` can act on students only — it cannot change roles, edit profiles, import from CSV, or act on grader or instructor rows. The **Enrollments** menu entry is now visible to staff with `manage_roster` ([#1419](https://github.com/pawtograder/platform/pull/1419))
+- **`manage_gradebook` capability for the staff gradebook** — The staff gradebook now requires the `manage_gradebook` capability. Instructors have it by default. Default graders no longer have access to the gradebook page, other students' scores, score overrides, or Convert Missing to 0 until an instructor grants `manage_gradebook` to their role. Students continue to see their own released grades. **Download Gradebook** remains instructor-only ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Office hours
+
+- **Ticket escalation walkthrough** — A what's-new walkthrough now appears the first time a staff member encounters the ticket escalation controls, explaining how escalation works. It is shown once and dismissed permanently ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **First-time student hints** — Instructors can enable a first-time hints walkthrough for students on the office hours pages. When enabled, the walkthrough appears once on a student's first visit and explains how the queue works, what to include in a request, and what to expect while waiting. Enable it under **Course Settings → Feature flags** ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **Office hours walkthrough stays dismissed** — A dismissed office hours walkthrough no longer reappears when the component remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+
+#### Dashboard
+
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time, so a survey correctly turns **Overdue** at its deadline without requiring a page reload ([#1184](https://github.com/pawtograder/platform/pull/1184))
+
+#### Bug fixes
+
+- **Forgejo repository web links** — Repository links for Forgejo assignments now point to the correct URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Forgejo handout syncs stopped** — Handout syncs are no longer queued for Forgejo repositories, which do not use the GitHub handout sync path ([#1425](https://github.com/pawtograder/platform/pull/1425))
+- **Forgejo group membership** — Students are now moved between Forgejo groups correctly when group membership changes, leavers have their access revoked, and staff are granted write access to group repositories ([#1397](https://github.com/pawtograder/platform/pull/1397))
+
 ## August 2026
 
 ### August 19, 2026

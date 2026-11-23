@@ -10,6 +10,10 @@ icon: "table"
   <img src="/images/staff/gradebook-grid-1787282079132.png" alt="Gradebook grid with one row per student, Class Section and Lab Section columns, two assignment columns showing Max 100, a Skill #12 column marked with a lock icon, calculated skills columns, and a footer with Download Gradebook, Import Columns, and Add Column" />
 </Frame>
 
+<Note>
+The staff gradebook requires the `manage_gradebook` capability. Instructors have it by default. Default graders do not — they cannot open the gradebook page, read other students' scores, override grades, or use Convert Missing to 0 until an instructor grants `manage_gradebook` to their role (for example, a Head TA role). Students always see their own released grades regardless of this setting.
+</Note>
+
 ## Column Semantics
 
 In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources.
@@ -61,6 +65,10 @@ You can reorder gradebook columns to organize them logically:
 - **Auto-layout**: Click the **Auto-layout columns** button (grid icon) in the toolbar. Auto-layout first sorts every column by slug using a natural alphanumeric sort, so `lab-2` comes before `lab-10`. It then makes a second pass that moves each calculated column after the columns it depends on, so dependencies always appear to the left of the columns that use them.
 
 Column reordering is saved immediately and affects the display for all instructors and the export order in CSV files.
+
+<Note>
+Drag-and-drop, Auto-layout, and the column menu's Edit, Move, Release, and Delete actions all require the `manage_gradebook` capability. **Download Gradebook** remains instructor-only.
+</Note>
 
 ### The Column Menu
 
