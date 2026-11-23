@@ -56,20 +56,34 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
-## Resolving
+## Resolving and escalating
 
 | Status | Meaning |
 | --- | --- |
 | `open` | Filed, unclaimed, still in the queue. |
 | `in_progress` | A staff member has claimed it. |
-| `resolved` | Finished. Removed from the open list. |
+| `resolved` | Finished, pending a student check-in. Removed from the open list. |
 | `closed` | Also finished, and treated exactly like `resolved` in every list. |
 
 Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Resolving and Feedback](/students/office-hours/resolving-and-feedback)); staff do not get that dialog.
 
+### Resolve vs End ticket
+
+When you are helping a student, the header shows three action buttons:
+
+- **Resolve** — Marks the request resolved and starts a 10-minute check-in with the student. The student is asked "Did your problem get fixed?" If they answer **No**, they write what they are still stuck on and the ticket is escalated automatically. If they answer **Yes**, or do not answer within 10 minutes, the ticket stays resolved and the student receives the usual feedback prompt.
+- **End ticket** — Closes the ticket permanently with no check-in. The student cannot reopen it and it cannot be escalated again. Use this when more help will not fix the problem: wrong queue, a question for the instructor outside office hours, or a student who has already left.
+- **Escalate** — Hands the ticket to another staff member with a note on what you tried. The ticket returns to the queue unassigned and sorts above every normal ticket, so the student does not restart at the back of the line. Only the TA currently helping sees the Escalate button. The note is staff-only and can be up to 500 characters.
+
 <Note>
 When staff resolve a request, no resolution status or note is recorded, only who resolved it and when. If you want data on how requests actually ended, ask students to resolve their own.
 </Note>
+
+An escalated ticket is marked with a purple **Escalated** badge in the queue. After a second escalation the badge reads **Escalated ×2**. When you open an escalated ticket, a history panel shows who already helped, how long the student has waited, and every escalation note, so the student does not have to explain again.
+
+<Warning>
+End the call before you resolve or end a ticket. Both **Join Video Call** and **End Call** are disabled once a request is resolved or closed, which leaves the meeting running with no way to shut it down from the interface.
+</Warning>
 
 Nothing in the web interface sets `closed`. The only route to it is `pawtograder help-requests close`, which is instructor-only and defaults to that status. See [Command Line Interface](/staff/cli).
 
