@@ -88,6 +88,39 @@ gradebook history. Don't unrelease without a plan to re-release — the
 student may have already seen the previous grade.
 </Warning>
 
+## Release and Unrelease Code Walks
+
+On assignments with a code-walk rubric, the grading status panel shows
+two additional buttons: **Release code walks** and **Unrelease code
+walks**. These are separate from **Release all** because code walks are
+graded and released independently of the main grading review.
+
+- **Release code walks** — publishes every *completed* code walk for
+  the assignment in one step. Incomplete code walks are skipped; the
+  confirmation toast reports how many were released and notes that
+  incomplete ones were left alone.
+- **Unrelease code walks** — hides every released code walk for the
+  assignment, including ones that were released before they were
+  finished.
+
+Both actions affect only code-walk reviews. Grading, self-review, and
+meta-grading reviews are never touched. Releasing a code walk does not
+publish hidden autograder tests; only releasing the grading review does.
+
+The submissions table on assignments with a code-walk rubric shows a
+**Code walk released** column alongside the renamed **Grading released**
+column. The code-walk column shows:
+
+- A check mark — the code walk is released.
+- A cross — the code walk is complete but not yet released.
+- **Incomplete** (muted) — the code walk is not complete; Release code
+  walks skips it.
+- **—** (muted) — no code-walk review exists for this student (for
+  example, no submission).
+
+Both columns support the release-status filter. Assignments without a
+code-walk rubric show the original single **Released** column.
+
 ## Reassign Grading by Grader
 
 Reassignment is grader-centric rather than submission-centric: you pick
