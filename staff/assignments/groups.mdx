@@ -36,7 +36,10 @@ can no longer change groups.
 Use **Manage Groups** to create groups manually, add or remove members,
 rename or delete groups, and move students between groups. Changes are
 staged locally and applied in one operation when you click **Publish
-Changes**. Publishing creates or updates memberships, creates GitHub
+Changes**. The **Publish Changes** button and all group-editing controls
+require the `publish_groups` capability; graders without it can view
+groups, mentors, and the CSV export, but cannot make changes. See
+[Roles and capabilities](/staff/roles). Publishing creates or updates memberships, creates GitHub
 repositories for any new groups, and queues permission-sync jobs. If
 individual items fail, the rest still go through: the failed moves and
 groups stay staged for you to retry, and you get a "Published with

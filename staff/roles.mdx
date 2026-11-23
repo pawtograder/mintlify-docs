@@ -1,0 +1,75 @@
+---
+title: "Roles and capabilities"
+description: "Create custom grader roles with fine-grained capabilities to control what each staff member can do"
+icon: "shield-check"
+---
+
+# Roles and capabilities
+
+Every person in a course has an **app role** — instructor, grader, student, or admin — and every class ships with a matching default role for each. Instructors can create additional **custom roles** for graders, each with its own set of capabilities, so you can give a Head TA more access than a regular grader without making them a full instructor.
+
+## Default roles and capabilities
+
+Each course starts with four default roles. Only the instructor role carries capabilities; the others start with none.
+
+| Role | Default capabilities |
+|------|---------------------|
+| Instructor | `manage_review_assignments`, `publish_groups`, `manage_assignments`, `manage_roles` |
+| Grader | _(none)_ |
+| Student | _(none)_ |
+| Admin | _(none)_ |
+
+Default roles cannot be renamed or deleted.
+
+## Capabilities
+
+| Capability | What it controls |
+|-----------|-----------------|
+| `manage_review_assignments` | Access to **Bulk Assign Grading** and **Reassign Grading by Grader**. Without it, a grader is redirected away from those pages. |
+| `publish_groups` | Editing groups on **Manage Groups** — creating, moving, renaming, deleting, and publishing changes. Without it, a grader can view groups, mentors, and the CSV export but cannot make changes. |
+| `manage_assignments` | Creating and editing assignments. Without it, **New Assignment** and **Edit Assignment** are hidden, and the pages redirect if accessed directly. |
+| `manage_roles` | Creating, renaming, and deleting custom grader roles, and choosing their capabilities. Does not grant the ability to assign people to roles; that stays instructor-only. |
+
+<Note>
+A custom role can only add capabilities on top of the default grader role. It cannot remove capabilities that the default grader role holds. Any capability added to the default grader role in the future will automatically apply to every grader, including those on custom roles.
+</Note>
+
+## Creating a custom role
+
+Only instructors (holders of `manage_roles`) can manage custom roles.
+
+1. Navigate to **Course Settings → Roles** (route: `manage/course/roles`).
+2. Click **Create Role**.
+3. Enter a role name. Names must be unique (case-insensitive) and cannot be blank.
+4. Check the capabilities you want to grant. You can only grant capabilities you hold yourself.
+5. Click **Save**.
+
+## Assigning a grader to a custom role
+
+Changing a grader's role is done from the course roster:
+
+1. Navigate to **Course Settings → Enrollments**.
+2. Find the grader in the roster.
+3. Select the custom role from the **Role** dropdown on their row.
+
+<Note>
+Changing a person's app role (for example, from grader to instructor) always moves them to that app role's default role, overriding any custom role they were on.
+</Note>
+
+## Editing and deleting custom roles
+
+From **Course Settings → Roles**:
+
+- Click the pencil icon on a role to rename it or change its capabilities.
+- Click the trash icon to delete it. A role that has at least one grader assigned to it cannot be deleted; reassign those graders first.
+
+## What graders see without capabilities
+
+Graders on the default grader role (no extra capabilities) see a reduced interface:
+
+- **Grading Assignments** hides the **Assignment Management** row and the row-level **Edit** and **Delete** icons.
+- **Bulk Assign** and **Reassign** redirect back to Grading Assignments.
+- **Manage Groups** is read-only: groups, mentors, and CSV export are visible, but all editing controls are hidden.
+- **New Assignment** and **Edit Assignment** are hidden from the navigation and assignment menus.
+
+Instructors see no change.
