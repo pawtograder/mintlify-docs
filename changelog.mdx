@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 8, 2026
+
+#### Course settings
+- **Gemini API key management** — Instructors can now store, replace, and remove a course-owned Google Gemini API key from **Course Settings → Gemini API Key**. The key is held in Vault and is never returned through the interface. Saving requires the new `gemini-api-key-setup` feature flag to be on; checking status and removing a key work regardless of the flag. See [Course Settings → Gemini API key](/staff/course-settings#gemini-api-key) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Roles and permissions
+- **Custom grader roles and capabilities** — Instructors can create custom grader roles (for example, "Head TA") and grant them capabilities beyond the default grader set: `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. Controls that require a capability are hidden from graders who do not hold it — **New Assignment**, **Edit Assignment**, **Bulk Assign**, **Reassign**, and the group management change controls are now gated on the relevant capability. Graders on a custom role inherit everything the default grader role holds, plus the custom role's extras. See [Staff overview → Custom grader roles](/staff/intro#custom-grader-roles-and-capabilities) ([#1199](https://github.com/pawtograder/platform/pull/1199))
+
+#### Surveys
+- **Duplicate question names rejected at publish** — Publishing a survey is now refused when two questions resolve to the same answer key. The Visual Builder warns you while editing and numbers new default names across the whole survey instead of per page. Drafts may keep duplicates. A survey published before this check that is later closed cannot be reopened until the duplicates are renamed. See [Surveys → Duplicate question names](/staff/surveys#duplicate-question-names) ([#1168](https://github.com/pawtograder/platform/pull/1168))
+
+#### Integrations
+- **Forgejo and Coder SSO via Pawtograder** — Pawtograder can now act as an OAuth 2.1 / OIDC identity provider, so Forgejo and Coder deployments can offer "Sign in with Pawtograder". An OAuth consent page shows the requesting app and scopes. This is a self-hosted deployment feature configured in the Helm chart; it is off by default ([#1165](https://github.com/pawtograder/platform/pull/1165), [#1164](https://github.com/pawtograder/platform/pull/1164))
+
+#### Bug fixes
+- **LTI grade-push failures now surface correctly** — Grade sync failures that previously hid inside a 200 response are now reported as 500s and captured to Sentry. Rows whose class has grade sync disabled are deferred rather than blocking the drain, and a repeatedly failing row is moved to the back of the queue instead of starving newer work ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **Exam grading: points box refills on same-value option change** — Selecting a different rubric option worth the same number of points now correctly refills the points input ([#1208](https://github.com/pawtograder/platform/pull/1208))
+
+#### Exam grading
+- **Exam grading with OCR and student matching** — A new exam grading system supports scanning paper exams, matching pages to students via OCR, and grading with a structured rubric. This is an opt-in feature for courses using paper exams ([#814](https://github.com/pawtograder/platform/pull/814))
+
 ## August 2026
 
 ### August 19, 2026

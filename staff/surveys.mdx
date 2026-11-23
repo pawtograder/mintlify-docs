@@ -642,8 +642,23 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- **Rejects duplicate question names** — every question must have a unique name (the answer key SurveyJS uses to store responses). If two questions share a name, publishing is refused with a message that names each duplicate, where it appears, and how to fix it
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+#### Duplicate question names
+
+SurveyJS saves each answer under its question's **name** field (or **valueName** when set). Two questions sharing a name means answering one overwrites the other, and a required question can appear complete while empty.
+
+The Visual Builder warns you while you edit: if two **Question name** fields match, a warning appears in the builder. The builder also numbers new default names across the whole survey (not per page), so the first question of every page is no longer automatically `question_1`.
+
+Publishing is refused — by both the form and the database — when any two questions resolve to the same answer key. Drafts may keep duplicates so that work in progress can be saved and fixed later.
+
+<Note>
+A survey published before this check was added may have duplicate names. If it is later closed, it cannot be reopened until the duplicates are renamed. Renaming is allowed while the survey is closed. Answers already collected under the shared key are preserved.
+</Note>
+
+**Where to rename:** The Visual Builder's **Question name** field is available for most question types. For dropdowns, matrices, and questions with a **valueName** set, you may need to edit the survey JSON directly. The refusal message names the question type and location so you know where to look.
 
 ## Saving Survey Templates
 
