@@ -6,6 +6,51 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Grading
+
+- **Realtime class updates for students and staff** — The platform now broadcasts class row changes to the students and staff realtime topics, so pages that subscribe to those topics refresh automatically when course settings change ([#1145](https://github.com/pawtograder/platform/pull/1145))
+
+#### Assignments
+
+- **Assignment provider and GitHub guards** — Assignment creation and editing now validates GitHub repository access before proceeding, preventing configuration errors when the GitHub integration is misconfigured (CW-10, [#1128](https://github.com/pawtograder/platform/pull/1128))
+
+#### Permissions
+
+- **Class roles made of capabilities** — Every class now has four default roles (instructor, grader, student, admin), and each role holds a list of capabilities that control which actions it can perform. This is the foundation for fine-grained grader permissions; the UI and database will both read from these tables in upcoming releases. Nothing changes for existing users in this release ([#1147](https://github.com/pawtograder/platform/pull/1147))
+
+#### Security
+
+- **Actions job token verification** — GitHub Actions job tokens are now verified by issuer and default audience before being accepted, closing a class of token-substitution attacks (CW-15, [#1153](https://github.com/pawtograder/platform/pull/1153))
+
+## October 2026
+
+### October 28, 2026
+
+#### Grading
+
+- **Code-walk release state in the submissions table** — On assignments with a code-walk rubric, the submissions table now shows separate **Grading released** and **Code walk released** columns. Each column is independently filterable. Assignments without a code-walk rubric are unchanged ([#1151](https://github.com/pawtograder/platform/pull/1151))
+
+### October 23, 2026
+
+#### Grading
+
+- **Bulk release and unrelease code walks** — The grading status panel now shows **Release code walks** and **Unrelease code walks** buttons on assignments that have a code-walk rubric. Releasing publishes only completed code walks; incomplete ones are skipped and the toast says so. Grading, self-review, and meta-grading reviews are not affected ([#1130](https://github.com/pawtograder/platform/pull/1130))
+- **Hidden autograder tests no longer exposed by non-grading releases** — Releasing a code walk, self-review, or meta-grading review from the submission page previously published the submission's hidden autograder tests. Only releasing the grading review now publishes hidden tests ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
+### October 12, 2026
+
+#### Grading
+
+- **Tab preserved across submissions, complete and move on, assignees shown by name** — The submission tab you are on (Files, Autograder Detail, Survey, etc.) is now carried to the next submission when you use Previous, Next Incomplete, or complete a review. Completing a review opens the next incomplete submission automatically; if none remain, a message says so. The **Complete + Next** button is replaced by a single **Complete and go to next** button when a next submission exists. The rubric sidebar now shows a **Grading assigned to** panel with each assignee's name, rubric parts, due date, and status — instructors see all assignments, graders see only their own. Survey-linked no-submission assignments open on the Survey tab for staff ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
+#### Groups
+
+- **Fail-safe group repository deletes; pre-release group repos deferred** — Deleting a group repository on GitHub now fails safely: if the delete fails, the rest of the group deletion still proceeds. Group repositories for pre-release assignments are now created only when the assignment is released, not when the group is formed ([#1174](https://github.com/pawtograder/platform/pull/1174))
+
 ## August 2026
 
 ### August 19, 2026

@@ -145,11 +145,36 @@ When a group submission has individual grading components, the submission view s
 
 Students see only their own breakdown; instructors and graders see all group members' scores. Tooltips on the assignments table also show individual score breakdowns.
 
+## Grading assigned to
+
+The rubric sidebar shows a **Grading assigned to** panel listing every review assignment on the submission:
+
+- **Instructors** see all assignments, or "Not assigned to anyone" when none exist.
+- **Graders** see only their own assignment (RLS limits what they can read), or "Not assigned to you".
+
+Each row shows the assignee's name with "(you)" if it is yours, the rubric and parts, the due date or completion time, and a **Complete** / **Pending** badge.
+
+## Navigating between submissions
+
+The grading toolbar carries the tab you are on (Files, Autograder Detail, Survey, etc.) to the next submission, so you do not need to re-pick the tab for every submission.
+
+- **Next Incomplete** (review mode) — opens the next submission with an incomplete review assigned to you, wrapping around if needed.
+- **Next** (no assignments) — opens the next submission in picker order (by student name).
+- **Previous** — steps back through your submissions, including completed ones, so you can return to a submission you just finished.
+
+Survey-linked no-submission assignments open on the **Survey** tab for staff, showing the student's answers next to the rubric. An explicit **/grade** URL is never redirected.
+
 ## Completing a review
 
 Once all required rubric checks are applied, click **Complete Review** to mark the review done. This does **not** release the review to the student; it indicates to the instructor that the review is ready to be released.
 
 When you complete an assigned rubric part, Pawtograder will also automatically complete any other review assignments on the same submission whose assigned parts are a subset of yours. For example, if you complete parts A, B, and C, another grader assigned only to A+B has their assignment auto-completed.
+
+### Complete and go to next
+
+When you have review assignments and a next incomplete submission exists, the completion button reads **Complete and go to next**. Clicking it marks the review complete and opens the next incomplete submission on the same tab. If no incomplete submissions remain, a success message appears and you stay on the current submission.
+
+While you are working an incomplete review assignment, the sidebar's submission-level **Complete Review** button is hidden — the toolbar button is the only completion control, so you cannot accidentally complete the submission review before finishing your assigned parts.
 
 ### Editing after completion
 
