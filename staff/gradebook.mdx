@@ -10,6 +10,10 @@ icon: "table"
   <img src="/images/staff/gradebook-grid-1787282079132.png" alt="Gradebook grid with one row per student, Class Section and Lab Section columns, two assignment columns showing Max 100, a Skill #12 column marked with a lock icon, calculated skills columns, and a footer with Download Gradebook, Import Columns, and Add Column" />
 </Frame>
 
+<Note>
+The staff gradebook requires the `manage_gradebook` capability. By default only instructors hold it, so graders on the default grader role cannot open the gradebook, read student scores, or override grades. An instructor can grant `manage_gradebook` to a custom role such as a Head TA from **Course Settings → Roles**. Students still see their own released grades in the student gradebook regardless of this capability.
+</Note>
+
 ## Column Semantics
 
 In the Pawtograder gradebook system, **columns** represent individual grade components that collectively form a student's overall course performance. Each column is defined by a unique slug identifier, a human-readable name, and a maximum score, but their power lies in their flexibility for grade calculation and data sources.
