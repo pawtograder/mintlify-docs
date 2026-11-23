@@ -8,6 +8,10 @@ icon: "shield-check"
 
 Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
 
+<Note>
+The **Fix Permissions**, **Retry creation**, and **Cleanup individual repositories** actions require the `manage_student_repositories` capability. By default only instructors hold it. An instructor can grant it to a custom role such as a Head TA from **Course Settings → Roles**. The **Sync** button requires the separate `manage_assignments` capability. Staff without either capability can still view the repository status table.
+</Note>
+
 ## Fix Repository Permissions
 
 If you suspect that repository permissions are out of sync (for example, if students report they cannot access their repositories), you can use the **Fix Permissions** button to audit and correct all repository permissions for an assignment.
