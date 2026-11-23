@@ -6,6 +6,20 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Surveys
+- **Survey pages now show the survey's name** — The student survey page, the Student Preview dialog, and the single-response view now display the name you gave the survey in the dashboard, rather than the placeholder "Survey Name" that the visual builder writes into the survey JSON. Renaming a survey while a student is answering it updates the heading without losing their typed answers, current page, or focus ([#1002](https://github.com/pawtograder/platform/pull/1002))
+
+#### Assignments
+- **Code-walk release state in the submissions table** — The instructor submissions table now shows whether a student's code-walk review has been completed and released, separately from the grading review. This reflects the independent code-walk release introduced in October ([#1151](https://github.com/pawtograder/platform/pull/1151))
+- **Safer group repository management** — Dissolving an empty group no longer fails when the group's repository has workflow event rows from pushes that never became submissions. Group repositories for unreleased assignments are now created at release time rather than immediately, so all groups start from the same template commit and students do not get early access ([#1174](https://github.com/pawtograder/platform/pull/1174), [#1175](https://github.com/pawtograder/platform/pull/1175))
+
+#### Security
+- **GitHub Actions job tokens verified by issuer and audience** — Autograder job tokens are now validated against the expected issuer and default audience, closing a path where a token from a different workflow could be accepted ([#1153](https://github.com/pawtograder/platform/pull/1153))
+
 ## August 2026
 
 ### August 19, 2026
