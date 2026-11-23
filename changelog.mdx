@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Gradebook
+- **Gradebook access controlled by capability** — The staff gradebook is now gated by the `manage_gradebook` capability. Graders on the default grader role no longer have access to the staff gradebook, score overrides, or Convert Missing to 0. Instructors can grant gradebook access to a custom role (for example, a Head TA) from Course Settings. Instructors are unchanged. See [Gradebook](/staff/gradebook) ([#1356](https://github.com/pawtograder/platform/pull/1356), [#1384](https://github.com/pawtograder/platform/pull/1384))
+
+#### Roster management
+- **Roster tasks delegatable to a custom role** — A new `manage_roster` capability controls who can manage lab sections, rename class sections, and add, remove, or cancel invitations for students. It is on the default instructor role only. An instructor can give it to a custom role such as a Head TA; that role can then act on students but not on graders or instructors. See [Lab Sections](/staff/lab-sections) ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Repository management
+- **Repository repair tools delegatable to a custom role** — A new `manage_student_repositories` capability controls who can use **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** on the Repository Status page. It is on the default instructor role only. Graders on the default role can still view the table. See [Repository Permissions](/staff/assignments/repository-permissions) ([#1384](https://github.com/pawtograder/platform/pull/1384))
+
+#### Surveys
+- **Survey countdown stays live** — The **Surveys to complete** banner on the student dashboard now updates while the page is open. A survey turns Overdue within 30 seconds of its deadline without a reload. Switching back to a tab you left open refreshes the survey list automatically (at most once a minute) ([#1184](https://github.com/pawtograder/platform/pull/1184))
+
+#### Office hours
+- **Hints for first-time students** — A new course feature flag, `office-hours-student-onboarding`, shows guided hints to students on the office hours pages until they first click **New Request**. One hint points at the queue list when the course has multiple text queues; the other appears below the **New Request** button and says whether staff are on duty. Both close on click or Escape and are remembered per user. See [Feature flags](/staff/feature-flags) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **What's new walkthrough for ticket escalation** — Staff see a one-time walkthrough explaining the Escalate, Resolve, and End ticket controls when they first open the office hours manage view. A **What's new** button in the header reopens it ([#1261](https://github.com/pawtograder/platform/pull/1261))
+
+#### Bug fixes
+- **Forgejo repository links corrected** — Commit, pull request, and file links for Forgejo assignments now point to the Forgejo instance instead of GitHub. The GitHub help page no longer lists Forgejo repositories ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Handout sync skipped for Forgejo repositories** — The Repository Status page no longer shows a Sync button for Forgejo repositories, and bulk sync skips them with a count in the result toast ([#1425](https://github.com/pawtograder/platform/pull/1425))
+
 ## August 2026
 
 ### August 19, 2026

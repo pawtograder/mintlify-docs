@@ -37,8 +37,8 @@ assume the relevant module is enabled.
 
 ### What graders see
 
-Graders get a smaller navigation set than instructors. A grader has **no
-Gradebook entry at all** — neither the staff gradebook nor the student one — and
+Graders get a smaller navigation set than instructors. A grader on the default grader role has **no
+Gradebook entry** — neither the staff gradebook nor the student one — and
 does not see these **Course Settings** entries: **Enrollments**, **LMS (LTI)
 Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due
 Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
@@ -46,6 +46,10 @@ Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
 A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
+
+<Note>
+Instructors can create custom roles with specific capabilities. A grader on a custom role with the `manage_gradebook` capability gets the **Gradebook** entry and full gradebook access. A grader with `manage_roster` can access **Enrollments** and manage lab sections. A grader with `manage_student_repositories` can use the repository repair tools on the **Repository Status** page. See [Course Settings](/staff/course-settings) for how to configure custom roles.
+</Note>
 
 ## Key features
 
