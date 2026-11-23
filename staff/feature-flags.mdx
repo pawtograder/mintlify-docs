@@ -88,6 +88,17 @@ While it is on, students see their invitation to the course's Discord server on 
 Turning the flag back on does not retroactively create the invitations skipped while it was off. Those students are recorded as not joined with no invite. The Discord membership panel tells you how many are waiting, on **Course Settings → Discord** and on **Course Settings → Enrollments**; only the Discord page carries the retry button. The next scheduled sync also picks them up, but only for courses inside the active-class window.
 </Warning>
 
+### Office hours hints for new students
+
+When this flag is on, students see up to two guided hints on the office hours pages, shown one at a time, until they first click an enabled **New Request** button:
+
+1. **Queue description hint** — shown only when the course has two or more text queues. It points at the queue list and tells students to read each queue's description before picking one.
+2. **New Request hint** — shown below the **New Request** button. When nobody is on duty, it says so and names the next scheduled office hours from the course calendar, or says to check back later if the calendar has no upcoming events. When staff are on duty, it says so and invites the student to click.
+
+Each hint closes when the student clicks it, clicks outside it, or presses Escape. After the student clicks an enabled **New Request** button, the hints stop appearing for that student on any browser or device. Staff never see the hints, even when using **View as student**.
+
+The new request form also gets longer helper text on the **Help Queue**, **Template**, and **Description** fields when this flag is on.
+
 ## Feature flags control navigation, not access
 
 Feature flags are a curation tool. They decide which modules your course puts in front of students and staff, and when — so you can hold Surveys or Flashcards back until the week they matter, retire Polls once you have stopped using them, and keep the course menu down to what the course is actually doing. Staff pages behave the same way, which is deliberate: a module you are not running should not clutter anyone's menu.
