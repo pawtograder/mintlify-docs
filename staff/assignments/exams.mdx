@@ -1,0 +1,96 @@
+---
+title: "Exam Grading"
+description: "Create paper exams and in-app quizzes, scan and match student submissions, and grade with OCR-assisted region detection"
+icon: "file-pen"
+---
+
+# Exam Grading
+
+Pawtograder supports two exam assignment types: **paper exams** (printed, scanned, and matched back to students) and **in-app quizzes** (completed directly in the browser). Both use the same question structure and rubric system as other assignments.
+
+## Assignment types
+
+When creating an assignment, set the **Assessment type** to one of:
+
+| Type | How students submit |
+| --- | --- |
+| **Paper exam** | Students write on a printed exam. Staff scan the completed papers, upload the scan batch, and Pawtograder matches pages to students. |
+| **In-app quiz** | Students answer questions directly in Pawtograder. Submissions are collected automatically. |
+
+## Question structure
+
+Exam questions are organized in a tree. A question can be flat (a single answer box) or nested (a section that groups sub-questions). Supported answer types:
+
+| Answer type | Description |
+| --- | --- |
+| `free_text` | Open-ended written answer (default) |
+| `multiple_choice` | One option selected from a list |
+| `multi_select` | One or more options selected |
+| `numeric` | A number, with an optional tolerance for partial credit |
+| `true_false` | True or false |
+
+Questions with sub-questions act as sections; their answer type is ignored during grading.
+
+## Paper exams
+
+### Creating the exam template
+
+1. Open **Manage → Assignments → [Assignment] → Configure Exam**.
+2. Add questions and set their answer types and point values.
+3. Click **Generate PDF** to produce a printable exam template. Pawtograder lays out the questions and draws answer regions on the pages.
+4. Alternatively, upload your own PDF and use the **Region Editor** to draw answer regions by hand over each question.
+
+<Note>
+If you upload a PDF and Pawtograder's AI template extraction (powered by Gemini) proposes answer types, it normalizes unknown types to `free_text`. You can correct any type in the Region Editor before saving.
+</Note>
+
+### Uploading scans
+
+After the exam, scan the completed papers and upload the scan batch from **Configure Exam → Scan Batches → Upload Scans**. Pawtograder processes the batch page by page. If a page fails to process, the batch enters a **Failed** state and shows which pages need attention.
+
+### Matching pages to students
+
+Once the batch is processed, Pawtograder attempts to match each exam booklet to a student using OCR on the student ID region. Booklets that cannot be matched automatically appear in the **Awaiting Match Review** queue. Review each one, confirm or correct the match, and submit.
+
+After all booklets are matched, the batch moves to **Completed** and Pawtograder creates a graded submission for each student with an `exam_v1` artifact.
+
+### Grading scanned exams
+
+Open a student's submission to see their scanned pages alongside the answer regions. Apply rubric checks and leave annotations as you would on any handgraded assignment. Graders see only the regions for the questions assigned to them.
+
+## In-app quizzes
+
+Students open the quiz from their assignment page and answer questions in the browser. Pawtograder records each attempt.
+
+### Autograding
+
+Multiple-choice, multi-select, true/false, and numeric questions are autograded on submission. Numeric answers are checked against the configured tolerance. Free-text questions are left for hand grading.
+
+### Retakes
+
+If the assignment allows retakes, students can submit additional attempts. Each attempt is recorded separately. You can configure how many attempts are allowed and whether students see their score between attempts.
+
+### Releasing grades
+
+Grades are not visible to students until you release them, the same as any other assignment. Use **Release all** on the Assignment Dashboard or release individual submissions from the submissions table.
+
+## Seeding exam data for development
+
+The `--exams` flag on the seed command creates exam and quiz assignments covering the full range of question shapes and lifecycle states. Use `--exam-scans <n>` to cap how many students per paper exam get scanned submissions generated. See the developer setup guide for details.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Rubrics" icon="list-check" href="/staff/assignments/rubrics">
+    Define the grading rubric for exam questions.
+  </Card>
+  <Card title="Handgrading" icon="pen" href="/staff/assignments/handgrading">
+    Apply rubric checks and annotations to student work.
+  </Card>
+  <Card title="AI assistance" icon="robot" href="/staff/ai-assistance">
+    Configure a course Gemini API key for AI-assisted template extraction.
+  </Card>
+  <Card title="Assignment configuration" icon="gear" href="/staff/assignments/configuration">
+    Set the assessment type and other per-assignment settings.
+  </Card>
+</CardGroup>

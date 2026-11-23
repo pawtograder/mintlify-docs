@@ -153,7 +153,8 @@
                   "staff/assignments/rubrics",
                   "staff/assignments/handgrading",
                   "staff/assignments/grading-assignments",
-                  "staff/assignments/bulk-actions"
+                  "staff/assignments/bulk-actions",
+                  "staff/assignments/exams"
                 ]
               },
               {
