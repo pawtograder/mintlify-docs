@@ -122,10 +122,18 @@ The student export (from the **Students** page) uses the same
 
 When a group is published:
 
-- All members are added as collaborators to the shared GitHub repo.
+- All members are added as collaborators to the shared GitHub or Forgejo repo.
 - Any member can push; the submission is recorded for the group.
 - All members see the same handgrading feedback and rubric scores,
   unless a part is configured for individual grading.
 - Late tokens and extensions apply at the group level — using a token
   or being granted an extension covers every member. See
   [Extensions](/staff/assignments/extensions).
+
+## Moving students between groups (Forgejo assignments)
+
+For assignments backed by Forgejo, instructors can move a student from one group to another from **Manage Groups**. When a student leaves a group, their write access to that group's repository is automatically revoked by the Forgejo reconciler within minutes. If the student joins a new group, they are granted access to the new group's repository on the next reconciler pass.
+
+<Note>
+Dissolving a Forgejo group (removing its last member) is not yet supported while the group still has a repository row. Move the last member to another group or wait for the archiving feature to land before dissolving.
+</Note>

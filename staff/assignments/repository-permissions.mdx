@@ -8,6 +8,14 @@ icon: "shield-check"
 
 Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
 
+## Who can use the repair tools
+
+The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons require the `manage_student_repositories` capability. By default, only instructors hold this capability. Graders on the default grader role can open the **Repository Status** page and read the table, but cannot use these buttons.
+
+An instructor can grant the capability to a custom role (for example, a Head TA role) from **Course Settings → Roles**. A holder gets the same repair access as an instructor: Retry and Fix Permissions work on any student or group repository, and Cleanup works on individual repositories only.
+
+**Sync** (syncing template changes into student repositories) requires the separate `manage_assignments` capability and is not affected by `manage_student_repositories`.
+
 ## Fix Repository Permissions
 
 If you suspect that repository permissions are out of sync (for example, if students report they cannot access their repositories), you can use the **Fix Permissions** button to audit and correct all repository permissions for an assignment.

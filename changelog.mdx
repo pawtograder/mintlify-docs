@@ -6,6 +6,33 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Gradebook
+- **Gradebook access controlled by capability** — The staff gradebook now requires the `manage_gradebook` capability. By default only instructors hold it, so graders on the default grader role can no longer open the gradebook, read other students' scores, override cells, or use Convert Missing to 0. An instructor can grant the capability to a custom role (for example, a Head TA role) to give that role full gradebook access. Download Gradebook remains instructor-only. Students still see their own released grades ([#1356](https://github.com/pawtograder/platform/pull/1356))
+- **Gradebook column names stay in sync** — A gradebook column linked to an assignment now keeps its name when the assignment is renamed ([#963](https://github.com/pawtograder/platform/pull/963))
+
+#### Repository management
+- **Repository repair actions controlled by capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page now require the `manage_student_repositories` capability. By default only instructors hold it. Graders can still view the repository table. Sync remains on `manage_assignments`. The **Repository Status** nav item follows the same capability ([#1384](https://github.com/pawtograder/platform/pull/1384))
+
+#### Office hours
+- **Ticket escalation** — When you cannot finish a student's question, the purple **Escalate** button lets you hand the ticket to another staff member with a note on what you tried. The ticket returns to the queue above all normal tickets so the student keeps their place. Students can also trigger an escalation by answering "No" to the check-in that appears after you press **Resolve**. A new **End ticket** button closes a request permanently with no check-in ([#1169](https://github.com/pawtograder/platform/pull/1169), [#1261](https://github.com/pawtograder/platform/pull/1261))
+- **What's new walkthrough for ticket escalation** — The first time a staff member opens the office hours manage pages, a dialog offers a five-step tour of the escalation flow. The **What's new** button in the header reopens it at any time ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Hints for first-time students** — A new course feature flag, **Office hours: hints for new students** (`office-hours-student-onboarding`), shows students up to two guided hints on the office hours pages until they click an enabled New Request button. One hint points at the queue list when the course has multiple text queues; the other shows whether staff are on duty and when the next session starts. Completion is stored per user. Off by default ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **Office hours fixes** — Fixed a refetch storm on private tickets, and check-in reopen now follows the solo-request rule ([#1344](https://github.com/pawtograder/platform/pull/1344))
+
+#### Cloud workspaces (Forgejo)
+- **Staff write access to Forgejo repos** — Course staff (instructors, graders, and admins) now get write access to every student and group Forgejo repository through a `{slug}-staff` team in the course's Forgejo org. The team is kept in sync automatically; removing a staff role revokes access within minutes ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Move students between Forgejo groups** — Instructors can now move students between groups on Forgejo assignments. When a student leaves a group, their write access to that group's repository is revoked automatically ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Forgejo assignment repo status** — The Repository Status page now shows Forgejo assignment repositories and links to them on Forgejo. Assignments display their real grader repository and link Forgejo handouts to Forgejo ([#1362](https://github.com/pawtograder/platform/pull/1362), [#1361](https://github.com/pawtograder/platform/pull/1361))
+- **Rerun autograder on Forgejo repos** — The bulk Rerun Autograder page now triggers regrading on Forgejo repositories ([#1366](https://github.com/pawtograder/platform/pull/1366))
+- **Waiting for access indicator** — A Forgejo repository that is not yet ready shows "Waiting for access" instead of a broken state ([#1390](https://github.com/pawtograder/platform/pull/1390))
+
+#### Exams
+- **Auto-extract improvements** — Auto-extract regions are now wider to better capture where students write, scan alignment is improved before reading regions, points on questions with parts are preserved, and processing is blocked while a batch is already being processed ([#1392](https://github.com/pawtograder/platform/pull/1392), [#1331](https://github.com/pawtograder/platform/pull/1331), [#1391](https://github.com/pawtograder/platform/pull/1391), [#1355](https://github.com/pawtograder/platform/pull/1355))
+
 ## August 2026
 
 ### August 19, 2026
