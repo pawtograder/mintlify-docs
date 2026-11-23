@@ -1,0 +1,83 @@
+---
+title: "Grader roles and capabilities"
+description: "Create custom grader roles with specific capabilities so head TAs and specialized graders can do exactly what their role requires"
+icon: "shield-halved"
+---
+
+# Grader roles and capabilities
+
+Every course has four built-in roles — **instructor**, **grader**, **student**, and **admin** — and each person in the course is assigned one. Instructors can now create additional custom grader roles that extend the default grader role with specific capabilities, so a head TA or a specialized grader can do exactly what their role requires without needing full instructor access.
+
+## Built-in capabilities
+
+Each capability unlocks a specific set of actions in the course. The four capabilities are:
+
+| Capability | What it allows |
+|---|---|
+| `manage_review_assignments` | See and delete review assignments; use Bulk Assign and Reassign |
+| `publish_groups` | Create, edit, and publish groups; use all controls on Manage Groups |
+| `manage_assignments` | Create and edit assignments; sync and create student repositories |
+| `manage_roles` | Create, rename, and delete custom grader roles; choose their capabilities |
+
+By default, only the instructor role holds all four capabilities. The default grader role holds none of them. A custom role can hold any combination of the first three; `manage_roles` is always instructor-only and cannot be added to a custom role.
+
+## What graders see without a capability
+
+When a grader lacks a capability, the controls that require it are hidden rather than shown as disabled:
+
+- **Without `manage_review_assignments`**: The Assignment Management row and row-level Edit/Delete icons are hidden on Grading Assignments. Bulk Assign and Reassign redirect back to Grading Assignments.
+- **Without `publish_groups`**: Manage Groups is read-only. Groups, mentors, and CSV export remain; every change control is hidden.
+- **Without `manage_assignments`**: New Assignment, the Edit Assignment menu item, and the (Edit) link on Manage Groups are hidden. The `/new` and `/edit` pages redirect to the assignment list.
+
+Instructors see no change.
+
+## Creating a custom grader role
+
+You need the `manage_roles` capability (instructors have it by default).
+
+1. Open **Course Settings → Enrollments** and find the **Roles** section, or navigate to `manage/course/roles`.
+2. Click **New Role**.
+3. Enter a name. Role names must be non-blank and are unique within the course, ignoring case.
+4. Check the capabilities you want the role to hold. You can only grant capabilities you yourself hold in this course.
+5. Click **Save**.
+
+The new role immediately appears in the role selector when you edit a grader's enrollment.
+
+<Note>
+You can only add capabilities to a custom role, not remove capabilities from it. A custom role always inherits everything the default grader role holds, plus whatever you add. If the default grader role gains a new capability in a future update, every grader — including those on custom roles — gains it automatically.
+</Note>
+
+## Assigning a custom role to a grader
+
+1. Open **Course Settings → Enrollments**.
+2. Find the grader in the roster.
+3. Click the role selector on their row and choose the custom role.
+
+Changing a grader's app role (for example, from grader to student) always moves them to that role's default, discarding any custom role assignment.
+
+<Warning>
+`manage_roles` does not let you assign roles to people. Assigning a role to a grader is always instructor-only, controlled by the `user_roles` database policies.
+</Warning>
+
+## Deleting a custom role
+
+A custom role can be deleted only when no grader is currently assigned to it. Reassign any graders on the role first, then delete it from the Roles page.
+
+The four default roles (instructor, grader, student, admin) are fixed and cannot be deleted or renamed.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings">
+    The full Course Settings menu and what each of its entries does.
+  </Card>
+  <Card title="Assigning grading tasks" icon="users-gear" href="/staff/assignments/grading-assignments">
+    How to bulk-assign and reassign grading work, including the controls gated on manage_review_assignments.
+  </Card>
+  <Card title="Groups" icon="users" href="/staff/assignments/groups">
+    Managing student groups, including the controls gated on publish_groups.
+  </Card>
+  <Card title="Assignment configuration" icon="sliders" href="/staff/assignments/configuration">
+    Creating and editing assignments, gated on manage_assignments.
+  </Card>
+</CardGroup>
