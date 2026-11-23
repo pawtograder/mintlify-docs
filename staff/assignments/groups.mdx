@@ -127,10 +127,18 @@ The student export (from the **Students** page) uses the same
 
 When a group is published:
 
-- All members are added as collaborators to the shared GitHub repo.
+- All members are added as collaborators to the shared GitHub or Forgejo repo.
 - Any member can push; the submission is recorded for the group.
 - All members see the same handgrading feedback and rubric scores,
   unless a part is configured for individual grading.
 - Late tokens and extensions apply at the group level — using a token
   or being granted an extension covers every member. See
   [Extensions](/staff/assignments/extensions).
+
+### Forgejo courses
+
+On courses backed by a Forgejo instance, publishing group changes also:
+
+- Moves students between Forgejo team groups when their assignment group changes.
+- Revokes repository access for students who leave a group.
+- Grants course staff write access to the group's repository.
