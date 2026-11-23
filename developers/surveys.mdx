@@ -236,6 +236,14 @@ SELECT create_survey_assignments('<surveys.id>', ARRAY['<profile-1>', '<profile-
 Two sibling RPCs exist and have **no callers**: `get_survey_responses_with_group_context(p_survey_id uuid, p_class_id bigint)` (`20260222000000:112`) and `get_survey_series_trend_data(p_series_id uuid, p_class_id bigint)` (`20260222000002:135`). They are typed in `SupabaseTypes.d.ts` and are callable, but nothing reads them. Note the parameter order on the group-context one: survey first, class second. Calling it positionally with the class id first fails on type mismatch.
 </Warning>
 
+### Duplicate question name enforcement
+
+SurveyJS stores each answer under the question's effective key — the `valueName` when set, otherwise the `name` cleaned by `Question.getValidName` (trim, drop first `|`, drop `{` and `}`, drop leading `#`s). Two questions with the same effective key share one answer slot, so the second answer silently overwrites the first.
+
+A `BEFORE INSERT/UPDATE` trigger (`20261106130000_unique_survey_question_names.sql`) rejects any write that would publish a survey with duplicate effective keys. The check walks `pages`, `panels`, `paneldynamic` template elements, and `flowpanel` groups, applying the same key derivation as `survey-core 2.3`. Other updates to a survey that was published before this check (closing it, changing dates, changing settings) are still allowed, so those surveys are not stranded. A survey closed with duplicate names from before the check cannot be reopened until the names are resolved; renaming while closed is allowed.
+
+The visual builder warns when two **Question name** fields match as typed. It does not apply the full SurveyJS key derivation, so the warning is a best-effort hint. The database trigger is the authoritative check and its error message names each duplicate and explains where to rename it.
+
 ### Due dates are advisory
 
 `can_respond_to_survey` never reads `due_date` (`20260817120000_tighten_survey_and_poll_rls.sql:27-32`). Nothing else enforces it either — not RLS, not the client, which only renders it (`app/course/[course_id]/surveys/page.tsx`). Surveys accept late responses, and `submitted_at` is what records how late.
@@ -370,10 +378,10 @@ The helpers are `authorizeforclass(class__id bigint)`, `authorizeforclassgrader(
 
 ### The renderer
 
-`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries four non-obvious behaviors, three of them accessibility fixes for issue #881.
+`components/Survey.tsx` is the only place a `survey-core` `Model` is constructed for a survey. Do not build one inline: the wrapper carries several non-obvious behaviors, three of them accessibility fixes for issue #881.
 
 ```typescript
-// components/Survey.tsx:41-71
+// components/Survey.tsx
 const surveyJsonKey = useMemo(() => JSON.stringify(surveyJson ?? null), [surveyJson]);
 
 const survey = useMemo(() => {
@@ -390,11 +398,15 @@ const survey = useMemo(() => {
 }, [surveyJsonKey]);
 ```
 
-- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor (`:33-41`).
-- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync (`:53-61`).
-- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing (`:62-64`).
+- The model is keyed on the **serialized** definition, not on object identity. The definition arrives as a JSONB column on a `TableController` row, so its identity changes on any realtime update or refetch even when the bytes are the same. Keying on identity rebuilt the whole question tree and threw away focus and the screen-reader cursor.
+- `textUpdateMode = "onTyping"` matters for correctness, not just for feel. Under the SurveyJS default (`"onBlur"`) typed text lives only in the DOM input until a blur, so it is outside `survey.data`, never autosaved, and overwritten by the next model-to-DOM sync.
+- `onGetTitleTagName` is the supported per-survey override for title tags. A plain `questionTitleTagName` assignment is not a SurveyJS API and does nothing.
 
-The theme is applied in an effect from the Chakra color mode (`:73-79`).
+The theme is applied in an effect from the Chakra color mode.
+
+**`title` prop** — Pass the database `surveys.title` to override whatever title is embedded in the SurveyJS JSON (the visual builder writes `"Survey Name"` as a placeholder). The title is set on the model in a layout effect so a rename arriving over realtime updates the heading without rebuilding the model or losing typed answers. Omit the prop or pass an empty string to fall back to the JSON title. The title string bypasses SurveyJS's text processor so `{placeholder}` syntax in a database title is shown as typed rather than filled in.
+
+**`titleTag` prop** — Controls the HTML element used for the survey title. Defaults to `"h1"`, which is correct on the student survey page. Pass `"div"` inside dialogs (such as the Student Preview) where the dialog's own heading already names the survey.
 
 ### Survey JSON structure
 
@@ -513,22 +525,19 @@ Note that the client sets `submitted_at` explicitly even though `set_survey_subm
 
 ### Autosave
 
-Autosave is gated on `allow_response_editing` and returns early when the flag is off:
+Autosave runs on every survey regardless of `allow_response_editing`. The flag only governs whether a student can re-edit after submitting:
 
 ```typescript
-// app/course/[course_id]/surveys/[survey_id]/page.tsx:236-260
-const handleValueChanged = useCallback((surveyModel: Model) => {
-  if (!private_profile_id || !surveyId || !allowResponseEditing) return;
-  if (isSubmittingRef.current || hasSubmittedRef.current) return;
-  // debounced by AUTOSAVE_DEBOUNCE_MS, trailing edge only
-}, [private_profile_id, surveyId, allowResponseEditing, saveResponseToDb]);
+// app/course/[course_id]/surveys/[survey_id]/page.tsx
+const shouldAutosaveResponse = (isSubmitted: boolean, allowEditing: boolean) =>
+  !isSubmitted || allowEditing;
 ```
 
-With the flag off, nothing is persisted until the student clicks Complete. That is the behavior the user-facing pages describe, and it is enforced here rather than in RLS: `can_respond_to_survey` would accept the draft insert either way.
+With the flag off, drafts still autosave so a student can close the page and return. After submitting, no further autosaves are sent. `can_respond_to_survey` and the `survey_responses_update_owner` policy enforce this at the database level too.
 
-Submit and autosave race by construction, since SurveyJS fires a final `onValueChanged` on blur. `handleSurveyComplete` cancels any pending autosave timer, awaits any in-flight one, and only then writes, so the submit is guaranteed to be the last write (`:196-207`). `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense (`:147`). Preserve both if you touch this.
+Autosaves are serialized: each save chains on the previous one, so a slow in-flight save cannot overwrite a newer answer. Only the newest queued save is sent — intermediate saves that are superseded by a later edit are skipped. `handleSurveyComplete` waits for the whole chain before writing the final submitted row, so the submit is always the last write. `saveResponseToDb`'s own `hasSubmittedRef` check is the second line of defense. Preserve both if you touch this.
 
-Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode (`:313-314`).
+Read-only state is `existingResponse?.is_submitted && !survey.allow_response_editing`, ORed with the staff "view as student" mode.
 
 ## CSV export
 
