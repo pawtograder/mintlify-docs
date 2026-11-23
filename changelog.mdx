@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13, 2026
+
+#### Gradebook
+- **Column groups and topics** — Instructors can now create named, collapsible column groups that are stored and persist across sessions. Turning the feature on for the first time shows a preview of the groups it would create before anything changes. A second feature, gradebook topics, lets you mark columns as attempts at a topic and choose a standing column; the gradebook can then show one column per topic that collapses to its standing and expands to its attempts. Both features are on by default for new courses and off for existing ones until an instructor enables them. See [Gradebook](/staff/gradebook) and [Feature flags](/staff/feature-flags) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+#### Exams
+- **Exam rubric out-of-date notice** — The exam template page now shows a notice when the saved questions no longer match the rubric built from them, and tells the instructor to click "Build rubric from exam" before grading starts ([#1277](https://github.com/pawtograder/platform/pull/1277))
+- **Paper exam submission opens on its exam artifact** — Graders opening a paper exam submission now land on the answer crops rather than the scanned page image ([#1281](https://github.com/pawtograder/platform/pull/1281))
+- **Exam UI polish** — Dropdown chevrons, region labels moved above the answer area, the question picker resets after drawing a region, and "No exam template yet" links to the template page ([#1283](https://github.com/pawtograder/platform/pull/1283))
+
+#### Forgejo integration
+- **Push webhooks from Forgejo** — Student repository pushes from Forgejo are now accepted, matched to the correct repository, and recorded in the commit history. The commit history dialog shows only recorded commits for Forgejo repositories rather than a GitHub error banner ([#1228](https://github.com/pawtograder/platform/pull/1228))
+
+#### Office hours
+- **New office hours requests show student count in real time** — A TA with office hours open now sees the correct student count on a new request without reloading the page ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
 ## August 2026
 
 ### August 19, 2026
