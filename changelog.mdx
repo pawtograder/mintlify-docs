@@ -6,6 +6,43 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 13, 2026
+
+#### Gradebook
+- **First-class column groups and topics** — Instructors can now create, rename, reorder, and delete named gradebook column groups instead of relying on the slug-prefix heuristic. Turning the feature on shows a preview of the groups it would create before anything changes. A second axis, **topics**, lets courses that assess each topic more than once mark columns as attempts and designate a standing column per topic; the gradebook can then show one column per topic that collapses to its standing. **Suggest Topics** infers topics from existing columns and changes nothing until confirmed. Both features are on by default for new courses and off for existing ones until an instructor enables them from **Course Settings → Feature flags**. See [Gradebook](/staff/gradebook) ([#1215](https://github.com/pawtograder/platform/pull/1215))
+
+### November 12, 2026
+
+#### Office hours
+- **Real-time student count for new requests** — A TA with office hours open now sees the correct student count on a new help request without reloading the page. Previously, a new request created while the TA already had the queue open showed "0 students" until a reload ([#1275](https://github.com/pawtograder/platform/pull/1275))
+
+### November 11, 2026
+
+#### SSO and developer tools
+- **Skip consent and Forgejo login pages for first-party apps** — The `autoApproveFirstParty` chart option lets Forgejo and Coder sign-ins skip the OAuth consent page for known callback URLs. Forgejo's login page now follows its SSO link directly when only one provider is configured ([#1245](https://github.com/pawtograder/platform/pull/1245))
+- **Forgejo as Coder's external auth provider** — Coder workspaces can now clone private Forgejo repositories using a Forgejo OAuth2 app registered by `setup-coder-forgejo-auth.sh` ([#1234](https://github.com/pawtograder/platform/pull/1234))
+
+### November 10, 2026
+
+#### Exams
+- **Exam grading behind a course feature flag** — The **Paper exam (Scan & OCR)** assignment type and its three pages are now gated on the `exams` course feature flag. The flag is off by default; turn it on under **Course Settings → Feature flags** before creating a paper exam assignment ([#1196](https://github.com/pawtograder/platform/pull/1196))
+
+#### Grading
+- **Custom grader roles and capabilities** — Instructors can create custom grader roles with specific capabilities (such as `manage_review_assignments` or `manage_assignments`). A grader on a custom role with `manage_review_assignments` can see and delete review assignments; one with `manage_assignments` can create and edit assignments. See [Assigning Grading Tasks](/staff/assignments/grading-assignments) ([#1010](https://github.com/pawtograder/platform/pull/1010))
+
+### November 9, 2026
+
+#### Gradebook
+- **Course Gemini API key** — Instructors can save, replace, or remove a course-level Gemini API key from **Course Settings → Gemini API Key**. The key is stored in Vault and never returned through the UI. Requires the `gemini-api-key-setup` feature flag. See [Feature flags](/staff/feature-flags#gemini-api-key) ([#1161](https://github.com/pawtograder/platform/pull/1161))
+
+#### Exams
+- **Exam and quiz seeding** — The database seeder now seeds exam and quiz assignments covering all question shapes and lifecycle states, including scan batches, graded submissions, and in-app quizzes ([#1213](https://github.com/pawtograder/platform/pull/1213))
+
+#### Infrastructure
+- **Postgres /dev/shm** — Chart 0.4.0 gives the Postgres primary and standby a real 1 Gi `/dev/shm` volume, replacing the container default of 64 Mi. Deploy in a maintenance window ([#1028](https://github.com/pawtograder/platform/pull/1028))
+
 ## August 2026
 
 ### August 19, 2026

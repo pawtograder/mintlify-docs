@@ -18,6 +18,12 @@ When a grader completes their assigned review, Pawtograder automatically:
 
 This reduces duplicate work when multiple graders are assigned to overlapping parts of the same submission.
 
+## Grader capabilities and custom roles
+
+By default, graders can see and delete review assignments for the class. Instructors can create custom grader roles with additional capabilities from **Course Settings → Feature flags** (not yet documented separately). A grader on a custom role with the `manage_review_assignments` capability can see and delete review assignments; a grader with `manage_assignments` can create and edit assignments.
+
+Custom roles build on the default grader role: a capability added to the default grader role reaches every grader, and a custom role can only add capabilities, not remove them.
+
 ## Conflicts of Interest
 
 Pawtograder will automatically ensure that graders do not grade assignments that they have a conflict of interest in. Graders can self-input their conflicts (under "Course Settings" - "Grading Conflicts"), and instructors can review and enter conflicts for all graders in the class. Graders are encouraged to input a "Reason" for their conflict, so that instructors can understand the nature of the conflict and help avoid declaring spurious conflicts.
