@@ -56,13 +56,47 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalating a ticket
+
+While you are helping a student, a purple **Escalate** button appears next to **Resolve**. Use it when you cannot finish the question yourself and want to hand it to another staff member.
+
+Clicking **Escalate** opens a short note field (up to 500 characters, staff-only). Write what you tried and what is still unresolved, then confirm. The ticket returns to the queue as open, but it sorts **above every normal ticket** so the student does not restart at the back of the line. A purple **Escalated** badge marks it, and the queue row previews your note.
+
+When another staff member opens the escalated ticket, a history panel shows who already helped, how long the student has waited in total, and every escalation note, so the student does not have to explain again.
+
+Students can also escalate their own ticket. When you press **Resolve**, the student gets a 10-minute check-in: "Did your problem get fixed?" If they answer **No**, they write what they are still stuck on and the ticket is escalated automatically. If they answer **Yes**, or do not answer within 10 minutes, the ticket stays resolved.
+
+## Ending a ticket
+
+The red **End ticket** button closes a ticket permanently. There is no check-in, nobody can escalate it again, and the student cannot reopen it. Use it when more help will not fix the problem — wrong queue, a question for the instructor outside office hours, or a student who has already left.
+
+You can also end a ticket you have already resolved, during its check-in window, to withdraw the check-in.
+
+<Warning>
+End the video call before you resolve or end a ticket. Both **Resolve** and **End ticket** are disabled while a call is running.
+</Warning>
+
+### Resolve vs End ticket
+
+| | Resolve | End ticket |
+| --- | --- | --- |
+| Student check-in | Yes, 10 minutes | No |
+| Can be escalated afterwards | Yes, if the student says No | Never |
+| Use when | You think it is fixed | It is done, whether or not it is fixed |
+
+## What's new walkthrough
+
+The first time a staff member opens the office hours manage view, a **New in Office Hours: ticket escalation** dialog appears. It offers a five-step tour of escalation, the escalated-ticket view, the Resolve check-in, End ticket, and the Resolve vs End ticket comparison. Closing the dialog skips the tour; **Show me** starts it.
+
+A **What's new** button in the queue header reopens the tour at any time. The tour is staff-only; students never see it.
+
 ## Resolving
 
 | Status | Meaning |
 | --- | --- |
 | `open` | Filed, unclaimed, still in the queue. |
 | `in_progress` | A staff member has claimed it. |
-| `resolved` | Finished. Removed from the open list. |
+| `resolved` | Finished. Removed from the open list. The student gets a 10-minute check-in. |
 | `closed` | Also finished, and treated exactly like `resolved` in every list. |
 
 Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Resolving and Feedback](/students/office-hours/resolving-and-feedback)); staff do not get that dialog.
