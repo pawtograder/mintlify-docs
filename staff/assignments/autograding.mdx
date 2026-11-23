@@ -974,6 +974,30 @@ If the action detects that the push came from a handout/template repo
 rather than a student repo, the server returns a `handout_notice` and
 the action exits successfully without grading.
 
+## Forgejo Autograding
+
+Pawtograder supports autograding on courses backed by a [Forgejo](https://forgejo.org/) instance in addition to GitHub. The grading flow is the same — a Forgejo Actions workflow runs on each push and reports results back to Pawtograder — but there are a few Forgejo-specific behaviors to be aware of.
+
+### Enabling and disabling the autograder
+
+On a Forgejo course, the autograder can be toggled on or off from the assignment's **Configure Autograder** page. When the autograder is off, pushes are still collected as submissions for hand grading but no Actions run is triggered.
+
+### Organization webhook
+
+Pawtograder registers a webhook on each Forgejo organization it manages. When a push arrives, Pawtograder checks the webhook for every organization the course belongs to, not just the primary one, so courses that span multiple organizations receive grading events correctly.
+
+### Recording finished runs
+
+When a Forgejo Actions run finishes, Pawtograder records the completed run against the submission. If a run was already in progress when a newer push arrived, the older run's result is discarded and only the most recent finished run is kept.
+
+### Repository web links
+
+Submission pages link directly to the student's Forgejo repository and to the specific Actions run that produced the result, using the Forgejo instance's web URL rather than a GitHub URL.
+
+### Handout sync
+
+Handout file syncing is not performed for Forgejo repositories. Handout distribution on Forgejo courses is handled outside Pawtograder (for example, by pushing directly to the Forgejo organization's template repository).
+
 ## Running a Forked Action
 
 The grading action is fully open source at
