@@ -35,6 +35,12 @@ After running the fix, you'll see a summary showing:
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
 
+## Access control
+
+By default, the **Fix Permissions**, **Retry creation**, and **Cleanup individual repositories** buttons are instructor-only, and the **Repository Status** link in the assignment navigation is hidden from graders.
+
+Instructors can grant access to these tools by adding the `manage_student_repositories` capability to a custom role. Staff on that role see the **Repository Status** nav item and all three repair buttons, but not the **Sync** button or row checkboxes (those require `manage_assignments`).
+
 ## When to Use Fix Permissions
 
 Use the Fix Permissions tool when:
