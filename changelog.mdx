@@ -6,6 +6,38 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Custom roles and capabilities
+
+- **Emailer now grantable to custom roles** — A new `send_announcements` capability controls access to the Emailer. Instructors hold it by default and can grant it to any custom role (for example, a Head TA). Graders without the capability no longer see the Emailer in the Course Settings menu. Email creation is also now enforced to stay within the sender's class. ([#1420](https://github.com/pawtograder/platform/pull/1420))
+- **Rubric editing now grantable to custom roles** — A new `manage_rubrics` capability controls who can edit rubrics. Instructors hold it by default and can grant it to custom roles. Graders without the capability no longer see the **Configure Rubric** link and are redirected if they navigate to the rubric editor directly. The rubric save function (`update_rubric_full`) now also links a new rubric to its assignment automatically, so a Head TA with `manage_rubrics` but not `manage_assignments` can create rubrics. Concurrent saves to the same review round are detected and reported rather than silently overwriting each other. ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Group mentor, rename, and Copy Groups now grantable to custom roles** — A new `manage_groups` capability controls setting a group's mentor, renaming a group, and copying groups from a prior assignment. Instructors hold it by default. A privacy bug was also fixed: group memberships were previously readable by anyone enrolled in any class; they are now scoped to the membership's own class. ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Roster management now grantable to custom roles** — A new `manage_roster` capability controls lab sections, class section names, and the Enrollments page. Instructors hold it by default and can grant it to custom roles. ([#1419](https://github.com/pawtograder/platform/pull/1419))
+- **Gradebook now grantable to custom roles** — A new `manage_gradebook` capability controls access to the staff gradebook. Instructors hold it by default and can grant it to custom roles. ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Forgejo grading
+
+- **Forgejo Actions runs recorded and linked** — Completed Forgejo Actions runs (success and failure) are now recorded as workflow events. The commit's check run is updated with the run's conclusion and a link to the Forgejo Actions run. Submissions that finish without a grader result receive the same fallback error result as GitHub. Commit History and the submission Checks tab link to the run. ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Autograder on/off toggle for Forgejo assignments** — The autograder can now be enabled or disabled for Forgejo assignments from the Configure Autograder page. Enabling restores a parked `grade.yml.disabled` or adds the stock Forgejo workflow. Because Forgejo has no push-direct submission path yet, the autograder cannot be turned off on a Forgejo assignment. Existing student repositories keep their own copy of `grade.yml`. ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo org hooks upgraded to receive action-run events** — The reconciler now checks every org's webhook on each pass and upgrades hooks that are missing the `action_run_success` and `action_run_failure` events. Hooks that cannot be patched in place are replaced atomically (create then delete). ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo group management: move students, revoke leavers, give staff write access** — Students can be moved between Forgejo groups, students who leave a group lose their Forgejo repository access, and staff are given write access to group repositories. ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Forgejo repository web links fixed** — Repository links in the UI now point to the correct Forgejo URL for Forgejo assignments. ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Forgejo handout syncs no longer queued** — Handout sync jobs are no longer queued for Forgejo repositories, which do not support the GitHub-based sync path. ([#1425](https://github.com/pawtograder/platform/pull/1425))
+- **Staff file functions work with GitHub grader repos when no GitHub org is set** — The staff file functions can now read and write a course's own GitHub grader repositories even when the course has no GitHub organization configured. ([#1412](https://github.com/pawtograder/platform/pull/1412))
+
+#### Bug fixes
+
+- **Exam answer crops rendered at consistent zoom** — All answer crops on the exam grading page now render at the same zoom level. ([#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Exam auto-extract regions widened** — Auto-extract regions are now wider to cover the full area where students write. ([#1392](https://github.com/pawtograder/platform/pull/1392))
+- **Exam scan alignment fixed** — Scans are now aligned with the template before regions are read. ([#1331](https://github.com/pawtograder/platform/pull/1331))
+- **Exam batch processing guard** — Processing is now refused while a batch is already being processed, preventing duplicate runs. ([#1355](https://github.com/pawtograder/platform/pull/1355))
+- **Office hours walkthrough stays dismissed** — A dismissed office hours walkthrough now stays closed across page remounts. ([#1418](https://github.com/pawtograder/platform/pull/1418))
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time so it turns Overdue at the correct moment. ([#1184](https://github.com/pawtograder/platform/pull/1184))
+- **Error reporting unified** — A single error mapper now handles all staff roles, and only unexpected errors are reported to Sentry. ([#1246](https://github.com/pawtograder/platform/pull/1246))
+
 ## August 2026
 
 ### August 19, 2026
