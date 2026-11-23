@@ -1,6 +1,6 @@
 ---
 title: "AI assistance for helping students"
-description: "Copy structured prompts out of Pawtograder into your own AI assistant, and give it read access to course data over MCP"
+description: "Copy structured prompts out of Pawtograder into your own AI assistant, give it read access to course data over MCP, and optionally connect a Gemini API key for course-level AI features"
 icon: "robot"
 ---
 
@@ -14,11 +14,39 @@ fetches the help request, submission, test output, and assignment spec for
 itself.
 
 <Warning>
-Pawtograder never calls a model. Every AI button in the product does exactly one
+Pawtograder never calls a model on your behalf. Every AI button in the product does exactly one
 thing: it puts text on your clipboard. Nothing is sent to Anthropic, OpenAI, or
 any other provider by Pawtograder, and no AI-generated text ever appears inside
-Pawtograder.
+Pawtograder — unless you configure a course Gemini API key for features that use it directly.
 </Warning>
+
+## Course Gemini API key
+
+Some Pawtograder features can call Google Gemini directly when you supply a key for your course. The key is stored encrypted in Vault and is never returned to any client; only the Pawtograder backend can use it.
+
+<Note>
+This feature requires the `gemini-api-key-setup` course feature flag to be enabled. Ask your Pawtograder administrator to turn it on for your course. Without it, the key management controls are not shown.
+</Note>
+
+### Saving a key
+
+1. Open **Course Settings → Feature flags** and confirm that **Gemini API key setup** is enabled.
+2. Navigate to the Gemini key settings page for your course (the exact menu entry depends on your deployment).
+3. Paste your Google Gemini API key into the field and click **Save**.
+
+The page shows one of two states:
+
+- **Configured** — a key is stored. You can replace it by saving a new one, or remove it entirely.
+- **Not configured** — no key is stored. Save one to enable Gemini-backed features.
+
+### Replacing or removing a key
+
+- **Replace**: save a new key. The old key is overwritten in place; no previous value is retained.
+- **Remove**: click **Remove key**. The stored key is deleted and Gemini-backed features stop working until a new key is saved.
+
+### What the key is used for
+
+The key is used only by features in your course that are explicitly documented as Gemini-backed. No key is ever logged or returned through any API endpoint.
 
 ## What the copied prompt contains
 

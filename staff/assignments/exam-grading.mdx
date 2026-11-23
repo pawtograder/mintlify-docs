@@ -1,0 +1,69 @@
+---
+title: "Exam Grading"
+description: "Upload scanned paper exams, match pages to students with OCR, and grade them with rubrics"
+icon: "file-pen"
+---
+
+# Exam Grading
+
+Pawtograder's exam grading system lets you upload scanned paper exams, automatically match each page to the student who wrote it using OCR, and grade them with the same rubric and handgrading tools used for programming assignments.
+
+<Note>
+Exam grading is a separate assignment type. When creating an assignment, choose **Exam** as the assessment type to enable the exam-specific upload and matching workflow.
+</Note>
+
+## How it works
+
+1. Students take a paper exam. Each exam booklet or page includes a student identifier (name, ID, or a printed barcode) that OCR can read.
+2. After the exam, scan the completed booklets and upload the PDF or image files to Pawtograder.
+3. Pawtograder's OCR pipeline reads each page and matches it to an enrolled student.
+4. You review and confirm the matches, correct any that OCR got wrong, and then grade the matched submissions using rubrics and handgrading.
+
+## Creating an exam assignment
+
+1. From **Manage → Assignments**, click **New Assignment**.
+2. Set the **Assessment type** to **Exam**.
+3. Fill in the standard fields: title, slug, release date, due date, and points possible.
+4. Define a rubric for the exam questions. See [Rubrics](/staff/assignments/rubrics).
+
+<Note>
+Exam assignments do not use GitHub repositories or the autograder. The repository configuration and autograder fields are not shown for this assessment type.
+</Note>
+
+## Uploading scanned exams
+
+After the exam, navigate to the assignment's **Exam Upload** page:
+
+1. Click **Upload Scans** and select your scanned PDF or image files.
+2. Pawtograder processes each page through OCR to extract student identifiers.
+3. The upload page shows a progress indicator while processing runs.
+
+## Reviewing student matches
+
+After OCR completes, the **Student Matching** page lists each detected page alongside the student Pawtograder matched it to and a confidence score.
+
+- **High confidence** matches are shown in green and are accepted automatically.
+- **Low confidence** matches are shown in yellow and require your review.
+- **Unmatched** pages are shown in red and must be assigned manually.
+
+To correct a match:
+
+1. Click the row for the page you want to reassign.
+2. Search for the correct student by name or email.
+3. Click **Confirm** to save the assignment.
+
+Once all pages are matched, click **Finalize Matches** to create submissions for each student. Each student's matched pages become their submission, which you can then grade.
+
+## Grading exam submissions
+
+Exam submissions are graded the same way as other handgraded assignments:
+
+- Open the submission from the assignment's submissions table.
+- Apply rubric checks and leave annotations on the scanned pages.
+- Complete the review and release grades when ready.
+
+See [Handgrading](/staff/assignments/handgrading) for the full grading interface reference, and [Assigning Grading Tasks](/staff/assignments/grading-assignments) for distributing exam grading among your staff.
+
+## Points box behavior
+
+When a grader selects a rubric option, the points box is filled automatically with that option's point value. If the grader then selects a different option worth the same number of points, the points box is refreshed to reflect the new selection — it does not retain the previous option's value.
