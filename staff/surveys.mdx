@@ -642,8 +642,34 @@ The system validates surveys before publishing:
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- Rejects duplicate question names (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+#### Duplicate question names
+
+Every question in a survey must have a unique name, because SurveyJS saves each answer under its question's name. Two questions with the same name share one answer slot: answering the second clears the first, and a required question can appear complete while its answer is actually empty.
+
+Publishing is refused — by both the form and the database — when any two questions resolve to the same answer key. The refusal message names each repeated question, where it appears in the survey, and how to fix it.
+
+**What counts as the answer key:**
+
+- A question's **valueName** when it has one (used as written, not cleaned)
+- Otherwise the question's **name**, after SurveyJS's load-time cleaning: trimmed, the first `|` dropped, braces removed, leading `#` characters removed
+- HTML and image elements hold no answer and are not checked
+
+**Where to rename:**
+
+- Most questions: edit the **Question name** field in the Visual Builder
+- Questions inside panels, dropdowns, and matrices: these have no name field in the Visual Builder; edit the survey JSON directly or use the JSON editor
+
+**Drafts may keep duplicates** so that work in progress can be saved and fixed later. The check runs only when a survey is published or when a published survey's questions are changed.
+
+<Note>
+A survey that was published before this check was added and then closed cannot be reopened until its duplicate names are resolved. Renaming questions while the survey is closed is allowed. Answers already collected under the shared key are preserved.
+</Note>
+
+**Visual Builder warning:** While editing, the builder shows a warning when two **Question name** fields match. This comparison is based on the names as typed and does not apply SurveyJS's answer-key rules, so it may flag names that the database would accept. Fix any warning before publishing to be safe.
 
 ## Saving Survey Templates
 
