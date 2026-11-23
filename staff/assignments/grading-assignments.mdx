@@ -8,6 +8,10 @@ icon: "users-gear"
 
 Pawtograder has a robust feature to allow instructors to assign grading tasks to staff. When a grading task is assigned, the instructor can set a due date for that task, and re-assign the task to a different grader if needed. When reassigning a rubric part to a TA who already completed grading a different rubric part for the same submission, the new work will appear in their pending work list. Pawtograder will also automatically allow any other grader to complete the task if the original grader is unable to complete it (without needing to re-assign the task).
 
+<Note>
+Access to grading assignment controls is governed by capabilities. By default, graders can access **Grading Assignments** and **Manage Groups**. The **Bulk Assign** and **Reassign** pages require the `manage_review_assignments` capability, and **Manage Groups** change controls require `publish_groups`. Instructors can grant these capabilities to custom grader roles. Graders without the required capability are redirected back to **Grading Assignments** when they try to access a restricted page.
+</Note>
+
 ## Automatic Completion of Related Reviews
 
 When a grader completes their assigned review, Pawtograder automatically:
