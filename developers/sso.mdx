@@ -1,0 +1,93 @@
+---
+title: "SSO / OAuth Identity Provider"
+description: "Pawtograder as an OAuth 2.1 / OIDC identity provider for Forgejo, Coder, and other tools"
+icon: "key-round"
+---
+
+# SSO / OAuth Identity Provider
+
+Pawtograder can act as an OAuth 2.1 / OIDC identity provider through Supabase Auth's OAuth server, so tools like Forgejo and Coder can offer "Sign in with Pawtograder". This lets students and staff use their existing Pawtograder credentials to access course tooling without a separate account.
+
+## How it works
+
+When a user clicks "Sign in with Pawtograder" in Forgejo or Coder:
+
+1. The tool redirects to Pawtograder's authorization endpoint with a `client_id`, `redirect_uri`, `scope`, and PKCE parameters.
+2. If the user is not signed in, they are sent to the sign-in page. The `redirect` parameter carries the consent URL so the flow resumes after sign-in or sign-up.
+3. Pawtograder shows the **OAuth consent page** at `/oauth/consent`, listing the requesting application and the scopes it is asking for.
+4. The user clicks **Approve** or **Deny**.
+5. On approval, GoTrue issues an authorization code and redirects back to the tool's `redirect_uri`.
+6. The tool exchanges the code for tokens and signs the user in.
+
+If GoTrue already has the user's consent for this client and scope set, the consent page is skipped and the redirect happens immediately.
+
+## OAuth consent page
+
+The consent page at `app/(auth-pages)/oauth/consent` shows:
+
+- The name of the application requesting access
+- The scopes being requested (for example, `openid profile email`)
+- **Approve** and **Deny** buttons
+
+The `profile` scope grants access to the user's name and email address. The name claim is the user's email address, since Pawtograder does not expose a separate display name through the OIDC userinfo endpoint.
+
+The `authorization_id` is preserved through sign-in and sign-up redirects, so a user who does not yet have a Pawtograder account can create one and complete the authorization in one flow.
+
+## Supported scopes
+
+| Scope | What it grants |
+|-------|---------------|
+| `openid` | An ID token identifying the user |
+| `profile` | The user's name (their email address) |
+| `email` | The user's email address |
+
+## Redirect security
+
+All redirect paths in the sign-in, sign-up, and email confirmation flows are validated before use:
+
+- The path must be on the same origin as the Pawtograder web server.
+- Control characters and backslashes are rejected.
+- Protocol-relative URLs (`//attacker.example`) are rejected.
+
+An unparseable or off-origin redirect is treated as absent and the user is sent to `/course` instead.
+
+## Configuration
+
+OAuth server support is enabled in `supabase/config.toml` under `[auth.oauth_server]`. Dynamic client registration is off; clients are registered by a Pawtograder administrator.
+
+The `GOTRUE_URI_ALLOW_LIST` must include each web channel host with `/**` (for example, `https://app.example.com/**`). GoTrue only waives the allow list for the `SITE_URL` hostname, and `/*` stops at one path segment.
+
+## Registering a client (Forgejo or Coder)
+
+Client registration is done by a Pawtograder administrator using the GoTrue admin API or the Supabase dashboard. Each client needs:
+
+- A `client_id` and `client_secret`
+- One or more allowed `redirect_uris`
+- The scopes it may request
+
+After registration, configure the tool to use Pawtograder as its OIDC provider:
+
+- **Authorization endpoint**: `<PAWTOGRADER_URL>/oauth/authorize`
+- **Token endpoint**: `<SUPABASE_URL>/auth/v1/token`
+- **Userinfo endpoint**: `<SUPABASE_URL>/auth/v1/user`
+- **JWKS endpoint**: `<SUPABASE_URL>/auth/v1/.well-known/jwks.json`
+
+<Note>
+GoTrue requires PKCE on every authorization request. Some tools (including Forgejo on first setup via CLI) skip PKCE on the initial request. The E2E test lane handles this by spending that first request during bootstrap.
+</Note>
+
+## E2E testing
+
+The Forgejo/Coder SSO lane is an opt-in end-to-end test that boots an isolated Supabase stack, Forgejo, and Coder, registers both as OAuth clients, and walks the sign-in journeys:
+
+- Warm and cold sign-in on both apps
+- Deny and repeat sign-in
+- Forged `redirect_uri` rejection
+
+Run it with:
+
+```bash
+npm run test:e2e:forgejo-coder
+```
+
+The lane is defined in `tests/e2e/forgejo-coder/` and the workflow is `.github/workflows/forgejo-coder-e2e.yml`.

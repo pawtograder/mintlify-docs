@@ -75,6 +75,47 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Class roles and capabilities
+
+On top of the four `app_role` values, each class has a set of **class roles** made of **capabilities**. Every class gets four default roles — instructor, grader, student, and admin — and each person in the class is linked to one. Instructors can create custom grader roles that add capabilities on top of the default grader role.
+
+The current capabilities are:
+
+| Capability | What it allows |
+|---|---|
+| `manage_review_assignments` | Assign and reassign graders to submissions |
+| `publish_groups` | Publish group assignments |
+| `manage_assignments` | Create, edit, and delete assignments |
+| `manage_roles` | Create, rename, and delete custom grader roles and set their capabilities |
+
+A custom grader role inherits everything the default grader role holds, plus its own extras. A capability added to the default grader role later reaches every grader automatically.
+
+#### `useCapability` hook
+
+Pages use `useCapability(capability)` to show or hide controls based on what the signed-in user can do:
+
+```typescript
+const canPublishGroups = useCapability("publish_groups");
+// true if the current user holds publish_groups in this class
+```
+
+The hook reads `user_class_capabilities()`, the same SQL function the database policies use, so the page and the database always agree. A provider in the course layout fetches once per class page and re-fetches when the viewer's own role or any role's capabilities change, or when the staff channel reconnects.
+
+#### Writing a policy that checks a capability
+
+Every policy that checks a capability must use `user_class_ids_with_capability(capability)` and never look up the capability directly from `role_capabilities`. A direct lookup finds only the user's own class role and misses the default grader role's capabilities that custom roles inherit.
+
+```sql
+-- Correct: use the helper function
+CREATE POLICY example_policy ON public.some_table
+  FOR UPDATE TO authenticated
+  USING (
+    class_id = ANY(user_class_ids_with_capability('manage_assignments'))
+  );
+```
+
+See `docs/capabilities.md` in the repository for the full rule and examples.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.

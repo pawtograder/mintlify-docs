@@ -256,7 +256,8 @@
           {
             "group": "Integrations",
             "pages": [
-              "developers/mcp-server"
+              "developers/mcp-server",
+              "developers/sso"
             ]
           },
           {
