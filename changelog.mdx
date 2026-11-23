@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Grading
+- **Code-walk release state in the submissions table** — On assignments with a code-walk rubric, the submissions table now shows a separate **Code walk released** column alongside **Grading released**. The column indicates whether each student's code walk is released, complete but unreleased, incomplete, or not yet reviewed. A filter lets you narrow the table to released or unreleased code walks ([#1151](https://github.com/pawtograder/platform/pull/1151))
+
+#### Roles and permissions
+- **Class roles made of capabilities (foundation)** — Every class now has four default roles (instructor, grader, student, admin), and each role holds a list of capabilities — actions it is allowed to perform. The first four capabilities are `manage_review_assignments`, `publish_groups`, `manage_assignments`, and `manage_roles`. Only the instructor role holds them, matching today's access rules. Nothing in the UI reads these tables yet, so no access changes in this release. Future releases will use them to align what the UI shows with what the database allows ([#1147](https://github.com/pawtograder/platform/pull/1147))
+
+#### Security
+- **Actions job tokens verified by issuer and audience** — The autograder now validates the OIDC token issuer before fetching any keys, so only tokens from GitHub Actions (or a configured Forgejo instance) are accepted. The token's audience must match the provider's default (`https://github.com/<owner>` for GitHub), which blocks a token minted for another service from being replayed. Token rejections are tagged and reported to Sentry even on endpoints that mute other security errors ([#1153](https://github.com/pawtograder/platform/pull/1153))
+
+#### Assignments (Cloud Workspaces foundation)
+- **Per-assignment Git provider (database foundation)** — Assignments and repositories now record their Git provider (`github` or `forgejo`), defaulting to `github`. All existing GitHub workflows, webhooks, and repository operations are guarded to skip non-GitHub records. Forgejo provisioning is not yet available; this release lays the database and backend foundation ([#1128](https://github.com/pawtograder/platform/pull/1128))
+
+## October 2026
+
+### October 28, 2026
+
+#### Grading
+- **Bulk release and unrelease of code walks** — The grading status panel now has **Release code walks** and **Unrelease code walks** buttons for assignments with a code-walk rubric. Releasing affects only completed code walks; unreleasing reverses all released code walks. The toast reports how many changed and notes that incomplete code walks were skipped. Previously, code walks could only be released one submission at a time ([#1130](https://github.com/pawtograder/platform/pull/1130))
+- **Releasing a code walk no longer publishes hidden autograder tests** — Previously, releasing any review (including a code walk, self-review, or meta-grading review) would publish the submission's hidden autograder tests. Now only releasing the grading review publishes hidden tests ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
 ## August 2026
 
 ### August 19, 2026

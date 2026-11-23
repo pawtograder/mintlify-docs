@@ -948,7 +948,7 @@ When the action runs in the student repo, it:
 
 <Steps>
 <Step title="Authenticates with the grading server">
-GitHub issues an OIDC token to the workflow. The action sends that token to the grading server, which verifies it (so it knows which repo and commit the request came from), runs security checks, registers a new submission, and returns a one-time download URL for the matching grader repository tarball.
+GitHub issues an OIDC token to the workflow. The action sends that token to the grading server, which verifies it by checking the token's issuer against a trusted allowlist (GitHub Actions, or a configured Forgejo instance) and confirming the audience matches the provider's default (`https://github.com/<owner>`). This ensures the token was issued for this specific repository owner and was not minted for another service. After verification, the server runs security checks, registers a new submission, and returns a one-time download URL for the matching grader repository tarball.
 </Step>
 <Step title="Downloads the grader and reads pawtograder.yml">
 The action extracts the grader tarball alongside the student's checkout and reads `pawtograder.yml` from the grader repo. The config selects an "overlay" grader and a build preset (`java-gradle`, `python-script`, or `none`).
