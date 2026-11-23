@@ -24,7 +24,11 @@ On the assignment's **Dashboard** tab, the grading panel reports:
 
 The panel also carries the assignment-wide grading actions:
 **Finalize grading**, plus **Release all** and **Unrelease all** for
-instructors. See [Bulk Actions](/staff/assignments/bulk-actions).
+instructors. On assignments with a code-walk rubric, instructors also
+see **Release code walks** and **Unrelease code walks** (see
+[Code walk release](#code-walk-release) below). See
+[Bulk Actions](/staff/assignments/bulk-actions) for the full release
+reference.
 
 ## Per-TA Grading Progress Dashboard
 
@@ -84,6 +88,31 @@ Reassigning work and editing review due dates happen on the parent
 [Assigning Grading Tasks](/staff/assignments/grading-assignments). For
 release and unrelease across selected submissions, see
 [Bulk Actions](/staff/assignments/bulk-actions).
+
+## Code walk release
+
+When an assignment has a code-walk rubric, the grading panel shows two
+additional actions for instructors:
+
+- **Release code walks** — Releases every *completed* code-walk review
+  for the assignment. Incomplete code walks are skipped; the
+  confirmation toast reports how many were released and notes that
+  incomplete ones were not changed. Grading, self-review, and
+  meta-grading reviews are not affected.
+- **Unrelease code walks** — Hides code-walk grades from students again
+  for every submission in the assignment, reversing a previous release.
+  Grading, self-review, and meta-grading reviews are not affected.
+
+Both actions require confirmation before running. The submissions table
+on the assignment page shows a separate **Code walk released** column
+(alongside **Grading released**) so you can see the release state of
+each submission at a glance.
+
+<Note>
+Releasing a code walk does not release the grading review, and
+releasing the grading review does not release the code walk. The two
+are independent.
+</Note>
 
 ## Best practices
 

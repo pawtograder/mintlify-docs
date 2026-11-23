@@ -6,6 +6,39 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## October 2026
+
+### October 28, 2026
+
+#### Grading
+- **Code walk release state in the submissions table** — On assignments with a code-walk rubric, the submissions table now shows separate **Grading released** and **Code walk released** columns. Each column is independently filterable. A cell shows a check when released, a cross when complete but not yet released, **Incomplete** when the code walk is unfinished, and **—** when the student has no submission. Assignments without a code-walk rubric are unchanged ([#1151](https://github.com/pawtograder/platform/pull/1151))
+
+### October 23, 2026
+
+#### Grading
+- **Bulk release and unrelease code walks** — The grading status panel now has **Release code walks** and **Unrelease code walks** buttons for assignments that have a code-walk rubric. Releasing publishes every completed code walk for the assignment; incomplete code walks are skipped and the toast says how many were skipped. Unreleasing reverses all released code walks. Grading, self-review, and meta-grading reviews are not affected by either action. The buttons are visible to instructors only ([#1130](https://github.com/pawtograder/platform/pull/1130))
+- **Releasing a code walk no longer exposes hidden autograder tests** — Previously, releasing any review (including a code walk or self-review) would publish the submission's hidden autograder tests. Hidden tests are now only revealed when the grading review itself is released ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
+### October 14, 2026
+
+#### Grading
+- **Choose to stay or move on after completing a review** — The review completion popover now offers two buttons: **Complete**, which saves the review and keeps you on the current submission, and **Complete and go to next**, which saves and opens your next incomplete review on the same tab. If there is no next review, only **Complete** appears. Students completing a self-review see only **Complete** ([#1079](https://github.com/pawtograder/platform/pull/1079))
+
+### October 12, 2026
+
+#### Grading
+- **Tab preserved across submissions, assignees shown by name, and Previous navigation** — Moving between submissions (via Next Incomplete, Previous, or the submission picker) now keeps the tab you are on — Files, Autograder Detail, Survey, and so on — so you do not have to re-select it on every submission. The rubric sidebar's **Grading assigned to** panel shows each assignee's name (with "(you)" for your own assignment), rubric parts, due date, and status; instructors see all assignments on the submission, graders see only their own. A **Previous** link lets you step back through your assigned submissions, including ones you have already completed. Survey-only assignments open on the Survey tab for staff ([#1058](https://github.com/pawtograder/platform/pull/1058))
+
+## September 2026
+
+### September 27, 2026
+
+#### Bug fixes
+- **Handout sync no longer overwrites student work** — The handout sync that runs when a student's repository is created no longer pushes to a repository that already has commits, preventing accidental overwrites of student work ([#973](https://github.com/pawtograder/platform/pull/973))
+- **Repository not shown as linked before GitHub org auth** — The assignment page no longer shows a student's repository as ready or linked before they have authorized the GitHub organization ([#987](https://github.com/pawtograder/platform/pull/987))
+- **Late token page explains when a course has none** — The late tokens page now shows a clear message when the course does not offer late tokens, rather than showing an empty table ([#1043](https://github.com/pawtograder/platform/pull/1043))
+- **Files and Checks tabs usable on large pull-request submissions** — The Files and Checks tabs on pull-request submissions with many files or checks are now scrollable and usable without the page becoming unresponsive ([#1046](https://github.com/pawtograder/platform/pull/1046))
+
 ## August 2026
 
 ### August 19, 2026
