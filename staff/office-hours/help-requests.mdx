@@ -56,14 +56,42 @@ The panel lists sessions newest first with the TA, duration, queue depth, and st
 
 The same sessions drive the course-wide dashboard described in [Staffing and Time Tracking](/staff/office-hours/staffing-and-time-tracking).
 
+## Escalating a request
+
+When you cannot finish helping a student — the session ran out of time, the problem needs a different TA, or you need to step away — use **Escalate** instead of **Stop** or **Resolve**. Escalate requires a note explaining what was tried and what still needs doing, then returns the request to the queue with an **Escalated** badge. Escalated requests sort ahead of ordinary open requests so the next available TA sees them first.
+
+The escalation history panel on the request (staff-only) shows every escalation note in order, so whoever picks it up next has the full context. The badge reads **Escalated (×N)** when a request has been escalated more than once.
+
+<Note>
+Escalate is only available while you are the assigned staff member and no video call is live. End the call before escalating.
+</Note>
+
+## Ending a request
+
+**End ticket** closes a request immediately with no check-in and no escalation. Use it when the student left, the question was answered in another channel, or you need to remove the request from the queue for good. A closed ticket cannot be reopened through the interface.
+
+End ticket is available after you resolve a request as well, so you can withdraw a pending student check-in (see below) if the student has already confirmed their problem was fixed elsewhere.
+
+<Note>
+End ticket is disabled while a video call is live. End the call first.
+</Note>
+
+## Student check-in after resolve
+
+When you click **Resolve** on a request that is in progress, the student receives a 10-minute **"Did your problem get fixed?"** prompt. If they answer **No**, the request is automatically escalated back into the queue with their note, so it is not lost. If the 10-minute window expires with no answer, the request stays resolved.
+
+If you resolve a request that nobody ever claimed (no TA picked it up), no check-in is sent.
+
+The **Resolve** confirmation dialog tells you which case applies.
+
 ## Resolving
 
 | Status | Meaning |
 | --- | --- |
 | `open` | Filed, unclaimed, still in the queue. |
 | `in_progress` | A staff member has claimed it. |
-| `resolved` | Finished. Removed from the open list. |
-| `closed` | Also finished, and treated exactly like `resolved` in every list. |
+| `resolved` | Finished. Removed from the open list. A student check-in may still be pending. |
+| `closed` | Also finished, and treated exactly like `resolved` in every list. No check-in is pending. |
 
 Any instructor or grader, and any student named on the request, can resolve it. Students pick a reason when they do (see [Resolving and Feedback](/students/office-hours/resolving-and-feedback)); staff do not get that dialog.
 
@@ -71,7 +99,7 @@ Any instructor or grader, and any student named on the request, can resolve it. 
 When staff resolve a request, no resolution status or note is recorded, only who resolved it and when. If you want data on how requests actually ended, ask students to resolve their own.
 </Note>
 
-Nothing in the web interface sets `closed`. The only route to it is `pawtograder help-requests close`, which is instructor-only and defaults to that status. See [Command Line Interface](/staff/cli).
+Nothing in the web interface sets `closed`. The only route to it is `pawtograder help-requests close`, which is instructor-only and defaults to that status, or the **End ticket** button. See [Command Line Interface](/staff/cli).
 
 Once a request is resolved or closed, its chat becomes read-only for everyone and reads "This is a historical chat view. New messages cannot be sent."
 

@@ -50,6 +50,67 @@ Staff-only columns are useful for internal grading calculations, curve adjustmen
 
 When you release or unrelease a gradebook column, Pawtograder automatically enqueues recalculation for all columns that depend on it. This ensures that calculated columns (those using expressions) always reflect the current visibility state and scores of their source columns. For example, if you have a "Final Grade" column that references "Homework Average," releasing the homework average will trigger the final grade to recalculate for all students, ensuring they see accurate totals based on what's now visible to them.
 
+## Column Groups
+
+When the **Gradebook column groups** feature is on, you can create named groups that collapse and expand in the gradebook header row. Groups are stored and persist across sessions; they are not guessed from column slugs.
+
+### Enabling column groups
+
+Open **Course Settings → Feature flags** and turn on **Gradebook column groups**. Before anything changes, a preview dialog shows the groups that would be created from your current columns and lists every column whose header would differ from today. Confirm to apply the groups, or cancel to leave the gradebook as it is.
+
+<Note>
+Courses created after this feature shipped have column groups on by default. Courses that existed before have it written as disabled; an instructor must turn it on to see the preview and apply groups.
+</Note>
+
+### Creating and editing groups
+
+- **From a column's menu** — Open the column header menu (the chevron) and choose **Group…** to assign the column to an existing group, create a new group by name, or remove it from its current group.
+- **From the Add Column or Edit Column dialog** — A **Group** picker appears when column groups are on. New columns start ungrouped.
+- **Auto-group ungrouped columns** — Click **Auto-group Columns** in the gradebook toolbar to group any ungrouped columns by their slug prefix. A preview shows what would be created before anything is written.
+
+### Managing groups
+
+Each group header carries a menu (the three-dot icon) with:
+
+- **Rename group** — Group names are unique per gradebook, ignoring case.
+- **Move group left / Move group right** — Moves the whole group one position.
+- **Delete group** — Removes the group header; its columns stay where they are, ungrouped. No grades change.
+
+Move Left and Move Right on a column header move the column within its group. An ungrouped column steps over a whole neighbouring group.
+
+### Turning column groups off
+
+Turning the feature off goes back to the slug-guessed display. Your stored groups are kept and reappear if you turn it back on.
+
+## Gradebook Topics
+
+The **Gradebook topics** feature is for courses that assess each topic more than once. Mark gradebook columns as attempts at a topic, choose a standing column for each topic, and the gradebook can show one column per topic that expands to its attempts.
+
+### Setting up topics
+
+Click **Suggest Topics** in the gradebook toolbar. Pawtograder infers topics from your existing columns: a computed column whose inputs are only manual columns that nothing else reads is proposed as a topic's standing, and those inputs as its attempts. Attempt numbers are read from "Attempt N" column names, or assigned by position. Review the proposed topics, uncheck any you do not want, resolve any duplicate attempt numbers, and click **Create topics**.
+
+Applying keeps each standing column's existing expression, so no grades change.
+
+### Topic view and group view
+
+Once topics exist, a **Show topics** toggle appears in the gradebook toolbar. In topic view, each topic is one collapsible unit drawn where its standing column sits; collapsed, it shows the standing score; expanded, it shows the attempts in order. Switch back to the group view with **Show groups**.
+
+### Standing rules
+
+Each topic header carries a menu with:
+
+- **Standing: best attempt** — Generates an expression that takes the highest non-excused score across all attempts. Missing attempts are skipped.
+- **Standing: latest attempt** — Generates an expression that takes the score of the highest-numbered attempt that has a score and is not excused.
+- **Standing: keep the column's own expression** — Clears the generated rule; the standing column keeps whatever expression it has.
+- **Rename topic**, **Delete topic (columns stay)**
+
+When a generated rule is set, the standing column's expression is kept in sync automatically as attempts are added, removed, or renumbered.
+
+### Assigning a column to a topic
+
+Open the column header menu and choose **Topic…** to assign the column to an existing topic, create a new topic, or remove it from its current topic. Set the attempt number, or leave it blank to use the next available number.
+
 ## Managing Columns
 
 ### Reordering Columns
