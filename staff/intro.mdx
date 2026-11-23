@@ -47,6 +47,10 @@ A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
 
+Within those pages, controls that require a capability the grader does not hold are hidden. For example, on **Grading Assignments** a grader without `manage_review_assignments` does not see the **Assignment Management** row or the edit/delete icons. On **Manage Groups** a grader without `publish_groups` sees the groups table and can export to CSV, but all controls that change groups are hidden.
+
+Instructors can create custom grader roles with additional capabilities. See [Class roles and capabilities](/developers/intro#class-roles-and-capabilities) in the developer guide for the full list.
+
 ## Key features
 
 - **Assignments**: distribute and grade programming assignments with autograders,

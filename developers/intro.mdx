@@ -75,6 +75,57 @@ Two consequences for anything you build:
 Several role gates ask whether a user holds a role in **any** class rather than in the class the request is about. The admin dashboard gate above is one; the MCP server's pre-tool check is another. When you add a gate, decide deliberately which of the two you mean, and rely on RLS for the per-class answer.
 </Warning>
 
+### Class roles and capabilities
+
+On top of the four `app_role` values, every class has a set of **class roles** (`class_roles` table) with associated **capabilities** (`role_capabilities` table). Every person in a class is linked to one class role through `user_roles.class_role_id`.
+
+Each class starts with four default roles — `instructor`, `grader`, `student`, and `admin` — and instructors can create custom grader roles (e.g., "Head TA") with a subset of capabilities. A custom role inherits everything the default `grader` role holds, plus whatever extras the instructor adds.
+
+The current capabilities are:
+
+| Capability | What it allows |
+|---|---|
+| `manage_review_assignments` | Create, edit, and delete review assignments |
+| `publish_groups` | Publish and manage student groups |
+| `manage_assignments` | Create, edit, and delete assignments |
+| `manage_roles` | Create and configure custom grader roles (does not grant the ability to assign people to roles) |
+
+Only the `instructor` default role holds any capabilities. Graders, students, and admins hold none by default.
+
+#### Checking capabilities in the UI
+
+Use the `useCapability(capability)` hook to show or hide controls based on what the current user can do:
+
+```typescript
+import { useCapability } from "@/hooks/useCapability";
+
+const canPublishGroups = useCapability("publish_groups");
+// returns true | false | undefined (undefined while loading)
+```
+
+The hook reads `user_class_capabilities()`, the same database function that RLS policies use, so the page and the database always agree. The result updates automatically when the viewer's role or a role's capabilities change.
+
+#### Checking capabilities in RLS policies
+
+Every policy that guards a capability-controlled action must use `user_class_ids_with_capability(capability)` rather than looking up the capability directly:
+
+```sql
+CREATE POLICY example ON public.some_table
+  FOR UPDATE TO authenticated
+  USING (
+    class_id = ANY(user_class_ids_with_capability('manage_assignments'))
+  );
+```
+
+This function returns the set of class IDs where the current user holds the capability, accounting for both the user's own class role and the default grader role's capabilities. A direct lookup of `role_capabilities` finds only the user's own class role and misses inherited capabilities. See `supabase/docs/capabilities.md` in the repository for the full rule.
+
+#### Adding a new capability
+
+1. Add the value to the `class_capability` enum in a new migration.
+2. Add it to the `instructor` default role's capabilities in the same migration (or it will be ungrantable).
+3. Add an RLS policy using `user_class_ids_with_capability` on any table that needs it.
+4. Use `useCapability` in the UI to gate the relevant controls.
+
 ### Profiles
 
 Every enrollment carries two rows in `profiles`, and `user_roles` points at both through `private_profile_id` and `public_profile_id` (`hooks/useClassProfiles.tsx:24-25`). Both columns are unique, so each profile belongs to exactly one enrollment, which is why several foreign keys reference `user_roles(private_profile_id)` rather than `profiles(id)`.
