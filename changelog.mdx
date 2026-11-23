@@ -6,6 +6,34 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 8, 2026
+
+#### Bug fixes
+- **Bug reporter redacts and replays reports** — The in-app bug reporter now redacts sensitive information from submitted reports and attaches a replay so the team can reproduce the issue ([#1050](https://github.com/pawtograder/platform/pull/1050))
+
+### November 7, 2026
+
+#### Assignments — exam grading
+- **Exam grading with OCR and student matching** — A new exam grading workflow lets instructors upload scanned exam pages, uses OCR to extract student identifiers, and matches pages to enrolled students for hand grading ([#814](https://github.com/pawtograder/platform/pull/814))
+
+#### Assignments — capabilities and roles
+- **Custom grader roles with capabilities** — Instructors can now create custom grader roles (for example, "Head TA") that extend the default grader role with specific capabilities: `manage_assignments`, `manage_review_assignments`, `publish_groups`, and `manage_roles`. Controls that require a capability are hidden from graders who do not hold it. See [Staff overview → Custom grader roles and capabilities](/staff/intro#custom-grader-roles-and-capabilities) ([#1010](https://github.com/pawtograder/platform/pull/1010))
+- **`manage_assignments` gates creating and editing assignments** — New Assignment, Edit Assignment, and the repository sync actions now require the `manage_assignments` capability. Graders without it are redirected to the assignment list ([#1199](https://github.com/pawtograder/platform/pull/1199))
+- **`manage_review_assignments` gates bulk assign and reassign** — Bulk Assign and Reassign redirect a grader without `manage_review_assignments` back to Grading Assignments ([#1198](https://github.com/pawtograder/platform/pull/1198))
+- **`publish_groups` gates group management changes** — Manage Groups is read-only without `publish_groups`; groups, mentors, and CSV export remain visible, but all change controls are hidden ([#1198](https://github.com/pawtograder/platform/pull/1198))
+
+#### Integrations
+- **LTI grade push errors now surface correctly** — Grade sync failures that previously hid inside a 200 response are now reported to Sentry and return a 500, so silent grade-push failures are caught. Rows whose class has grade sync disabled are deferred rather than blocking the drain, and repeatedly failing rows are moved to the back of the queue ([#1206](https://github.com/pawtograder/platform/pull/1206))
+- **SSO with Forgejo and Coder** — Pawtograder can now act as an OAuth 2.1 / OIDC identity provider, letting Forgejo and Coder offer "Sign in with Pawtograder". An OAuth consent page shows the requesting app and scopes. This is a deployment-level feature configured in the Helm chart ([#1164](https://github.com/pawtograder/platform/pull/1164), [#1165](https://github.com/pawtograder/platform/pull/1165))
+
+### November 6, 2026
+
+#### Surveys
+- **Duplicate question names rejected at publish** — Publishing a survey whose two or more questions share the same answer key is now refused with a message naming each repeated question. The Visual Builder warns while you edit and numbers new default names across the whole survey. A survey published before this check was introduced can still be edited and closed; it cannot be reopened until the duplicate names are resolved. See [Surveys → Duplicate question names](/staff/surveys#duplicate-question-names) ([#1005](https://github.com/pawtograder/platform/pull/1005))
+- **Autosave works on all surveys** — Answers in progress now autosave on every survey, regardless of whether **Allow Response Editing** is on. Previously, autosave only ran when response editing was enabled, so a student who closed the page on a survey without editing lost their answers ([#977](https://github.com/pawtograder/platform/pull/977))
+
 ## August 2026
 
 ### August 19, 2026
