@@ -225,9 +225,9 @@ The **Available At** date must be before the **Due Date**. Students cannot acces
 Use the available date to schedule surveys in advance without manually publishing them later, e.g. releasing surveys after an assignment deadline or class event.
 </Tip>
 
-### Response Editing Control
+### Response editing control
 
-Toggle **Allow Response Editing** to control whether students can modify their submissions. The form summarizes it as: "When on, changes auto-save. When off, a student's first submission is final."
+Toggle **Allow Response Editing** to control whether students can modify their submissions after they click **Complete**.
 
 **Enabled:**
 
@@ -235,11 +235,15 @@ Toggle **Allow Response Editing** to control whether students can modify their s
 - After submitting, the student sees a green banner reading "You can edit your response since editing is allowed for this survey." and can submit again
 - Each re-submission updates the recorded submission time
 
-**Disabled:**
+**Disabled (default):**
 
-- Nothing is saved until the student clicks **Complete**, so a student who closes the page loses their answers
+- Answers still autosave as the student works, so a student can close the page and return to a partly finished survey
 - After submitting, the student sees a yellow banner reading "This survey has been submitted and cannot be edited." and the survey renders read-only
 - The original submission time is preserved
+
+<Note>
+Answers in progress autosave regardless of this setting. **Allow Response Editing** only controls whether a student can change their answers *after* clicking **Complete**.
+</Note>
 
 The button on the student's survey list reads **Start Survey**, **Continue Survey**, or **View Submission** based on their own progress, not on this setting.
 
@@ -635,15 +639,28 @@ Editing a published survey overwrites it rather than creating a second version. 
 
 **Best Practice**: If substantial changes are needed, leave the published survey alone. Save it to the Template Library, clone it into a new survey, and close the original.
 
-### Validation and Error Handling
+### Validation and error handling
 
 The system validates surveys before publishing:
 
 - Ensures due date is in the future (cannot publish with past due date)
 - Validates JSON structure of survey questions
 - Checks for required fields (title, question structure)
+- **Rejects duplicate question names** — every question in a published survey must have a unique name (see below)
 
 If validation fails, an error message explains the issue and you must fix errors before publishing.
+
+#### Duplicate question names
+
+Each question's **Question name** field sets the key under which its answer is stored. If two questions share the same name, one answer overwrites the other, and a required question can appear complete while its answer is actually missing.
+
+Pawtograder refuses to publish a survey that contains duplicate question names. The error message names each repeated question, where it appears in the survey, and how to rename it. Drafts may keep duplicates so that work in progress can be saved and fixed later.
+
+<Note>
+Some question types — dropdowns, matrices, and questions with a **Value name** set — cannot be renamed in the Visual Builder. Use the JSON editor to rename those questions directly.
+</Note>
+
+If a survey was published before this check was introduced and its questions share a name, it can still be closed and its responses viewed. However, reopening it (changing status from closed back to published) is refused until the duplicate names are resolved. Renaming questions while the survey is closed is allowed.
 
 ## Saving Survey Templates
 

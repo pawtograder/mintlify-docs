@@ -47,6 +47,45 @@ A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
 
+Within those pages, some actions are gated on capabilities that only certain grader roles hold. By default, graders cannot create or edit assignments, manage review assignments, publish groups, or manage roles. Instructors can create custom grader roles with additional capabilities — see [Custom grader roles](#custom-grader-roles) below.
+
+## Custom grader roles
+
+Every class has four built-in roles: **instructor**, **grader**, **student**, and **admin**. Instructors can also create custom grader roles (such as "Head TA") that extend the default grader role with additional capabilities.
+
+### Capabilities
+
+Capabilities control access to specific actions within a course. The available capabilities are:
+
+| Capability | What it allows |
+|---|---|
+| `manage_assignments` | Create and edit assignments, sync repositories |
+| `manage_review_assignments` | Bulk assign and reassign grading |
+| `publish_groups` | Create, edit, and publish student groups |
+| `manage_roles` | Create and manage custom grader roles (instructor only) |
+
+The default grader role has none of these capabilities. The instructor role has all four. A custom grader role can add any capability except `manage_roles`.
+
+### Creating a custom grader role
+
+1. Navigate to **Course Settings → Enrollments** (instructor only)
+2. Open the **Roles** tab
+3. Click **Create Role**
+4. Enter a name for the role (e.g., "Head TA")
+5. Check the capabilities you want to grant
+6. Click **Save**
+
+### Assigning a custom role to a grader
+
+1. Navigate to **Course Settings → Enrollments**
+2. Find the grader in the roster
+3. Open their role dropdown and select the custom role
+4. The change takes effect immediately
+
+<Note>
+Only graders can be assigned to custom roles. Changing someone's app role (e.g., from grader to instructor) always moves them to that role's default, overriding any custom role assignment.
+</Note>
+
 ## Key features
 
 - **Assignments**: distribute and grade programming assignments with autograders,

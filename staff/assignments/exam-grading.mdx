@@ -1,0 +1,133 @@
+---
+title: "Exam grading (scan & OCR)"
+description: "Upload scanned paper exams, OCR student answers, match pages to students, and create graded submissions automatically"
+icon: "file-scan"
+---
+
+# Exam grading (scan & OCR)
+
+Pawtograder can grade paper exams by scanning them, running OCR on each answer region, matching pages to students, and creating graded submissions for hand grading. The workflow has three stages: define the exam template, upload scanned PDFs, and review the student matches before finalizing.
+
+<Note>
+Exam grading is controlled by a course feature flag. If you do not see the **Exam (Scan & OCR)** option when creating an assignment, ask your Pawtograder administrator to enable the `exams` feature flag for your course.
+</Note>
+
+## Creating an exam assignment
+
+When creating a new assignment, set **Assignment type** to **Paper exam (scan & OCR)**. This pins the assignment to no repository and individual submissions, and after saving you are taken directly to the exam management pages.
+
+<Note>
+The assignment type cannot be changed after creation.
+</Note>
+
+## Stage 1: Template and regions
+
+Navigate to **Exam (Scan & OCR) → 1. Template & Regions** in the assignment's left-hand nav.
+
+### Uploading the template
+
+Upload the blank exam as a PDF. Pawtograder rasterizes each page in the browser and stores the page images. You can replace the template at any time before students are matched; replacing it clears any regions you have drawn.
+
+### Defining question regions
+
+After uploading, the **Region Editor** shows each template page. You draw bounding boxes on the pages to tell Pawtograder where to look for each student's answers and identity.
+
+**Region types:**
+
+| Type | Purpose |
+|---|---|
+| **Answer region** | The area where a student writes their answer to a specific question. Must be attached to a question. |
+| **Student name region** | Where the student writes their name. Used for matching. |
+| **Student ID region** | Where the student writes their SIS ID. Used for matching. |
+
+**Drawing a region:**
+
+1. Select the region type from the **Draw a region** panel
+2. For answer regions, also select which question the region belongs to
+3. Drag on the page image to draw the bounding box
+4. Click a drawn region to remove it
+
+**Question structure:**
+
+Questions are organized in a three-level hierarchy: **Parts** (level 1) → **Questions** (level 2) → **Items** (level 3). Use the **Question structure** panel to add and label questions. Each leaf question (one with no children) has an answer type and a point value.
+
+Answer types:
+
+| Type | Description |
+|---|---|
+| `free_text` | Open-ended written answer, graded by rubric |
+| `short_answer` | Brief written answer, graded by rubric |
+| `multiple_choice` | One of several labeled options |
+| `numeric` | A number, with optional tolerance |
+| `true_false` | True or False |
+
+**Auto-extraction:**
+
+Click **Auto-extract (Gemini)** to have Pawtograder propose a question structure and regions from the template pages using Google Gemini. Review the proposal carefully before saving — auto-extraction replaces the current structure and clears any answer key.
+
+**Saving:**
+
+Click **Save structure** to persist the question tree and regions. The rubric is built automatically from the question structure the first time you save, if the assignment has a grading rubric configured. Subsequent saves leave an existing rubric untouched; click **Build rubric from exam** to rebuild it after making structural changes.
+
+<Warning>
+Save the structure before clicking **Build rubric from exam**. The rubric is built from the saved questions, so unsaved edits would be ignored.
+</Warning>
+
+## Stage 2: Scan and match
+
+Navigate to **Exam (Scan & OCR) → 2. Scan & Match**.
+
+### Uploading scans
+
+Upload a single PDF containing all scanned student exams, concatenated in any order. Set **Pages/exam** to the number of pages in each student's exam (this must match the template's page count). Click **Upload scans** to upload and create a scan batch.
+
+### Processing (OCR and matching)
+
+After uploading, click **Process (OCR + match)** on the batch. Pawtograder:
+
+1. Splits the PDF into per-student groups by the pages-per-exam setting
+2. Runs OCR on each answer region and identity region
+3. Attempts to match each exam to a student by name and SIS ID
+
+The batch status updates as processing proceeds: `uploaded` → `ocr` → `matching` → `review`.
+
+### Reviewing matches
+
+Once the batch reaches `review` status, the **Match Review** table appears. Each row shows one student's exam with:
+
+- **Detected** — the name and SIS ID read from the identity regions
+- **Match** — the confidence and status of the automatic match
+- **Student** — a dropdown to select or override the matched student
+- **Actions** — **Confirm** to accept the match, **Skip** to exclude this exam
+
+Match statuses:
+
+| Status | Meaning |
+|---|---|
+| `suggested` | Pawtograder found a likely match; review and confirm |
+| `confirmed` | Match accepted; ready to finalize |
+| `unmatched` | No match found; select a student manually |
+| `skipped` | Excluded from finalization |
+| `created` | Submission already created |
+
+Selecting a student from the dropdown sets the status to `suggested`. Click **Confirm** to mark it ready for finalization.
+
+### Finalizing
+
+Once you have confirmed all the matches you want to finalize, click **Create N submission(s)**. Pawtograder creates a graded submission for each confirmed match, attaching the OCR results and cropped answer images as an artifact.
+
+Finalization runs asynchronously. Refresh the page to see updated statuses. If finalization fails partway through, confirmed rows without a submission can be re-queued by clicking **Create submission(s)** again.
+
+## Grading finalized submissions
+
+Finalized submissions appear in the assignment's **Grading Assignments** page like any other submission. The submission's **Files** tab shows the exam artifact: each question's answer region as a cropped image alongside the OCR text. Graders apply rubric checks as usual.
+
+## In-app quizzes
+
+For assignments that do not require a physical exam, use **Assignment type: Quiz / worksheet (in-app)** instead. The quiz builder lets you author questions with an answer key; objective questions (multiple choice, numeric, true/false) are graded automatically when students submit.
+
+Navigate to **Quiz (Questions & Grading)** in the assignment's left-hand nav to build the quiz. Students take it at **Assignments → [assignment name] → Take the quiz →**.
+
+<Note>
+The quiz builder locks once students have submitted, to prevent orphaning their saved answers. Duplicate the assignment to make changes after submissions exist.
+</Note>
