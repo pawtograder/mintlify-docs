@@ -6,6 +6,36 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Office hours
+- **Student onboarding hints for office hours** — A new course feature flag, **Office hours: hints for new students** (`office-hours-student-onboarding`), shows first-time students guided hints on the office hours pages. When enabled, students see up to two hints in order: one pointing at the queue list when the course has two or more text queues, and one on the **New Request** button that says whether staff are on duty and, if not, when the next office hours start. The hints close on click, outside click, or Escape, and stop appearing permanently once the student clicks an enabled **New Request** button. The new request form also gets longer helper text on the **Help Queue**, **Template**, and **Description** fields. The flag is off by default. See [Feature flags](/staff/feature-flags) ([#1348](https://github.com/pawtograder/platform/pull/1348))
+- **"What's new" walkthrough for ticket escalation** — The first time a staff member opens the office hours manage view, a dialog introduces ticket escalation: the **Escalate** button, what an escalated ticket looks like, how **Resolve** now checks in with the student, the new **End ticket** button, and a comparison table. A **What's new** button in the queue header reopens the tour at any time. Students never see the prompt or button. Completion is remembered per user across all browsers and devices ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Dismissed walkthrough stays closed across remounts** — The office hours "What's new" walkthrough no longer reopens when navigating between pages in the manage view while the database write is still in flight ([#1418](https://github.com/pawtograder/platform/pull/1418))
+
+#### Roster and permissions
+- **`manage_roster` capability** — Instructors can now delegate roster tasks to a custom role such as a Head TA. Anyone with `manage_roster` who is not an instructor can remove students, change a student's SIS sync override, cancel pending student invitations, and add new students. They cannot touch grader or instructor rows, change anyone's role, or create invitations. Lab section management (create, edit, delete sections, meetings, and leaders) and class section renaming also follow `manage_roster`. The capability is on the default instructor role only, so no one gains or loses access on day one. See [Course Settings](/staff/course-settings) ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Gradebook
+- **Capability-gated gradebook access** — Who can view and arrange the gradebook is now decided by a capability, consistent with the broader capability system ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Assignments
+- **Fix repository web links for Forgejo assignments** — Repository links on Forgejo-backed assignments now point to the correct URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Forgejo: move students between groups, revoke leavers, and give staff write access** — When students join or leave groups on Forgejo-backed assignments, Pawtograder now moves them between Forgejo groups, revokes access for students who leave, and grants staff write access to repositories ([#1397](https://github.com/pawtograder/platform/pull/1397))
+
+#### Exams
+- **Consistent zoom on answer crops** — Every answer crop in the exam grading view now renders at the same zoom level, so graders can compare answers side by side without visual inconsistency ([#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Wider Auto-extract regions** — Auto-extract regions are now widened to cover the full area where students write, reducing missed content at region edges ([#1392](https://github.com/pawtograder/platform/pull/1392))
+- **Scan alignment before reading regions** — Scans are now aligned with the template before regions are read, improving accuracy on skewed or shifted pages ([#1331](https://github.com/pawtograder/platform/pull/1331))
+- **Prevent concurrent batch processing** — Clicking **Process** while a batch is already being processed is now refused, preventing duplicate processing runs ([#1355](https://github.com/pawtograder/platform/pull/1355))
+- **Auto-extract preserves points on questions with parts** — Points set by Auto-extract on a question with sub-parts are no longer discarded ([#1391](https://github.com/pawtograder/platform/pull/1391))
+
+#### Bug fixes
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time, so overdue surveys turn red on time without a page reload ([#1184](https://github.com/pawtograder/platform/pull/1184))
+- **Handout syncs skipped for Forgejo repositories** — Handout sync jobs are no longer queued for Forgejo-backed repositories, which do not support the sync workflow ([#1425](https://github.com/pawtograder/platform/pull/1425))
+
 ## August 2026
 
 ### August 19, 2026
