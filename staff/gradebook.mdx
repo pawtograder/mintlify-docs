@@ -6,6 +6,20 @@ icon: "table"
 
 # Gradebook
 
+## Who can access the gradebook
+
+The staff gradebook is controlled by the **`manage_gradebook`** capability. By default, only instructors hold it. Graders on the default grader role cannot open the gradebook page, read other students' scores, override a score, or use **Convert Missing to 0**.
+
+An instructor can grant the capability to a custom role (for example, a Head TA role) from **Course Settings → Roles**. A staff member with `manage_gradebook` gets exactly what an instructor has: they can open the gradebook, read every student's scores, override cells, use Convert Missing to 0, and add, edit, move, import, release, and delete columns, groups, and topics.
+
+**Download Gradebook** (CSV export) remains instructor-only regardless of the capability.
+
+Students still see their own released grades in the student gradebook and in What-If mode, regardless of who holds `manage_gradebook`.
+
+<Note>
+The **Gradebook** link in the course navigation and the **Manage gradebook** entry in the global search palette are hidden for staff who do not hold `manage_gradebook`. A staff member who opens the gradebook URL without the capability is redirected to the course home page.
+</Note>
+
 <Frame>
   <img src="/images/staff/gradebook-grid-1787282079132.png" alt="Gradebook grid with one row per student, Class Section and Lab Section columns, two assignment columns showing Max 100, a Skill #12 column marked with a lock icon, calculated skills columns, and a footer with Download Gradebook, Import Columns, and Add Column" />
 </Frame>

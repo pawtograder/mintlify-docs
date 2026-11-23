@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Office hours
+- **Ticket escalation** — When you cannot finish a student's question, a purple **Escalate** button lets you hand the ticket to another staff member with a note on what you tried. The ticket returns to the queue above every normal ticket so the student does not restart at the back of the line. A purple badge marks it, and the queue row previews your note. When you press **Resolve**, the student gets a 10-minute check-in; if they say the problem is not fixed, the ticket is escalated automatically. A new red **End ticket** button closes a ticket permanently with no check-in. A **What's new** walkthrough opens the first time a staff member visits the manage view and explains all of this in five steps ([#1261](https://github.com/pawtograder/platform/pull/1261))
+- **Student onboarding hints** — A new course feature flag, **Office hours: hints for new students**, adds guided popovers to the student office hours page. One points at the queue list when the course has two or more text queues; the other appears below the **New Request** button and says whether staff are on duty, with the next scheduled office hours if nobody is. Both close after the student clicks an enabled **New Request** button, and the completion is remembered across browsers and devices. The new request form also gets longer helper text on the Help Queue, Template, and Description fields while the flag is on. Off by default ([#1348](https://github.com/pawtograder/platform/pull/1348))
+
+#### Gradebook
+- **`manage_gradebook` capability** — The staff gradebook is now controlled by the `manage_gradebook` capability rather than the instructor role. By default only instructors hold it, so graders on the default grader role can no longer open the gradebook, read other students' scores, override cells, or use Convert Missing to 0. An instructor can grant the capability to a custom role such as Head TA. Download Gradebook (CSV export) remains instructor-only ([#1356](https://github.com/pawtograder/platform/pull/1356))
+
+#### Assignments
+- **`manage_student_repositories` capability** — The **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page now require the `manage_student_repositories` capability. By default only instructors hold it. The **Repository Status** nav link is also hidden without it. **Sync** remains controlled by `manage_assignments`. Staff without either capability can still read the repository table ([#1384](https://github.com/pawtograder/platform/pull/1384))
+
+#### Cloud workspaces (Forgejo)
+- **Staff write access to Forgejo repos** — Course staff (instructors, graders, and admins) now get write access to every student and group Forgejo repository through a `{slug}-staff` team in the class's Forgejo org. The team is kept in sync automatically; removing a staff member from the course removes them from the team within minutes ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Move students between Forgejo groups** — Instructors can now move students between Forgejo assignment groups. Previously this was refused ([#1397](https://github.com/pawtograder/platform/pull/1397))
+- **Forgejo group leavers lose repo access** — When a student leaves a Forgejo assignment group, their write access to the group's repository is revoked automatically. Rejoining the group restores access ([#1397](https://github.com/pawtograder/platform/pull/1397))
+
+#### Bug fixes
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time, so it turns **Overdue** at the right moment without a page reload ([#1013](https://github.com/pawtograder/platform/pull/1013))
+
 ## August 2026
 
 ### August 19, 2026
