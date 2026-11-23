@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 23, 2026
+
+#### Custom roles and capabilities
+
+- **Gradebook access controlled by capability** — The staff gradebook now requires the `manage_gradebook` capability. By default only instructors hold it, so graders on the default grader role can no longer open the gradebook, read student scores, or override grades. An instructor can grant `manage_gradebook` to a custom role such as a Head TA. Students still see their own released grades. The gradebook page, the Gradebook sidebar link, the "Manage gradebook" search result, and the Grades card on a student's profile page all follow this capability ([#1356](https://github.com/pawtograder/platform/pull/1356))
+- **Roster management delegatable to custom roles** — A new `manage_roster` capability covers lab sections, class section renaming, and student enrollment actions. An instructor can grant it to a custom role such as a Head TA. A non-instructor with `manage_roster` can add, remove, and manage students only — not graders or instructors. The **Enrollments** menu entry now appears for anyone holding `manage_roster`. Only instructors can set a lab section's SIS CRN ([#1419](https://github.com/pawtograder/platform/pull/1419))
+- **Group management delegatable to custom roles** — A new `manage_groups` capability covers setting group mentors, renaming groups, and copying groups from another assignment. Staging group changes and publishing them remain on the existing `publish_groups` capability. Also fixed a privacy bug where any enrolled user could read every course's group memberships ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Repository repair actions delegatable to custom roles** — A new `manage_student_repositories` capability covers the **Retry creation**, **Fix Permissions**, and **Cleanup individual repositories** buttons on the Repository Status page. The **Sync** button remains on `manage_assignments`. Staff without either capability can still view the repository status table ([#1384](https://github.com/pawtograder/platform/pull/1384))
+
+#### Office hours
+
+- **First-visit hints for students** — A new course feature flag, **Office hours: hints for new students** (`office-hours-student-onboarding`), adds guided popovers to the office hours pages. When enabled, students see a queue description hint (when the course has two or more text queues) and a New Request hint that shows whether staff are on duty and when the next office hours start. Hints close after the student clicks an enabled New Request button, and that completion is saved per user across all browsers and devices. The new request form also shows longer helper text on the Help Queue, Template, and Description fields. The flag is off by default ([#1348](https://github.com/pawtograder/platform/pull/1348))
+
+#### Bug fixes
+
+- **Exam answer crops rendered at consistent zoom** — All answer crop images on the exam grading page now render at the same zoom level ([#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Exam auto-extract regions widened** — Auto-extract regions now extend to where students write, reducing missed answers ([#1392](https://github.com/pawtograder/platform/pull/1392))
+- **Exam scan alignment** — Scans are now aligned with the template before regions are read ([#1331](https://github.com/pawtograder/platform/pull/1331))
+- **Exam batch processing guard** — The Process button is now disabled while a batch is already being processed ([#1355](https://github.com/pawtograder/platform/pull/1355))
+- **Office hours walkthrough stays dismissed** — A dismissed office hours walkthrough no longer reopens when the page remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time so it turns Overdue at the correct moment ([#1184](https://github.com/pawtograder/platform/pull/1184))
+- **Forgejo repository web links** — Repository web links for Forgejo assignments now point to the correct URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+
 ## August 2026
 
 ### August 19, 2026
