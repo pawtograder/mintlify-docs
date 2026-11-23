@@ -444,6 +444,14 @@ customLabel(100 * score / max_score, [
 `customLabel` returns the value from the first row whose threshold the input meets or exceeds, so list thresholds from highest to lowest. If no row matches, it returns the literal string `Error`.
 </Warning>
 
+## Access control
+
+By default, only instructors can open the staff gradebook. Graders on the default grader role have no gradebook entry and cannot read other students' scores or override grades.
+
+An instructor can grant gradebook access to a custom role (for example, a Head TA role) by adding the `manage_gradebook` capability to that role from **Course Settings → Enrollments → Roles**. A grader with `manage_gradebook` can do everything an instructor can in the gradebook, except download the gradebook CSV (that remains instructor-only).
+
+Students always see only their own released grades, regardless of this setting.
+
 ## Exporting Grades
 
 You can export gradebook data to CSV for external analysis or record-keeping. The export is built in the browser from data already loaded, so it downloads immediately.
