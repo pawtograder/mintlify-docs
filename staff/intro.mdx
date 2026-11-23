@@ -37,7 +37,7 @@ assume the relevant module is enabled.
 
 ### What graders see
 
-Graders get a smaller navigation set than instructors. A grader has **no
+Graders get a smaller navigation set than instructors. A grader on the **default grader role** has **no
 Gradebook entry at all** — neither the staff gradebook nor the student one — and
 does not see these **Course Settings** entries: **Enrollments**, **LMS (LTI)
 Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due
@@ -46,6 +46,22 @@ Date Extensions**, **Audit Log**, **Emailer**, **Workflow Runs**.
 A grader does see **Manage Assignments**, **Discussion**, **Office Hours**,
 **Surveys**, **Polls**, and **Course Settings → Discord**, **Lab Sections**,
 **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**.
+
+### Custom roles and capabilities
+
+Instructors can create custom roles (for example, a Head TA role) and grant them
+specific capabilities. A capability unlocks a feature for everyone on that role,
+without giving them full instructor access. Current capabilities include:
+
+- **`manage_gradebook`** — see and edit the staff gradebook, override scores, use Convert Missing to 0, and arrange columns. Without it, a grader cannot open the gradebook page at all.
+- **`manage_student_repositories`** — use Retry creation, Fix Permissions, and Cleanup on the Repository Status page.
+- **`manage_assignments`** — save assignment configuration and queue handout syncs.
+- **`manage_review_assignments`** — create and edit review assignments.
+- **`manage_roster`** — manage lab sections, rename class sections, and add or remove students from the Enrollments page. A non-instructor with this capability can only act on students, not on graders or instructors.
+- **`manage_roles`** — create and edit custom roles.
+- **`publish_groups`** — publish group formation.
+
+Instructors always hold every capability. To give a custom role a capability, go to **Course Settings → Enrollments**, open the **Roles** tab, and edit the role.
 
 ## Key features
 
