@@ -6,6 +6,35 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 6, 2026
+
+#### Authentication
+- **Sign in with Pawtograder for Forgejo and Coder** — Pawtograder now acts as an OAuth 2.1 / OIDC identity provider, so Forgejo and Coder can offer "Sign in with Pawtograder". A consent page at `/oauth/consent` shows the requesting application and scopes, records Approve or Deny, and skips the prompt when consent was already given. Sign-up carries the OAuth return path through email confirmation so a new user can finish authorizing without losing their place ([#1164](https://github.com/pawtograder/platform/pull/1164))
+- **Redirect path hardening** — Sign-in, sign-up, and the auth callback now reject protocol-relative paths, control characters, and backslashes, and require the redirect to resolve to the same origin ([#1164](https://github.com/pawtograder/platform/pull/1164))
+
+#### Roles and permissions
+- **Class roles and capabilities** — Every class now has default instructor, grader, student, and admin roles. Each person in a class is linked to one of them, and each role carries a set of capabilities (`manage_review_assignments`, `publish_groups`, `manage_assignments`, `manage_roles`). Instructors can create custom grader roles that extend the default grader role with additional capabilities. The `useCapability()` hook lets pages show or hide controls based on what the current user can do, using the same rule the database policies enforce ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1147](https://github.com/pawtograder/platform/pull/1147), [#1189](https://github.com/pawtograder/platform/pull/1189))
+
+#### Surveys
+- **Survey drafts always autosave** — Answers in progress now autosave on every survey, regardless of whether response editing is allowed. Previously, autosave only ran when **Allow Response Editing** was on, so students who closed the page before clicking Complete lost their answers on most surveys. The **Allow Response Editing** setting still controls whether a submitted response can be changed ([#977](https://github.com/pawtograder/platform/pull/977), [#1067](https://github.com/pawtograder/platform/pull/1067))
+- **Survey pages show the database title** — The survey page heading now shows the title you set in the survey form, not the placeholder "Survey Name" that the visual builder writes into the SurveyJS JSON. Renaming a survey while a student is answering it updates the heading without rebuilding the model or losing typed answers ([#1002](https://github.com/pawtograder/platform/pull/1002), [#1167](https://github.com/pawtograder/platform/pull/1167))
+
+#### Assignments
+- **Assignment provider and GitHub guards** — First step of code-walk assignment improvements: an assignment provider and GitHub guards for the assignment workflow ([#1128](https://github.com/pawtograder/platform/pull/1128))
+- **Actions job token verification** — GitHub Actions job tokens are now verified by issuer and default audience ([#1153](https://github.com/pawtograder/platform/pull/1153))
+- **Code-walk release state in submissions table** — The submissions table now shows the code-walk release state for each submission ([#1151](https://github.com/pawtograder/platform/pull/1151))
+
+#### Groups
+- **Fail-safe group repository deletes** — Group repository deletes now fail safely, and pre-release group repositories are deferred ([#1174](https://github.com/pawtograder/platform/pull/1174), [#1175](https://github.com/pawtograder/platform/pull/1175))
+
+#### Realtime
+- **Class row updates broadcast to students** — An `AFTER UPDATE` trigger on `classes` now sends a `classes_update` broadcast to the class's students and staff channels, so pages can react to course configuration changes without a reload ([#1145](https://github.com/pawtograder/platform/pull/1145))
+
+#### Operations
+- **WAL-G retention via CronJob** — WAL-G retention changes are now applied through a CronJob so they no longer require a Postgres restart (chart 0.3.29) ([#1124](https://github.com/pawtograder/platform/pull/1124))
+
 ## August 2026
 
 ### August 19, 2026
