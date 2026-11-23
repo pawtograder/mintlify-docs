@@ -6,6 +6,38 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 4, 2026
+
+#### Infrastructure
+- **CI: disposable-database marker for privileged BYOK tests** — The end-to-end pipeline now marks each run's throwaway database with a random Vault secret and exports its fingerprint, so credential-lifecycle specs can verify they are running against a fresh, isolated database and refuse to run against a shared or developer database ([#1191](https://github.com/pawtograder/platform/pull/1191))
+
+## October 2026
+
+### October 30, 2026
+
+#### Infrastructure
+- **WAL-G retention moved to its own CronJob (chart 0.3.29)** — Changing the number of base backups to retain no longer restarts Postgres. A new `walg-retention` CronJob runs `wal-g delete retain FULL` hourly in its own pod, separate from the primary's sidecar. Set `postgres.walg.retention.keepBackups` to control retention without touching the StatefulSet. A `PawtograderWALRetentionStale` alert fires if the job has not succeeded in 26 hours, and the maintenance script waits for any in-flight retention job before declaring the fence complete ([#1124](https://github.com/pawtograder/platform/pull/1124))
+
+### October 28, 2026
+
+#### Grading
+- **Code walk release state in the submissions table** — On assignments with a code-walk rubric, the submissions table now shows a separate **Code walk released** column alongside the existing **Grading released** column. The column shows whether each student's code walk is released, complete but not yet released, incomplete, or absent. A filter lets you scope the table to released or unreleased code walks ([#1151](https://github.com/pawtograder/platform/pull/1151))
+
+### October 23, 2026
+
+#### Grading
+- **Bulk release and unrelease of code walks** — The grading status panel now has **Release code walks** and **Unrelease code walks** buttons for assignments with a code-walk rubric. Releasing publishes every completed code walk for the assignment in one step; incomplete code walks are skipped and the toast says how many were skipped. Unreleasing reverses any release, including ones made per submission before the review was finished. Grading, self-review, and meta-grading reviews are not affected. Previously, code walks could only be released one submission at a time ([#1130](https://github.com/pawtograder/platform/pull/1130))
+- **Hidden autograder tests no longer exposed by non-grading releases** — Releasing a code walk, self-review, or meta-grading review from the submission page previously published the submission's hidden autograder tests. Only releasing the grading review now exposes hidden tests ([#1130](https://github.com/pawtograder/platform/pull/1130))
+
+### October 16, 2026
+
+#### Groups
+- **Safer group repository deletes and deferred repo creation** — Publishing group changes no longer fails when a group's repository has workflow telemetry rows. A new `delete_repository_rows` helper clears check runs and workflow events before deleting the repository, and refuses to delete a repository that still has submissions. Group repositories for assignments with a future release date are now created at release time rather than immediately on publish, so students do not get early access and repos are pinned to the latest template commit at release. The publish confirmation reports how many repos will be created at release. Clearing a future release date while groups are still waiting for repos is blocked ([#1175](https://github.com/pawtograder/platform/pull/1175))
+- **Students who leave a group lose GitHub access** — When the last member leaves a group that is kept because it has submissions, the group's repository is now synced to an empty collaborator list, revoking the departed student's push access ([#1175](https://github.com/pawtograder/platform/pull/1175))
+- **Safer instructor group moves** — Moving a student between groups now validates the destination before removing the student from the old group, so a bad destination can no longer leave a student in no group. Groups with submissions are preserved when the last member is moved out. Cleanup failures after the move (such as a failed archive enqueue) are reported to Sentry but do not abort the move ([#1175](https://github.com/pawtograder/platform/pull/1175))
+
 ## August 2026
 
 ### August 19, 2026
