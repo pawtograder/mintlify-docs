@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 24, 2026
+
+#### Custom staff roles
+- **Staff Roles page** — Instructors can now create custom grader roles (for example, "Head TA") from **Course Settings → Staff Roles**. Each role has its own set of capabilities — such as managing rubrics, sending announcements, mentoring groups, or managing the roster — that can be toggled on or off. Graders are moved between roles from the same page. The Enrollments table shows each grader's current role name. See [Staff Roles](/staff/course-settings#staff-roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Capability: edit rubrics** — A custom role can be given the **Manage rubrics** capability, allowing graders on that role to create and edit grading rubrics ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Capability: send announcements** — A custom role can be given the **Send announcements** capability, allowing graders on that role to send emails from **Course Settings → Emailer** ([#1420](https://github.com/pawtograder/platform/pull/1420))
+- **Capability: manage groups** — A custom role can be given the **Manage groups** capability, allowing graders on that role to set group mentors and copy groups from a prior assignment ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Capability: manage roster** — A custom role can be given the **Manage roster** capability, allowing graders on that role to add, remove, and invite students, and manage lab and class sections ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Forgejo
+- **Push-mode submissions without the autograder** — On Forgejo, push-mode assignments with the autograder disabled now create submissions directly from default-branch pushes, matching the behavior on GitHub. Late-token policy, empty-submission detection, and deadline enforcement all apply. Forgejo does not retry failed deliveries automatically; a failed push can be redelivered from the hook's delivery history ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Archive unlinked repositories** — Forgejo repositories that are no longer linked to a Pawtograder assignment are archived automatically ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Delete Forgejo assignments and courses** — Deleting an assignment or course in Pawtograder now also removes the corresponding Forgejo repositories and organization ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Autograder on/off toggle** — The autograder can now be turned on or off for Forgejo assignments from the assignment settings ([#1395](https://github.com/pawtograder/platform/pull/1395))
+
+#### Bug fixes
+- **Coder workspace startup** — Fixed a race condition where `~/.gitconfig` could be written by `clone.sh` at the same time as the workspace startup script, causing workspace creation to fail ([#1373](https://github.com/pawtograder/platform/pull/1373))
+- **Exam answer crops** — All answer crops on an exam now render at the same zoom level ([#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Exam auto-extract regions** — Auto-extract regions are now widened to cover the full area where students write ([#1392](https://github.com/pawtograder/platform/pull/1392))
+- **Office hours walkthrough** — Dismissing the office hours walkthrough now persists across page remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+- **Survey countdown on the dashboard** — The survey countdown on the student dashboard now stays live so it turns "Overdue" at the right moment ([#1184](https://github.com/pawtograder/platform/pull/1184))
+
 ## August 2026
 
 ### August 19, 2026
