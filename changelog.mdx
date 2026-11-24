@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 24, 2026
+
+#### Forgejo
+- **Push-mode assignments without an autograder now create submissions on Forgejo** — On a push-mode assignment with the autograder off, every push to the default branch is collected as a submission for hand grading, the same way GitHub handles it. Late, empty, and oversized pushes receive visible rejection messages. Pushes by Pawtograder's admin account, by staff to a student's repository, and handout-sync commits are skipped ([#1430](https://github.com/pawtograder/platform/pull/1430))
+
+### November 23, 2026
+
+#### Staff roles and capabilities
+- **Custom grader roles** — Instructors can create custom grader roles (for example, "Head TA") from **Course Settings → Staff Roles** and choose exactly which capabilities each role holds. Capabilities cover grading, rubric editing, group management, roster management, the Emailer, office hours, discussion, surveys, polls, and flashcards. Graders can be moved between roles from the same page, and the Enrollments table shows each grader's staff role name. See [Staff Roles](/staff/roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Emailer capability** — Instructors can grant the **Send announcements** capability to a custom grader role, allowing those graders to send email from Course Settings → Emailer ([#1420](https://github.com/pawtograder/platform/pull/1420))
+- **Rubric editing capability** — Instructors can grant the **Manage rubrics** capability to a custom grader role, allowing those graders to create and edit grading rubrics ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Group management capabilities** — Instructors can grant **Manage groups** (set mentors, copy groups) and **Publish groups** (create, edit, and move students between groups) to a custom grader role ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Roster management capability** — Instructors can grant the **Manage roster** capability to a custom grader role, allowing those graders to add, remove, and invite students and manage lab sections ([#1419](https://github.com/pawtograder/platform/pull/1419))
+
+#### Forgejo
+- **Forgejo grading: finished Actions runs recorded, org hooks updated, autograder toggle enabled** — Completed and cancelled Forgejo Actions runs now appear in Commit History and the submission Checks tab with a link to the run. The reconciler checks every class org's hook on each pass to ensure it subscribes to run events. Instructors can now turn the autograder on or off for Forgejo assignments from the Autograder page or Edit Assignment; enabling restores or creates `grade.yml` in the handout, and disabling parks it as `grade.yml.disabled` ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo: archive unlinked repos, and delete Forgejo assignments** — When a student leaves a Forgejo group or a group is dissolved, the group's repository is queued for archiving (removing collaborators and renaming it). Forgejo assignments can now be deleted from the assignment page, with their student repositories and handout queued for archiving ([#1398](https://github.com/pawtograder/platform/pull/1398))
+
+#### Bug fixes
+- **Office hours walkthrough stays dismissed** — A dismissed office-hours walkthrough no longer reappears when the component remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+- **Exam answer crops rendered at consistent zoom** — All answer crops on the exam grading page now render at the same zoom level ([#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Survey countdown turns Overdue on time** — The survey countdown on the student dashboard now updates live so it switches to "Overdue" at the correct moment ([#1184](https://github.com/pawtograder/platform/pull/1184))
+
 ## August 2026
 
 ### August 19, 2026
