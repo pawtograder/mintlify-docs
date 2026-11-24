@@ -59,6 +59,60 @@ on a role with the **Send announcements** capability can access **Emailer**, and
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+## Staff Roles
+
+**Course Settings → Staff Roles** (`manage/course/roles`) is where instructors
+create custom grader roles and decide what each role can do. It is instructor-only:
+a grader who opens the URL sees an explanation instead of controls.
+
+The page has a side menu with three sections:
+
+- **Create / Edit Role** — create a new role (it starts as a copy of the default
+  Grader role), or pick an existing role to rename, delete, or open its capabilities.
+  The default Grader role cannot be renamed or deleted. A role with active or
+  removed members cannot be deleted until those members are moved to another role.
+- **Staff & Roles** — the **Staff** tab lists every active grader with a dropdown
+  to move them to a different role. The **Roles** tab lists all roles with their
+  active membership counts.
+- **Roles & Capabilities** — pick a role, then toggle individual capabilities on
+  or off. Capabilities are grouped by where they appear in the app (Manage
+  Assignments, Gradebook, Office Hours, Discussion, Surveys, Polls, Course
+  Settings). Each capability has an info button that explains what it does and
+  where to find it. Changes save immediately.
+
+### Available capabilities
+
+| Capability | What it unlocks |
+| --- | --- |
+| **Manage assignments** | Create and edit assignments, sync student repositories from Repository Status |
+| **Manage rubrics** | Create and edit grading rubrics |
+| **Manage groups** | Set group mentors and copy groups from another assignment |
+| **Publish groups** | Create and edit groups and move students between them |
+| **Manage review assignments** | Create, edit, delete, and clear review assignments |
+| **Grade submissions** | Grade student submissions using the grading rubric |
+| **Handle regrades** | Respond to student regrade requests |
+| **Grant extensions** | Give students due-date extensions |
+| **Manage student repositories** | Retry repository creation and fix permissions |
+| **Manage gradebook** | View the staff gradebook, create columns, import and release grades |
+| **Help students** | Take, assign, resolve, and moderate help requests in Office Hours |
+| **Manage office hours** | Create and edit help request templates and queue settings |
+| **Moderate discussion** | Pin, edit, answer, merge, move, and hide discussion posts |
+| **Send announcements** | Send emails to the class from Course Settings → Emailer |
+| **Manage surveys** | Create, edit, publish, close, and delete surveys |
+| **Run polls** | Create, edit, open, close, and delete live polls |
+| **Manage roster** | Add, remove, and invite students; manage lab sections and class sections |
+| **Manage flashcards** | Create, edit, and delete flashcard decks and cards |
+
+<Note>
+The **Manage roles** capability is always instructor-only and never appears on
+this page. Moving a grader between roles also requires an instructor, even for
+roles that hold other Course Settings capabilities.
+</Note>
+
+Changes to a role take effect the next time the affected grader loads a page.
+Enrollments shows each grader's current role name and updates live when a role
+is renamed or a grader is moved.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
