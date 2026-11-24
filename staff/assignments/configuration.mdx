@@ -209,6 +209,14 @@ the default branch becomes a submission for you to grade by hand** — no
 for your reference solution and grading notes. Pushes to other branches
 are recorded in the commit history but are not submissions.
 
+This behavior applies to both GitHub and Forgejo repositories. On Forgejo,
+each default-branch push is recorded as a submission directly from the
+webhook — the same late-token policy, empty-submission detection, and
+deadline enforcement apply as on GitHub. Because Forgejo does not retry
+failed webhook deliveries automatically, a push that fails to record (for
+example, because the repository was not yet ready) must be redelivered
+manually from the hook's delivery history.
+
 Two ways the checkbox is decided for you:
 
 - Pawtograder **forces it off** for pull-request submission mode
