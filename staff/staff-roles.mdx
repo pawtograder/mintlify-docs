@@ -1,0 +1,97 @@
+---
+title: "Staff Roles"
+description: "Create custom grader roles and control which capabilities each role holds"
+icon: "shield"
+---
+
+# Staff Roles
+
+**Course Settings → Staff Roles** is where instructors create custom grader roles, choose what each role can do, and assign graders to roles. Only instructors can open this page; a grader who navigates to it sees an explanation and no controls.
+
+<Note>
+Staff Roles is an instructor-only page. Graders see a message explaining that only instructors can manage staff roles.
+</Note>
+
+## The three sections
+
+The page has a side menu with three sections:
+
+### Create / Edit Role
+
+Create a new custom role or edit an existing one.
+
+- **Create a role** — opens a dialog to name the new role. The role starts with the same capabilities as the default Grader role. Role names must be unique within the course (case-insensitive) and at most 60 characters.
+- **Edit a role** — pick a role from the dropdown to rename or delete it, or to open its capabilities. The default Grader role cannot be renamed or deleted. A role that still has active or removed graders on it cannot be deleted; the dialog says how many people are on it and asks you to move them first.
+
+### Staff & Roles
+
+Two tabs:
+
+- **Staff** — lists every active grader with a dropdown to move them to a different role. Moving a grader takes effect the next time that person loads a page.
+- **Roles** — lists every role with its active membership count and any removed members.
+
+<Note>
+Moving a grader between roles requires an instructor. The database enforces this even if a future custom role were given `manage_roles`.
+</Note>
+
+### Roles & Capabilities
+
+Pick a role from the dropdown, then toggle its capabilities on or off. Changes save immediately. Each capability has an **ⓘ** button that explains what it does and where to find it in the app.
+
+Capabilities are grouped by the area of the app they affect:
+
+| Area | Section | Capability | What it controls |
+|------|---------|-----------|-----------------|
+| Manage Assignments | Assignments | Manage assignments | Create and edit assignments, including autograder settings. Also syncs student repositories from Repository Status. |
+| Manage Assignments | Rubrics | Manage rubrics | Create and edit grading rubrics under Configure Rubric. |
+| Manage Assignments | Groups | Manage groups | Set group mentors and copy groups from another assignment. |
+| Manage Assignments | Groups | Publish groups | Create and edit groups and move students between them. |
+| Manage Assignments | Reviews | Manage review assignments | Create, edit, delete, and clear review assignments. |
+| Manage Assignments | Grading | Grade submissions | Grade student submissions using the assignment grading rubric. |
+| Manage Assignments | Grading | Handle regrades | Respond to student regrade requests. |
+| Manage Assignments | Grading | Grant extensions | Give students due-date extensions. |
+| Manage Assignments | Repositories | Manage student repositories | Retry repository creation and fix permissions. Also allows cleaning up individual repositories. |
+| Gradebook | Grades | Manage gradebook | View the staff Gradebook, create and arrange columns, import and release grades, and override scores. |
+| Office Hours | Help requests | Help students | Take, assign, resolve, and moderate help requests. Chat as staff, manage queues, and record karma notes. |
+| Office Hours | Settings | Manage office hours | Create and edit help request templates and instructor settings. |
+| Discussion | Posts | Moderate discussion | Pin, edit, answer, merge, move, and hide posts in Discussion. |
+| Surveys | Surveys | Manage surveys | Create, edit, publish, close, delete, and assign surveys. |
+| Polls | Live polls | Run polls | Create, edit, open, close, and delete live polls. |
+| Course Settings | Emailer | Send announcements | Send emails to the class from Course Settings → Emailer. |
+| Course Settings | Enrollments & sections | Manage roster | Add, remove, and invite students in Enrollments. Manage lab sections and rename class sections. Changing staff roles still requires an instructor. |
+| Course Settings | Flashcards | Manage flashcards | Create, edit, and delete decks and cards under Flashcard Decks. |
+
+<Note>
+The `manage_roles` capability (which gates this page) is never shown in the capability list and cannot be given to a grader or custom role. Only instructors hold it.
+</Note>
+
+Capabilities that are not yet in the database do not appear on the page. Unknown capabilities from future features appear under **Other** with their database description.
+
+## How roles work
+
+Every grader is on exactly one role. When a course is created, a default **Grader** role is set up. Custom roles start as a copy of the Grader role's capabilities, and you adjust them from there.
+
+Instructors always have access to everything, regardless of role settings.
+
+Role changes apply the next time the affected person loads a page — there is no need to ask them to log out.
+
+## The Enrollments table
+
+The **Enrollments** table (Course Settings → Enrollments) shows each grader's current role name in the **Role** column. If a grader is on a custom role, the column shows that role's name instead of "Grader". The **Edit Role** dialog in Enrollments also shows the grader's current role name.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings">
+    Index of all Course Settings entries, including Staff Roles.
+  </Card>
+  <Card title="Grading Assignments" icon="pen-to-square" href="/staff/assignments/grading-assignments">
+    How graders are assigned to submissions.
+  </Card>
+  <Card title="Emails" icon="envelope" href="/staff/emails">
+    The Emailer, controlled by the send_announcements capability.
+  </Card>
+  <Card title="Surveys" icon="clipboard-list" href="/staff/surveys">
+    Surveys, controlled by the manage_surveys capability.
+  </Card>
+</CardGroup>
