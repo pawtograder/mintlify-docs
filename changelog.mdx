@@ -6,6 +6,40 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 24, 2026
+
+#### Exams
+- **Auto-extract works on exams of 8 or more pages** — A bug that prevented the auto-extract feature from working on exams with 8 or more pages has been fixed ([#1369](https://github.com/pawtograder/platform/pull/1369))
+- **Exam answer crops render at a consistent zoom** — All answer crops in the exam grading view now render at the same zoom level ([#1323](https://github.com/pawtograder/platform/pull/1323))
+
+#### Forgejo
+- **Push-mode assignments without an autograder now create submissions on Forgejo** — On Forgejo-hosted repositories, a push-mode assignment with no autograder now records a submission directly from each default-branch push, matching the existing GitHub behavior. Late, empty, and oversized pushes are rejected with a visible error on the submission page ([#1430](https://github.com/pawtograder/platform/pull/1430))
+
+### November 23, 2026
+
+#### Staff roles and capabilities
+- **Custom grader roles** — Instructors can now create custom grader roles (for example, "Head TA") from **Course Settings → Staff Roles**. Each role has its own set of capabilities — fine-grained permissions that control what that role can do across assignments, gradebook, office hours, discussion, surveys, polls, and course settings. Graders can be moved between roles from the same page, and the Enrollments table shows each grader's current role name. See [Staff Roles](/staff/staff-roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Surveys gated on manage_surveys capability** — Creating, editing, publishing, closing, and deleting surveys is now gated on the `manage_surveys` capability. Instructors can grant this to a custom grader role from Staff Roles ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Live polls gated on run_polls capability** — Creating, opening, closing, and deleting polls is now gated on the `run_polls` capability ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard deck management gated on manage_flashcards capability** — Creating, editing, and deleting flashcard decks and cards is now gated on the `manage_flashcards` capability ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **Rubric editing gated on manage_rubrics capability** — Editing grading rubrics is now gated on the `manage_rubrics` capability ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Group management gated on manage_groups capability** — Setting group mentors and copying groups is now gated on the `manage_groups` capability ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Roster management gated on manage_roster capability** — Adding, removing, and inviting students is now gated on the `manage_roster` capability ([#1419](https://github.com/pawtograder/platform/pull/1419))
+- **Emailer gated on send_announcements capability** — Sending class emails from the Emailer is now gated on the `send_announcements` capability ([#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Forgejo
+- **Unlinked Forgejo repositories are archived** — Forgejo repositories that are no longer linked to a Pawtograder assignment are automatically archived. Deleting a Forgejo assignment or course also removes the corresponding Forgejo repositories ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Forgejo autograder can be turned on or off** — The autograder on/off toggle now works for Forgejo assignments. Finished Actions runs are recorded, and every organization's webhook is checked ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo repository web links fixed** — Web links to Forgejo assignment repositories now point to the correct URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+- **Handout syncs no longer queued for Forgejo repositories** — Handout sync jobs are no longer incorrectly queued for Forgejo-hosted repositories ([#1425](https://github.com/pawtograder/platform/pull/1425))
+
+#### Bug fixes
+- **Office hours walkthrough stays dismissed** — A dismissed office hours walkthrough no longer reappears when the component remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+- **Survey countdown stays live** — The survey countdown on the student dashboard now updates in real time so it turns Overdue at the right moment ([#1184](https://github.com/pawtograder/platform/pull/1184))
+- **Coder workspace startup race fixed** — The Coder workspace startup script no longer races with `~/.gitconfig` writes from the clone script ([#1373](https://github.com/pawtograder/platform/pull/1373))
+
 ## August 2026
 
 ### August 19, 2026
