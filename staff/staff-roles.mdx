@@ -1,0 +1,93 @@
+---
+title: "Staff Roles"
+description: "Create custom grader roles, choose what each role can do, and assign graders to roles"
+icon: "shield"
+---
+
+# Staff Roles
+
+**Course Settings → Staff Roles** (`manage/course/roles`) is where instructors create custom grader roles, choose which capabilities each role holds, and assign graders to roles. Changes save immediately and take effect the next time that person loads a page.
+
+<Note>
+Only instructors can manage staff roles. A grader who opens this page sees an explanation instead of controls.
+</Note>
+
+## Why custom roles
+
+Every grader starts on the default **Grader** role. By default, graders can grade submissions, help students in office hours, and moderate discussion — but they cannot create assignments, send emails, or manage the roster. Custom roles let you give a subset of graders additional capabilities without making them full instructors.
+
+For example, you might create a **Head TA** role that can also manage rubrics and grant extensions, or a **Lab TA** role that can only help students in office hours.
+
+## The three pages
+
+The Staff Roles workspace has a side menu with three pages.
+
+### Create / Edit Role
+
+**Create a role** opens a dialog where you name the new role. The name must be unique within the course (case-insensitive) and at most 60 characters. A new role starts with the same capabilities as the default Grader role; you then turn capabilities on or off from **Roles & Capabilities**.
+
+**Edit a role** lets you pick an existing custom role to rename or delete it, or to jump to its capabilities. The default Grader role cannot be renamed or deleted.
+
+A role that still has people on it — including removed graders — cannot be deleted. The dialog tells you how many people are on it and asks you to move them first.
+
+### Staff & Roles
+
+The **Staff** tab lists every active grader with a dropdown to move them to a different role. Moving a grader requires an instructor; the database enforces this even if the page is open.
+
+The **Roles** tab lists every role with its active membership count and, in parentheses, any removed graders still on it.
+
+### Roles & Capabilities
+
+Pick a role from the dropdown, then toggle capabilities on or off. Capabilities are grouped by where they appear in the app:
+
+| Area | Section | Capability | What it allows |
+| --- | --- | --- | --- |
+| **Manage Assignments** | Assignments | Manage assignments | Create and edit assignments, including autograder settings. Also syncs student repositories from Repository Status. |
+| **Manage Assignments** | Rubrics | Manage rubrics | Create and edit grading rubrics under Configure Rubric. |
+| **Manage Assignments** | Groups | Manage groups | Set group mentors and copy groups from another assignment. |
+| **Manage Assignments** | Groups | Publish groups | Create and edit groups and move students between them. |
+| **Manage Assignments** | Reviews | Manage review assignments | Create, edit, delete, and clear review assignments. |
+| **Manage Assignments** | Grading | Grade submissions | Grade student submissions using the assignment grading rubric. |
+| **Manage Assignments** | Grading | Handle regrades | Respond to student regrade requests. |
+| **Manage Assignments** | Grading | Grant extensions | Give students due-date extensions. |
+| **Manage Assignments** | Repositories | Manage student repositories | Retry repository creation and fix permissions. Also allows cleaning up individual repositories. |
+| **Gradebook** | Grades | Manage gradebook | View the staff Gradebook, create and arrange columns, import and release grades, and override scores. |
+| **Office Hours** | Help requests | Help students | Take, assign, resolve, and moderate help requests. Chat as staff, manage queues, and record karma notes. |
+| **Office Hours** | Settings | Manage office hours | Create and edit help request templates and instructor settings. |
+| **Discussion** | Posts | Moderate discussion | Pin, edit, answer, merge, move, and hide posts. |
+| **Surveys** | Surveys | Manage surveys | Create, edit, publish, close, delete, and assign surveys. |
+| **Polls** | Live polls | Run polls | Create, edit, open, close, and delete live polls. |
+| **Course Settings** | Emailer | Send announcements | Send emails to the class from Course Settings → Emailer. |
+| **Course Settings** | Enrollments & sections | Manage roster | Add, remove, and invite students in Enrollments. Manage lab sections and rename class sections. Changing staff roles still requires an instructor. |
+| **Course Settings** | Flashcards | Manage flashcards | Create, edit, and delete decks and cards under Flashcard Decks. |
+
+Each capability has an **ⓘ** button that explains it in plain words. The same description is read by screen readers when the switch is focused.
+
+<Note>
+The `manage_roles` capability — which gates this page itself — is always held by instructors and can never be given to a grader or custom role. It does not appear in the capability list.
+</Note>
+
+## How capabilities interact with the interface
+
+Most capabilities are actions. A grader who does not hold a capability cannot perform that action, but they can still see the pages and data they could see before. For example, a grader without `manage_surveys` can still view survey responses; they just cannot create, edit, publish, close, or delete surveys.
+
+A few capabilities also control navigation. See [Feature flags](/staff/feature-flags#feature-flags-control-navigation-not-access) for the distinction between flags (which hide navigation) and capabilities (which gate actions).
+
+## Enrollments shows staff roles
+
+The **Enrollments** table shows each grader's staff role in the **Role** column. If a grader is on a custom role, the column shows the custom role name instead of "Grader". The **Edit Role** dialog in Enrollments still changes the app role (student, grader, instructor); to move a grader between custom roles, use **Staff Roles → Staff & Roles**.
+
+## Live updates
+
+Role changes made by another instructor appear without reloading the page. If you have the Staff Roles page open while a colleague creates, renames, or deletes a role, the page updates automatically.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings">
+    Index of all Course Settings entries, including Staff Roles.
+  </Card>
+  <Card title="Feature flags" icon="sliders" href="/staff/feature-flags">
+    Flags hide navigation; capabilities gate actions. Understanding the difference.
+  </Card>
+</CardGroup>
