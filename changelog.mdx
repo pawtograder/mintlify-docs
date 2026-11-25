@@ -6,6 +6,36 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Office Hours
+- **Queue list stays visible when real-time is disconnected** — When the real-time connection drops, the office hours queue list remains visible and usable. Staff can still see queues, go on duty, and manage requests; updates resume automatically when the connection recovers ([#1065](https://github.com/pawtograder/platform/pull/1065))
+
+#### Staff Roles and Permissions
+- **Custom grader roles with fine-grained permissions** — Instructors can create custom grader roles from **Course Settings → Staff Roles** and assign them to graders. Custom roles can carry any combination of `manage_surveys`, `run_polls`, `manage_flashcards`, and `send_announcements` permissions, expanding a grader's access beyond the default set ([#1010](https://github.com/pawtograder/platform/pull/1010))
+- **Survey and poll actions gated on permissions** — Creating, editing, publishing, closing, and deleting surveys requires `manage_surveys`. Running live polls requires `run_polls`. Graders without these permissions see read-only views ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard deck management gated on permission** — Creating, editing, and deleting flashcard decks requires `manage_flashcards`. Graders without this permission can still view analytics ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **Emailer accessible to custom roles** — The `send_announcements` permission can be granted to a custom grader role, allowing those graders to compose and send course email from the Emailer ([#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Forgejo Support
+- **Forgejo as a git provider** — Pawtograder now supports Forgejo as an alternative to GitHub for hosting student repositories. Assignment pages display the correct repository host name, commit history records Forgejo handout commits, and submissions are created directly from pushes when the autograder is off ([#1413](https://github.com/pawtograder/platform/pull/1413), [#1414](https://github.com/pawtograder/platform/pull/1414), [#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Retry creation and fix permissions work on Forgejo repositories** — The retry-creation and fix-permissions flows now handle Forgejo-backed repositories in addition to GitHub ([#1428](https://github.com/pawtograder/platform/pull/1428))
+- **Git provider checks before GitHub-only calls** — Commit history, group approval, PR mode, and CLI repo commands now check the git provider before making GitHub API calls, so Forgejo courses are not affected by GitHub-specific logic ([#1426](https://github.com/pawtograder/platform/pull/1426))
+- **GitHub-only staff actions hidden for Forgejo courses** — Staff actions that require a GitHub organization are hidden when the course uses Forgejo. Repository analytics are skipped for Forgejo assignments ([#1427](https://github.com/pawtograder/platform/pull/1427))
+- **Archive and delete for Forgejo** — Unlinked Forgejo repositories are archived, and Forgejo assignments and courses can be deleted cleanly ([#1398](https://github.com/pawtograder/platform/pull/1398))
+
+#### Error Surfacing
+- **Shared error mapper replaces "Unknown error" fallbacks** — Most raw database errors are now translated into actionable messages before being shown to users. The group publish flow refuses to proceed when a grader lacks the required permission (`42501`) and surfaces the reason via the error mapper ([#1297](https://github.com/pawtograder/platform/pull/1297), [#1247](https://github.com/pawtograder/platform/pull/1247))
+- **Ops playbook for error surfacing** — A new [error surfacing ops playbook](/developers/monitoring#error-surfacing-ops-playbook) in the developer monitoring docs covers how to triage Postgres error codes, use the shared error mapper, and escalate ([#983](https://github.com/pawtograder/platform/pull/983))
+
+#### What's New
+- **Walkthrough registry and WhatsNew component** — A walkthrough registry and generic `WhatsNew` component are now available for surfacing in-app feature announcements. Run `npm run whats-new` to generate the registry ([#1364](https://github.com/pawtograder/platform/pull/1364))
+
+#### Bug Fixes
+- **Exam auto-extract works on exams of 8 or more pages** — The auto-extract feature for scanned exams now correctly processes exams with 8 or more pages ([#1369](https://github.com/pawtograder/platform/pull/1369))
+
 ## August 2026
 
 ### August 19, 2026
