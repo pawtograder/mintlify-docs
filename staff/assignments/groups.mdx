@@ -36,11 +36,17 @@ can no longer change groups.
 Use **Manage Groups** to create groups manually, add or remove members,
 rename or delete groups, and move students between groups. Changes are
 staged locally and applied in one operation when you click **Publish
-Changes**. Publishing creates or updates memberships, creates GitHub
+Changes**. Publishing creates or updates memberships, creates
 repositories for any new groups, and queues permission-sync jobs. If
 individual items fail, the rest still go through: the failed moves and
 groups stay staged for you to retry, and you get a "Published with
 errors" toast.
+
+If publishing fails with a permission error (`42501`), the page shows
+which students triggered the error and why — typically a student whose
+enrollment is not yet active or who has not accepted their course
+invitation. Remove the affected student, confirm their enrollment, and
+re-publish.
 
 <Note>
 Adding or removing a member notifies the group's other members, including
@@ -122,7 +128,7 @@ The student export (from the **Students** page) uses the same
 
 When a group is published:
 
-- All members are added as collaborators to the shared GitHub repo.
+- All members are added as collaborators to the shared repository.
 - Any member can push; the submission is recorded for the group.
 - All members see the same handgrading feedback and rubric scores,
   unless a part is configured for individual grading.
