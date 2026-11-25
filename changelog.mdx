@@ -6,6 +6,47 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Staff roles and capabilities
+
+- **Custom grader roles** — Instructors can now create custom grader roles with specific capabilities from **Course Settings → Staff Roles**. A custom role starts as a copy of the default grader role and can have individual capabilities turned on or off. This lets instructors control which TAs can manage surveys, run polls, publish groups, send announcements, and more, without changing what instructors and default graders can do on day one. See [Staff Roles](/staff/staff-roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **`manage_surveys` capability** — Survey creation, editing, publishing, closing, and deletion now require the `manage_surveys` capability. By default only instructors hold it; graders can be granted it through a custom role. The CLI `surveys.copy` command also requires `manage_surveys` in the target class ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **`run_polls` capability** — Creating, opening, closing, and deleting live polls now requires the `run_polls` capability. Both instructors and default graders hold it; it can be removed from a custom role. Staff without `run_polls` can still view polls and results ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **`manage_flashcards` capability** — Creating, editing, and deleting flashcard decks and cards now requires the `manage_flashcards` capability. Both instructors and default graders hold it; it can be removed from a custom role. Staff without `manage_flashcards` can still view decks and analytics ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **Emailer capability** — Instructors can grant the `send_announcements` capability to a custom grader role, allowing those TAs to send course-wide emails via the Emailer ([#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Office hours
+
+- **Queue display when real-time is disconnected** — When the real-time connection cannot be established, the office hours queues are now shown using the last known data instead of going blank. The **Real-time updates disconnected** banner still appears, but staff can continue to see and work requests ([#1065](https://github.com/pawtograder/platform/pull/1065))
+
+#### Forgejo support
+
+- **Forgejo handout commit history** — Handout commits made through Forgejo are now recorded in the assignment's commit history, matching the behavior for GitHub-hosted repositories ([#1413](https://github.com/pawtograder/platform/pull/1413))
+- **Retry and Fix Permissions for Forgejo** — The Retry submission and Fix Permissions actions now handle Forgejo-hosted repositories correctly ([#1428](https://github.com/pawtograder/platform/pull/1428))
+- **Forgejo assignment pages** — Assignment pages now display the correct repository host name when the course uses Forgejo ([#1414](https://github.com/pawtograder/platform/pull/1414))
+- **GitHub-only staff actions hidden for Forgejo courses** — Staff actions that only apply to GitHub (such as repo analytics) are now hidden when the course uses Forgejo as its repository host ([#1427](https://github.com/pawtograder/platform/pull/1427))
+- **Forgejo submissions without autograder** — For Forgejo-hosted assignments with the autograder disabled, submissions are now created directly from pushes, matching the behavior for GitHub-hosted repo-only assignments ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Forgejo course and assignment deletion** — Deleting a Forgejo-hosted assignment or course now archives unlinked repositories and cleans up Forgejo resources correctly ([#1398](https://github.com/pawtograder/platform/pull/1398))
+
+#### Error surfacing
+
+- **Clearer permission errors** — Database permission errors (`42501`) are now surfaced with the specific error message rather than a generic "Unknown error" fallback. This applies to group publishing, survey management, and other capability-gated actions ([#1247](https://github.com/pawtograder/platform/pull/1247), [#1297](https://github.com/pawtograder/platform/pull/1297))
+- **Group publish blocked with explanation** — When publishing groups fails because a grader lacks the `publish_groups` capability, the error message now explains why ([#1297](https://github.com/pawtograder/platform/pull/1297))
+
+#### What's New walkthroughs
+
+- **Walkthrough registry** — A new walkthrough registry and generic `WhatsNew` component let the platform surface in-app feature announcements. Run `npm run whats-new` to generate walkthrough entries ([#1364](https://github.com/pawtograder/platform/pull/1364))
+
+### November 24, 2026
+
+#### Bug fixes
+
+- **Exam auto-extract on 8+ pages** — Auto-extract now works correctly on exams with 8 or more pages ([#1369](https://github.com/pawtograder/platform/pull/1369))
+- **Coder startup race condition** — The Coder workspace startup script no longer writes `~/.gitconfig` from `clone.sh`, preventing a race with the startup script that could corrupt git configuration ([#1373](https://github.com/pawtograder/platform/pull/1373))
+
 ## August 2026
 
 ### August 19, 2026
