@@ -1,0 +1,88 @@
+---
+title: "Staff Roles"
+description: "Create custom grader roles with specific permissions for surveys, polls, flashcards, and email"
+icon: "user-shield"
+---
+
+# Staff Roles
+
+Instructors can create custom grader roles that grant specific permissions beyond the default grader access. Custom roles let you give a TA or course assistant exactly the access they need — for example, the ability to manage surveys without giving them full instructor access.
+
+Open **Course Settings → Staff Roles** (`manage/course/staff-roles`) to manage roles for your course.
+
+## Default roles
+
+Pawtograder has three built-in per-course roles:
+
+| Role | What they can do |
+|---|---|
+| **Instructor** | Full management access to the course |
+| **Grader** | Grade submissions, view analytics, and access a subset of Course Settings |
+| **Student** | View course content, submit assignments, and respond to surveys and polls |
+
+The grader role is the starting point for custom roles. A custom role inherits the grader's base access and adds the specific permissions you grant it.
+
+## Custom roles
+
+Custom roles are named roles you define for your course. Each custom role is assigned one or more **permissions** that unlock specific staff actions.
+
+### Creating a custom role
+
+1. Open **Course Settings → Staff Roles**
+2. Click **Create Role**
+3. Enter a name for the role (for example, "Survey Manager" or "Poll Runner")
+4. Check the permissions you want to grant
+5. Click **Save**
+
+Once created, the role appears in the **Enrollments** page, where you can assign it to any grader in the course.
+
+### Available permissions
+
+| Permission | What it unlocks |
+|---|---|
+| `manage_surveys` | Create, edit, publish, close, and delete surveys; view all responses |
+| `run_polls` | Create, open, close, and delete polls |
+| `manage_flashcards` | Create and edit flashcard decks and cards; view all analytics |
+| `send_announcements` | Compose and send email from **Course Settings → Emailer** |
+
+<Note>
+A grader without any custom role can still **view** surveys and polls (read-only access to published content and responses). The permissions above unlock the staff **action** controls — creating, editing, publishing, and deleting.
+</Note>
+
+### Assigning a custom role
+
+1. Open **Course Settings → Enrollments**
+2. Find the grader you want to assign the role to
+3. Open their row and select the custom role from the **Role** dropdown
+4. The change saves immediately
+
+A grader can hold only one custom role at a time. Assigning a new role replaces the previous one.
+
+### Editing and deleting roles
+
+Click the pencil icon on a role row to edit its name or permissions. Changes take effect immediately for all graders currently assigned that role.
+
+Click the trash icon to delete a role. Graders assigned the deleted role revert to the default grader role.
+
+## What graders see by default
+
+Without a custom role, a grader's Course Settings menu shows: **Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**, and **Grading Conflicts**. The following entries are instructor-only by default: **Enrollments**, **LMS (LTI) Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs**.
+
+Granting a custom role does not add new Course Settings entries to the grader's menu — it unlocks the action controls within the pages the grader can already reach, and adds the **Emailer** entry when `send_announcements` is granted.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Surveys" icon="clipboard-list" href="/staff/surveys">
+    Create and manage surveys; the manage_surveys permission controls staff actions.
+  </Card>
+  <Card title="Polls" icon="square-poll-vertical" href="/staff/polls/intro">
+    Run live in-class polls; the run_polls permission controls staff actions.
+  </Card>
+  <Card title="Flashcard Decks" icon="layer-group" href="/staff/flashcard-decks">
+    Author practice decks; the manage_flashcards permission controls staff actions.
+  </Card>
+  <Card title="Emailer" icon="envelope" href="/staff/emails">
+    Send email to course members; requires the send_announcements permission.
+  </Card>
+</CardGroup>
