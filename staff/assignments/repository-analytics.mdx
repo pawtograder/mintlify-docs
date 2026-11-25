@@ -32,6 +32,10 @@ Analytics are off by default. To turn them on:
 
 The assignment must belong to a class with a GitHub organization configured. Only assignments with this flag set are picked up by the daily refresh job and accept manual refresh requests.
 
+<Note>
+Repository analytics collect data from GitHub only. Assignments using Forgejo repositories are skipped by the analytics refresh job and do not appear in the activity chart or items table.
+</Note>
+
 ## Refreshing Data
 
 Two refresh paths exist:

@@ -17,9 +17,14 @@ Open **Course Settings → Flashcard Decks** in the course navigation bar
 
 ## Who can manage decks
 
-Instructors and graders both get the **Flashcard Decks** entry, and both can
-create decks, add and edit cards, delete decks, and read every analytics view.
-Nothing on these pages is instructor-only.
+Instructors always have full access to **Flashcard Decks**. Graders get the
+entry by default and can create decks, add and edit cards, delete decks, and
+read every analytics view.
+
+If your course uses custom grader roles, a grader on a role without the
+`manage_flashcards` capability loses access to **Flashcard Decks**. An
+instructor can grant or revoke this capability per role from
+[**Course Settings → Staff Roles**](/staff/staff-roles).
 
 The `flashcards` feature flag governs the student side only. Turning it off
 removes the **Flashcards** entry from the student course menu, and leaves
