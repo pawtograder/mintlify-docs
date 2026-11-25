@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Staff roles and capabilities
+
+- **Custom grader roles** — Instructors can now create custom grader roles (for example, "Head TA") from **Course Settings → Staff Roles**. Each role starts with the default Grader capabilities, and you choose what to turn on or off: manage assignments, manage rubrics, manage groups, grade submissions, handle regrades, grant extensions, manage student repositories, manage gradebook, help students, manage office hours, moderate discussion, manage surveys, run polls, manage roster, manage flashcards, and send announcements. Changes save immediately and apply the next time that person loads a page. See [Staff Roles](/staff/roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Capability-gated surveys and polls** — The **Manage surveys** and **Run polls** capabilities now gate the staff actions for creating, editing, and running surveys and polls. Graders without these capabilities can still view but not modify ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Capability-gated flashcard management** — The **Manage flashcards** capability now gates deck and card creation, editing, and deletion under Flashcard Decks. Graders without it can still view analytics ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **Capability-gated group management** — The **Manage groups** capability now gates setting group mentors and copying groups from another assignment ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Capability-gated rubric editing** — The **Manage rubrics** capability now controls who can edit grading rubrics. Graders without it can view rubrics but cannot save changes ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Capability-gated emailer** — The **Send announcements** capability now gates access to the Emailer, so a custom role can be given the ability to send class emails ([#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Forgejo
+
+- **Push-mode submissions on Forgejo without an autograder** — For push-mode assignments with the autograder off, Forgejo now creates submissions directly from default-branch pushes, the same way GitHub does. Late, empty, and oversized pushes receive visible rejection messages. Pushes by Pawtograder's admin account, by staff to a student's repository, and handout-sync commits are skipped ([#1430](https://github.com/pawtograder/platform/pull/1430))
+
+#### Bug fixes
+
+- **GitHub-only staff actions hidden without a GitHub org** — Staff actions that require a GitHub organization are now hidden when the course has no GitHub org configured, instead of showing and failing ([#1427](https://github.com/pawtograder/platform/pull/1427))
+- **Repository analytics skips Forgejo** — The daily analytics refresh no longer attempts to collect GitHub analytics for Forgejo repositories ([#1427](https://github.com/pawtograder/platform/pull/1427))
+- **Exam auto-extract works on exams of 8 or more pages** — Auto-extraction of exam answers now handles exams with 8 or more pages correctly ([#1389](https://github.com/pawtograder/platform/pull/1389))
+- **Dismissed walkthroughs stay closed** — A dismissed walkthrough no longer reopens when the component remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+
 ## August 2026
 
 ### August 19, 2026
