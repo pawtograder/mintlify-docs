@@ -16,6 +16,16 @@ artifacts back to Pawtograder. This page is the reference for the
 `pawtograder.yml` config that drives that flow.
 
 <Note>
+**Forgejo assignments** use the same `pawtograder.yml` configuration and
+`assignment-action` workflow, but the workflow runs in Forgejo Actions rather
+than GitHub Actions. The grader repository always stays on GitHub. On Forgejo,
+every push to the default branch becomes a submission through a grading run —
+there is no push-direct submission path yet, so the autograder cannot be turned
+off for Forgejo assignments. Finished Forgejo Actions runs appear in Commit
+History and the submission Checks tab, with links to the run on Forgejo.
+</Note>
+
+<Note>
 The `pawtograder.yml` schema is published at
 `https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json`.
 Reference it from the top of your YAML to get IDE autocomplete:
@@ -152,6 +162,15 @@ Keep `workflow_dispatch:` no matter what else you change. It is how Pawtograder 
 Delete the `push:` block if you would rather students submit deliberately. Pawtograder then dispatches the workflow only when the head commit message of a push contains `#submit`, matched case-sensitively — so `#Submit` and `#SUBMIT` do not count. Warn students if you do this, because nothing in the interface tells them the marker is required. You can also narrow the trigger rather than remove it, by adding branches or restricting paths; the rule is the same either way, in that whatever the `on:` block matches is what becomes a submission.
 
 Assignments configured without an autograder have no `grade.yml` at all. There, every push to the default branch is collected as a submission for hand grading, and neither trigger applies. Pushes to other branches are recorded in the commit history but are not submissions. See [Configuration → Autograder](/staff/assignments/configuration#autograder).
+
+<Note>
+On Forgejo assignments, the autograder cannot be turned off. Because Forgejo has
+no push-direct submission path, a push only becomes a submission through a
+grading run. Enabling or disabling the autograder on a Forgejo assignment updates
+`grade.yml` in the handout repository. Student repositories created before the
+change keep their own copy of `grade.yml` until they are next synced with the
+handout.
+</Note>
 
 ### Students Must Not Edit `grade.yml`
 

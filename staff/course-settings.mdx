@@ -1,6 +1,6 @@
 ---
 title: "Course Settings"
-description: "Index of the 14 Course Settings menu entries, plus the course time zone and the class late token policy"
+description: "Index of the 15 Course Settings menu entries, plus the course time zone and the class late token policy"
 icon: "gear"
 ---
 
@@ -8,21 +8,22 @@ icon: "gear"
 
 **Course Settings** is a menu, not a page. Its trigger is a button with no link:
 clicking it opens the menu and the address in your browser does not change. Every
-course-wide setting lives on one of the menu's 14 entries, so this page is an
+course-wide setting lives on one of the menu's 15 entries, so this page is an
 index — find the entry you want below, then follow the link for the details.
 
 <Frame>
   <img src="/images/staff/course-settings-menu-1787281367482.png" alt="Course navigation with the Course Settings menu open, listing Discord, Enrollments, LMS (LTI) Sync, Feature flags, GitHub Templates, Lab Sections, Flashcard Decks, Discussion Topics, Discussion Engagement, Grading Conflicts, Due Date Extensions, Audit Log, Emailer, and Workflow Runs" />
 </Frame>
 
-## The 14 entries
+## The 15 entries
 
 Routes are relative to `/course/<course_id>/`.
 
 | Entry | Route | What it does | Documentation |
 | --- | --- | --- | --- |
 | **Discord** | `manage/discord` | Connects the course to a Discord server, so help requests and regrade requests post automatically to Discord channels. Also holds the **Calendar Integration** section, which auto-syncs every 5 minutes. | Not yet documented |
-| **Enrollments** | `manage/course/enrollments` | The course roster table, plus a panel of university Student Information System (SIS) section links. | Not yet documented |
+| **Enrollments** | `manage/course/enrollments` | The course roster table, plus a panel of university Student Information System (SIS) section links. The **Role** column shows each grader's staff role. | Not yet documented |
+| **Staff Roles** | `manage/course/roles` | Creates and manages custom grader roles (for example, Head TA), controls which capabilities each role holds, and assigns graders to roles. | [Staff roles](#staff-roles) |
 | **LMS (LTI) Sync** | `manage/course/lti` | Syncs rosters from your LMS and pushes assignment grades back over LTI 1.3. | Not yet documented |
 | **Feature flags** | `manage/course/feature-flags` | Turns course features on or off. Navigation, dashboards, and student tools follow these flags. | [Feature flags](/staff/feature-flags) |
 | **GitHub Templates** | `manage/course/github` | Overrides the handout and solution (grader) template repositories used when creating new assignment repos. Blank fields inherit your GitHub org's default, then the Pawtograder default. | Not yet documented |
@@ -50,13 +51,69 @@ URLs or bookmarking pages. **Lab Sections** opens `manage/course/lab-roster`, an
 
 A grader's menu is a subset of an instructor's. Graders see five entries:
 **Discord**, **Lab Sections**, **Flashcard Decks**, **Discussion Engagement**,
-and **Grading Conflicts**. The other nine — **Enrollments**, **LMS (LTI) Sync**,
-**Feature flags**, **GitHub Templates**, **Discussion Topics**, **Due Date
-Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
+and **Grading Conflicts**. The other ten — **Enrollments**, **Staff Roles**,
+**LMS (LTI) Sync**, **Feature flags**, **GitHub Templates**, **Discussion Topics**,
+**Due Date Extensions**, **Audit Log**, **Emailer**, and **Workflow Runs** — are
 instructor-only.
 
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
+
+## Staff roles
+
+**Course Settings → Staff Roles** (`manage/course/roles`) is where instructors
+create custom grader roles, control what each role can do, and assign graders to
+roles. Only instructors can open this page; a grader who navigates to it sees an
+explanation and no controls.
+
+The page has three sections, accessible from a side menu:
+
+- **Create / Edit Role** — create a new role (it starts as a copy of the default
+  Grader role) or pick an existing role to rename, delete, or edit its
+  capabilities. The default Grader role cannot be renamed or deleted. A role that
+  still has members (including removed graders) cannot be deleted until they are
+  moved to another role.
+- **Staff & Roles** — the **Staff** tab lists every active grader with a
+  drop-down to move them to a different role. The **Roles** tab shows each role
+  and how many people are on it.
+- **Roles & Capabilities** — pick a role, then toggle individual capabilities on
+  or off. Capabilities are grouped by where they appear in the app (Manage
+  Assignments, Gradebook, Office Hours, Discussion, Surveys, Polls, Course
+  Settings). Each capability has an info button that explains what it does and
+  where to find it. Changes save immediately.
+
+### Available capabilities
+
+| Capability | What it allows |
+| --- | --- |
+| `manage_assignments` | Create and edit assignments, including autograder settings. Also syncs student repositories from Repository Status. |
+| `manage_rubrics` | Create and edit grading rubrics. |
+| `manage_groups` | Set group mentors and copy groups from another assignment. |
+| `publish_groups` | Create and edit groups and move students between them. |
+| `manage_review_assignments` | Create, edit, delete, and clear review assignments. |
+| `grade_submissions` | Grade student submissions using the assignment rubric. |
+| `handle_regrades` | Respond to student regrade requests. |
+| `grant_extensions` | Give students due-date extensions. |
+| `manage_student_repositories` | Retry repository creation and fix permissions. |
+| `manage_gradebook` | View the staff gradebook, create columns, import and release grades, and override scores. |
+| `help_students` | Take, assign, resolve, and moderate help requests in Office Hours. |
+| `manage_office_hours` | Create and edit help request templates and office hours settings. |
+| `moderate_discussion` | Pin, edit, answer, merge, move, and hide discussion posts. |
+| `send_announcements` | Send emails to the class from Course Settings → Emailer. |
+| `manage_surveys` | Create, edit, publish, close, delete, and assign surveys. |
+| `run_polls` | Create, edit, open, close, and delete live polls. |
+| `manage_roster` | Add, remove, and invite students. Manage lab sections and rename class sections. |
+| `manage_flashcards` | Create, edit, and delete flashcard decks and cards. |
+
+<Note>
+The `manage_roles` capability is always held by instructors and cannot be granted
+to a grader or custom role. Instructors can always do everything regardless of
+role settings.
+</Note>
+
+The **Enrollments** page shows each grader's staff role in the **Role** column,
+and the **Edit Role** dialog there shows the grader's current role name. Changes
+made on either page appear on the other without a reload.
 
 ## Course time zone
 

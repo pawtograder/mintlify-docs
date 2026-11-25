@@ -6,6 +6,28 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Forgejo support
+
+- **Forgejo grading runs recorded** — Finished Forgejo Actions runs now appear in Commit History and the submission Checks tab, with links to the run on Forgejo. A run that ends without grader feedback produces the same fallback error result as GitHub ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Autograder on/off for Forgejo assignments** — Instructors can now enable or disable the autograder on a Forgejo assignment from the Autograder page or Edit Assignment. Enabling restores a parked `grade.yml`; disabling parks it. Because Forgejo has no push-direct submission path, the autograder cannot be turned off while that limitation exists. Student repositories created before the change keep their own copy of `grade.yml` ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo handout commit history** — Pushes to a Forgejo handout repository are now recorded in the assignment's handout commit history, and the initial commit is recorded when the handout is created ([#1413](https://github.com/pawtograder/platform/pull/1413))
+- **Forgejo assignment pages show the correct host name** — Assignment pages for Forgejo assignments now name Forgejo rather than GitHub where the repository host is mentioned ([#1414](https://github.com/pawtograder/platform/pull/1414))
+- **Retry and Fix Permissions handle Forgejo repositories** — The Retry creation and Fix Permissions actions on the Repositories page now work for Forgejo assignments ([#1428](https://github.com/pawtograder/platform/pull/1428))
+- **Forgejo submissions from pushes when autograder is off** — For Forgejo assignments with the autograder disabled, pushes to the default branch are now collected directly as submissions for hand grading ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Forgejo assignments and courses can be deleted** — Deleting a Forgejo assignment or course now archives unlinked repositories and cleans up Forgejo resources ([#1398](https://github.com/pawtograder/platform/pull/1398))
+
+#### Staff roles and permissions
+
+- **Staff Roles page** — Instructors can now create custom grader roles (for example, Head TA), control which capabilities each role holds, and assign graders to roles from **Course Settings → Staff Roles**. The Enrollments page shows each grader's staff role. See [Course Settings](/staff/course-settings#staff-roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Surveys and polls gated on capabilities** — Survey staff actions require the `manage_surveys` capability; live poll staff actions require `run_polls` ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard deck management gated on capability** — Creating and editing flashcard decks now requires the `manage_flashcards` capability ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **Emailer gated on capability** — Sending announcements from Course Settings → Emailer now requires the `send_announcements` capability, which can be granted to a custom grader role ([#1420](https://github.com/pawtograder/platform/pull/1420))
+- **Rubric editing gated on capability** — Editing rubrics now requires the `manage_rubrics` capability ([#1333](https://github.com/pawtograder/platform/pull/1333))
+
 ## August 2026
 
 ### August 19, 2026
