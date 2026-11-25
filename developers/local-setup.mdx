@@ -358,6 +358,15 @@ npm run cli -- <command> [options]
 npm run cli:repos -- <command> [options]
 ```
 
+### What's New registry
+
+```bash
+# Generate the What's New walkthrough entries for the current build
+npm run whats-new
+```
+
+`npm run whats-new` reads the walkthrough registry and emits the structured entries that the in-app "What's New" component uses to surface recent feature announcements to users. Run it after adding a new walkthrough entry to verify the output before committing.
+
 `npm run cli` runs `cli/index.ts` through `tsx` (`package.json:41-42`); the same source ships to npm as `@pawtograder/cli` (`AGENTS.md:71`). Every command needs a login token, and the full command surface is documented in the [CLI guide](/developers/cli).
 
 ## Continuous integration
