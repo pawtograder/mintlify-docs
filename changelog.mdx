@@ -6,6 +6,31 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Staff roles and permissions
+- **Custom grader roles** — Instructors can now create custom grader roles (for example, "Head TA") from **Course Settings → Staff Roles** and assign individual capabilities to each role. Capabilities cover every major area of the platform: assignments, rubrics, groups, grading, regrades, extensions, gradebook, office hours, discussion, surveys, polls, flashcards, roster, and email. Changes save immediately and take effect the next time the grader loads a page. The **Enrollments** table shows each grader's current role name. See [Staff Roles](/staff/staff-roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Rubric editing gated on `manage_rubrics`** — Editing a grading rubric now requires the `manage_rubrics` capability. Instructors always have it; graders get it through a custom role ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Flashcard deck management gated on `manage_flashcards`** — Creating, editing, and deleting flashcard decks and cards now requires the `manage_flashcards` capability ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **Survey management gated on `manage_surveys`** — Creating, editing, publishing, closing, and deleting surveys now requires the `manage_surveys` capability ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Poll management gated on `run_polls`** — Creating, opening, closing, and deleting polls now requires the `run_polls` capability ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Group management gated on `manage_groups`** — Setting group mentors and copying groups from another assignment now requires the `manage_groups` capability. Renaming groups and copying groups also requires it ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Email sending gated on `send_announcements`** — Sending emails from **Course Settings → Emailer** now requires the `send_announcements` capability ([#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Forgejo support
+- **Forgejo: submissions from pushes without an autograder** — When the autograder is turned off on a Forgejo assignment, pushes to the default branch now create submissions directly, matching the behavior of GitHub assignments ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Forgejo: archive unlinked repos and delete assignments and courses** — Forgejo repositories that are no longer linked to a Pawtograder assignment are archived. Deleting a Forgejo assignment or course now also removes the corresponding Forgejo resources ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Forgejo: grading with Actions** — Finished Forgejo Actions runs are now recorded, every organization's webhook is checked, and the autograder can be turned on or off per assignment ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo: repository web links fixed** — Web links to Forgejo assignment repositories now resolve correctly ([#1415](https://github.com/pawtograder/platform/pull/1415))
+
+#### Bug fixes
+- **GitHub-only staff actions hidden without a GitHub org** — The **Sync Staff Team** button and the **GitHub Diagnostics** action in Enrollments are now hidden for courses that have no GitHub organization configured. Repository analytics are skipped for Forgejo assignments and repositories ([#1427](https://github.com/pawtograder/platform/pull/1427))
+- **Exam auto-extract works on 8 or more pages** — Auto-extracting answers from scanned exams now works correctly when the exam has 8 or more pages ([#1389](https://github.com/pawtograder/platform/pull/1389))
+- **Exam answer crops rendered at consistent zoom** — Every answer crop on an exam now renders at the same zoom level ([#1323](https://github.com/pawtograder/platform/pull/1323))
+- **Office hours walkthrough stays dismissed** — A dismissed office hours walkthrough now stays closed across page remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+
 ## August 2026
 
 ### August 19, 2026
