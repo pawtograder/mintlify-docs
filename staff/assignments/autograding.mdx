@@ -163,6 +163,15 @@ Delete the `push:` block if you would rather students submit deliberately. Pawto
 
 Assignments configured without an autograder have no `grade.yml` at all. There, every push to the default branch is collected as a submission for hand grading, and neither trigger applies. Pushes to other branches are recorded in the commit history but are not submissions. See [Configuration → Autograder](/staff/assignments/configuration#autograder).
 
+<Note>
+On Forgejo assignments, the autograder cannot be turned off. Because Forgejo has
+no push-direct submission path, a push only becomes a submission through a
+grading run. Enabling or disabling the autograder on a Forgejo assignment updates
+`grade.yml` in the handout repository. Student repositories created before the
+change keep their own copy of `grade.yml` until they are next synced with the
+handout.
+</Note>
+
 ### Students Must Not Edit `grade.yml`
 
 Pawtograder records a hash of the handout's `grade.yml`. When a submission arrives, it hashes the copy in the student's repository and compares the two. On a mismatch the submission is **rejected**, and the student is told:
