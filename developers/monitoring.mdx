@@ -159,6 +159,41 @@ Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are indivi
 
 Alert rules live in `charts/pawtograder/templates/prometheus-rules.yaml`, grouped as `pawtograder.backup`, `pawtograder.walg`, `pawtograder.replication`, `pawtograder.postgres`, `pawtograder.app`, `pawtograder.edgefunctions`, `pawtograder.secrets`, and `pawtograder.certs`. Routing is in `alertmanager-config.yaml`.
 
+## Error surfacing ops playbook
+
+When an error surfaces in Bugsink or a user reports unexpected behavior, use this playbook to triage and resolve it.
+
+### 1. Identify the error class
+
+Check the Bugsink issue for the error message and stack trace. Pawtograder maps most database and application errors to a human-readable message before surfacing them to users. If you see a raw Postgres error code (e.g. `42501`), consult the table below.
+
+| Postgres code | Meaning | Common cause in Pawtograder |
+| --- | --- | --- |
+| `42501` | `insufficient_privilege` | A row-level security policy blocked the operation. Most often seen when publishing group changes — the grader performing the publish lacks a required permission. |
+| `23505` | `unique_violation` | A duplicate record was inserted. Usually a race condition on submission creation or group membership. |
+| `23503` | `foreign_key_violation` | A referenced row was deleted before the dependent row. Check for concurrent deletes. |
+
+### 2. Check the shared error mapper
+
+Pawtograder routes most `Unknown error` fallbacks through a shared error mapper that translates Postgres error codes and RLS violations into actionable messages. If a user reports seeing "Unknown error", check whether the mapper covers that code:
+
+- The mapper is invoked on every database mutation in the web app.
+- If the code is not mapped, the raw Postgres message is shown. Add a mapping in the shared error mapper and open a PR.
+- For `42501` errors on group publish specifically: the publish operation now refuses to proceed and surfaces the reason via the mapper rather than silently failing.
+
+### 3. Reproduce with the error mapper output
+
+When the mapper produces a message, it includes the Postgres error code and the operation that failed. Use that to:
+
+1. Identify the RLS policy or constraint that fired.
+2. Check whether the user's role has the required permission.
+3. If the policy is correct and the user should not have access, the error is expected — document it for the user.
+4. If the policy is wrong, fix it in the database migrations and update the mapper message.
+
+### 4. Escalate
+
+If the error is not covered by the mapper and you cannot reproduce it, attach the Bugsink issue URL to a Slack message in the engineering channel with the affected course ID and user ID.
+
 ## Error tracking and product analytics
 
 Errors do not go to Sentry's hosted service. All three Sentry initializations point at `NEXT_PUBLIC_BUGSINK_DSN`, a self-hosted [Bugsink](https://www.bugsink.com/) instance, with `integrations: []` because Bugsink supports no integrations. Server and edge configs are registered from `instrumentation.ts`, which also re-exports `Sentry.captureRequestError` as `onRequestError`. Edge functions initialize separately through `npm:@sentry/deno`.
