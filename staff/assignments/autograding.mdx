@@ -151,7 +151,7 @@ Keep `workflow_dispatch:` no matter what else you change. It is how Pawtograder 
 
 Delete the `push:` block if you would rather students submit deliberately. Pawtograder then dispatches the workflow only when the head commit message of a push contains `#submit`, matched case-sensitively — so `#Submit` and `#SUBMIT` do not count. Warn students if you do this, because nothing in the interface tells them the marker is required. You can also narrow the trigger rather than remove it, by adding branches or restricting paths; the rule is the same either way, in that whatever the `on:` block matches is what becomes a submission.
 
-Assignments configured without an autograder have no `grade.yml` at all. There, every push to the default branch is collected as a submission for hand grading, and neither trigger applies. Pushes to other branches are recorded in the commit history but are not submissions. See [Configuration → Autograder](/staff/assignments/configuration#autograder).
+Assignments configured without an autograder have no `grade.yml` at all. There, every push to the default branch is collected as a submission for hand grading, and neither trigger applies. Pushes to other branches are recorded in the commit history but are not submissions. For Forgejo-hosted repositories, submissions are created directly from pushes when the autograder is off, without going through GitHub Actions. See [Configuration → Autograder](/staff/assignments/configuration#autograder).
 
 ### Students Must Not Edit `grade.yml`
 
