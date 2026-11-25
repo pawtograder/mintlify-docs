@@ -36,11 +36,16 @@ can no longer change groups.
 Use **Manage Groups** to create groups manually, add or remove members,
 rename or delete groups, and move students between groups. Changes are
 staged locally and applied in one operation when you click **Publish
-Changes**. Publishing creates or updates memberships, creates GitHub
-repositories for any new groups, and queues permission-sync jobs. If
-individual items fail, the rest still go through: the failed moves and
-groups stay staged for you to retry, and you get a "Published with
-errors" toast.
+Changes**. Publishing creates or updates memberships, creates repositories for
+any new groups, and queues permission-sync jobs. If individual items fail, the
+rest still go through: the failed moves and groups stay staged for you to retry,
+and you get a "Published with errors" toast.
+
+If a permission check fails during publish, the publish is refused before any
+changes are applied and the group mapper shows which groups or members triggered
+the error. The error message describes what was refused rather than showing a raw
+database code. Failed groups remain staged so you can retry after the issue is
+resolved.
 
 <Note>
 Adding or removing a member notifies the group's other members, including
