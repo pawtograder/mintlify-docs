@@ -56,7 +56,7 @@ Open one poll at a time. If two polls are live at once, students who scan the co
 Choose **Polls** from your course navigation to reach **Manage Polls**, the list of every poll in the course. From there you create polls, open and close them, and open a poll's results page.
 
 <Note>
-Creating, opening, closing, and deleting polls is limited to instructors and graders in that course. Graders have the same poll permissions as instructors.
+Creating, opening, closing, and deleting polls requires the `run_polls` capability. By default, both instructors and graders hold this capability. An instructor can remove it from a custom grader role under **Course Settings → Staff Roles**. Staff without `run_polls` can still view polls and their results.
 </Note>
 
 Running your first poll takes eight steps:
