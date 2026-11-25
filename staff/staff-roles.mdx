@@ -1,0 +1,109 @@
+---
+title: "Staff Roles"
+description: "Create custom grader roles, assign capabilities to each role, and control what each TA can do"
+icon: "shield"
+---
+
+# Staff Roles
+
+**Course Settings → Staff Roles** is where instructors create custom grader roles, choose what each role can do, and assign graders to roles. Changes save immediately and take effect the next time that person loads a page.
+
+Only instructors can access this page. A grader who opens the URL sees an explanation and no controls.
+
+## What are roles and capabilities
+
+Every course has four built-in roles: **Instructor**, **Grader**, **Student**, and **Admin**. Instructors can always do everything. The Grader role is the starting point for custom roles.
+
+A **capability** is one action, such as managing surveys or running polls. A **custom role** is a named bundle of capabilities you define — for example, a "Head TA" role that can grade submissions and manage rubrics, or a "Lab TA" role that can only help students in office hours.
+
+Custom roles start as a copy of the default Grader role, so they begin with everything a grader can already do. You then turn individual capabilities on or off.
+
+## The three pages
+
+The Staff Roles workspace has a side menu with three pages.
+
+### Create / Edit Role
+
+Use this page to create a new role or pick an existing one to rename, delete, or edit its capabilities.
+
+**Creating a role:**
+
+1. Click **Create a role**.
+2. Enter a name (for example, "Head TA"). Names must be unique within the course, ignoring case.
+3. Click **Create role**. The new role starts with everything the default Grader role can do.
+
+**Editing a role:**
+
+1. Click **Edit a role**.
+2. Choose a role from the dropdown.
+3. Use the buttons that appear to **Rename**, **Delete**, or **Edit capabilities** for that role.
+
+The default Grader role cannot be renamed or deleted. Custom roles can be renamed or deleted as long as no one is on them.
+
+**Deleting a role:**
+
+A role can only be deleted when it has no members — neither active graders nor removed (disabled) graders. The delete dialog tells you how many people are on the role and asks you to move them first. Move active graders on the **Staff & Roles** page; re-enable and move removed graders from **Course Settings → Enrollments**.
+
+### Roles & Capabilities
+
+Use this page to turn capabilities on or off for a role. Pick a role from the dropdown, then toggle the switches. Each switch has an **ⓘ** button that explains what the capability does and where to find it in the app.
+
+Capabilities are grouped by app area:
+
+| Area | Capabilities |
+| --- | --- |
+| **Manage Assignments** | Manage assignments, Manage rubrics, Manage groups, Publish groups, Manage review assignments, Grade submissions, Handle regrades, Grant extensions, Manage student repositories |
+| **Gradebook** | Manage gradebook |
+| **Office Hours** | Help students, Manage office hours |
+| **Discussion** | Moderate discussion |
+| **Surveys** | Manage surveys |
+| **Polls** | Run polls |
+| **Course Settings** | Send announcements, Manage roster, Manage flashcards |
+
+The page only shows capabilities that exist in the database. Capabilities added by future updates appear automatically, unknown ones appear under **Other** with their database description. The `manage_roles` capability (which gates this page itself) is never shown — it cannot be given to a grader or custom role.
+
+### Staff & Roles
+
+This page has two tabs.
+
+**Staff tab** — lists every active grader with a role dropdown. Select a different role to move that grader. The change saves immediately.
+
+**Roles tab** — lists every role with its active member count and any removed (disabled) members. Click a role name to jump to its capabilities page.
+
+## Default capabilities by role
+
+When a new class is created, the default roles start with these capabilities:
+
+| Capability | Instructor | Grader |
+| --- | --- | --- |
+| All capabilities | ✓ | — |
+| `help_students` | ✓ | ✓ |
+| `manage_flashcards` | ✓ | ✓ |
+| `run_polls` | ✓ | ✓ |
+
+All other capabilities are instructor-only by default. Instructors can add any capability to the default Grader role or to a custom role.
+
+## Live updates
+
+Role changes made by another instructor appear without reloading the page. If a broadcast is missed, the page fetches only the changed keys in the background. A failed background fetch shows a "Staff roles could not be refreshed. Reload the page to try again." toast.
+
+## Enrollments
+
+The **Enrollments** table shows each grader's staff role name in the **Role** column. A grader on the default Grader role shows "Grader"; a grader on a custom role shows that role's name. The **Edit Role** dialog in Enrollments still changes the app role (student, grader, instructor) — use Staff Roles to change which custom role a grader is on.
+
+## Related pages
+
+<CardGroup cols={2}>
+  <Card title="Course Settings" icon="gear" href="/staff/course-settings">
+    Index of all Course Settings entries.
+  </Card>
+  <Card title="Surveys" icon="clipboard-list" href="/staff/surveys">
+    The manage_surveys capability controls who can create and manage surveys.
+  </Card>
+  <Card title="Polls" icon="square-poll-vertical" href="/staff/polls/intro">
+    The run_polls capability controls who can create and run live polls.
+  </Card>
+  <Card title="Flashcard Decks" icon="layer-group" href="/staff/flashcard-decks">
+    The manage_flashcards capability controls who can manage flashcard decks.
+  </Card>
+</CardGroup>

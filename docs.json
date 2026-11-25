@@ -124,6 +124,7 @@
               "staff/feature-flags",
               "staff/lab-sections",
               "staff/flashcard-decks",
+              "staff/staff-roles",
               "staff/workflow-runs",
               "staff/audit-log",
               "staff/emails"
