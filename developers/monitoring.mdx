@@ -159,6 +159,44 @@ Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are indivi
 
 Alert rules live in `charts/pawtograder/templates/prometheus-rules.yaml`, grouped as `pawtograder.backup`, `pawtograder.walg`, `pawtograder.replication`, `pawtograder.postgres`, `pawtograder.app`, `pawtograder.edgefunctions`, `pawtograder.secrets`, and `pawtograder.certs`. Routing is in `alertmanager-config.yaml`.
 
+## Error surfacing ops playbook
+
+When errors appear in the platform, use this playbook to triage and resolve them.
+
+### Identifying errors
+
+Errors surface in three places:
+
+1. **Bugsink** — server-side and edge function exceptions are sent to the self-hosted Bugsink instance configured via `NEXT_PUBLIC_BUGSINK_DSN`. Check the Bugsink dashboard for new issues, their stack traces, and affected users.
+2. **Prometheus / Grafana** — the `web_supabase_rpc_errors_total` counter (labelled by `rpc` and `code`) tracks RPC-level failures. A spike here often precedes user-visible errors. The `pawtograder.app` alert group in `prometheus-rules.yaml` fires on sustained error rates.
+3. **User-visible error messages** — the platform uses a shared error mapper that translates Postgres error codes into human-readable messages. When a user reports an error, the message they see corresponds to a specific Postgres code; see [Common error codes](#common-error-codes) below.
+
+### Common error codes
+
+| Postgres code | Meaning | Common cause |
+| --- | --- | --- |
+| `42501` | Insufficient privilege | A row-level security policy blocked the operation. Most often seen when publishing group changes — see [Group publish and 42501](#group-publish-and-42501). |
+| `23505` | Unique violation | A duplicate record was inserted. |
+| `23503` | Foreign key violation | A referenced row does not exist. |
+| `P0001` | Raise exception | A database function explicitly rejected the operation. The message text explains why. |
+
+### Group publish and 42501
+
+When publishing group changes, a `42501` error means one or more students in the group do not have the required course role. The group management page shows which students triggered the error and why, so you can fix the membership before retrying. Common causes:
+
+- A student was added to the group before they accepted their course invitation.
+- A student's enrollment was dropped after the group was formed.
+
+Resolve by removing the affected student from the group, confirming their enrollment is active, and re-publishing.
+
+### Escalation
+
+If an error cannot be resolved from the interface:
+
+1. Capture the full error message and the Bugsink issue URL.
+2. Check `web_supabase_rpc_errors_total` for the affected RPC and time window.
+3. Open an issue in the [platform repository](https://github.com/pawtograder/platform) with the Bugsink link, the Prometheus query, and reproduction steps.
+
 ## Error tracking and product analytics
 
 Errors do not go to Sentry's hosted service. All three Sentry initializations point at `NEXT_PUBLIC_BUGSINK_DSN`, a self-hosted [Bugsink](https://www.bugsink.com/) instance, with `integrations: []` because Bugsink supports no integrations. Server and edge configs are registered from `instrumentation.ts`, which also re-exports `Sentry.captureRequestError` as `onRequestError`. Edge functions initialize separately through `npm:@sentry/deno`.

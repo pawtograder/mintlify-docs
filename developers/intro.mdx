@@ -112,6 +112,7 @@ Components do not query Supabase directly. `TableController` (`lib/TableControll
 1. Fork the repository and create a feature branch.
 2. Make your changes. Regenerate types with `npm run client-local` if you touched the schema.
 3. Run `npm run format` before committing. CI rejects unformatted code (`AGENTS.md:42`).
+   - If your change introduces a user-visible feature, register a walkthrough entry with `npm run whats-new`. The walkthrough registry drives the in-app "What's New" announcements shown to users on their first visit after an update.
 4. Run the checks CI runs: `npm run lint`, `charts/pawtograder/tests/render-guardrails.sh`, and `npm run test:functions` (`lint.yml:33`, `:47`, `:60`).
 5. Run the tests your change affects: `npm test` for Jest, `npx playwright test` for end-to-end.
 6. Open a pull request.

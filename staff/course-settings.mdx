@@ -58,6 +58,26 @@ instructor-only.
 On **Grading Conflicts**, a grader sees only their own conflicts and is told to
 contact an instructor about anyone else's. Instructors see the whole class.
 
+### Custom grader roles
+
+Instructors can create custom roles that grant graders a specific subset of
+staff permissions. Custom roles are managed from **Course Settings → Staff
+Roles** (`manage/course/staff-roles`).
+
+Each custom role is a named set of permission flags. The available flags are:
+
+| Permission | What it grants |
+| --- | --- |
+| `manage_surveys` | Create, edit, publish, close, and delete surveys |
+| `run_polls` | Create, open, close, and delete polls |
+| `manage_flashcards` | Create, edit, and delete flashcard decks and cards |
+| `send_announcements` | Compose and send course emails from the Emailer |
+
+A staff member assigned a custom role sees only the Course Settings entries
+that their role's permissions unlock. For example, a staff member with only
+`manage_surveys` sees **Surveys** in the course navigation but not **Polls**,
+**Flashcard Decks**, or **Emailer**.
+
 ## Course time zone
 
 Each course has its own time zone, and every date and time rendered inside the
