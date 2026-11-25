@@ -159,6 +159,22 @@ Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are indivi
 
 Alert rules live in `charts/pawtograder/templates/prometheus-rules.yaml`, grouped as `pawtograder.backup`, `pawtograder.walg`, `pawtograder.replication`, `pawtograder.postgres`, `pawtograder.app`, `pawtograder.edgefunctions`, `pawtograder.secrets`, and `pawtograder.certs`. Routing is in `alertmanager-config.yaml`.
 
+## Error surfacing playbook
+
+When a database operation fails with a permission error (`42501`), Pawtograder surfaces the error message directly in the UI rather than showing a generic "Unknown error" fallback. This applies to group publishing, grader assignment, and other staff actions that touch capability-gated tables.
+
+**What you see:** A toast or inline error message containing the specific PostgreSQL error text, such as `Permission denied: manage_surveys required` or `42501: new row violates row-level security policy`.
+
+**What it means:** The signed-in user's role does not hold the capability required for that action. Check the user's role and its capabilities under **Course Settings → Staff Roles**.
+
+**What to do:**
+1. Identify the capability named in the error message (e.g., `manage_surveys`, `run_polls`, `manage_flashcards`).
+2. Open **Course Settings → Staff Roles** and find the user's role.
+3. Add the required capability to that role, or ask an instructor to do so.
+4. Retry the action.
+
+If the error message is not a capability name but a generic RLS policy violation, the user may be attempting an action outside their class (cross-class writes are blocked at the database level and cannot be granted through roles).
+
 ## Error tracking and product analytics
 
 Errors do not go to Sentry's hosted service. All three Sentry initializations point at `NEXT_PUBLIC_BUGSINK_DSN`, a self-hosted [Bugsink](https://www.bugsink.com/) instance, with `integrations: []` because Bugsink supports no integrations. Server and edge configs are registered from `instrumentation.ts`, which also re-exports `Sentry.captureRequestError` as `onRequestError`. Edge functions initialize separately through `npm:@sentry/deno`.
