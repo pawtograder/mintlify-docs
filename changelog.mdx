@@ -6,6 +6,46 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Staff roles and capabilities
+
+- **Staff Roles page** — Instructors can now create custom grader roles from **Course Settings → Staff Roles**. Each role has a set of capabilities that control what the grader can do. Create a role, turn capabilities on or off, and move graders between roles — all from one place. Changes take effect the next time the grader loads a page. See [Staff Roles](/staff/staff-roles) ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Emailer capability** — Graders on a custom role with `send_announcements` can now send class emails from Course Settings → Emailer ([#1420](https://github.com/pawtograder/platform/pull/1420))
+- **Rubric editing capability** — The `manage_rubrics` capability controls who can create and edit rubrics. By default only instructors can edit rubrics; grant `manage_rubrics` to a custom role to extend that access ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Group management capability** — Graders on a custom role with `manage_groups` can set group mentors and copy groups from another assignment. The `publish_groups` capability controls creating and editing groups ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Survey management capability** — The `manage_surveys` capability controls who can create, edit, publish, close, and delete surveys. Graders without it can still view responses ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Poll management capability** — The `run_polls` capability controls who can create, open, close, and delete polls ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard deck management capability** — The `manage_flashcards` capability controls who can create and manage flashcard decks under Course Settings → Flashcard Decks ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **GitHub-only staff actions hidden without a GitHub org** — Staff actions that require a GitHub organization are now hidden when the course has no GitHub org configured, preventing confusing errors ([#1427](https://github.com/pawtograder/platform/pull/1427))
+
+#### Forgejo
+
+- **Submissions from pushes when autograder is off** — For Forgejo-backed assignments with the autograder disabled, a push to the default branch now creates a submission directly, without waiting for a grading run ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Archive unlinked repos and delete Forgejo assignments and courses** — Forgejo repositories that are no longer linked to a Pawtograder assignment are archived automatically. Deleting an assignment or course now also cleans up the corresponding Forgejo resources ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Forgejo grading improvements** — Finished Actions runs are now recorded, every org's webhook is checked, and the autograder can be turned on or off per assignment ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Repository web links for Forgejo assignments** — Assignment repository links now point to the correct Forgejo URL ([#1415](https://github.com/pawtograder/platform/pull/1415))
+
+#### Exams
+
+- **Auto-extract works on exams of 8 or more pages** — The auto-extract feature for scanned exams previously stopped working on exams with 8 or more pages. This is now fixed ([#1389](https://github.com/pawtograder/platform/pull/1389))
+- **Consistent answer crop zoom** — Every answer crop in the exam grading view now renders at the same zoom level ([#1323](https://github.com/pawtograder/platform/pull/1323))
+
+#### Office hours
+
+- **Walkthrough stays dismissed across remounts** — A dismissed office-hours walkthrough no longer reappears when the component remounts ([#1418](https://github.com/pawtograder/platform/pull/1418))
+
+#### What's new
+
+- **Walkthrough registry and WhatsNew component** — A shared registry and generic `WhatsNew` component make it easier to add in-app walkthroughs for new features. Run `npm run whats-new` to generate the registry ([#1364](https://github.com/pawtograder/platform/pull/1364))
+
+#### Bug fixes
+
+- **Error handling** — Unexpected errors are now routed to Sentry; expected errors use a shared error mapper for consistent messages across all roles ([#1246](https://github.com/pawtograder/platform/pull/1246), [#1247](https://github.com/pawtograder/platform/pull/1247))
+- **Staff file functions work without a GitHub org** — Staff file functions can now read and write a course's own GitHub grader repositories even when the course has no GitHub org configured ([#1412](https://github.com/pawtograder/platform/pull/1412))
+
 ## August 2026
 
 ### August 19, 2026
