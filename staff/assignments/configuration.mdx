@@ -209,6 +209,10 @@ the default branch becomes a submission for you to grade by hand** — no
 for your reference solution and grading notes. Pushes to other branches
 are recorded in the commit history but are not submissions.
 
+<Note>
+For Forgejo-backed assignments with the autograder disabled, submissions are created directly from pushes to the default branch — no CI pipeline is involved. The commit history records Forgejo handout commits alongside student pushes, so the timeline on the submission page reflects the full history from the Forgejo repository.
+</Note>
+
 Two ways the checkbox is decided for you:
 
 - Pawtograder **forces it off** for pull-request submission mode
