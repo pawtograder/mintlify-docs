@@ -16,6 +16,16 @@ artifacts back to Pawtograder. This page is the reference for the
 `pawtograder.yml` config that drives that flow.
 
 <Note>
+**Forgejo assignments** use the same `pawtograder.yml` configuration and
+`assignment-action` workflow, but the workflow runs in Forgejo Actions rather
+than GitHub Actions. The grader repository always stays on GitHub. On Forgejo,
+every push to the default branch becomes a submission through a grading run —
+there is no push-direct submission path yet, so the autograder cannot be turned
+off for Forgejo assignments. Finished Forgejo Actions runs appear in Commit
+History and the submission Checks tab, with links to the run on Forgejo.
+</Note>
+
+<Note>
 The `pawtograder.yml` schema is published at
 `https://raw.githubusercontent.com/pawtograder/assignment-action/refs/tags/v4/pawtograder.schema.json`.
 Reference it from the top of your YAML to get IDE autocomplete:
