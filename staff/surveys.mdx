@@ -12,7 +12,9 @@ Pawtograder's surveys feature enables instructors to collect structured feedback
 
 Navigate to **Surveys** in the course navigation menu to access the survey management dashboard.
 
-Only instructors can create, edit, publish, close, or delete surveys. Graders can open **View Responses** on a published or closed survey; on a draft row they see the title without a link and a disabled **No Actions Available** menu.
+Instructors can always create, edit, publish, close, or delete surveys. Graders can open **View Responses** on a published or closed survey; on a draft row they see the title without a link and a disabled **No Actions Available** menu.
+
+Graders who hold the `manage_surveys` capability can also create, edit, publish, close, and delete surveys — the same actions as instructors. See [Staff Roles](/staff/staff-roles) for how to grant this capability to a custom grader role.
 
 <Note>
 Surveys are controlled by a course feature flag under [**Course Settings → Feature flags**](/staff/feature-flags). Turning it off hides the **Surveys** menu entry for students and staff, but it does not block direct links to survey pages.
