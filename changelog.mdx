@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Staff roles and permissions
+- **Custom grader roles** — Instructors can now create custom grader roles from **Course Settings → Staff Roles** and grant them specific permissions: `manage_surveys` (create and manage surveys), `run_polls` (create and run polls), `manage_flashcards` (manage flashcard decks), and `send_announcements` (access the Emailer). A grader with `send_announcements` gains the **Emailer** entry in their Course Settings menu. See [Staff Roles](/staff/staff-roles) ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1298](https://github.com/pawtograder/platform/pull/1298), [#1299](https://github.com/pawtograder/platform/pull/1299), [#1300](https://github.com/pawtograder/platform/pull/1300), [#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Forgejo support
+- **Forgejo repository support expanded** — Pawtograder now records handout commits in the handout commit history for Forgejo-hosted repositories, creates submissions directly from pushes when the autograder is off, archives unlinked repos, and supports deleting Forgejo assignments and courses. Retry creation and Fix Permissions both work on Forgejo repositories. GitHub-only staff actions are hidden when no GitHub org is configured, and Forgejo repositories are skipped in repo analytics ([#1380](https://github.com/pawtograder/platform/pull/1380), [#1398](https://github.com/pawtograder/platform/pull/1398), [#1413](https://github.com/pawtograder/platform/pull/1413), [#1414](https://github.com/pawtograder/platform/pull/1414), [#1426](https://github.com/pawtograder/platform/pull/1426), [#1427](https://github.com/pawtograder/platform/pull/1427), [#1428](https://github.com/pawtograder/platform/pull/1428), [#1430](https://github.com/pawtograder/platform/pull/1430))
+
+#### Error handling
+- **Clearer error messages across the platform** — A shared error mapper now translates raw database and permission errors into human-readable messages. Group publish is refused (rather than partially applied) when a permission check fails, and the group mapper shows which groups triggered the error. The "Unknown error" fallback has been replaced with the shared mapper throughout the app ([#983](https://github.com/pawtograder/platform/pull/983), [#1247](https://github.com/pawtograder/platform/pull/1247), [#1297](https://github.com/pawtograder/platform/pull/1297))
+
+#### Office hours
+- **Queue page stays usable when real-time disconnects** — When the live WebSocket connection cannot be established or is lost, the office hours queue page now falls back to polling and continues to show queue cards and requests. The page no longer goes blank on a connection failure ([#1065](https://github.com/pawtograder/platform/pull/1065))
+
+#### Bug fixes
+- **Exam auto-extract works on 8 or more pages** — The auto-extract feature for exam submissions now handles exams of 8 or more pages correctly ([#1369](https://github.com/pawtograder/platform/pull/1369), [#1389](https://github.com/pawtograder/platform/pull/1389))
+- **Coder workspace startup race fixed** — The `clone.sh` script no longer writes `~/.gitconfig`, preventing a race condition with the Coder workspace startup script ([#1373](https://github.com/pawtograder/platform/pull/1373))
+
+#### Developer tooling
+- **What's New walkthrough registry** — A walkthrough registry, a generic `WhatsNew` component, and `npm run whats-new` are now available for surfacing recent feature announcements to users in-app ([#1364](https://github.com/pawtograder/platform/pull/1364))
+- **Ops playbook for error surfacing** — A new error surfacing playbook in the developer documentation covers how to locate and diagnose errors using Bugsink, Prometheus metrics, and the Supabase dashboard. See [Monitoring and Metrics](/developers/monitoring) ([#983](https://github.com/pawtograder/platform/pull/983), [#1421](https://github.com/pawtograder/platform/pull/1421))
+
 ## August 2026
 
 ### August 19, 2026
