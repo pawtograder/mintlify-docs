@@ -54,3 +54,7 @@ Pawtograder automatically manages repository permissions when:
 - Individual submissions are activated or deactivated
 
 The Fix Permissions tool provides a way to audit and correct permissions if they become out of sync for any reason.
+
+## Retrying failed repository creation
+
+If a student repository failed to be created (for example, due to a transient error at release time), use the **Retry** button on the repository row to re-attempt creation. Retry works for both GitHub and Forgejo repositories and re-runs the full creation flow, including setting permissions and adding collaborators.
