@@ -18,7 +18,7 @@ If you push three commits at once, the last one is the one that gets graded.
 
 ## Your Assignment Repository
 
-Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your GitHub repository for the assignment appears in the repository box below the assignment's due date and description. This repository is private, and only you and the course staff can see it.
+Once an assignment has been released by your instructor, you'll see it in the **Assignments** tab. A link to your repository for the assignment appears in the repository box below the assignment's due date and description. Depending on your course, this may be a GitHub or Forgejo repository. Either way, it is private, and only you and the course staff can see it.
 
 Your instructor may have provided starter code in that repository. Use this repository to complete the assignment.
 
@@ -26,7 +26,7 @@ Your instructor may have provided starter code in that repository. Use this repo
 
 On an assignment with an autograder, **every push is a submission**. The branches that count are the ones listed in the grading workflow in your own repository, at `.github/workflows/grade.yml`; as that workflow ships, the branch is `main`. The last commit in the push is the one that gets graded, so if you push three commits at once, only the third is submitted.
 
-On an assignment with no autograder there is no workflow at all. Each push to your default branch up to your deadline is recorded as a submission for the course staff to grade by hand.
+On an assignment with no autograder there is no workflow at all. Each push to your default branch up to your deadline is recorded as a submission for the course staff to grade by hand. This applies to both GitHub and Forgejo assignments.
 
 <Warning>
 A push after your deadline does not become a gradeable submission. It is not dropped silently either: the submission that appears is fileless and cannot be graded, and it carries an error reading "Your submission at commit ... was not recorded: it was pushed after the deadline for this assignment". Where late tokens are offered, that message also says why none covered the push.

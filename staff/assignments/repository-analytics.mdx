@@ -32,6 +32,10 @@ Analytics are off by default. To turn them on:
 
 The assignment must belong to a class with a GitHub organization configured. Only assignments with this flag set are picked up by the daily refresh job and accept manual refresh requests.
 
+<Note>
+**Repository analytics are only available for GitHub assignments.** Forgejo assignments do not support this feature. On a Forgejo assignment's submission page, the Repo Analytics tab shows a message indicating that analytics are only collected from GitHub, and the Refresh button is hidden.
+</Note>
+
 ## Refreshing Data
 
 Two refresh paths exist:
@@ -71,3 +75,5 @@ Use the type filter buttons (or a rubric check's KPI link) to narrow the items t
 ## Access Control
 
 Repo Analytics is staff-only. Only graders and instructors of the class can open the tab or reach the data behind it; students cannot see it on their own or anyone else's submission.
+
+The **Sync Staff Team** button and **GitHub diagnostics** actions in Enrollments are also only available for courses with a GitHub organization configured. These controls are hidden automatically when a course has no GitHub org.
