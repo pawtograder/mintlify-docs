@@ -1,16 +1,20 @@
 ---
 title: "Repository Permissions"
-description: "Audit and fix GitHub repository permissions for assignment repositories"
+description: "Audit and fix repository permissions for assignment repositories"
 icon: "shield-check"
 ---
 
 # Repository Permissions
 
-Pawtograder automatically manages GitHub repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
+Pawtograder automatically manages repository permissions for all assignment repositories, ensuring students have access to their own repositories and staff can view all repositories in the course.
 
 ## Fix Repository Permissions
 
 If you suspect that repository permissions are out of sync (for example, if students report they cannot access their repositories), you can use the **Fix Permissions** button to audit and correct all repository permissions for an assignment.
+
+<Note>
+**Fix Permissions is only available for GitHub assignments.** For Forgejo assignments, access is managed automatically by the Forgejo reconciler. The Fix Permissions button is replaced with an explanatory note on Forgejo assignment pages.
+</Note>
 
 ### Using the Fix Permissions Tool
 
@@ -34,6 +38,13 @@ After running the fix, you'll see a summary showing:
 <Note>
 The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
 </Note>
+
+## Retrying Repository Creation
+
+If a repository failed to be created, you can retry creation from the **Repositories** page. The behavior differs by host:
+
+- **GitHub assignments**: Retrying re-queues the repository for creation. The page shows "Creation Re-queued" and updates automatically.
+- **Forgejo assignments**: Retrying clears the recorded error and kicks the Forgejo reconciler to try again on its next pass. The page shows a confirmation that Pawtograder will try to create the repository again.
 
 ## When to Use Fix Permissions
 
