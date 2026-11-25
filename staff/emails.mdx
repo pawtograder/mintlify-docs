@@ -8,7 +8,7 @@ icon: "envelope"
 
 **Course Settings → Emailer** is the only place in Pawtograder that sends mail on
 your behalf. Everything else labeled "export" writes a file to your computer; see
-[Exporting Course Data](/staff/exports). The menu entry is instructor-only.
+[Exporting Course Data](/staff/exports). The menu entry requires the `send_announcements` permission, which instructors have by default. Instructors can grant `send_announcements` to a custom grader role from **Course Settings → Staff Roles**, allowing those graders to compose and send course email.
 
 <Note>
 The names do not line up. The nav calls it **Emailer**, the URL is

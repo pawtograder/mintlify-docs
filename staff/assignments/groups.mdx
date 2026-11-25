@@ -36,11 +36,14 @@ can no longer change groups.
 Use **Manage Groups** to create groups manually, add or remove members,
 rename or delete groups, and move students between groups. Changes are
 staged locally and applied in one operation when you click **Publish
-Changes**. Publishing creates or updates memberships, creates GitHub
-repositories for any new groups, and queues permission-sync jobs. If
+Changes**. Publishing creates or updates memberships, creates repositories for any new groups, and queues permission-sync jobs. If
 individual items fail, the rest still go through: the failed moves and
 groups stay staged for you to retry, and you get a "Published with
 errors" toast.
+
+<Note>
+If **Publish Changes** is refused with a permission error, the grader account performing the publish lacks a required database permission (`42501 insufficient_privilege`). The error message names the operation that failed. Ask an instructor to publish the changes, or to grant the grader the necessary role. See the [error surfacing ops playbook](/developers/monitoring#error-surfacing-ops-playbook) for how to diagnose and resolve this class of error.
+</Note>
 
 <Note>
 Adding or removing a member notifies the group's other members, including

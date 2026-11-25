@@ -99,20 +99,15 @@ The leaderboard is not a management page. It is the **Show autograder
 leaderboard to students** checkbox under **Advanced settings** on the Edit
 Assignment form; see [Leaderboard](/staff/assignments/leaderboard).
 
-## GitHub permissions
+## Git provider and permissions
 
-Pawtograder creates two GitHub teams for each class — a **staff** team
-and a **students** team. Staff are granted access to every assignment
-repository; students are granted access to only their own. The students
-team can be used by instructors to share additional read-only
-repositories (in-class exercises, code samples) with the whole class.
+Pawtograder supports two git providers: **GitHub** and **Forgejo**. The provider is configured at the course level. Most courses use GitHub; Forgejo is available for deployments that self-host their git infrastructure.
 
-Pawtograder reconciles repository collaborators against current group
-membership whenever you click **Fix Repository Permissions** on an
-assignment's Repositories page. Run the audit after roster changes,
-group reshuffles, or when a student reports a missing repo. Details and
-the full audit flow are in
-[Repository Permissions](/staff/assignments/repository-permissions).
+For GitHub-backed courses, Pawtograder creates two GitHub teams for each class — a **staff** team and a **students** team. Staff are granted access to every assignment repository; students are granted access to only their own. The students team can be used by instructors to share additional read-only repositories (in-class exercises, code samples) with the whole class.
+
+For Forgejo-backed courses, the same permission model applies but is managed through Forgejo's organization and team APIs. Assignment pages display the Forgejo host name rather than "GitHub" where applicable. Repository analytics are not available for Forgejo-backed assignments.
+
+Pawtograder reconciles repository collaborators against current group membership whenever you click **Fix Repository Permissions** on an assignment's Repositories page. Run the audit after roster changes, group reshuffles, or when a student reports a missing repo. Details and the full audit flow are in [Repository Permissions](/staff/assignments/repository-permissions).
 
 ## Syncing handout updates
 
