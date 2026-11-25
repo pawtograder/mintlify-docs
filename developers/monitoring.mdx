@@ -159,6 +159,58 @@ Eight Grafana dashboards ship in `charts/pawtograder/dashboards/` and are indivi
 
 Alert rules live in `charts/pawtograder/templates/prometheus-rules.yaml`, grouped as `pawtograder.backup`, `pawtograder.walg`, `pawtograder.replication`, `pawtograder.postgres`, `pawtograder.app`, `pawtograder.edgefunctions`, `pawtograder.secrets`, and `pawtograder.certs`. Routing is in `alertmanager-config.yaml`.
 
+## Error surfacing playbook
+
+When users report unexpected errors, use this sequence to locate and diagnose the problem.
+
+### 1. Check Bugsink for the exception
+
+Open your self-hosted Bugsink instance (configured via `NEXT_PUBLIC_BUGSINK_DSN`). Filter by the affected user, route, or time window. Each event includes a stack trace, the request URL, and the Sentry `event_id` that the browser or server reported to the user.
+
+### 2. Correlate with Prometheus
+
+Cross-reference the Bugsink timestamp with the Prometheus metrics:
+
+- `web_http_request_duration_seconds` — look for elevated error-status buckets on the affected route
+- `web_supabase_rpc_errors_total{code="..."}` — Postgres error codes surface here; `42501` (insufficient privilege) is the most common cause of permission-related failures
+- `web_edge_function_invocation_total{status="error"}` — edge function failures
+
+### 3. Identify permission errors (code 42501)
+
+A `42501` RPC error means a database row-level security policy or function permission check refused the call. The error mapper in the UI now surfaces a human-readable explanation rather than a raw Postgres error, so users see a message describing what they tried to do and why it was refused.
+
+To investigate:
+
+1. Find the RPC name from `web_supabase_rpc_errors_total{code="42501"}` in Prometheus.
+2. Check the Bugsink event for the full Postgres error message, which names the policy or function.
+3. Verify the user's role and course enrollment in the Supabase dashboard.
+
+### 4. Group publish failures
+
+When **Publish Changes** on the **Manage Groups** page encounters a `42501` error, the publish is now refused before any changes are applied, and the group mapper shows which groups or members triggered the permission check. Staff see a clear message rather than a silent partial publish.
+
+If you see this in production:
+
+- Check that the grader or instructor performing the publish has the correct role for the course.
+- Look for recently changed RLS policies on the `group_memberships` or `repositories` tables.
+- The failed groups remain staged so staff can retry after the permission issue is resolved.
+
+### 5. Queue depth and worker health
+
+If errors are widespread rather than isolated to one user:
+
+- Check `pawtograder_async_queue_size` and `pawtograder_async_dlq_size` — a growing DLQ means jobs are failing repeatedly.
+- Check `pawtograder_queue_oldest_message_seconds` — a message older than a few minutes in a normally healthy queue indicates a stalled worker.
+- Check circuit breaker state: `pawtograder_circuit_breaker_open{state="open"}` series indicate a downstream dependency (GitHub, Discord, etc.) that is being rate-limited or is unavailable.
+
+### 6. Escalation
+
+If the above steps do not identify the root cause:
+
+- Pull the raw Supabase logs from your deployment's log aggregator for the affected time window.
+- Check the Realtime service logs if the error involves live updates or WebSocket connections.
+- For GitHub-related failures, check the GitHub async worker DLQ (`pawtograder_async_dlq_size`) and the rate limiter gauges (`pawtograder_bottleneck_running`, `pawtograder_bottleneck_queued`).
+
 ## Error tracking and product analytics
 
 Errors do not go to Sentry's hosted service. All three Sentry initializations point at `NEXT_PUBLIC_BUGSINK_DSN`, a self-hosted [Bugsink](https://www.bugsink.com/) instance, with `integrations: []` because Bugsink supports no integrations. Server and edge configs are registered from `instrumentation.ts`, which also re-exports `Sentry.captureRequestError` as `onRequestError`. Edge functions initialize separately through `npm:@sentry/deno`.
