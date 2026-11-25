@@ -6,6 +6,29 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Forgejo support
+- **Forgejo as a git provider** — Assignments can now use Forgejo-hosted repositories in addition to GitHub. Forgejo assignment pages name the correct repository host, commit history records pushes from Forgejo, and submissions are created directly from pushes when the autograder is off. Retry creation and fix-permissions operations handle Forgejo repositories, and unlinked Forgejo repos are archived when a course or assignment is deleted ([#1413](https://github.com/pawtograder/platform/pull/1413), [#1414](https://github.com/pawtograder/platform/pull/1414), [#1426](https://github.com/pawtograder/platform/pull/1426), [#1427](https://github.com/pawtograder/platform/pull/1427), [#1428](https://github.com/pawtograder/platform/pull/1428), [#1430](https://github.com/pawtograder/platform/pull/1430), [#1398](https://github.com/pawtograder/platform/pull/1398))
+
+#### Staff roles and permissions
+- **Custom grader roles** — Instructors can create custom roles that grant graders a specific subset of staff permissions from **Course Settings → Staff Roles**. The available permissions are `manage_surveys`, `run_polls`, `manage_flashcards`, and `send_announcements`. Staff with a custom role see only the Course Settings entries their permissions unlock ([#1010](https://github.com/pawtograder/platform/pull/1010), [#1298](https://github.com/pawtograder/platform/pull/1298), [#1299](https://github.com/pawtograder/platform/pull/1299), [#1300](https://github.com/pawtograder/platform/pull/1300), [#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Error handling
+- **Clearer errors when group publish fails** — When publishing group changes fails with a `42501` permission error, the group management page now shows which students triggered the error and why, so you can fix the membership before retrying ([#1297](https://github.com/pawtograder/platform/pull/1297))
+- **Shared error mapper** — Unknown error fallbacks across the platform have been replaced with a shared error mapper that translates Postgres error codes into human-readable messages ([#1247](https://github.com/pawtograder/platform/pull/1247))
+
+#### Office hours
+- **Queue list shown when real-time can't connect** — When the real-time connection cannot be established, the office hours queue list is now shown using the last known data rather than a blank page, so staff can still see and work requests while the connection recovers ([#1065](https://github.com/pawtograder/platform/pull/1065))
+
+#### What's New
+- **In-app walkthrough registry** — A walkthrough registry and generic `WhatsNew` component now power in-app "What's New" announcements shown to users on their first visit after an update. Developers register new features with `npm run whats-new` ([#1364](https://github.com/pawtograder/platform/pull/1364))
+
+#### Bug fixes
+- **Exam auto-extract works on 8+ pages** — The auto-extract feature for exams now works correctly on exams of 8 or more pages ([#1369](https://github.com/pawtograder/platform/pull/1369))
+
 ## August 2026
 
 ### August 19, 2026
