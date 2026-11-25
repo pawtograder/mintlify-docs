@@ -43,6 +43,10 @@ groups stay staged for you to retry, and you get a "Published with
 errors" toast.
 
 <Note>
+If **Publish Changes** fails with a `42501` permission error, the grader performing the publish does not hold the `publish_groups` capability. An instructor can grant it under **Course Settings → Staff Roles**, or an instructor can publish the groups directly.
+</Note>
+
+<Note>
 Adding or removing a member notifies the group's other members, including
 when the change comes from publishing. That notification is suppressed
 while the assignment is unreleased, so you can prepare and adjust groups

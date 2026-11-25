@@ -1,0 +1,94 @@
+---
+title: "Staff Roles"
+description: "Create custom grader roles with specific capabilities, so instructors can control which TAs can manage surveys, run polls, publish groups, and more"
+icon: "user-shield"
+---
+
+# Staff Roles
+
+Pawtograder has two built-in staff roles — **instructor** and **grader** — but instructors can create custom roles that give specific graders a tailored set of capabilities. A custom role is a named bundle of capabilities that you assign to one or more graders in your course.
+
+Open **Course Settings → Staff Roles** (`manage/course/roles`) to manage custom roles.
+
+## Why use custom roles
+
+By default, all graders share the same access. Custom roles let you:
+
+- Give a head TA the ability to publish groups or manage surveys without making them an instructor.
+- Restrict a course coordinator from running live polls or managing flashcard decks.
+- Grant the Emailer capability to a TA who sends announcements on your behalf.
+
+## Default capabilities
+
+Every new class starts with two default roles. The **instructor** role holds every capability. The **grader** role holds a subset:
+
+| Capability | Default grader | Default instructor |
+| --- | --- | --- |
+| `help_students` | ✓ | ✓ |
+| `manage_flashcards` | ✓ | ✓ |
+| `run_polls` | ✓ | ✓ |
+| `grade_submissions` | ✓ | ✓ |
+| `handle_regrades` | ✓ | ✓ |
+| `grant_extensions` | ✓ | ✓ |
+| `manage_surveys` | — | ✓ |
+| `publish_groups` | — | ✓ |
+| `manage_groups` | — | ✓ |
+| `manage_assignments` | — | ✓ |
+| `manage_review_assignments` | — | ✓ |
+| `manage_rubrics` | — | ✓ |
+| `manage_gradebook` | — | ✓ |
+| `manage_roster` | — | ✓ |
+| `send_announcements` | — | ✓ |
+| `manage_student_repositories` | — | ✓ |
+
+## Creating a custom role
+
+1. Open **Course Settings → Staff Roles**.
+2. Click **Create Role**.
+3. Enter a name (for example, "Head TA" or "Lab Leader").
+4. A new custom role starts as a copy of the default grader role — it inherits whatever capabilities the default grader role currently holds.
+5. Toggle individual capabilities on or off.
+6. Save.
+
+## Assigning a custom role to a grader
+
+1. Open **Course Settings → Enrollments**.
+2. Find the grader in the roster.
+3. In the **Role** column, select the custom role from the dropdown.
+
+A grader can hold only one role at a time. Changing their role takes effect immediately.
+
+## Capability reference
+
+| Capability | What it controls |
+| --- | --- |
+| `help_students` | Going on duty in office hours queues and claiming help requests |
+| `manage_flashcards` | Creating, editing, and deleting flashcard decks and cards |
+| `run_polls` | Creating, opening, closing, and deleting live polls |
+| `manage_surveys` | Creating, editing, publishing, closing, and deleting surveys |
+| `grade_submissions` | Grading student submissions |
+| `handle_regrades` | Responding to regrade requests |
+| `grant_extensions` | Granting due-date extensions and late tokens |
+| `publish_groups` | Publishing staged group changes on **Manage Groups** |
+| `manage_groups` | Creating, editing, and deleting groups; copying groups from prior assignments |
+| `manage_assignments` | Creating and editing assignments |
+| `manage_review_assignments` | Bulk-assigning and reassigning grading tasks |
+| `manage_rubrics` | Creating and editing rubrics |
+| `manage_gradebook` | Editing gradebook formulas and releasing grades |
+| `manage_roster` | Managing enrollments and lab sections |
+| `send_announcements` | Sending course-wide emails via the Emailer |
+| `manage_student_repositories` | Running Fix Permissions and other repository management actions |
+
+## How custom roles copy the default grader role
+
+When you create a custom role, it starts as a copy of the default grader role's current capabilities. If you later add a capability to the default grader role, existing custom roles are also updated to include it — unless you have explicitly turned that capability off on the custom role.
+
+An instructor can only add capabilities they themselves hold to a custom role. They cannot grant a capability they do not have.
+
+## What graders see
+
+A grader's navigation and available actions follow their role's capabilities. Controls that require a capability the grader does not hold are hidden or disabled. If a grader tries to reach a page that requires a capability they lack (for example, the new-survey page without `manage_surveys`), they are redirected to the survey list.
+
+<Note>
+Capabilities control actions, not visibility. A grader without `manage_surveys` can still view the Surveys page and read responses — they just cannot create, edit, or delete surveys. See [Feature Flags](/staff/feature-flags) for the flags that control whether a module appears in the navigation at all.
+</Note>
