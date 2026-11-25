@@ -6,6 +6,35 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25, 2026
+
+#### Forgejo support
+- **Forgejo assignment pages use the correct host labels** — Assignment creation, the student assignment list, and the Rerun Autograder page now name Forgejo or GitHub correctly depending on which host the assignment uses. The assignment type option reads "Git repository + autograder" instead of "GitHub repo + autograder" ([#1414](https://github.com/pawtograder/platform/pull/1414))
+- **Forgejo push-mode submissions without an autograder** — For push-mode Forgejo assignments with the autograder off, every push to the default branch now creates a submission directly, the same way GitHub does. Late, empty, and oversized pushes produce visible rejections. Pushes by Pawtograder's admin account, by staff to a student's repository, and superseded deliveries are skipped ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Forgejo autograder on/off toggle** — The autograder can now be enabled or disabled for Forgejo assignments from the Configure Autograder page. Enabling adds `grade.yml` to the handout; disabling parks it as `grade.yml.disabled`. Existing student repositories keep their own copy until they are next synced with the handout ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo grading runs appear in commit history** — Finished Forgejo Actions runs now appear in Commit History and the submission Checks tab, with a link to the run. A run that finishes without posting feedback records the same error result as GitHub does ([#1395](https://github.com/pawtograder/platform/pull/1395))
+- **Forgejo assignments can be deleted** — Deleting a Forgejo assignment now works. Student repositories and the handout are queued for archiving by the Forgejo reconciler. Unlinked Forgejo repositories are also archived when a student leaves a group ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Repository analytics not available for Forgejo** — The Refresh button and analytics tab are hidden for Forgejo assignment submissions. Repository analytics are only collected from GitHub ([#1427](https://github.com/pawtograder/platform/pull/1427))
+- **GitHub-only staff actions hidden without a GitHub org** — The Sync Staff Team button and GitHub diagnostics actions are now hidden for courses that have no GitHub organization configured ([#1427](https://github.com/pawtograder/platform/pull/1427))
+
+#### Custom staff roles and capabilities
+- **Staff Roles page** — A new **Course Settings → Staff Roles** page lets instructors create custom grader roles (for example, "Head TA"), turn individual capabilities on or off for each role, and assign graders to a role. Changes take effect the next time that person loads a page ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Rubric editing follows `manage_rubrics`** — Editing rubrics now requires the `manage_rubrics` capability. Instructors hold it by default; they can grant it to a custom role. Without it, the Configure Rubric menu item is hidden and the rubric page redirects to the assignment page. A new rubric is now linked to its assignment by the save itself, so a Head TA with `manage_rubrics` but not `manage_assignments` can create one ([#1333](https://github.com/pawtograder/platform/pull/1333))
+- **Survey management follows `manage_surveys`** — Creating, editing, publishing, closing, and deleting surveys requires the `manage_surveys` capability. Instructors hold it by default; they can grant it to a custom role ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Poll management follows `run_polls`** — Creating, opening, closing, and deleting polls requires the `run_polls` capability. Both instructors and graders hold it by default; instructors can turn it off for a custom role ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard management follows `manage_flashcards`** — Creating, editing, and deleting flashcard decks and cards requires the `manage_flashcards` capability. Both instructors and graders hold it by default; instructors can turn it off for a custom role ([#1299](https://github.com/pawtograder/platform/pull/1299))
+- **Emailer follows `send_announcements`** — Accessing the Emailer requires the `send_announcements` capability. Instructors hold it by default; they can grant it to a custom role. Without it, the Emailer entry is hidden from the Course Settings menu ([#1420](https://github.com/pawtograder/platform/pull/1420))
+- **Group mentor and Copy Groups follow `manage_groups`** — Setting a group's mentor and copying groups from another assignment require the `manage_groups` capability. Instructors hold it by default; they can grant it to a custom role. Without it, the mentor is shown as text and the Copy Groups button is hidden. Also fixed: group memberships were previously visible to any enrolled user across all courses; they are now scoped to the member's own class ([#1401](https://github.com/pawtograder/platform/pull/1401))
+- **Emailer send_announcements grants a custom role access to send email** — A custom role with `send_announcements` can now send email to the class. New emails are validated to ensure the recipient is enrolled in the class and the batch belongs to the same class ([#1420](https://github.com/pawtograder/platform/pull/1420))
+
+#### Office hours
+- **"What's new" walkthrough** — A guided walkthrough of recent office hours features appears automatically for staff on their first visit after a new feature ships. The **What's new** button in the header reopens it at any time ([#1364](https://github.com/pawtograder/platform/pull/1364))
+
+#### Exams
+- **Auto-extract works on exams of 8 or more pages** — Auto-extract now sends template pages to Gemini in groups of two, all at once, and merges the results. Previously, sending all pages in one request timed out on exams of 8 or more pages. If any group fails, nothing is imported and the error message names the affected pages ([#1389](https://github.com/pawtograder/platform/pull/1389))
+
 ## August 2026
 
 ### August 19, 2026
