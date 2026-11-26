@@ -6,6 +6,30 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 25–26, 2026
+
+#### Rubrics
+- **Safe deletion of applied rubric checks** — Removing a rubric check that has already been applied to student submissions now runs a pre-flight check before saving. Checks with only soft-deleted comments are cleaned up automatically. Checks with active grading comments or open regrade requests show a confirmation dialog listing every affected submission, grader, and comment, with links that open in a new tab so your unsaved rubric edits are preserved. After confirming, Pawtograder soft-deletes the comments, auto-resolves linked regrade requests, recomputes affected scores, and opens a follow-up report grouped by grader with copy and CSV export options. A dismissible banner lets you reopen the report during the same session ([#1432](https://github.com/pawtograder/platform/pull/1432))
+
+#### Staff roles and permissions
+- **Staff Roles page** — Instructors can now create custom grader roles, assign capabilities to them, and move graders between roles from **Course Settings → Staff Roles**. A new role starts as a copy of the default Grader role's capabilities. Changes save immediately and broadcast to all open pages ([#1298](https://github.com/pawtograder/platform/pull/1298))
+- **Survey management gated on `manage_surveys`** — Creating, editing, publishing, closing, and deleting surveys now requires the `manage_surveys` capability. By default only instructors hold it; an instructor can grant it to a custom role. Graders without the capability can still view responses ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Poll management gated on `run_polls`** — Creating, opening, closing, and deleting polls now requires the `run_polls` capability. The default Grader role holds it, so graders can run polls by default. An instructor can turn it off for a custom role ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard management gated on `manage_flashcards`** — Creating, editing, and deleting flashcard decks and cards now requires the `manage_flashcards` capability. The default Grader role holds it. An instructor can turn it off for a custom role. The old creator-based bypass is removed ([#1299](https://github.com/pawtograder/platform/pull/1299))
+
+#### Office hours
+- **Queues shown when realtime disconnects** — The office hours queue list and request list are now shown using the last known data when the realtime connection is unavailable, rather than going blank. They refresh automatically when the connection is restored ([#1065](https://github.com/pawtograder/platform/pull/1065))
+
+#### Forgejo support
+- **Retry creation and Fix Permissions work for Forgejo repositories** — The Repository Status page's **Retry** and **Fix Permissions** actions now handle Forgejo-hosted repositories in addition to GitHub ([#1428](https://github.com/pawtograder/platform/pull/1428))
+- **Forgejo handout commits recorded in commit history** — Pushes to Forgejo handout repositories are now recorded in the handout commit history ([#1413](https://github.com/pawtograder/platform/pull/1413))
+- **Forgejo submissions without autograder** — For Forgejo-hosted assignments with the autograder disabled, pushes to the default branch now create submissions directly, matching the behavior for GitHub-hosted assignments ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Forgejo assignment and course cleanup** — Deleting a Forgejo assignment or course now archives unlinked repositories and cleans up Forgejo resources ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Repository host named correctly on assignment pages** — Assignment pages now show the correct repository host name (Forgejo or GitHub) rather than always saying GitHub ([#1414](https://github.com/pawtograder/platform/pull/1414))
+- **GitHub-only staff actions hidden for Forgejo courses** — Staff actions that require a GitHub organization (such as repository analytics) are now hidden when the course uses Forgejo as its repository host ([#1427](https://github.com/pawtograder/platform/pull/1427))
+
 ## August 2026
 
 ### August 19, 2026
