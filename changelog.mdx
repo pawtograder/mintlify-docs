@@ -6,6 +6,33 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 26, 2026
+
+#### Rubrics
+- **Safe deletion of applied rubric checks** — Removing a rubric check that has already been applied to student submissions now opens a guided confirmation workflow. A pre-flight preview lists every affected submission, grader, comment location, and point value. Checks with only previously soft-deleted comments are cleaned up automatically. After confirming, Pawtograder atomically soft-deletes the comments, recomputes affected submission scores, and auto-resolves linked regrade requests. A follow-up report grouped by grader opens automatically and can be copied as Markdown or downloaded as CSV. See [Deleting applied rubric checks](/staff/assignments/rubrics#deleting-applied-rubric-checks) ([#1432](https://github.com/pawtograder/platform/pull/1432))
+
+#### Gradebook
+- **Stale recalculation fixes** — Gradebook calculated columns (topic standings, assignment averages) no longer show stale values marked with `*` after a grade change lands while a recalculation is already in progress. The recalculation worker now reads row versions before reading inputs, so a concurrent grade change invalidates the in-flight pass instead of letting it commit a stale result. **Convert Missing to 0** now runs as a single server-side operation that keeps any grade entered while the dialog was open and immediately enqueues recalculation for dependent columns ([#1433](https://github.com/pawtograder/platform/pull/1433))
+
+### November 25, 2026
+
+#### Forgejo support
+- **Handout commit history for Forgejo assignments** — The Repository Status page now shows commit history for Forgejo-hosted handout repositories. The initial commit is recorded when the handout is created, and subsequent pushes to the default branch are recorded as they arrive ([#1413](https://github.com/pawtograder/platform/pull/1413))
+- **Forgejo: submissions from direct pushes without autograder** — Forgejo assignments with the autograder turned off now create submissions directly from pushes to the default branch, matching the existing GitHub behavior ([#1430](https://github.com/pawtograder/platform/pull/1430))
+- **Forgejo: archive unlinked repos and delete assignments** — Unlinked Forgejo repositories are archived rather than left open, and deleting a Forgejo assignment or course now cleans up the associated Forgejo resources ([#1398](https://github.com/pawtograder/platform/pull/1398))
+- **Forgejo: retry creation and fix permissions** — Retry creation and Fix Permissions now work correctly for Forgejo-hosted repositories ([#1428](https://github.com/pawtograder/platform/pull/1428))
+- **Forgejo: correct repository host label** — Assignment pages for Forgejo assignments now show "Forgejo" as the repository host instead of "GitHub" ([#1414](https://github.com/pawtograder/platform/pull/1414))
+- **GitHub-only staff actions hidden for Forgejo courses** — Staff actions that require a GitHub organization (such as repository analytics) are hidden when the course uses Forgejo ([#1427](https://github.com/pawtograder/platform/pull/1427))
+
+#### Permissions
+- **Survey and poll management gated by capabilities** — Creating, editing, publishing, closing, and deleting surveys now requires the `manage_surveys` capability (instructor-only by default). Running live polls (creating, opening, closing, deleting) now requires the `run_polls` capability (on the default grader role and all custom roles by default). Instructors can grant or revoke these capabilities per role from **Course Settings → Roles**. See [Surveys](/staff/surveys) and [Polls](/staff/polls/intro) ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard deck management gated by capability** — Creating, editing, and deleting flashcard decks and cards now requires the `manage_flashcards` capability. Both the default instructor and default grader roles hold it, so day-one access is unchanged. See [Flashcard Decks](/staff/flashcard-decks) ([#1299](https://github.com/pawtograder/platform/pull/1299))
+
+#### Office hours
+- **Queue display when real-time connection fails** — The office hours queue list and request cards are now shown using the last known data when the real-time connection is unavailable, so staff can continue working while the connection recovers ([#1065](https://github.com/pawtograder/platform/pull/1065))
+
 ## August 2026
 
 ### August 19, 2026
