@@ -27,12 +27,12 @@ If you suspect that repository permissions are out of sync (for example, if stud
 After running the fix, you'll see a summary showing:
 
 - **Synced**: Number of repositories where permissions were queued for update
-- **No usernames**: Repositories skipped because no students have confirmed GitHub usernames
-- **Not ready**: Repositories skipped because they haven't been created on GitHub yet
+- **No usernames**: Repositories skipped because no students have confirmed their git provider usernames
+- **Not ready**: Repositories skipped because they haven't been created yet
 - **Errors**: Number of repositories that encountered errors during the audit
 
 <Note>
-The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on GitHub.
+The fix operation enqueues permission sync jobs that run asynchronously. It may take a few moments for the changes to be reflected on the repository host.
 </Note>
 
 ## When to Use Fix Permissions
