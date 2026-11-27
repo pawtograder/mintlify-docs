@@ -451,6 +451,31 @@ The example sets each check's `points` to its highest option. [Note on Options v
 - **The points summary shows 0 for the rubric.** The checks have `points: 0`. See
   [Note on Options vs Base Points](#note-on-options-vs-base-points).
 
+## Deleting applied rubric checks
+
+When you remove a rubric check that has already been applied to student submissions, Pawtograder guides you through the deletion rather than failing silently.
+
+**Checks with only soft-deleted comments** (comments already removed by graders) are cleaned up automatically with no prompt.
+
+**Checks with active grading comments or open regrade requests** trigger a confirmation dialog before saving. The dialog shows:
+
+- Each affected check, with the number of submissions and comments it appears on
+- The grader who applied each comment, their email, and a link to the submission (opens in a new tab so you don't lose your unsaved rubric edits)
+- A warning if any affected submission has already had grades released to students
+- Active regrade requests that reference the check
+
+From the dialog you can:
+
+- **Refresh Usage** to re-check for any grading activity that arrived while you were reviewing
+- **Cancel** to go back to the editor without saving
+- **Delete Checks & Comments and Save** to confirm — this soft-deletes all listed comments, detaches them from the deleted check, auto-resolves any linked regrade requests, recomputes affected submission scores, and saves the rubric
+
+After a confirmed deletion, a **Follow-Up Report** dialog opens automatically. It groups the deleted comments by grader and lets you copy a per-grader follow-up message, copy the full report as Markdown, or download a CSV. You can reopen the report from the banner at the top of the rubric editor for the rest of your session.
+
+<Warning>
+If any affected submission had already-released grades, student scores change immediately when you confirm. The dialog and the follow-up report both flag released submissions so you can coordinate with graders on replacement feedback.
+</Warning>
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.
