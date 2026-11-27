@@ -96,7 +96,7 @@ For a calculated or imported column, the editor switches to override mode. It sh
 
 **Missing** is a distinct state from a score of 0. A missing grade does not count as a zero: a calculated column that depends on one is marked "not final" rather than silently computing a lower score.
 
-When you have finished grading an item and want the missing entries to count as zeros, open the column menu and choose **Convert Missing to 0**. This sets `score = 0`, clears the missing flag, and stamps the note `Missing value converted to 0` on every affected grade in the column. It cannot be undone, and it is only offered for manually-entered columns and for columns whose score expression starts with `assignments(`.
+When you have finished grading an item and want the missing entries to count as zeros, open the column menu and choose **Convert Missing to 0**. This sets `score = 0`, clears the missing flag, and stamps the note `Missing value converted to 0` on every affected grade in the column. The conversion runs as a single server-side operation: a grade entered by another grader between when you opened the dialog and when you confirmed is kept rather than overwritten. For calculated columns, the zero is stored as a score override so recalculation preserves it. All converted rows are queued for recalculation so averages and topic standings that read the column pick up the zero. The operation cannot be undone, and it is only offered for manually-entered columns and for columns whose score expression starts with `assignments(`.
 
 ## Gradebook Recalculation
 
