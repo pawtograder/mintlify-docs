@@ -6,6 +6,34 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 27, 2026
+
+#### Grading
+- **Guided deletion of applied rubric checks** — Removing a rubric check that has already been applied to student submissions now opens a confirmation dialog before anything is changed. The dialog lists every affected submission, grader, comment location, and points value, warns when grades have already been released, and lets you open any submission in a new tab without losing your unsaved rubric edits. After confirming, Pawtograder soft-deletes the comments, auto-resolves linked regrade requests, recomputes submission scores, and opens a follow-up report grouped by grader with copy-to-clipboard and CSV export options. Checks whose only comments were already soft-deleted are removed cleanly without a confirmation step. See [Deleting applied rubric checks](/staff/assignments/rubrics#deleting-applied-rubric-checks) ([#1432](https://github.com/pawtograder/platform/pull/1432))
+
+### November 26, 2026
+
+#### Gradebook
+- **Stale gradebook recalculations fixed** — A grade change that arrives while a recalculation pass is already running now invalidates the in-flight pass, so calculated columns (topic standings, assignment averages) always reflect the latest inputs rather than a snapshot taken before the change landed ([#1433](https://github.com/pawtograder/platform/pull/1433))
+- **Convert Missing to 0 is now race-safe** — The operation runs as a single server-side statement, so a grade entered by a grader between the time you opened the dialog and the time you confirmed is never overwritten. Converted rows are automatically enqueued for recalculation so dependent columns pick up the zeros ([#1433](https://github.com/pawtograder/platform/pull/1433))
+
+### November 25, 2026
+
+#### Permissions
+- **manage_surveys capability** — Creating, editing, publishing, closing, and deleting surveys now requires the `manage_surveys` capability. By default only the instructor role holds it. Graders can still view responses and analytics. See [Surveys](/staff/surveys) ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **run_polls capability** — Creating, opening, closing, and deleting live polls now requires the `run_polls` capability. By default both the instructor role and the default grader role hold it. Staff without the capability can still view poll results. See [Polls](/staff/polls/intro) ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **manage_flashcards capability** — Creating, editing, and deleting flashcard decks and cards now requires the `manage_flashcards` capability. By default both the instructor role and the default grader role hold it. All staff can still view decks and analytics. See [Flashcard Decks](/staff/flashcard-decks) ([#1299](https://github.com/pawtograder/platform/pull/1299))
+
+#### Forgejo
+- **Handout commit history for Forgejo assignments** — Pushes to a Forgejo handout repository are now recorded in the assignment's handout commit history, and the initial commit is recorded when the handout is first set up. Previously the Repository Status page showed no commits for Forgejo handouts ([#1413](https://github.com/pawtograder/platform/pull/1413))
+- **Forgejo support for retry, fix permissions, and commit history** — Retry submission creation, Fix Repository Permissions, and commit history now work correctly for assignments using Forgejo as the repository host ([#1426](https://github.com/pawtograder/platform/pull/1426), [#1428](https://github.com/pawtograder/platform/pull/1428))
+
+#### Bug fixes
+- **Office hours queues visible when realtime is unavailable** — The office hours queue list now shows even when the realtime connection cannot be established, so staff and students can still see and manage requests ([#1341](https://github.com/pawtograder/platform/pull/1341))
+- **Exam auto-extract works on exams of 8 or more pages** — The automatic page extraction for scanned exams now handles exams with 8 or more pages correctly ([#1389](https://github.com/pawtograder/platform/pull/1389))
+
 ## August 2026
 
 ### August 19, 2026
