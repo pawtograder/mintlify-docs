@@ -451,6 +451,49 @@ The example sets each check's `points` to its highest option. [Note on Options v
 - **The points summary shows 0 for the rubric.** The checks have `points: 0`. See
   [Note on Options vs Base Points](#note-on-options-vs-base-points).
 
+## Deleting applied rubric checks
+
+When you remove a rubric check that has already been applied to student submissions, Pawtograder guides you through the deletion rather than failing silently.
+
+### Checks with only soft-deleted comments
+
+If a check's only existing comments were already soft-deleted (for example, by a grader who removed their own annotation), the check is removed cleanly when you save — no confirmation is needed.
+
+### Checks with active comments or open regrade requests
+
+If a check still has active grading comments or open regrade requests, saving the rubric opens a **Delete Applied Rubric Check?** confirmation dialog before anything is changed. The dialog shows:
+
+- Each affected check, with the number of submissions and comments it appears on
+- The grader who applied each comment, their email, and the location (file, line, or artifact)
+- A warning if any affected submission has already had its grades released to students
+- A warning if any open regrade requests reference the check
+
+You can filter the list by grader, student, or check name, and open any submission in a new tab to review it without losing your unsaved rubric edits.
+
+**Refresh Usage** re-checks the database in case grading activity changed while you were reviewing the dialog. If new comments arrived after you opened the dialog, the confirmation is rejected and the dialog refreshes automatically.
+
+Clicking **Delete Checks & Comments and Save** atomically:
+
+1. Soft-deletes all active grading comments on the removed checks (preserving the audit trail)
+2. Detaches and auto-resolves any open regrade requests linked to those checks
+3. Recomputes submission review scores for every affected submission
+4. Saves the updated rubric
+
+### Follow-up report
+
+After a confirmed deletion, a **Rubric Saved — Follow-Up Report** dialog opens automatically. It shows:
+
+- A summary badge row (checks deleted, submissions affected, comments removed, graders involved)
+- A **By Grader** tab (default) with a per-grader table and a **Copy follow-up message** button that generates a ready-to-send message listing each affected submission
+- A **By Rubric Check** tab showing the same data organized by check
+- **Copy Report (Markdown)** and **Download CSV** buttons for the full report
+
+The report is also accessible from a dismissible banner at the top of the rubric editor for the rest of your session.
+
+### Regrade requests on deleted checks
+
+Students whose regrade requests referenced a deleted check see a banner on their submission page explaining that the rubric check was removed. Instructors can still resolve or close those requests; resolving or closing a detached request records no score change, since there is no longer a grading comment to adjust.
+
 ## Editing Rubrics
 
 When editing rubrics, Pawtograder protects against accidental data loss. If you attempt to leave the rubric editor with unsaved changes, a confirmation dialog appears warning you that your changes will be lost. You can choose to stay and save, or discard the changes and leave.

@@ -17,9 +17,13 @@ Open **Course Settings → Flashcard Decks** in the course navigation bar
 
 ## Who can manage decks
 
-Instructors and graders both get the **Flashcard Decks** entry, and both can
-create decks, add and edit cards, delete decks, and read every analytics view.
-Nothing on these pages is instructor-only.
+Creating, editing, and deleting decks and cards requires the **manage_flashcards**
+capability. By default both the instructor role and the default grader role hold
+it, so instructors and graders keep the same access they had before. An instructor
+can turn the capability off for a custom role (for example, a course coordinator
+who should only view analytics). All staff can still view decks, read analytics,
+and access the **Flashcard Decks** entry in Course Settings regardless of whether
+they hold the capability.
 
 The `flashcards` feature flag governs the student side only. Turning it off
 removes the **Flashcards** entry from the student course menu, and leaves
@@ -275,7 +279,8 @@ The copy brings each deck's name, description, and every card, in order. It does
 not bring student progress or any recorded activity — the new course's decks
 start with clean analytics. Use `--deck <id or name>` in place of `--all` for a
 single deck; a name that matches more than one deck is rejected, and you are
-asked for the deck's id instead. You need access to both courses.
+asked for the deck's id instead. You need staff access to the source course and
+the **manage_flashcards** capability in the target course.
 
 `pawtograder flashcards list --class <course>` prints the decks in a course with
 their card counts. See [Command line tools](/staff/cli) for installation and
