@@ -6,6 +6,24 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 27, 2026
+
+#### Bug fixes
+- **Gradebook recalculation race condition fixed** — Calculated columns (averages, topic standings) no longer show stale values when a grade changes while a recalculation pass is already in flight. The worker now reads the row version before fetching inputs, and any grade change that arrives mid-pass bumps the version so the in-flight result is discarded rather than committed ([#1433](https://github.com/pawtograder/platform/pull/1433))
+- **"Convert Missing to 0" is now atomic** — The conversion runs as a single server-side statement, so a grade entered by another grader between when you opened the dialog and when you confirmed is kept rather than overwritten. Dependent calculated columns are automatically re-enqueued for recalculation ([#1433](https://github.com/pawtograder/platform/pull/1433))
+
+### November 26, 2026
+
+#### Rubrics
+- **Confirmation workflow for deleting applied rubric checks** — Removing a rubric check that has already been applied to student submissions now shows a confirmation dialog listing every affected submission, grader, and comment before saving. Checks with only previously-deleted comments are cleaned up automatically with no prompt. After confirming, a follow-up report groups the deleted comments by grader with copyable messages and a CSV download. Regrade requests linked to deleted checks are auto-resolved and flagged clearly in the review panel ([#1432](https://github.com/pawtograder/platform/pull/1432))
+
+### November 25, 2026
+
+#### Office hours
+- **Office hours page shows queues even when realtime can't connect** — The student office hours page now renders as soon as the queue data loads over HTTP, rather than waiting for the realtime WebSocket to join. A "Live updates unavailable" banner appears in the layout when the connection fails, and the page shows a clear error if the data fetch itself fails ([#1341](https://github.com/pawtograder/platform/pull/1341))
+
 ## August 2026
 
 ### August 19, 2026
