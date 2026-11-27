@@ -6,6 +6,43 @@ icon: "clock-rotate-left"
 
 This page covers changes since the end of the Spring 2026 term. Entries are grouped by month, newest first.
 
+## November 2026
+
+### November 27, 2026
+
+#### Workspaces
+- **GitHub workspaces commit as the linked GitHub account** — Cloud Workspaces for GitHub assignments now use the student's linked GitHub no-reply address (`<id>+<username>@users.noreply.github.com`) for Git commits. This fixes unattributed commits for students whose school email is not on their GitHub account, and resolves push rejections for students with GitHub's email privacy protection turned on. Forgejo workspaces are unchanged ([#1436](https://github.com/pawtograder/platform/pull/1436))
+
+### November 26, 2026
+
+#### Rubrics
+- **Confirmation workflow for deleting applied rubric checks** — Removing a rubric check that has already been applied to submissions now shows a confirmation dialog listing every affected submission, grader, and comment before saving. Confirming soft-deletes the comments, recomputes scores, and auto-resolves linked regrade requests. A follow-up report opens after the save with per-grader breakdowns, copyable follow-up messages, and a CSV export. See [Creating and Managing Rubrics](/staff/assignments/rubrics#deleting-applied-rubric-checks) ([#1432](https://github.com/pawtograder/platform/pull/1432))
+
+#### Gradebook
+- **Stale gradebook recalculations fixed** — Calculated columns (topic standings, assignment averages) could show stale values when a grade changed while a recalculation was already in flight. The recalculation worker now reads row versions before reading inputs, so a mid-pass grade change invalidates the in-flight result and triggers a fresh pass. **Convert Missing to 0** now runs as a single server-side operation that cannot overwrite a grade entered concurrently ([#1433](https://github.com/pawtograder/platform/pull/1433))
+
+### November 25, 2026
+
+#### Forgejo support
+- **Forgejo handout commit history** — Pushes to a Forgejo assignment's handout repository are now recorded in the handout commit history shown on the Repository Status page. The initial commit is also recorded when the handout is first created ([#1413](https://github.com/pawtograder/platform/pull/1413))
+- **Retry and Fix Permissions handle Forgejo repositories** — Retrying repository creation on a Forgejo row now clears the error and kicks the Forgejo reconciler instead of writing a misleading GitHub message. Fix Permissions is hidden for Forgejo assignments (Forgejo access is managed by the reconciler) and shows an explanatory note instead ([#1428](https://github.com/pawtograder/platform/pull/1428))
+- **GitHub-only actions guarded for Forgejo** — Staff commit history, group join-request approval, PR-mode functions, and CLI repo commands now check the git provider before making GitHub API calls, so Forgejo assignments no longer produce confusing errors on those paths ([#1426](https://github.com/pawtograder/platform/pull/1426))
+- **GitHub-only staff actions hidden without a GitHub org** — The Sync Staff Team button is hidden when the course has no GitHub organization configured. GitHub diagnostics in the enrollments table are also hidden in that case. Repository analytics are skipped for Forgejo assignments ([#1427](https://github.com/pawtograder/platform/pull/1427))
+
+#### Office hours
+- **Office hours page loads without realtime** — The student office hours page now shows the queue data that loaded over HTTP even when the realtime WebSocket cannot connect. A **Live updates unavailable** banner appears instead of the page loading forever. The request detail page also no longer waits for realtime before rendering ([#1341](https://github.com/pawtograder/platform/pull/1341))
+
+#### Permissions
+- **Survey management gated on `manage_surveys`** — Creating, editing, publishing, closing, and deleting surveys now requires the `manage_surveys` capability. By default only the instructor role holds it; instructors can grant it to custom grader roles. Graders without it can still view responses. The CLI `surveys copy` command requires `manage_surveys` in the target class ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Poll management gated on `run_polls`** — Creating, opening, closing, and deleting polls now requires the `run_polls` capability. Both the default instructor and default grader roles hold it. Instructors can turn it off for a custom role. Staff without it can still view polls and results ([#1300](https://github.com/pawtograder/platform/pull/1300))
+- **Flashcard management gated on `manage_flashcards`** — Creating, editing, and deleting flashcard decks and cards now requires the `manage_flashcards` capability. Both the default instructor and default grader roles hold it. Instructors can turn it off for a custom role. All staff can still view decks and analytics ([#1299](https://github.com/pawtograder/platform/pull/1299))
+
+#### Exams
+- **Auto-extract works on exams of 8 or more pages** — Exam template auto-extraction now sends pages to Gemini in groups of two rather than all at once, so long exams no longer time out. If any group fails, the error message names the affected pages and nothing is imported. Questions that continue across a page boundary are joined automatically ([#1389](https://github.com/pawtograder/platform/pull/1389))
+
+#### What's new walkthroughs
+- **Walkthrough registry and generic component** — The escalation tour is now part of a registry-backed system. New walkthroughs can be added as single files and are shown to the right audience on the right page. A `npm run whats-new` script drafts walkthrough text for a PR using Claude ([#1364](https://github.com/pawtograder/platform/pull/1364))
+
 ## August 2026
 
 ### August 19, 2026
