@@ -109,6 +109,8 @@ When gradebook columns use expressions that reference other columns, Pawtograder
 
 The result is that calculated grades stay current even during heavy activity, such as several graders entering scores at once, without one worker clobbering another's results.
 
+A grade change that arrives while a recalculation pass is already running bumps the row's version counter, which invalidates the in-flight pass. The worker discards its result and re-runs the row, so a calculated column (such as a topic standing or assignment average) always reflects the latest inputs rather than a snapshot taken before the change landed.
+
 ## "What If" Grade Calculations
 
 What-If is a **student-facing** mode that lets students explore hypothetical grade scenarios by temporarily adjusting their own scores. It answers questions like "What grade do I need on the final exam to get an A?" or "How will my grade change if I skip this assignment?"
