@@ -103,7 +103,8 @@ When you have finished grading an item and want the missing entries to count as 
 When gradebook columns use expressions that reference other columns, Pawtograder automatically recalculates affected grades when dependencies change. This recalculation process runs asynchronously in the background to maintain performance for large courses.
 
 - When a grade changes, the system enqueues a recalculation job for each affected gradebook row and marks that row dirty and recalculating.
-- Each enqueue also bumps a per-row version counter, which invalidates any worker already computing that row.
+- Each enqueue also bumps a per-row version counter, which invalidates any worker already computing that row. If a grade changes while a recalculation is already in flight, the version is bumped again so the in-flight pass loses its version check and the row is recalculated a second time with the latest inputs.
+- A background worker reads the row's version before reading its inputs, so a grade change that arrives between those two reads causes a version mismatch and the stale result is discarded rather than committed.
 - A background worker takes each job, computes the row, and writes the result back only if nothing has changed in the meantime. A result computed from inputs that have since moved is discarded rather than overwriting the fresher value.
 - Mismatched rows are re-enqueued with an attempt counter and exponential backoff. Past a retry ceiling the row goes to a dead letter queue instead of cycling forever.
 
