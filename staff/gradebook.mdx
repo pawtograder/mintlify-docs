@@ -98,6 +98,8 @@ For a calculated or imported column, the editor switches to override mode. It sh
 
 When you have finished grading an item and want the missing entries to count as zeros, open the column menu and choose **Convert Missing to 0**. This sets `score = 0`, clears the missing flag, and stamps the note `Missing value converted to 0` on every affected grade in the column. It cannot be undone, and it is only offered for manually-entered columns and for columns whose score expression starts with `assignments(`.
 
+The conversion runs as a single server-side operation. A grade entered by a grader between the time you opened the dialog and the time you confirmed is not overwritten — only cells that are still missing at the moment the write runs are converted. After converting, every affected row is automatically enqueued for recalculation so averages and topic standings that read this column pick up the zeros.
+
 ## Gradebook Recalculation
 
 When gradebook columns use expressions that reference other columns, Pawtograder automatically recalculates affected grades when dependencies change. This recalculation process runs asynchronously in the background to maintain performance for large courses.
